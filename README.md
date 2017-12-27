@@ -116,7 +116,7 @@ List of events emitted to Kafka by this microservice for below topics:
   - \<ResourceName>Modified
   - \<ResourceName>Deleted
 
-The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [Command Interface](https://github.com/restorecommerce/command-interface)in the used microservice. For usage details please see [the shared interface tests](https://github.com/restorecommerce/command-interface/tree/master/test).
+The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [command-interface](https://github.com/restorecommerce/command-interface)in the used microservice. For usage details please see [command-interface tests](https://github.com/restorecommerce/command-interface/tree/master/test).
 
 ## Usage
 

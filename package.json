@@ -1,0 +1,55 @@
+{
+  "name": "@restorecommerce/resource-base-interface",
+  "version": "0.1.0",
+  "description": "Restore Commerce Resource Base Interface",
+  "main": "index.js",
+  "author": "Invend GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/resource-base-interface.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "resource",
+    "base",
+    "interface"
+  ],
+  "dependencies": {
+    "@restorecommerce/chassis-srv": "github:restorecommerce/chassis-srv",
+    "@restorecommerce/grpc-client": "git+https://github.com/restorecommerce/grpc-client",
+    "@restorecommerce/kafka-client": "git+https://github.com/restorecommerce/kafka-client",
+    "@restorecommerce/protos": "github:restorecommerce/protos",
+    "@restorecommerce/service-config": "^0.1.0",
+    "bluebird": "^3.5.1",
+    "lodash": "^4.17.4",
+    "redis": "^2.8.0"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.18",
+    "@types/mocha": "^2.2.41",
+    "@types/redis": "^2.8.1",
+    "@types/should": "11.2.0",
+    "co-mocha": "^1.2.0",
+    "coveralls": "^3.0.0",
+    "istanbul": "^0.4.5",
+    "jshint": "^2.9.4",
+    "mocha": "^4.0.1",
+    "should": "11.2.1"
+  },
+  "scripts": {
+    "pretest": "npm run tsctests",
+    "tsctests": "tsc test/*_test.ts --module commonjs -target ES6",
+    "test": "npm run lint && npm run mocha",
+    "lint": "tslint './index.ts' './lib/**/*.ts' './*_test.ts'",
+    "mocha": "mocha ./test/*.js",
+    "test-debug": "npm run lint && npm run mocha-debug",
+    "mocha-debug": "mocha ./test/*.js --inspect-brk",
+    "coveralls": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./test/*.js",
+    "postinstall": "tsc -d"
+  },
+  "engines": {
+    "node": ">= 9.2.0"
+  }
+}

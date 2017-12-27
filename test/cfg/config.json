@@ -1,0 +1,132 @@
+{
+  "database": {
+    "testdb": {
+      "provider": "arango",
+      "host": "127.0.0.1",
+      "port": 8529,
+      "database": "resource-base-test",
+      "autoCreate": true
+    }
+  },
+  "client": {
+    "test": {
+      "logger": {
+        "console": {
+          "handleExceptions": false,
+          "level": "warn",
+          "colorize": true,
+          "prettyPrint": true
+        }
+      },
+      "transports": {
+        "grpc": {
+          "service": "io.restorecommerce.resourcebase.Service",
+          "protos": [
+            "io/restorecommerce/resource_base.proto"
+          ],
+          "protoRoot": "node_modules/@restorecommerce/protos/",
+          "timeout": 3000
+        }
+      },
+      "loadbalancer": {
+        "name": "roundRobin"
+      },
+      "publisher": {
+        "name": "static",
+        "instances": [
+          "grpc://localhost:50051"
+        ]
+      },
+      "endpoints": {
+        "read": {},
+        "create": {},
+        "delete": {},
+        "update": {},
+        "upsert": {}
+      }
+    }
+  },
+  "events": {
+    "testevents": {
+      "provider": "kafka",
+      "groupId": "restore-resource-base-interface-test",
+      "clientId": "restore-resource-base-interface-test",
+      "connectionString": "localhost:2181",
+      "ResourceCreated": {
+        "protos": [
+          "io/restorecommerce/resource_base.proto"
+        ],
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "ResourceModified": {
+        "protos": [
+          "io/restorecommerce/resource_base.proto"
+        ],
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "ResourceDeleted": {
+        "protos": [
+          "io/restorecommerce/resource_base.proto"
+        ],
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      }
+    },
+    "enableEvents": "true"
+  },
+  "server": {
+    "logger": {
+      "console": {
+        "handleExceptions": false,
+        "level": "warn",
+        "colorize": true,
+        "prettyPrint": true
+      }
+    },
+    "services": {
+      "test": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "update": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "upsert": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    "transports": [
+      {
+        "name": "pipeline",
+        "provider": "grpc",
+        "services": {
+          "test": "io.restorecommerce.resourcebase.Service"
+        },
+        "protos": [
+          "io/restorecommerce/resource_base.proto"
+        ],
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "addr": "localhost:50051"
+      }
+    ]
+  }
+}

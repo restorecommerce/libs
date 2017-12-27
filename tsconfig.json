@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+     "./lib/**/*.ts", "./index.ts", "./test/crud_test.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "docs"
+  ]
+}

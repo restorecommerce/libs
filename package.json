@@ -18,8 +18,8 @@
   ],
   "dependencies": {
     "@restorecommerce/chassis-srv": "github:restorecommerce/chassis-srv",
-    "@restorecommerce/grpc-client": "git+https://github.com/restorecommerce/grpc-client",
-    "@restorecommerce/kafka-client": "git+https://github.com/restorecommerce/kafka-client",
+    "@restorecommerce/grpc-client": "github:restorecommerce/grpc-client",
+    "@restorecommerce/kafka-client": "github:restorecommerce/kafka-client",
     "@restorecommerce/protos": "github:restorecommerce/protos",
     "@restorecommerce/service-config": "^0.1.0",
     "bluebird": "^3.5.1",

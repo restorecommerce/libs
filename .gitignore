@@ -1,0 +1,17 @@
+node_modules/
+npm-debug.log
+
+coverage/
+
+.project
+.settings
+.directory
+.vscode/
+
+*.log
+*~
+
+lib/core/*.js
+lib/core/*.d.ts
+*.js
+*.d.ts

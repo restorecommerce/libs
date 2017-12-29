@@ -12,6 +12,8 @@ services:
 before_install:
   - sudo apt-get update
   - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-ce
+  - 'npm install -g typescript'
+  - 'npm install -g tslint'
   - 'npm config set loglevel error'
   - docker network create --driver bridge chassis_net
   - docker run --name chassis_zk -d --net=chassis_net -p 2181:2181 wurstmeister/zookeeper
@@ -26,5 +28,5 @@ before_install:
 scripts:
   - 'npm test'
 after_success:
+  - sleep 30
   - npm run coveralls
-  - 'cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js'

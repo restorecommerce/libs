@@ -25,13 +25,10 @@ const uuidGen = (): string => {
 
 async function setDefaults(obj: any, collectionName: string): Promise<any> {
   const o = obj;
-
   let now: number;
-
   if (redisClient) {
     const time: string = (await redisClient.timeAsync())[0];
     now = Number(time);
-
     const values: Array<string> = await redisClient.hgetallAsync(collectionName);
 
     if (values) {
@@ -58,13 +55,10 @@ async function setDefaults(obj: any, collectionName: string): Promise<any> {
   } else {
     now = Date.now();
   }
-
   if (_.isNil(o.created) || o.created === 0) {
     o.created = now;
   }
-
   o.modified = now;
-
   if (_.isNil(o.id) || o.id === 0 || isEmptyObject(o.id)) {
     o.id = uuidGen();
   }
@@ -159,7 +153,7 @@ export class ResourcesAPIBase {
 
 
   /**
-   * Finds documents based on provided filters and options/
+   * Finds documents based on provided filters and options
    * @param {object} filter key value filter using mongodb/nedb filter format.
    * @param {number} limit
    * @param {number} offset

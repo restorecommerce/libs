@@ -40,6 +40,8 @@ export class ServiceBase {
   /**
    * Endpoint read.
    * Return resources based on provided filter and options.
+   * @param call request containing filter,limit, offset and sort options
+   * @param context
    */
    async read(call: any, context: any): Promise<any> {
     if (!_.isEmpty(call.request.search)) {
@@ -105,6 +107,8 @@ export class ServiceBase {
   /**
    * Endpoint create.
    * Inserts resources.
+   * @param call contains a list of resources to be created
+   * @param context
    */
   async create(call: any, context: any): Promise<any> {
     try {
@@ -128,6 +132,8 @@ export class ServiceBase {
   /**
    * Endpoint delete.
    * Removes resources specified by id or all resources.
+   * @param call contains list of resource IDs to be deleted
+   * @param context
    */
   async delete(call: any, context: any): Promise<any> {
     try {
@@ -165,6 +171,8 @@ export class ServiceBase {
   /**
    * Endpoint update.
    * Updates resources.
+   * @param call contains list of resources to be modified
+   * @param context
    */
   async update(call: any, context: any): Promise<any> {
     try {
@@ -188,6 +196,8 @@ export class ServiceBase {
   /**
    * Endpoint upsert.
    * Upserts resources.
+   * @param call contains list of resources to be created or modified
+   * @param context
    */
   async upsert(call: any, context: any): Promise<any> {
     try {
@@ -200,5 +210,3 @@ export class ServiceBase {
     }
   }
 }
-
-// module.exports.ServiceBase = ServiceBase;

@@ -1,13 +1,12 @@
 # resource-base-interface
-
-[![Version npm][version]](https://npmjs.org/package/@restorecommerce/resource-base-interface)[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/r/restorecommerce/resource-base-interface?branch=master)
+<img src="http://img.shields.io/npm/v/%40restorecommerce%2Fresource%2Dbase%2Dinterface.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/r/restorecommerce/resource-base-interface?branch=master)
 
 [version]: http://img.shields.io/npm/v/resource-base-interface.svg?style=flat-square
 [build]: http://img.shields.io/travis/restorecommerce/resource-base-interface/master.svg?style=flat-square
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
 
-The resource-base-interface provides resource CRUD operations can be bound, in addition to other services, to a server. The CRUD operations are described via [gRPC](https://grpc.io/docs/) interface. The message structures are defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. This interface directly communicates with an ArangoDB instance and also emits resource messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled using configuration `enableEvents` in config.json(#test/cfg/config.json) file..
+The resource-base-interface describes resource CRUD operations can be bound to a server or other services. The CRUD operations are described via [gRPC](https://grpc.io/docs/) interface. The message structures are defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. This interface directly communicates with an ArangoDB instance and also emits resource messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled using configuration `enableEvents` in config.json(#test/cfg/config.json) file..
 
 ## gRPC Interface
 
@@ -33,7 +32,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| items | []io.restorecommerce.resourcebase.Resource | required | list of resources |
+| items | [ ]io.restorecommerce.resourcebase.Resource | required | list of resources |
 | total_count | number | optional | total number of resources |
 
 ### Read
@@ -108,7 +107,7 @@ Requests are performed using `io.restorecommerce.resourcebase.DeleteRequest` and
 
 ## Kafka Events
 
-List of events emitted to Kafka by this microservice for below topics:
+List of events emitted to Kafka by this microservice for below topic:
 
 - `io.restorecommerce.resourcebase.<ResourceName>.resource`
   - \<ResourceName>Created

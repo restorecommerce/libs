@@ -2,9 +2,7 @@
 
 import * as mocha from 'mocha';
 import * as coMocha from 'co-mocha';
-
 coMocha(mocha);
-
 import {ServiceBase} from '..';
 import {ResourcesAPIBase} from '../';
 import {toStruct} from '../';
@@ -13,12 +11,16 @@ import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Events, Topic } from '@restorecommerce/kafka-client';
 import * as srvConfig from '@restorecommerce/service-config';
-
 import * as should from 'should';
 import * as _ from 'lodash';
 import * as co from 'co';
-/* global describe it before after beforeEach */
 
+/*
+ * Note: To run this test, a running ArangoDB and Kafka instance is required.
+ * (Kafka is needed only if 'events:enableEvents' config is enabled)
+ */
+
+/* global describe it before after beforeEach */
 describe('converting to struct back to object', () => {
   it('should result in the same object', () => {
     const obj = {
@@ -195,28 +197,9 @@ describe('ServiceBase', () => {
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });
-      // Search filter not yet implmented
-      // it('should return only resources with word "data"', function* checkget() {
-      //   const result = yield testService.get({
-      //     search: ['data'],
-      //   });
-      //   should.exist(result);
-      //   should.not.exist(result.error);
-      //   should.exist(result.data);
-      //   should.exist(result.data.items);
-      //   should.exist(result.data.totalCount);
-      //   result.data.totalCount.should.be.equal(2);
-      //   result.data.items.should.be.Array();
-      //   result.data.items.should.length(2);
-      //   _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-      //     return _.includes(_.words(data.text), 'data');
-      //   }), 'id'));
-      // });
-      // TODO: Test extendedFilter
-      // TODO: Test localesLimiter
     });
     describe('create', () => {
-      it('should insert new documents', async function checkget() {
+      it('should create new documents', async function checkget() {
         const newTestDataFirst = {
           id: '/test/newdata',
           value: -10,

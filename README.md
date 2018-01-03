@@ -77,7 +77,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 | ----- | ---- | ----- | ----------- |
 | offset | number | optional | offset of the resource |
 | limit | number | optional | limit, default value is `1000` |
-| filter | google.protobuf.Struct | optional | filter based on filed values, multiple filters can be combined with `AND` and `OR` operators  |
+| filter | google.protobuf.Struct | optional | filter based on field values, multiple filters can be combined with `AND` and `OR` operators  |
 | sort | [ ]io.restorecommerce.resourcebase.Sort | optional | sort the resources |
 | field | []io.restorecommerce.resourcebase.FieldFilter | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
 | search | [ ]string | optional | word search, not yet implemeneted |

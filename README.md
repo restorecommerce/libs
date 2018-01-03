@@ -79,7 +79,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 | limit | number | optional | limit, default value is `1000` |
 | filter | google.protobuf.Struct | optional | filter based on filed values, multiple filters can be combined with `AND` and `OR` operators  |
 | sort | [ ]io.restorecommerce.resourcebase.Sort | optional | sort the resources |
-| field | [ ]io.restorecommerce.resourcebase.FieldFilter | optional | fields selector |
+| field | []io.restorecommerce.resourcebase.FieldFilter | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
 | search | [ ]string | optional | word search, not yet implemeneted |
 | locales_limiter | [ ]string | optional | querying based on locales, not yet implemented |
 | scope | io.restorecommerce.resourcebase.ScopeFilter | optional | scope to operate on, not yet implemented |

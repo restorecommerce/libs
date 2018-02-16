@@ -6,7 +6,7 @@
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
 
-The resource-base-interface describes resource CRUD operations can be bound to a server or other services. The CRUD operations are described via [gRPC](https://grpc.io/docs/) interface. The message structures are defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. This interface directly communicates with an ArangoDB instance and also emits resource messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled using property `enableEvents` in the [`config.json`](test/cfg/config.json) file.
+The resource-base-interface describes resource CRUD operations can be bound to a server or other services. The CRUD operations are described via [gRPC](https://grpc.io/docs/) interface. The message structures are defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. The service which implements this interface communicates with an ArangoDB instance. This interface emits resource messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled using property `enableEvents` in the [`config.json`](test/cfg/config.json) file.
 
 ## gRPC Interface
 
@@ -32,7 +32,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| items | [ ]io.restorecommerce.resourcebase.Resource | required | list of resources |
+| items | [ ] `io.restorecommerce.resourcebase.Resource` | required | list of resources |
 | total_count | number | optional | total number of resources |
 
 ### Read
@@ -52,7 +52,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | field | string | optional | field to be sorted upon |
-| SortOrder | enum | optional | sorting order, UNSORTED, ASCENDING and DESCENDING |
+| SortOrder | enum | optional | sorting order, `UNSORTED`, `ASCENDING` or `DESCENDING` |
 
 
 `io.restorecommerce.resourcebase.FieldFilter`
@@ -78,11 +78,11 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 | offset | number | optional | offset of the resource |
 | limit | number | optional | limit, default value is `1000` |
 | filter | google.protobuf.Struct | optional | filter based on field values, multiple filters can be combined with `AND` and `OR` operators  |
-| sort | [ ]io.restorecommerce.resourcebase.Sort | optional | sort the resources |
-| field | []io.restorecommerce.resourcebase.FieldFilter | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
+| sort | [ ]`io.restorecommerce.resourcebase.Sort` | optional | sort the resources |
+| field | [ ] `io.restorecommerce.resourcebase.FieldFilter` | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
 | search | [ ]string | optional | word search, not yet implemeneted |
 | locales_limiter | [ ]string | optional | querying based on locales, not yet implemented |
-| scope | io.restorecommerce.resourcebase.ScopeFilter | optional | scope to operate on, not yet implemented |
+| scope | `io.restorecommerce.resourcebase.ScopeFilter` | optional | scope to operate on, not yet implemented |
 
 ### Update
 
@@ -115,7 +115,7 @@ List of events emitted to Kafka by this microservice for below topic:
   - \<ResourceName>Modified
   - \<ResourceName>Deleted
 
-The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [command-interface](https://github.com/restorecommerce/command-interface) in the used microservice. For usage details please see [command-interface tests](https://github.com/restorecommerce/command-interface/tree/master/test).
+The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [command-interface](https://github.com/restorecommerce/chassis-srv/blob/master/command-interface.md) in the used microservice. For usage details please see [command-interface tests](https://github.com/restorecommerce/chassis-srv/blob/master/test/command_test.ts).
 
 ## Usage
 

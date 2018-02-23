@@ -1,8 +1,5 @@
 language: node_js
 sudo: required
-cache:
-  directories:
-    - node_modules
 node_js:
     - "9.2.0"
 git:
@@ -15,16 +12,18 @@ before_install:
   - 'npm install -g typescript'
   - 'npm install -g tslint'
   - 'npm config set loglevel error'
-  - docker network create --driver bridge chassis_net
-  - docker run --name chassis_zk -d --net=chassis_net -p 2181:2181 wurstmeister/zookeeper
-  - docker run --name chassis_kafka -d --net=chassis_net -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 -e KAFKA_ZOOKEEPER_CONNECT=zk:2181 -v /var/run/docker.sock:/var/run/docker.sock --link chassis_zk:zk wurstmeister/kafka:1.0.0
+  - docker network create --driver bridge resourcebase_net
+  - docker run --name resourcebase_zk -d --net=resourcebase_net -p 2181:2181 wurstmeister/zookeeper
+  - docker run --name resourcebase_kafka -d --net=resourcebase_net -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 -e KAFKA_ZOOKEEPER_CONNECT=zk:2181 -v /var/run/docker.sock:/var/run/docker.sock --link resourcebase_zk:zk wurstmeister/kafka:1.0.0
   - docker create --name arangodb-persist arangodb true
-  - docker run --name chassis_adb -d -p 127.0.0.1:8529:8529 --volumes-from arangodb-persist -e ARANGO_NO_AUTH=1 arangodb
+  - docker run --name resourcebase_adb -d -p 127.0.0.1:8529:8529 --volumes-from arangodb-persist -e ARANGO_NO_AUTH=1 arangodb
+  - docker run --name resourcebase_redis -d --net=resourcebase_net -p 127.0.0.1:6379:6379  redis:4.0.6-alpine
   - sleep 10
   - docker ps -a
-  - docker logs chassis_adb
-  - docker logs chassis_zk
-  - docker logs chassis_kafka
+  - docker logs resourcebase_adb
+  - docker logs resourcebase_zk
+  - docker logs resourcebase_kafka
+  - docker logs resourcebase_redis
 scripts:
   - 'npm test'
 after_success:

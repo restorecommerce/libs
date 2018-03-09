@@ -28,4 +28,4 @@ scripts:
   - 'npm test'
 after_success:
   - sleep 30
-  - npm run coveralls
+  - npm run codecov

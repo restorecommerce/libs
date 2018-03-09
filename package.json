@@ -31,8 +31,7 @@
     "@types/mocha": "^2.2.41",
     "@types/redis": "^2.8.1",
     "@types/should": "11.2.0",
-    "co-mocha": "^1.2.0",
-    "coveralls": "^3.0.0",
+    "codecov": "^3.0.0",
     "istanbul": "^0.4.5",
     "jshint": "^2.9.4",
     "mocha": "^4.0.1",
@@ -46,7 +45,7 @@
     "mocha": "export NODE_ENV=test; mocha -R spec ./test/*.js --exit",
     "test-debug": "npm run lint && npm run mocha-debug",
     "mocha-debug": "export NODE_ENV=test; mocha ./test/*.js --inspect-brk --exit",
-    "coveralls": "export NODE_ENV=test; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec ./test/*.js --exit",
+    "codecov": "export NODE_ENV=test; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && codecov",
     "postinstall": "tsc -d"
   },
   "engines": {

@@ -1,8 +1,6 @@
 'use strict';
 
 import * as mocha from 'mocha';
-import * as coMocha from 'co-mocha';
-coMocha(mocha);
 import {ServiceBase} from '..';
 import {ResourcesAPIBase} from '../';
 import {toStruct} from '../';

@@ -29,7 +29,7 @@
   "devDependencies": {
     "@types/bluebird": "^3.5.18",
     "@types/mocha": "^2.2.41",
-    "@types/redis": "^2.8.1",
+    "@types/redis": "^2.8.6",
     "@types/should": "11.2.0",
     "codecov": "^3.0.0",
     "istanbul": "^0.4.5",

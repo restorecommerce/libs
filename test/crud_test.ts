@@ -60,15 +60,15 @@ describe('ServiceBase', () => {
     }
     const service: ServiceBase = new ServiceBase('Resource', testEvents,
       server.logger, resourceAPI, isEventsEnabled);
-    await co(server.bind('test', service));
-    await co(server.start());
+    await server.bind('test', service);
+    await server.start();
 
     client = new Client(cfg.get('client:test'), server.logger);
     testService = await client.connect();
   });
   after(async function after() {
     await client.end();
-    await co(server.end());
+    await server.stop();
     await events.stop();
   });
   describe('endpoints', () => {

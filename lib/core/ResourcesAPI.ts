@@ -65,6 +65,29 @@ async function setDefaults(obj: any, collectionName: string): Promise<any> {
   return o;
 }
 
+function decodeBufferObj(document: any, bufferField: string): any {
+  if (bufferField in document && document[bufferField]) {
+    const encodedBufferObj = document[bufferField].value;
+    // By default it was encoded in utf8 so decoding by default from utf8
+    let decodedMsg = Buffer.from(encodedBufferObj).toString();
+    // store as object in DB
+    decodedMsg = JSON.parse(decodedMsg);
+    document[bufferField] = decodedMsg;
+  }
+  return document;
+}
+
+function encodeMsgObj(document: any, bufferField: string): any {
+  if (bufferField in document && document[bufferField]) {
+    const decodedMsg = document[bufferField];
+    // convert the Msg obj to Buffer Obj
+    const encodedBufferObj = Buffer.from(JSON.stringify(decodedMsg));
+    document[bufferField] = {};
+    document[bufferField].value = encodedBufferObj;
+  }
+  return document;
+}
+
 async function setModified(obj: any): Promise<Object> {
   const o = obj;
   if (redisClient) {
@@ -85,23 +108,28 @@ function isEmptyObject(obj: any): any {
 export class ResourcesAPIBase {
   db: any;
   collectionName: string;
+  bufferField: string;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    * @param {string} collectionName Name of database collection.
-   * @param {any} fieldGeneratorConf The collection's field generators configuration.
+   * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(db: any, collectionName: string, fieldGeneratorConf?: any) {
+  constructor(db: any, collectionName: string, fieldHandlerConf?: any) {
     this.db = db;
     this.collectionName = collectionName;
 
-    if (!fieldGeneratorConf) {
+    if (!fieldHandlerConf) {
       return;
     }
 
-    const strategyCfg = fieldGeneratorConf.strategies;
+    const strategyCfg = fieldHandlerConf.strategies;
     if (!redisClient) {
-      redisClient = fieldGeneratorConf.redisClient;
+      redisClient = fieldHandlerConf.redisClient;
+    }
+
+    if (fieldHandlerConf.bufferField) {
+      this.bufferField = fieldHandlerConf.bufferField;
     }
 
     // values for Redis hash set
@@ -143,12 +171,13 @@ export class ResourcesAPIBase {
           break;
       }
     }
-    redisClient.hset(hashValues, (err, reply) => {
-      if (err) {
-        throw err;
-      }
-
-    });
+    if (redisClient) {
+      redisClient.hset(hashValues, (err, reply) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
   }
 
 
@@ -170,6 +199,15 @@ export class ResourcesAPIBase {
       fields: field,
     };
     const entities = await co(this.db.find(this.collectionName, filter, options));
+    if (this.bufferField) {
+      // encode the msg obj back to buffer obj and send it back
+      entities.forEach(element => {
+        if (element[this.bufferField]) {
+          element = encodeMsgObj(element, this.bufferField);
+          return element;
+        }
+      });
+    }
     return entities;
   }
 
@@ -189,12 +227,17 @@ export class ResourcesAPIBase {
   */
   async create(documents: Object[]): Promise<any> {
     const collection = this.collectionName;
+    const toInsert = [];
     try {
       for (let i = 0; i < documents.length; i += 1) {
         documents[i] = await setDefaults(documents[i], collection);
+        // decode the buffer and store it to DB
+        if (this.bufferField) {
+          toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
+        }
       }
 
-      await co(this.db.insert(collection, documents));
+      await co(this.db.insert(collection, this.bufferField ? toInsert : documents));
     } catch (e) {
       if (e.code === 409) {
         throw new errors.AlreadyExists('Item Already exists.');
@@ -242,7 +285,15 @@ export class ResourcesAPIBase {
           throw err;
         });
       });
-      const result = await co(this.db.upsert(this.collectionName, documents));
+      const toInsert = [];
+      for (let i = 0; i < documents.length; i += 1) {
+        // decode the buffer and store it to DB
+        if (this.bufferField) {
+          toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
+        }
+      }
+      const result = await co(this.db.upsert(this.collectionName,
+        this.bufferField ? toInsert : documents));
       let reqUp = _.filter(result, (e) => {
         return _.isNil(e.created) || e.created === 0;
       });
@@ -306,7 +357,10 @@ export class ResourcesAPIBase {
       const collectionName = this.collectionName;
       const patches = [];
       for (let i = 0; i < documents.length; i += 1) {
-        const doc = documents[i];
+        let doc = documents[i];
+        if (this.bufferField) {
+          doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
+        }
         patches.push(await co(db.update(collectionName,
           { id: doc['id'] }, _.omitBy(doc, _.isNil))));
       }

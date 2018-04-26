@@ -109,6 +109,8 @@ export class ResourcesAPIBase {
   db: any;
   collectionName: string;
   bufferField: string;
+  requiredFields: Object;
+  resourceName: string;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
@@ -118,6 +120,7 @@ export class ResourcesAPIBase {
   constructor(db: any, collectionName: string, fieldHandlerConf?: any) {
     this.db = db;
     this.collectionName = collectionName;
+    this.resourceName = collectionName.substring(0, collectionName.length - 1);
 
     if (!fieldHandlerConf) {
       return;
@@ -130,6 +133,10 @@ export class ResourcesAPIBase {
 
     if (fieldHandlerConf.bufferField) {
       this.bufferField = fieldHandlerConf.bufferField;
+    }
+
+    if (fieldHandlerConf.requiredFields) {
+      this.requiredFields = fieldHandlerConf.requiredFields;
     }
 
     // values for Redis hash set
@@ -236,6 +243,11 @@ export class ResourcesAPIBase {
           toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
         }
       }
+      // check if all the required fields are present
+      if (this.requiredFields && this.requiredFields[this.resourceName]) {
+        this.checkRequiredFields(this.requiredFields[this.resourceName],
+          documents);
+      }
 
       await co(this.db.insert(collection, this.bufferField ? toInsert : documents));
     } catch (e) {
@@ -244,6 +256,26 @@ export class ResourcesAPIBase {
       }
       throw e;
     }
+  }
+
+  /**
+* check if the required fields are present.
+*
+* @param {Object} requiredFields contains list of requried fileds.
+* @param {String} resourceName resourece name.
+* @param {any} documents list of documents.
+*/
+  checkRequiredFields(requiredFields: string[], documents: any): void {
+    console.log('Required fields are:', requiredFields);
+    for (let document of documents) {
+      for (let eachField of requiredFields) {
+        if (!document[eachField]) {
+          throw new errors.InvalidArgument(`Field ${eachField} is necessary
+            for ${this.resourceName}`);
+        }
+      }
+    }
+
   }
 
   /**

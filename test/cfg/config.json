@@ -128,5 +128,10 @@
         "addr": "localhost:50051"
       }
     ]
+  },
+  "fieldHandlers": {
+    "fieldGenerators": {},
+    "bufferFields": {},
+    "requiredFields": {}
   }
 }

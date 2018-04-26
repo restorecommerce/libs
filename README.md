@@ -117,6 +117,23 @@ List of events emitted to Kafka by this microservice for below topic:
 
 The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [command-interface](https://github.com/restorecommerce/chassis-srv/blob/master/command-interface.md) in the used microservice. For usage details please see [command-interface tests](https://github.com/restorecommerce/chassis-srv/blob/master/test/command_test.ts).
 
+## Fields Configuration
+
+### Field Generators
+
+[Redis](https://redis.io/) can optionally be integrated with this microservice to automatically generate specific fields in each resource.
+Such autogeneration feature currently includes timestamps and sequential counters. The latter one is particularly useful for fields like customer or item numbers, which can have a type of sequential logic and can be read and written efficiently with Redis.
+These operations can be enabled by simply specifying the fields and their "strategies" in the configuration files.
+
+### Buffer Fields
+
+Buffer-encoded fields can be decoded before being stored in the database. It is possible to specify in the `bufferFields` config what fields of each resource should be specially handled this way. The values are also encoded into a buffer again when read from the database.
+
+### Required Fields
+
+It is possible to specify which fields are required for each document of each resource on the `requiredFields` config.
+An `InvalidArgument` error is thrown if one of these fields is missing.
+
 ## Usage
 
 See [tests](test/).

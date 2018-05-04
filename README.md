@@ -6,7 +6,10 @@
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
 
-The resource-base-interface describes resource CRUD operations can be bound to a server or other services. The CRUD operations are described via [gRPC](https://grpc.io/docs/) interface. The message structures are defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. The service which implements this interface communicates with an ArangoDB instance. This interface emits resource messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled using property `enableEvents` in the [`config.json`](test/cfg/config.json) file.
+The resource-base-interface describes resource CRUD operations which can be bound to a service. Such operations are described via a [gRPC](https://grpc.io/docs/) interface with the message structures therefore being defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. 
+The exposed gRPC methods are provided by the `ServiceBase` object which uses a `ResourceAPI` instance to invoke operations from a database provider. The exposed interface is therefore agnostic to a specific database implementation.
+However, a valid database provider is required. A set of such providers is implemented in [chassis-srv](https://github.com/restorecommerce/chassis-srv/). 
+This interface emits resource-related messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled at the `ServiceBase`'s constructor.
 
 ## gRPC Interface
 
@@ -119,20 +122,20 @@ The events emitted to Kafka can be used for restoring the system in case of fail
 
 ## Fields Configuration
 
+It is possible to pass a fields configuration object to `ResourceAPI` in order to enable some special field handlers.
+
 ### Field Generators
 
-[Redis](https://redis.io/) can optionally be integrated with this microservice to automatically generate specific fields in each resource.
-Such autogeneration feature currently includes timestamps and sequential counters. The latter one is particularly useful for fields like customer or item numbers, which can have a type of sequential logic and can be read and written efficiently with Redis.
-These operations can be enabled by simply specifying the fields and their "strategies" in the configuration files.
+The `strategies` property can be used to specify fields within each resource which should be generated automatically. Such autogeneration feature currently includes UUIDs, timestamps and sequential counters. The latter one is particularly useful for fields such as a customer or an item number, which can have a type of sequential logic. In these cases, a [Redis](https://redis.io/) database is used to generate and read these values efficiently.
 
 ### Buffer Fields
 
-Buffer-encoded fields can be decoded before being stored in the database. It is possible to specify in the `bufferFields` config what fields of each resource should be specially handled this way. The values are also encoded into a buffer again when read from the database.
+Buffer-encoded fields can be decoded before being stored in the database. It is possible to specify within the `bufferFields` property what fields of each resource should be specially handled this way. The values are also encoded into a buffer again when read from the database.
 
 ### Required Fields
 
 It is possible to specify which fields are required for each document of each resource on the `requiredFields` config.
-An `InvalidArgument` error is thrown if one of these fields is missing.
+An `InvalidArgument` error is thrown if one of these fields is missing when attempting to store a document.
 
 ## Usage
 

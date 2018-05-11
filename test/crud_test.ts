@@ -1,10 +1,10 @@
 'use strict';
 
 import * as mocha from 'mocha';
-import {ServiceBase} from '..';
-import {ResourcesAPIBase} from '../';
-import {toStruct} from '../';
-import {toObject} from './../';
+import { ServiceBase } from '..';
+import { ResourcesAPIBase } from '../';
+import { toStruct } from '../';
+import { toObject } from './../';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Events, Topic } from '@restorecommerce/kafka-client';
@@ -49,9 +49,27 @@ describe('ServiceBase', () => {
     server = new chassis.Server(cfg.get('server'));
     events = new Events(cfg.get('events:testevents'), server.logger);
     await events.start();
+    const resourceName = 'resource';
     const testEvents: Topic = events.topic('test');
     db = await co(chassis.database.get(cfg.get('database:testdb'), server.logger));
-    const resourceAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'test');
+
+    const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
+    const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');
+    let resourceFieldConfig: any;
+    if (bufferHandlerConfig && ('testBufferedData' in bufferHandlerConfig)) {
+      if (!resourceFieldConfig) {
+        resourceFieldConfig = {};
+      }
+      resourceFieldConfig['bufferField'] = bufferHandlerConfig['testBufferedData'];
+    }
+    if (requiredFieldsConfig && (resourceName in requiredFieldsConfig)) {
+      if (!resourceFieldConfig) {
+        resourceFieldConfig = {};
+      }
+      resourceFieldConfig['requiredFields'] = requiredFieldsConfig;
+    }
+
+    const resourceAPI: ResourcesAPIBase = new ResourcesAPIBase(db, `${resourceName}s`, resourceFieldConfig);
     let isEventsEnabled = cfg.get('events:enableEvents');
     if (isEventsEnabled === 'true') {
       isEventsEnabled = true;
@@ -61,6 +79,13 @@ describe('ServiceBase', () => {
     const service: ServiceBase = new ServiceBase('Resource', testEvents,
       server.logger, resourceAPI, isEventsEnabled);
     await server.bind('test', service);
+
+    // Create buffered service and bind it to gRPC server
+    const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'testBufferedDatas', resourceFieldConfig);
+    const bufferService: ServiceBase = new ServiceBase('BufferResource', testEvents,
+    server.logger, resourceBufferAPI, isEventsEnabled);
+    await server.bind('testBufferedService', bufferService);
+
     await server.start();
 
     client = new Client(cfg.get('client:test'), server.logger);
@@ -80,10 +105,10 @@ describe('ServiceBase', () => {
         { id: '/test/xy', created: now, modified: now, value: 1, text: 'a xy' },
         { id: '/test/xyz', created: now, modified: now, value: 3, text: 'second test data' },
         { id: '/test/zy', created: now, modified: now, value: 12, text: 'yz test data' }];
-      await co(db.insert('test', testData));
+      await co(db.insert('resources', testData));
     });
     describe('read', () => {
-      it('should return all three elements with no arguments', async function checkget() {
+      it('should return all three elements with no arguments', async function checkRead() {
         const result = await testService.read({});
         should.exist(result);
         should.not.exist(result.error);
@@ -95,7 +120,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(3);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(testData, 'id'));
       });
-      it('should return two elements with offset 1', async function checkget() {
+      it('should return two elements with offset 1', async function checkRead() {
         const compareData = _.drop((await testService.read({})).data.items, 1);
         const result = await testService.read({
           offset: 1,
@@ -110,7 +135,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
       });
-      it('should return two elements with limit 2', async function checkget() {
+      it('should return two elements with limit 2', async function checkRead() {
         const compareData = _.dropRight((await testService.read({})).data.items, 1);
         const result = await testService.read({
           limit: 2,
@@ -125,7 +150,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
       });
-      it('should return elements sorted', async function checkget() {
+      it('should return elements sorted', async function checkRead() {
         const result = await testService.read({
           sort: [{
             field: 'id',
@@ -152,7 +177,7 @@ describe('ServiceBase', () => {
         });
         result.data.items.should.deepEqual(testDataDescending);
       });
-      it('should return only resources with value higher than 10', async function checkget() {
+      it('should return only resources with value higher than 10', async function checkRead() {
         const filter = toStruct({
           value: {
             $gt: 10,
@@ -173,7 +198,7 @@ describe('ServiceBase', () => {
           return data.value > 10;
         }), 'id'));
       });
-      it('should return elements only with field value', async function checkget() {
+      it('should return elements only with field value', async function checkRead() {
         const result = await testService.read({
           field: [{
             name: 'value',
@@ -197,7 +222,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('create', () => {
-      it('should create new documents', async function checkget() {
+      it('should create new documents', async function checkCreate() {
         const newTestDataFirst = {
           id: '/test/newdata',
           value: -10,
@@ -231,7 +256,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('delete', () => {
-      it('should delete collection when requested', async function checkget() {
+      it('should delete collection when requested', async function checkDelete() {
         const result = await testService.delete({ collection: true });
         should.exist(result);
         should.not.exist(result.error);
@@ -243,7 +268,7 @@ describe('ServiceBase', () => {
         should.exist(allTestData.data.items);
         allTestData.data.items.should.length(0);
       });
-      it('should delete all specified documents', async function checkget() {
+      it('should delete all specified documents', async function checkDelete() {
         const result = await testService.delete({ ids: [testData[1].id] });
         should.exist(result);
         should.not.exist(result.error);
@@ -259,7 +284,8 @@ describe('ServiceBase', () => {
       });
     });
     describe('update', () => {
-      it('should update all specified documents', async function checkget() {
+      it('should update all specified documents', async function
+        checkUpdate() {
         const patch = _.map(testData, (data) => {
           data.value = 100;
           data.text = 'test-patch';
@@ -284,7 +310,8 @@ describe('ServiceBase', () => {
       });
     });
     describe('upsert', () => {
-      it('should create or updae specified documents', async function checkget() {
+      it('should create or updae specified documents', async function
+        checkUpsert() {
         const replace = [{
           id: testData[2].id,
           value: 0,
@@ -319,6 +346,51 @@ describe('ServiceBase', () => {
 
         const inserted = _.find(allTestData.data.items, { id: replace[2].id });
         should.exist(inserted);
+      });
+    });
+    // Test to check required field
+    describe('check required fileds', () => {
+      it('should throw an error when trying to add ', async function checkget() {
+        let result = await testService.delete({ collection: true });
+        should.exist(result);
+        should.not.exist(result.error);
+        const allTestData = await testService.read();
+        const objectMissingField = [
+          { id: '/test/xy', value: 1 },
+          { id: '/test/xyz', value: 3 },
+          { id: '/test/zy', value: 12 }];
+        result = await testService.create({ items: objectMissingField });
+          should.exist(result);
+        should.exist(result);
+        should.exist(result.error);
+        should.exist(result.error.details);
+        result.error.details.should.startWith('3 INVALID_ARGUMENT: Field text is necessary');
+      });
+    });
+    // Test to check buffered fields
+    describe('check buffered fileds', () => {
+      it('should decode the buffered field before storing in DB',
+        async function checkBufferedData() {
+        client = new Client(cfg.get('client:testBufferedService'), server.logger);
+        let testBufferService = await client.connect();
+        const bufData = {
+          type_url: '',
+          value: Buffer.from(JSON.stringify({testkey: "testValue"}))
+        };
+        const bufferObjects = [
+          { value: 'testValue1', count: 1, data: bufData },
+          { value: 'testValue2', count: 1, data: bufData }];
+        const bufferResult = await testBufferService.create({items: bufferObjects});
+        // Read directly from DB and compare the JSON data
+        // because normal read() operation again encodes and sends the data back
+        // to check that data was decoded and stored in DB read directly from DB.
+        const result = await co(db.find('testBufferedDatas'));
+        should.exist(result);
+        should.exist(result[0].data);
+        should.exist(result[0].data.testkey);
+        result[0].data.testkey.should.equal('testValue');
+        // delete the data
+        await co(db.delete('testBufferedDatas'));
       });
     });
   });

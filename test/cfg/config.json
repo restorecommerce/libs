@@ -44,6 +44,32 @@
         "update": {},
         "upsert": {}
       }
+    },
+    "testBufferedService": {
+      "transports": {
+        "grpc": {
+          "service": "test.Test",
+          "protos": [
+            "test/test.proto"
+          ],
+          "protoRoot": "node_modules/@restorecommerce/protos/",
+          "timeout": 3000
+        }
+      },
+      "loadbalancer": {
+        "name": "roundRobin"
+      },
+      "publisher": {
+        "name": "static",
+        "instances": [
+          "grpc://localhost:50051"
+        ]
+      },
+      "endpoints": {
+        "create": {},
+        "read": {},
+        "delete": {}
+      }
     }
   },
   "events": {
@@ -72,6 +98,13 @@
         ],
         "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "testBufferDataCreated": {
+        "protos": [
+          "test/test.proto"
+        ],
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "messageObject": "test.TestBufferedData"
       }
     },
     "enableEvents": "true"
@@ -112,6 +145,23 @@
             "pipeline"
           ]
         }
+      },
+      "testBufferedService": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        }
       }
     },
     "transports": [
@@ -119,10 +169,12 @@
         "name": "pipeline",
         "provider": "grpc",
         "services": {
-          "test": "io.restorecommerce.resourcebase.Service"
+          "test": "io.restorecommerce.resourcebase.Service",
+          "testBufferedService": "test.Test"
         },
         "protos": [
-          "io/restorecommerce/resource_base.proto"
+          "io/restorecommerce/resource_base.proto",
+          "test/test.proto"
         ],
         "protoRoot": "node_modules/@restorecommerce/protos/",
         "addr": "localhost:50051"
@@ -131,7 +183,13 @@
   },
   "fieldHandlers": {
     "fieldGenerators": {},
-    "bufferFields": {},
-    "requiredFields": {}
+    "bufferFields": {
+      "testBufferedData": "data"
+    },
+    "requiredFields": {
+      "resource": [
+        "text"
+      ]
+    }
   }
 }

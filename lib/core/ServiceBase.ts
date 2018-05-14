@@ -45,8 +45,9 @@ export class ServiceBase {
    */
    async read(call: any, context: any): Promise<any> {
     if (!_.isEmpty(call.request.search)) {
-      throw new errors.Unimplemented('arangodb and elastic search is not implemented');
+      throw new errors.Unimplemented('Full-text search is not implemented');
     }
+
     try {
       let objectEntities = [];
       let sort;

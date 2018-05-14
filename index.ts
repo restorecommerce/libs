@@ -2,41 +2,50 @@
 
 import * as _ from 'lodash';
 
-export function toStruct(obj: Object, fromArray: any = false): any {
+export function toStruct(obj: any, fromArray = false): any {
+  const decode = (value: any) => {
+    let decodedVal;
+    if (_.isNumber(value)) {
+      decodedVal = { number_value: value };
+    }
+    else if (_.isString(value)) {
+      decodedVal = { string_value: value };
+    }
+    else if (_.isBoolean(value)) {
+      decodedVal = { bool_value: value };
+    }
+    else if (_.isArray(value)) {
+      decodedVal = {
+        list_value: {
+          values: _.map(value, (v) => {
+            return toStruct(v, true);
+          })
+        }
+      };
+    }
+    else if (_.isObject(value)) {
+      decodedVal = { struct_value: toStruct(value) };
+    }
+
+    return decodedVal;
+  };
+
   let struct;
   // fromArray flag is true when iterating
   // objects inside a JSON array
   if (!fromArray) {
     struct = {
-      fields: {},
+      fields: {
+      },
     };
+    _.forEach(obj, (value, key) => {
+      struct.fields[key] = decode(value);
+    });
   }
   else {
-    struct = {
-      struct_value: { fields: {} },
-    };
-    struct.struct_value.fields = {};
+    struct = decode(obj);
   }
-  _.forEach(obj, (value, key) => {
-    let innerStruct;
-    if (!fromArray) {
-      innerStruct = struct.fields;
-    } else {
-      innerStruct = struct.struct_value.fields;
-    }
 
-    if (_.isNumber(value)) {
-      innerStruct[key] = { number_value: value };
-    } else if (_.isString(value)) {
-      innerStruct[key] = { string_value: value };
-    } else if (_.isBoolean(value)) {
-      innerStruct[key] = { bool_value: value };
-    } else if (_.isArray(value)) {
-      innerStruct[key] = { list_value: { values: _.map(value, (v) => { return toStruct(v, true); }) } };
-    } else if (_.isObject(value)) {
-      innerStruct[key] = { struct_value: toStruct(value) };
-    }
-  });
   return struct;
 }
 

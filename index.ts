@@ -2,7 +2,7 @@
 
 import * as _ from 'lodash';
 
-export function toStruct(obj: any, fromArray = false): any {
+export function toStruct(obj: any, fromArray: Boolean = false): any {
   const decode = (value: any) => {
     let decodedVal;
     if (_.isNumber(value)) {

@@ -1,12 +1,11 @@
-'use strict';
-
 import * as _ from 'lodash';
 import * as bluebird from 'bluebird';
 import * as chassis from '@restorecommerce/chassis-srv';
-import * as co from 'co';
 import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
+
+import { Resource } from './interfaces';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
@@ -198,14 +197,14 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read(filter: Object = {}, limit: any = 1000, offset: any = 0,
-    sort: Object = {}, field: Object = {}): Promise<any> {
+    sort: Object = {}, field: Object = {}): Promise<Resource[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
       sort,
       fields: field,
     };
-    const entities = await co(this.db.find(this.collectionName, filter, options));
+    const entities: Resource[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferField) {
       // encode the msg obj back to buffer obj and send it back
       entities.forEach(element => {
@@ -216,15 +215,6 @@ export class ResourcesAPIBase {
       });
     }
     return entities;
-  }
-
-  /**
-   * Counts documents based on provided filters.
-   * @param {object} filter key value filter using mongodb/nedb filter format.
-   * @return {Number} Document count
-   */
-  async count(filter: Object = {}): Promise<number> {
-    return await co(this.db.count(this.collectionName, filter));
   }
 
   /**
@@ -249,7 +239,7 @@ export class ResourcesAPIBase {
           documents);
       }
 
-      await co(this.db.insert(collection, this.bufferField ? toInsert : documents));
+      await this.db.insert(collection, this.bufferField ? toInsert : documents);
     } catch (e) {
       if (e.code === 409) {
         throw new errors.AlreadyExists('Item Already exists.');
@@ -266,7 +256,6 @@ export class ResourcesAPIBase {
 * @param {any} documents list of documents.
 */
   checkRequiredFields(requiredFields: string[], documents: any): void {
-    console.log('Required fields are:', requiredFields);
     for (let document of documents) {
       for (let eachField of requiredFields) {
         if (!document[eachField]) {
@@ -290,15 +279,15 @@ export class ResourcesAPIBase {
     _.forEach(ids, (id) => {
       filter.$or.push({ id });
     });
-    await co(this.db.delete(this.collectionName, filter));
+    await this.db.delete(this.collectionName, filter);
   }
 
   /**
    * Delete all documents in the collection.
    */
   async deleteCollection(): Promise<any> {
-    const entities = await co(this.db.find(this.collectionName, {}, { fields: { id: 1 } }));
-    await co(this.db.truncate(this.collectionName));
+    const entities = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
+    await this.db.truncate(this.collectionName);
     return entities;
   }
 
@@ -308,7 +297,7 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    */
   async upsert(documents: Object[],
-    events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<any> {
+    events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<Resource[]> {
     try {
       _.map(documents, (document) => {
         setModified(document).then((res) => {
@@ -324,47 +313,60 @@ export class ResourcesAPIBase {
           toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
         }
       }
-      const result = await co(this.db.upsert(this.collectionName,
-        this.bufferField ? toInsert : documents));
-      let reqUp = _.filter(result, (e) => {
-        return _.isNil(e.created) || e.created === 0;
+      let result: Resource[] = await this.db.upsert(this.collectionName,
+        this.bufferField ? toInsert : documents);
+      let inserted: Resource[] = [];
+      result = _.map(result, (doc) => {
+        if (_.isNil(doc.created) || doc.created === 0) {
+          doc.created = doc.modified;
+          inserted.push(doc);
+        }
+        return doc;
       });
-      // Insert created date
-      if (reqUp.length > 0) {
-        const now: number = Date.now();
-        reqUp = _.map(reqUp, (e) => {
-          const ee = e;
-          ee.created = now;
-          return ee;
-        });
-        const b = await co(this.update(reqUp));
-        _.forEach(b, (e) => {
-          const el = _.find(result, { id: e.id });
-          if (el) {
-            el.created = e.created;
-          }
-        });
-        if (isEventsEnabled) {
-          const dispatch = [];
-          _.forEach(result, (res) => {
-            dispatch.push(events.emit(`${resourceName}Created`, res));
-          });
-          await dispatch;
-        }
-      } else {
-        // resource updated
-        if (isEventsEnabled) {
-          const dispatch = [];
-          _.forEach(result, (res) => {
-            dispatch.push(events.emit(`${resourceName}Modified`, res));
-          });
-          await dispatch;
-        }
+      // Assign `created` to inserted documents
+      if (inserted.length > 0) {
+        // inserted = _.map(inserted, (e) => {
+        //   const ee = e;
+        //   ee.created = now;
+        //   ee.modified = now;
+        //   return ee;
+        // });
+        // update the newly inserted documents with a created property
+        const updated = await this.update(inserted);
+        // _.forEach(updated, (e) => {
+        //   const el: Resource = _.find<Resource[]>(result, { id: e.id });
+        //   if (el) {
+        //     el.created = e.created;
+        //   }
+        // });
+        // if (isEventsEnabled) {
+        //   const dispatch = [];
+        //   _.forEach(result, (res) => {
+        //     dispatch.push(events.emit(`${resourceName}Created`, res));
+        //   });
+        //   await dispatch;
+        // }
       }
+      // else {
+      // resource updated
+      if (isEventsEnabled) {
+        const dispatch = [];
+        _.forEach(result, (doc) => {
+          let eventName: string;
+          if (doc.created == doc.modified) { // resource was just created
+            eventName = 'Created';
+          } else {
+            eventName = 'Modified';
+          }
+          dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
+        });
+        await dispatch;
+      }
+      // }
       return result;
     } catch (error) {
       if (error.code === 404) {
-        throw new errors.NotFound('Can\'t find any Item with the given id.');
+        throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }
       throw error;
     }
@@ -376,7 +378,7 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    * A list of documents or partial documents. Each document must contain an id field.
    */
-  async update(documents: Object[]): Promise<any> {
+  async update(documents: { id: string, [key: string]: any }[]): Promise<Resource[]> {
     try {
       _.map(documents, (document) => {
         setModified(document).then((res) => {
@@ -393,8 +395,8 @@ export class ResourcesAPIBase {
         if (this.bufferField) {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
-        patches.push(await co(db.update(collectionName,
-          { id: doc['id'] }, _.omitBy(doc, _.isNil))));
+        patches.push(await db.update(collectionName,
+          { id: doc['id'] }, _.omitBy(doc, _.isNil)));
       }
       return _.flatten(patches);
     } catch (e) {

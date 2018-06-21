@@ -28,7 +28,9 @@ const providers = [
       const dbHost: string = cfg.get('database:testdb:host');
       const dbPort: string = cfg.get('database:testdb:port');
       const dbName: string = cfg.get('database:testdb:database');
+      const dbCfg = cfg.get('database:testdb')
       const db = new Database('http://' + dbHost + ':' + dbPort);
+      await
       await db.dropDatabase(dbName);
       return database.get(cfg.get('database:testdb'), server.logger);
     }

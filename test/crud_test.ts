@@ -11,7 +11,6 @@ import { Events, Topic } from '@restorecommerce/kafka-client';
 import * as srvConfig from '@restorecommerce/service-config';
 import * as should from 'should';
 import * as _ from 'lodash';
-import * as co from 'co';
 
 /*
  * Note: To run this test, a running ArangoDB and Kafka instance is required.
@@ -51,7 +50,7 @@ describe('ServiceBase', () => {
     await events.start();
     const resourceName = 'resource';
     const testEvents: Topic = events.topic('test');
-    db = await co(chassis.database.get(cfg.get('database:testdb'), server.logger));
+    db = await chassis.database.get(cfg.get('database:testdb'), server.logger);
 
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
     const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');
@@ -98,14 +97,14 @@ describe('ServiceBase', () => {
   });
   describe('endpoints', () => {
     beforeEach(async function purgeDB() {
-      db = await co(chassis.database.get(cfg.get('database:testdb'), server.logger));
-      await co(db.truncate());
+      db = await chassis.database.get(cfg.get('database:testdb'), server.logger);
+      await db.truncate();
       const now: number = Date.now();
       testData = [
         { id: '/test/xy', created: now, modified: now, value: 1, text: 'a xy' },
         { id: '/test/xyz', created: now, modified: now, value: 3, text: 'second test data' },
         { id: '/test/zy', created: now, modified: now, value: 12, text: 'yz test data' }];
-      await co(db.insert('resources', testData));
+      await db.insert('resources', testData);
     });
     describe('read', () => {
       it('should return all three elements with no arguments', async function checkRead() {
@@ -130,7 +129,7 @@ describe('ServiceBase', () => {
         should.exist(result.data);
         should.exist(result.data.items);
         should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(testData.length);
+        result.data.total_count.should.be.equal(compareData.length);
         result.data.items.should.be.Array();
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
@@ -145,7 +144,7 @@ describe('ServiceBase', () => {
         should.exist(result.data);
         should.exist(result.data.items);
         should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(testData.length);
+        result.data.total_count.should.be.equal(compareData.length);
         result.data.items.should.be.Array();
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
@@ -384,13 +383,13 @@ describe('ServiceBase', () => {
         // Read directly from DB and compare the JSON data
         // because normal read() operation again encodes and sends the data back
         // to check that data was decoded and stored in DB read directly from DB.
-        const result = await co(db.find('testBufferedDatas'));
+        const result = await db.find('testBufferedDatas');
         should.exist(result);
         should.exist(result[0].data);
         should.exist(result[0].data.testkey);
         result[0].data.testkey.should.equal('testValue');
         // delete the data
-        await co(db.delete('testBufferedDatas'));
+        await db.delete('testBufferedDatas');
       });
     });
   });

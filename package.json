@@ -23,7 +23,7 @@
     "@restorecommerce/protos": "github:restorecommerce/protos",
     "@restorecommerce/service-config": "^0.1.0",
     "bluebird": "^3.5.1",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.10",
     "redis": "^2.8.0"
   },
   "devDependencies": {

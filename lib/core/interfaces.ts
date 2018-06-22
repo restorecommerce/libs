@@ -24,8 +24,8 @@ export interface ReadRequest {
 }
 
 export interface DeleteRequest {
-  collection: boolean;
-  ids: string[];
+  collection?: boolean;
+  ids?: string[];
 }
 
 export interface UpdateRequest {

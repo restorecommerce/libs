@@ -5,7 +5,7 @@ import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
 
-import { Resource } from './interfaces';
+import { Resource, DB } from './interfaces';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
@@ -105,8 +105,6 @@ function isEmptyObject(obj: any): any {
  * Resource API base provides functions for CRUD operations.
  */
 export class ResourcesAPIBase {
-  db: any;
-  collectionName: string;
   bufferField: string;
   requiredFields: Object;
   resourceName: string;
@@ -116,9 +114,7 @@ export class ResourcesAPIBase {
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(db: any, collectionName: string, fieldHandlerConf?: any) {
-    this.db = db;
-    this.collectionName = collectionName;
+  constructor(private db: DB, private collectionName: string, fieldHandlerConf?: any) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
 
     if (!fieldHandlerConf) {
@@ -196,8 +192,8 @@ export class ResourcesAPIBase {
    * @param {object} field key value, key=field value: 0=exclude, 1=include
    * @returns {an Object that contains an items field}
    */
-  async read(filter: Object = {}, limit: any = 1000, offset: any = 0,
-    sort: Object = {}, field: Object = {}): Promise<Resource[]> {
+  async read(filter: Object = {}, limit: number = 1000, offset: number = 0,
+    sort: any = {}, field: any = {}): Promise<Resource[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
@@ -222,7 +218,7 @@ export class ResourcesAPIBase {
   *
   * @param {array.object} documents
   */
-  async create(documents: Object[]): Promise<any> {
+  async create(documents: { id?: string, [key: string]: any }[]): Promise<any> {
     const collection = this.collectionName;
     const toInsert = [];
     try {
@@ -296,7 +292,7 @@ export class ResourcesAPIBase {
    *
    * @param [array.object] documents
    */
-  async upsert(documents: Object[],
+  async upsert(documents: { id: string, [key: string]: any }[],
     events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<Resource[]> {
     try {
       _.map(documents, (document) => {
@@ -325,29 +321,8 @@ export class ResourcesAPIBase {
       });
       // Assign `created` to inserted documents
       if (inserted.length > 0) {
-        // inserted = _.map(inserted, (e) => {
-        //   const ee = e;
-        //   ee.created = now;
-        //   ee.modified = now;
-        //   return ee;
-        // });
-        // update the newly inserted documents with a created property
         const updated = await this.update(inserted);
-        // _.forEach(updated, (e) => {
-        //   const el: Resource = _.find<Resource[]>(result, { id: e.id });
-        //   if (el) {
-        //     el.created = e.created;
-        //   }
-        // });
-        // if (isEventsEnabled) {
-        //   const dispatch = [];
-        //   _.forEach(result, (res) => {
-        //     dispatch.push(events.emit(`${resourceName}Created`, res));
-        //   });
-        //   await dispatch;
-        // }
       }
-      // else {
       // resource updated
       if (isEventsEnabled) {
         const dispatch = [];
@@ -362,7 +337,7 @@ export class ResourcesAPIBase {
         });
         await dispatch;
       }
-      // }
+
       return result;
     } catch (error) {
       if (error.code === 404) {

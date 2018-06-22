@@ -6,6 +6,7 @@ import * as chassis from '@restorecommerce/chassis-srv';
 import { toObject } from '../..';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic, Events } from '@restorecommerce/kafka-client';
+import { ServiceCall, ReadRequest, CreateRequest, DeleteRequest, UpdateRequest, UpsertRequest } from './interfaces';
 
 const errors = chassis.errors;
 
@@ -43,7 +44,7 @@ export class ServiceBase {
    * @param call request containing filter,limit, offset and sort options
    * @param context
    */
-   async read(call: any, context?: any): Promise<any> {
+  async read(call: ServiceCall<ReadRequest>, context?: any): Promise<any> {
     if (!_.isEmpty(call.request.search)) {
       throw new errors.Unimplemented('Full-text search is not implemented');
     }
@@ -111,7 +112,7 @@ export class ServiceBase {
    * @param call contains a list of resources to be created
    * @param context
    */
-  async create(call: any, context?: any): Promise<any> {
+  async create(call: ServiceCall<CreateRequest>, context?: any): Promise<any> {
     try {
       await this.resourceapi.create(call.request.items);
       const dispatch = [];
@@ -136,7 +137,7 @@ export class ServiceBase {
    * @param call contains list of resource IDs to be deleted
    * @param context
    */
-  async delete(call: any, context?: any): Promise<any> {
+  async delete(call: ServiceCall<DeleteRequest>, context?: any): Promise<any> {
     try {
       const events = this.events.entity;
       if (call.request.collection) {
@@ -151,7 +152,7 @@ export class ServiceBase {
         }
         this.logger.info(
           `resource ${this.name} of
-           collection ${this.resourceapi.collectionName} deleted`);
+           collection ${this.name}s deleted`);
         return {};
       }
       await this.resourceapi.delete(call.request.ids);
@@ -175,7 +176,7 @@ export class ServiceBase {
    * @param call contains list of resources to be modified
    * @param context
    */
-  async update(call: any, context?: any): Promise<any> {
+  async update(call: ServiceCall<UpdateRequest>, context?: any): Promise<any> {
     try {
       const updateResult = await this.resourceapi.update(call.request.items);
       this.logger.info('io.restorecommerce.' + this.name + '.resource.updated', updateResult);
@@ -200,7 +201,7 @@ export class ServiceBase {
    * @param call contains list of resources to be created or modified
    * @param context
    */
-  async upsert(call: any, context?: any): Promise<any> {
+  async upsert(call: ServiceCall<UpsertRequest>, context?: any): Promise<any> {
     try {
       const result = await this.resourceapi.upsert(call.request.items,
         this.events.entity, this.isEventsEnabled, this.name);

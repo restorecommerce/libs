@@ -15,12 +15,12 @@ export interface ServiceCall<TRequest> {
 export type SortType = 'ASCENDING' | 'DESCENDING' | 'UNSORTED' | 2 | 1 | 0;
 
 export interface ReadRequest {
-  search: string; // fulltext search
-  sort: { field: string, order: SortType }[];
-  limit: number;
-  offset: number;
-  field: { name: string, include: boolean }[];
-  filter: any;
+  search?: string; // fulltext search
+  sort?: { field: string, order: SortType }[];
+  limit?: number;
+  offset?: number;
+  field?: { name: string, include: boolean }[];
+  filter?: any;
 }
 
 export interface DeleteRequest {

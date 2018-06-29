@@ -34,6 +34,15 @@ describe('converting to struct back to object', () => {
   });
 });
 
+const now = Date.now();
+let meta = {
+  created: now,
+  modified: now,
+  modified_by: 'Admin',
+  owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
+};
+
+
 describe('ServiceBase', () => {
   let db: any;
   let server: chassis.Server;
@@ -82,7 +91,7 @@ describe('ServiceBase', () => {
     // Create buffered service and bind it to gRPC server
     const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'testBufferedDatas', resourceFieldConfig);
     const bufferService: ServiceBase = new ServiceBase('BufferResource', testEvents,
-    server.logger, resourceBufferAPI, isEventsEnabled);
+      server.logger, resourceBufferAPI, isEventsEnabled);
     await server.bind('testBufferedService', bufferService);
 
     await server.start();
@@ -96,14 +105,14 @@ describe('ServiceBase', () => {
     await events.stop();
   });
   describe('endpoints', () => {
-    beforeEach(async function purgeDB() {
+    beforeEach(async function restoreDB() {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger);
       await db.truncate();
       const now: number = Date.now();
       testData = [
-        { id: '/test/xy', created: now, modified: now, value: 1, text: 'a xy' },
-        { id: '/test/xyz', created: now, modified: now, value: 3, text: 'second test data' },
-        { id: '/test/zy', created: now, modified: now, value: 12, text: 'yz test data' }];
+        { id: '/test/xy', meta, value: 1, text: 'a xy' },
+        { id: '/test/xyz', meta, value: 3, text: 'second test data' },
+        { id: '/test/zy', meta, value: 12, text: 'yz test data' }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
@@ -213,24 +222,33 @@ describe('ServiceBase', () => {
         result.data.items.should.be.Array();
         result.data.items.should.length(3);
         const testDataReduced = [
-          { id: '', created: 0, modified: 0, text: '', value: testData[0].value },
-          { id: '', created: 0, modified: 0, text: '', value: testData[1].value },
-          { id: '', created: 0, modified: 0, text: '', value: testData[2].value },
+          { id: '', text: '', meta: null, value: testData[0].value },
+          { id: '', text: '', meta: null, value: testData[1].value },
+          { id: '', text: '', meta: null, value: testData[2].value },
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });
     });
     describe('create', () => {
       it('should create new documents', async function checkCreate() {
+        const meta = {
+          modified_by: 'Admin',
+          owner: [{
+            owner_entity: 'urn:restorecommerce:acs:model:User',
+            owner_id: 'Admin'
+          }]
+        };
         const newTestDataFirst = {
           id: '/test/newdata',
           value: -10,
           text: 'new data',
+          meta
         };
         const newTestDataSecond = {
           id: '/test/newdata2',
           value: -10,
           text: 'new second data',
+          meta
         };
         const newTestData = [newTestDataFirst, newTestDataSecond];
         const result = await testService.create({ items: newTestData });
@@ -311,18 +329,22 @@ describe('ServiceBase', () => {
     describe('upsert', () => {
       it('should create or updae specified documents', async function
         checkUpsert() {
+        const now = Date.now();
         const replace = [{
           id: testData[2].id,
           value: 0,
           text: '',
+          meta
         }, {
           id: testData[0].id,
           value: 0,
           text: 'patched',
+          meta
         }, {
           id: '/test/newput',
           value: 0,
           text: '',
+          meta
         }];
         const result = await testService.upsert({ items: replace });
         should.exist(result);
@@ -355,11 +377,11 @@ describe('ServiceBase', () => {
         should.not.exist(result.error);
         const allTestData = await testService.read();
         const objectMissingField = [
-          { id: '/test/xy', value: 1 },
-          { id: '/test/xyz', value: 3 },
-          { id: '/test/zy', value: 12 }];
+          { id: '/test/xy', value: 1, meta },
+          { id: '/test/xyz', value: 3, meta },
+          { id: '/test/zy', value: 12, meta }];
         result = await testService.create({ items: objectMissingField });
-          should.exist(result);
+        should.exist(result);
         should.exist(result);
         should.exist(result.error);
         should.exist(result.error.details);
@@ -370,27 +392,28 @@ describe('ServiceBase', () => {
     describe('check buffered fileds', () => {
       it('should decode the buffered field before storing in DB',
         async function checkBufferedData() {
-        client = new Client(cfg.get('client:testBufferedService'), server.logger);
-        let testBufferService = await client.connect();
-        const bufData = {
-          type_url: '',
-          value: Buffer.from(JSON.stringify({testkey: "testValue"}))
-        };
-        const bufferObjects = [
-          { value: 'testValue1', count: 1, data: bufData },
-          { value: 'testValue2', count: 1, data: bufData }];
-        const bufferResult = await testBufferService.create({items: bufferObjects});
-        // Read directly from DB and compare the JSON data
-        // because normal read() operation again encodes and sends the data back
-        // to check that data was decoded and stored in DB read directly from DB.
-        const result = await db.find('testBufferedDatas');
-        should.exist(result);
-        should.exist(result[0].data);
-        should.exist(result[0].data.testkey);
-        result[0].data.testkey.should.equal('testValue');
-        // delete the data
-        await db.delete('testBufferedDatas');
-      });
+          client = new Client(cfg.get('client:testBufferedService'), server.logger);
+          let testBufferService = await client.connect();
+          const bufData = {
+            type_url: '',
+            value: Buffer.from(JSON.stringify({ testkey: "testValue" }))
+          };
+          const bufferObjects = [
+            { value: 'testValue1', count: 1, data: bufData, meta },
+            { value: 'testValue2', count: 1, data: bufData, meta }];
+          const bufferResult = await testBufferService.create({ items: bufferObjects });
+          console.log(bufferResult);
+          // Read directly from DB and compare the JSON data
+          // because normal read() operation again encodes and sends the data back.
+          // This way, we check if the data was actually encoded by reading it fromt the DB.
+          const result = await db.find('testBufferedDatas');
+          should.exist(result);
+          should.exist(result[0].data);
+          should.exist(result[0].data.testkey);
+          result[0].data.testkey.should.equal('testValue');
+          // delete the data
+          await db.delete('testBufferedDatas');
+        });
     });
   });
 });

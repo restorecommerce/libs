@@ -1,15 +1,14 @@
 import * as _ from 'lodash';
 import * as bluebird from 'bluebird';
-import * as chassis from '@restorecommerce/chassis-srv';
+import { errors } from '@restorecommerce/chassis-srv';
 import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
 
-import { Resource, DB } from './interfaces';
+import { BaseDocument, DB } from './interfaces';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
-const errors = chassis.errors;
 let redisClient: any;
 
 const Strategies = {
@@ -18,16 +17,20 @@ const Strategies = {
   RANDOM: 'random',
   TIMESTAMP: 'timestamp'
 };
-const uuidGen = (): string => {
-  return uuid.v4().replace(/-/g, '');
-};
 
-async function setDefaults(obj: any, collectionName: string): Promise<any> {
+function uuidGen(): string {
+  return uuid.v4().replace(/-/g, '');
+}
+
+async function setDefaults(obj: { meta: any, [key: string]: any }, collectionName: string): Promise<any> {
   const o = obj;
-  let now: number;
+
+  if (_.isEmpty(o.meta) || _.isNil(o.meta.modified_by) || _.isEmpty(o.meta.owner)) {
+    throw new errors.InvalidArgument('Object does not contain ownership information');
+  }
+
+  const now = Date.now();
   if (redisClient) {
-    const time: string = (await redisClient.timeAsync())[0];
-    now = Number(time);
     const values: Array<string> = await redisClient.hgetallAsync(collectionName);
 
     if (values) {
@@ -51,13 +54,12 @@ async function setDefaults(obj: any, collectionName: string): Promise<any> {
         }
       }
     }
-  } else {
-    now = Date.now();
   }
-  if (_.isNil(o.created) || o.created === 0) {
-    o.created = now;
+
+  if (_.isNil(o.meta.created) || o.meta.created === 0) {
+    o.meta.created = now;
   }
-  o.modified = now;
+  o.meta.modified = now;
   if (_.isNil(o.id) || o.id === 0 || isEmptyObject(o.id)) {
     o.id = uuidGen();
   }
@@ -87,13 +89,12 @@ function encodeMsgObj(document: any, bufferField: string): any {
   return document;
 }
 
-async function setModified(obj: any): Promise<Object> {
+function setModified(obj: BaseDocument): BaseDocument {
   const o = obj;
-  if (redisClient) {
-    o.modified = await redisClient.timeAsync()[0];
-  } else {
-    o.modified = Date.now();
+  if (_.isEmpty(obj.meta)) {
+    throw new errors.InvalidArgument('Missing document metadata upon update');
   }
+  o.meta.modified = Date.now();
   return o;
 }
 
@@ -193,14 +194,14 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read(filter: Object = {}, limit: number = 1000, offset: number = 0,
-    sort: any = {}, field: any = {}): Promise<Resource[]> {
+    sort: any = {}, field: any = {}): Promise<BaseDocument[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
       sort,
       fields: field,
     };
-    const entities: Resource[] = await this.db.find(this.collectionName, filter, options);
+    const entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferField) {
       // encode the msg obj back to buffer obj and send it back
       entities.forEach(element => {
@@ -218,7 +219,7 @@ export class ResourcesAPIBase {
   *
   * @param {array.object} documents
   */
-  async create(documents: { id?: string, [key: string]: any }[]): Promise<any> {
+  async create(documents: BaseDocument[]): Promise<any> {
     const collection = this.collectionName;
     const toInsert = [];
     try {
@@ -245,12 +246,10 @@ export class ResourcesAPIBase {
   }
 
   /**
-* check if the required fields are present.
-*
-* @param {Object} requiredFields contains list of requried fileds.
-* @param {String} resourceName resourece name.
-* @param {any} documents list of documents.
-*/
+   * Check if a resource's required fields are present.
+   * @param requiredFields
+   * @param documents
+   */
   checkRequiredFields(requiredFields: string[], documents: any): void {
     for (let document of documents) {
       for (let eachField of requiredFields) {
@@ -292,16 +291,10 @@ export class ResourcesAPIBase {
    *
    * @param [array.object] documents
    */
-  async upsert(documents: { id: string, [key: string]: any }[],
-    events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<Resource[]> {
+  async upsert(documents: BaseDocument[],
+    events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<BaseDocument[]> {
     try {
-      _.map(documents, (document) => {
-        setModified(document).then((res) => {
-          return;
-        }).catch((err) => {
-          throw err;
-        });
-      });
+      _.map(documents, setModified);
       const toInsert = [];
       for (let i = 0; i < documents.length; i += 1) {
         // decode the buffer and store it to DB
@@ -309,12 +302,12 @@ export class ResourcesAPIBase {
           toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
         }
       }
-      let result: Resource[] = await this.db.upsert(this.collectionName,
+      let result: BaseDocument[] = await this.db.upsert(this.collectionName,
         this.bufferField ? toInsert : documents);
-      let inserted: Resource[] = [];
+      let inserted: BaseDocument[] = [];
       result = _.map(result, (doc) => {
-        if (_.isNil(doc.created) || doc.created === 0) {
-          doc.created = doc.modified;
+        if (_.isNil(doc.meta.created) || doc.meta.created === 0) {
+          doc.meta.created = doc.meta.modified;
           inserted.push(doc);
         }
         return doc;
@@ -328,7 +321,7 @@ export class ResourcesAPIBase {
         const dispatch = [];
         _.forEach(result, (doc) => {
           let eventName: string;
-          if (doc.created == doc.modified) { // resource was just created
+          if (doc.meta.created == doc.meta.modified) { // resource was just created
             eventName = 'Created';
           } else {
             eventName = 'Modified';
@@ -353,15 +346,9 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    * A list of documents or partial documents. Each document must contain an id field.
    */
-  async update(documents: { id: string, [key: string]: any }[]): Promise<Resource[]> {
+  async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
     try {
-      _.map(documents, (document) => {
-        setModified(document).then((res) => {
-          return document;
-        }).catch((err) => {
-          throw err;
-        });
-      });
+      _.map(documents, setModified);
       const db = this.db;
       const collectionName = this.collectionName;
       const patches = [];

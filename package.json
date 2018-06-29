@@ -41,7 +41,7 @@
     "tsctests": "tsc test/*_test.ts --module commonjs -target ES6",
     "test": "npm run lint && npm run mocha",
     "lint": "tslint './index.ts' './lib/**/*.ts' './*_test.ts'",
-    "mocha": "export NODE_ENV=test; mocha -R spec ./test/*.js --exit",
+    "mocha": "export NODE_ENV=test; mocha -R spec ./test/c*.js --exit",
     "test-debug": "npm run lint && npm run mocha-debug",
     "mocha-debug": "export NODE_ENV=test; mocha ./test/*.js --inspect-brk --exit",
     "coveralls": "export NODE_ENV=test; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/*.js --exit",

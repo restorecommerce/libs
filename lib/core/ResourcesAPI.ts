@@ -25,7 +25,7 @@ function uuidGen(): string {
 async function setDefaults(obj: { meta: any, [key: string]: any }, collectionName: string): Promise<any> {
   const o = obj;
 
-  if (_.isEmpty(o.meta) || _.isNil(o.meta.modified_by) || _.isEmpty(o.meta.owner)) {
+  if (_.isEmpty(o.meta)) {
     throw new errors.InvalidArgument('Object does not contain ownership information');
   }
 

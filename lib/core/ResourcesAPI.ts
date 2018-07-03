@@ -67,7 +67,7 @@ async function setDefaults(obj: { meta: any, [key: string]: any }, collectionNam
 }
 
 function decodeBufferObj(document: any, bufferField: string): any {
-  if (bufferField in document && document[bufferField]) {
+  if (bufferField in document && !_.isEmpty(document[bufferField])) {
     const encodedBufferObj = document[bufferField].value;
     // By default it was encoded in utf8 so decoding by default from utf8
     let decodedMsg = Buffer.from(encodedBufferObj).toString();

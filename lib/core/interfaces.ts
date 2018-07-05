@@ -25,8 +25,15 @@ export interface UpdateRequest {
 
 export interface BaseDocument {
   id?: string;
-  meta: any;
+  meta: DocumentMetadata;
   [key: string]: any;
+}
+
+export interface DocumentMetadata {
+  created?: number;
+  modified?: number;
+  modified_by?: string;
+  owner: { owner_entity: string, owner_id: string };
 }
 
 export interface UpsertRequest extends UpdateRequest { }
@@ -37,7 +44,7 @@ export interface CreateRequest {
 
 export interface DB {
   insert(collection: string, documents: BaseDocument[]): Promise<BaseDocument[]>;
-  find(collection: string, flter: any, { limit, offset, sort, fields}: { limit?: number, offset?: number, sort?: any, fields?: any}): Promise<BaseDocument[]>;
+  find(collection: string, filter: any, { limit, offset, sort, fields}?: { limit?: number, offset?: number, sort?: any, fields?: any}): Promise<BaseDocument[]>;
   update(collection: string, filter: { id: string }, document: { id?: string, [key: string]: any}): Promise<BaseDocument[]>;
   truncate(collection: string): Promise<void>;
   upsert(collection: string, documents: BaseDocument[]): Promise<BaseDocument[]>;

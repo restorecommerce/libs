@@ -5,7 +5,7 @@ import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
 
-import { BaseDocument, DB } from './interfaces';
+import { BaseDocument, DB, DocumentMetadata } from './interfaces';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
@@ -22,7 +22,7 @@ function uuidGen(): string {
   return uuid.v4().replace(/-/g, '');
 }
 
-async function setDefaults(obj: { meta: any, [key: string]: any }, collectionName: string): Promise<any> {
+async function setDefaults(obj: { meta: DocumentMetadata, [key: string]: any }, collectionName: string): Promise<any> {
   const o = obj;
 
   if (_.isEmpty(o.meta)) {
@@ -66,7 +66,25 @@ async function setDefaults(obj: { meta: any, [key: string]: any }, collectionNam
   return o;
 }
 
-function decodeBufferObj(document: any, bufferField: string): any {
+function updateMetadata(docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDocument {
+  if (_.isEmpty(newDoc.meta)) {
+    // docMeta.owner = newDoc.owner;
+    throw new errors.InvalidArgument(`Update request holds no valid metadata for document ${newDoc.id}`);
+  }
+
+  if (!_.isEmpty(newDoc.meta.owner)) {
+    // if ownership is meant to be updated
+    docMeta.owner = newDoc.meta.owner;
+  }
+
+  docMeta.modified_by = newDoc.meta.modified_by;
+  docMeta.modified = Date.now();
+
+  newDoc.meta = docMeta;
+  return newDoc;
+}
+
+function decodeBufferObj(document: BaseDocument, bufferField: string): BaseDocument {
   if (bufferField in document && !_.isEmpty(document[bufferField])) {
     const encodedBufferObj = document[bufferField].value;
     // By default it was encoded in utf8 so decoding by default from utf8
@@ -87,15 +105,6 @@ function encodeMsgObj(document: any, bufferField: string): any {
     document[bufferField].value = encodedBufferObj;
   }
   return document;
-}
-
-function setModified(obj: BaseDocument): BaseDocument {
-  const o = obj;
-  if (_.isEmpty(obj.meta)) {
-    throw new errors.InvalidArgument('Missing document metadata upon update');
-  }
-  o.meta.modified = Date.now();
-  return o;
 }
 
 function isEmptyObject(obj: any): any {
@@ -294,42 +303,34 @@ export class ResourcesAPIBase {
   async upsert(documents: BaseDocument[],
     events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<BaseDocument[]> {
     try {
-      _.map(documents, setModified);
-      const toInsert = [];
+      const dispatch = []; // CRUD events to be dispatched
       for (let i = 0; i < documents.length; i += 1) {
-        // decode the buffer and store it to DB
-        if (this.bufferField) {
-          toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
-        }
-      }
-      let result: BaseDocument[] = await this.db.upsert(this.collectionName,
-        this.bufferField ? toInsert : documents);
-      let inserted: BaseDocument[] = [];
-      result = _.map(result, (doc) => {
-        if (_.isNil(doc.meta.created) || doc.meta.created === 0) {
-          doc.meta.created = doc.meta.modified;
-          inserted.push(doc);
-        }
-        return doc;
-      });
-      // Assign `created` to inserted documents
-      if (inserted.length > 0) {
-        const updated = await this.update(inserted);
-      }
-      // resource updated
-      if (isEventsEnabled) {
-        const dispatch = [];
-        _.forEach(result, (doc) => {
-          let eventName: string;
-          if (doc.meta.created == doc.meta.modified) { // resource was just created
-            eventName = 'Created';
-          } else {
-            eventName = 'Modified';
+        let doc = documents[i];
+        decodeBufferObj(doc, this.bufferField);
+
+        const foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
+          fields: {
+            meta: 1
           }
-          dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
         });
-        await dispatch;
+
+        let eventName: string;
+        if (_.isEmpty(foundDocs)) {
+          // insert
+          setDefaults(doc, this.collectionName);
+          eventName = 'Created';
+        } else {
+          // update
+          const dbDoc = foundDocs[0];
+          updateMetadata(dbDoc.meta, doc);
+          eventName = 'Modified';
+        }
+
+        dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
       }
+
+      const result = await this.db.upsert(this.collectionName, documents);
+      await dispatch;
 
       return result;
     } catch (error) {
@@ -348,7 +349,6 @@ export class ResourcesAPIBase {
    */
   async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
     try {
-      _.map(documents, setModified);
       const db = this.db;
       const collectionName = this.collectionName;
       const patches = [];
@@ -357,13 +357,25 @@ export class ResourcesAPIBase {
         if (this.bufferField) {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
+
+        const foundDocs = await db.find(collectionName, { id: doc.id }, {
+          fields: {
+            meta: 1
+          }
+        });
+        if (_.isEmpty(foundDocs)) {
+          throw { code: 404 };
+        }
+        const dbDoc = foundDocs[0];
+        doc = updateMetadata(dbDoc.meta, doc);
+
         patches.push(await db.update(collectionName,
-          { id: doc['id'] }, _.omitBy(doc, _.isNil)));
+          { id: doc.id }, _.omitBy(doc, _.isNil)));
       }
       return _.flatten(patches);
     } catch (e) {
       if (e.code === 404) {
-        throw new errors.NotFound('Can\'t find any Item with the given id.');
+        throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }
       throw e;
     }

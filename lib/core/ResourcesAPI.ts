@@ -84,14 +84,19 @@ function updateMetadata(docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
   return newDoc;
 }
 
-function decodeBufferObj(document: BaseDocument, bufferField: string): BaseDocument {
-  if (bufferField in document && !_.isEmpty(document[bufferField])) {
-    const encodedBufferObj = document[bufferField].value;
+/**
+ *
+ * @param document
+ * @param bufferFieldPath A '.'-separated object path.
+ */
+function decodeBufferObj(document: BaseDocument, bufferFieldPath: string): BaseDocument {
+  if (_.has(document, bufferFieldPath) && !_.isEmpty(_.get(document, bufferFieldPath))) {
+    const encodedBufferObj = _.get(document, bufferFieldPath).value;
     // By default it was encoded in utf8 so decoding by default from utf8
     let decodedMsg = Buffer.from(encodedBufferObj).toString();
     // store as object in DB
     decodedMsg = JSON.parse(decodedMsg);
-    document[bufferField] = decodedMsg;
+    _.set(document, bufferFieldPath, decodedMsg);
   }
   return document;
 }

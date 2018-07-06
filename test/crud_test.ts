@@ -402,7 +402,6 @@ describe('ServiceBase', () => {
             { value: 'testValue1', count: 1, data: bufData, meta },
             { value: 'testValue2', count: 1, data: bufData, meta }];
           const bufferResult = await testBufferService.create({ items: bufferObjects });
-          console.log(bufferResult);
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.
           // This way, we check if the data was actually encoded by reading it fromt the DB.

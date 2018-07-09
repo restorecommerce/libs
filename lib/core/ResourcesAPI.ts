@@ -255,25 +255,25 @@ export class ResourcesAPIBase {
         result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
         for (let document of documents) {
           for (let eachEdgeCfg of this.graphCfg.vertices[collection]) {
-            const fromIDkey = this.graphCfg.vertices[collection][0].from;
+            const fromIDkey = eachEdgeCfg.from;
             const from_id = document[fromIDkey];
-            const toIDkey = this.graphCfg.vertices[collection][0].to;
+            const toIDkey = eachEdgeCfg.to;
             const to_id = document[toIDkey];
             const fromVerticeName = collection;
-            const toVerticeName = this.graphCfg.vertices[collection][0].toVerticeName;
+            const toVerticeName = eachEdgeCfg.toVerticeName;
             if (fromVerticeName && toVerticeName) {
-              const edgeDefRes = await this.db.addEdgeDefinition(this.graphCfg.vertices[collection][0].edgeName, [fromVerticeName],
+              const edgeDefRes = await this.db.addEdgeDefinition(eachEdgeCfg.edgeName, [fromVerticeName],
                 [toVerticeName]);
             }
             if (from_id && to_id) {
               if (_.isArray(to_id)) {
                 for (let toID of to_id) {
-                  await this.db.createEdge(this.graphCfg.vertices[collection][0].edgeName, null,
+                  await this.db.createEdge(eachEdgeCfg.edgeName, null,
                     `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
                 }
                 continue;
               }
-              await this.db.createEdge(this.graphCfg.vertices[collection][0].edgeName, null,
+              await this.db.createEdge(eachEdgeCfg.edgeName, null,
                 `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
             }
           }

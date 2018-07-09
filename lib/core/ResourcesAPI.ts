@@ -91,26 +91,12 @@ function updateMetadata(docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
  */
 function decodeBufferObj(document: BaseDocument, bufferFieldPath: string): BaseDocument {
   if (_.has(document, bufferFieldPath) && !_.isEmpty(_.get(document, bufferFieldPath))) {
-
-    let encodedBufferObj = _.get(document, bufferFieldPath);
-    if (!_.has(encodedBufferObj, 'type_url') || !_.has(encodedBufferObj, 'value')) {
-      for (let property in encodedBufferObj) {
-        if (_.has(encodedBufferObj, 'type_url') && _.has(encodedBufferObj, 'value')) {
-          encodedBufferObj = encodedBufferObj[property];
-          break;
-        }
-      }
-    }
-
-    if (_.isEmpty(encodedBufferObj.value)) {
-      return document;
-    }
+    const encodedBufferObj = _.get(document, bufferFieldPath).value;
     // By default it was encoded in utf8 so decoding by default from utf8
-    let decodedMsg = Buffer.from(encodedBufferObj.value).toString();
+    let decodedMsg = Buffer.from(encodedBufferObj).toString();
     // store as object in DB
     decodedMsg = JSON.parse(decodedMsg);
     _.set(document, bufferFieldPath, decodedMsg);
-
   }
   return document;
 }

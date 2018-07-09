@@ -139,7 +139,19 @@ export class ServiceBase {
     try {
       const events = this.events.entity;
       if (call.request.collection) {
-        const docs = await this.resourceapi.deleteCollection();
+        const graphCfg = this.resourceapi.graphCfg;
+        let docs = [];
+        let idsList;
+        if (graphCfg && graphCfg.vertices[this.name]) {
+          docs = await this.resourceapi.read({});
+          idsList = _.map(docs, (doc) => {
+            return doc.id;
+          });
+          await this.resourceapi.delete(idsList);
+        }
+        if (docs.length === 0) {
+          docs = await this.resourceapi.deleteCollection();
+        }
 
         if (this.isEventsEnabled) {
           const dispatch = [];

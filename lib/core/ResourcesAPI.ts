@@ -118,14 +118,17 @@ export class ResourcesAPIBase {
   bufferField: string;
   requiredFields: Object;
   resourceName: string;
+  graphCfg: any;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(private db: DB, private collectionName: string, fieldHandlerConf?: any) {
+  constructor(private db: DB, private collectionName: string, fieldHandlerConf?: any,
+    graphCfg?: any) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
+    this.graphCfg = graphCfg;
 
     if (!fieldHandlerConf) {
       return;
@@ -245,7 +248,42 @@ export class ResourcesAPIBase {
           documents);
       }
 
-      await this.db.insert(collection, this.bufferField ? toInsert : documents);
+      let result = [];
+      if (this.graphCfg && this.graphCfg.vertices[collection]) {
+        await this.db.createGraphDB(this.graphCfg.graphName);
+        await this.db.addVertexCollection(collection);
+        result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
+        for (let document of documents) {
+          for (let eachEdgeCfg of this.graphCfg.vertices[collection]) {
+            const fromIDkey = this.graphCfg.vertices[collection][0].from;
+            const from_id = document[fromIDkey];
+            const toIDkey = this.graphCfg.vertices[collection][0].to;
+            const to_id = document[toIDkey];
+            const fromVerticeName = collection;
+            const toVerticeName = this.graphCfg.vertices[collection][0].toVerticeName;
+            if (fromVerticeName && toVerticeName) {
+              const edgeDefRes = await this.db.addEdgeDefinition(this.graphCfg.vertices[collection][0].edgeName, [fromVerticeName],
+                [toVerticeName]);
+            }
+            if (from_id && to_id) {
+              if (_.isArray(to_id)) {
+                for (let toID of to_id) {
+                  await this.db.createEdge(this.graphCfg.vertices[collection][0].edgeName, null,
+                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
+                }
+                continue;
+              }
+              await this.db.createEdge(this.graphCfg.vertices[collection][0].edgeName, null,
+                `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
+            }
+          }
+        }
+        result.push(result);
+        return result;
+      }
+      else {
+        await this.db.insert(collection, this.bufferField ? toInsert : documents);
+      }
     } catch (e) {
       if (e.code === 409) {
         throw new errors.AlreadyExists('Item Already exists.');
@@ -283,6 +321,15 @@ export class ResourcesAPIBase {
     _.forEach(ids, (id) => {
       filter.$or.push({ id });
     });
+    if (this.graphCfg && this.graphCfg.vertices[this.collectionName]) {
+      // Modify the Ids to include documentHandle
+      if (ids.length > 0) {
+        ids = _.map(ids, (id) => {
+          return `${this.collectionName}/${id}`;
+        });
+        return await this.db.removeVertex(this.collectionName, ids);
+      }
+    }
     await this.db.delete(this.collectionName, filter);
   }
 

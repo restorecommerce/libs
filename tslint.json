@@ -1,7 +1,7 @@
 {
   "rules": {
     "adjacent-overload-signatures": true,
-    "typedef": [true, "call-signature", "parameter", "member-variable-declaration"],
+    "typedef": [true, "call-signature", "parameter"],
     "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-shorthand": true,
     "only-arrow-functions": [false],

@@ -8,16 +8,34 @@
       "autoCreate": true
     }
   },
+  "graph": {
+    "graphName": "testGraph",
+    "vertices": {
+      "organizations": [
+        {}
+      ],
+      "persons": [
+        {
+          "edgeName": "person_has_car",
+          "from": "id",
+          "to": "car_id",
+          "direction": "outbound",
+          "toVerticeName": "cars"
+        }
+      ],
+      "cars": [
+        {
+          "edgeName": "car_has_org",
+          "from": "id",
+          "to": "org_id",
+          "direction": "outbound",
+          "toVerticeName": "organizations"
+        }
+      ]
+    }
+  },
   "client": {
     "test": {
-      "logger": {
-        "console": {
-          "handleExceptions": false,
-          "level": "warn",
-          "colorize": true,
-          "prettyPrint": true
-        }
-      },
       "transports": {
         "grpc": {
           "service": "io.restorecommerce.resourcebase.Service",

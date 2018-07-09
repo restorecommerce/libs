@@ -2,6 +2,8 @@
 
 import * as mocha from 'mocha';
 import { GraphResourcesServiceBase } from '../lib/core/GraphResourcesServiceBase';
+import { ResourcesAPIBase } from '../lib/core/ResourcesAPI';
+import { ServiceBase } from '../lib/core/ServiceBase';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';
@@ -15,8 +17,7 @@ const database = chassis.database;
 let cfg = srvConfig(process.cwd() + '/test');
 let server = new chassis.Server(cfg.get('server'));
 /*
- * Note: To run this test, a running ArangoDB and Kafka instance is required.
- * (Kafka is needed only if 'events:enableEvents' config is enabled)
+ * Note: To run this test, a running ArangoDB is required.
  */
 
 /* global describe it before after beforeEach */
@@ -30,7 +31,6 @@ const providers = [
       const dbName: string = cfg.get('database:testdb:database');
       const dbCfg = cfg.get('database:testdb')
       const db = new Database('http://' + dbHost + ':' + dbPort);
-      await
       await db.dropDatabase(dbName);
       return database.get(cfg.get('database:testdb'), server.logger);
     }
@@ -43,34 +43,15 @@ providers.forEach((providerCfg) => {
 });
 
 function testProvider(providerCfg) {
-
   describe('GraphServiceBase', () => {
     let db: any;
     let client: Client;
     let testService;
-    const vertexCollectionName = 'person';
-    const edgeCollectionName = 'has_car';
-    const edgeCollectionName_1 = 'has_headquartesrs_in';
-    const vertexCollectionName_1 = 'car';
-    const vertexCollectionName_2 = 'location';
+    let testResourceBaseService;
+    let graphCfg;
+    let resourcesList;
     before(async function before() {
       db = await providerCfg.init();
-      // create graph with a graph name
-      const graph = await db.createGraphDB('test-graph');
-      // create person vertex collection
-      await db.addVertexCollection(vertexCollectionName);
-      await db.addVertexCollection(vertexCollectionName_1);
-      await db.addVertexCollection(vertexCollectionName_2);
-      // create edge definition edgeCollectionName, fromVerticeCollection,
-      // toVerticeCollection
-      await db.addEdgeDefinition(edgeCollectionName,
-        [vertexCollectionName],
-        [vertexCollectionName_1]);
-      await db.addEdgeDefinition(edgeCollectionName_1,
-        [vertexCollectionName_1],
-        [vertexCollectionName_2]);
-      should.exist(db);
-
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db);
       await server.bind('graphsTestService', graphAPIService);
@@ -79,6 +60,13 @@ function testProvider(providerCfg) {
 
       client = new Client(cfg.get('client:graphsTestService'), server.logger);
       testService = await client.connect();
+
+      // Start resource base server for the graph services
+      graphCfg = cfg.get('graph');
+      resourcesList = Object.keys(graphCfg.vertices);
+
+      let resourceBaseClient = new Client(cfg.get('client:test'), server.logger);
+      testResourceBaseService = await resourceBaseClient.connect();
     });
     after(async function after() {
       await client.end();
@@ -86,68 +74,51 @@ function testProvider(providerCfg) {
     });
 
     describe('Graphs Collection API', () => {
-      let result, result1, result2;
-      let edgeResult;
+      let result_1, result_2, result_3;
+      let service_1, service_2, service_3;
+      let meta;
       it('should create a vertex collection and insert data into it', async function
     createVertices() {
+        let meta = {
+          owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
+        };
         const personVertices = [
-          { name: 'Alice', id: 'a' },
-          { name: 'Bob', id: 'b' }
+          { name: 'Alice', id: 'a', car_id: 'c', meta },
+          { name: 'Bob', id: 'b', car_id: 'd', meta }
         ];
         const carVertices = [
-          { car: 'bmw', id: 'c' },
-          { car: 'vw', id: 'd' }
+          { car: 'bmw', id: 'c', org_id: 'e', meta },
+          { car: 'vw', id: 'd', org_id: 'f', meta }
         ];
         const orgVertices = [
-          { org: 'Bayern', id: 'e' },
-          { org: 'wolfsburg', id: 'f' }
-        ];
-        result = await db.createVertex(vertexCollectionName, personVertices);
-        result1 = await db.createVertex(vertexCollectionName_1, carVertices);
-        result2 = await db.createVertex(vertexCollectionName_2, orgVertices);
-
-        // verify the data from DB
-        let insertedVertices = await db.find(vertexCollectionName);
-        insertedVertices = _.sortBy(insertedVertices, [function (o) { return o.name; }]);
-        should.exist(insertedVertices);
-        insertedVertices.should.deepEqual(personVertices);
-      });
-      it('should create an edge collection and insert data into it', async function
-      createEdges() {
-        let edges: any = [
-          { info: 'Alice has BMW car', _from: result[0]._id, _to: result1[0]._id },
-          { info: 'Bob has VW car', _from: result[1]._id, _to: result1[1]._id }];
-
-        let edges_1: any = [{ info: 'BMW has head quarters in Bayern', _from: result1[0]._id, _to: result2[0]._id },
-        { info: 'VW has head quarters in Wolfsburg', _from: result1[1]._id, _to: result2[1]._id }
+          { org: 'Bayern', id: 'e', meta },
+          { org: 'wolfsburg', id: 'f', meta }
         ];
 
-        await db.createEdge(edgeCollectionName, edges[0]);
-        await db.createEdge(edgeCollectionName, edges[1]);
-        await db.createEdge(edgeCollectionName_1, edges_1[0]);
-        await db.createEdge(edgeCollectionName_1, edges_1[1]);
-        let insertedEdges: any = await db.find(edgeCollectionName);
-        let insertedEdges_1: any = await db.find(edgeCollectionName_1);
-        should.exist(insertedEdges);
-        should.exist(insertedEdges_1);
-        insertedEdges.should.have.size(2);
-        insertedEdges_1.should.have.size(2);
-        edges = _.sortBy(edges, [function (o) { return o.info; }]);
-        insertedEdges = _.sortBy(insertedEdges, [function (o) { return o.info; }]);
-        insertedEdges.should.deepEqual(edges);
-        edges_1 = _.sortBy(edges_1, [function (o) { return o.info; }]);
-        insertedEdges_1 = _.sortBy(insertedEdges_1, [function (o) { return o.info; }]);
-        insertedEdges_1.should.deepEqual(edges_1);
+        const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db, 'persons', null, graphCfg);
+        service_1 = new ServiceBase('persons', null,
+          server.logger, resourceAPI1, false);
+        result_1 = await service_1.create({ request: { items: personVertices } });
+
+        const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db, 'cars', null, graphCfg);
+        service_2 = new ServiceBase('cars', null,
+          server.logger, resourceAPI2, false);
+        result_2 = await service_2.create({ request: { items: carVertices } });
+
+        const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db, 'organizations', null, graphCfg);
+        service_3 = new ServiceBase('organizations', null,
+          server.logger, resourceAPI3, false);
+        result_3 = await service_3.create({ request: { items: orgVertices } });
       });
       // Test for graph traversal
       it('should traverse all vertices and edges in the graph',
         async function checkGraphTraversal() {
           const traversalRequest = {
-            start_vertex: result[0]._id,
+            start_vertex: `persons/${result_1.items[0].id}`,
             opts: { direction: 'outbound' }
           };
-          const expectedVertices = [{ name: 'Alice', id: 'a' },
-          { car: 'bmw', id: 'c' },
+          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
+          { car: 'bmw', id: 'c', org_id: 'e' },
           { org: 'Bayern', id: 'e' }];
           let traversalResponse = await testService.traversal(traversalRequest);
           // compare data
@@ -160,11 +131,13 @@ function testProvider(providerCfg) {
             const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString())
             traversalResponse.paths = decodedPath;
           }
+          should.exist(traversalResponse.paths);
+          should.exist(traversalResponse.data);
           traversalResponse.paths.should.have.size(3);
           traversalResponse.data.should.have.size(3);
-          let finalVertices = [];
+          let finalVertices: any = [];
           for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, '_id'));
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
             _.sortBy(finalVertices, [function (o) { return o.id; }]);
@@ -174,13 +147,13 @@ function testProvider(providerCfg) {
       it('should traverse by excluding specified vertices using filter in the graph',
         async function checkGraphTraversal() {
           const traversalRequest = {
-            start_vertex: result[0]._id,
+            start_vertex: `persons/${result_1.items[0].id}`,
             opts: {
               direction: 'outbound',
-              filter: [{ vertex: 'car' }]
+              filter: [{ vertex: 'cars' }]
             }
           };
-          const expectedVertices = [{ name: 'Alice', id: 'a' },
+          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { org: 'Bayern', id: 'e' }];
           let traversalResponse = await testService.traversal(traversalRequest);
           // compare data
@@ -197,7 +170,7 @@ function testProvider(providerCfg) {
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, '_id'));
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
             _.sortBy(finalVertices, [function (o) { return o.id; }]);
@@ -207,13 +180,13 @@ function testProvider(providerCfg) {
       it('should traverse by including only specified edges using expander in the graph',
         async function checkGraphTraversal() {
           const traversalRequest = {
-            start_vertex: result[0]._id,
+            start_vertex: `persons/${result_1.items[0].id}`,
             opts: {
-              expander: [{ edge: 'car', direction: 'outbound' }]
+              expander: [{ edge: 'has_car', direction: 'outbound' }]
             }
           };
-          const expectedVertices = [{ name: 'Alice', id: 'a' },
-          { car: 'bmw', id: 'c' }];
+          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
+          { car: 'bmw', id: 'c', org_id: 'e' }];
           let traversalResponse = await testService.traversal(traversalRequest);
           // compare data
           traversalResponse = traversalResponse.data;
@@ -222,18 +195,26 @@ function testProvider(providerCfg) {
             traversalResponse.data = decodedData;
           }
           if (traversalResponse && traversalResponse.paths) {
-            const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString())
+            const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString());
             traversalResponse.paths = decodedPath;
           }
           traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, '_id'));
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
             _.sortBy(finalVertices, [function (o) { return o.id; }]);
           finalVertices.should.deepEqual(expectedVertices);
+        });
+
+      it('delete vertices, should delete the edges associated as well',
+        async function deleteAllEdges() {
+          // Deleting the ids of vertexCollection 'cars' should remove
+          // both 'person_has_car'  and 'car_has_org' both edges
+          await service_2.delete({ request: { collection: 'cars' } });
+          // await service_2.delete({ request: { ids: ['c', 'd'] } });
         });
     });
   });

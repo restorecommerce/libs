@@ -269,7 +269,7 @@ export class ResourcesAPIBase {
               if (_.isArray(to_id)) {
                 for (let toID of to_id) {
                   await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
+                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                 }
                 continue;
               }

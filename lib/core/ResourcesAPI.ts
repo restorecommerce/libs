@@ -414,14 +414,9 @@ export class ResourcesAPIBase {
 
         if (this.edgeCfg) {
           for (let eachEdgeCfg of this.edgeCfg) {
-            console.log('Edge cfg is...', eachEdgeCfg);
             const toIDkey = eachEdgeCfg.to;
-            console.log('to ID key is....', toIDkey);
-            console.log('DB doc is....', JSON.stringify(dbDoc));
             let modified_to_idValues = doc[toIDkey];
             let db_to_idValues = dbDoc[toIDkey];
-            console.log('modified to id values....', JSON.stringify(modified_to_idValues));
-            console.log('DB to id values......', JSON.stringify(db_to_idValues));
             if (_.isArray(modified_to_idValues)) {
               modified_to_idValues = _.sortBy(modified_to_idValues);
             }
@@ -438,7 +433,6 @@ export class ResourcesAPIBase {
 
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              console.log('Outgoing edges are...', JSON.stringify(outgoingEdges));
               for (let outgoingEdge of outgoingEdges) {
                 const removedEdge = await db.removeEdge(edgeCollectionName, outgoingEdge._id);
               }
@@ -446,13 +440,11 @@ export class ResourcesAPIBase {
               if (from_id && modified_to_idValues) {
                 if (_.isArray(modified_to_idValues)) {
                   for (let toID of modified_to_idValues) {
-                    console.log('Creating new edge........', toID);
                     await this.db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                   }
                   continue;
                 }
-                console.log('Creating new edge since there is change in data..');
                 await this.db.createEdge(edgeCollectionName, null,
                   `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
               }

@@ -118,7 +118,7 @@ export class ResourcesAPIBase {
   bufferField: string;
   requiredFields: Object;
   resourceName: string;
-  graphCfg: any;
+  edgeCfg: any;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
@@ -126,9 +126,9 @@ export class ResourcesAPIBase {
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
   constructor(private db: DB, private collectionName: string, fieldHandlerConf?: any,
-    graphCfg?: any) {
+    edgeCfg?: any, private graphName?: string) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
-    this.graphCfg = graphCfg;
+    this.edgeCfg = edgeCfg;
 
     if (!fieldHandlerConf) {
       return;
@@ -249,12 +249,12 @@ export class ResourcesAPIBase {
       }
 
       let result = [];
-      if (this.graphCfg && this.graphCfg.vertices[collection]) {
-        await this.db.createGraphDB(this.graphCfg.graphName);
+      if (this.edgeCfg) {
+        await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
         result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
         for (let document of documents) {
-          for (let eachEdgeCfg of this.graphCfg.vertices[collection]) {
+          for (let eachEdgeCfg of this.edgeCfg) {
             const fromIDkey = eachEdgeCfg.from;
             const from_id = document[fromIDkey];
             const toIDkey = eachEdgeCfg.to;
@@ -321,7 +321,7 @@ export class ResourcesAPIBase {
     _.forEach(ids, (id) => {
       filter.$or.push({ id });
     });
-    if (this.graphCfg && this.graphCfg.vertices[this.collectionName]) {
+    if (this.edgeCfg) {
       // Modify the Ids to include documentHandle
       if (ids.length > 0) {
         ids = _.map(ids, (id) => {
@@ -405,16 +405,60 @@ export class ResourcesAPIBase {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
 
-        const foundDocs = await db.find(collectionName, { id: doc.id }, {
-          fields: {
-            meta: 1
-          }
-        });
+        const foundDocs = await db.find(collectionName, { id: doc.id });
         if (_.isEmpty(foundDocs)) {
           throw { code: 404 };
         }
         const dbDoc = foundDocs[0];
         doc = updateMetadata(dbDoc.meta, doc);
+
+        if (this.edgeCfg) {
+          for (let eachEdgeCfg of this.edgeCfg) {
+            console.log('Edge cfg is...', eachEdgeCfg);
+            const toIDkey = eachEdgeCfg.to;
+            console.log('to ID key is....', toIDkey);
+            console.log('DB doc is....', JSON.stringify(dbDoc));
+            let modified_to_idValues = doc[toIDkey];
+            let db_to_idValues = dbDoc[toIDkey];
+            console.log('modified to id values....', JSON.stringify(modified_to_idValues));
+            console.log('DB to id values......', JSON.stringify(db_to_idValues));
+            if (_.isArray(modified_to_idValues)) {
+              modified_to_idValues = _.sortBy(modified_to_idValues);
+            }
+            if (_.isArray(db_to_idValues)) {
+              db_to_idValues = _.sortBy(db_to_idValues);
+            }
+            // delete and recreate only if there is a difference in references
+            if (!_.isEqual(modified_to_idValues, db_to_idValues)) {
+              // TODO delete and recreate the edge (since there is no way to update the edge as we dont add id to the edge as for doc)
+              const fromIDkey = eachEdgeCfg.from;
+              const from_id = doc[fromIDkey];
+              const fromVerticeName = collectionName;
+              const toVerticeName = eachEdgeCfg.toVerticeName;
+
+              const edgeCollectionName = eachEdgeCfg.edgeName;
+              let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
+              console.log('Outgoing edges are...', JSON.stringify(outgoingEdges));
+              for (let outgoingEdge of outgoingEdges) {
+                const removedEdge = await db.removeEdge(edgeCollectionName, outgoingEdge._id);
+              }
+              // Create new edges
+              if (from_id && modified_to_idValues) {
+                if (_.isArray(modified_to_idValues)) {
+                  for (let toID of modified_to_idValues) {
+                    console.log('Creating new edge........', toID);
+                    await this.db.createEdge(eachEdgeCfg.edgeName, null,
+                      `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
+                  }
+                  continue;
+                }
+                console.log('Creating new edge since there is change in data..');
+                await this.db.createEdge(edgeCollectionName, null,
+                  `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
+              }
+            }
+          }
+        }
 
         patches.push(await db.update(collectionName,
           { id: doc.id }, _.omitBy(doc, _.isNil)));

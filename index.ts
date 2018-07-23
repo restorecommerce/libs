@@ -101,3 +101,5 @@ import { ResourcesAPIBase } from './lib/core/ResourcesAPI';
 export { ResourcesAPIBase };
 import { ServiceBase } from './lib/core/ServiceBase';
 export { ServiceBase };
+import { GraphResourcesServiceBase } from './lib/core/GraphResourcesServiceBase';
+export { GraphResourcesServiceBase };

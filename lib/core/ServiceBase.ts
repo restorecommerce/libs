@@ -139,10 +139,10 @@ export class ServiceBase {
     try {
       const events = this.events.entity;
       if (call.request.collection) {
-        const graphCfg = this.resourceapi.graphCfg;
+        const edgeCfg = this.resourceapi.edgeCfg;
         let docs = [];
         let idsList;
-        if (graphCfg && graphCfg.vertices[this.name]) {
+        if (edgeCfg) {
           docs = await this.resourceapi.read({});
           idsList = _.map(docs, (doc) => {
             return doc.id;

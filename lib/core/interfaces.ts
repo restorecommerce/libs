@@ -44,16 +44,18 @@ export interface CreateRequest {
 
 export interface DB {
   insert(collection: string, documents: BaseDocument[]): Promise<BaseDocument[]>;
-  find(collection: string, filter: any, { limit, offset, sort, fields}?: { limit?: number, offset?: number, sort?: any, fields?: any}): Promise<BaseDocument[]>;
-  update(collection: string, filter: { id: string }, document: { id?: string, [key: string]: any}): Promise<BaseDocument[]>;
+  find(collection: string, filter: any, { limit, offset, sort, fields }?: { limit?: number, offset?: number, sort?: any, fields?: any }): Promise<BaseDocument[]>;
+  update(collection: string, filter: { id: string }, document: { id?: string, [key: string]: any }): Promise<BaseDocument[]>;
   truncate(collection: string): Promise<void>;
   upsert(collection: string, documents: BaseDocument[]): Promise<BaseDocument[]>;
   delete(collection: string, filter: any): Promise<void>;
-  createVertex(collectionName: string, data: Object): Promise<BaseDocument []>;
+  createVertex(collectionName: string, data: Object): Promise<BaseDocument[]>;
   createGraphDB(graphName: string): Promise<Object>;
-  createEdge(collectionName: string, data: Object, fromId?: string, toId?: string): Promise<BaseDocument []>;
+  createEdge(collectionName: string, data: Object, fromId?: string, toId?: string): Promise<BaseDocument[]>;
   addEdgeDefinition(collectionName: string, fromVertice: [Object], toVertice: [Object]): Promise<Object>;
   addVertexCollection(collectionName: string): Promise<Object>;
   removeVertex(collectionName: string, documentHandles: string | string[]): Promise<any>;
   removeVertexCollection(collectionName: string, dropCollection?: boolean): Promise<Object>;
+  getOutEdges(collectionName: string, documentHandle: string): Promise<[Object]>;
+  removeEdge(collectionName: string, documentHandle: string): Promise<any>;
 }

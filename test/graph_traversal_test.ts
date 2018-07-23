@@ -53,7 +53,8 @@ function testProvider(providerCfg) {
     before(async function before() {
       db = await providerCfg.init();
       // graph Service
-      const graphAPIService = new GraphResourcesServiceBase(db);
+      const graphAPIService = new GraphResourcesServiceBase(db,
+        cfg.get('fieldHandlers:bufferFields'));
       await server.bind('graphsTestService', graphAPIService);
 
       await server.start();
@@ -94,18 +95,24 @@ function testProvider(providerCfg) {
           { org: 'Bayern', id: 'e', meta },
           { org: 'wolfsburg', id: 'f', meta }
         ];
-
-        const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db, 'persons', null, graphCfg);
+        const graphName = cfg.get('graph:graphName');
+        const personCollection = 'persons';
+        const carsCollection = 'cars';
+        const orgCollection = 'organizations';
+        const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
+          personCollection, null, graphCfg.vertices[personCollection], graphName);
         service_1 = new ServiceBase('persons', null,
           server.logger, resourceAPI1, false);
         result_1 = await service_1.create({ request: { items: personVertices } });
 
-        const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db, 'cars', null, graphCfg);
+        const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db,
+          carsCollection, null, graphCfg.vertices[carsCollection], graphName);
         service_2 = new ServiceBase('cars', null,
           server.logger, resourceAPI2, false);
         result_2 = await service_2.create({ request: { items: carVertices } });
 
-        const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db, 'organizations', null, graphCfg);
+        const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db,
+          orgCollection, null, orgCollection, graphName);
         service_3 = new ServiceBase('organizations', null,
           server.logger, resourceAPI3, false);
         result_3 = await service_3.create({ request: { items: orgVertices } });

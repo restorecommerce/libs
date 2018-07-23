@@ -6,30 +6,29 @@
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
 
-The resource-base-interface describes resource CRUD operations which can be bound to a service. Such operations are described via a [gRPC](https://grpc.io/docs/) interface with the message structures therefore being defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/) in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file. 
-The exposed gRPC methods are provided by the `ServiceBase` object which uses a `ResourceAPI` instance to invoke operations from a database provider. The exposed interface is therefore agnostic to a specific database implementation.
+The `resource-base-interface` describes resource CRUD operations which can be bound to a service. Such operations are described via a [gRPC](https://grpc.io/docs/) interface with the message structures therefore being defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/). This interface can be bound with any protobuf definition as long as it contains the endpoints defined in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file (note that any resource message structure can be defined). 
+
+The exposed gRPC methods are implemented by the `ServiceBase` object which uses a `ResourceAPI` instance to perform operations with a database provider. The exposed interface is therefore agnostic to a specific database implementation.
 However, a valid database provider is required. A set of such providers is implemented in [chassis-srv](https://github.com/restorecommerce/chassis-srv/). 
 This interface emits resource-related messages to [Apache Kafka](https://kafka.apache.org) which can be enabled or disabled at the `ServiceBase`'s constructor.
 
 ## gRPC Interface
 
-This interface describes the following gRPC endpoints.
-
-### Create
-
-This operation is used for inserting resources to the database.
-Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and responses are a list of resources `io.restorecommerce.resourcebase.ResourceList`.
+This interface describes the following gRPC endpoints for a generic resource of type `Resource`.
 
 `io.restorecommerce.resourcebase.Resource`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | id | string | required | identifier for the resource |
-| created | double | required | date when the resource was created |
-| modified | double | required | date when the resource was modified |
+| meta | io.restorecommerce.meta.Meta meta | optional | Meta information common to all Restore Commerce resources |
 | value | number | optional | value for the resource |
 | text | string | optional | textual data for the resource |
 
+### Create
+
+This operation is used for inserting resources to the database.
+Requests are performed by providing a list of resources which are returned in the response. A [`meta`](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/meta.proto) should be present, containing relevant resource ownership information. Timestamps for creation and modification are then appended automatically to this property upon a `Create` request. 
 
 `io.restorecommerce.resourcebase.ResourceList`
 
@@ -41,7 +40,7 @@ Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and 
 ### Read
 
 This operation returns resources based on provided filter and options.
-Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and responses are a list of resrouces `io.restorcommerce.resourcebase.ResourceList`.
+Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and responses are a list of resources.
 
 `google.protobuf.Struct`
 
@@ -90,39 +89,38 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 ### Update
 
 This operation is used for updating resources in the database.
-Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and responses are list of resources `io.restorecommerce.resourcebase.ResourceList`.
+Requests are performed by providing a list of resources and all updated items are returned within the response. Note that the only required properties on each resource are its `id` and the properties which are meant to be modified.
 
 ### Upsert
 
-This operation is used for creating or updating resources in the database.
-Requests are performed using `io.restorecommerce.resourcebase.ResourceList` and responses are list of resources `io.restorecommerce.resourcebase.ResourceList`.
+This operation is used for updating resources in the database or creating them if they do not exist.
+Requests are performed  by providing a resource list, which is returned in the response.
 
 ### Delete
 
 This operation is used for deleting resources in the database.
-Requests are performed using `io.restorecommerce.resourcebase.DeleteRequest` and responses are `google.protobuf.Empty` message.
+Requests are performed using `io.restorecommerce.resourcebase.DeleteRequest` and responses are `google.protobuf.Empty` messages.
 
 `io.restorecommerce.resourcebase.DeleteRequest`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| ids | [ ]string | required | list of resource identifiers to be deleted |
+| collection | string | required | Name of the target collection |
+| ids | [ ]string | Optional | List of resource identifiers to be deleted; if empty or not provided, the whole collection is truncated |
 
 ## Kafka Events
 
-List of events emitted to Kafka by this microservice for below topic:
-
-- `io.restorecommerce.resourcebase.<ResourceName>.resource`
-  - \<ResourceName>Created
-  - \<ResourceName>Read
-  - \<ResourceName>Modified
-  - \<ResourceName>Deleted
+A kafka [`Topic`](https://github.com/restorecommerce/kafka-client/blob/master/src/events/provider/kafka/index.ts) can be provided when instantiating a `ServiceBase`. If `enableEvents` is set to true, a list of events is then emitted to Kafka by this microservice for each document of each CRUD request :
+- <ResourceName>Created
+- <ResourceName>Read
+- <ResourceName>Modified
+- <ResourceName>Deleted
 
 The events emitted to Kafka can be used for restoring the system in case of failure by implementing a [command-interface](https://github.com/restorecommerce/chassis-srv/blob/master/command-interface.md) in the used microservice. For usage details please see [command-interface tests](https://github.com/restorecommerce/chassis-srv/blob/master/test/command_test.ts).
 
 ## Fields Configuration
 
-It is possible to pass a fields configuration object to `ResourceAPI` in order to enable some special field handlers.
+It is possible to pass a fields [`configuration object`](test/cfg/config.json#L235) to `ResourceAPI` in order to enable some special field handlers.
 
 ### Field Generators
 

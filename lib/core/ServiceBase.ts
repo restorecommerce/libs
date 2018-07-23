@@ -115,7 +115,7 @@ export class ServiceBase {
       await this.resourceapi.create(call.request.items);
       const dispatch = [];
       const events: Topic = this.events.entity;
-      this.logger.info(this.name + ' created', call.request.items);
+      this.logger.info(this.name + ' created', { items: call.request.items });
       if (this.isEventsEnabled) {
         _.forEach(call.request.items, (item) => {
           dispatch.push(events.emit(`${this.name}Created`, item));
@@ -160,9 +160,7 @@ export class ServiceBase {
           });
           await dispatch;
         }
-        this.logger.info(
-          `resource ${this.name} of
-           collection ${this.name}s deleted`);
+        this.logger.info(`${this.name} deleted`);
         return {};
       }
       await this.resourceapi.delete(call.request.ids);
@@ -189,7 +187,7 @@ export class ServiceBase {
   async update(call: ServiceCall<UpdateRequest>, context?: any): Promise<any> {
     try {
       const updateResult = await this.resourceapi.update(call.request.items);
-      this.logger.info('io.restorecommerce.' + this.name + '.resource.updated', updateResult);
+      this.logger.info(this.name + ' updated', { items: updateResult });
       if (this.isEventsEnabled) {
         const dispatch = [];
         const events = this.events.entity;
@@ -215,6 +213,7 @@ export class ServiceBase {
     try {
       const result = await this.resourceapi.upsert(call.request.items,
         this.events.entity, this.isEventsEnabled, this.name);
+      this.logger.info(`${this.name} upserted`, { items: result });
       return { items: result };
     } catch (e) {
       this.logger.error(e);

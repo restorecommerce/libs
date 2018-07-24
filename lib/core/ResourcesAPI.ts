@@ -285,7 +285,8 @@ export class ResourcesAPIBase {
         await this.db.insert(collection, this.bufferField ? toInsert : documents);
       }
     } catch (e) {
-      if (e.code === 409) {
+      if (e.code === 409 || (e.message &&
+        e.message.includes('unique constraint violated'))) {
         throw new errors.AlreadyExists('Item Already exists.');
       }
       throw e;

@@ -177,6 +177,15 @@ Requests are performed using `io.restorecommerce.graph.TraversalRequest` and res
 | paths | `google.protobuf.Any` | required | buffered data, contains the list of visited paths |
 | data | `google.protobuf.Any` | required | buffered data, contains all the data from the visited vertices |
 
+`io.restorecommerce.graph.VertexFields`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| _id | string | required | vertex document handle |
+| _key | string | required | vertex document unique key |
+| _rev | string | required | revision or vertex document ETag |
+| id | string | required | id of the vertex collection |
+
 ## Kafka Events
 
 A kafka [`Topic`](https://github.com/restorecommerce/kafka-client/blob/master/src/events/provider/kafka/index.ts) can be provided when instantiating a `ServiceBase`. If `enableEvents` is set to true, a list of events is then emitted to Kafka by this microservice for each document of each CRUD request :

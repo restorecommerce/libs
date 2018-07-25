@@ -140,10 +140,19 @@ export class ServiceBase {
       const events = this.events.entity;
       if (call.request.collection) {
         const edgeCfg = this.resourceapi.edgeCfg;
-        let docs = [];
+        let docs: any = [];
         let idsList;
+        const readIds = {
+          request: {
+            field: [{
+              name: 'id',
+              include: true
+            }]
+          }
+        };
         if (edgeCfg) {
-          docs = await this.resourceapi.read({});
+          docs = await this.read(readIds);
+          docs = docs.items;
           idsList = _.map(docs, (doc) => {
             return doc.id;
           });

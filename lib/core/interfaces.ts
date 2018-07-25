@@ -10,7 +10,7 @@ export interface ReadRequest {
   sort?: { field: string, order: SortType }[];
   limit?: number;
   offset?: number;
-  field?: { name: string, include: number }[];
+  field?: { name: string, include: boolean }[];
   filter?: any;
 }
 

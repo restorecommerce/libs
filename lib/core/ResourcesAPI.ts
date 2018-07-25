@@ -406,7 +406,12 @@ export class ResourcesAPIBase {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
 
-        const foundDocs = await db.find(collectionName, { id: doc.id });
+        const foundDocs = await db.find(collectionName, { id: doc.id },
+          {
+            fields: {
+              meta: 1
+            }
+          });
         if (_.isEmpty(foundDocs)) {
           throw { code: 404 };
         }

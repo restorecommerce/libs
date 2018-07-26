@@ -322,16 +322,24 @@ export class ResourcesAPIBase {
     _.forEach(ids, (id) => {
       filter.$or.push({ id });
     });
-    if (this.edgeCfg) {
-      // Modify the Ids to include documentHandle
-      if (ids.length > 0) {
-        ids = _.map(ids, (id) => {
-          return `${this.collectionName}/${id}`;
-        });
-        return await this.db.removeVertex(this.collectionName, ids);
+    try {
+      if (this.edgeCfg) {
+        // Modify the Ids to include documentHandle
+        if (ids.length > 0) {
+          ids = _.map(ids, (id) => {
+            return `${this.collectionName}/${id}`;
+          });
+          return await this.db.removeVertex(this.collectionName, ids);
+        }
+      }
+      await this.db.delete(this.collectionName, filter);
+    }
+    catch (err) {
+      if (err.code === 404 || (err.message &&
+        err.message.includes('collection not found'))) {
+        throw new errors.NotFound('Collection or one or more items with the given IDs not found.');
       }
     }
-    await this.db.delete(this.collectionName, filter);
   }
 
   /**

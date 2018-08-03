@@ -37,14 +37,21 @@ export class GraphResourcesServiceBase {
   async traversal(call: any, context: any): Promise<any> {
     const collection_name = call.request.collection_name;
     let start_vertex = call.request.start_vertex;
+    if (_.isEmpty(start_vertex)) {
+      start_vertex = call.request.start_vertices;
+      if (!_.isEmpty(start_vertex)) {
+        start_vertex = start_vertex.vertices;
+      }
+    }
     const opts = call.request.opts;
-    if (_.isNil(start_vertex)) {
+    if (_.isEmpty(start_vertex)) {
       throw new Error('missing start vertex');
     }
+
     const queryResult = await this.db.traversal(start_vertex, opts,
       collection_name);
     let idPropertyMapping = new Map<String, String>();
-    const vertexFields = queryResult.vertex_fields;
+    const vertexFields = queryResult.vertex_fields || [];
     let marshallRequired = false;
     for (let eachVertex of vertexFields) {
       const collectionArray = eachVertex._id.split('/');

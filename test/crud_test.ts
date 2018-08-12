@@ -39,7 +39,14 @@ let meta = {
   created: now,
   modified: now,
   modified_by: 'Admin',
-  owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
+  owner: [{
+    "id": "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
+    "value": "urn:restorecommerce:acs:model:user.User"
+  },
+  {
+    "id": "urn:restorecommerce:acs:names:ownerInstance",
+    "value": "Admin"
+  }]
 };
 
 
@@ -234,8 +241,12 @@ describe('ServiceBase', () => {
         const meta = {
           modified_by: 'Admin',
           owner: [{
-            owner_entity: 'urn:restorecommerce:acs:model:User',
-            owner_id: 'Admin'
+            "id": "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
+            "value": "urn:restorecommerce:acs:model:user.User"
+          },
+          {
+            "id": "urn:restorecommerce:acs:names:ownerInstance",
+            "value": "Admin"
           }]
         };
         const newTestDataFirst = {

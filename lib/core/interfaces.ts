@@ -33,7 +33,7 @@ export interface DocumentMetadata {
   created?: number;
   modified?: number;
   modified_by?: string;
-  owner: { owner_entity: string, owner_id: string }[];
+  owner: { id: string, value: string }[];
 }
 
 export interface UpsertRequest extends UpdateRequest { }

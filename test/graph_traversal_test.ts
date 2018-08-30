@@ -79,7 +79,7 @@ function testProvider(providerCfg) {
       let service_1, service_2, service_3;
       let meta;
       it('should create a vertex collection and insert data into it', async function
-    createVertices() {
+        createVertices() {
         let meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
         };
@@ -99,11 +99,12 @@ function testProvider(providerCfg) {
         const personCollection = 'persons';
         const carsCollection = 'cars';
         const orgCollection = 'organizations';
+
         const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
-          personCollection, null, graphCfg.vertices[personCollection], graphName);
-        service_1 = new ServiceBase('persons', null,
+          orgCollection, null, orgCollection, graphName);
+        service_3 = new ServiceBase('organizations', null,
           server.logger, resourceAPI1, false);
-        result_1 = await service_1.create({ request: { items: personVertices } });
+        result_3 = await service_3.create({ request: { items: orgVertices } });
 
         const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db,
           carsCollection, null, graphCfg.vertices[carsCollection], graphName);
@@ -112,10 +113,10 @@ function testProvider(providerCfg) {
         result_2 = await service_2.create({ request: { items: carVertices } });
 
         const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db,
-          orgCollection, null, orgCollection, graphName);
-        service_3 = new ServiceBase('organizations', null,
+          personCollection, null, graphCfg.vertices[personCollection], graphName);
+        service_1 = new ServiceBase('persons', null,
           server.logger, resourceAPI3, false);
-        result_3 = await service_3.create({ request: { items: orgVertices } });
+        result_1 = await service_1.create({ request: { items: personVertices } });
       });
       // Test for graph traversal
       it('should traverse all vertices and edges in the graph',

@@ -396,7 +396,7 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.error);
         should.exist(result.error.details);
-        result.error.details.should.startWith('3 INVALID_ARGUMENT: Field text is necessary');
+        result.error.details.should.containEql('invalid argument');
       });
     });
     // Test to check buffered fields

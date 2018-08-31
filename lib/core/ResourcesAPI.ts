@@ -5,7 +5,8 @@ import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
 
-import { BaseDocument, DB, DocumentMetadata } from './interfaces';
+import { BaseDocument,  DocumentMetadata } from './interfaces';
+import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 
@@ -125,7 +126,7 @@ export class ResourcesAPIBase {
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(private db: DB, private collectionName: string, fieldHandlerConf?: any,
+  constructor(private db: GraphDatabaseProvider, private collectionName: string, fieldHandlerConf?: any,
     edgeCfg?: any, private graphName?: string) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
     this.edgeCfg = edgeCfg;

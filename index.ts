@@ -1,5 +1,6 @@
 'use strict';
 
+
 import * as _ from 'lodash';
 
 export function toStruct(obj: any, fromArray: Boolean = false): any {

@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
@@ -10,7 +11,7 @@ export class GraphResourcesServiceBase {
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    */
-  constructor(private db: any, private bufferFiledCfg?: any) {
+  constructor(private db: GraphDatabaseProvider, private bufferFiledCfg?: any) {
     if (bufferFiledCfg) {
       this.bufferedCollections = [];
       for (let key in bufferFiledCfg) {

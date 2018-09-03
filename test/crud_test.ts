@@ -67,7 +67,7 @@ describe('ServiceBase', () => {
     const resourceName = 'resource';
     const testEvents: Topic = events.topic('test');
     db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
-    db.registerCustomQuery('testFilter', 'node.value < @testParam', 'filter');
+    db.registerCustomQuery('testFilter', 'filter node.value < @testParam', 'filter');
 
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
     const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');

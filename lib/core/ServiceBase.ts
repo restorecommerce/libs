@@ -69,6 +69,7 @@ export class ServiceBase {
           }
         });
       }
+
       let limit = call.request.limit;
       if (call.request.limit <= 0) {
         limit = 1000;
@@ -86,12 +87,17 @@ export class ServiceBase {
         }
         field[f.name] = 0;
       });
+      const customQuery = call.request.custom_query;
+      const customArgs = call.request.custom_arguments || {};
+
       objectEntities = (await this.resourceapi.read(
         filter,
         limit,
         offset,
         sort,
-        field
+        field,
+        customQuery,
+        customArgs
       )) || [];
 
       return {

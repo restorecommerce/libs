@@ -12,6 +12,8 @@ export interface ReadRequest {
   offset?: number;
   field?: { name: string, include: boolean }[];
   filter?: any;
+  custom_query?: string;
+  custom_arguments?: any;
 }
 
 export interface DeleteRequest {

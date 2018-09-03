@@ -40,18 +40,18 @@ let meta = {
   modified: now,
   modified_by: 'Admin',
   owner: [{
-    "id": "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
-    "value": "urn:restorecommerce:acs:model:user.User"
+    id: "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
+    value: "urn:restorecommerce:acs:model:user.User"
   },
   {
-    "id": "urn:restorecommerce:acs:names:ownerInstance",
-    "value": "Admin"
+    id: "urn:restorecommerce:acs:names:ownerInstance",
+    value: "Admin"
   }]
 };
 
 
 describe('ServiceBase', () => {
-  let db: any;
+  let db: chassis.GraphDatabaseProvider;
   let server: chassis.Server;
   let events: Events;
   let client: Client;
@@ -66,7 +66,8 @@ describe('ServiceBase', () => {
     await events.start();
     const resourceName = 'resource';
     const testEvents: Topic = events.topic('test');
-    db = await chassis.database.get(cfg.get('database:testdb'), server.logger);
+    db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
+    db.registerCustomQuery('testFilter', 'node.value < @testParam', 'filter');
 
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
     const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');
@@ -113,7 +114,7 @@ describe('ServiceBase', () => {
   });
   describe('endpoints', () => {
     beforeEach(async function restoreDB() {
-      db = await chassis.database.get(cfg.get('database:testdb'), server.logger);
+      db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
       const now: number = Date.now();
       testData = [
@@ -235,18 +236,45 @@ describe('ServiceBase', () => {
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });
+      it('should apply a custom filter', async function checkRead() {
+        const result = await testService.read({
+          field: [{
+            name: 'value',
+            include: true,
+          }],
+          custom_query: 'testFilter',
+          custom_arguments: {
+            value: Buffer.from(JSON.stringify({ testParam: 12 }))
+          }
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+
+        result.data.total_count.should.be.equal(2);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(2);
+
+        const testDataReduced = [
+          { id: '', text: '', meta: null, value: testData[0].value },
+          { id: '', text: '', meta: null, value: testData[1].value },
+        ];
+        _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+      });
     });
     describe('create', () => {
       it('should create new documents', async function checkCreate() {
         const meta = {
           modified_by: 'Admin',
           owner: [{
-            "id": "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
-            "value": "urn:restorecommerce:acs:model:user.User"
+            id: "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
+            value: "urn:restorecommerce:acs:model:user.User"
           },
           {
-            "id": "urn:restorecommerce:acs:names:ownerInstance",
-            "value": "Admin"
+            id: "urn:restorecommerce:acs:names:ownerInstance",
+            value: "Admin"
           }]
         };
         const newTestDataFirst = {
@@ -382,11 +410,11 @@ describe('ServiceBase', () => {
     });
     // Test to check required field
     describe('check required fileds', () => {
-      it('should throw an error when trying to add ', async function checkget() {
+      it('should throw an error when trying to add ', async function checkGet() {
         let result = await testService.delete({ collection: true });
         should.exist(result);
         should.not.exist(result.error);
-        const allTestData = await testService.read();
+        await testService.read();
         const objectMissingField = [
           { id: '/test/xy', value: 1, meta },
           { id: '/test/xyz', value: 3, meta },

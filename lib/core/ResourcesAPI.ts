@@ -207,12 +207,14 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read(filter: Object = {}, limit: number = 1000, offset: number = 0,
-    sort: any = {}, field: any = {}): Promise<BaseDocument[]> {
+    sort: any = {}, field: any = {}, customQuery: string = undefined, customArgs: any = {}): Promise<BaseDocument[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
       sort,
       fields: field,
+      customQuery,
+      customArguments: customArgs.value ? JSON.parse(customArgs.value.toString()) : {}
     };
     const entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferField) {

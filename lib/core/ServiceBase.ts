@@ -105,7 +105,7 @@ export class ServiceBase {
         total_count: objectEntities.length,
       };
     } catch (e) {
-      this.logger.info(e);
+      this.logger.error('Error caught while processing read request', { e });
       throw e;
     }
   }
@@ -131,7 +131,7 @@ export class ServiceBase {
 
       return { items: call.request.items };
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error('Error caught while processing create request', { e });
       throw e;
     }
   }
@@ -144,51 +144,29 @@ export class ServiceBase {
   async delete(call: ServiceCall<DeleteRequest>, context?: any): Promise<any> {
     try {
       const events = this.events.entity;
+      let docs: any[];
       if (call.request.collection) {
-        const edgeCfg = this.resourceapi.edgeCfg;
-        let docs: any = [];
-        let idsList;
-        const readIds = {
-          request: {
-            field: [{
-              name: 'id',
-              include: true
-            }]
-          }
-        };
-        if (edgeCfg) {
-          docs = await this.read(readIds);
-          docs = docs.items;
-          idsList = _.map(docs, (doc) => {
-            return doc.id;
-          });
-          await this.resourceapi.delete(idsList);
-        }
-        if (docs.length === 0) {
-          docs = await this.resourceapi.deleteCollection();
-        }
+        docs = await this.resourceapi.deleteCollection();
 
-        if (this.isEventsEnabled) {
-          const dispatch = [];
-          _.forEach(docs, (doc) => {
-            dispatch.push(events.emit(`${this.name}Deleted`, doc));
-          });
-          await dispatch;
-        }
         this.logger.info(`${this.name} deleted`);
-        return {};
+      } else {
+        await this.resourceapi.delete(call.request.ids);
+        docs = call.request.ids;
       }
-      await this.resourceapi.delete(call.request.ids);
+
       if (this.isEventsEnabled) {
         const dispatch = [];
-        _.forEach(call.request.ids, (id) => {
-          dispatch.push(events.emit(`${this.name}Deleted`, { id }));
+        _.forEach(docs, (id) => {
+          if (typeof id == 'string') {
+            id = { id };
+          }
+          dispatch.push(events.emit(`${this.name}Deleted`, id));
         });
         await dispatch;
       }
       return {};
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error('Error caught while processing delete request', { e });
       throw e;
     }
   }
@@ -213,7 +191,7 @@ export class ServiceBase {
       }
       return { items: updateResult };
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error('Error caught while processing update request', { e });
       throw e;
     }
   }
@@ -231,7 +209,7 @@ export class ServiceBase {
       this.logger.info(`${this.name} upserted`, { items: result });
       return { items: result };
     } catch (e) {
-      this.logger.error(e);
+      this.logger.error('Error caught while processing upsert request', { e });
       throw e;
     }
   }

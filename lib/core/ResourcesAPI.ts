@@ -5,7 +5,7 @@ import * as uuid from 'uuid';
 import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
 
-import { BaseDocument,  DocumentMetadata } from './interfaces';
+import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
@@ -117,19 +117,17 @@ function isEmptyObject(obj: any): any {
  */
 export class ResourcesAPIBase {
   bufferField: string;
-  requiredFields: Object;
+  requiredFields: any;
   resourceName: string;
-  edgeCfg: any;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(private db: GraphDatabaseProvider, private collectionName: string, fieldHandlerConf?: any,
-    edgeCfg?: any, private graphName?: string) {
+  constructor(private db: DatabaseProvider, private collectionName: string, fieldHandlerConf?: any,
+    private edgeCfg?: any, private graphName?: string) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
-    this.edgeCfg = edgeCfg;
 
     if (!fieldHandlerConf) {
       return;
@@ -252,7 +250,7 @@ export class ResourcesAPIBase {
       }
 
       let result = [];
-      if (this.edgeCfg) {
+      if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
         result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
@@ -296,6 +294,10 @@ export class ResourcesAPIBase {
     }
   }
 
+  private isGraphDB(db: DatabaseProvider): db is GraphDatabaseProvider {
+    return !!this.edgeCfg;
+  }
+
   /**
    * Check if a resource's required fields are present.
    * @param requiredFields
@@ -320,13 +322,13 @@ export class ResourcesAPIBase {
    */
   async delete(ids: string[]): Promise<any> {
     const filter = {
-      $or: [],
+      id: {
+        $in: ids
+      }
     };
-    _.forEach(ids, (id) => {
-      filter.$or.push({ id });
-    });
+
     try {
-      if (this.edgeCfg) {
+      if (this.isGraphDB(this.db)) {
         // Modify the Ids to include documentHandle
         if (ids.length > 0) {
           ids = _.map(ids, (id) => {
@@ -348,10 +350,37 @@ export class ResourcesAPIBase {
   /**
    * Delete all documents in the collection.
    */
-  async deleteCollection(): Promise<any> {
-    const entities = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
-    await this.db.truncate(this.collectionName);
-    return entities;
+  async deleteCollection(): Promise<Array<any>> {
+    if (this.isGraphDB(this.db)) {
+      // graph edges are only deleted automatically when a specific vertex is deleted
+      // (`truncate` does not work in this case)
+      let docs: any = [];
+      let idsList;
+      const readIds = {
+        request: {
+          field: [{
+            name: 'id',
+            include: true
+          }]
+        }
+      };
+      docs = await this.db.find(this.collectionName, {}, {
+        fields: {
+          id: 1
+        }
+      });
+
+      docs = docs.items;
+      idsList = _.map(docs, (doc) => {
+        return doc.id;
+      });
+      await this.delete(idsList);
+      return docs;
+    } else {
+      const entities = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
+      await this.db.truncate(this.collectionName);
+      return entities;
+    }
   }
 
   /**
@@ -408,7 +437,6 @@ export class ResourcesAPIBase {
    */
   async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
     try {
-      const db = this.db;
       const collectionName = this.collectionName;
       const patches = [];
       for (let i = 0; i < documents.length; i += 1) {
@@ -417,7 +445,7 @@ export class ResourcesAPIBase {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
 
-        const foundDocs = await db.find(collectionName, { id: doc.id },
+        const foundDocs = await this.db.find(collectionName, { id: doc.id },
           {
             fields: {
               meta: 1
@@ -429,7 +457,9 @@ export class ResourcesAPIBase {
         const dbDoc = foundDocs[0];
         doc = updateMetadata(dbDoc.meta, doc);
 
-        if (this.edgeCfg) {
+        if (this.isGraphDB(this.db)) {
+          const db = this.db;
+
           for (let eachEdgeCfg of this.edgeCfg) {
             const toIDkey = eachEdgeCfg.to;
             let modified_to_idValues = doc[toIDkey];
@@ -457,19 +487,19 @@ export class ResourcesAPIBase {
               if (from_id && modified_to_idValues) {
                 if (_.isArray(modified_to_idValues)) {
                   for (let toID of modified_to_idValues) {
-                    await this.db.createEdge(eachEdgeCfg.edgeName, null,
+                    await db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                   }
                   continue;
                 }
-                await this.db.createEdge(edgeCollectionName, null,
+                await db.createEdge(edgeCollectionName, null,
                   `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
               }
             }
           }
         }
 
-        patches.push(await db.update(collectionName,
+        patches.push(await this.db.update(collectionName,
           { id: doc.id }, _.omitBy(doc, _.isNil)));
       }
       return _.flatten(patches);

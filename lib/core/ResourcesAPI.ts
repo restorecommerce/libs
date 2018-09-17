@@ -354,28 +354,16 @@ export class ResourcesAPIBase {
     if (this.isGraphDB(this.db)) {
       // graph edges are only deleted automatically when a specific vertex is deleted
       // (`truncate` does not work in this case)
-      let docs: any = [];
-      let idsList;
-      const readIds = {
-        request: {
-          field: [{
-            name: 'id',
-            include: true
-          }]
-        }
-      };
-      docs = await this.db.find(this.collectionName, {}, {
+      const ids = await this.db.find(this.collectionName, {}, {
         fields: {
           id: 1
         }
       });
 
-      docs = docs.items;
-      idsList = _.map(docs, (doc) => {
+      await this.delete(_.map(ids, (doc) => {
         return doc.id;
-      });
-      await this.delete(idsList);
-      return docs;
+      }));
+      return ids;
     } else {
       const entities = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
       await this.db.truncate(this.collectionName);

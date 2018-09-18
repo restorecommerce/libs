@@ -87,7 +87,7 @@ export class ServiceBase {
         }
         field[f.name] = 0;
       });
-      const customQuery = call.request.custom_query;
+      const customQueries = call.request.custom_queries;
       const customArgs = call.request.custom_arguments || {};
 
       objectEntities = (await this.resourceapi.read(
@@ -96,7 +96,7 @@ export class ServiceBase {
         offset,
         sort,
         field,
-        customQuery,
+        customQueries,
         customArgs
       )) || [];
 

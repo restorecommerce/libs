@@ -242,7 +242,7 @@ describe('ServiceBase', () => {
             name: 'value',
             include: true,
           }],
-          custom_query: 'testFilter',
+          custom_queries: 'testFilter',
           custom_arguments: {
             value: Buffer.from(JSON.stringify({ testParam: 12 }))
           }

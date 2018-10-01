@@ -119,7 +119,7 @@
       "provider": "kafka",
       "groupId": "restore-resource-base-interface-test",
       "clientId": "restore-resource-base-interface-test",
-      "connectionString": "localhost:2181",
+      "kafkaHost": "localhost:9092",
       "ResourceCreated": {
         "protos": [
           "io/restorecommerce/resource_base.proto"

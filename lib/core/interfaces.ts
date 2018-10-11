@@ -27,7 +27,7 @@ export interface UpdateRequest {
 
 export interface BaseDocument {
   id?: string;
-  meta: DocumentMetadata;
+  meta?: DocumentMetadata;
   [key: string]: any;
 }
 

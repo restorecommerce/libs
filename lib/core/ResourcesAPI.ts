@@ -23,7 +23,7 @@ function uuidGen(): string {
   return uuid.v4().replace(/-/g, '');
 }
 
-async function setDefaults(obj: { meta: DocumentMetadata, [key: string]: any }, collectionName: string): Promise<any> {
+async function setDefaults(obj: { meta?: DocumentMetadata, [key: string]: any }, collectionName: string): Promise<any> {
   const o = obj;
 
   if (_.isEmpty(o.meta)) {
@@ -377,7 +377,7 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    */
   async upsert(documents: BaseDocument[],
-    events: Topic, isEventsEnabled: boolean, resourceName: string): Promise<BaseDocument[]> {
+    events: Topic, resourceName: string): Promise<BaseDocument[]> {
     try {
       const dispatch = []; // CRUD events to be dispatched
       for (let i = 0; i < documents.length; i += 1) {

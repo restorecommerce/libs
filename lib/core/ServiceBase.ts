@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
-import * as co from 'co';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { toObject } from '../..';
 import { ResourcesAPIBase } from './ResourcesAPI';
-import { Topic, Events } from '@restorecommerce/kafka-client';
+import { Topic } from '@restorecommerce/kafka-client';
 import { ServiceCall, ReadRequest, CreateRequest, DeleteRequest, UpdateRequest, UpsertRequest } from './interfaces';
 
 const errors = chassis.errors;
@@ -205,7 +204,7 @@ export class ServiceBase {
   async upsert(call: ServiceCall<UpsertRequest>, context?: any): Promise<any> {
     try {
       const result = await this.resourceapi.upsert(call.request.items,
-        this.events.entity, this.isEventsEnabled, this.name);
+        this.events.entity, this.name);
       this.logger.info(`${this.name} upserted`, { items: result });
       return { items: result };
     } catch (e) {

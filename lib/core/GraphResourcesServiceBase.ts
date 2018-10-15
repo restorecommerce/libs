@@ -35,7 +35,7 @@ export class GraphResourcesServiceBase {
   * @return  {TraversalResponse} TraversalResponse containing VertexFields,
   * traversed pahts and materialized data
   */
-  async traversal(call: any, context: any): Promise<any> {
+  async traversal(call: any, context?: any): Promise<any> {
     const collection_name = call.request.collection_name;
     let start_vertex = call.request.start_vertex;
     if (_.isEmpty(start_vertex)) {

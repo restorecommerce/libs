@@ -408,6 +408,10 @@ export class ResourcesAPIBase {
       const result = await this.db.upsert(this.collectionName, documents);
       await dispatch;
 
+      if (this.bufferField) {
+        return _.map(result, doc => encodeMsgObj(doc, this.bufferField));
+      }
+
       return result;
     } catch (error) {
       if (error.code === 404) {
@@ -426,7 +430,7 @@ export class ResourcesAPIBase {
   async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
     try {
       const collectionName = this.collectionName;
-      const patches = [];
+      let patches = [];
       for (let i = 0; i < documents.length; i += 1) {
         let doc = documents[i];
         if (this.bufferField) {
@@ -490,7 +494,12 @@ export class ResourcesAPIBase {
         patches.push(await this.db.update(collectionName,
           { id: doc.id }, _.omitBy(doc, _.isNil)));
       }
-      return _.flatten(patches);
+
+      patches = _.flatten(patches);
+      if (this.bufferField) {
+        patches = _.map(patches, patch => encodeMsgObj(patch, this.bufferField));
+      }
+      return patches;
     } catch (e) {
       if (e.code === 404) {
         throw new errors.NotFound('Can\'t find one or more items with the given IDs.');

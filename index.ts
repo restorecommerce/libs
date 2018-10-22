@@ -69,9 +69,6 @@ function decodeValue(value: any): any {
   else if (value.string_value) {
     ret = value.string_value;
   }
-  else if (!_.isNil(value.bool_value)) {
-    ret = value.bool_value;
-  }
   else if (value.list_value) {
     ret = _.map(value.list_value.values, (v) => {
       return toObject(v, true);
@@ -79,6 +76,9 @@ function decodeValue(value: any): any {
   }
   else if (value.struct_value) {
     ret = toObject(value.struct_value);
+  }
+  else if (!_.isNil(value.bool_value)) {
+    ret = value.bool_value;
   }
   return ret;
 }

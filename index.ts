@@ -1,6 +1,3 @@
-'use strict';
-
-
 import * as _ from 'lodash';
 
 export function toStruct(obj: any, fromArray: Boolean = false): any {
@@ -73,19 +70,6 @@ function decodeValue(value: any): any {
   } else {
     return value[value.kind];
   }
-}
-
-export function objectToProtobuf(entityName: string, object: Object,
-  protobuf: any): any {
-  const proto = _.cloneDeep(protobuf);
-  const keys = Object.keys(object);
-  const name = entityName.charAt(0).toUpperCase() + entityName.slice(1);
-  const inst = new proto[name]();
-  for (let index = 0; index < keys.length; index += 1) {
-    inst['set' + keys[index].charAt(0).toUpperCase() +
-      keys[index].slice(1)].call(proto, object[keys[index]]);
-  }
-  return inst;
 }
 
 import { ResourcesAPIBase } from './lib/core/ResourcesAPI';

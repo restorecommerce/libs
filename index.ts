@@ -61,15 +61,26 @@ export function toObject(struct: any, fromArray: any = false): Object {
 }
 
 function decodeValue(value: any): any {
-  if (value.kind == 'list_value') {
-    return _.map(value.list_value.values, (v) => {
+  let ret = {};
+
+  if (value.number_value) {
+    ret = value.number_value;
+  }
+  else if (value.string_value) {
+    ret = value.string_value;
+  }
+  else if (!_.isNil(value.bool_value)) {
+    ret = value.bool_value;
+  }
+  else if (value.list_value) {
+    ret = _.map(value.list_value.values, (v) => {
       return toObject(v, true);
     });
-  } else if (value.kind == 'struct_value') {
-    return toObject(value.struct_value);
-  } else {
-    return value[value.kind];
   }
+  else if (value.struct_value) {
+    ret = toObject(value.struct_value);
+  }
+  return ret;
 }
 
 import { ResourcesAPIBase } from './lib/core/ResourcesAPI';

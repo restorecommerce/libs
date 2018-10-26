@@ -104,8 +104,9 @@ export class ServiceBase {
         total_count: objectEntities.length,
       };
     } catch (e) {
-      this.logger.error('Error caught while processing read request', { e });
-      throw e;
+      const { code, message } = e;
+      this.logger.error('Error caught while processing read request', { code, message });
+      throw { code, message };
     }
   }
 
@@ -130,8 +131,9 @@ export class ServiceBase {
 
       return { items: call.request.items };
     } catch (e) {
-      this.logger.error('Error caught while processing create request', { e });
-      throw e;
+      const { code, message } = e;
+      this.logger.error('Error caught while processing read request', { code, message });
+      throw { code, message };
     }
   }
   /**
@@ -165,8 +167,9 @@ export class ServiceBase {
       }
       return {};
     } catch (e) {
-      this.logger.error('Error caught while processing delete request', { e });
-      throw e;
+      const { code, message } = e;
+      this.logger.error('Error caught while processing read request', { code, message });
+      throw { code, message };
     }
   }
 
@@ -190,8 +193,9 @@ export class ServiceBase {
       }
       return { items: updateResult };
     } catch (e) {
-      this.logger.error('Error caught while processing update request', { e });
-      throw e;
+      const { code, message } = e;
+      this.logger.error('Error caught while processing read request', { code, message });
+      throw { code, message };
     }
   }
 
@@ -208,8 +212,9 @@ export class ServiceBase {
       this.logger.info(`${this.name} upserted`, { items: result });
       return { items: result };
     } catch (e) {
-      this.logger.error('Error caught while processing upsert request', { e });
-      throw e;
+      const { code, message } = e;
+      this.logger.error('Error caught while processing read request', { code, message });
+      throw { code, message };
     }
   }
 }

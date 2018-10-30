@@ -122,7 +122,9 @@ function testProvider(providerCfg) {
         async function checkGraphTraversal() {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].id}`,
-            opts: { direction: 'outbound' }
+            opts: { direction: 'outbound' },
+            data: true,
+            path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' },
@@ -158,7 +160,9 @@ function testProvider(providerCfg) {
             opts: {
               direction: 'outbound',
               filter: [{ vertex: 'cars' }]
-            }
+            },
+            data: true,
+            path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { org: 'Bayern', id: 'e' }];
@@ -190,7 +194,9 @@ function testProvider(providerCfg) {
             start_vertex: `persons/${result_1.items[0].id}`,
             opts: {
               expander: [{ edge: 'has_car', direction: 'outbound' }]
-            }
+            },
+            path: true,
+            data: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' }];

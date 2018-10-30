@@ -49,8 +49,16 @@ export class GraphResourcesServiceBase {
       throw new Error('missing start vertex');
     }
     const edge_name = call.request.edge_name;
+    let data;
+    let path;
+    if (call.request.data) {
+      data = call.request.data;
+    }
+    if (call.request.path) {
+      path = call.request.path;
+    }
     const queryResult = await this.db.traversal(start_vertex, opts,
-      collection_name, edge_name);
+      collection_name, edge_name, data, path);
     let idPropertyMapping = new Map<String, String>();
     const vertexFields = queryResult.vertex_fields || [];
     let marshallRequired = false;

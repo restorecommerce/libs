@@ -51,20 +51,25 @@ export class GraphResourcesServiceBase {
     const edge_name = call.request.edge_name;
     let data;
     let path;
+    let aql;
     if (call.request.data) {
       data = call.request.data;
     }
     if (call.request.path) {
       path = call.request.path;
     }
+    if (call.request.aql) {
+      aql = call.request.aql;
+    }
     const queryResult = await this.db.traversal(start_vertex, opts,
-      collection_name, edge_name, data, path);
+      collection_name, edge_name, data, path, aql);
     let idPropertyMapping = new Map<String, String>();
     const vertexFields = queryResult.vertex_fields || [];
     let marshallRequired = false;
     for (let eachVertex of vertexFields) {
       const collectionArray = eachVertex._id.split('/');
       const resourceName = collectionArray[0].substring(0, collectionArray[0].length - 1);
+      marshallRequired = true;
       if (this.bufferedCollections.indexOf(resourceName) > -1) {
         // need to marshall this collection instance data
         // map id to the actual key which needs to be marshelled
@@ -73,7 +78,7 @@ export class GraphResourcesServiceBase {
       }
     }
     let completeDecodedData = [];
-    if (marshallRequired) {
+    if (marshallRequired || (queryResult && queryResult.data && queryResult.data.value)) {
       // get the decoded JSON list of resources.
       const decodedData = JSON.parse(Buffer.from(queryResult.data.value).toString());
       for (let doc of decodedData) {
@@ -84,10 +89,22 @@ export class GraphResourcesServiceBase {
         }
       }
     }
-    if (completeDecodedData.length > 0) {
-      queryResult.data = { value: Buffer.from(JSON.stringify(completeDecodedData)) };
+    const size = 150;
+    const completeVertexFields = queryResult.vertex_fields;
+    while (completeDecodedData.length > 0 || completeVertexFields.length > 0) {
+      if (completeDecodedData.length > 0) {
+        const partDoc = completeDecodedData.splice(0, 1000);
+        queryResult.data = { value: Buffer.from(JSON.stringify(partDoc)) };
+      }
+      if (completeVertexFields.length > 0) {
+        queryResult.vertex_fields = completeVertexFields.splice(0, size);
+      }
+      await call.write(queryResult);
     }
-    return queryResult;
+    if (queryResult && queryResult.paths && queryResult.paths.value) {
+      await call.write(queryResult);
+    }
+    await call.end();
   }
 
   /**

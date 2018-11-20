@@ -98,7 +98,7 @@ describe('ServiceBase', () => {
 
     // Create buffered service and bind it to gRPC server
     const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'testBufferedDatas', resourceFieldConfig);
-    const bufferService: ServiceBase = new ServiceBase('BufferResource', testEvents,
+    const bufferService: ServiceBase = new ServiceBase('testBufferedData', testEvents,
       server.logger, resourceBufferAPI, isEventsEnabled);
     await server.bind('testBufferedService', bufferService);
 

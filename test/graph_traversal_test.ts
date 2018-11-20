@@ -129,17 +129,33 @@ function testProvider(providerCfg) {
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' },
           { org: 'Bayern', id: 'e' }];
-          let traversalResponse = await testService.traversal(traversalRequest);
+          let result = await testService.traversal(traversalRequest);
+          let traversalResponse = { data: [], paths: [] };
+          while (result.read) {
+            const resp = await result.read();
+            // Promisify the callback containing result
+            const partResp: any = await new Promise((resolve, reject) => {
+              resp((err, response) => {
+                if (err) {
+                  if (err.message === 'stream end') {
+                    resolve(null);
+                  }
+                  reject(err);
+                }
+                resolve(response);
+              });
+            });
+            if (!partResp) {
+              break;
+            }
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          }
           // compare data
-          traversalResponse = traversalResponse.data;
-          if (traversalResponse && traversalResponse.data) {
-            const decodedData = JSON.parse(Buffer.from(traversalResponse.data.value).toString());
-            traversalResponse.data = decodedData;
-          }
-          if (traversalResponse && traversalResponse.paths) {
-            const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString())
-            traversalResponse.paths = decodedPath;
-          }
           should.exist(traversalResponse.paths);
           should.exist(traversalResponse.data);
           traversalResponse.paths.should.have.size(3);
@@ -166,17 +182,32 @@ function testProvider(providerCfg) {
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { org: 'Bayern', id: 'e' }];
-          let traversalResponse = await testService.traversal(traversalRequest);
+          let result = await testService.traversal(traversalRequest);
+          let traversalResponse = { data: [], paths: [] };
+          while (result.read) {
+            const resp = await result.read();
+            let partResp: any = await new Promise((resolve, reject) => {
+              resp((err, response) => {
+                if (err) {
+                  if (err.message === 'stream end') {
+                    resolve(null);
+                  }
+                  reject(err);
+                }
+                resolve(response);
+              });
+            });
+            if (!partResp) {
+              break;
+            }
+            if (partResp && partResp.data && partResp.data.value) {
+              traversalResponse.data = JSON.parse(partResp.data.value.toString());
+            }
+            if (partResp && partResp.paths && partResp.paths.value) {
+              traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
+            }
+          }
           // compare data
-          traversalResponse = traversalResponse.data;
-          if (traversalResponse && traversalResponse.data) {
-            const decodedData = JSON.parse(Buffer.from(traversalResponse.data.value).toString());
-            traversalResponse.data = decodedData;
-          }
-          if (traversalResponse && traversalResponse.paths) {
-            const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString())
-            traversalResponse.paths = decodedPath;
-          }
           traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
@@ -200,17 +231,33 @@ function testProvider(providerCfg) {
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' }];
-          let traversalResponse = await testService.traversal(traversalRequest);
+          let traversalResponse = { data: [], paths: [] };
+          let result = await testService.traversal(traversalRequest);
+
+          while (result.read) {
+            let resp = await result.read();
+            let partResp: any = await new Promise((resolve, reject) => {
+              resp((err, response) => {
+                if (err) {
+                  if (err.message === 'stream end') {
+                    resolve(null);
+                  }
+                  reject(err);
+                }
+                resolve(response);
+              });
+            });
+            if (!partResp) {
+              break;
+            }
+            if (partResp && partResp.data && partResp.data.value) {
+              traversalResponse.data = JSON.parse(partResp.data.value.toString());
+            }
+            if (partResp && partResp.paths && partResp.paths.value) {
+              traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
+            }
+          }
           // compare data
-          traversalResponse = traversalResponse.data;
-          if (traversalResponse && traversalResponse.data) {
-            const decodedData = JSON.parse(Buffer.from(traversalResponse.data.value).toString());
-            traversalResponse.data = decodedData;
-          }
-          if (traversalResponse && traversalResponse.paths) {
-            const decodedPath = JSON.parse(Buffer.from(traversalResponse.paths.value).toString());
-            traversalResponse.paths = decodedPath;
-          }
           traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];

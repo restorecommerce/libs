@@ -127,6 +127,10 @@ Requests are performed using `io.restorecommerce.graph.TraversalRequest` and res
 | start_vertex | string | required | this can be either the `_id` or the `_key` of a vertex in the collection |
 | opts | `io.restorecommerce.graph.Options` | optional | List of options for graph traversal |
 | collection_name | string | optional | starting vertex's Collection name |
+| edge_name | string | optional | edge name for traversal |
+| data | bool | optional | if set to `true` only the vertices data is returned |
+| path | bool | optional | if set to `true` only the traversed paths are returned |
+| aql | bool | optional | if set to `true` traversal is executed as an AQL query |
 
 `io.restorecommerce.graph.Options`
 

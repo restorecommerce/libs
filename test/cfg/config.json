@@ -85,8 +85,7 @@
       },
       "endpoints": {
         "create": {},
-        "read": {},
-        "delete": {}
+        "read": {}
       }
     },
     "graphsTestService": {
@@ -141,7 +140,7 @@
         "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
-      "testBufferDataCreated": {
+      "testBufferedDataCreated": {
         "protos": [
           "test/test.proto"
         ],

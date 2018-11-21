@@ -91,7 +91,8 @@ export class GraphResourcesServiceBase {
     }
     const size = 150;
     const completeVertexFields = queryResult.vertex_fields;
-    while (completeDecodedData.length > 0 || completeVertexFields.length > 0) {
+    while ((completeDecodedData && completeDecodedData.length > 0) ||
+      (completeVertexFields && completeVertexFields.length > 0)) {
       if (completeDecodedData.length > 0) {
         const partDoc = completeDecodedData.splice(0, 1000);
         queryResult.data = { value: Buffer.from(JSON.stringify(partDoc)) };

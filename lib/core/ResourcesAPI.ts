@@ -306,7 +306,12 @@ export class ResourcesAPIBase {
   checkRequiredFields(requiredFields: string[], documents: any): void {
     for (let document of documents) {
       for (let eachField of requiredFields) {
+        const isArray = _.isArray(eachField);
         if (!document[eachField]) {
+          throw new errors.InvalidArgument(`Field ${eachField} is necessary
+            for ${this.resourceName}`);
+        }
+        if ((isArray && document[eachField].length == 0)) {
           throw new errors.InvalidArgument(`Field ${eachField} is necessary
             for ${this.resourceName}`);
         }

@@ -104,9 +104,13 @@ export class ServiceBase {
         total_count: objectEntities.length,
       };
     } catch (e) {
-      const { code, message } = e;
+      const { code, message, details } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      throw { code, message };
+      if (details) {
+        throw { code, message: `${message} - ${details}` };
+      } else {
+        throw { code, message };
+      }
     }
   }
 
@@ -131,9 +135,13 @@ export class ServiceBase {
 
       return { items: call.request.items };
     } catch (e) {
-      const { code, message } = e;
+      const { code, message, details } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      throw { code, message };
+      if (details) {
+        throw { code, message: `${message} - ${details}` };
+      } else {
+        throw { code, message };
+      }
     }
   }
   /**
@@ -167,9 +175,13 @@ export class ServiceBase {
       }
       return {};
     } catch (e) {
-      const { code, message } = e;
+      const { code, message, details } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      throw { code, message };
+      if (details) {
+        throw { code, message: `${message} - ${details}` };
+      } else {
+        throw { code, message };
+      }
     }
   }
 
@@ -193,9 +205,13 @@ export class ServiceBase {
       }
       return { items: updateResult };
     } catch (e) {
-      const { code, message } = e;
+      const { code, message, details } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      throw { code, message };
+      if (details) {
+        throw { code, message: `${message} - ${details}` };
+      } else {
+        throw { code, message };
+      }
     }
   }
 
@@ -212,9 +228,13 @@ export class ServiceBase {
       this.logger.info(`${this.name} upserted`, { items: result });
       return { items: result };
     } catch (e) {
-      const { code, message } = e;
+      const { code, message, details } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      throw { code, message };
+      if (details) {
+        throw { code, message: `${message} - ${details}` };
+      } else {
+        throw { code, message };
+      }
     }
   }
 }

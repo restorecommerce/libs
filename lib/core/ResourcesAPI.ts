@@ -290,7 +290,7 @@ export class ResourcesAPIBase {
         e.message.includes('unique constraint violated'))) {
         throw new errors.AlreadyExists('Item Already exists.');
       }
-      throw { code: e.code, message: e.message };
+      throw { code: e.code, message: e.message, details: e.details };
     }
   }
 
@@ -417,7 +417,7 @@ export class ResourcesAPIBase {
       if (error.code === 404) {
         throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }
-      throw { code: error.code, message: error.message };
+      throw { code: error.code, message: error.message, details: error.details };
     }
   }
 
@@ -504,7 +504,7 @@ export class ResourcesAPIBase {
       if (e.code === 404) {
         throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }
-      throw { code: e.code, message: e.message };
+      throw { code: e.code, message: e.message, details: e.details };
     }
   }
 }

@@ -27,25 +27,32 @@
     "redis": "^2.8.0"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.18",
-    "@types/lodash": "^4.14.110",
-    "@types/mocha": "^5.0.0",
-    "@types/redis": "^2.8.1",
-    "coveralls": "^3.0.0",
+    "@types/bluebird": "^3.5.26",
+    "@types/lodash": "^4.14.123",
+    "@types/mocha": "^5.2.6",
+    "@types/redis": "^2.8.12",
+    "coveralls": "^3.0.3",
     "istanbul": "^0.4.5",
-    "mocha": "^5.1.0",
-    "should": "^13.2.1"
+    "mocha": "^6.0.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.3",
+    "should": "^13.2.1",
+    "tslint": "^5.14.0",
+    "typescript": "^3.3.4000"
   },
   "scripts": {
     "pretest": "npm run tsctests",
     "tsctests": "tsc test/*_test.ts --module commonjs -target ES6",
     "test": "npm run lint && npm run mocha",
     "lint": "tslint './index.ts' './lib/**/*.ts' './*_test.ts'",
-    "mocha": "export NODE_ENV=test; mocha -R spec ./test/*.js --exit",
+    "mocha": "cross-env NODE_ENV=test; mocha -R spec ./test/*.js --exit",
     "test-debug": "npm run lint && npm run mocha-debug",
-    "mocha-debug": "export NODE_ENV=test; mocha ./test/*_test.js --inspect-brk --exit",
-    "coveralls": "export NODE_ENV=test; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/*.js --exit",
-    "postinstall": "tsc -d"
+    "mocha-debug": "cross-env NODE_ENV=test; mocha ./test/*_test.js --inspect-brk --exit",
+    "coveralls": "cross-env NODE_ENV=test; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/*.js --exit",
+    "postinstall": "tsc -d",
+    "build:tsc": "tsc -d",
+    "build:clean": "rimraf index.js lib/**/*.js",
+    "build": "npm-run-all lint build:clean build:tsc"
   },
   "engines": {
     "node": ">= 9.2.0"

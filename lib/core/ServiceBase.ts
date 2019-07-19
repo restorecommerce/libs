@@ -12,7 +12,7 @@ const errors = chassis.errors;
  * CRUD resource operations.
  */
 export class ServiceBase {
-  logger: any;
+  logger: chassis.Logger;
   name: string;
   events: any;
   resourceapi: ResourcesAPIBase;
@@ -24,7 +24,7 @@ export class ServiceBase {
    * @param [object] logger Chassis logger.
    * @param [object] resourceapi ResourceAPI object.
    */
-  constructor(entityName: string, entityEvents: any, logger: any,
+  constructor(entityName: string, entityEvents: any, logger: chassis.Logger,
     resourceapi: ResourcesAPIBase, isEventsEnabled?: boolean) {
     this.logger = logger;
     this.name = entityName;

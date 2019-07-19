@@ -43,7 +43,7 @@
   },
   "scripts": {
     "pretest": "npm run tsctests",
-    "tsctests": "tsc test/*_test.ts --module commonjs -target ES6",
+    "tsctests": "tsc -d -p tsconfig.test.json",
     "test": "npm run lint && npm run mocha",
     "lint": "tslint './index.ts' './lib/**/*.ts' './*_test.ts'",
     "mocha": "cross-env NODE_ENV=test; mocha -R spec ./test/*.js --exit",

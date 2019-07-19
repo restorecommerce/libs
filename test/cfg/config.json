@@ -154,7 +154,7 @@
     "logger": {
       "console": {
         "handleExceptions": false,
-        "level": "warn",
+        "level": "crit",
         "colorize": true,
         "prettyPrint": true
       }

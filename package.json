@@ -18,7 +18,7 @@
   ],
   "dependencies": {
     "@restorecommerce/chassis-srv": "github:restorecommerce/chassis-srv",
-    "@restorecommerce/grpc-client": "github:restorecommerce/grpc-client",
+    "@restorecommerce/grpc-client": "^0.0.1",
     "@restorecommerce/kafka-client": "^0.1.5",
     "@restorecommerce/protos": "github:restorecommerce/protos",
     "@restorecommerce/service-config": "^0.1.4",
@@ -42,7 +42,7 @@
     "typescript": "^3.6.3"
   },
   "scripts": {
-    "pretest": "npm run tsctests",
+    "pretest": "npm run build && npm run tsctests",
     "tsctests": "tsc -d -p tsconfig.test.json",
     "test": "npm run lint && nyc npm run mocha",
     "lint": "tslint './index.ts' './lib/**/*.ts' './*_test.ts'",

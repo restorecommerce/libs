@@ -136,7 +136,7 @@ export class ServiceBase {
       return { items: call.request.items };
     } catch (e) {
       const { code, message, details } = e;
-      this.logger.error('Error caught while processing read request', { code, message });
+      this.logger.error('Error caught while processing create request', { code, message });
       if (details) {
         throw { code, message: `${message} - ${details}` };
       } else {
@@ -176,7 +176,7 @@ export class ServiceBase {
       return {};
     } catch (e) {
       const { code, message, details } = e;
-      this.logger.error('Error caught while processing read request', { code, message });
+      this.logger.error('Error caught while processing delete request', { code, message });
       if (details) {
         throw { code, message: `${message} - ${details}` };
       } else {
@@ -206,7 +206,7 @@ export class ServiceBase {
       return { items: updateResult };
     } catch (e) {
       const { code, message, details } = e;
-      this.logger.error('Error caught while processing read request', { code, message });
+      this.logger.error('Error caught while processing update request', { code, message });
       if (details) {
         throw { code, message: `${message} - ${details}` };
       } else {
@@ -229,7 +229,7 @@ export class ServiceBase {
       return { items: result };
     } catch (e) {
       const { code, message, details } = e;
-      this.logger.error('Error caught while processing read request', { code, message });
+      this.logger.error('Error caught while processing upsert request', { code, message });
       if (details) {
         throw { code, message: `${message} - ${details}` };
       } else {

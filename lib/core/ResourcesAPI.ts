@@ -263,7 +263,7 @@ export class ResourcesAPIBase {
             const fromVerticeName = collection;
             const toVerticeName = eachEdgeCfg.toVerticeName;
             if (fromVerticeName && toVerticeName) {
-              const edgeDefRes = await this.db.addEdgeDefinition(eachEdgeCfg.edgeName, [fromVerticeName],
+              await this.db.addEdgeDefinition(eachEdgeCfg.edgeName, [fromVerticeName],
                 [toVerticeName]);
             }
             if (from_id && to_id) {
@@ -478,7 +478,7 @@ export class ResourcesAPIBase {
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               for (let outgoingEdge of outgoingEdges) {
-                const removedEdge = await db.removeEdge(edgeCollectionName, outgoingEdge._id);
+                await db.removeEdge(edgeCollectionName, outgoingEdge._id);
               }
               // Create new edges
               if (from_id && modified_to_idValues) {

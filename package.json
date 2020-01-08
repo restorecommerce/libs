@@ -17,10 +17,10 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "github:restorecommerce/chassis-srv",
+    "@restorecommerce/chassis-srv": "git+https://git@github.com/restorecommerce/chassis-srv.git",
     "@restorecommerce/grpc-client": "^0.0.1",
     "@restorecommerce/kafka-client": "^0.1.5",
-    "@restorecommerce/protos": "github:restorecommerce/protos",
+    "@restorecommerce/protos": "git+https://git@github.com/restorecommerce/protos.git",
     "@restorecommerce/service-config": "^0.1.4",
     "bluebird": "^3.5.5",
     "lodash": "^4.17.15",

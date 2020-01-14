@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import * as chassis from '@restorecommerce/chassis-srv';
-import { toObject } from './index';
+import { toObject } from '../index';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic } from '@restorecommerce/kafka-client';
 import { ServiceCall, ReadRequest, CreateRequest, DeleteRequest, UpdateRequest, UpsertRequest } from './interfaces';

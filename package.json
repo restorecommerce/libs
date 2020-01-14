@@ -48,7 +48,7 @@
   },
   "scripts": {
     "test": "npm run lint && nyc npm run mocha",
-    "lint": "eslint 'core/**/*.ts' ",
+    "lint": "eslint 'src/core/**/*.ts' ",
     "mocha": "cross-env NODE_ENV=test; mocha -R spec ./lib/test/*.js --exit",
     "test-debug": "npm run lint && npm run mocha-debug",
     "mocha-debug": "cross-env NODE_ENV=test; mocha ./lib/test/*_test.js --inspect-brk --exit",

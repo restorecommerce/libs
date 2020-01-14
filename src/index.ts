@@ -83,9 +83,9 @@ export const toObject = (struct: any, fromArray: any = false): Object => {
   return obj;
 };
 
-import { ResourcesAPIBase } from './ResourcesAPI';
+import { ResourcesAPIBase } from './core/ResourcesAPI';
 export { ResourcesAPIBase };
-import { ServiceBase } from './ServiceBase';
+import { ServiceBase } from './core/ServiceBase';
 export { ServiceBase };
-import { GraphResourcesServiceBase } from './GraphResourcesServiceBase';
+import { GraphResourcesServiceBase } from './core/GraphResourcesServiceBase';
 export { GraphResourcesServiceBase };

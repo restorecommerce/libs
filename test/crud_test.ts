@@ -1,10 +1,10 @@
 'use strict';
 
 import * as mocha from 'mocha';
-import { ServiceBase } from '../core';
-import { ResourcesAPIBase } from '../core';
-import { toStruct } from '../core';
-import { toObject } from '../core';
+import { ServiceBase } from '../src';
+import { ResourcesAPIBase } from '../src';
+import { toStruct } from '../src';
+import { toObject } from '../src';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Events, Topic } from '@restorecommerce/kafka-client';

@@ -7,10 +7,10 @@ export type SortType = 'ASCENDING' | 'DESCENDING' | 'UNSORTED' | 2 | 1 | 0;
 
 export interface ReadRequest {
   search?: string; // fulltext search
-  sort?: { field: string, order: SortType }[];
+  sort?: { field: string; order: SortType }[];
   limit?: number;
   offset?: number;
-  field?: { name: string, include: boolean }[];
+  field?: { name: string; include: boolean }[];
   filter?: any;
   custom_queries?: string[];
   custom_arguments?: any;
@@ -35,7 +35,7 @@ export interface DocumentMetadata {
   created?: number;
   modified?: number;
   modified_by?: string;
-  owner: { id: string, value: string }[];
+  owner: { id: string; value: string }[];
 }
 
 export interface UpsertRequest extends UpdateRequest { }

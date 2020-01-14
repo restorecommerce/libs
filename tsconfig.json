@@ -5,13 +5,18 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "outDir": "lib",
+    "typeRoots": [
+      "node_modules/@types"
+    ]
   },
   "include": [
-     "./lib/**/*.ts", "./index.ts", "./test/crud_test.ts"
+    "./**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "docs"
+    "doc",
+    "lib",
+    "node_modules"
   ]
 }

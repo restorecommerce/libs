@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 
-export function toStruct(obj: any, fromArray: Boolean = false): any {
+export const toStruct = (obj: any, fromArray: Boolean = false): any => {
   const decode = (value: any) => {
     let decodedVal;
     if (_.isNumber(value)) {
@@ -45,22 +45,9 @@ export function toStruct(obj: any, fromArray: Boolean = false): any {
   }
 
   return struct;
-}
+};
 
-export function toObject(struct: any, fromArray: any = false): Object {
-  let obj = {};
-  if (!fromArray) {
-    _.forEach(struct.fields, (value, key) => {
-      obj[key] = decodeValue(value);
-    });
-  }
-  else {
-    obj = decodeValue(struct);
-  }
-  return obj;
-}
-
-function decodeValue(value: any): any {
+const decodeValue = (value: any): any => {
   let ret = {};
 
   if (value.number_value) {
@@ -71,21 +58,34 @@ function decodeValue(value: any): any {
   }
   else if (value.list_value) {
     ret = _.map(value.list_value.values, (v) => {
-      return toObject(v, true);
+      return toObject(v, true); // eslint-disable-line
     });
   }
   else if (value.struct_value) {
-    ret = toObject(value.struct_value);
+    ret = toObject(value.struct_value); // eslint-disable-line
   }
   else if (!_.isNil(value.bool_value)) {
     ret = value.bool_value;
   }
   return ret;
-}
+};
 
-import { ResourcesAPIBase } from './lib/core/ResourcesAPI';
+export const toObject = (struct: any, fromArray: any = false): Object => {
+  let obj = {};
+  if (!fromArray) {
+    _.forEach(struct.fields, (value, key) => {
+      obj[key] = decodeValue(value);
+    });
+  }
+  else {
+    obj = decodeValue(struct);
+  }
+  return obj;
+};
+
+import { ResourcesAPIBase } from './ResourcesAPI';
 export { ResourcesAPIBase };
-import { ServiceBase } from './lib/core/ServiceBase';
+import { ServiceBase } from './ServiceBase';
 export { ServiceBase };
-import { GraphResourcesServiceBase } from './lib/core/GraphResourcesServiceBase';
+import { GraphResourcesServiceBase } from './GraphResourcesServiceBase';
 export { GraphResourcesServiceBase };

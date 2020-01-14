@@ -19,11 +19,15 @@ const Strategies = {
   TIMESTAMP: 'timestamp'
 };
 
-function uuidGen(): string {
+const uuidGen = (): string => {
   return uuid.v4().replace(/-/g, '');
-}
+};
 
-async function setDefaults(obj: { meta?: DocumentMetadata, [key: string]: any }, collectionName: string): Promise<any> {
+const isEmptyObject = (obj: any): any => {
+  return !Object.keys(obj).length;
+};
+
+const setDefaults = async (obj: { meta?: DocumentMetadata; [key: string]: any }, collectionName: string): Promise<any> => {
   const o = obj;
 
   if (_.isEmpty(o.meta)) {
@@ -65,9 +69,9 @@ async function setDefaults(obj: { meta?: DocumentMetadata, [key: string]: any },
     o.id = uuidGen();
   }
   return o;
-}
+};
 
-function updateMetadata(docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDocument {
+const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDocument => {
   if (_.isEmpty(newDoc.meta)) {
     // docMeta.owner = newDoc.owner;
     throw new errors.InvalidArgument(`Update request holds no valid metadata for document ${newDoc.id}`);
@@ -83,9 +87,9 @@ function updateMetadata(docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
 
   newDoc.meta = docMeta;
   return newDoc;
-}
+};
 
-function decodeBufferObj(document: BaseDocument, bufferField: string): BaseDocument {
+const decodeBufferObj = (document: BaseDocument, bufferField: string): BaseDocument => {
   if (bufferField in document && !_.isEmpty(document[bufferField])) {
     const encodedBufferObj = document[bufferField].value;
     // By default it was encoded in utf8 so decoding by default from utf8
@@ -95,9 +99,9 @@ function decodeBufferObj(document: BaseDocument, bufferField: string): BaseDocum
     document[bufferField] = decodedMsg;
   }
   return document;
-}
+};
 
-function encodeMsgObj(document: any, bufferField: string): any {
+const encodeMsgObj = (document: any, bufferField: string): any => {
   if (bufferField in document && document[bufferField]) {
     const decodedMsg = document[bufferField];
     // convert the Msg obj to Buffer Obj
@@ -106,11 +110,7 @@ function encodeMsgObj(document: any, bufferField: string): any {
     document[bufferField].value = encodedBufferObj;
   }
   return document;
-}
-
-function isEmptyObject(obj: any): any {
-  return !Object.keys(obj).length;
-}
+};
 
 /**
  * Resource API base provides functions for CRUD operations.
@@ -204,7 +204,7 @@ export class ResourcesAPIBase {
    * @param {object} field key value, key=field value: 0=exclude, 1=include
    * @returns {an Object that contains an items field}
    */
-  async read(filter: Object = {}, limit: number = 1000, offset: number = 0,
+  async read(filter: Object = {}, limit = 1000, offset = 0,
     sort: any = {}, field: any = {}, customQueries: string[] = [], customArgs: any = {}): Promise<BaseDocument[]> {
     const options = {
       limit: Math.min(limit, 1000),

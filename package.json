@@ -2,7 +2,7 @@
   "name": "@restorecommerce/resource-base-interface",
   "version": "0.0.1",
   "description": "Restore Commerce Resource Base Interface",
-  "main": "lib/src/index.js",
+  "main": "lib/index.js",
   "author": "Invend GmbH",
   "repository": {
     "type": "git",
@@ -48,7 +48,7 @@
   },
   "scripts": {
     "test": "npm run lint && nyc npm run mocha",
-    "lint": "eslint './src/**/*.ts' ",
+    "lint": "eslint 'core/**/*.ts' ",
     "mocha": "cross-env NODE_ENV=test; mocha -R spec ./lib/test/*.js --exit",
     "test-debug": "npm run lint && npm run mocha-debug",
     "mocha-debug": "cross-env NODE_ENV=test; mocha ./lib/test/*_test.js --inspect-brk --exit",

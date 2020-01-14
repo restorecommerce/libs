@@ -1,9 +1,9 @@
 'use strict';
 
 import * as mocha from 'mocha';
-import { GraphResourcesServiceBase } from '../src';
-import { ResourcesAPIBase } from '../src';
-import { ServiceBase } from '../src';
+import { GraphResourcesServiceBase } from '../core';
+import { ResourcesAPIBase } from '../core';
+import { ServiceBase } from '../core';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';

@@ -12,7 +12,7 @@
     ]
   },
   "include": [
-    "./**/*.ts"
+    "./src/**/*.ts"
   ],
   "exclude": [
     "doc",

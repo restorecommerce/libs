@@ -17,10 +17,10 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "git+https://git@github.com/restorecommerce/chassis-srv.git",
-    "@restorecommerce/grpc-client": "^0.0.1",
-    "@restorecommerce/kafka-client": "^0.1.5",
-    "@restorecommerce/protos": "git+https://git@github.com/restorecommerce/protos.git",
+    "@restorecommerce/chassis-srv": "^0.0.1",
+    "@restorecommerce/grpc-client": "^0.0.5",
+    "@restorecommerce/kafka-client": "^0.1.8",
+    "@restorecommerce/protos": "^0.0.1",
     "@restorecommerce/service-config": "^0.1.4",
     "bluebird": "^3.5.5",
     "lodash": "^4.17.15",
@@ -55,7 +55,6 @@
     "test-debug": "npm run lint && npm run mocha-debug",
     "mocha-debug": "cross-env NODE_ENV=test; mocha ./test/*_test.js --inspect-brk --exit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "postinstall": "tsc -d",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc"

@@ -1,7 +1,7 @@
 {
   "name": "@restorecommerce/resource-base-interface",
   "version": "0.0.1",
-  "description": "Restore Commerce Resource Base Interface",
+  "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "Invend GmbH",
   "repository": {

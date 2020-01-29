@@ -1,7 +1,6 @@
 # resource-base-interface
-<img src="http://img.shields.io/npm/v/%40restorecommerce%2Fresource%2Dbase%2Dinterface.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
+[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
 
-[version]: http://img.shields.io/npm/v/resource-base-interface.svg?style=flat-square
 [build]: http://img.shields.io/travis/restorecommerce/resource-base-interface/master.svg?style=flat-square
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
@@ -217,6 +216,30 @@ Buffer-encoded fields can be decoded before being stored in the database. It is 
 It is possible to specify which fields are required for each document of each resource on the `requiredFields` config.
 An `InvalidArgument` error is thrown if one of these fields is missing when attempting to store a document.
 
+## Development
+
+### Tests
+
+See [tests](test/). To execute the tests a set of _backing services_ are needed.
+Refer to [System](https://github.com/restorecommerce/system) repository to start the backing-services before running the tests.
+
+- To run tests
+
+```sh
+npm run test
+```
+
 ## Usage
 
-See [tests](test/).
+- Install dependencies
+
+```sh
+npm install
+```
+
+- Build
+
+```sh
+# compile the code
+npm run build
+```

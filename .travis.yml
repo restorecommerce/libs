@@ -14,7 +14,7 @@ before_install:
   - 'npm config set loglevel error'
   - docker network create --driver bridge resourcebase_net
   - docker run --name resourcebase_zk -d --net=resourcebase_net -p 2181:2181 zookeeper:3.5.5
-  - docker run --name resourcebase_kafka -d --net=resourcebase_net -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 -e KAFKA_ZOOKEEPER_CONNECT=zk:2181 -v /var/run/docker.sock:/var/run/docker.sock --link resourcebase_zk:zk wurstmeister/kafka:2.12-2.4.0
+  - docker run --name resourcebase_kafka -d --net=resourcebase_net -p 29092:29092 -e KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 -e KAFKA_ZOOKEEPER_CONNECT=zk:2181 -v /var/run/docker.sock:/var/run/docker.sock --link resourcebase_zk:zk wurstmeister/kafka:2.12-2.4.0
   - docker create --name arangodb-persist arangodb true
   - docker run --name resourcebase_adb -d -p 127.0.0.1:8529:8529 --volumes-from arangodb-persist -e ARANGO_NO_AUTH=1 arangodb/arangodb:3.4.7
   - docker run --name resourcebase_redis -d --net=resourcebase_net -p 127.0.0.1:6379:6379  redis:5.0-rc-alpine

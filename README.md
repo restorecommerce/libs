@@ -1,7 +1,8 @@
 # resource-base-interface
-<img src="http://img.shields.io/npm/v/%40restorecommerce%2Fresource%2Dbase%2Dinterface.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
 
-[version]: http://img.shields.io/npm/v/resource-base-interface.svg?style=flat-square
+[![Version][version]](https://www.npmjs.com/package/@restorecommerce/resource-base-interface)[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
+
+[version]: http://img.shields.io/npm/v/@restorecommerce/resource-base-interface.svg?style=flat-square
 [build]: http://img.shields.io/travis/restorecommerce/resource-base-interface/master.svg?style=flat-square
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square

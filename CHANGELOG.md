@@ -1,3 +1,8 @@
+### 0.0.2 (June 10th, 2020)
+
+- Updated dependencies
+- fix for null check when decoding the strcut value (in case of $Or operator its possible that not all values are present)
+
 ### 0.0.1 (January 29th, 2020)
 
 Initial share.

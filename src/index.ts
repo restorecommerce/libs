@@ -49,7 +49,9 @@ export const toStruct = (obj: any, fromArray: Boolean = false): any => {
 
 const decodeValue = (value: any): any => {
   let ret = {};
-
+  if (!value) {
+    value = {};
+  }
   if (value.number_value) {
     ret = value.number_value;
   }

@@ -1,3 +1,7 @@
+### 0.0.3 (June 23rd, 2020)
+
+- fix for read operation when filter is array
+
 ### 0.0.2 (June 10th, 2020)
 
 - Updated dependencies

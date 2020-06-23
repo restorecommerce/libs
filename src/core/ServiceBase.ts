@@ -76,7 +76,11 @@ export class ServiceBase {
       const offset = call.request.offset;
       let filter = {};
       if (!_.isEmpty(call.request.filter)) {
-        filter = toObject(call.request.filter);
+        if (call.request.filter.list_value) {
+          filter = toObject(call.request.filter, true);
+        } else {
+          filter = toObject(call.request.filter);
+        }
       }
       const field = {};
       _.forEach(call.request.field, (f) => {

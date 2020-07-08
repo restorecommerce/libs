@@ -1,3 +1,7 @@
+### 0.0.4 (July 8th, 2020)
+
+- updated grpc-client, kafka-client and other dependencies
+
 ### 0.0.3 (June 23rd, 2020)
 
 - fix for read operation when filter is array

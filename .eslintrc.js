@@ -16,7 +16,17 @@ module.exports = {
   ],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
-    "@typescript-eslint/class-name-casing": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      }
+    ],
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/member-delimiter-style": [
       "error",

@@ -1,3 +1,7 @@
+### 0.0.5 (August 19th, 2020)
+
+- updated RC dependencies
+
 ### 0.0.4 (July 8th, 2020)
 
 - updated grpc-client, kafka-client and other dependencies

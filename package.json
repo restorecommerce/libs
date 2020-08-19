@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "Invend GmbH",
@@ -17,9 +17,9 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "0.0.8",
-    "@restorecommerce/grpc-client": "0.0.6",
-    "@restorecommerce/kafka-client": "^0.1.10",
+    "@restorecommerce/chassis-srv": "^0.1.4",
+    "@restorecommerce/grpc-client": "^0.0.7",
+    "@restorecommerce/kafka-client": "^0.1.12",
     "@restorecommerce/protos": "0.0.8",
     "@restorecommerce/service-config": "^0.1.6",
     "bluebird": "^3.7.2",

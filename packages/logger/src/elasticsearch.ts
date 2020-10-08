@@ -1,4 +1,4 @@
-import { ElasticsearchTransport, ElasticsearchTransportOptions } from "winston-elasticsearch";
+import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from "winston-elasticsearch";
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
 
@@ -14,7 +14,7 @@ export const mappingTemplate = require('../elasticsearch-template-mapping.json')
  @param {Object} logData.meta - the log meta data
  @returns {Object} transformed message
  */
-const transformer = (logData) => {
+const transformer: Transformer = (logData) => {
   const transformed: any = {};
   // set rid if it exists
   if (rTracer.id()) {

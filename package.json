@@ -5,7 +5,8 @@
   "main": "index.js",
   "author": "n-fuse GmbH",
   "scripts": {
-    "publish": "lerna publish",
+    "version": "lerna version --conventional-commits --no-push --no-git-tag-version",
+    "publish": "lerna publish from-package",
     "changed": "lerna changed"
   },
   "repository": {

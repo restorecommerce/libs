@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.2...@restorecommerce/logger@0.3.3) (2020-10-08)
+
+
+### Bug Fixes
+
+* **logger:** add missing dependency ([3150b96](https://github.com/restorecommerce/libs/commit/3150b962f3a153618aa84a5b1013e664e250c98c))
+
+
+
+
+
 ## 0.3.2 (2020-10-08)
 
 **Note:** Version bump only for package @restorecommerce/logger

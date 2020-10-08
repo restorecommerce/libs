@@ -1,5 +1,7 @@
 # @restorecommerce
 
-Library mmonorepo for Restorecommerce
+Library monorepo for Restorecommerce
 
 ## Packages
+
+- [@restorecommerce/logger](packages/logger)

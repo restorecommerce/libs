@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "cls-hooked": "^4.2.2",
+    "cls-rtracer": "^2.2.0",
     "winston": "^3.3.3",
     "winston-elasticsearch": "^0.10.0"
   },

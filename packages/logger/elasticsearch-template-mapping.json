@@ -1,0 +1,54 @@
+{
+  "index_patterns": [
+    "logs-*"
+  ],
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "index": {
+      "refresh_interval": "5s",
+      "mapping": {
+        "total_fields": {
+          "limit": "3000"
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_source": {
+      "enabled": true
+    },
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "keyword"
+      },
+      "user": {
+        "type": "keyword",
+        "index": true
+      },
+      "message": {
+        "type": "text",
+        "index": true
+      },
+      "severity": {
+        "type": "keyword",
+        "index": true
+      },
+      "fields": {
+        "dynamic": true,
+        "properties": {}
+      },
+      "req_id": {
+        "type": "keyword",
+        "index": true
+      },
+      "proc_time": {
+        "type": "text",
+        "index": true
+      }
+    }
+  }
+}

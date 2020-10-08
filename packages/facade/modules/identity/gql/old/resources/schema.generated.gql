@@ -1,0 +1,60 @@
+schema {
+  query: RootQuery
+}
+
+"""The root of all queries"""
+type RootQuery {
+  getAllTimezones(limit: Int): outputTimezoneType
+}
+
+"""Timezone output description"""
+type outputTimezoneType {
+  details: [TimezoneType]
+  error: ErrorList
+}
+
+"""Timezone proto description"""
+type TimezoneType {
+  id: String
+  value: String
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Meta info common to all resources"""
+type Meta {
+  """Creation timestamp"""
+  created: Date
+
+  """Last-modification timestamp"""
+  modified: Date
+
+  """UUID from last User who modified the resource"""
+  modified_by: String
+
+  """A list of attributes describing the owner's entities"""
+  owner: [Attribute]
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+"""An ID-value attribute"""
+type Attribute {
+  """Attribute ID"""
+  id: String
+
+  """Attribute value"""
+  value: String
+}
+
+"""Objects with error returned for GraphQL operations"""
+type ErrorList {
+  """Error code"""
+  code: [String]
+
+  """Error message description"""
+  message: [String]
+}

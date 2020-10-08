@@ -1,0 +1,21 @@
+"""
+Date custom scalar type
+"""
+scalar Date
+
+
+
+"""
+An ID-value attribute
+"""
+type Attribute {
+  """
+  Attribute ID
+  """
+  id: String!
+
+  """
+  Attribute value
+  """
+  value: String!
+}

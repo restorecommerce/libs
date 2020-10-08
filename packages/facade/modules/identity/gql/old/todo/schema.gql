@@ -1,0 +1,66 @@
+
+"""The root of all queries"""
+type RootQuery {
+  getAllCountries(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputCountryType
+  getAllRoles(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRoleType
+  getAllUsers(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType, role_association: inputUserRole): outputUsersType
+  getAllPolicySets(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicySetType
+  getAllPolicies(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicyType
+  getAllRules(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRuleType
+  getAllPermissions: outputPermissionsType
+}
+
+type Mutation {
+  activateUser(input: activateUserInput!): activateUserPayload
+  changeUserPass(input: changePasswordInput!): changePasswordPayload
+  confirmPasswordChange(input: confirmPasswordChangeInput!): confirmPasswordChangePayload
+  createCountries(input: createCountriesInput!): createCountriesPayload
+  createPolicies(input: createPoliciesInput!): createPoliciesPayload
+  createPolicySets(input: createPolicySetsInput!): createPolicySetsPayload
+  createProducts(input: createProductsInput!): createProductsPayload
+  createRoles(input: createRolesInput!): createRolesPayload
+  createRules(input: createRulesInput!): createRulesPayload
+  createUsers(input: createUsersInput!): createUsersPayload
+  deleteUsers(input: deleteUsersInput!): deleteUsersPayload
+  registerUser(input: RegisterUserInput!): RegisterUserPayload
+  requestEmailChange(input: requestEmailChangeInput!): requestEmailChangePayload
+  confirmEmailChange(input: confirmEmailChangeInput!): confirmEmailChangePayload
+  unregisterUser(input: unregisterUserInput!): unregisterUserPayload
+  signInUser(input: signInUserInput!): signInUserPayload
+  signInApiKey(input: signInApiKeyInput!): signInApiKeyPayload
+  logoutUser(input: logoutUserInput!): logoutUserPayload
+  activateUsers(input: activateUsersInput!): activateUsersPayload
+  updateUsers(input: updateUsersInput!): updateUsersPayload
+  updateCountries(input: updateCountriesInput!): updateCountriesPayload
+  updateDevices(input: updateDevicesInput!): updateDevicesPayload
+  updateDeviceTypes(input: updateDeviceTypesInput!): updateDeviceTypesPayload
+  updateDeviceMakes(input: updateDeviceMakesInput!): updateDeviceMakesPayload
+  updateContactPoints(input: updateContactPointsInput!): updateContactPointsPayload
+  updateLocales(input: updateLocalesInput!): updateLocalesPayload
+  updateLocations(input: updateLocationsInput!): updateLocationsPayload
+  updateOrganizations(input: updateOrganizationsInput!): updateOrganizationsPayload
+  updatePaymentMethods(input: updatePaymentMethodsInput!): updatePaymentMethodsPayload
+  updatePolicies(input: updatePoliciesInput!): updatePoliciesPayload
+  updatePolicySets(input: updatePolicySetsInput!): updatePolicySetsPayload
+  updateProducts(input: updateProductsInput!): updateProductsPayload
+  updateRoles(input: updateRolesInput!): updateRolesPayload
+  updateRules(input: updateRulesInput!): updateRulesPayload
+  updateServiceTeams(input: updateServiceTeamsInput!): updateServiceTeamsPayload
+  updateSolutions(input: updateSolutionsInput!): updateSolutionsPayload
+  updateTaxes(input: updateTaxesInput!): updateTaxesPayload
+  uploadFile(input: uploadFileInput!): uploadFilePayload
+  updateTaxTypes(input: updateTaxTypesInput!): updateTaxTypesPayload
+  updateTimezones(input: updateTimezonesInput!): updateTimezonesPayload
+  requestPasswordChange(input: requestPasswordChangeInput!): requestPasswordChangePayload
+
+  """Persists the chosen user scope within the session context"""
+  setSessionScope(input: setSessionScopeInput!): setSessionScopePayload
+}
+
+
+schema {
+  query: RootQuery
+  mutation: Mutation
+}
+
+

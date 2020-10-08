@@ -1,0 +1,16 @@
+
+# import DefaultListQueryArgsInput from "./shared/query.graphql"
+# import OutputTimezoneType from "./timezone.graphql"
+
+type RootQuery {
+  getAllTimezones(input: DefaultListQueryArgsInput): OutputTimezoneType!
+}
+
+type Mutation {
+  x: String
+}
+
+schema {
+  query: RootQuery
+  mutation: Mutation
+}

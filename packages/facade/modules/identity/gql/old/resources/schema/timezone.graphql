@@ -1,0 +1,15 @@
+# import Meta from "./shared/meta.graphql"
+# import Status from "./shared/query.graphql"
+
+type TimezoneType {
+  id: String!
+  value: String!
+  description: String
+  meta: Meta!
+}
+
+type OutputTimezoneType {
+  payload: [TimezoneType!]!
+  status: Status!
+  meta: Meta!
+}

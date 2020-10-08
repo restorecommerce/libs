@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2019"],
+    "module": "commonjs",
+    "target": "ES2019",
+    "baseUrl": "./packages",
+    "paths": {
+      "@restorecommerce/logger": ["logger/src"]
+    }
+  }
+}

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.3...@restorecommerce/logger@0.3.4) (2020-10-08)
+
+
+### Bug Fixes
+
+* **logger:** add missing export ([72955a3](https://github.com/restorecommerce/libs/commit/72955a387e1742a843f1f6011f7e16b2384d69bd))
+
+
+
+
+
 ## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.2...@restorecommerce/logger@0.3.3) (2020-10-08)
 
 

@@ -1,0 +1,18 @@
+# Development
+
+## Commit messages
+
+This repository use [commitizen](https://github.com/commitizen/cz-cli) to normalize the commit messages.
+Commit messages are not linted.
+
+## Testing all packages
+
+Run `npm test` from the cli to run tests for all packages
+
+## Releasing one (or more) packages
+
+Run `npm run publish` from the cli to
+
+- update version in changed packages
+- create a release commit and tag
+- publish the changed packages to npm

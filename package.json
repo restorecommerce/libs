@@ -5,9 +5,9 @@
   "main": "index.js",
   "author": "n-fuse GmbH",
   "scripts": {
-    "version": "lerna version --conventional-commits --no-push --no-git-tag-version",
-    "publish": "lerna publish from-package",
-    "changed": "lerna changed"
+    "publish": "lerna publish --conventional-commits",
+    "changed": "lerna changed",
+    "test": "lerna run test"
   },
   "repository": {
     "type": "git",

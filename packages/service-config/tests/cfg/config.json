@@ -1,0 +1,9 @@
+{
+  "test": "test",
+  "boolProp": true,
+  "numberProp": 8,
+  "obj": {
+    "objectParamA": "test",
+    "objectParamB": "test"
+  }
+}

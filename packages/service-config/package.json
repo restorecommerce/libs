@@ -1,0 +1,46 @@
+{
+  "name": "@restorecommerce/service-config",
+  "version": "0.3.0",
+  "description": "An opinionated wrapper of nconf optimized for microservices",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "author": "n-fuse GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/libs.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "configuration"
+  ],
+  "dependencies": {
+    "nconf": "^0.10.0",
+    "@restorecommerce/logger": "^0.3.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/nconf": "^0.10.0",
+    "@types/node": "^12.12.67",
+    "cross-env": "^7.0.2",
+    "jest": "^26.4.2",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^26.4.0",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "build": "npm-run-all build:clean build:compile",
+    "build:clean": "rimraf -rf ./dist",
+    "build:compile": "tsc -p src/tsconfig.json",
+    "test": "cross-env NODE_ENV=development obj__objectParamA=envparam jest",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">= 12.18.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

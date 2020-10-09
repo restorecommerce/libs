@@ -38,7 +38,7 @@ export interface RestoreLoggerElasticsearchTransportOptions extends Elasticsearc
   source?: any;
 }
 export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
-  transformer['source'] = opts.source;
+  (transformer as any)['source'] = opts.source;
   return new ElasticsearchTransport({
     mappingTemplate,
     transformer,

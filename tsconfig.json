@@ -1,11 +1,13 @@
 {
+  "files": [],
   "compilerOptions": {
     "lib": ["ES2019"],
     "module": "commonjs",
-    "target": "ES2019",
-    "baseUrl": "./packages",
-    "paths": {
-      "@restorecommerce/logger": ["logger/src"]
-    }
-  }
+    "target": "ES2019"
+  },
+  "references": [
+    { "path": "./packages/logger/tsconfig.json" },
+    { "path": "./packages/grpc-client/tsconfig.json" },
+    { "path": "./packages/service-config/tsconfig.json" },
+  ]
 }

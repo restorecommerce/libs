@@ -12,9 +12,9 @@ const rTracerFormat = format.printf((info) => {
   const time = info.timestamp;
   const level = info.level;
   const message = info.message;
-  delete info.timestamp;
-  delete info.level;
-  delete info.message;
+  delete (info as any).timestamp;
+  delete (info as any).level;
+  delete (info as any).message;
   let object = '';
   if (Object.entries(info).length !== 0 && info.constructor === Object) {
     object = JSON.stringify(info);
@@ -25,26 +25,26 @@ const rTracerFormat = format.printf((info) => {
 });
 
 export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
-  let colorize = undefined;
-  if (opts.colorize !== false) {
-    const colorizeOpts = typeof opts.colorize === 'object' ? opts.colorize : undefined;
-    colorize = format.colorize(colorizeOpts);
-  }
+
+  let formats: any[] = [
+    format.simple(),
+    format.timestamp(),
+    rTracerFormat
+  ]
 
   let prettyPrint = undefined;
   if (opts.prettyPrint !== false) {
     const prettyPrintOpts = typeof opts.prettyPrint === 'object' ? opts.prettyPrint : undefined;
-    prettyPrint = format.prettyPrint(prettyPrintOpts);
+    formats.unshift(format.prettyPrint(prettyPrintOpts))
+  }
+
+  if (opts.colorize !== false) {
+    const colorizeOpts = typeof opts.colorize === 'object' ? opts.colorize : undefined;
+    formats.unshift(format.colorize(colorizeOpts))
   }
 
   return new transports.Console({
-    format: format.combine(
-      colorize,
-      prettyPrint,
-      format.simple(),
-      format.timestamp(),
-      rTracerFormat
-    ),
+    format: format.combine(...formats),
     ...opts,
   });
 }

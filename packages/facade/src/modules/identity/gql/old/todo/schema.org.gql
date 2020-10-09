@@ -1,0 +1,4293 @@
+schema {
+  query: RootQuery
+  mutation: Mutation
+}
+
+"""Effect resulting from a rule, policy or policy set"""
+enum AccessControlEffectType {
+  """Permit operation"""
+  PERMIT
+
+  """Deny operation"""
+  DENY
+}
+
+"""Generic command resource."""
+input AccessControlnputTargetType {
+  """Entity requesting access."""
+  subject: [InputAttribute]
+
+  """Targeted resources"""
+  resources: [InputAttribute]
+
+  """Targeted action"""
+  action: [InputAttribute]
+}
+
+"""Generic command resource."""
+type AccessControlTargetType {
+  """Entity requesting access."""
+  subject: [Attribute]
+
+  """Targeted resources"""
+  resources: [Attribute]
+
+  """Targeted action"""
+  action: [Attribute]
+}
+
+enum AccrueSchemeType {
+  """First term"""
+  FIRST_TERM
+
+  """Every term"""
+  EVERY_TERM
+}
+
+input activateDevicesInput {
+  ids: [String]
+  clientMutationId: String
+}
+
+type activateDevicesPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input activateUserInput {
+  name: String
+  activation_code: String
+  clientMutationId: String
+}
+
+type activateUserPayload {
+  activationStatus: String
+  error: Error
+  clientMutationId: String
+}
+
+input activateUsersInput {
+  listOfUserIDs: [String]
+  clientMutationId: String
+}
+
+type activateUsersPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""additional address fields"""
+input additionalAddressInput {
+  """Longitude"""
+  field1: String
+
+  """Latitude"""
+  field2: String
+}
+
+"""additional address fields"""
+type additionalAddressOutput {
+  """Longitude"""
+  field1: String
+
+  """Latitude"""
+  field2: String
+}
+
+"""Address message description"""
+input AddressInputType {
+  """ID"""
+  id: String
+
+  """Postal code"""
+  postcode: String
+
+  """Country"""
+  country_id: String
+
+  """Locality"""
+  locality: String
+
+  """Street address"""
+  street: String
+
+  """building number"""
+  building_number: String
+
+  """Region address"""
+  region: String
+
+  """Longitude"""
+  altitude: Float
+
+  """Geographical coordinates"""
+  geo_coordinates: geoPointInputType
+
+  """additional address input fields"""
+  addressAddition: additionalAddressInput
+  owner: [InputAttribute]
+}
+
+"""Address message description"""
+type AddressType {
+  """ID"""
+  id: String
+
+  """Postal code"""
+  postcode: String
+
+  """Country"""
+  country_id: String
+
+  """Locality"""
+  locality: String
+
+  """Street address"""
+  street: String
+
+  """building number"""
+  building_number: String
+
+  """Region address"""
+  region: String
+
+  """Longitude"""
+  altitude: Float
+
+  """Geographical coordinates"""
+  geo_coordinates: geoPointType
+
+  """Country"""
+  country: CountryType
+
+  """additional address output fields"""
+  addressAddition: additionalAddressOutput
+
+  """Meta info"""
+  meta: Meta
+}
+
+input AddressUpdateInputType {
+  """ID"""
+  id: String
+
+  """Postal code"""
+  postcode: String
+
+  """Country"""
+  country_id: String
+
+  """Locality"""
+  locality: String
+
+  """Street address"""
+  street: String
+
+  """building number"""
+  building_number: String
+
+  """Region address"""
+  region: String
+
+  """Longitude"""
+  altitude: Float
+
+  """Geographical coordinates"""
+  geo_coordinates: geoPointInputType
+
+  """additional address input fields"""
+  addressAddition: additionalAddressInput
+}
+
+"""Address for registering User"""
+input AddressuserInputType {
+  """ID"""
+  id: String
+
+  """Postal code"""
+  postcode: String
+
+  """Country"""
+  country_id: String
+
+  """Locality"""
+  locality: String
+
+  """Street address"""
+  street: String
+
+  """building number"""
+  building_number: String
+
+  """Region address"""
+  region: String
+
+  """Longitude"""
+  altitude: Float
+
+  """Geographical coordinates"""
+  geo_coordinates: geoPointInputType
+
+  """additional address input fields"""
+  addressAddition: additionalAddressInput
+}
+
+input administrativeRoomSkipCancelInput {
+  """Organization name"""
+  organization: String
+
+  """Hotel name"""
+  hotel: String
+
+  """Skip cancellations (room per date)"""
+  skipCancels: [SkipCancelInputType]
+  clientMutationId: String
+}
+
+type administrativeRoomSkipCancelPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""An ID-value attribute"""
+type Attribute {
+  """Attribute ID"""
+  id: String
+
+  """Attribute value"""
+  value: String
+}
+
+"""Delay between retries"""
+input BackOff {
+  """Fixed or Exponential delay"""
+  type: BackOffEnum
+
+  """time until retry in milliseconds"""
+  delay: Int
+}
+
+"""backOff enum type"""
+enum BackOffEnum {
+  """retry with same delay"""
+  FIXED
+
+  """retry with exponential delay"""
+  EXPONENTIAL
+}
+
+"""Delay between retries"""
+type BackOffOutputType {
+  """Fixed or Exponential delay"""
+  type: BackOffEnum
+
+  """time until retry in milliseconds"""
+  delay: Int
+}
+
+input bindLocationsInput {
+  parent: String
+  child: String
+  clientMutationId: String
+}
+
+type bindLocationsPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input bindOrganizationsInput {
+  parent: String
+  child: String
+  clientMutationId: String
+}
+
+type bindOrganizationsPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""BucketNames"""
+enum BucketNames {
+  usercontent
+  invoices
+}
+
+input cancelContractsInput {
+  """An array of Contract IDs"""
+  listOfContractIDs: [String]
+  clientMutationId: String
+}
+
+type cancelContractsPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input changePasswordInput {
+  id: String
+  password: String
+  new_password: String
+  clientMutationId: String
+}
+
+type changePasswordPayload {
+  passChangeStatus: String
+  error: Error
+  clientMutationId: String
+}
+
+"""A parameter of a system command."""
+input CommandInputParameter {
+  """Command field."""
+  field: String
+
+  """Field description"""
+  description: String
+
+  """Field data type"""
+  type: CommandParameterFieldType
+
+  """Nested parameters for `object_value`"""
+  properties: JSON
+}
+
+"""Generic command resource."""
+input CommandInputType {
+  """Command name."""
+  name: String
+
+  """Command-specific parameters."""
+  parameters: [CommandInputParameter]
+
+  """Command description."""
+  description: String
+  owner: [InputAttribute]
+}
+
+"""A parameter of a system command."""
+type CommandParameter {
+  """Command field."""
+  field: String
+
+  """Field description"""
+  description: String
+
+  """Field data type"""
+  type: CommandParameterFieldType
+
+  """Nested parameters for `object_value`"""
+  properties: JSON
+}
+
+enum CommandParameterFieldType {
+  boolean_value
+  object_value
+  array_value
+  number_value
+  string_value
+}
+
+"""Generic command resource."""
+type CommandType {
+  """Command resource ID."""
+  id: String
+
+  """Meta info"""
+  meta: Meta
+
+  """Command name."""
+  name: String
+
+  """Command-specific parameters."""
+  parameters: [CommandParameter]
+
+  """Command description."""
+  description: String
+}
+
+input confirmEmailChangeInput {
+  name: String
+  activationCode: String
+  clientMutationId: String
+}
+
+type confirmEmailChangePayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input confirmPasswordChangeInput {
+  name: String
+  password: String
+  activation_code: String
+  clientMutationId: String
+}
+
+type confirmPasswordChangePayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input confirmUserInvitationInput {
+  name: String
+  password: String
+  activationCode: String
+  clientMutationId: String
+}
+
+type confirmUserInvitationPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""ContactPoints message description"""
+input ContactPointsInputType {
+  """ID"""
+  id: String
+
+  """Physical address"""
+  physical_address_id: String
+
+  """Website"""
+  website: String
+
+  """Email address"""
+  email: String
+
+  """Type of contact point"""
+  contact_point_type_id: String
+
+  """ID of VAT"""
+  vat_id: String
+
+  """International Standard Industrial Classification V4"""
+  isic_v4: String
+
+  """Tax ID"""
+  tax_id: String
+
+  """Telephone number"""
+  telephone: String
+
+  """Locale settings"""
+  locale_id: String
+
+  """Timezone"""
+  timezone_id: String
+  owner: [InputAttribute]
+}
+
+"""ContactPoints message description"""
+type ContactPointsType {
+  """ID"""
+  id: String
+
+  """Physical address"""
+  physical_address_id: String
+
+  """Website"""
+  website: String
+
+  """Email address"""
+  email: String
+
+  """Type of contact point"""
+  contact_point_type_id: String
+
+  """ID of VAT"""
+  vat_id: String
+
+  """International Standard Industrial Classification V4"""
+  isic_v4: String
+
+  """Tax ID"""
+  tax_id: String
+
+  """Telephone number"""
+  telephone: String
+
+  """Locale settings"""
+  locale_id: String
+
+  """Timezone"""
+  timezone_id: String
+
+  """Physical address"""
+  physical_address: AddressType
+
+  """Type of contact point (resolved)"""
+  contact_point_type: TypeOfContactPointType
+
+  """User locale settings (default is "de-DE")"""
+  locale: LocaleType
+
+  """Contact timezone"""
+  timezone: TimezoneType
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""ContactPoints message description"""
+input ContactPointsUpdateInputType {
+  """ID"""
+  id: String
+
+  """Physical address"""
+  physical_address_id: String
+
+  """Website"""
+  website: String
+
+  """Email address"""
+  email: String
+
+  """Type of contact point"""
+  contact_point_type_id: String
+
+  """ID of VAT"""
+  vat_id: String
+
+  """International Standard Industrial Classification V4"""
+  isic_v4: String
+
+  """Tax ID"""
+  tax_id: String
+
+  """Telephone number"""
+  telephone: String
+
+  """Locale settings"""
+  locale_id: String
+
+  """Timezone"""
+  timezone_id: String
+}
+
+"""ContactPoints message description"""
+input ContactPointsUserInputType {
+  """ID"""
+  id: String
+
+  """Website"""
+  website: String
+
+  """Email address"""
+  email: String
+
+  """Type of contact point"""
+  contact_point_type_id: String
+
+  """Telephone number"""
+  telephone: String
+
+  """Locale settings"""
+  locale_id: String
+
+  """Timezone"""
+  timezone_id: String
+
+  """Address associated with this Contact Point"""
+  address: AddressuserInputType
+}
+
+"""Contract proto description"""
+input ContractInputType {
+  """Contract ID"""
+  id: String
+
+  """Contract name"""
+  name: String
+
+  """Contract description (optional)"""
+  description: String
+
+  """Xingular Customer ID"""
+  xingular_customer_id: String
+
+  """Date custom scalar type"""
+  termination_date: Date
+
+  """Status of Contract, Active or Cancellation pending"""
+  status: ContractStatus
+
+  """start date of the contract"""
+  start_date: Date
+
+  """Invoicing Term"""
+  invoicing_term: InvoicingTermEnum
+
+  """
+  Invoicing delay, number of days after the term when the invoice should be generated
+  """
+  invoicing_delay: Int
+
+  """length of contract"""
+  term: Int
+
+  """Invoicing scheme"""
+  invoicing_scheme: InvoicingSchemeEnum
+
+  """list of product associations"""
+  product_associations: [productAssoction]
+  owner: [InputAttribute]
+}
+
+enum ContractStatus {
+  """Contract is yet to be activated"""
+  PENDING_ACTIVATION
+
+  """Contract is active"""
+  ACTIVE
+
+  """Contract is under pending cancellation"""
+  PENDING_CANCELLATION
+
+  """Contract is cancelled"""
+  CANCELLED
+}
+
+"""Contract proto description"""
+type ContractType {
+  """Contract ID"""
+  id: String
+
+  """Contract name"""
+  name: String
+
+  """Contract description (optional)"""
+  description: String
+
+  """Xingular Customer ID"""
+  xingular_customer_id: String
+
+  """Date custom scalar type"""
+  termination_date: Date
+
+  """Status of Contract, Active or Cancellation pending"""
+  status: ContractStatus
+
+  """start date of the contract"""
+  start_date: Date
+
+  """Invoicing Term"""
+  invoicing_term: InvoicingTermEnum
+
+  """
+  Invoicing delay, number of days after the term when the invoice should be generated
+  """
+  invoicing_delay: Int
+
+  """length of contract"""
+  term: Int
+
+  """Invoicing scheme"""
+  invoicing_scheme: InvoicingSchemeEnum
+
+  """list of product associations"""
+  product_associations: [productAssociation]
+  xingular_customer: XingularCustomerType
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""ContactPoints message description"""
+input ContractUpdateInputType {
+  """Contract ID"""
+  id: String
+
+  """Contract name"""
+  name: String
+
+  """Contract description (optional)"""
+  description: String
+
+  """Xingular Customer ID"""
+  xingular_customer_id: String
+
+  """Date custom scalar type"""
+  termination_date: Date
+
+  """Status of Contract, Active or Cancellation pending"""
+  status: ContractStatus
+
+  """start date of the contract"""
+  start_date: Date
+
+  """Invoicing Term"""
+  invoicing_term: InvoicingTermEnum
+
+  """
+  Invoicing delay, number of days after the term when the invoice should be generated
+  """
+  invoicing_delay: Int
+
+  """length of contract"""
+  term: Int
+
+  """Invoicing scheme"""
+  invoicing_scheme: InvoicingSchemeEnum
+
+  """list of product associations"""
+  product_associations: [productAssoction]
+}
+
+"""Country message description"""
+input CountryInputType {
+  """ID"""
+  id: String
+
+  """Country name"""
+  name: String
+
+  """Country code"""
+  country_code: String
+
+  """Geographical name"""
+  geographical_name: String
+
+  """Economic areas to which a country belongs."""
+  economic_areas: [String]
+  owner: [InputAttribute]
+}
+
+"""Country message description"""
+type CountryType {
+  """ID"""
+  id: String
+
+  """Country name"""
+  name: String
+
+  """Country code"""
+  country_code: String
+
+  """Geographical name"""
+  geographical_name: String
+
+  """Economic areas to which a country belongs."""
+  economic_areas: [String]
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Country message description"""
+input CountryUpdateInputType {
+  """ID"""
+  id: String
+
+  """Country name"""
+  name: String
+
+  """Country code"""
+  country_code: String
+
+  """Geographical name"""
+  geographical_name: String
+
+  """Economic areas to which a country belongs."""
+  economic_areas: [String]
+}
+
+input createAddressesInput {
+  listOfAddresses: [AddressInputType]
+  clientMutationId: String
+}
+
+type createAddressesPayload {
+  details: [AddressType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createCommandsInput {
+  listOfCommands: [CommandInputType]
+  clientMutationId: String
+}
+
+type createCommandsPayload {
+  details: [CommandType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createContactPointsInput {
+  listOfContactPoints: [ContactPointsInputType]
+  clientMutationId: String
+}
+
+type createContactPointsPayload {
+  details: [ContactPointsType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createContactPointTypesInput {
+  listOfContactPointTypes: [TypeOfContactPointInputType]
+  clientMutationId: String
+}
+
+type createContactPointTypesPayload {
+  details: [TypeOfContactPointType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createContractsInput {
+  listOfContracts: [ContractInputType]
+  clientMutationId: String
+}
+
+type createContractsPayload {
+  details: [ContractType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createCountriesInput {
+  listOfCountries: [CountryInputType]
+  clientMutationId: String
+}
+
+type createCountriesPayload {
+  details: [CountryType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createCredentialsInput {
+  listOfCredentials: [CredentialInputType]
+  clientMutationId: String
+}
+
+type createCredentialsPayload {
+  details: [CredentialType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createDeviceMakesInput {
+  listOfDeviceMakes: [DeviceMakeInputType]
+  clientMutationId: String
+}
+
+type createDeviceMakesPayload {
+  details: [DeviceMakeType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createDevicesInput {
+  listOfDevices: [DeviceInputType]
+  clientMutationId: String
+}
+
+type createDevicesPayload {
+  details: [DeviceType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createDeviceTypesInput {
+  listOfDeviceTypes: [TypeOfDeviceInput]
+  clientMutationId: String
+}
+
+type createDeviceTypesPayload {
+  details: [TypeOfDeviceType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createLocalesInput {
+  listOfLocales: [LocaleInputType]
+  clientMutationId: String
+}
+
+type createLocalesPayload {
+  details: [LocaleType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createLocationsInput {
+  listOfLocations: [LocationInputType]
+  clientMutationId: String
+}
+
+type createLocationsPayload {
+  details: [LocationType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createOrganizationsInput {
+  listOfOrganizations: [OrganizationInputType]
+  clientMutationId: String
+}
+
+type createOrganizationsPayload {
+  details: [OrganizationType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createPaymentMethodsInput {
+  listOfPaymentMethods: [PaymentMethodTypeInput]
+  clientMutationId: String
+}
+
+type createPaymentMethodsPayload {
+  details: [PaymentMethodTypeOutput]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createPoliciesInput {
+  listOfPolicies: [PolicyInputType]
+  clientMutationId: String
+}
+
+type createPoliciesPayload {
+  details: [PolicyType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createPolicySetsInput {
+  listOfPolicySets: [PolicySetInputType]
+  clientMutationId: String
+}
+
+type createPolicySetsPayload {
+  details: [PolicySetType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createProductsInput {
+  listOfProducts: [ProductInputType]
+  clientMutationId: String
+}
+
+type createProductsPayload {
+  details: [ProductType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createRolesInput {
+  listOfRoles: [RoleInputType]
+  clientMutationId: String
+}
+
+type createRolesPayload {
+  details: [RoleType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createRulesInput {
+  listOfRules: [RuleInputType]
+  clientMutationId: String
+}
+
+type createRulesPayload {
+  details: [RuleType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createServiceTeamsInput {
+  listOfServiceTeams: [ServiceTeamInputType]
+  clientMutationId: String
+}
+
+type createServiceTeamsPayload {
+  details: [ServiceTeamType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createSolutionsInput {
+  listOfSolutions: [SolutionInputType]
+  clientMutationId: String
+}
+
+type createSolutionsPayload {
+  details: [SolutionType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createTaxesInput {
+  listOfTaxes: [TaxInputType]
+  clientMutationId: String
+}
+
+type createTaxesPayload {
+  details: [TaxType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createTaxTypesInput {
+  listOfTaxTypes: [TypeOfTaxInputType]
+  clientMutationId: String
+}
+
+type createTaxTypesPayload {
+  details: [TypeOfTaxType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createTimezonesInput {
+  listOfTimezones: [TimezoneInputType]
+  clientMutationId: String
+}
+
+type createTimezonesPayload {
+  details: [TimezoneType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createUsersInput {
+  listOfUsers: [UserInputType]
+  clientMutationId: String
+}
+
+type createUsersPayload {
+  details: [ResponseSafeUserType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input createXingularCustomersInput {
+  listOfXingularCustomers: [XingularCustomerInputType]
+  clientMutationId: String
+}
+
+type createXingularCustomersPayload {
+  details: [XingularCustomerType]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""Credential message description"""
+input CredentialInputType {
+  """ID"""
+  id: String
+
+  """Credentials name"""
+  name: String
+
+  """Credentials description"""
+  description: String
+
+  """User name"""
+  user: String
+
+  """password"""
+  pass: String
+
+  """JSON object containging auth key or certificate"""
+  credentials: JSON
+  owner: [InputAttribute]
+}
+
+"""Credential message description"""
+type CredentialType {
+  """ID"""
+  id: String
+
+  """Credentials name"""
+  name: String
+
+  """Credentials description"""
+  description: String
+
+  """User name"""
+  user: String
+
+  """password"""
+  pass: String
+
+  """JSON object containging auth key or certificate"""
+  credentials: JSON
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Credential message description"""
+input CredentialUpdateInputType {
+  """ID"""
+  id: String
+
+  """Credentials name"""
+  name: String
+
+  """Credentials description"""
+  description: String
+
+  """User name"""
+  user: String
+
+  """password"""
+  pass: String
+
+  """JSON object containging auth key or certificate"""
+  credentials: JSON
+}
+
+enum CurrencyType {
+  EUR
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+input deleteFileInput {
+  FileData: [DeleteFileType]
+  clientMutationId: String
+}
+
+type deleteFilePayload {
+  deleteStatus: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""File data"""
+input DeleteFileType {
+  Bucket: String
+  Key: String
+}
+
+input deleteOrgDataInput {
+  listOfOrgIDs: [String]
+  clientMutationId: String
+}
+
+type deleteOrgDataPayload {
+  deleteStatus: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input deleteResourcesInput {
+  listOfResources: [DeleteResourceType]
+  clientMutationId: String
+}
+
+type deleteResourcesPayload {
+  deleteStatus: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""Resource data"""
+input DeleteResourceType {
+  entity: String
+  ids: [String]
+}
+
+input deleteUsersInput {
+  listOfUsers: [DeleteUserType]
+  clientMutationId: String
+}
+
+type deleteUsersPayload {
+  deleteStatus: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""User data"""
+input DeleteUserType {
+  id: String
+  name: String
+  email: String
+}
+
+"""Device Activity messages"""
+type DeviceAcvityType {
+  """Device Activity"""
+  data: JSON
+  error: ErrorArray
+}
+
+enum DeviceEnumType {
+  SENSOR
+  ACTUATOR
+  SENSOR_ACTUATOR
+  GATEWAY
+  EDGE_COMPUTE
+}
+
+"""Device proto description"""
+input DeviceInputType {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Location to which this Device is linked"""
+  location_id: String
+
+  """Organization to which this Device is linked"""
+  organization_id: String
+
+  """DeviceType ID"""
+  type_id: String
+
+  """Solution ID"""
+  solution_ids: [String]
+
+  """Key for the Device used for Basic Auth"""
+  key: String
+
+  """IPv4 address of the device"""
+  ipv4_address: String
+
+  """Battery level of the device"""
+  battery_level: Float
+
+  """Battery status of the device"""
+  battery_status: String
+  owner: [InputAttribute]
+  lora: LoraInputType
+}
+
+"""Device proto description"""
+input DeviceMakeInputType {
+  id: String
+  name: String
+  description: String
+
+  """Image URL"""
+  image: String
+  owner: [InputAttribute]
+}
+
+"""Device proto description"""
+type DeviceMakeType {
+  id: String
+  name: String
+  description: String
+
+  """Image URL"""
+  image: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Device proto description"""
+input DeviceMakeUpdateInputType {
+  id: String
+  name: String
+  description: String
+
+  """Image URL"""
+  image: String
+}
+
+"""Device proto description"""
+type DeviceType {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Location to which this Device is linked"""
+  location_id: String
+
+  """Organization to which this Device is linked"""
+  organization_id: String
+
+  """DeviceType ID"""
+  type_id: String
+
+  """Solution ID"""
+  solution_ids: [String]
+
+  """Key for the Device used for Basic Auth"""
+  key: String
+
+  """IPv4 address of the device"""
+  ipv4_address: String
+
+  """Battery level of the device"""
+  battery_level: Float
+
+  """Battery status of the device"""
+  battery_status: String
+
+  """Location to which this Device is linked"""
+  location: LocationType
+
+  """Organization to which this Device is linked"""
+  organization: OrganizationType
+
+  """tracks the device status if active or inactive"""
+  active: Boolean
+
+  """Meta info"""
+  meta: Meta
+  type: TypeOfDeviceType
+  solutions: [SolutionType]
+  lora: LoraType
+
+  """Time stamp when the device was last seen"""
+  last_seen: Date
+
+  """Overall status of the device"""
+  overall_status: String
+}
+
+"""Device proto description"""
+input DeviceUpdateInputType {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Location to which this Device is linked"""
+  location_id: String
+
+  """Organization to which this Device is linked"""
+  organization_id: String
+
+  """DeviceType ID"""
+  type_id: String
+
+  """Solution ID"""
+  solution_ids: [String]
+
+  """Key for the Device used for Basic Auth"""
+  key: String
+
+  """IPv4 address of the device"""
+  ipv4_address: String
+
+  """Battery level of the device"""
+  battery_level: Float
+
+  """Battery status of the device"""
+  battery_status: String
+  lora: LoraInputType
+}
+
+"""Objects with error returned for GraphQL operations"""
+type Error {
+  """Error code"""
+  code: String
+
+  """Error message description"""
+  message: String
+}
+
+"""
+Objects with error returned for bulk user / resource GraphQL operations
+"""
+type ErrorArray {
+  """List of error codes"""
+  code: [String]
+
+  """List of error message descriptions"""
+  message: [String]
+}
+
+input ExecuteCommandInput {
+  """Command name"""
+  name: String
+
+  """Command-specific parameters"""
+  payload: JSON
+  clientMutationId: String
+}
+
+type ExecuteCommandPayload {
+  responses: [outputCommandResponse]
+  clientMutationId: String
+}
+
+"""File list output type"""
+type FileList {
+  file_name: String
+  url: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""File output description"""
+type FileType {
+  key: String
+  bucket: String
+  url: String
+  object: String
+
+  """options description"""
+  options: OptionsFields
+}
+
+enum FilterFieldValue {
+  STRING
+  BOOLEAN
+  NUMBER
+  DATE
+  ARRAY
+}
+
+"""Filters the fields based on the operation specified"""
+enum FilterOperation {
+  """Filter fields lesser than the the specified value"""
+  lt
+
+  """Filter fields lesser than or equal to the the specified value"""
+  lte
+
+  """Filter fields greater than the the specified value"""
+  gt
+
+  """Filter fields greater than or equal to the the specified value"""
+  gte
+
+  """Filter fields exactly equal to the the specified value"""
+  eq
+
+  """Filter fields which are empty"""
+  isEmpty
+
+  """Filter fields which are in"""
+  in
+
+  """
+  Filter fields which are like the specified value but match case-insensitive
+  """
+  iLike
+}
+
+"""Filter options"""
+type FilterOpts {
+  """Field names based on which the filtering needs to be done"""
+  field: String
+
+  """Filter Operation options"""
+  operation: FilterOperation
+
+  """Field value"""
+  value: String
+
+  """Value type (optional, default is STRING)"""
+  type: FilterFieldValue
+}
+
+"""Filter options"""
+input FilterOptsInput {
+  """Field names based on which the filtering needs to be done"""
+  field: String
+
+  """Filter Operation options"""
+  operation: FilterOperation
+
+  """Field value"""
+  value: String
+
+  """Value type (optional, default is STRING)"""
+  type: FilterFieldValue
+}
+
+input generateReportInput {
+  from: Date
+  to: Date
+  clientMutationId: String
+}
+
+type generateReportPayload {
+  error: Error
+
+  """CSV file stream"""
+  report: String
+  clientMutationId: String
+}
+
+"""Describes a geographical point on Earth"""
+input geoPointInputType {
+  """Longitude"""
+  longitude: Float
+
+  """Latitude"""
+  latitude: Float
+}
+
+"""Describes a geographical point on Earth"""
+type geoPointType {
+  """Longitude"""
+  longitude: Float
+
+  """Latitude"""
+  latitude: Float
+}
+
+"""Image proto description"""
+input ImageInputType {
+  """Image ID"""
+  id: String
+
+  """caption for the image"""
+  caption: String
+
+  """file name"""
+  filename: String
+
+  """Image content type"""
+  content_type: String
+
+  """Image URL"""
+  url: String
+
+  """Image Width"""
+  width: Int
+
+  """Image height"""
+  height: Int
+
+  """Image size - length"""
+  length: Int
+}
+
+"""Image proto description"""
+type ImageType {
+  """Image ID"""
+  id: String
+
+  """caption for the image"""
+  caption: String
+
+  """file name"""
+  filename: String
+
+  """Image content type"""
+  content_type: String
+
+  """Image URL"""
+  url: String
+
+  """Image Width"""
+  width: Int
+
+  """Image height"""
+  height: Int
+
+  """Image size - length"""
+  length: Int
+}
+
+"""ElasticSearch indices"""
+enum IndexNames {
+  BUTTON_PRESS
+  ROOM_SKIPS
+}
+
+"""Attribute from a Target property"""
+input InputAttribute {
+  """Attribute ID"""
+  id: String
+
+  """Attribute value"""
+  value: String
+}
+
+"""Unit price specification"""
+input inputPriceSpecification {
+  price: Float
+  currency: CurrencyType
+  reference_quantity: inputRefQuantity
+}
+
+"""Reference quantity for product price specifications"""
+input inputRefQuantity {
+  value: Float
+  unit_code: PriceUnitType
+}
+
+"""Role and attributes"""
+input InputRoleAssociation {
+  """Role ID"""
+  role: String
+  attributes: [InputAttribute]
+}
+
+"""Used to filter a user by a role association"""
+input inputUserRole {
+  """A user role"""
+  role: String
+
+  """Organizations linked to the role"""
+  organizations: [String]
+}
+
+"""Invoice message description"""
+type InvoiceType {
+  """ID"""
+  id: String
+
+  """Document creation timestamp"""
+  timestamp: Date
+
+  """Xingular customer database ID"""
+  customer_id: String
+
+  """Xingular customer details"""
+  xingular_customer: XingularCustomerType
+
+  """Invoice payment status"""
+  payment_status: String
+
+  """Gross amount"""
+  total_amount: Float
+
+  """VAT amount (difference between total and net)"""
+  vat_amount: Float
+
+  """Net amount"""
+  net_amount: Float
+
+  """PDF document"""
+  document: String
+
+  """Invoice number"""
+  invoice_number: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Invoicing Scheme"""
+enum InvoicingSchemeEnum {
+  """Beginning of term"""
+  BEGINNING_OF_TERM
+
+  """End of term"""
+  END_OF_TERM
+}
+
+"""Invoicing term enum values"""
+enum InvoicingTermEnum {
+  """Monthly invoicing term"""
+  MONTHLY
+
+  """Calender Monthly invoicing term"""
+  CALENDER_MONTHLY
+
+  """Yearly invoicing term"""
+  YEARLY
+
+  """Calender Yearly invoicing term"""
+  CALENDER_YEARLY
+}
+
+"""payload data for the job"""
+input JobData {
+  """timezone ex: Europe/Amsterdam"""
+  timezone: String
+
+  """payload for the job depends on the job type"""
+  payload: JSON
+}
+
+"""timezone and payload data for the job"""
+type JobDataOutputType {
+  """timezone ex: Europe/Berlin"""
+  timezone: String
+
+  """Payload of any data type"""
+  payload: JSON
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Jobs filter options"""
+input JobFilterOpts {
+  """Job type"""
+  type: JobTypes
+  job_ids: [String]
+}
+
+"""Job Options"""
+input JobOptions {
+  """job priority options"""
+  priority: JobPriority
+
+  """amount of possible failing runs until job fails"""
+  attempts: Int
+
+  """delay settings between failed job runs"""
+  backoff: BackOff
+
+  """if set job will expire after timeout milliseconds"""
+  timeout: Int
+
+  """Repeat options for Job"""
+  repeat: Repeat
+}
+
+"""Job Options"""
+type jobOptionsOutput {
+  """job priority options"""
+  priority: JobPriority
+
+  """amount of possible failing runs until job fails"""
+  attempts: Int
+
+  """delay settings between failed job runs"""
+  backoff: BackOffOutputType
+
+  """if set job will expire after timeout milliseconds"""
+  timeout: Int
+
+  """Repeat options for Job"""
+  repeat: RepeatOutputType
+}
+
+"""the priority of the job to be scheduled"""
+enum JobPriority {
+  """normal priority"""
+  NORMAL
+
+  """low priority"""
+  LOW
+
+  """medium priority"""
+  MEDIUM
+
+  """high priority"""
+  HIGH
+
+  """critical priority"""
+  CRITICAL
+}
+
+"""job output type"""
+type Jobs {
+  """Job ID (auto-generated)"""
+  id: String
+
+  """Job type"""
+  type: JobTypes
+
+  """
+  Job data to be stored (timezone, meta info and job-specific payload data)
+  """
+  data: JobDataOutputType
+
+  """
+  Can be either a date instance or a human-readable string like "tomorrow at 5am" or "2 seconds from now"
+  """
+  when: String
+
+  """Job Options"""
+  options: jobOptionsOutput
+}
+
+"""to schedule a job to Scheduling Service"""
+input JobScheduler {
+  """Job ID (auto-generated)"""
+  id: String
+
+  """Job type"""
+  type: JobTypes
+
+  """
+  Job data to be stored (timezone, meta info and job-specific payload data)
+  """
+  data: JobData
+
+  """
+  Can be either a date instance or a human-readable string like "tomorrow at 5am" or "2 seconds from now"
+  """
+  when: String
+
+  """Job Options"""
+  options: JobOptions
+}
+
+"""jobs list output type"""
+type JobsList {
+  details: [Jobs]
+  error: ErrorArray
+}
+
+"""the type of the job"""
+enum JobTypes {
+  """
+  Job which triggers notifications for the room cleaning service(currently no metadata is expected for this job)
+  """
+  ROOM_SERVICE_NOTIFICATION_JOB
+
+  """
+  Job which triggers invoice notifications(currently no metadata is expected for this job)
+  """
+  INVOICING_SERVICE_NOTIFICATION_JOB
+
+  """Job to generate Invoice Positions"""
+  GENERATE_INVOICE_POSITIONS_JOB
+
+  """Job to flush any pending notification"""
+  FLUSH_PENDING_NOTIFICATIONS_JOB
+
+  """Job to flush any pending notification"""
+  CANCEL_PENDING_CONTRACTS_JOB
+
+  """Job to flush completed and failed jobs from redis"""
+  FLUSH_STALLED_JOBS
+
+  """
+  Job which triggers the device service to check for and write the overall_status of the active devices
+  """
+  DEVICE_STATUS_JOB
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""Locale proto description"""
+input LocaleInputType {
+  id: String
+  value: String
+  description: String
+  owner: [InputAttribute]
+}
+
+"""Locale proto description"""
+type LocaleType {
+  id: String
+  value: String
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Locale proto description"""
+input LocaleUpdateInputType {
+  id: String
+  value: String
+  description: String
+}
+
+"""Location proto description"""
+input LocationInputType {
+  """Location ID"""
+  id: String
+
+  """Location name"""
+  name: String
+
+  """Location description"""
+  description: String
+
+  """Organization ID to which this location is linked"""
+  organization_id: String
+
+  """Location which contains this location; may be null"""
+  parent_id: String
+
+  """Locations contained in this location"""
+  children_ids: [String]
+
+  """Address of this location"""
+  address_id: String
+
+  """data for Location, used for specifying indication strategy"""
+  data: JSON
+  owner: [InputAttribute]
+}
+
+"""Location2 proto description"""
+type LocationType {
+  """Location ID"""
+  id: String
+
+  """Location name"""
+  name: String
+
+  """Location description"""
+  description: String
+
+  """Organization ID to which this location is linked"""
+  organization_id: String
+
+  """Location which contains this location; may be null"""
+  parent_id: String
+
+  """Locations contained in this location"""
+  children_ids: [String]
+
+  """Address of this location"""
+  address_id: String
+
+  """Organization to which this location is linked"""
+  organization: OrganizationType
+
+  """Address of Organization"""
+  address: AddressType
+
+  """Meta info"""
+  meta: Meta
+
+  """data for Location, used for specifying indication strategy"""
+  data: JSON
+}
+
+"""Location proto description"""
+input LocationUpdateInputType {
+  """Location ID"""
+  id: String
+
+  """Location name"""
+  name: String
+
+  """Location description"""
+  description: String
+
+  """Organization ID to which this location is linked"""
+  organization_id: String
+
+  """Location which contains this location; may be null"""
+  parent_id: String
+
+  """Locations contained in this location"""
+  children_ids: [String]
+
+  """Address of this location"""
+  address_id: String
+
+  """data for Location, used for specifying indication strategy"""
+  data: JSON
+}
+
+input logoutUserInput {
+  clientMutationId: String
+}
+
+type logoutUserPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""Lora-specific properties"""
+input LoraInputType {
+  """Lora Device EUI"""
+  eui: String
+
+  """Lora Application EUI"""
+  app_eui: String
+
+  """Lora Application Key"""
+  app_key: String
+
+  """Device address"""
+  device_address: String
+
+  """Network session key"""
+  network_session_key: String
+
+  """Application session key"""
+  app_session_key: String
+  network: LoraNetwork
+}
+
+enum LoraNetwork {
+  TTN
+}
+
+"""Lora-specific properties"""
+type LoraType {
+  """Lora Device EUI"""
+  eui: String
+
+  """Lora Application EUI"""
+  app_eui: String
+
+  """Lora Application Key"""
+  app_key: String
+
+  """Device address"""
+  device_address: String
+
+  """Network session key"""
+  network_session_key: String
+
+  """Application session key"""
+  app_session_key: String
+  network: LoraNetwork
+}
+
+"""Meta info common to all resources"""
+type Meta {
+  """Creation timestamp"""
+  created: Date
+
+  """Last-modification timestamp"""
+  modified: Date
+
+  """UUID from last User who modified the resource"""
+  modified_by: String
+
+  """A list of attributes describing the owner's entities"""
+  owner: [Attribute]
+}
+
+input modifyContractsInput {
+  listOfContracts: [ContractUpdateInputType]
+  clientMutationId: String
+}
+
+type modifyContractsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+type Mutation {
+  activateUser(input: activateUserInput!): activateUserPayload
+
+  """Administrative room skip cancellation"""
+  administrativeRoomSkipCancel(input: administrativeRoomSkipCancelInput!): administrativeRoomSkipCancelPayload
+  bindLocations(input: bindLocationsInput!): bindLocationsPayload
+  bindOrganizations(input: bindOrganizationsInput!): bindOrganizationsPayload
+  changeUserPass(input: changePasswordInput!): changePasswordPayload
+  confirmPasswordChange(input: confirmPasswordChangeInput!): confirmPasswordChangePayload
+  confirmUserInvitation(input: confirmUserInvitationInput!): confirmUserInvitationPayload
+  createAddresses(input: createAddressesInput!): createAddressesPayload
+  createContactPointTypes(input: createContactPointTypesInput!): createContactPointTypesPayload
+  createContactPoints(input: createContactPointsInput!): createContactPointsPayload
+  createCountries(input: createCountriesInput!): createCountriesPayload
+  createCredentials(input: createCredentialsInput!): createCredentialsPayload
+  createPaymentMethods(input: createPaymentMethodsInput!): createPaymentMethodsPayload
+  createPolicies(input: createPoliciesInput!): createPoliciesPayload
+  createPolicySets(input: createPolicySetsInput!): createPolicySetsPayload
+  createProducts(input: createProductsInput!): createProductsPayload
+  createRoles(input: createRolesInput!): createRolesPayload
+  createRules(input: createRulesInput!): createRulesPayload
+  createTaxes(input: createTaxesInput!): createTaxesPayload
+  createTaxTypes(input: createTaxTypesInput!): createTaxTypesPayload
+  createXingularCustomers(input: createXingularCustomersInput!): createXingularCustomersPayload
+  createDevices(input: createDevicesInput!): createDevicesPayload
+  createDeviceTypes(input: createDeviceTypesInput!): createDeviceTypesPayload
+  createDeviceMakes(input: createDeviceMakesInput!): createDeviceMakesPayload
+  createContracts(input: createContractsInput!): createContractsPayload
+  cancelContracts(input: cancelContractsInput!): cancelContractsPayload
+  revertContractsCancellation(input: revertContractsCancellationInput!): revertContractsCancellationPayload
+
+  """Reactivate a set of cancelled contracts"""
+  reactivateContracts(input: reactivateContractsInput!): reactivateContractsPayload
+  createLocales(input: createLocalesInput!): createLocalesPayload
+  createLocations(input: createLocationsInput!): createLocationsPayload
+  createServiceTeams(input: createServiceTeamsInput!): createServiceTeamsPayload
+  createSolutions(input: createSolutionsInput!): createSolutionsPayload
+  createTimezones(input: createTimezonesInput!): createTimezonesPayload
+  createUsers(input: createUsersInput!): createUsersPayload
+  createOrganizations(input: createOrganizationsInput!): createOrganizationsPayload
+  createCommands(input: createCommandsInput!): createCommandsPayload
+  deleteFile(input: deleteFileInput!): deleteFilePayload
+  deleteOrgData(input: deleteOrgDataInput!): deleteOrgDataPayload
+  deleteUsers(input: deleteUsersInput!): deleteUsersPayload
+
+  """
+  Generate a report for Xingular's bookkeeping system regarding a given time range
+  """
+  generateReport(input: generateReportInput!): generateReportPayload
+  deleteResources(input: deleteResourcesInput!): deleteResourcesPayload
+  registerUser(input: RegisterUserInput!): RegisterUserPayload
+  requestEmailChange(input: requestEmailChangeInput!): requestEmailChangePayload
+  confirmEmailChange(input: confirmEmailChangeInput!): confirmEmailChangePayload
+  unregisterUser(input: unregisterUserInput!): unregisterUserPayload
+  signInUser(input: signInUserInput!): signInUserPayload
+  signInApiKey(input: signInApiKeyInput!): signInApiKeyPayload
+  logoutUser(input: logoutUserInput!): logoutUserPayload
+  activateUsers(input: activateUsersInput!): activateUsersPayload
+  updateUsers(input: updateUsersInput!): updateUsersPayload
+  scheduleJobs(input: ScheduleJobInput!): ScheduleJobPayload
+  executeCommand(input: ExecuteCommandInput!): ExecuteCommandPayload
+  activateDevices(input: activateDevicesInput!): activateDevicesPayload
+  updateAddresses(input: updateAddressesInput!): updateAddressesPayload
+  updateContactPointTypes(input: updateAddressTypesInput!): updateAddressTypesPayload
+  updateContracts(input: modifyContractsInput!): modifyContractsPayload
+  updateCountries(input: updateCountriesInput!): updateCountriesPayload
+  updateCredentials(input: updateCredentialsInput!): updateCredentialsPayload
+  updateDevices(input: updateDevicesInput!): updateDevicesPayload
+  updateDeviceTypes(input: updateDeviceTypesInput!): updateDeviceTypesPayload
+  updateDeviceMakes(input: updateDeviceMakesInput!): updateDeviceMakesPayload
+  updateContactPoints(input: updateContactPointsInput!): updateContactPointsPayload
+  updateLocales(input: updateLocalesInput!): updateLocalesPayload
+  updateLocations(input: updateLocationsInput!): updateLocationsPayload
+  updateOrganizations(input: updateOrganizationsInput!): updateOrganizationsPayload
+  updatePaymentMethods(input: updatePaymentMethodsInput!): updatePaymentMethodsPayload
+  updatePolicies(input: updatePoliciesInput!): updatePoliciesPayload
+  updatePolicySets(input: updatePolicySetsInput!): updatePolicySetsPayload
+  updateProducts(input: updateProductsInput!): updateProductsPayload
+  updateRoles(input: updateRolesInput!): updateRolesPayload
+  updateRules(input: updateRulesInput!): updateRulesPayload
+  updateServiceTeams(input: updateServiceTeamsInput!): updateServiceTeamsPayload
+  updateSolutions(input: updateSolutionsInput!): updateSolutionsPayload
+  updateTaxes(input: updateTaxesInput!): updateTaxesPayload
+  uploadFile(input: uploadFileInput!): uploadFilePayload
+  updateTaxTypes(input: updateTaxTypesInput!): updateTaxTypesPayload
+  updateTimezones(input: updateTimezonesInput!): updateTimezonesPayload
+  requestPasswordChange(input: requestPasswordChangeInput!): requestPasswordChangePayload
+
+  """Persists the chosen user scope within the session context"""
+  setSessionScope(input: setSessionScopeInput!): setSessionScopePayload
+}
+
+"""OptionsFields Description"""
+type OptionsFields {
+  """Encoding"""
+  encoding: String
+
+  """content_type"""
+  content_type: String
+
+  """content_language"""
+  content_language: String
+
+  """content_disposition"""
+  content_disposition: String
+
+  """length"""
+  length: Int
+
+  """version"""
+  version: String
+
+  """md5"""
+  md5: String
+
+  """The tag-set for the object."""
+  tags: [Attribute]
+}
+
+"""options Input Type Description"""
+input optionsInputType {
+  """Encoding"""
+  encoding: String
+
+  """content_type"""
+  content_type: String
+
+  """content_language"""
+  content_language: String
+
+  """content_disposition"""
+  content_disposition: String
+
+  """length"""
+  length: Int
+
+  """version"""
+  version: String
+
+  """md5"""
+  md5: String
+
+  """The tag-set for the object."""
+  tags: [InputAttribute]
+}
+
+"""Organization proto description"""
+input OrganizationInputType {
+  """Organization ID"""
+  id: String
+
+  """Organization name"""
+  name: String
+
+  """Address of Organization"""
+  address_id: String
+
+  """ Hierarchically superior organization; may be null"""
+  parent_id: String
+
+  """Hierarchically inferior organizations; may be null"""
+  children_ids: [String]
+
+  """Organization website"""
+  website: String
+
+  """Organization email address"""
+  email: String
+
+  """List of different legal addresses"""
+  contact_point_ids: [String]
+
+  """Organization logo URL"""
+  logo: String
+
+  """VAT identification number"""
+  vat_id: String
+
+  """International Standard Industry Classification v4"""
+  isic_v4: String
+
+  """Registration"""
+  registration: String
+
+  """Registration court"""
+  registration_court: String
+
+  """Payment methods ids"""
+  payment_method_ids: [String]
+  owner: [InputAttribute]
+
+  """data for Organization, used for specifying indication strategy"""
+  data: JSON
+}
+
+"""Organization proto description"""
+type OrganizationType {
+  """Organization ID"""
+  id: String
+
+  """Organization name"""
+  name: String
+
+  """Address of Organization"""
+  address_id: String
+
+  """ Hierarchically superior organization; may be null"""
+  parent_id: String
+
+  """Hierarchically inferior organizations; may be null"""
+  children_ids: [String]
+
+  """Organization website"""
+  website: String
+
+  """Organization email address"""
+  email: String
+
+  """List of different legal addresses"""
+  contact_point_ids: [String]
+
+  """Organization logo URL"""
+  logo: String
+
+  """VAT identification number"""
+  vat_id: String
+
+  """International Standard Industry Classification v4"""
+  isic_v4: String
+
+  """Registration"""
+  registration: String
+
+  """Registration court"""
+  registration_court: String
+
+  """Meta info"""
+  meta: Meta
+
+  """Address of Organization"""
+  address: AddressType
+
+  """Hierarchically superior organization; may be null"""
+  parent_organization: OrganizationType
+
+  """Hierarchically inferior organizations; may be null"""
+  children_organizations: [OrganizationType]
+
+  """List of different legal addresses"""
+  contact_points: [ContactPointsType]
+
+  """Payment method identifier"""
+  payment_method_ids: [String]
+
+  """List of different payment methods"""
+  payment_methods: [PaymentMethodTypeOutput]
+
+  """data for Organization, used for specifying indication strategy"""
+  data: JSON
+}
+
+"""Organization proto description"""
+input OrganizationUpdateInputType {
+  """Organization ID"""
+  id: String
+
+  """Organization name"""
+  name: String
+
+  """Address of Organization"""
+  address_id: String
+
+  """ Hierarchically superior organization; may be null"""
+  parent_id: String
+
+  """Hierarchically inferior organizations; may be null"""
+  children_ids: [String]
+
+  """Organization website"""
+  website: String
+
+  """Organization email address"""
+  email: String
+
+  """List of different legal addresses"""
+  contact_point_ids: [String]
+
+  """Organization logo URL"""
+  logo: String
+
+  """VAT identification number"""
+  vat_id: String
+
+  """International Standard Industry Classification v4"""
+  isic_v4: String
+
+  """Registration"""
+  registration: String
+
+  """Registration court"""
+  registration_court: String
+
+  """Payment method identifier"""
+  payment_method_ids: [String]
+
+  """data for Organization, used for specifying indication strategy"""
+  data: JSON
+}
+
+"""Org data"""
+input orgInputType {
+  name: String
+  address: AddressuserInputType
+
+  """Organization website"""
+  website: String
+
+  """Organization email address"""
+  email: String
+
+  """Organization logo URL"""
+  logo: String
+
+  """VAT identification number"""
+  vat_id: String
+
+  """International Standard Industry Classification v4"""
+  isic_v4: String
+
+  """Registration"""
+  registration: String
+
+  """Registration court"""
+  registration_court: String
+}
+
+"""Address output description"""
+type outputAddressType {
+  details: [AddressType]
+  error: ErrorArray
+}
+
+"""Command response from one microservice bound to one or more services"""
+type outputCommandResponse {
+  """List of services bound to the response's microservice"""
+  services: [String]
+
+  """Response with variable payload"""
+  response: JSON
+}
+
+""" commands output description"""
+type outputCommandType {
+  details: [CommandType]
+  error: ErrorArray
+}
+
+"""ContactPoints output description"""
+type outputContactPointsType {
+  details: [ContactPointsType]
+  error: ErrorArray
+}
+
+"""Contract output description"""
+type outputContractType {
+  details: [ContractType]
+  error: ErrorArray
+}
+
+"""Country output description"""
+type outputCountryType {
+  details: [CountryType]
+  error: ErrorArray
+}
+
+"""Credential output description"""
+type outputCredentialType {
+  details: [CredentialType]
+  error: ErrorArray
+}
+
+"""Device output description"""
+type outputDeviceMakeType {
+  details: [DeviceMakeType]
+  error: ErrorArray
+}
+
+"""Device output description"""
+type outputDeviceType {
+  details: [DeviceType]
+  error: ErrorArray
+}
+
+"""File list output description"""
+type outputFileListType {
+  details: [FileList]
+  error: Error
+}
+
+"""File output description"""
+type outputFileType {
+  details: FileType
+  error: Error
+}
+
+"""Invoice output description"""
+type outputInvoiceType {
+  details: [InvoiceType]
+  error: ErrorArray
+}
+
+"""Locale output description"""
+type outputLocaleType {
+  details: [LocaleType]
+  error: ErrorArray
+}
+
+"""Location output description"""
+type outputLocationType {
+  details: [LocationType]
+  error: ErrorArray
+}
+
+"""Organization output description"""
+type outputOrgType {
+  details: [OrganizationType]
+  error: ErrorArray
+}
+
+"""Permissions output"""
+type outputPermissionsType {
+  details: JSON
+  error: Error
+}
+
+""" rules output description"""
+type outputPolicySetType {
+  details: [PolicySetType]
+  error: ErrorArray
+}
+
+""" Policy output"""
+type outputPolicyType {
+  details: [PolicyType]
+  error: ErrorArray
+}
+
+"""Product output description"""
+type outputProductType {
+  details: [ProductType]
+  error: ErrorArray
+}
+
+"""Role output description"""
+type outputRoleType {
+  details: [RoleType]
+  error: ErrorArray
+}
+
+""" Rule output"""
+type outputRuleType {
+  details: [RuleType]
+  error: ErrorArray
+}
+
+"""Service names"""
+type outputServicesType {
+  details: [String]
+  error: ErrorArray
+}
+
+"""ServiceTeam output description"""
+type outputServiceTeamType {
+  details: [ServiceTeamType]
+  error: ErrorArray
+}
+
+"""Solution output description"""
+type outputSolutionType {
+  details: [SolutionType]
+  error: ErrorArray
+}
+
+"""Tax output description"""
+type outputTaxType {
+  details: [TaxType]
+  error: ErrorArray
+}
+
+"""Timezone output description"""
+type outputTimezoneType {
+  details: [TimezoneType]
+  error: ErrorArray
+}
+
+"""ContactPoint type output description"""
+type outputTypeOfContactPointType {
+  details: [TypeOfContactPointType]
+  error: ErrorArray
+}
+
+"""Tax type output description"""
+type outputTypeOfTaxType {
+  details: [TypeOfTaxType]
+  error: ErrorArray
+}
+
+"""Output Users description"""
+type outputUsersType {
+  """Details of the Users"""
+  details: [UserType]
+
+  """Error codes and messages"""
+  error: ErrorArray
+}
+
+"""XingularCustomer output description"""
+type outputXingularCustomerType {
+  details: [XingularCustomerType]
+  error: ErrorArray
+}
+
+enum PaymentMethodEnumType {
+  WIRE_TRANSFER
+  DIRECT_DEBIT
+  PAYPAL
+}
+
+"""Payment method list type output description"""
+type PaymentMethodListTypeOutput {
+  details: [PaymentMethodTypeOutput]
+  error: ErrorArray
+}
+
+"""Payment method description"""
+input PaymentMethodTypeInput {
+  """ID"""
+  id: String
+
+  """Payment method type"""
+  payment_method: PaymentMethodEnumType
+
+  """
+  meta data for payment method type as Iban for wire transfer type and email id for paypal type etc
+  """
+  data: JSON
+  owner: [InputAttribute]
+}
+
+"""Payment method output description"""
+type PaymentMethodTypeOutput {
+  """ID"""
+  id: String
+
+  """Payment method type"""
+  payment_method: PaymentMethodEnumType
+
+  """data for Organization, used for specifying indication strategy"""
+  data: JSON
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Payment method description"""
+input PaymentMethodUpdateTypeOutput {
+  """ID"""
+  id: String
+
+  """Payment method type"""
+  payment_method: PaymentMethodEnumType
+
+  """
+  meta data for payment method type as Iban for wire transfer type and email id for paypal type etc
+  """
+  data: JSON
+}
+
+"""A policy resource (access control) which combines rules."""
+input PolicyInputType {
+  """Policy ID."""
+  id: String
+
+  """Policy name."""
+  name: String
+
+  """Policy description."""
+  description: String
+
+  """Policy Effect"""
+  effect: AccessControlEffectType
+
+  """Combining algorithm to decide among rule effects"""
+  combining_algorithm: String
+
+  """Rule resource IDs"""
+  rules: [String]
+  owner: [InputAttribute]
+
+  """Policy target (optional)"""
+  target: AccessControlnputTargetType
+}
+
+"""An aggregate of policy resources (access control)."""
+input PolicySetInputType {
+  """Policy set ID."""
+  id: String
+
+  """Policy set name."""
+  name: String
+
+  """Policy set description."""
+  description: String
+
+  """Combining algorithm to decide among policy effects"""
+  combining_algorithm: String
+
+  """Policy IDs"""
+  policies: [String]
+  owner: [InputAttribute]
+
+  """Policy set target (optional)"""
+  target: AccessControlnputTargetType
+}
+
+"""An aggregate of policy resources."""
+type PolicySetType {
+  """Policy set ID."""
+  id: String
+
+  """Policy set name."""
+  name: String
+
+  """Policy set description."""
+  description: String
+
+  """Combining algorithm to decide among policy effects"""
+  combining_algorithm: String
+
+  """Policy IDs"""
+  policies: [String]
+
+  """Policy set target (optional)"""
+  target: AccessControlTargetType
+  policies_resolved: [PolicyType]
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""An aggregate of policy resources (access control)."""
+input PolicySetUpdateInputType {
+  """Policy set ID."""
+  id: String
+
+  """Policy set name."""
+  name: String
+
+  """Policy set description."""
+  description: String
+
+  """Combining algorithm to decide among policy effects"""
+  combining_algorithm: String
+
+  """Policy IDs"""
+  policies: [String]
+
+  """Policy set target (optional)"""
+  target: AccessControlnputTargetType
+}
+
+"""Generic rule resource."""
+type PolicyType {
+  """Policy ID."""
+  id: String
+
+  """Policy name."""
+  name: String
+
+  """Policy description."""
+  description: String
+
+  """Policy Effect"""
+  effect: AccessControlEffectType
+
+  """Combining algorithm to decide among rule effects"""
+  combining_algorithm: String
+
+  """Rule resource IDs"""
+  rules: [String]
+
+  """Policy target (optional)"""
+  target: AccessControlTargetType
+  rules_resolved: [RuleType]
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""A policy resource (access control) which combines rules."""
+input PolicyUpdateInputType {
+  """Policy ID."""
+  id: String
+
+  """Policy name."""
+  name: String
+
+  """Policy description."""
+  description: String
+
+  """Policy Effect"""
+  effect: AccessControlEffectType
+
+  """Combining algorithm to decide among rule effects"""
+  combining_algorithm: String
+
+  """Rule resource IDs"""
+  rules: [String]
+  owner: [InputAttribute]
+
+  """Policy target (optional)"""
+  target: AccessControlnputTargetType
+}
+
+"""Unit price specification"""
+type priceSpecification {
+  price: Float
+  currency: CurrencyType
+  reference_quantity: refQuantity
+}
+
+enum PriceUnitType {
+  """The unit is the same as the product's quantity"""
+  QTY
+
+  """The unit is fixed for a monthly price"""
+  MON
+
+  """The unit is fixed for an yearly price"""
+  ANN
+}
+
+"""Product Association"""
+type productAssociation {
+  product_id: String
+  product: ProductType
+}
+
+"""Product Association"""
+input productAssoction {
+  product_id: String
+
+  """Product price"""
+  price: inputPriceSpecification
+}
+
+"""Product proto description"""
+input ProductInputType {
+  """Product ID"""
+  id: String
+
+  """Product name"""
+  name: String
+
+  """Product description"""
+  description: String
+
+  """Taxes applied to product"""
+  tax_id: String
+
+  """List of Solutions associated with the product"""
+  solution_ids: [String]
+
+  """Acccrue scheme which is every term or first term"""
+  accrue_scheme: AccrueSchemeType
+  owner: [InputAttribute]
+
+  """Product price"""
+  price: inputPriceSpecification
+}
+
+"""Product proto description"""
+type ProductType {
+  """Product ID"""
+  id: String
+
+  """Product name"""
+  name: String
+
+  """Product description"""
+  description: String
+
+  """Taxes applied to product"""
+  tax_id: String
+
+  """List of Solutions associated with the product"""
+  solution_ids: [String]
+
+  """Acccrue scheme which is every term or first term"""
+  accrue_scheme: AccrueSchemeType
+
+  """Meta info"""
+  meta: Meta
+
+  """Product price"""
+  price: priceSpecification
+
+  """ Variant"""
+  tax: TaxType
+  solutions: [SolutionType]
+}
+
+"""An aggregate of policy resources (access control)."""
+input ProductUpdateInputType {
+  """Product ID"""
+  id: String
+
+  """Product name"""
+  name: String
+
+  """Product description"""
+  description: String
+
+  """Taxes applied to product"""
+  tax_id: String
+
+  """List of Solutions associated with the product"""
+  solution_ids: [String]
+
+  """Acccrue scheme which is every term or first term"""
+  accrue_scheme: AccrueSchemeType
+  owner: [InputAttribute]
+
+  """Product price"""
+  price: inputPriceSpecification
+}
+
+"""Attribute from a Target property"""
+input PropertiesInputAttribute {
+  """Attribute ID"""
+  id: String
+
+  """Attribute value"""
+  value: Float
+
+  """Attribute unit"""
+  unit: String
+}
+
+"""Attribute from a Target property"""
+type PropertiesOutputAttribute {
+  """Attribute ID"""
+  id: String
+
+  """Attribute value"""
+  value: Float
+
+  """Attribute unit"""
+  unit: String
+}
+
+input reactivateContractsInput {
+  contractIDs: [String]
+  clientMutationId: String
+}
+
+type reactivateContractsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""Reference quantity for product price specifications"""
+type refQuantity {
+  value: Float
+  unit_code: PriceUnitType
+}
+
+input RegisterUserInput {
+  user: UserInputType
+  organization: orgInputType
+  contact_points: [ContactPointsUserInputType]
+  captcha_code: String
+  clientMutationId: String
+}
+
+type RegisterUserPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""Repeat Job options"""
+input Repeat {
+  """Interval to run a job periodically in milliseconds"""
+  every: Int
+
+  """
+  Interval to run a job periodically in a cron format (e.g: "0 0 5 * * *"). This should only be used in recurring jobs
+  """
+  cron: String
+
+  """
+  Used to define the exact time at which job should start repeating. Ex: "Jan 15, 2018 10:30:00"
+  """
+  startDate: String
+
+  """
+  Used to define the exact time at which job should stop repeating. Ex: "Jan 15, 2018 10:30:00"
+  """
+  endDate: String
+
+  """How many times a job has repeated"""
+  count: Int
+}
+
+"""Repeat Job options"""
+type RepeatOutputType {
+  """Interval to run a job periodically in milliseconds"""
+  every: Int
+
+  """
+  Interval to run a job periodically in a cron format (e.g: "0 0 5 * * *"). This should only be used in recurring jobs
+  """
+  cron: String
+
+  """
+  Used to define the exact time at which job should start repeating. Ex: "Jan 15, 2018 10:30:00"
+  """
+  startDate: String
+
+  """
+  Used to define the exact time at which job should stop repeating. Ex: "Jan 15, 2018 10:30:00"
+  """
+  endDate: String
+
+  """How many times a job has repeated"""
+  count: Int
+}
+
+input requestEmailChangeInput {
+  id: String
+  newEmail: String
+  clientMutationId: String
+}
+
+type requestEmailChangePayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input requestPasswordChangeInput {
+  name: String
+  email: String
+  clientMutationId: String
+}
+
+type requestPasswordChangePayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+"""User data"""
+type ResponseSafeUserType {
+  """User ID"""
+  id: String
+
+  """User Name"""
+  name: String
+  first_name: String
+  last_name: String
+
+  """User Email adress"""
+  email: String
+
+  """Default Organization Scope for this User"""
+  default_scope: String
+
+  """User role associations"""
+  role_associations: [RoleAssociation]
+
+  """List of User roles"""
+  role_associations_resolved: [RoleAssociationResolved]
+
+  """User locale settings (default is "de-DE")"""
+  locale_id: String
+
+  """User locale settings (default is "de-DE")"""
+  locale: LocaleType
+
+  """User timezone"""
+  timezone_id: String
+
+  """User timezone"""
+  timezone: TimezoneType
+
+  """Guest user"""
+  guest: Boolean
+
+  """Image URL and other details"""
+  image: ImageType
+
+  """User's current scope (if set, it overrides `default_scope`)"""
+  scope: userScopeType
+}
+
+input revertContractsCancellationInput {
+  """An array of IDs for the Contracts"""
+  contractIDs: [String]
+  clientMutationId: String
+}
+
+type revertContractsCancellationPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""Role and attributes"""
+type RoleAssociation {
+  """Role ID"""
+  role: String
+  attributes: [Attribute]
+}
+
+"""Role and organization"""
+type RoleAssociationResolved {
+  """Role"""
+  role: RoleType
+
+  """Organization"""
+  organizations: [OrganizationType]
+}
+
+"""Role proto description"""
+input RoleInputType {
+  """Role ID"""
+  id: String
+
+  """Role name"""
+  name: String
+
+  """Role description"""
+  description: String
+  owner: [InputAttribute]
+}
+
+"""Role proto description"""
+type RoleType {
+  """Role ID"""
+  id: String
+
+  """Role name"""
+  name: String
+
+  """Role description"""
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Role proto description"""
+input RoleUpdateInputType {
+  """Role ID"""
+  id: String
+
+  """Role name"""
+  name: String
+
+  """Role description"""
+  description: String
+  owner: [InputAttribute]
+}
+
+"""The root of all queries"""
+type RootQuery {
+  getAllAddresses(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputAddressType
+  getAllContactPointTypes(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputTypeOfContactPointType
+  getAllContactPoints(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputContactPointsType
+  getAllCountries(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputCountryType
+  getAllCredentials(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputCredentialType
+  getAllDevices(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputDeviceType
+  getAllDeviceTypes(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): TypeOfDeviceOutputType
+  getAllDeviceMakes(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputDeviceMakeType
+  getDeviceActivity(
+    """Device ID"""
+    ids: [String]
+  ): DeviceAcvityType
+  getAllContracts(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputContractType
+  getAllMicroServices(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputServicesType
+  getAllInvoices(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputInvoiceType
+  getAllLocales(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputLocaleType
+  getAllTimezones(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputTimezoneType
+  getAllLocations(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputLocationType
+  getAllOrganizations(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputOrgType
+  getAllPaymentMethods(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): PaymentMethodListTypeOutput
+  getAllProducts(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputProductType
+  getAllServiceTeams(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputServiceTeamType
+  getAllSolutions(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputSolutionType
+  getAllTaxes(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputTaxType
+  getAllTaxTypes(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputTypeOfTaxType
+  getAllXingularCustomers(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputXingularCustomerType
+  getAllScheduledJobs(filter: JobFilterOpts, limit: Int, sort: SortingOrder): JobsList
+  getAllCommands(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputCommandType
+  getAllRoles(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRoleType
+  getAllUsers(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType, role_association: inputUserRole): outputUsersType
+  getAllPolicySets(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicySetType
+  getAllPolicies(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicyType
+  getAllRules(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRuleType
+  getAllPermissions: outputPermissionsType
+  getDashboardData(
+    """Index name"""
+    index: IndexNames
+
+    """Organization ID"""
+    organization: String
+
+    """Location ID of Hotel"""
+    location_id: String
+
+    """Input text."""
+    from: Date
+
+    """Input text."""
+    to: Date
+  ): SearchResultType
+  fullTextSearch(
+    """Name of the indexed collection"""
+    collection: String
+
+    """Input text."""
+    text: String
+  ): SearchResultType
+  session: ResponseSafeUserType
+  listAllFiles(
+    """Bucket name"""
+    bucket: BucketNames
+
+    """Input file filter"""
+    filter: FilterOptsInput
+  ): outputFileListType
+  getFile(
+    """File Key Name"""
+    key: String
+
+    """Bucket name"""
+    bucket: BucketNames
+  ): outputFileType
+}
+
+"""
+A context query, used to pull resources on the access control service to perform a rule-level decision
+"""
+type ruleContextQuery {
+  filters: [FilterOpts]
+  query: String
+}
+
+"""
+A context query, used to pull resources on the access control service to perform a rule-level decision
+"""
+input ruleContextQueryInput {
+  filters: [FilterOptsInput]
+  query: String
+}
+
+"""Rule resource (access control)."""
+input RuleInputType {
+  """Rule ID."""
+  id: String
+
+  """Rule name."""
+  name: String
+
+  """Rule description."""
+  description: String
+
+  """JS code to evaluate special conditions (optional)"""
+  condition: String
+
+  """Rule Effect"""
+  effect: AccessControlEffectType
+  owner: [InputAttribute]
+
+  """Rule target"""
+  target: AccessControlnputTargetType
+
+  """GraphQL query to retrieve necessary external info (optional)"""
+  context_query: ruleContextQueryInput
+}
+
+"""Generic rule resource."""
+type RuleType {
+  """Rule ID."""
+  id: String
+
+  """Rule name."""
+  name: String
+
+  """Rule description."""
+  description: String
+
+  """JS code to evaluate special conditions (optional)"""
+  condition: String
+
+  """Rule Effect"""
+  effect: AccessControlEffectType
+
+  """Rule target"""
+  target: AccessControlTargetType
+
+  """GraphQL query to retrieve necessary external info (optional)"""
+  context_query: ruleContextQuery
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Rule resource (access control)."""
+input RuleUpdateInputType {
+  """Rule ID."""
+  id: String
+
+  """Rule name."""
+  name: String
+
+  """Rule description."""
+  description: String
+
+  """JS code to evaluate special conditions (optional)"""
+  condition: String
+
+  """Rule Effect"""
+  effect: AccessControlEffectType
+  owner: [InputAttribute]
+
+  """Rule target"""
+  target: AccessControlnputTargetType
+
+  """GraphQL query to retrieve necessary external info (optional)"""
+  context_query: ruleContextQueryInput
+}
+
+input ScheduleJobInput {
+  listOfJobs: [JobScheduler]
+  clientMutationId: String
+}
+
+type ScheduleJobPayload {
+  status: String
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""A role scope"""
+input ScopeInputType {
+  entity: String
+  instance: String
+}
+
+"""Result of a full text search"""
+type SearchResultType {
+  """Indexed items"""
+  data: [JSON]
+  error: Error
+}
+
+"""ServiceTeam proto description"""
+input ServiceTeamInputType {
+  """ServiceTeam ID"""
+  id: String
+
+  """Service team name"""
+  name: String
+
+  """Service team name (optional)"""
+  description: String
+
+  """User ID of the ServiceTeams's leader"""
+  leader_ids: [String]
+
+  """CC email list"""
+  cc_mail_list: [String]
+
+  """time zonde id for the service team"""
+  timezone_id: String
+
+  """team notification time"""
+  notification_time: String
+
+  """List of rooms a service team is responsible for"""
+  room_ids: [String]
+  organization_id: String
+  active: Boolean
+  owner: [InputAttribute]
+}
+
+"""ServiceTeam2 proto description"""
+type ServiceTeamType {
+  """ServiceTeam ID"""
+  id: String
+
+  """Service team name"""
+  name: String
+
+  """Service team name (optional)"""
+  description: String
+
+  """User ID of the ServiceTeams's leader"""
+  leader_ids: [String]
+
+  """CC email list"""
+  cc_mail_list: [String]
+
+  """time zonde id for the service team"""
+  timezone_id: String
+
+  """team notification time"""
+  notification_time: String
+
+  """List of rooms a service team is responsible for"""
+  room_ids: [String]
+  organization_id: String
+  active: Boolean
+
+  """List of users which coordinate a service team"""
+  leaders: [UserType]
+
+  """List of rooms a service team is responsible for"""
+  rooms: [LocationType]
+  organization: OrganizationType
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""ServiceTeam proto description"""
+input ServiceTeamUpdateInputType {
+  """ServiceTeam ID"""
+  id: String
+
+  """Service team name"""
+  name: String
+
+  """Service team name (optional)"""
+  description: String
+
+  """User ID of the ServiceTeams's leader"""
+  leader_ids: [String]
+
+  """CC email list"""
+  cc_mail_list: [String]
+
+  """time zonde id for the service team"""
+  timezone_id: String
+
+  """team notification time"""
+  notification_time: String
+
+  """List of rooms a service team is responsible for"""
+  room_ids: [String]
+  organization_id: String
+  active: Boolean
+  owner: [InputAttribute]
+}
+
+input setSessionScopeInput {
+  orgID: String
+  clientMutationId: String
+}
+
+type setSessionScopePayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input signInApiKeyInput {
+  apiKey: String
+  clientMutationId: String
+}
+
+type signInApiKeyPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input signInUserInput {
+  identifier: String
+  password: String
+  rememberMe: Boolean
+  clientMutationId: String
+}
+
+type signInUserPayload {
+  """Details of the User"""
+  me: ResponseSafeUserType
+
+  """OIDC access_token, id_token"""
+  tokens: TokenType
+  error: Error
+  clientMutationId: String
+}
+
+"""Room-date association for administrative skip cancellations"""
+input SkipCancelInputType {
+  """Room number"""
+  room: String
+
+  """Cancellation date"""
+  day: String
+}
+
+"""Solution proto description"""
+input SolutionInputType {
+  id: String
+  name: String
+  description: String
+  owner: [InputAttribute]
+}
+
+"""Solution proto description"""
+type SolutionType {
+  id: String
+  name: String
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Solution proto description"""
+input SolutionUpdateInputType {
+  id: String
+  name: String
+  description: String
+}
+
+"""Sorts the fields in either Ascending or Descending order"""
+enum SortingOrder {
+  """Sort in Ascending order"""
+  ASC
+
+  """Sort in Descending order"""
+  DESC
+}
+
+"""For sotring based on fileds"""
+input SortOpts {
+  """Field names to be sorted on"""
+  field: String
+
+  """Sorting Options"""
+  order: SortingOrder
+}
+
+"""Tax proto description"""
+input TaxInputType {
+  """Tax ID"""
+  id: String
+
+  """Country of tax"""
+  country_id: String
+
+  """Tax rate"""
+  rate: Float
+
+  """ Variant"""
+  variant: String
+
+  """ Tax type"""
+  type_id: String
+  owner: [InputAttribute]
+}
+
+"""Tax proto description"""
+type TaxType {
+  """Tax ID"""
+  id: String
+
+  """Country of tax"""
+  country_id: String
+
+  """Tax rate"""
+  rate: Float
+
+  """ Variant"""
+  variant: String
+
+  """ Tax type"""
+  type_id: String
+
+  """Meta info"""
+  meta: Meta
+
+  """Country"""
+  country: CountryType
+
+  """ Tax type"""
+  tax_type: TypeOfTaxType
+}
+
+"""Tax proto description"""
+input TaxUpdateInputType {
+  """Tax ID"""
+  id: String
+
+  """Country of tax"""
+  country_id: String
+
+  """Tax rate"""
+  rate: Float
+
+  """ Variant"""
+  variant: String
+
+  """ Tax type"""
+  type_id: String
+}
+
+"""Timezone proto description"""
+input TimezoneInputType {
+  id: String
+  value: String
+  description: String
+  owner: [InputAttribute]
+}
+
+"""Timezone proto description"""
+type TimezoneType {
+  id: String
+  value: String
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Timezone proto description"""
+input TimezoneUpdateInputType {
+  id: String
+  value: String
+  description: String
+}
+
+"""OIDC access_token, id_token"""
+type TokenType {
+  access_token: String
+  id_token: String
+  expires_in: Int
+  token_type: String
+  scope: String
+}
+
+"""ContactPoint message description"""
+input TypeOfContactPointInputType {
+  """ID"""
+  id: String
+
+  """ContactPoint type"""
+  type: String
+  owner: [InputAttribute]
+}
+
+"""ContactPoint message description"""
+type TypeOfContactPointType {
+  """ID"""
+  id: String
+
+  """ContactPoint type"""
+  type: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""ContactPoint message description"""
+input TypeOfContactPointUpdateInputType {
+  """ID"""
+  id: String
+
+  """ContactPoint type"""
+  type: String
+  owner: [InputAttribute]
+}
+
+"""DeviceType"""
+input TypeOfDeviceInput {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Image URL"""
+  image: String
+
+  """Device type variant"""
+  variant: String
+
+  """Original Equipment Manufacturer"""
+  oem_id: String
+
+  """Device product type"""
+  product_type: String
+
+  """Actual device type"""
+  device_type: DeviceEnumType
+
+  """Device maker ID"""
+  make_id: String
+  properties: [PropertiesInputAttribute]
+  owner: [InputAttribute]
+}
+
+type TypeOfDeviceOutputType {
+  details: [TypeOfDeviceType]
+  error: ErrorArray
+}
+
+"""DeviceType"""
+type TypeOfDeviceType {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Image URL"""
+  image: String
+
+  """Device type variant"""
+  variant: String
+
+  """Original Equipment Manufacturer"""
+  oem_id: String
+
+  """Device product type"""
+  product_type: String
+
+  """Actual device type"""
+  device_type: DeviceEnumType
+
+  """Device maker ID"""
+  make_id: String
+
+  """Meta info"""
+  meta: Meta
+  make: DeviceMakeType
+
+  """Properties of device type"""
+  properties: [PropertiesOutputAttribute]
+}
+
+"""DeviceType"""
+input TypeOfDeviceUpdateInput {
+  """Device ID"""
+  id: String
+
+  """Device name (optional)"""
+  name: String
+
+  """Device name (optional)"""
+  description: String
+
+  """Image URL"""
+  image: String
+
+  """Device type variant"""
+  variant: String
+
+  """Original Equipment Manufacturer"""
+  oem_id: String
+
+  """Device product type"""
+  product_type: String
+
+  """Actual device type"""
+  device_type: DeviceEnumType
+
+  """Device maker ID"""
+  make_id: String
+  properties: [PropertiesInputAttribute]
+}
+
+"""Tax message description"""
+input TypeOfTaxInputType {
+  """ID"""
+  id: String
+
+  """Tax type"""
+  type: String
+
+  """Tax description"""
+  description: String
+  owner: [InputAttribute]
+}
+
+"""Tax message description"""
+type TypeOfTaxType {
+  """ID"""
+  id: String
+
+  """Tax type"""
+  type: String
+
+  """Tax description"""
+  description: String
+
+  """Meta info"""
+  meta: Meta
+}
+
+"""Tax message description"""
+input TypeOfTaxUpdateInputType {
+  """ID"""
+  id: String
+
+  """Tax type"""
+  type: String
+
+  """Tax description"""
+  description: String
+}
+
+input unregisterUserInput {
+  name: String
+  email: String
+  id: String
+  clientMutationId: String
+}
+
+type unregisterUserPayload {
+  status: String
+  error: Error
+  clientMutationId: String
+}
+
+input updateAddressesInput {
+  listOfAddresses: [AddressUpdateInputType]
+  clientMutationId: String
+}
+
+type updateAddressesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateAddressTypesInput {
+  listOfContactPointTypes: [TypeOfContactPointUpdateInputType]
+  clientMutationId: String
+}
+
+type updateAddressTypesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateContactPointsInput {
+  listOfContactPoints: [ContactPointsUpdateInputType]
+  clientMutationId: String
+}
+
+type updateContactPointsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateCountriesInput {
+  listOfCountries: [CountryUpdateInputType]
+  clientMutationId: String
+}
+
+type updateCountriesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateCredentialsInput {
+  listOfCredentials: [CredentialUpdateInputType]
+  clientMutationId: String
+}
+
+type updateCredentialsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateDeviceMakesInput {
+  listOfDeviceMakes: [DeviceMakeUpdateInputType]
+  clientMutationId: String
+}
+
+type updateDeviceMakesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateDevicesInput {
+  listOfDevices: [DeviceUpdateInputType]
+  clientMutationId: String
+}
+
+type updateDevicesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateDeviceTypesInput {
+  listOfDeviceTypes: [TypeOfDeviceUpdateInput]
+  clientMutationId: String
+}
+
+type updateDeviceTypesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateLocalesInput {
+  listOfLocales: [LocaleUpdateInputType]
+  clientMutationId: String
+}
+
+type updateLocalesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateLocationsInput {
+  listOfLocations: [LocationUpdateInputType]
+  clientMutationId: String
+}
+
+type updateLocationsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateOrganizationsInput {
+  listOfOrganizations: [OrganizationUpdateInputType]
+  clientMutationId: String
+}
+
+type updateOrganizationsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updatePaymentMethodsInput {
+  listOfPaymentMethods: [PaymentMethodUpdateTypeOutput]
+  clientMutationId: String
+}
+
+type updatePaymentMethodsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updatePoliciesInput {
+  listOfPolicies: [PolicyUpdateInputType]
+  clientMutationId: String
+}
+
+type updatePoliciesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updatePolicySetsInput {
+  listOfPolicySets: [PolicySetUpdateInputType]
+  clientMutationId: String
+}
+
+type updatePolicySetsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateProductsInput {
+  listOfProducts: [ProductUpdateInputType]
+  clientMutationId: String
+}
+
+type updateProductsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateRolesInput {
+  listOfRoles: [RoleUpdateInputType]
+  clientMutationId: String
+}
+
+type updateRolesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateRulesInput {
+  listOfRules: [RuleUpdateInputType]
+  clientMutationId: String
+}
+
+type updateRulesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateServiceTeamsInput {
+  listOfServiceTeams: [ServiceTeamUpdateInputType]
+  clientMutationId: String
+}
+
+type updateServiceTeamsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateSolutionsInput {
+  listOfSolutions: [SolutionUpdateInputType]
+  clientMutationId: String
+}
+
+type updateSolutionsPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateTaxesInput {
+  listOfTaxes: [TaxUpdateInputType]
+  clientMutationId: String
+}
+
+type updateTaxesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateTaxTypesInput {
+  listOfTaxTypes: [TypeOfTaxUpdateInputType]
+  clientMutationId: String
+}
+
+type updateTaxTypesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+input updateTimezonesInput {
+  listOfTimezones: [TimezoneUpdateInputType]
+  clientMutationId: String
+}
+
+type updateTimezonesPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""User data"""
+input UpdateUserInputType {
+  """User ID (used to locate user to be updated)"""
+  id: String
+
+  """User name"""
+  name: String
+
+  """User's first name"""
+  first_name: String
+
+  """User's last name name"""
+  last_name: String
+
+  """If the user was activated via the activation process"""
+  active: Boolean
+
+  """User Role type"""
+  role_associations: [InputRoleAssociation]
+
+  """User locale settings (default is 'de-DE')"""
+  locale_id: String
+
+  """User timezone settings (default is 'Europe/Berlin')"""
+  timezone_id: String
+
+  """Default Organization Scope for this User"""
+  default_scope: String
+
+  """Image URL and other details"""
+  image: ImageInputType
+
+  """updated email ID"""
+  email: String
+
+  """updated password"""
+  password: String
+}
+
+input updateUsersInput {
+  listOfUsers: [UpdateUserInputType]
+  clientMutationId: String
+}
+
+type updateUsersPayload {
+  status: [String]
+  error: ErrorArray
+  clientMutationId: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input uploadFileInput {
+  fileName: Upload
+
+  """Name of the bucket"""
+  bucket: String
+
+  """options"""
+  options: optionsInputType
+  clientMutationId: String
+}
+
+type uploadFilePayload {
+  status: String
+  Url: String
+  Bucket: String
+  Key: String
+  Tags: [Attribute]
+  Length: Int
+  error: Error
+  clientMutationId: String
+}
+
+"""type of User"""
+enum UserEnumType {
+  """User belonging to an Organization"""
+  ORG_USER
+
+  """Individual User"""
+  INDIVIDUAL_USER
+
+  """Guest User"""
+  GUEST
+}
+
+"""User data"""
+input UserInputType {
+  """User ID"""
+  id: String
+
+  """Type of User"""
+  user_type: UserEnumType
+
+  """Username"""
+  name: String
+
+  """User's first name"""
+  first_name: String
+
+  """User's last name"""
+  last_name: String
+
+  """User Email address"""
+  email: String
+
+  """Password for this User"""
+  password: String
+
+  """Default Organization Scope for this User"""
+  default_scope: String
+
+  """Guest user"""
+  guest: Boolean
+
+  """User Role type"""
+  role_associations: [InputRoleAssociation]
+
+  """User locale settings (default is "de-DE")"""
+  locale_id: String
+
+  """User timezone settings (default is "Europe/Berlin")"""
+  timezone_id: String
+  owner: [InputAttribute]
+
+  """Image URL and other details"""
+  image: ImageInputType
+
+  """flag set to true when inviting user"""
+  invite: Boolean
+}
+
+"""User scope object"""
+type userScopeType {
+  role_associations: [RoleAssociation]
+
+  """The chosen scope's organization ID"""
+  scopeOrganization: String
+}
+
+"""User data"""
+type UserType {
+  """User ID"""
+  id: String
+
+  """User Name"""
+  name: String
+  first_name: String
+  last_name: String
+
+  """User Email adress"""
+  email: String
+
+  """Default Organization Scope for this User"""
+  default_scope: String
+
+  """User role associations"""
+  role_associations: [RoleAssociation]
+
+  """List of User roles"""
+  role_associations_resolved: [RoleAssociationResolved]
+
+  """User locale settings (default is "de-DE")"""
+  locale_id: String
+
+  """User locale settings (default is "de-DE")"""
+  locale: LocaleType
+
+  """User timezone"""
+  timezone_id: String
+
+  """User timezone"""
+  timezone: TimezoneType
+
+  """Guest user"""
+  guest: Boolean
+
+  """Image URL and other details"""
+  image: ImageType
+
+  """Meta info"""
+  meta: Meta
+
+  """User Activation status 1-Active, 0-Inactive"""
+  active: Boolean
+
+  """Activation code used to activate the User"""
+  activation_code: String
+
+  """True from time of registry until activation is complete"""
+  unauthenticated: Boolean
+}
+
+"""XingularCustomer message description"""
+input XingularCustomerInputType {
+  """ID"""
+  id: String
+
+  """Organization bound to the Xingular Customer"""
+  organization_id: String
+  owner: [InputAttribute]
+}
+
+"""XingularCustomer message description"""
+type XingularCustomerType {
+  """ID"""
+  id: String
+
+  """Organization bound to the Xingular Customer"""
+  organization_id: String
+
+  """Organization details"""
+  organization: OrganizationType
+
+  """Meta info"""
+  meta: Meta
+}

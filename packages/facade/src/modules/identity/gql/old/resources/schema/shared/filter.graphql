@@ -1,0 +1,77 @@
+enum FilterFieldValue {
+  STRING
+  BOOLEAN
+  NUMBER
+  DATE
+  ARRAY
+}
+
+"""
+Filters the fields based on the operation specified
+"""
+enum FilterOperation {
+  """
+  Filter fields lesser than the the specified value
+  """
+  lt
+
+  """
+  Filter fields lesser than or equal to the the specified value
+  """
+  lte
+
+  """
+  Filter fields greater than the the specified value
+  """
+  gt
+
+  """
+  Filter fields greater than or equal to the the specified value
+  """
+  gte
+
+  """
+  Filter fields exactly equal to the the specified value
+  """
+  eq
+
+  """
+  Filter fields which are empty
+  """
+  isEmpty
+
+  """
+  Filter fields which are in
+  """
+  in
+
+  """
+  Filter fields which are like the specified value but match case-insensitive
+  """
+  iLike
+}
+
+"""
+Filter options
+"""
+input FilterOptsInput {
+  """
+  Field names based on which the filtering needs to be done
+  """
+  field: String!
+
+  """
+  Filter Operation options
+  """
+  operation: FilterOperation!
+
+  """
+  Field value
+  """
+  value: String!
+
+  """
+  Value type (optional, default is STRING)
+  """
+  type: FilterFieldValue
+}

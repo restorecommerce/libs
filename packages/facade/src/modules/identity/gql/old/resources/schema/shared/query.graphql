@@ -1,0 +1,31 @@
+# import SortOptsInput from "./sort.graphql"
+# import FilterOptsInput from "./filter.graphql"
+
+
+"""
+Status of a response
+"""
+type Status {
+  key: String!
+  code: Int!
+  message: String
+}
+
+
+"""
+A role scope
+"""
+input ScopeInput {
+  entity: String
+  instance: String
+}
+
+
+input DefaultListQueryArgsInput {
+  filter: [FilterOptsInput!]
+  offset: Int
+  limit: Int
+  sort: SortOptsInput
+  scope: ScopeInput
+}
+

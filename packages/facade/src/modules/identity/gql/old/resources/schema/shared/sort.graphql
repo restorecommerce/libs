@@ -1,0 +1,30 @@
+
+"""
+Sorts the fields in either Ascending or Descending order
+"""
+enum SortingOrder {
+  """
+  Sort in Ascending order
+  """
+  ASC
+
+  """
+  Sort in Descending order
+  """
+  DESC
+}
+
+"""
+For string based on fileds
+"""
+input SortOptsInput {
+  """
+  Field names to be sorted on
+  """
+  field: String!
+
+  """
+  Sorting Options
+  """
+  order: SortingOrder
+}

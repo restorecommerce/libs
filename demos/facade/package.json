@@ -1,0 +1,31 @@
+{
+  "name": "@restorecommerce/facade-demo",
+  "version": "0.0.1",
+  "description": "",
+  "author": "n-fuse GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/libs.git"
+  },
+  "private": true,
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "facade",
+    "demo"
+  ],
+  "dependencies": {
+    "@restorecommerce/facade": "^0.0.1",
+    "@restorecommerce/service-config": "^0.3.1",
+    "@restorecommerce/logger": "^0.3.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+  },
+  "engines": {
+    "node": ">= 12.18.0"
+  }
+}

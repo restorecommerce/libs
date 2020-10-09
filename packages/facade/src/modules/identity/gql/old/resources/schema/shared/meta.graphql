@@ -1,0 +1,27 @@
+# import Date from "./base.graphql"
+# import Attribute from "./base.graphql"
+
+"""
+Meta information about a resource
+"""
+type Meta {
+  """
+  Creation timestamp
+  """
+  created: Date
+
+  """
+  Last-modification timestamp
+  """
+  modified: Date
+
+  """
+  UUID from last User who modified the resource
+  """
+  modified_by: String
+
+  """
+  A list of attributes describing the owner's entities
+  """
+  owner: [Attribute!]
+}

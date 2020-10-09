@@ -1,0 +1,45 @@
+
+"""The root of all queries"""
+type RootQuery {
+  getAllRoles(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRoleType
+  getAllUsers(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType, role_association: inputUserRole): outputUsersType
+  getAllPolicySets(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicySetType
+  getAllPolicies(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputPolicyType
+  getAllRules(limit: Int, offset: Int, filter: [FilterOptsInput], sort: SortOpts, scope: ScopeInputType): outputRuleType
+  getAllPermissions: outputPermissionsType
+}
+
+type Mutation {
+  activateUser(input: activateUserInput!): activateUserPayload
+  changeUserPass(input: changePasswordInput!): changePasswordPayload
+  confirmPasswordChange(input: confirmPasswordChangeInput!): confirmPasswordChangePayload
+  createPolicies(input: createPoliciesInput!): createPoliciesPayload
+  createPolicySets(input: createPolicySetsInput!): createPolicySetsPayload
+  createProducts(input: createProductsInput!): createProductsPayload
+  createRoles(input: createRolesInput!): createRolesPayload
+  createRules(input: createRulesInput!): createRulesPayload
+  createUsers(input: createUsersInput!): createUsersPayload
+  deleteUsers(input: deleteUsersInput!): deleteUsersPayload
+  registerUser(input: RegisterUserInput!): RegisterUserPayload
+  requestEmailChange(input: requestEmailChangeInput!): requestEmailChangePayload
+  confirmEmailChange(input: confirmEmailChangeInput!): confirmEmailChangePayload
+  unregisterUser(input: unregisterUserInput!): unregisterUserPayload
+  signInUser(input: signInUserInput!): signInUserPayload
+  signInApiKey(input: signInApiKeyInput!): signInApiKeyPayload
+  logoutUser(input: logoutUserInput!): logoutUserPayload
+  activateUsers(input: activateUsersInput!): activateUsersPayload
+  updateUsers(input: updateUsersInput!): updateUsersPayload
+  updatePolicies(input: updatePoliciesInput!): updatePoliciesPayload
+  updatePolicySets(input: updatePolicySetsInput!): updatePolicySetsPayload
+  updateRoles(input: updateRolesInput!): updateRolesPayload
+  updateRules(input: updateRulesInput!): updateRulesPayload
+  requestPasswordChange(input: requestPasswordChangeInput!): requestPasswordChangePayload
+}
+
+
+schema {
+  query: RootQuery
+  mutation: Mutation
+}
+
+

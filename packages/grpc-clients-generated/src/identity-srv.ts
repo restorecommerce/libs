@@ -1,12 +1,11 @@
 import { Empty } from "./generated/google/protobuf/empty";
-import { ActivateRequest, ChangeEmailRequest, ChangePasswordRequest, ConfirmEmailChangeRequest, ConfirmPasswordChangeRequest, ConfirmUserInvitationRequest, FindByRoleRequest, FindRequest, LoginRequest, OrgIDRequest, RegisterRequest, RequestPasswordChangeRequest, SendInvitationEmailRequest, Service as UserService, UnregisterRequest, User, UserIDs, UserList } from "./generated/io/restorecommerce/user";
-import { RoleList, Service as RoleService } from "./generated/io/restorecommerce/role";
+import { protobufPackage as userPackageName, ActivateRequest, ChangeEmailRequest, ChangePasswordRequest, ConfirmEmailChangeRequest, ConfirmPasswordChangeRequest, ConfirmUserInvitationRequest, FindByRoleRequest, FindRequest, LoginRequest, OrgIDRequest, RegisterRequest, RequestPasswordChangeRequest, SendInvitationEmailRequest, Service as UserService, UnregisterRequest, User, UserIDs, UserList } from "./generated/io/restorecommerce/user";
+import { protobufPackage as rolePackageName, RoleList, Service as RoleService } from "./generated/io/restorecommerce/role";
 import { RestoreCommerceGrpcClient } from "./grpc-client";
-
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
 
   user = this.createService<UserService>({
-    packageName: 'io.restorecommerce.user',
+    packageName: userPackageName,
     serviceName: 'Service',
     methods: {
       ...this.createCRUDUMethods(UserList),
@@ -84,7 +83,7 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
   });
 
   role = this.createService<RoleService>({
-    packageName: 'io.restorecommerce.role',
+    packageName: rolePackageName,
     serviceName: 'Service',
     methods: this.createCRUDUMethods(RoleList)
   });

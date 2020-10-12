@@ -1,23 +1,23 @@
 import { RestoreCommerceGrpcClient } from "./grpc-client";
-import { TimezoneList, Service as TimezoneService } from "./generated/io/restorecommerce/timezone";
-import { AddressList, Service as AddressService } from "./generated/io/restorecommerce/address";
-import { CountryList, Service as CountryService } from "./generated/io/restorecommerce/country";
+import { protobufPackage as timezonePackageName, TimezoneList, Service as TimezoneService } from "./generated/io/restorecommerce/timezone";
+import { protobufPackage as addressPackageName, AddressList, Service as AddressService } from "./generated/io/restorecommerce/address";
+import { protobufPackage as countryPackageName, CountryList, Service as CountryService } from "./generated/io/restorecommerce/country";
 
 export class ResourcesSrvGrpcClient extends RestoreCommerceGrpcClient {
   address = this.createService<AddressService>({
-    packageName: 'io.restorecommerce.address',
+    packageName: timezonePackageName,
     serviceName: 'Service',
     methods: this.createCRUDUMethods(AddressList),
   });
 
   country = this.createService<CountryService>({
-    packageName: 'io.restorecommerce.country',
+    packageName: countryPackageName,
     serviceName: 'Service',
     methods: this.createCRUDUMethods(CountryList),
   });
 
   timezone = this.createService<TimezoneService>({
-    packageName: 'io.restorecommerce.timezone',
+    packageName: addressPackageName,
     serviceName: 'Service',
     methods: this.createCRUDUMethods(TimezoneList),
   });

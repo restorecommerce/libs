@@ -1,15 +1,16 @@
 import Koa from 'koa';
 import { createLogger, Logger } from '@restorecommerce/logger';
 import bodyParser from 'koa-bodyparser';
-import * as reqResLogger from '@restorecommerce/koa-req-res-logger';
 import * as helmet from 'koa-helmet';
 import kcors from '@koa/cors';
 import { Server } from 'http';
 import { ApolloServer, gql } from 'apollo-server-koa';
 import { buildFederatedSchema } from '@apollo/federation';
+import { reqResLogger } from './middlewares/index';
 import { Facade, FacadeModule } from './interfaces';
 
 export * from './modules/index';
+export * from './middlewares/index';
 export * from './interfaces';
 
 interface FacadeImplConfig {
@@ -181,6 +182,8 @@ export function createFacade(config: FacadeConfig): Facade {
     // origin: TODO
   }));
   koa.use(helmet());
+
+  // koa.use(reqResLogger({ logger }));
 
   const facade = new FacadeImpl({
     koa,

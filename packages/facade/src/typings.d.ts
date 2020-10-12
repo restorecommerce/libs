@@ -6,6 +6,4 @@ declare module '*.graphql' {
 }
 
 
-declare module '@restorecommerce/koa-req-res-logger';
-// declare module 'koa';
 declare module 'koa-helmet';

@@ -54,8 +54,10 @@ export interface Facade<TModules extends FacadeModule[] = []> {
   readonly modules: ExtractModulesNamespace<TModules> & {[key: string]: any};
   start(): Promise<void>;
   stop(): Promise<void>;
-  addModule<TNewModule extends FacadeModule>(module: TNewModule, config?: ExtractModuleConfig<TNewModule>):
+  useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>):
+    Facade<[...TModules, FacadeModule<TNewState, TNewContext>]>;
+  useModule<TNewModule extends FacadeModule>(module: TNewModule, config?: ExtractModuleConfig<TNewModule>):
     Facade<[...TModules, TNewModule]>;
   supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule):
-    this is  Facade<[...TModules, TSupportedModule]>;
+    this is Facade<[...TModules, TSupportedModule]>;
 }

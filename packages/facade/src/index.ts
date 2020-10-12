@@ -48,7 +48,12 @@ export class FacadeImpl implements Facade {
 
   private loadedModules: string[] = [];
 
-  addModule<TModule extends FacadeModule>(module: TModule, config: any) {
+  useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>) {
+    this.koa.use(middleware);
+    return this as any;
+  }
+
+  useModule<TModule extends FacadeModule>(module: TModule, config: any) {
     if (this.loadedModules.includes(module.key)) {
       throw new Error('TODO');
     }

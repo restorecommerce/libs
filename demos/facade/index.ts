@@ -1,4 +1,4 @@
-import  { createFacade, identityModule, IdentityModule } from '@restorecommerce/facade';
+import  { createFacade, identityModule, reqResLogger } from '@restorecommerce/facade';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
@@ -18,13 +18,20 @@ const startServer = async () => {
     const facadeConfig = cfg.get('facade');
     const identityConfig = cfg.get('identity');
 
-    const facade: AppFacade = createFacade({
+    const facade = createFacade({
       ...facadeConfig,
       logger,
       env
-    })
-    .addModule(identityModule, identityConfig)
-    .addModule(exampleModule, { message: 'foo' });
+    });
+    facade.useMiddleware(reqResLogger({
+      logger
+    }));
+    facade.useModule(identityModule, identityConfig)
+    facade.useModule(exampleModule, { message: 'foo' });
+
+    facade.koa.use(reqResLogger({
+      logger
+    }));
 
     await facade.start();
   } catch (err) {

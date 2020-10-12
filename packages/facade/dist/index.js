@@ -29,12 +29,13 @@ exports.createFacade = exports.FacadeImpl = void 0;
 const koa_1 = __importDefault(require("koa"));
 const logger_1 = require("@restorecommerce/logger");
 const koa_bodyparser_1 = __importDefault(require("koa-bodyparser"));
-const reqResLogger = __importStar(require("@restorecommerce/koa-req-res-logger"));
 const helmet = __importStar(require("koa-helmet"));
 const cors_1 = __importDefault(require("@koa/cors"));
 const apollo_server_koa_1 = require("apollo-server-koa");
 const federation_1 = require("@apollo/federation");
+const index_1 = require("./middlewares/index");
 __exportStar(require("./modules/index"), exports);
+__exportStar(require("./middlewares/index"), exports);
 __exportStar(require("./interfaces"), exports);
 class FacadeImpl {
     constructor({ koa, logger, port, hostname }) {
@@ -52,7 +53,11 @@ class FacadeImpl {
     get address() {
         return this._server && this._server.address();
     }
-    addModule(module, config) {
+    useMiddleware(middleware) {
+        this.koa.use(middleware);
+        return this;
+    }
+    useModule(module, config) {
         if (this.loadedModules.includes(module.key)) {
             throw new Error('TODO');
         }
@@ -160,13 +165,14 @@ function createFacade(config) {
     const logger = (_a = config.logger) !== null && _a !== void 0 ? _a : logger_1.createLogger(config.logger);
     // middleware
     koa.use(koa_bodyparser_1.default());
-    koa.use(reqResLogger({ logger }));
+    koa.use(index_1.reqResLogger({ logger }));
     koa.use(cors_1.default({
         credentials: true,
         exposeHeaders: ['x-jwt']
         // origin: TODO
     }));
     koa.use(helmet());
+    // koa.use(reqResLogger({ logger }));
     const facade = new FacadeImpl({
         koa,
         logger,

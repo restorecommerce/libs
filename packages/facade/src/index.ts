@@ -6,6 +6,8 @@ import { GraphQLSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 
+// import * from 'graphql';
+
 export * from './modules/index';
 export * from './middlewares/index';
 export * from './facade';

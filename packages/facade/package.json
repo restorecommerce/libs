@@ -15,6 +15,9 @@
     "commerce",
     "facade"
   ],
+  "peerDependencies": {
+    "graphql": "^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0"
+  },
   "dependencies": {
     "@apollo/federation": "^0.20.4",
     "@apollo/gateway": "^0.21.0",

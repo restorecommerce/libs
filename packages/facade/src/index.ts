@@ -1,8 +1,8 @@
 import Koa from 'koa';
 import { createLogger, Logger } from '@restorecommerce/logger';
-import bodyParser from 'koa-bodyparser';
-import * as helmet from 'koa-helmet';
-import kcors from '@koa/cors';
+// import bodyParser from 'koa-bodyparser';
+// import helmet from 'koa-helmet';
+// import kcors from '@koa/cors';
 import { Server } from 'http';
 import { ApolloServer, gql } from 'apollo-server-koa';
 import { buildFederatedSchema } from '@apollo/federation';
@@ -12,31 +12,33 @@ export * from './modules/index';
 export * from './middlewares/index';
 export * from './facade';
 
-interface FacadeImplConfig {
+interface RestoreCommerceFacadeImplConfig {
   koa: Koa<any, any>;
   logger: Logger;
   port?: number;
   hostname?: string;
+  env?: string;
 }
 
-export class FacadeImpl implements Facade {
+export class RestoreCommerceFacade implements Facade {
 
   private _server?: Server;
   private _initialized = false;
   readonly logger: Logger;
   readonly port: number;
   readonly hostname: string;
-  readonly koa: Koa<any, any>;
-  readonly modules: any;
+  readonly koa: Koa;
+  readonly env: string;
+  modules: { [key: string]: any; };
 
-  constructor({koa, logger, port, hostname}: FacadeImplConfig) {
+  constructor({koa, logger, port, hostname, env}: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
     this.koa = koa;
     this.modules = {};
+    this.env = env ?? 'development';
   }
-
   get server() {
     return this._server;
   }
@@ -66,7 +68,7 @@ export class FacadeImpl implements Facade {
   }
 
   federation() {
-
+ 
   }
 
   start() {
@@ -74,16 +76,20 @@ export class FacadeImpl implements Facade {
       this._initialized = true;
       this.mountApolloServer();
     }
-    return new Promise<void>((resolve) => {
-      this._server = this.koa.listen(this.port, this.hostname , () => {
-        const address = this.address;
-        if (typeof address === 'string') {
-          this.logger.info(`Service is listening on ${address}`);
-        } else if(address) {
-          this.logger.info(`Service is listening on ${address.address}:${address.port}`);
-        }
-        resolve();
-      });
+    return new Promise<void>((resolve, reject) => {
+      try {
+        this._server = this.koa.listen(this.port, this.hostname , () => {
+          const address = this.address;
+          if (typeof address === 'string') {
+            this.logger.info(`Service is listening on ${address}`);
+          } else if(address) {
+            this.logger.info(`Service is listening on ${address.address}:${address.port}`);
+          }
+          resolve();
+        });
+      } catch (err) {
+        reject(err);
+      }
     });
   }
 
@@ -103,25 +109,18 @@ export class FacadeImpl implements Facade {
   }
 
   private mountApolloServer() {
-    const schema = buildFederatedSchema({
-      typeDefs: []
-    })
-    schema;
+    // const schema = buildFederatedSchema({
+    //   typeDefs: []
+    // })
+    // schema;
     const typeDefs = gql`
-    # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-    # This "Book" type defines the queryable fields for every book in our data source.
-    type Book {
-      title: String
-      author: String
-    }
-
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
-    type Query {
-      books: [Book]
-    }
+        type Book {
+          title: String
+          author: String
+        }
+        type Query {
+          books: [Book]
+        }
       `;
 
     const resolvers = {
@@ -134,12 +133,11 @@ export class FacadeImpl implements Facade {
 
     const gqlServer = new ApolloServer({
       // schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-      typeDefs: typeDefs,
+      typeDefs,
       resolvers,
-      // introspection: this.config.env === 'development',
-      // playground: this.config.env === 'development',
+      introspection: this.koa.env === 'development',
+      playground: this.koa.env === 'development',
       // executor: this.executor,
-      // would add upload options here if not for apollo-server #3703
       subscriptions: false, // not supported when using federation - but not used anyway
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
@@ -153,7 +151,9 @@ export class FacadeImpl implements Facade {
     });
 
     const middleware = gqlServer.getMiddleware({
-      path: '/graphql'
+      path: '/graphql',
+      cors: true,
+      bodyParserConfig: true,
     });
 
     this.koa.use(middleware);
@@ -176,22 +176,24 @@ export function createFacade(config: FacadeConfig): Facade {
 
   const logger = config.logger ?? createLogger(config.logger);
 
-  // middleware
-  koa.use(bodyParser());
-  koa.use(kcors({
-    credentials: true,
-    exposeHeaders: ['x-jwt']
-    // origin: TODO
-  }));
-  koa.use(helmet());
+  // console.log(helmet);
 
-  const facade = new FacadeImpl({
+
+  // middleware
+  // koa.use(bodyParser());
+  // koa.use(kcors({
+    // credentials: true,
+    // exposeHeaders: ['x-jwt']
+    // origin: TODO
+  // }));
+  // koa.use(helmet());
+
+
+  return new RestoreCommerceFacade({
     koa,
     logger,
     port: config.port,
-    hostname: config.hostname
+    hostname: config.hostname,
+    env: config.env
   });
-
-  return facade;
 }
-

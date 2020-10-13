@@ -34,3 +34,6 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
 export declare function createFacadeModuleFactory<TConfig = any, TModule extends FacadeModule = FacadeModule>(moduleName: string, fn: {
     (facade: Facade<[TModule]>, config: TConfig): void;
 }): FacadeModuleFactory<TConfig, ExtractModuleContext<TModule>, ExtractModuleNamespace<TModule>>;
+export declare function createFacadeModule<TModule extends FacadeModule = FacadeModule>(moduleName: string, fn: {
+    (facade: Facade<[TModule]>): void;
+}): TModule;

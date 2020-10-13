@@ -55,7 +55,7 @@ export  type ExtractModulesNamespace<T extends FacadeModuleBase[]> = (T[0] exten
 
 export type FacadeContext<T extends FacadeModuleBase[] | Facade> =
   T extends FacadeModuleBase[] ? ExtractModulesContext<T> :
-    (T extends Facade<infer TFacadeModules> ? ExtractModulesContext<TFacadeModules> : {});
+  (T extends Facade<infer TFacadeModules> ? ExtractModulesContext<TFacadeModules> : {});
 
 export interface Facade<TModules extends FacadeModuleBase[] = []> {
   readonly logger: Logger;
@@ -73,10 +73,16 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
 
 export function createFacadeModuleFactory<TConfig = any, TModule extends FacadeModule = FacadeModule>(moduleName: string, fn: {(facade: Facade<[TModule]>, config: TConfig): void})  {
   const facadeModuleFactory: FacadeModuleFactory<TConfig, ExtractModuleContext<TModule>, ExtractModuleNamespace<TModule>> = (config) => {
-    const facadeModule: TModule = ((facade) => fn(facade, config)) as any;
+    const facadeModule: TModule = ((facade) => fn(facade, config)) as TModule;
     facadeModule.moduleName = moduleName;
     return facadeModule;
   }
   facadeModuleFactory.moduleName = moduleName;
   return facadeModuleFactory;
+}
+
+export function createFacadeModule<TModule extends FacadeModule = FacadeModule>(moduleName: string, fn: {(facade: Facade<[TModule]>): void})  {
+  const facadeModule: TModule = ((facade) => fn(facade)) as TModule;
+  facadeModule.moduleName = moduleName;
+  return facadeModule;
 }

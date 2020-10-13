@@ -1,5 +1,5 @@
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { IdentitySrvGrpcClient } from "@restorecommerce/grpc-clients-generated";
+import { IdentitySrvGrpcClient } from "@restorecommerce/rc-grpc-clients";
 import { FacadeModule } from "../../facade";
 
 export interface IdentityConfig {

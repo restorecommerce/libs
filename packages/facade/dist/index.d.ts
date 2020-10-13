@@ -7,21 +7,25 @@ import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 export * from './modules/index';
 export * from './middlewares/index';
 export * from './facade';
-interface FacadeImplConfig {
+interface RestoreCommerceFacadeImplConfig {
     koa: Koa<any, any>;
     logger: Logger;
     port?: number;
     hostname?: string;
+    env?: string;
 }
-export declare class FacadeImpl implements Facade {
+export declare class RestoreCommerceFacade implements Facade {
     private _server?;
     private _initialized;
     readonly logger: Logger;
     readonly port: number;
     readonly hostname: string;
-    readonly koa: Koa<any, any>;
-    readonly modules: any;
-    constructor({ koa, logger, port, hostname }: FacadeImplConfig);
+    readonly koa: Koa;
+    readonly env: string;
+    modules: {
+        [key: string]: any;
+    };
+    constructor({ koa, logger, port, hostname, env }: RestoreCommerceFacadeImplConfig);
     get server(): Server;
     get address(): string | import("net").AddressInfo;
     private loadedModules;

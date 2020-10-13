@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFacadeModuleFactory = void 0;
+exports.createFacadeModule = exports.createFacadeModuleFactory = void 0;
 ;
 ;
 ;
@@ -14,3 +14,9 @@ function createFacadeModuleFactory(moduleName, fn) {
     return facadeModuleFactory;
 }
 exports.createFacadeModuleFactory = createFacadeModuleFactory;
+function createFacadeModule(moduleName, fn) {
+    const facadeModule = ((facade) => fn(facade));
+    facadeModule.moduleName = moduleName;
+    return facadeModule;
+}
+exports.createFacadeModule = createFacadeModule;

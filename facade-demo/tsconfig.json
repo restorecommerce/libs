@@ -1,0 +1,21 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "outDir": "./dist",
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "paths": {
+      "@restorecommerce/logger": ["../packages/logger"],
+      "@restorecommerce/facade": ["../packages/facade"],
+      "@restorecommerce/grpc-client": ["../packages/grpc-client"],
+      "@restorecommerce/rc-grpc-clients": ["../packages/rc-grpc-clients"],
+      "@restorecommerce/service-config": ["../packages/service-config"]
+    }
+  },
+  "files": ["src/index.ts"],
+}

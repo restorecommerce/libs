@@ -6,18 +6,6 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
@@ -25,19 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createFacade = exports.FacadeImpl = void 0;
+exports.createFacade = exports.RestoreCommerceFacade = void 0;
 const koa_1 = __importDefault(require("koa"));
 const logger_1 = require("@restorecommerce/logger");
-const koa_bodyparser_1 = __importDefault(require("koa-bodyparser"));
-const helmet = __importStar(require("koa-helmet"));
-const cors_1 = __importDefault(require("@koa/cors"));
 const apollo_server_koa_1 = require("apollo-server-koa");
-const federation_1 = require("@apollo/federation");
 __exportStar(require("./modules/index"), exports);
 __exportStar(require("./middlewares/index"), exports);
 __exportStar(require("./facade"), exports);
-class FacadeImpl {
-    constructor({ koa, logger, port, hostname }) {
+class RestoreCommerceFacade {
+    constructor({ koa, logger, port, hostname, env }) {
         this._initialized = false;
         this.loadedModules = [];
         this.logger = logger;
@@ -45,6 +29,7 @@ class FacadeImpl {
         this.hostname = hostname !== null && hostname !== void 0 ? hostname : '127.0.0.1';
         this.koa = koa;
         this.modules = {};
+        this.env = env !== null && env !== void 0 ? env : 'development';
     }
     get server() {
         return this._server;
@@ -74,17 +59,22 @@ class FacadeImpl {
             this._initialized = true;
             this.mountApolloServer();
         }
-        return new Promise((resolve) => {
-            this._server = this.koa.listen(this.port, this.hostname, () => {
-                const address = this.address;
-                if (typeof address === 'string') {
-                    this.logger.info(`Service is listening on ${address}`);
-                }
-                else if (address) {
-                    this.logger.info(`Service is listening on ${address.address}:${address.port}`);
-                }
-                resolve();
-            });
+        return new Promise((resolve, reject) => {
+            try {
+                this._server = this.koa.listen(this.port, this.hostname, () => {
+                    const address = this.address;
+                    if (typeof address === 'string') {
+                        this.logger.info(`Service is listening on ${address}`);
+                    }
+                    else if (address) {
+                        this.logger.info(`Service is listening on ${address.address}:${address.port}`);
+                    }
+                    resolve();
+                });
+            }
+            catch (err) {
+                reject(err);
+            }
         });
     }
     stop() {
@@ -103,25 +93,18 @@ class FacadeImpl {
         });
     }
     mountApolloServer() {
-        const schema = federation_1.buildFederatedSchema({
-            typeDefs: []
-        });
-        schema;
+        // const schema = buildFederatedSchema({
+        //   typeDefs: []
+        // })
+        // schema;
         const typeDefs = apollo_server_koa_1.gql `
-    # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
-
-    # This "Book" type defines the queryable fields for every book in our data source.
-    type Book {
-      title: String
-      author: String
-    }
-
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
-    type Query {
-      books: [Book]
-    }
+        type Book {
+          title: String
+          author: String
+        }
+        type Query {
+          books: [Book]
+        }
       `;
         const resolvers = {
             Query: {
@@ -132,12 +115,11 @@ class FacadeImpl {
         };
         const gqlServer = new apollo_server_koa_1.ApolloServer({
             // schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-            typeDefs: typeDefs,
+            typeDefs,
             resolvers,
-            // introspection: this.config.env === 'development',
-            // playground: this.config.env === 'development',
+            introspection: this.koa.env === 'development',
+            playground: this.koa.env === 'development',
             // executor: this.executor,
-            // would add upload options here if not for apollo-server #3703
             subscriptions: false,
             formatError: (error) => {
                 this.logger.error('Error while processing request', { message: error.message });
@@ -150,32 +132,35 @@ class FacadeImpl {
             context: ({ ctx }) => ctx
         });
         const middleware = gqlServer.getMiddleware({
-            path: '/graphql'
+            path: '/graphql',
+            cors: true,
+            bodyParserConfig: true,
         });
         this.koa.use(middleware);
     }
 }
-exports.FacadeImpl = FacadeImpl;
+exports.RestoreCommerceFacade = RestoreCommerceFacade;
 function createFacade(config) {
     var _a;
     const koa = new koa_1.default();
     koa.env = config.env;
     koa.keys = config.keys;
     const logger = (_a = config.logger) !== null && _a !== void 0 ? _a : logger_1.createLogger(config.logger);
+    // console.log(helmet);
     // middleware
-    koa.use(koa_bodyparser_1.default());
-    koa.use(cors_1.default({
-        credentials: true,
-        exposeHeaders: ['x-jwt']
-        // origin: TODO
-    }));
-    koa.use(helmet());
-    const facade = new FacadeImpl({
+    // koa.use(bodyParser());
+    // koa.use(kcors({
+    // credentials: true,
+    // exposeHeaders: ['x-jwt']
+    // origin: TODO
+    // }));
+    // koa.use(helmet());
+    return new RestoreCommerceFacade({
         koa,
         logger,
         port: config.port,
-        hostname: config.hostname
+        hostname: config.hostname,
+        env: config.env
     });
-    return facade;
 }
 exports.createFacade = createFacade;

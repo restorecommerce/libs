@@ -9,7 +9,10 @@ export const exampleModule = createFacadeModuleFactory<ExampleConfig, ExampleMod
     throw new Error('Example module requires IdentityModule');
   }
   facade.modules.identity;
-  facade.koa.use(ctx => ctx.example = config.message)
+  facade.koa.use(async (ctx, next) => {
+    ctx.example = config.message;
+    await next();
+  });
+  facade.addLocalApolloService('example', ExampleSchema);
   facade.modules.example = 'example';
-  // facade.addScheme(ExampleSchema);
 });

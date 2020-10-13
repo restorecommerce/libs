@@ -63,6 +63,8 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
   readonly modules: ExtractModulesNamespace<TModules> & {[key: string]: any};
   start(): Promise<void>;
   stop(): Promise<void>;
+  addLocalApolloService(name: string, schema: any);
+  addRemoteApolloService(name: string, url: string);
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>):
     Facade<TModules>;
   useModule<TNewModule extends FacadeModule>(module: TNewModule):

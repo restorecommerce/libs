@@ -1,5 +1,8 @@
-import { addResolveFunctionsToSchema } from "apollo-server-koa";
+import { addResolversToSchema } from "@graphql-tools/schema";
 import { resolvers } from "./resolvers";
 import { schema } from "./schema";
 
-export const ExampleSchema = addResolveFunctionsToSchema({ schema, resolvers });
+export const ExampleSchema = addResolversToSchema({
+  schema,
+  resolvers
+});

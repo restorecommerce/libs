@@ -1,7 +1,7 @@
 {
   "packages": [
     "packages/*",
-    "demos/*"
+    "facade-demo"
   ],
   "version": "independent",
   "command": {

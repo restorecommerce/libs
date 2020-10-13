@@ -22,5 +22,8 @@ export const identityModule = createFacadeModuleFactory<IdentityConfig, Identity
     client: new IdentitySrvGrpcClient(config.client)
   };
   facade.modules.identity = identity;
-  facade.koa.use(ctx => ctx.identity = identity);
+  facade.koa.use(async (ctx, next) => {
+    ctx.identity = identity;
+    await next();
+  });
 });

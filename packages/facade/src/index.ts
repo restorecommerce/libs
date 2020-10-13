@@ -1,11 +1,9 @@
 import Koa from 'koa';
 import { createLogger, Logger } from '@restorecommerce/logger';
-// import bodyParser from 'koa-bodyparser';
-// import helmet from 'koa-helmet';
-// import kcors from '@koa/cors';
 import { Server } from 'http';
-import { ApolloServer, gql } from 'apollo-server-koa';
-import { buildFederatedSchema } from '@apollo/federation';
+import { ApolloServer } from 'apollo-server-koa';
+import { GraphQLSchema } from 'graphql';
+import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 
 export * from './modules/index';
@@ -20,7 +18,17 @@ interface RestoreCommerceFacadeImplConfig {
   env?: string;
 }
 
+
+interface FacadeApolloServiceMap {
+  [key: string]: {
+    url?: string;
+    schema?: GraphQLSchema;
+  }
+}
+
 export class RestoreCommerceFacade implements Facade {
+
+  private apolloServices: FacadeApolloServiceMap = {};
 
   private _server?: Server;
   private _initialized = false;
@@ -67,8 +75,16 @@ export class RestoreCommerceFacade implements Facade {
     return this.loadedModules.includes(module.moduleName);
   }
 
-  federation() {
- 
+  addLocalApolloService(name: string, schema: any) {
+    this.apolloServices[name] = {
+      schema
+    };
+  }
+
+  addRemoteApolloService(name: string, url: string) {
+    this.apolloServices[name] = {
+      url
+    };
   }
 
   start() {
@@ -108,36 +124,35 @@ export class RestoreCommerceFacade implements Facade {
     });
   }
 
-  private mountApolloServer() {
-    // const schema = buildFederatedSchema({
-    //   typeDefs: []
-    // })
-    // schema;
-    const typeDefs = gql`
-        type Book {
-          title: String
-          author: String
-        }
-        type Query {
-          books: [Book]
-        }
-      `;
 
-    const resolvers = {
-      Query: {
-        books: () => {
-          return [];
-        },
-      },
-    };
+
+  private mountApolloServer() {
+    const serviceList = Object.keys(this.apolloServices).map(key => {
+      return {
+        name: key,
+        url: this.apolloServices[key].url ?? `local`,
+      };
+    });
+
+    const gateway = new ApolloGateway({
+      logger: this.logger,
+      serviceList,
+      buildService: ({name, url}) => {
+        if (url !== 'local') {
+          return new RemoteGraphQLDataSource({
+            url,
+            // TODO willSendRequest
+          })
+        } else {
+          return new LocalGraphQLDataSource(this.apolloServices[name].schema);
+        }
+      }
+    });
 
     const gqlServer = new ApolloServer({
-      // schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-      typeDefs,
-      resolvers,
+      gateway,
       introspection: this.koa.env === 'development',
       playground: this.koa.env === 'development',
-      // executor: this.executor,
       subscriptions: false, // not supported when using federation - but not used anyway
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
@@ -175,19 +190,6 @@ export function createFacade(config: FacadeConfig): Facade {
   koa.keys = config.keys;
 
   const logger = config.logger ?? createLogger(config.logger);
-
-  // console.log(helmet);
-
-
-  // middleware
-  // koa.use(bodyParser());
-  // koa.use(kcors({
-    // credentials: true,
-    // exposeHeaders: ['x-jwt']
-    // origin: TODO
-  // }));
-  // koa.use(helmet());
-
 
   return new RestoreCommerceFacade({
     koa,

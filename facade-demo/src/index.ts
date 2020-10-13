@@ -2,7 +2,6 @@ import  { createFacade, identityModule, reqResLogger } from '@restorecommerce/fa
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
-import { AppFacade } from './interfaces';
 import { exampleModule } from './example-module';
 
 const startServer = async () => {

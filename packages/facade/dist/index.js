@@ -57,12 +57,12 @@ class FacadeImpl {
         this.koa.use(middleware);
         return this;
     }
-    useModule(module, config) {
+    useModule(module) {
         if (this.loadedModules.includes(module.key)) {
             throw new Error('TODO');
         }
         this.loadedModules.push(module.key);
-        module.initialize(this, config);
+        module(this);
         return this;
     }
     supportsModule(module) {

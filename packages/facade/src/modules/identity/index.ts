@@ -1,6 +1,7 @@
 import { IdentitySrvGrpcClient } from "@restorecommerce/grpc-clients-generated";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 import { FacadeModule } from "../../interfaces";
+import { createModule } from "../..";
 
 export interface IdentityConfig {
   client: GrpcClientConfig
@@ -16,13 +17,16 @@ export interface IdentityNamespace extends IdentityContext {};
 
 export type IdentityModule = FacadeModule<IdentityConfig, IdentityContext, IdentityNamespace>;
 
-export const identityModule: IdentityModule = {
-  key: 'identity',
-  initialize(facade, config) {
+createModule()
+
+export const identityModule: IdentityModule = (config) => {
+  return (facade) => {
     const identity = {
       client: new IdentitySrvGrpcClient(config.client)
     };
     facade.modules.identity = identity;
     facade.koa.use(ctx => ctx.identity = identity);
-  }
-};
+  };
+}
+
+identityModule.key = 'identity';

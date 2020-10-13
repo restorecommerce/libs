@@ -1,17 +1,45 @@
 import Koa from 'koa';
 import { Logger } from '@restorecommerce/logger';
 
-export interface FacadeModule<TConfig = any, TContext extends object = {}, TNamespace extends object = {}> {
-  key: string;
-  initialize(facade: Facade<[FacadeModule<TConfig, TContext, TNamespace>]>, config: TConfig): void;
+export interface FacadeModuleBase<TContext extends object, TNamespace extends object> {
+  moduleName: string;
 };
+
+export interface FacadeModuleFn<TContext extends object = {}, TNamespace extends object = {}> extends FacadeModuleBase<TContext, TNamespace> {
+  (facade: Facade<[FacadeModule<any, TContext, TNamespace>]>): void;
+};
+
+export interface FacadeModule<TConfig = any, TContext extends object = {}, TNamespace extends object = {}> extends FacadeModuleBase<TContext, TNamespace> {
+  (config: TConfig): FacadeModuleFn<FacadeModule<TConfig, TContext, TNamespace>>;
+};
+
+function createFacadeModule<TConfig = any, TContext extends object = {}, TNamespace extends object = {}>(moduleName: string, fn: {(facade: Facade<[FacadeModule<TConfig, TContext, TNamespace>]>, config: TConfig): void})  {
+  const facadeModule: FacadeModule<TConfig, TContext, TNamespace> = (config) => {
+    const facadeModuleFn: FacadeModuleFn<TContext, TNamespace> = (facade) => fn(facade, config);
+    facadeModuleFn.moduleName=  moduleName;
+    facadeModuleFn.moduleName=  moduleName;
+    return facadeModuleFn;
+  }
+  facadeModule.moduleName = moduleName;
+  return facadeModule;
+}
+
+createFacadeModule('test', (facade, config) => {
+
+});
+
+
 
 export interface FacadeBaseContext<TModules extends FacadeModule[] = []> extends Koa.Context {
   logger: Logger;
   facade: Facade<TModules>;
 }
 
-type ExtractModuleConfig<TModule extends FacadeModule> = TModule extends FacadeModule<infer TConfig> ? TConfig : {};
+// type ExtractModuleConfig<TModule extends FacadeModule> = TModule extends FacadeModule<infer TConfig> ? TConfig : {};
+
+// Extract module
+type ExtractModule<TModuleFn extends FacadeModuleFn> =
+    TModuleFn extends FacadeModuleFn<infer TModule> ? TModule : {};
 
 // Extract module context
 type ExtractModuleContext<TModule extends FacadeModule> =
@@ -56,8 +84,8 @@ export interface Facade<TModules extends FacadeModule[] = []> {
   stop(): Promise<void>;
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>):
     Facade<[...TModules, FacadeModule<TNewState, TNewContext>]>;
-  useModule<TNewModule extends FacadeModule>(module: TNewModule, config?: ExtractModuleConfig<TNewModule>):
-    Facade<[...TModules, TNewModule]>;
+  useModule<TNewModuleFn extends FacadeModuleFn>(moduleFn: TNewModuleFn):
+    Facade<[...TModules, ExtractModule<TNewModuleFn>]>;
   supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule):
     this is Facade<[...TModules, TSupportedModule]>;
 }

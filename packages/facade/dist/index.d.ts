@@ -26,7 +26,7 @@ export declare class FacadeImpl implements Facade {
     get address(): string | import("net").AddressInfo;
     private loadedModules;
     useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>): any;
-    useModule<TModule extends FacadeModule>(module: TModule, config: any): any;
+    useModule<TModule extends FacadeModule>(module: TModule): any;
     supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule): this is Facade<[TSupportedModule]>;
     federation(): void;
     start(): Promise<void>;

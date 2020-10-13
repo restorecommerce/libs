@@ -7,7 +7,7 @@ import { Server } from 'http';
 import { ApolloServer, gql } from 'apollo-server-koa';
 import { buildFederatedSchema } from '@apollo/federation';
 import { reqResLogger } from './middlewares/index';
-import { Facade, FacadeModule } from './interfaces';
+import { Facade, FacadeModule, FacadeModuleFn } from './interfaces';
 
 export * from './modules/index';
 export * from './middlewares/index';
@@ -53,17 +53,18 @@ export class FacadeImpl implements Facade {
     return this as any;
   }
 
-  useModule<TModule extends FacadeModule>(module: TModule, config: any) {
-    if (this.loadedModules.includes(module.key)) {
-      throw new Error('TODO');
-    }
-    this.loadedModules.push(module.key);
-    module.initialize(this as any, config);
+  useModule<TNewModuleFn extends FacadeModuleFn>(moduleFn: TNewModuleFn) {
+  // useModule<TModule extends FacadeModule>(module: TModule) {
+    // if (this.loadedModules.includes(module.key)) {
+    //   throw new Error(`module ${module.key} already loaded`);
+    // }
+    this.loadedModules.push(moduleFn.moduleName);
+    moduleFn(this as any);
     return this as any;
   }
 
   supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule): this is Facade<[TSupportedModule]> {
-    return this.loadedModules.includes(module.key);
+    return this.loadedModules.includes(module.moduleName);
   }
 
   federation() {
@@ -86,7 +87,6 @@ export class FacadeImpl implements Facade {
         resolve();
       });
     });
-
   }
 
   stop() {
@@ -198,4 +198,10 @@ export function createFacade(config: FacadeConfig): Facade {
   });
 
   return facade;
+}
+
+export function createModule<TFacadeModule extends FacadeModule>(module: TFacadeModule, fn: FacadeModuleFn<FacadeModule>): FacadeModuleFn<FacadeModule> {
+  const retVal: FacadeModuleFn<FacadeModule> =  (x) => fn;
+  retVal.moduleName = module.moduleName;
+  return retVal;
 }

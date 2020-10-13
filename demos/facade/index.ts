@@ -26,7 +26,7 @@ const startServer = async () => {
     facade.useMiddleware(reqResLogger({
       logger
     }));
-    facade.useModule(identityModule, identityConfig)
+    facade.useModule(identityModule(identityConfig));
     facade.useModule(exampleModule, { message: 'foo' });
 
     facade.koa.use(reqResLogger({

@@ -6,12 +6,11 @@ import kcors from '@koa/cors';
 import { Server } from 'http';
 import { ApolloServer, gql } from 'apollo-server-koa';
 import { buildFederatedSchema } from '@apollo/federation';
-import { reqResLogger } from './middlewares/index';
-import { Facade, FacadeModule, FacadeModuleFn } from './interfaces';
+import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 
 export * from './modules/index';
 export * from './middlewares/index';
-export * from './interfaces';
+export * from './facade';
 
 interface FacadeImplConfig {
   koa: Koa<any, any>;
@@ -53,17 +52,16 @@ export class FacadeImpl implements Facade {
     return this as any;
   }
 
-  useModule<TNewModuleFn extends FacadeModuleFn>(moduleFn: TNewModuleFn) {
-  // useModule<TModule extends FacadeModule>(module: TModule) {
-    // if (this.loadedModules.includes(module.key)) {
-    //   throw new Error(`module ${module.key} already loaded`);
-    // }
-    this.loadedModules.push(moduleFn.moduleName);
-    moduleFn(this as any);
+  useModule<TNewModule extends FacadeModule>(module: TNewModule) {
+    if (this.loadedModules.includes(module.moduleName)) {
+      throw new Error(`module ${module.moduleName} already loaded`);
+    }
+    this.loadedModules.push(module.moduleName);
+    module(this as any);
     return this as any;
   }
 
-  supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule): this is Facade<[TSupportedModule]> {
+  supportsModule<TSupportedModule extends FacadeModuleBase>(module: TSupportedModule): this is Facade<[TSupportedModule]> {
     return this.loadedModules.includes(module.moduleName);
   }
 
@@ -180,15 +178,12 @@ export function createFacade(config: FacadeConfig): Facade {
 
   // middleware
   koa.use(bodyParser());
-  koa.use(reqResLogger({ logger }));
   koa.use(kcors({
     credentials: true,
     exposeHeaders: ['x-jwt']
     // origin: TODO
   }));
   koa.use(helmet());
-
-  // koa.use(reqResLogger({ logger }));
 
   const facade = new FacadeImpl({
     koa,
@@ -200,8 +195,3 @@ export function createFacade(config: FacadeConfig): Facade {
   return facade;
 }
 
-export function createModule<TFacadeModule extends FacadeModule>(module: TFacadeModule, fn: FacadeModuleFn<FacadeModule>): FacadeModuleFn<FacadeModule> {
-  const retVal: FacadeModuleFn<FacadeModule> =  (x) => fn;
-  retVal.moduleName = module.moduleName;
-  return retVal;
-}

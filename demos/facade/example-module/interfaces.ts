@@ -13,7 +13,7 @@ export interface ExampleNamespace {
   example: string;
 }
 
-export type ExampleModule = FacadeModule<ExampleConfig, ExampleContext, ExampleNamespace>;
+export type ExampleModule = FacadeModule<ExampleContext, ExampleNamespace>;
 
 
 export type ExampleContextUnion = FacadeContext<[ExampleModule, IdentityModule]>;

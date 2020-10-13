@@ -1,6 +1,6 @@
 import { IdentitySrvGrpcClient } from "@restorecommerce/grpc-clients-generated";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { FacadeModule } from "../../interfaces";
+import { FacadeModule } from "../../facade";
 export interface IdentityConfig {
     client: GrpcClientConfig;
 }
@@ -11,5 +11,5 @@ export interface IdentityContext {
 }
 export interface IdentityNamespace extends IdentityContext {
 }
-export declare type IdentityModule = FacadeModule<IdentityConfig, IdentityContext, IdentityNamespace>;
-export declare const identityModule: IdentityModule;
+export declare type IdentityModule = FacadeModule<IdentityContext, IdentityNamespace>;
+export declare const identityModule: import("../../facade").FacadeModuleFactory<IdentityConfig, IdentityContext, IdentityNamespace>;

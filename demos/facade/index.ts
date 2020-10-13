@@ -18,20 +18,13 @@ const startServer = async () => {
     const facadeConfig = cfg.get('facade');
     const identityConfig = cfg.get('identity');
 
-    const facade = createFacade({
+    const facade: AppFacade = createFacade({
       ...facadeConfig,
       logger,
       env
-    });
-    facade.useMiddleware(reqResLogger({
-      logger
-    }));
-    facade.useModule(identityModule(identityConfig));
-    facade.useModule(exampleModule, { message: 'foo' });
-
-    facade.koa.use(reqResLogger({
-      logger
-    }));
+    }).useModule(identityModule(identityConfig))
+      .useModule(exampleModule({ message: 'foo' }))
+      .useMiddleware(reqResLogger({ logger}));
 
     await facade.start();
   } catch (err) {

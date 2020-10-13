@@ -3,10 +3,10 @@
 import Koa from 'koa';
 import { Logger } from '@restorecommerce/logger';
 import { Server } from 'http';
-import { Facade, FacadeModule } from './interfaces';
+import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 export * from './modules/index';
 export * from './middlewares/index';
-export * from './interfaces';
+export * from './facade';
 interface FacadeImplConfig {
     koa: Koa<any, any>;
     logger: Logger;
@@ -26,8 +26,8 @@ export declare class FacadeImpl implements Facade {
     get address(): string | import("net").AddressInfo;
     private loadedModules;
     useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>): any;
-    useModule<TModule extends FacadeModule>(module: TModule): any;
-    supportsModule<TSupportedModule extends FacadeModule>(module: TSupportedModule): this is Facade<[TSupportedModule]>;
+    useModule<TNewModule extends FacadeModule>(module: TNewModule): any;
+    supportsModule<TSupportedModule extends FacadeModuleBase>(module: TSupportedModule): this is Facade<[TSupportedModule]>;
     federation(): void;
     start(): Promise<void>;
     stop(): Promise<void>;

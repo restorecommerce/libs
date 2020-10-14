@@ -1,4 +1,4 @@
-import { FacadeModule, FacadeContext, IdentityModule } from "@restorecommerce/facade";
+import { FacadeModule, FacadeContext, IdentityModule, test } from "@restorecommerce/facade";
 
 // Example module
 export interface ExampleConfig {
@@ -17,3 +17,7 @@ export type ExampleModule = FacadeModule<ExampleContext, ExampleNamespace>;
 
 
 export type ExampleContextUnion = FacadeContext<[ExampleModule, IdentityModule]>;
+
+export type x = test<[ExampleModule, IdentityModule]>;
+
+

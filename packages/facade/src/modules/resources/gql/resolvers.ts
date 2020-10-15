@@ -3,10 +3,15 @@ import { Resolvers  } from './schema.generated';
 
 export const resolvers: Resolvers = {
   Query: {
-    async identity(_, {input}, ctx) {
+    async getAllTimezones(_, {input}, ctx) {
       return {
-        message: `Echo: ${input.echo ?? '-'}`
-      };
+        payload: [],
+        status: {
+          code: 1,
+          key: 'ok',
+        }
+
+      }
     }
   }
 }

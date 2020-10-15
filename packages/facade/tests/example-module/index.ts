@@ -1,6 +1,7 @@
-import { identityModule, createFacadeModuleFactory } from "@restorecommerce/facade";
+import { identityModule, createFacadeModuleFactory } from "../../src/index";
+
 import { ExampleConfig, ExampleModule } from "./interfaces";
-import { ExampleSchema } from "./gql/index";
+import { FederatedExampleSchema } from "./gql/index";
 
 export { ExampleModule, ExampleContext } from './interfaces';
 
@@ -8,11 +9,12 @@ export const exampleModule = createFacadeModuleFactory<ExampleConfig, ExampleMod
   if (!facade.supportsModule(identityModule)) {
     throw new Error('Example module requires IdentityModule');
   }
-  facade.modules.identity;
   facade.koa.use(async (ctx, next) => {
     ctx.example = config.message;
     await next();
   });
-  facade.addLocalApolloService('example', ExampleSchema);
-  facade.modules.example = 'example';
+  facade.addApolloService({
+    name: 'example',
+    schema: FederatedExampleSchema
+  });
 });

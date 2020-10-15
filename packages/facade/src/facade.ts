@@ -1,5 +1,13 @@
 import Koa from 'koa';
 import { Logger } from '@restorecommerce/logger';
+import { Server } from 'http';
+import { AddressInfo } from 'net';
+
+type RequireAtLeastOne<T, Keys extends keyof T = keyof T> =
+  Pick<T, Exclude<keyof T, Keys>> & {
+    [K in Keys]-?: Required<Pick<T, K>> & Partial<Pick<T, Exclude<Keys, K>>>
+  }[Keys];
+
 
 export interface FacadeModuleBase<TContext extends object = {}> {
   moduleName: string;
@@ -19,12 +27,14 @@ export interface FacadeBaseContext<TModules extends FacadeModule[] = []> extends
 }
 
 // Extract module context
-export type ExtractModuleContext<TModule extends FacadeModuleBase> =
+export type ExtractModuleContext<TModule> =
     TModule extends FacadeModuleFactory<infer TConfig, infer TContext> ? TContext :
     TModule extends FacadeModule<infer TContext> ? TContext :
-    {};
+    never;
 
-export type ExtractModulesContext<T extends FacadeModuleBase[]> = (T[0] extends FacadeModuleBase ? ExtractModuleContext<T[0]> : {}) &
+
+
+export type FacadeModulesContext<T extends FacadeModuleBase[]> = (T[0] extends FacadeModuleBase ? ExtractModuleContext<T[0]> : {}) &
                                                            (T[1] extends FacadeModuleBase ? ExtractModuleContext<T[1]> : {}) &
                                                            (T[2] extends FacadeModuleBase ? ExtractModuleContext<T[2]> : {}) &
                                                            (T[3] extends FacadeModuleBase ? ExtractModuleContext<T[3]> : {}) &
@@ -37,16 +47,18 @@ export type ExtractModulesContext<T extends FacadeModuleBase[]> = (T[0] extends 
 
 
 export type FacadeContext<T extends FacadeModuleBase[] | Facade> =
-  T extends FacadeModuleBase[] ? ExtractModulesContext<T> :
-  (T extends Facade<infer TFacadeModules> ? ExtractModulesContext<TFacadeModules> : {});
+  T extends FacadeModuleBase[] ? FacadeModulesContext<T> :
+  (T extends Facade<infer TFacadeModules> ? FacadeModulesContext<TFacadeModules> : {});
 
-export interface Facade<TModules extends FacadeModuleBase[] = []> {
+export interface Facade<TModules extends FacadeModuleBase[] = any> {
   readonly logger: Logger;
-  readonly koa: Koa<any, ExtractModulesContext<TModules>>;
+  readonly koa: Koa<any, FacadeModulesContext<TModules>>;
+  readonly server?: Server;
+  readonly address?: string | AddressInfo;
+  readonly listening: boolean;
   start(): Promise<void>;
   stop(): Promise<void>;
-  addLocalApolloService(name: string, schema: any);
-  addRemoteApolloService(name: string, url: string);
+  addApolloService({name, schema, url}: RequireAtLeastOne<{name: string, url: string, schema: any}, 'url' | 'schema'>);
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>):
     Facade<TModules>;
   useModule<TNewModule extends FacadeModule>(module: TNewModule):
@@ -70,37 +82,3 @@ export function createFacadeModule<TModule extends FacadeModule = FacadeModule>(
   facadeModule.moduleName = moduleName;
   return facadeModule;
 }
-
-
-
-
-// Example module
-export interface ExampleConfig {
-  message: string;
-}
-
-export interface ExampleContext {
-  example: string;
-}
-
-export interface ExampleNamespace {
-  example: string;
-}
-
-// export type ExampleModule = FacadeModule<ExampleContext, ExampleNamespace, 'example'>;
-
-
-// export type ExampleContextUnion = FacadeContext<[ExampleModule]>;
-
-// // export type x = ExtractModuleNamespace<ExampleModule>;
-// // const m: ExampleModule;
-// // m.moduleName = 'example';
-
-
-// // type S<T extends string> = Record<T, number>;
-
-// const f: Facade<[ExampleModule]>;
-
-// f.modules.example
-
-

@@ -1,4 +1,4 @@
-import { IdentityModule, FacadeContext } from '@restorecommerce/facade';
+import { IdentityModule, FacadeContext } from '../src/index';
 import { ExampleModule } from './example-module/index';
 
 export type AppFacadeModules = [IdentityModule, ExampleModule];

@@ -12,6 +12,4 @@ export interface IdentityContext {
   }
 };
 
-export interface IdentityNamespace extends IdentityContext {};
-
-export type IdentityModule = FacadeModule<IdentityContext, IdentityNamespace>;
+export type IdentityModule = FacadeModule<IdentityContext>;

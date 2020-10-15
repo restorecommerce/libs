@@ -6,8 +6,6 @@ import { GraphQLSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { Facade, FacadeModule, FacadeModuleBase } from './facade';
 
-// import * from 'graphql';
-
 export * from './modules/index';
 export * from './middlewares/index';
 export * from './facade';
@@ -27,6 +25,11 @@ interface FacadeApolloServiceMap {
     schema?: GraphQLSchema;
   }
 }
+
+export type ApolloServiceArg = {
+  name: string;
+} & ({ url: string } | { schema: any })
+
 
 export class RestoreCommerceFacade implements Facade {
 
@@ -57,6 +60,10 @@ export class RestoreCommerceFacade implements Facade {
     return this._server && this._server.address();
   }
 
+  get listening() {
+    return this._server && this._server.listening;
+  }
+
   private loadedModules: string[] = [];
 
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>) {
@@ -77,16 +84,8 @@ export class RestoreCommerceFacade implements Facade {
     return this.loadedModules.includes(module.moduleName);
   }
 
-  addLocalApolloService(name: string, schema: any) {
-    this.apolloServices[name] = {
-      schema
-    };
-  }
-
-  addRemoteApolloService(name: string, url: string) {
-    this.apolloServices[name] = {
-      url
-    };
+  addApolloService({name, schema, url}) {
+    this.apolloServices[name] = { schema, url };
   }
 
   start() {
@@ -125,8 +124,6 @@ export class RestoreCommerceFacade implements Facade {
       });
     });
   }
-
-
 
   private mountApolloServer() {
     const serviceList = Object.keys(this.apolloServices).map(key => {

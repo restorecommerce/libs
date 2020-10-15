@@ -1,14 +1,15 @@
 {
-  "extends": "../tsconfig-base.json",
+  "extends": "../../tsconfig-base.json",
   "compilerOptions": {
     "typeRoots": [
       "./node_modules/@types"
     ],
     "outDir": "./dist",
-    "declaration": true,
+    "declaration": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "lib": ["ES2015"]
   },
-  "include": ["src/**/*.ts"],
+  "files": ["./index.ts"]
 }

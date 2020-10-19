@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Attribute } from './attribute';
+import { Attribute } from '../../io/restorecommerce/attribute';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -64,4 +64,77 @@ export const Meta = {
     }
     return message;
   },
+  fromJSON(object: any): Meta {
+    const message = { ...baseMeta } as Meta;
+    message.owner = [];
+    if (object.created !== undefined && object.created !== null) {
+      message.created = Number(object.created);
+    } else {
+      message.created = 0;
+    }
+    if (object.modified !== undefined && object.modified !== null) {
+      message.modified = Number(object.modified);
+    } else {
+      message.modified = 0;
+    }
+    if (object.modifiedBy !== undefined && object.modifiedBy !== null) {
+      message.modifiedBy = String(object.modifiedBy);
+    } else {
+      message.modifiedBy = "";
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      for (const e of object.owner) {
+        message.owner.push(Attribute.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Meta>): Meta {
+    const message = { ...baseMeta } as Meta;
+    message.owner = [];
+    if (object.created !== undefined && object.created !== null) {
+      message.created = object.created;
+    } else {
+      message.created = 0;
+    }
+    if (object.modified !== undefined && object.modified !== null) {
+      message.modified = object.modified;
+    } else {
+      message.modified = 0;
+    }
+    if (object.modifiedBy !== undefined && object.modifiedBy !== null) {
+      message.modifiedBy = object.modifiedBy;
+    } else {
+      message.modifiedBy = "";
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      for (const e of object.owner) {
+        message.owner.push(Attribute.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: Meta): unknown {
+    const obj: any = {};
+    message.created !== undefined && (obj.created = message.created);
+    message.modified !== undefined && (obj.modified = message.modified);
+    message.modifiedBy !== undefined && (obj.modifiedBy = message.modifiedBy);
+    if (message.owner) {
+      obj.owner = message.owner.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.owner = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

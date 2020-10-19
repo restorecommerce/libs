@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { Subject, ApiKey } from './auth';
-import { Meta } from './meta';
-import { ReadRequest, DeleteRequest } from './resource_base';
+import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Meta } from '../../io/restorecommerce/meta';
+import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
 import { Empty } from '../../google/protobuf/empty';
 import { Writer, Reader } from 'protobufjs/minimal';
 
@@ -80,6 +80,29 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
 
 export const TimezoneList = {
@@ -123,6 +146,68 @@ export const TimezoneList = {
     }
     return message;
   },
+  fromJSON(object: any): TimezoneList {
+    const message = { ...baseTimezoneList } as TimezoneList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Timezone.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TimezoneList>): TimezoneList {
+    const message = { ...baseTimezoneList } as TimezoneList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Timezone.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: TimezoneList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Timezone.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const Timezone = {
@@ -161,4 +246,71 @@ export const Timezone = {
     }
     return message;
   },
+  fromJSON(object: any): Timezone {
+    const message = { ...baseTimezone } as Timezone;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Timezone>): Timezone {
+    const message = { ...baseTimezone } as Timezone;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  toJSON(message: Timezone): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.value !== undefined && (obj.value = message.value);
+    message.description !== undefined && (obj.description = message.description);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -29,6 +29,7 @@ export interface Rule {
    */
   condition: string;
   effect: Effect;
+  evaluationCacheable: boolean;
 }
 
 /**
@@ -40,6 +41,7 @@ export interface RuleRQ {
   effect: Effect;
   condition: string;
   contextQuery?: ContextQuery;
+  evaluationCacheable: boolean;
 }
 
 export interface RuleList {
@@ -74,12 +76,14 @@ const baseRule: object = {
   description: "",
   condition: "",
   effect: 0,
+  evaluationCacheable: false,
 };
 
 const baseRuleRQ: object = {
   id: "",
   effect: 0,
   condition: "",
+  evaluationCacheable: false,
 };
 
 const baseRuleList: object = {
@@ -121,6 +125,32 @@ export enum Effect {
   UNRECOGNIZED = -1,
 }
 
+export function effectFromJSON(object: any): Effect {
+  switch (object) {
+    case 0:
+    case "PERMIT":
+      return Effect.PERMIT;
+    case 1:
+    case "DENY":
+      return Effect.DENY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Effect.UNRECOGNIZED;
+  }
+}
+
+export function effectToJSON(object: Effect): string {
+  switch (object) {
+    case Effect.PERMIT:
+      return "PERMIT";
+    case Effect.DENY:
+      return "DENY";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export const Target = {
   encode(message: Target, writer: Writer = Writer.create()): Writer {
     for (const v of message.subject) {
@@ -160,6 +190,69 @@ export const Target = {
     }
     return message;
   },
+  fromJSON(object: any): Target {
+    const message = { ...baseTarget } as Target;
+    message.subject = [];
+    message.resources = [];
+    message.action = [];
+    if (object.subject !== undefined && object.subject !== null) {
+      for (const e of object.subject) {
+        message.subject.push(Attribute.fromJSON(e));
+      }
+    }
+    if (object.resources !== undefined && object.resources !== null) {
+      for (const e of object.resources) {
+        message.resources.push(Attribute.fromJSON(e));
+      }
+    }
+    if (object.action !== undefined && object.action !== null) {
+      for (const e of object.action) {
+        message.action.push(Attribute.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Target>): Target {
+    const message = { ...baseTarget } as Target;
+    message.subject = [];
+    message.resources = [];
+    message.action = [];
+    if (object.subject !== undefined && object.subject !== null) {
+      for (const e of object.subject) {
+        message.subject.push(Attribute.fromPartial(e));
+      }
+    }
+    if (object.resources !== undefined && object.resources !== null) {
+      for (const e of object.resources) {
+        message.resources.push(Attribute.fromPartial(e));
+      }
+    }
+    if (object.action !== undefined && object.action !== null) {
+      for (const e of object.action) {
+        message.action.push(Attribute.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: Target): unknown {
+    const obj: any = {};
+    if (message.subject) {
+      obj.subject = message.subject.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.subject = [];
+    }
+    if (message.resources) {
+      obj.resources = message.resources.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.resources = [];
+    }
+    if (message.action) {
+      obj.action = message.action.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.action = [];
+    }
+    return obj;
+  },
 };
 
 export const Rule = {
@@ -178,6 +271,7 @@ export const Rule = {
     }
     writer.uint32(58).string(message.condition);
     writer.uint32(64).int32(message.effect);
+    writer.uint32(72).bool(message.evaluationCacheable);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): Rule {
@@ -211,12 +305,126 @@ export const Rule = {
         case 8:
           message.effect = reader.int32() as any;
           break;
+        case 9:
+          message.evaluationCacheable = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
     return message;
+  },
+  fromJSON(object: any): Rule {
+    const message = { ...baseRule } as Rule;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromJSON(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
+    } else {
+      message.contextQuery = undefined;
+    }
+    if (object.condition !== undefined && object.condition !== null) {
+      message.condition = String(object.condition);
+    } else {
+      message.condition = "";
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = effectFromJSON(object.effect);
+    } else {
+      message.effect = 0;
+    }
+    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
+    } else {
+      message.evaluationCacheable = false;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Rule>): Rule {
+    const message = { ...baseRule } as Rule;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromPartial(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
+    } else {
+      message.contextQuery = undefined;
+    }
+    if (object.condition !== undefined && object.condition !== null) {
+      message.condition = object.condition;
+    } else {
+      message.condition = "";
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = object.effect;
+    } else {
+      message.effect = 0;
+    }
+    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+      message.evaluationCacheable = object.evaluationCacheable;
+    } else {
+      message.evaluationCacheable = false;
+    }
+    return message;
+  },
+  toJSON(message: Rule): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.contextQuery !== undefined && (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
+    message.condition !== undefined && (obj.condition = message.condition);
+    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    return obj;
   },
 };
 
@@ -231,6 +439,7 @@ export const RuleRQ = {
     if (message.contextQuery !== undefined && message.contextQuery !== undefined) {
       ContextQuery.encode(message.contextQuery, writer.uint32(42).fork()).ldelim();
     }
+    writer.uint32(48).bool(message.evaluationCacheable);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): RuleRQ {
@@ -255,12 +464,93 @@ export const RuleRQ = {
         case 5:
           message.contextQuery = ContextQuery.decode(reader, reader.uint32());
           break;
+        case 6:
+          message.evaluationCacheable = reader.bool();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
       }
     }
     return message;
+  },
+  fromJSON(object: any): RuleRQ {
+    const message = { ...baseRuleRQ } as RuleRQ;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromJSON(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = effectFromJSON(object.effect);
+    } else {
+      message.effect = 0;
+    }
+    if (object.condition !== undefined && object.condition !== null) {
+      message.condition = String(object.condition);
+    } else {
+      message.condition = "";
+    }
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
+    } else {
+      message.contextQuery = undefined;
+    }
+    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
+    } else {
+      message.evaluationCacheable = false;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
+    const message = { ...baseRuleRQ } as RuleRQ;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromPartial(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = object.effect;
+    } else {
+      message.effect = 0;
+    }
+    if (object.condition !== undefined && object.condition !== null) {
+      message.condition = object.condition;
+    } else {
+      message.condition = "";
+    }
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
+    } else {
+      message.contextQuery = undefined;
+    }
+    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+      message.evaluationCacheable = object.evaluationCacheable;
+    } else {
+      message.evaluationCacheable = false;
+    }
+    return message;
+  },
+  toJSON(message: RuleRQ): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.condition !== undefined && (obj.condition = message.condition);
+    message.contextQuery !== undefined && (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
+    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    return obj;
   },
 };
 
@@ -305,6 +595,68 @@ export const RuleList = {
     }
     return message;
   },
+  fromJSON(object: any): RuleList {
+    const message = { ...baseRuleList } as RuleList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Rule.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RuleList>): RuleList {
+    const message = { ...baseRuleList } as RuleList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Rule.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: RuleList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Rule.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const ContextQuery = {
@@ -335,6 +687,46 @@ export const ContextQuery = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ContextQuery {
+    const message = { ...baseContextQuery } as ContextQuery;
+    message.filters = [];
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(ContextQuery_Filter.fromJSON(e));
+      }
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = String(object.query);
+    } else {
+      message.query = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
+    const message = { ...baseContextQuery } as ContextQuery;
+    message.filters = [];
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(ContextQuery_Filter.fromPartial(e));
+      }
+    }
+    if (object.query !== undefined && object.query !== null) {
+      message.query = object.query;
+    } else {
+      message.query = "";
+    }
+    return message;
+  },
+  toJSON(message: ContextQuery): unknown {
+    const obj: any = {};
+    if (message.filters) {
+      obj.filters = message.filters.map(e => e ? ContextQuery_Filter.toJSON(e) : undefined);
+    } else {
+      obj.filters = [];
+    }
+    message.query !== undefined && (obj.query = message.query);
+    return obj;
   },
 };
 
@@ -368,4 +760,60 @@ export const ContextQuery_Filter = {
     }
     return message;
   },
+  fromJSON(object: any): ContextQuery_Filter {
+    const message = { ...baseContextQuery_Filter } as ContextQuery_Filter;
+    if (object.field !== undefined && object.field !== null) {
+      message.field = String(object.field);
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = String(object.operation);
+    } else {
+      message.operation = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ContextQuery_Filter>): ContextQuery_Filter {
+    const message = { ...baseContextQuery_Filter } as ContextQuery_Filter;
+    if (object.field !== undefined && object.field !== null) {
+      message.field = object.field;
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = object.operation;
+    } else {
+      message.operation = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  toJSON(message: ContextQuery_Filter): unknown {
+    const obj: any = {};
+    message.field !== undefined && (obj.field = message.field);
+    message.operation !== undefined && (obj.operation = message.operation);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

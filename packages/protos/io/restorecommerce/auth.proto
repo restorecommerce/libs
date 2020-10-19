@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package io.restorecommerce.auth;
+import "io/restorecommerce/attribute.proto";
+
+/**
+ * Subject of creating User
+ */
+message Subject {
+  string id = 1; // user id
+  string scope = 2; // target scope
+  repeated RoleAssociation role_associations = 3; //  role_associations of user creating the user
+  repeated HierarchicalScope hierarchical_scopes = 4; // HR scope of user creating the User
+  bool unauthenticated = 5; // for unauthenticated context
+  string token = 6;
+}
+
+/**
+ * Api Key
+ */
+message ApiKey {
+  string value = 1; // ApiKey
+}
+
+
+message Tokens {
+  string name = 1; // token name
+  double expires_at = 2; // expiration date for token
+  string token = 3; // token
+  repeated string scopes = 4; // identifier for role_association
+}
+
+message HierarchicalScope {
+  string id = 1; // root node
+  repeated HierarchicalScope children = 2; // children nodes
+  string role = 3; // role identifier associated with root node scope
+}
+
+message RoleAssociation {
+  string role = 1;  // role ID
+  repeated io.restorecommerce.attribute.Attribute attributes = 2;  // useful attributes for RBAC/ABAC like organizational scope
+  string id = 3; // identifier for role_association
+}
+

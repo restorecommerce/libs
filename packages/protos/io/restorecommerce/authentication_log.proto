@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package io.restorecommerce.authentication_log;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AuthenticationLogList);
+  rpc Create (AuthenticationLogList) returns (AuthenticationLogList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (AuthenticationLogList) returns (AuthenticationLogList);
+  rpc Upsert (AuthenticationLogList) returns (AuthenticationLogList);
+}
+
+message AuthenticationLogList {
+  repeated AuthenticationLog items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+/**
+ * Authentication Log
+ */
+message AuthenticationLog {
+  string id = 1; // log id
+  string ipv4_address = 2;
+  string ipv6_address = 3;
+  string operating_system = 4;
+  string user_agent = 5;
+  double date = 6; // time stamp of login, logout or token update
+  string activity = 7; // login, logout
+  io.restorecommerce.meta.Meta meta = 8; // meta info
+  string subject_id = 9; // subject id
+  string token_name = 10; // token name associated with io.restorecommerce.auth.Token.token_name
+}
+
+message Deleted {
+  string id = 1;
+}

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package io.restorecommerce.country;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CountryList);
+  rpc Create (CountryList) returns (CountryList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (CountryList) returns (CountryList);
+  rpc Upsert (CountryList) returns (CountryList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message CountryList {
+  repeated Country items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Country {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string country_code = 4;
+  string geographical_name = 5;
+  repeated string economic_areas = 6; 
+}

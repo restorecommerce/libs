@@ -93,6 +93,62 @@ export const Manufacturer = {
     }
     return message;
   },
+  fromJSON(object: any): Manufacturer {
+    const message = { ...baseManufacturer } as Manufacturer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Manufacturer>): Manufacturer {
+    const message = { ...baseManufacturer } as Manufacturer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  toJSON(message: Manufacturer): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    return obj;
+  },
 };
 
 export const ManufacturerList = {
@@ -136,6 +192,68 @@ export const ManufacturerList = {
     }
     return message;
   },
+  fromJSON(object: any): ManufacturerList {
+    const message = { ...baseManufacturerList } as ManufacturerList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Manufacturer.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ManufacturerList>): ManufacturerList {
+    const message = { ...baseManufacturerList } as ManufacturerList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Manufacturer.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: ManufacturerList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Manufacturer.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const Deleted = {
@@ -160,4 +278,38 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

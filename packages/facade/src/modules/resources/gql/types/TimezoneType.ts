@@ -1,4 +1,4 @@
-import { GraphQLInputObjectType, GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql';
+import { GraphQLInputObjectType, GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql';
 import { StatusType, MetaType, AttributeInputType } from '@gql';
 
 const fields = {
@@ -50,7 +50,7 @@ export const OutputTimezoneType = new GraphQLObjectType({
       type: new GraphQLList(TimezoneType),
     },
     status: {
-      type: StatusType,
+      type: new GraphQLNonNull(StatusType),
     },
   }),
 });

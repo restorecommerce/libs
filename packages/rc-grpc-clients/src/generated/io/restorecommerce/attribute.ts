@@ -40,4 +40,49 @@ export const Attribute = {
     }
     return message;
   },
+  fromJSON(object: any): Attribute {
+    const message = { ...baseAttribute } as Attribute;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Attribute>): Attribute {
+    const message = { ...baseAttribute } as Attribute;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  toJSON(message: Attribute): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

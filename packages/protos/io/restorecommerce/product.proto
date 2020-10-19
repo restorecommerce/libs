@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+package io.restorecommerce.product;
+
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/image.proto";
+import "io/restorecommerce/auth.proto";
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductList);
+  rpc Create (ProductList) returns (ProductList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ProductList) returns (ProductList);
+  rpc Upsert (ProductList) returns (ProductList);
+}
+
+// Product resource
+message MainProduct {
+  string id = 1;
+  oneof product_type {
+    Product product = 2;
+    Bundle bundle = 3;
+  }
+  bool active = 4;
+  io.restorecommerce.meta.Meta meta = 5;
+}
+
+message Product {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string manufacturer_id = 4;
+  string taric_code = 5;
+  oneof classification {
+    Identifier prototype = 6;
+    Identifier category = 7;
+  }
+  repeated string tax_type_id = 8;
+  repeated Variant variants = 9;
+  string gtin = 10;
+}
+
+message Identifier {
+  string id = 1;
+}
+
+message ProductList {
+  repeated MainProduct items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Variant {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  int32 stock_level = 4;
+  double price = 5;
+  bool sale = 6;
+  double sale_price = 7;
+  repeated io.restorecommerce.image.Image image = 8;
+  string stock_keeping_unit = 9;
+  repeated VariantAttribute attributes = 10;
+}
+
+message VariantAttribute {
+  string key = 1;
+  repeated string values = 2;
+}
+
+message Bundle {
+  string id = 1;
+  string name = 3;
+  string description = 4;
+  repeated io.restorecommerce.image.Image image = 5;
+  repeated BundleProduct product = 6;
+  double price = 7;
+}
+
+message BundleProduct {
+  string product_id = 1;
+  uint32 quantity = 2;
+}
+
+
+message Deleted {
+  string id = 1;
+}

@@ -1,17 +1,10 @@
-import { buildFederatedSchema } from '@apollo/federation';
-import { Resolvers  } from './schema.generated';
+import { createGenericReadResolver } from '../resolvers';
+import { Resolvers } from './schema.generated';
 
 export const resolvers: Resolvers = {
   Query: {
-    async getAllTimezones(_, {input}, ctx) {
-      return {
-        payload: [],
-        status: {
-          code: 1,
-          key: 'ok',
-        }
-
-      }
-    }
+    getAllTimezones: createGenericReadResolver(
+      ctx => ctx.resources.client.timezone
+    )
   }
 }

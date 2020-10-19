@@ -26,15 +26,15 @@
     "@graphql-codegen/core": "^1.17.8",
     "@graphql-codegen/typescript": "^1.17.10",
     "@graphql-codegen/typescript-resolvers": "^1.17.10",
-    "@restorecommerce/protos": "0.0.10-beta.1",
+    "@restorecommerce/protos": "0.2.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^12.12.64",
     "graphql": "^15.3.0",
-    "jest": "^26.4.2",
+    "jest": "^26.5.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.0",
-    "ts-proto": "^1.36.0",
+    "ts-proto": "^1.38.0",
     "typescript": "^4.0.3"
   },
   "scripts": {
@@ -43,7 +43,7 @@
     "build:compile": "tsc -p src/tsconfig.json",
     "test": "jest",
     "prepublishOnly": "npm run build",
-    "gen:grpc": "protoc --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=false --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto",
+    "gen:grpc": "protoc --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto",
     "gen:gql": "node -r ts-node/register -r tsconfig-paths/register generator.ts"
   },
   "engines": {

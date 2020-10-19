@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package io.restorecommerce.ostorage;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/any.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
+
+service Service {
+  rpc Get (GetRequest) returns (stream Object);
+  rpc Put (stream Object) returns (Response);
+  rpc Delete (DeleteRequest) returns (google.protobuf.Empty);
+  rpc List (ListRequest) returns (ObjectsData);
+  rpc Copy (CopyRequest) returns (CopyResponse);
+}
+
+message CopyRequest {
+  repeated CopyRequestItem items = 1;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 5;
+    io.restorecommerce.auth.ApiKey api_key = 6;
+  }
+}
+
+message CopyResponse {
+  repeated CopyResponseItem response = 1;
+}
+
+message CopyRequestItem {
+  string bucket = 1;
+  string copySource = 2;
+  string key = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  Options options = 5;
+}
+
+message CopyResponseItem {
+  string bucket = 1;
+  string copySource = 2;
+  string key = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  Options options = 5;
+}
+
+message Options {
+  string encoding = 1;
+  string content_type = 2;
+  string content_language = 3;
+  string content_disposition = 4;
+  int32 length = 5;
+  string version = 6;
+  string md5 = 7;
+  repeated io.restorecommerce.attribute.Attribute tags = 8;
+  google.protobuf.Any data = 9; // optional meta data ex: from and to dates
+}
+
+message Object {
+  string key = 1;
+  string bucket = 2;
+  bytes object = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  string url = 5;
+  Options options = 6;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 7;
+    io.restorecommerce.auth.ApiKey api_key = 8;
+  }
+}
+
+message GetRequest {
+  string key = 1;
+  string bucket = 2;
+  bool download = 3;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 4;
+    io.restorecommerce.auth.ApiKey api_key = 5;
+  }
+}
+
+message ObjectsData {
+  repeated ObjectData object_data = 1;
+}
+
+message ObjectData {
+  string object_name = 1;
+  string url = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+}
+
+message DeleteRequest {
+  string key = 1;
+  string bucket = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 5;
+    io.restorecommerce.auth.ApiKey api_key = 6;
+  }
+}
+
+message Response {
+  string url = 1;
+  string bucket = 2 ;
+  string key = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  repeated io.restorecommerce.attribute.Attribute tags = 5;
+  int32 length = 6; // file size of uploaded object
+}
+
+message ListRequest {
+  string bucket = 1;
+  google.protobuf.Struct filter = 2; /// Filter based on fieldName|operation, value|list
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 5;
+    io.restorecommerce.auth.ApiKey api_key = 6;
+  }
+}

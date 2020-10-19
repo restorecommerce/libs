@@ -4,18 +4,37 @@ import { DeleteRequest, ReadRequest } from "./generated/io/restorecommerce/resou
 import { CommandRequest, Service as CommandInterfaceService } from "./generated/io/restorecommerce/commandinterface";
 import { Empty } from "./generated/google/protobuf/empty";
 import { Any } from './generated/google/protobuf/any';
+import { ApiKey, Subject } from './generated/io/restorecommerce/auth';
 
-interface ResourceType<T extends Object> {
-  encode(message: T, writer: Writer): Writer;
-  decode(input: Uint8Array | Reader, length?: number): T;
+export { DeleteRequest, ReadRequest };
+
+interface ResourceType<TType extends List<TType>> {
+  encode(message: TType, writer: Writer): Writer;
+  decode(input: Uint8Array | Reader, length?: number): TType;
+}
+export interface List<T> {
+  items: T[];
+  totalCount: number;
 }
 
-export interface CRUDUService<T extends object> extends Record<string, any> {
-  Create(request: T): Promise<T>;
-  Read(request: ReadRequest): Promise<T>;
-  Update(request: T): Promise<T>;
+export interface CruudService<T> extends Record<string, any> {
+  Create(request: List<T>): Promise<List<T>>;
+  Read(request: ReadRequest): Promise<List<T>>;
+  Update(request: List<T>): Promise<List<T>>;
   Delete(request: DeleteRequest): Promise<Empty>;
-  Upsert(request: T): Promise<T>;
+  Upsert(request: List<T>): Promise<List<T>>;
+}
+
+export function isCruudService<TType extends object = any>(service: CruudService<TType>): service is CruudService<TType> {
+  return (
+    service &&
+    typeof service === 'object' &&
+    typeof service['Create'] === 'function' &&
+    typeof service['Read'] === 'function' &&
+    typeof service['Update'] === 'function' &&
+    typeof service['Upsert'] === 'function' &&
+    typeof service['Delete'] === 'function'
+  );
 }
 
 export class RestoreCommerceGrpcClient extends GrpcClient {
@@ -32,7 +51,7 @@ export class RestoreCommerceGrpcClient extends GrpcClient {
     }
   });
 
-  protected createCRUDUMethods<TType extends object>(type: ResourceType<TType>): GrpcServiceMethods<CRUDUService<TType>> {
+  protected createCRUDMethods<TType extends List<TType>>(type: ResourceType<TType>): GrpcServiceMethods<CruudService<TType>> {
     return {
       Create: {
         type: 'unary',

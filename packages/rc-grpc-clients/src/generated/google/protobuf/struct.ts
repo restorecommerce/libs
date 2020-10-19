@@ -98,6 +98,27 @@ export enum NullValue {
   UNRECOGNIZED = -1,
 }
 
+export function nullValueFromJSON(object: any): NullValue {
+  switch (object) {
+    case 0:
+    case "NULL_VALUE":
+      return NullValue.NULL_VALUE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return NullValue.UNRECOGNIZED;
+  }
+}
+
+export function nullValueToJSON(object: NullValue): string {
+  switch (object) {
+    case NullValue.NULL_VALUE:
+      return "NULL_VALUE";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export const Struct = {
   encode(message: Struct, writer: Writer = Writer.create()): Writer {
     Object.entries(message.fields).forEach(([key, value]) => {
@@ -125,6 +146,38 @@ export const Struct = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Struct {
+    const message = { ...baseStruct } as Struct;
+    message.fields = {};
+    if (object.fields !== undefined && object.fields !== null) {
+      Object.entries(object.fields).forEach(([key, value]) => {
+        message.fields[key] = Value.fromJSON(value);
+      })
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Struct>): Struct {
+    const message = { ...baseStruct } as Struct;
+    message.fields = {};
+    if (object.fields !== undefined && object.fields !== null) {
+      Object.entries(object.fields).forEach(([key, value]) => {
+        if (value !== undefined) {
+          message.fields[key] = Value.fromPartial(value);
+        }
+      })
+    }
+    return message;
+  },
+  toJSON(message: Struct): unknown {
+    const obj: any = {};
+    obj.fields = {};
+    if (message.fields) {
+      Object.entries(message.fields).forEach(([k, v]) => {
+        obj.fields[k] = Value.toJSON(v);
+      })
+    }
+    return obj;
   },
 };
 
@@ -155,6 +208,40 @@ export const Struct_FieldsEntry = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Struct_FieldsEntry {
+    const message = { ...baseStruct_FieldsEntry } as Struct_FieldsEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = Value.fromJSON(object.value);
+    } else {
+      message.value = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Struct_FieldsEntry>): Struct_FieldsEntry {
+    const message = { ...baseStruct_FieldsEntry } as Struct_FieldsEntry;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = Value.fromPartial(object.value);
+    } else {
+      message.value = undefined;
+    }
+    return message;
+  },
+  toJSON(message: Struct_FieldsEntry): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.value !== undefined && (obj.value = message.value ? Value.toJSON(message.value) : undefined);
+    return obj;
   },
 };
 
@@ -212,6 +299,84 @@ export const Value = {
     }
     return message;
   },
+  fromJSON(object: any): Value {
+    const message = { ...baseValue } as Value;
+    if (object.nullValue !== undefined && object.nullValue !== null) {
+      message.nullValue = nullValueFromJSON(object.nullValue);
+    } else {
+      message.nullValue = undefined;
+    }
+    if (object.numberValue !== undefined && object.numberValue !== null) {
+      message.numberValue = Number(object.numberValue);
+    } else {
+      message.numberValue = undefined;
+    }
+    if (object.stringValue !== undefined && object.stringValue !== null) {
+      message.stringValue = String(object.stringValue);
+    } else {
+      message.stringValue = undefined;
+    }
+    if (object.boolValue !== undefined && object.boolValue !== null) {
+      message.boolValue = Boolean(object.boolValue);
+    } else {
+      message.boolValue = undefined;
+    }
+    if (object.structValue !== undefined && object.structValue !== null) {
+      message.structValue = Struct.fromJSON(object.structValue);
+    } else {
+      message.structValue = undefined;
+    }
+    if (object.listValue !== undefined && object.listValue !== null) {
+      message.listValue = ListValue.fromJSON(object.listValue);
+    } else {
+      message.listValue = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Value>): Value {
+    const message = { ...baseValue } as Value;
+    if (object.nullValue !== undefined && object.nullValue !== null) {
+      message.nullValue = object.nullValue;
+    } else {
+      message.nullValue = undefined;
+    }
+    if (object.numberValue !== undefined && object.numberValue !== null) {
+      message.numberValue = object.numberValue;
+    } else {
+      message.numberValue = undefined;
+    }
+    if (object.stringValue !== undefined && object.stringValue !== null) {
+      message.stringValue = object.stringValue;
+    } else {
+      message.stringValue = undefined;
+    }
+    if (object.boolValue !== undefined && object.boolValue !== null) {
+      message.boolValue = object.boolValue;
+    } else {
+      message.boolValue = undefined;
+    }
+    if (object.structValue !== undefined && object.structValue !== null) {
+      message.structValue = Struct.fromPartial(object.structValue);
+    } else {
+      message.structValue = undefined;
+    }
+    if (object.listValue !== undefined && object.listValue !== null) {
+      message.listValue = ListValue.fromPartial(object.listValue);
+    } else {
+      message.listValue = undefined;
+    }
+    return message;
+  },
+  toJSON(message: Value): unknown {
+    const obj: any = {};
+    message.nullValue !== undefined && (obj.nullValue = message.nullValue !== undefined ? nullValueToJSON(message.nullValue) : undefined);
+    message.numberValue !== undefined && (obj.numberValue = message.numberValue);
+    message.stringValue !== undefined && (obj.stringValue = message.stringValue);
+    message.boolValue !== undefined && (obj.boolValue = message.boolValue);
+    message.structValue !== undefined && (obj.structValue = message.structValue ? Struct.toJSON(message.structValue) : undefined);
+    message.listValue !== undefined && (obj.listValue = message.listValue ? ListValue.toJSON(message.listValue) : undefined);
+    return obj;
+  },
 };
 
 export const ListValue = {
@@ -239,4 +404,44 @@ export const ListValue = {
     }
     return message;
   },
+  fromJSON(object: any): ListValue {
+    const message = { ...baseListValue } as ListValue;
+    message.values = [];
+    if (object.values !== undefined && object.values !== null) {
+      for (const e of object.values) {
+        message.values.push(Value.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ListValue>): ListValue {
+    const message = { ...baseListValue } as ListValue;
+    message.values = [];
+    if (object.values !== undefined && object.values !== null) {
+      for (const e of object.values) {
+        message.values.push(Value.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: ListValue): unknown {
+    const obj: any = {};
+    if (message.values) {
+      obj.values = message.values.map(e => e ? Value.toJSON(e) : undefined);
+    } else {
+      obj.values = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

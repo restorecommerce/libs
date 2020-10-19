@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package io.restorecommerce.commandinterface;
+
+import "google/protobuf/any.proto";
+import "io/restorecommerce/auth.proto";
+
+// used to send requests through Kafka or gRPC
+message CommandRequest {
+  //  command identifier (used to demultiplex operation in the command implementation)
+  string name = 1;
+  google.protobuf.Any payload = 2;  // variable payload
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+// used to push responses to Kafka
+message CommandResponse {
+  // service identifiers
+  // (multiple services may reply to one system command)
+  // (multiple service names can be bound to one microservice)
+  repeated string services = 1;
+  google.protobuf.Any payload = 2;  // variable payload
+}
+
+/**
+* RPC service for executing commands
+*/
+service Service {
+  rpc Command(CommandRequest) returns (google.protobuf.Any);
+}

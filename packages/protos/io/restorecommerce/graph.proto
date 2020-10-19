@@ -1,0 +1,80 @@
+syntax = "proto3";
+package io.restorecommerce.graph;
+import "google/protobuf/any.proto";
+import "io/restorecommerce/auth.proto";
+
+// Service provides the CRUD operations
+service Service {
+  rpc Traversal (TraversalRequest) returns (stream TraversalResponse);
+}
+
+message TraversalRequest {
+  message StartVertices {
+    repeated string vertices = 1;
+  }
+
+  // Document handle either _id or _key value
+  oneof vertex {
+    string start_vertex = 1;
+    StartVertices start_vertices = 2;
+  }
+
+  // Filter based on fieldName|operation, value|list
+  Options opts = 3;
+  string collection_name = 4;
+  string edge_name = 5;
+  bool data = 6;
+  bool path = 7;
+  bool aql = 8;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 9;
+    io.restorecommerce.auth.ApiKey api_key = 10;
+  }
+}
+
+message TraversalResponse {
+  repeated VertexFields vertex_fields = 1;
+  google.protobuf.Any paths = 2;
+  google.protobuf.Any data = 3;
+}
+
+message VertexFields {
+  string aid = 1;
+  string _key = 2;
+  string _rev = 3;
+  string id = 4;
+}
+
+message Options {
+ string sort = 1; // JS code
+ string direction = 2; // either inbound or outbound
+ uint32 min_depth = 3; // ANDed with any existing filters): visits only nodes in at least the given depth
+ string start_vertex = 4; // id of the startVertex
+ string visitor = 5; // JS code
+ string item_order = 6; // item iteration order can be "forward" or "backward"
+ string strategy = 7; // traversal strategy can be "depthfirst" or "breadthfirst"
+ repeated Filter filter = 8; // JS code
+ string init = 9; // JS code
+ uint32 max_iterations = 10; // maximum number of iterations in each traversal
+ uint32 max_depth = 11; // ANDed with any existing filters visits only nodes in at most the given depth
+ Uniqueness uniqueness = 12; // specifies uniqueness for vertices and edges visited
+ string order = 13; //  "preorder", "postorder" or "preorder-expander"
+ string graph_name = 14; // name of graph that contains the edges
+ repeated Expander expander = 15; // JS code
+ string edge_collection = 16; // name of the collection that contains the edges
+ bool lowest_common_ancestor = 17;
+}
+
+message Filter {
+  string vertex = 1; // exclude these vertices
+}
+
+message Expander {
+  string edge = 1; // expand these edges
+  string direction = 2;
+}
+
+message Uniqueness {
+  string vertices = 1; // "none"|"global"|"path" for unique vertices
+  string edges = 2; // "none"|"global"|"path" for unique edges
+}

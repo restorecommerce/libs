@@ -223,6 +223,29 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
 
 export const InvoiceList = {
@@ -265,6 +288,68 @@ export const InvoiceList = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): InvoiceList {
+    const message = { ...baseInvoiceList } as InvoiceList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoiceList>): InvoiceList {
+    const message = { ...baseInvoiceList } as InvoiceList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: InvoiceList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Invoice.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
   },
 };
 
@@ -332,6 +417,139 @@ export const Invoice = {
     }
     return message;
   },
+  fromJSON(object: any): Invoice {
+    const message = { ...baseInvoice } as Invoice;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = String(object.timestamp);
+    } else {
+      message.timestamp = "";
+    }
+    if (object.customerId !== undefined && object.customerId !== null) {
+      message.customerId = String(object.customerId);
+    } else {
+      message.customerId = "";
+    }
+    if (object.paymentStatus !== undefined && object.paymentStatus !== null) {
+      message.paymentStatus = String(object.paymentStatus);
+    } else {
+      message.paymentStatus = "";
+    }
+    if (object.totalAmount !== undefined && object.totalAmount !== null) {
+      message.totalAmount = Number(object.totalAmount);
+    } else {
+      message.totalAmount = 0;
+    }
+    if (object.netAmount !== undefined && object.netAmount !== null) {
+      message.netAmount = Number(object.netAmount);
+    } else {
+      message.netAmount = 0;
+    }
+    if (object.vatAmount !== undefined && object.vatAmount !== null) {
+      message.vatAmount = Number(object.vatAmount);
+    } else {
+      message.vatAmount = 0;
+    }
+    if (object.document !== undefined && object.document !== null) {
+      message.document = String(object.document);
+    } else {
+      message.document = "";
+    }
+    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
+      message.invoiceNumber = String(object.invoiceNumber);
+    } else {
+      message.invoiceNumber = "";
+    }
+    if (object.customerRemark !== undefined && object.customerRemark !== null) {
+      message.customerRemark = String(object.customerRemark);
+    } else {
+      message.customerRemark = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Invoice>): Invoice {
+    const message = { ...baseInvoice } as Invoice;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.timestamp !== undefined && object.timestamp !== null) {
+      message.timestamp = object.timestamp;
+    } else {
+      message.timestamp = "";
+    }
+    if (object.customerId !== undefined && object.customerId !== null) {
+      message.customerId = object.customerId;
+    } else {
+      message.customerId = "";
+    }
+    if (object.paymentStatus !== undefined && object.paymentStatus !== null) {
+      message.paymentStatus = object.paymentStatus;
+    } else {
+      message.paymentStatus = "";
+    }
+    if (object.totalAmount !== undefined && object.totalAmount !== null) {
+      message.totalAmount = object.totalAmount;
+    } else {
+      message.totalAmount = 0;
+    }
+    if (object.netAmount !== undefined && object.netAmount !== null) {
+      message.netAmount = object.netAmount;
+    } else {
+      message.netAmount = 0;
+    }
+    if (object.vatAmount !== undefined && object.vatAmount !== null) {
+      message.vatAmount = object.vatAmount;
+    } else {
+      message.vatAmount = 0;
+    }
+    if (object.document !== undefined && object.document !== null) {
+      message.document = object.document;
+    } else {
+      message.document = "";
+    }
+    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
+      message.invoiceNumber = object.invoiceNumber;
+    } else {
+      message.invoiceNumber = "";
+    }
+    if (object.customerRemark !== undefined && object.customerRemark !== null) {
+      message.customerRemark = object.customerRemark;
+    } else {
+      message.customerRemark = "";
+    }
+    return message;
+  },
+  toJSON(message: Invoice): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.customerId !== undefined && (obj.customerId = message.customerId);
+    message.paymentStatus !== undefined && (obj.paymentStatus = message.paymentStatus);
+    message.totalAmount !== undefined && (obj.totalAmount = message.totalAmount);
+    message.netAmount !== undefined && (obj.netAmount = message.netAmount);
+    message.vatAmount !== undefined && (obj.vatAmount = message.vatAmount);
+    message.document !== undefined && (obj.document = message.document);
+    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
+    message.customerRemark !== undefined && (obj.customerRemark = message.customerRemark);
+    return obj;
+  },
 };
 
 export const InvoicesPositionsData = {
@@ -358,6 +576,35 @@ export const InvoicesPositionsData = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): InvoicesPositionsData {
+    const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
+    message.invoicesPositionsData = [];
+    if (object.invoicesPositionsData !== undefined && object.invoicesPositionsData !== null) {
+      for (const e of object.invoicesPositionsData) {
+        message.invoicesPositionsData.push(InvoicePositions.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
+    const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
+    message.invoicesPositionsData = [];
+    if (object.invoicesPositionsData !== undefined && object.invoicesPositionsData !== null) {
+      for (const e of object.invoicesPositionsData) {
+        message.invoicesPositionsData.push(InvoicePositions.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: InvoicesPositionsData): unknown {
+    const obj: any = {};
+    if (message.invoicesPositionsData) {
+      obj.invoicesPositionsData = message.invoicesPositionsData.map(e => e ? InvoicePositions.toJSON(e) : undefined);
+    } else {
+      obj.invoicesPositionsData = [];
+    }
+    return obj;
   },
 };
 
@@ -420,6 +667,101 @@ export const InvoicePositions = {
     }
     return message;
   },
+  fromJSON(object: any): InvoicePositions {
+    const message = { ...baseInvoicePositions } as InvoicePositions;
+    message.invoicePositions = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.invoicePositions !== undefined && object.invoicePositions !== null) {
+      for (const e of object.invoicePositions) {
+        message.invoicePositions.push(InvoicePosition.fromJSON(e));
+      }
+    }
+    if (object.recipientCustomer !== undefined && object.recipientCustomer !== null) {
+      message.recipientCustomer = RecipientCustomer.fromJSON(object.recipientCustomer);
+    } else {
+      message.recipientCustomer = undefined;
+    }
+    if (object.recipientBillingAddress !== undefined && object.recipientBillingAddress !== null) {
+      message.recipientBillingAddress = BillingAddress.fromJSON(object.recipientBillingAddress);
+    } else {
+      message.recipientBillingAddress = undefined;
+    }
+    if (object.senderBillingAddress !== undefined && object.senderBillingAddress !== null) {
+      message.senderBillingAddress = BillingAddress.fromJSON(object.senderBillingAddress);
+    } else {
+      message.senderBillingAddress = undefined;
+    }
+    if (object.recipientOrganization !== undefined && object.recipientOrganization !== null) {
+      message.recipientOrganization = Organization.fromJSON(object.recipientOrganization);
+    } else {
+      message.recipientOrganization = undefined;
+    }
+    if (object.senderOrganization !== undefined && object.senderOrganization !== null) {
+      message.senderOrganization = Organization.fromJSON(object.senderOrganization);
+    } else {
+      message.senderOrganization = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
+    const message = { ...baseInvoicePositions } as InvoicePositions;
+    message.invoicePositions = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.invoicePositions !== undefined && object.invoicePositions !== null) {
+      for (const e of object.invoicePositions) {
+        message.invoicePositions.push(InvoicePosition.fromPartial(e));
+      }
+    }
+    if (object.recipientCustomer !== undefined && object.recipientCustomer !== null) {
+      message.recipientCustomer = RecipientCustomer.fromPartial(object.recipientCustomer);
+    } else {
+      message.recipientCustomer = undefined;
+    }
+    if (object.recipientBillingAddress !== undefined && object.recipientBillingAddress !== null) {
+      message.recipientBillingAddress = BillingAddress.fromPartial(object.recipientBillingAddress);
+    } else {
+      message.recipientBillingAddress = undefined;
+    }
+    if (object.senderBillingAddress !== undefined && object.senderBillingAddress !== null) {
+      message.senderBillingAddress = BillingAddress.fromPartial(object.senderBillingAddress);
+    } else {
+      message.senderBillingAddress = undefined;
+    }
+    if (object.recipientOrganization !== undefined && object.recipientOrganization !== null) {
+      message.recipientOrganization = Organization.fromPartial(object.recipientOrganization);
+    } else {
+      message.recipientOrganization = undefined;
+    }
+    if (object.senderOrganization !== undefined && object.senderOrganization !== null) {
+      message.senderOrganization = Organization.fromPartial(object.senderOrganization);
+    } else {
+      message.senderOrganization = undefined;
+    }
+    return message;
+  },
+  toJSON(message: InvoicePositions): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.invoicePositions) {
+      obj.invoicePositions = message.invoicePositions.map(e => e ? InvoicePosition.toJSON(e) : undefined);
+    } else {
+      obj.invoicePositions = [];
+    }
+    message.recipientCustomer !== undefined && (obj.recipientCustomer = message.recipientCustomer ? RecipientCustomer.toJSON(message.recipientCustomer) : undefined);
+    message.recipientBillingAddress !== undefined && (obj.recipientBillingAddress = message.recipientBillingAddress ? BillingAddress.toJSON(message.recipientBillingAddress) : undefined);
+    message.senderBillingAddress !== undefined && (obj.senderBillingAddress = message.senderBillingAddress ? BillingAddress.toJSON(message.senderBillingAddress) : undefined);
+    message.recipientOrganization !== undefined && (obj.recipientOrganization = message.recipientOrganization ? Organization.toJSON(message.recipientOrganization) : undefined);
+    message.senderOrganization !== undefined && (obj.senderOrganization = message.senderOrganization ? Organization.toJSON(message.senderOrganization) : undefined);
+    return obj;
+  },
 };
 
 export const RecipientCustomer = {
@@ -447,6 +789,40 @@ export const RecipientCustomer = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): RecipientCustomer {
+    const message = { ...baseRecipientCustomer } as RecipientCustomer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.customerNumber !== undefined && object.customerNumber !== null) {
+      message.customerNumber = String(object.customerNumber);
+    } else {
+      message.customerNumber = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RecipientCustomer>): RecipientCustomer {
+    const message = { ...baseRecipientCustomer } as RecipientCustomer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.customerNumber !== undefined && object.customerNumber !== null) {
+      message.customerNumber = object.customerNumber;
+    } else {
+      message.customerNumber = "";
+    }
+    return message;
+  },
+  toJSON(message: RecipientCustomer): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.customerNumber !== undefined && (obj.customerNumber = message.customerNumber);
+    return obj;
   },
 };
 
@@ -508,6 +884,128 @@ export const BillingAddress = {
     }
     return message;
   },
+  fromJSON(object: any): BillingAddress {
+    const message = { ...baseBillingAddress } as BillingAddress;
+    if (object.email !== undefined && object.email !== null) {
+      message.email = String(object.email);
+    } else {
+      message.email = "";
+    }
+    if (object.website !== undefined && object.website !== null) {
+      message.website = String(object.website);
+    } else {
+      message.website = "";
+    }
+    if (object.street !== undefined && object.street !== null) {
+      message.street = String(object.street);
+    } else {
+      message.street = "";
+    }
+    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
+      message.buildingNumber = String(object.buildingNumber);
+    } else {
+      message.buildingNumber = "";
+    }
+    if (object.postcode !== undefined && object.postcode !== null) {
+      message.postcode = String(object.postcode);
+    } else {
+      message.postcode = "";
+    }
+    if (object.region !== undefined && object.region !== null) {
+      message.region = String(object.region);
+    } else {
+      message.region = "";
+    }
+    if (object.countryName !== undefined && object.countryName !== null) {
+      message.countryName = String(object.countryName);
+    } else {
+      message.countryName = "";
+    }
+    if (object.telephone !== undefined && object.telephone !== null) {
+      message.telephone = String(object.telephone);
+    } else {
+      message.telephone = "";
+    }
+    if (object.timezone !== undefined && object.timezone !== null) {
+      message.timezone = String(object.timezone);
+    } else {
+      message.timezone = "";
+    }
+    if (object.economicArea !== undefined && object.economicArea !== null) {
+      message.economicArea = String(object.economicArea);
+    } else {
+      message.economicArea = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<BillingAddress>): BillingAddress {
+    const message = { ...baseBillingAddress } as BillingAddress;
+    if (object.email !== undefined && object.email !== null) {
+      message.email = object.email;
+    } else {
+      message.email = "";
+    }
+    if (object.website !== undefined && object.website !== null) {
+      message.website = object.website;
+    } else {
+      message.website = "";
+    }
+    if (object.street !== undefined && object.street !== null) {
+      message.street = object.street;
+    } else {
+      message.street = "";
+    }
+    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
+      message.buildingNumber = object.buildingNumber;
+    } else {
+      message.buildingNumber = "";
+    }
+    if (object.postcode !== undefined && object.postcode !== null) {
+      message.postcode = object.postcode;
+    } else {
+      message.postcode = "";
+    }
+    if (object.region !== undefined && object.region !== null) {
+      message.region = object.region;
+    } else {
+      message.region = "";
+    }
+    if (object.countryName !== undefined && object.countryName !== null) {
+      message.countryName = object.countryName;
+    } else {
+      message.countryName = "";
+    }
+    if (object.telephone !== undefined && object.telephone !== null) {
+      message.telephone = object.telephone;
+    } else {
+      message.telephone = "";
+    }
+    if (object.timezone !== undefined && object.timezone !== null) {
+      message.timezone = object.timezone;
+    } else {
+      message.timezone = "";
+    }
+    if (object.economicArea !== undefined && object.economicArea !== null) {
+      message.economicArea = object.economicArea;
+    } else {
+      message.economicArea = "";
+    }
+    return message;
+  },
+  toJSON(message: BillingAddress): unknown {
+    const obj: any = {};
+    message.email !== undefined && (obj.email = message.email);
+    message.website !== undefined && (obj.website = message.website);
+    message.street !== undefined && (obj.street = message.street);
+    message.buildingNumber !== undefined && (obj.buildingNumber = message.buildingNumber);
+    message.postcode !== undefined && (obj.postcode = message.postcode);
+    message.region !== undefined && (obj.region = message.region);
+    message.countryName !== undefined && (obj.countryName = message.countryName);
+    message.telephone !== undefined && (obj.telephone = message.telephone);
+    message.timezone !== undefined && (obj.timezone = message.timezone);
+    message.economicArea !== undefined && (obj.economicArea = message.economicArea);
+    return obj;
+  },
 };
 
 export const InvoicePosition = {
@@ -544,6 +1042,57 @@ export const InvoicePosition = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): InvoicePosition {
+    const message = { ...baseInvoicePosition } as InvoicePosition;
+    message.tableList = [];
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = String(object.currency);
+    } else {
+      message.currency = "";
+    }
+    if (object.tableList !== undefined && object.tableList !== null) {
+      for (const e of object.tableList) {
+        message.tableList.push(InvoiceRow.fromJSON(e));
+      }
+    }
+    if (object.totalPrice !== undefined && object.totalPrice !== null) {
+      message.totalPrice = InvoicePrice.fromJSON(object.totalPrice);
+    } else {
+      message.totalPrice = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
+    const message = { ...baseInvoicePosition } as InvoicePosition;
+    message.tableList = [];
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = object.currency;
+    } else {
+      message.currency = "";
+    }
+    if (object.tableList !== undefined && object.tableList !== null) {
+      for (const e of object.tableList) {
+        message.tableList.push(InvoiceRow.fromPartial(e));
+      }
+    }
+    if (object.totalPrice !== undefined && object.totalPrice !== null) {
+      message.totalPrice = InvoicePrice.fromPartial(object.totalPrice);
+    } else {
+      message.totalPrice = undefined;
+    }
+    return message;
+  },
+  toJSON(message: InvoicePosition): unknown {
+    const obj: any = {};
+    message.currency !== undefined && (obj.currency = message.currency);
+    if (message.tableList) {
+      obj.tableList = message.tableList.map(e => e ? InvoiceRow.toJSON(e) : undefined);
+    } else {
+      obj.tableList = [];
+    }
+    message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice ? InvoicePrice.toJSON(message.totalPrice) : undefined);
+    return obj;
   },
 };
 
@@ -585,6 +1134,73 @@ export const InvoiceRow = {
     }
     return message;
   },
+  fromJSON(object: any): InvoiceRow {
+    const message = { ...baseInvoiceRow } as InvoiceRow;
+    if (object.product !== undefined && object.product !== null) {
+      message.product = String(object.product);
+    } else {
+      message.product = "";
+    }
+    if (object.pricePerUnit !== undefined && object.pricePerUnit !== null) {
+      message.pricePerUnit = Number(object.pricePerUnit);
+    } else {
+      message.pricePerUnit = 0;
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = Number(object.quantity);
+    } else {
+      message.quantity = 0;
+    }
+    if (object.vat !== undefined && object.vat !== null) {
+      message.vat = String(object.vat);
+    } else {
+      message.vat = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoiceRow>): InvoiceRow {
+    const message = { ...baseInvoiceRow } as InvoiceRow;
+    if (object.product !== undefined && object.product !== null) {
+      message.product = object.product;
+    } else {
+      message.product = "";
+    }
+    if (object.pricePerUnit !== undefined && object.pricePerUnit !== null) {
+      message.pricePerUnit = object.pricePerUnit;
+    } else {
+      message.pricePerUnit = 0;
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = object.quantity;
+    } else {
+      message.quantity = 0;
+    }
+    if (object.vat !== undefined && object.vat !== null) {
+      message.vat = object.vat;
+    } else {
+      message.vat = "";
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
+    return message;
+  },
+  toJSON(message: InvoiceRow): unknown {
+    const obj: any = {};
+    message.product !== undefined && (obj.product = message.product);
+    message.pricePerUnit !== undefined && (obj.pricePerUnit = message.pricePerUnit);
+    message.quantity !== undefined && (obj.quantity = message.quantity);
+    message.vat !== undefined && (obj.vat = message.vat);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
+  },
 };
 
 export const InvoicePrice = {
@@ -613,6 +1229,40 @@ export const InvoicePrice = {
     }
     return message;
   },
+  fromJSON(object: any): InvoicePrice {
+    const message = { ...baseInvoicePrice } as InvoicePrice;
+    if (object.gross !== undefined && object.gross !== null) {
+      message.gross = Number(object.gross);
+    } else {
+      message.gross = 0;
+    }
+    if (object.net !== undefined && object.net !== null) {
+      message.net = Number(object.net);
+    } else {
+      message.net = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<InvoicePrice>): InvoicePrice {
+    const message = { ...baseInvoicePrice } as InvoicePrice;
+    if (object.gross !== undefined && object.gross !== null) {
+      message.gross = object.gross;
+    } else {
+      message.gross = 0;
+    }
+    if (object.net !== undefined && object.net !== null) {
+      message.net = object.net;
+    } else {
+      message.net = 0;
+    }
+    return message;
+  },
+  toJSON(message: InvoicePrice): unknown {
+    const obj: any = {};
+    message.gross !== undefined && (obj.gross = message.gross);
+    message.net !== undefined && (obj.net = message.net);
+    return obj;
+  },
 };
 
 export const TriggerInvoices = {
@@ -640,4 +1290,44 @@ export const TriggerInvoices = {
     }
     return message;
   },
+  fromJSON(object: any): TriggerInvoices {
+    const message = { ...baseTriggerInvoices } as TriggerInvoices;
+    message.ids = [];
+    if (object.ids !== undefined && object.ids !== null) {
+      for (const e of object.ids) {
+        message.ids.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TriggerInvoices>): TriggerInvoices {
+    const message = { ...baseTriggerInvoices } as TriggerInvoices;
+    message.ids = [];
+    if (object.ids !== undefined && object.ids !== null) {
+      for (const e of object.ids) {
+        message.ids.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: TriggerInvoices): unknown {
+    const obj: any = {};
+    if (message.ids) {
+      obj.ids = message.ids.map(e => e);
+    } else {
+      obj.ids = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

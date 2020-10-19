@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Meta } from '../../io/restorecommerce/meta';
-import { Target, Effect } from '../../io/restorecommerce/rule';
+import { Target, Effect, effectFromJSON, effectToJSON } from '../../io/restorecommerce/rule';
 import { Subject, ApiKey } from '../../io/restorecommerce/auth';
 import { PolicyRQ } from '../../io/restorecommerce/policy';
 import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
@@ -123,6 +123,101 @@ export const PolicySet = {
     }
     return message;
   },
+  fromJSON(object: any): PolicySet {
+    const message = { ...basePolicySet } as PolicySet;
+    message.policies = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromJSON(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
+    } else {
+      message.combiningAlgorithm = "";
+    }
+    if (object.policies !== undefined && object.policies !== null) {
+      for (const e of object.policies) {
+        message.policies.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PolicySet>): PolicySet {
+    const message = { ...basePolicySet } as PolicySet;
+    message.policies = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromPartial(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+      message.combiningAlgorithm = object.combiningAlgorithm;
+    } else {
+      message.combiningAlgorithm = "";
+    }
+    if (object.policies !== undefined && object.policies !== null) {
+      for (const e of object.policies) {
+        message.policies.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: PolicySet): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
+    if (message.policies) {
+      obj.policies = message.policies.map(e => e);
+    } else {
+      obj.policies = [];
+    }
+    return obj;
+  },
 };
 
 export const PolicySetList = {
@@ -165,6 +260,68 @@ export const PolicySetList = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): PolicySetList {
+    const message = { ...basePolicySetList } as PolicySetList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(PolicySet.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PolicySetList>): PolicySetList {
+    const message = { ...basePolicySetList } as PolicySetList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(PolicySet.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: PolicySetList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? PolicySet.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
   },
 };
 
@@ -211,4 +368,88 @@ export const PolicySetRQ = {
     }
     return message;
   },
+  fromJSON(object: any): PolicySetRQ {
+    const message = { ...basePolicySetRQ } as PolicySetRQ;
+    message.policies = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromJSON(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
+    } else {
+      message.combiningAlgorithm = "";
+    }
+    if (object.policies !== undefined && object.policies !== null) {
+      for (const e of object.policies) {
+        message.policies.push(PolicyRQ.fromJSON(e));
+      }
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = effectFromJSON(object.effect);
+    } else {
+      message.effect = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PolicySetRQ>): PolicySetRQ {
+    const message = { ...basePolicySetRQ } as PolicySetRQ;
+    message.policies = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.target !== undefined && object.target !== null) {
+      message.target = Target.fromPartial(object.target);
+    } else {
+      message.target = undefined;
+    }
+    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+      message.combiningAlgorithm = object.combiningAlgorithm;
+    } else {
+      message.combiningAlgorithm = "";
+    }
+    if (object.policies !== undefined && object.policies !== null) {
+      for (const e of object.policies) {
+        message.policies.push(PolicyRQ.fromPartial(e));
+      }
+    }
+    if (object.effect !== undefined && object.effect !== null) {
+      message.effect = object.effect;
+    } else {
+      message.effect = 0;
+    }
+    return message;
+  },
+  toJSON(message: PolicySetRQ): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
+    if (message.policies) {
+      obj.policies = message.policies.map(e => e ? PolicyRQ.toJSON(e) : undefined);
+    } else {
+      obj.policies = [];
+    }
+    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

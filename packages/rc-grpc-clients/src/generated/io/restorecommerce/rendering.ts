@@ -74,6 +74,32 @@ export enum Payload_Strategy {
   UNRECOGNIZED = -1,
 }
 
+export function payload_StrategyFromJSON(object: any): Payload_Strategy {
+  switch (object) {
+    case 0:
+    case "INLINE":
+      return Payload_Strategy.INLINE;
+    case 1:
+    case "COPY":
+      return Payload_Strategy.COPY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Payload_Strategy.UNRECOGNIZED;
+  }
+}
+
+export function payload_StrategyToJSON(object: Payload_Strategy): string {
+  switch (object) {
+    case Payload_Strategy.INLINE:
+      return "INLINE";
+    case Payload_Strategy.COPY:
+      return "COPY";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export const Payload = {
   encode(message: Payload, writer: Writer = Writer.create()): Writer {
     if (message.templates !== undefined && message.templates !== undefined) {
@@ -122,6 +148,84 @@ export const Payload = {
     }
     return message;
   },
+  fromJSON(object: any): Payload {
+    const message = { ...basePayload } as Payload;
+    if (object.templates !== undefined && object.templates !== null) {
+      message.templates = Any.fromJSON(object.templates);
+    } else {
+      message.templates = undefined;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.styleUrl !== undefined && object.styleUrl !== null) {
+      message.styleUrl = String(object.styleUrl);
+    } else {
+      message.styleUrl = "";
+    }
+    if (object.strategy !== undefined && object.strategy !== null) {
+      message.strategy = payload_StrategyFromJSON(object.strategy);
+    } else {
+      message.strategy = 0;
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = Any.fromJSON(object.options);
+    } else {
+      message.options = undefined;
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = String(object.contentType);
+    } else {
+      message.contentType = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Payload>): Payload {
+    const message = { ...basePayload } as Payload;
+    if (object.templates !== undefined && object.templates !== null) {
+      message.templates = Any.fromPartial(object.templates);
+    } else {
+      message.templates = undefined;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.styleUrl !== undefined && object.styleUrl !== null) {
+      message.styleUrl = object.styleUrl;
+    } else {
+      message.styleUrl = "";
+    }
+    if (object.strategy !== undefined && object.strategy !== null) {
+      message.strategy = object.strategy;
+    } else {
+      message.strategy = 0;
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = Any.fromPartial(object.options);
+    } else {
+      message.options = undefined;
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = object.contentType;
+    } else {
+      message.contentType = "";
+    }
+    return message;
+  },
+  toJSON(message: Payload): unknown {
+    const obj: any = {};
+    message.templates !== undefined && (obj.templates = message.templates ? Any.toJSON(message.templates) : undefined);
+    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.styleUrl !== undefined && (obj.styleUrl = message.styleUrl);
+    message.strategy !== undefined && (obj.strategy = payload_StrategyToJSON(message.strategy));
+    message.options !== undefined && (obj.options = message.options ? Any.toJSON(message.options) : undefined);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
+    return obj;
+  },
 };
 
 export const RenderRequest = {
@@ -152,6 +256,46 @@ export const RenderRequest = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): RenderRequest {
+    const message = { ...baseRenderRequest } as RenderRequest;
+    message.payload = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      for (const e of object.payload) {
+        message.payload.push(Payload.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
+    const message = { ...baseRenderRequest } as RenderRequest;
+    message.payload = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      for (const e of object.payload) {
+        message.payload.push(Payload.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: RenderRequest): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.payload) {
+      obj.payload = message.payload.map(e => e ? Payload.toJSON(e) : undefined);
+    } else {
+      obj.payload = [];
+    }
+    return obj;
   },
 };
 
@@ -184,4 +328,55 @@ export const RenderResponse = {
     }
     return message;
   },
+  fromJSON(object: any): RenderResponse {
+    const message = { ...baseRenderResponse } as RenderResponse;
+    message.response = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.response !== undefined && object.response !== null) {
+      for (const e of object.response) {
+        message.response.push(Any.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {
+    const message = { ...baseRenderResponse } as RenderResponse;
+    message.response = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.response !== undefined && object.response !== null) {
+      for (const e of object.response) {
+        message.response.push(Any.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: RenderResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.response) {
+      obj.response = message.response.map(e => e ? Any.toJSON(e) : undefined);
+    } else {
+      obj.response = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

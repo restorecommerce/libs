@@ -32,7 +32,7 @@ export interface TraversalResponse {
 }
 
 export interface VertexFields {
-  Xid: string;
+  aid: string;
   Key: string;
   Rev: string;
   id: string;
@@ -148,7 +148,7 @@ const baseTraversalResponse: object = {
 };
 
 const baseVertexFields: object = {
-  Xid: "",
+  aid: "",
   Key: "",
   Rev: "",
   id: "",
@@ -264,6 +264,128 @@ export const TraversalRequest = {
     }
     return message;
   },
+  fromJSON(object: any): TraversalRequest {
+    const message = { ...baseTraversalRequest } as TraversalRequest;
+    if (object.startVertex !== undefined && object.startVertex !== null) {
+      message.startVertex = String(object.startVertex);
+    } else {
+      message.startVertex = undefined;
+    }
+    if (object.startVertices !== undefined && object.startVertices !== null) {
+      message.startVertices = TraversalRequest_StartVertices.fromJSON(object.startVertices);
+    } else {
+      message.startVertices = undefined;
+    }
+    if (object.opts !== undefined && object.opts !== null) {
+      message.opts = Options.fromJSON(object.opts);
+    } else {
+      message.opts = undefined;
+    }
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = String(object.collectionName);
+    } else {
+      message.collectionName = "";
+    }
+    if (object.edgeName !== undefined && object.edgeName !== null) {
+      message.edgeName = String(object.edgeName);
+    } else {
+      message.edgeName = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Boolean(object.data);
+    } else {
+      message.data = false;
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = Boolean(object.path);
+    } else {
+      message.path = false;
+    }
+    if (object.aql !== undefined && object.aql !== null) {
+      message.aql = Boolean(object.aql);
+    } else {
+      message.aql = false;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
+    const message = { ...baseTraversalRequest } as TraversalRequest;
+    if (object.startVertex !== undefined && object.startVertex !== null) {
+      message.startVertex = object.startVertex;
+    } else {
+      message.startVertex = undefined;
+    }
+    if (object.startVertices !== undefined && object.startVertices !== null) {
+      message.startVertices = TraversalRequest_StartVertices.fromPartial(object.startVertices);
+    } else {
+      message.startVertices = undefined;
+    }
+    if (object.opts !== undefined && object.opts !== null) {
+      message.opts = Options.fromPartial(object.opts);
+    } else {
+      message.opts = undefined;
+    }
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = object.collectionName;
+    } else {
+      message.collectionName = "";
+    }
+    if (object.edgeName !== undefined && object.edgeName !== null) {
+      message.edgeName = object.edgeName;
+    } else {
+      message.edgeName = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = object.data;
+    } else {
+      message.data = false;
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    } else {
+      message.path = false;
+    }
+    if (object.aql !== undefined && object.aql !== null) {
+      message.aql = object.aql;
+    } else {
+      message.aql = false;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: TraversalRequest): unknown {
+    const obj: any = {};
+    message.startVertex !== undefined && (obj.startVertex = message.startVertex);
+    message.startVertices !== undefined && (obj.startVertices = message.startVertices ? TraversalRequest_StartVertices.toJSON(message.startVertices) : undefined);
+    message.opts !== undefined && (obj.opts = message.opts ? Options.toJSON(message.opts) : undefined);
+    message.collectionName !== undefined && (obj.collectionName = message.collectionName);
+    message.edgeName !== undefined && (obj.edgeName = message.edgeName);
+    message.data !== undefined && (obj.data = message.data);
+    message.path !== undefined && (obj.path = message.path);
+    message.aql !== undefined && (obj.aql = message.aql);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const TraversalRequest_StartVertices = {
@@ -290,6 +412,35 @@ export const TraversalRequest_StartVertices = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): TraversalRequest_StartVertices {
+    const message = { ...baseTraversalRequest_StartVertices } as TraversalRequest_StartVertices;
+    message.vertices = [];
+    if (object.vertices !== undefined && object.vertices !== null) {
+      for (const e of object.vertices) {
+        message.vertices.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TraversalRequest_StartVertices>): TraversalRequest_StartVertices {
+    const message = { ...baseTraversalRequest_StartVertices } as TraversalRequest_StartVertices;
+    message.vertices = [];
+    if (object.vertices !== undefined && object.vertices !== null) {
+      for (const e of object.vertices) {
+        message.vertices.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: TraversalRequest_StartVertices): unknown {
+    const obj: any = {};
+    if (message.vertices) {
+      obj.vertices = message.vertices.map(e => e);
+    } else {
+      obj.vertices = [];
+    }
+    return obj;
   },
 };
 
@@ -330,11 +481,62 @@ export const TraversalResponse = {
     }
     return message;
   },
+  fromJSON(object: any): TraversalResponse {
+    const message = { ...baseTraversalResponse } as TraversalResponse;
+    message.vertexFields = [];
+    if (object.vertexFields !== undefined && object.vertexFields !== null) {
+      for (const e of object.vertexFields) {
+        message.vertexFields.push(VertexFields.fromJSON(e));
+      }
+    }
+    if (object.paths !== undefined && object.paths !== null) {
+      message.paths = Any.fromJSON(object.paths);
+    } else {
+      message.paths = undefined;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
+    const message = { ...baseTraversalResponse } as TraversalResponse;
+    message.vertexFields = [];
+    if (object.vertexFields !== undefined && object.vertexFields !== null) {
+      for (const e of object.vertexFields) {
+        message.vertexFields.push(VertexFields.fromPartial(e));
+      }
+    }
+    if (object.paths !== undefined && object.paths !== null) {
+      message.paths = Any.fromPartial(object.paths);
+    } else {
+      message.paths = undefined;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
+    return message;
+  },
+  toJSON(message: TraversalResponse): unknown {
+    const obj: any = {};
+    if (message.vertexFields) {
+      obj.vertexFields = message.vertexFields.map(e => e ? VertexFields.toJSON(e) : undefined);
+    } else {
+      obj.vertexFields = [];
+    }
+    message.paths !== undefined && (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
+    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    return obj;
+  },
 };
 
 export const VertexFields = {
   encode(message: VertexFields, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.Xid);
+    writer.uint32(10).string(message.aid);
     writer.uint32(18).string(message.Key);
     writer.uint32(26).string(message.Rev);
     writer.uint32(34).string(message.id);
@@ -348,7 +550,7 @@ export const VertexFields = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.Xid = reader.string();
+          message.aid = reader.string();
           break;
         case 2:
           message.Key = reader.string();
@@ -365,6 +567,62 @@ export const VertexFields = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): VertexFields {
+    const message = { ...baseVertexFields } as VertexFields;
+    if (object.aid !== undefined && object.aid !== null) {
+      message.aid = String(object.aid);
+    } else {
+      message.aid = "";
+    }
+    if (object.Key !== undefined && object.Key !== null) {
+      message.Key = String(object.Key);
+    } else {
+      message.Key = "";
+    }
+    if (object.Rev !== undefined && object.Rev !== null) {
+      message.Rev = String(object.Rev);
+    } else {
+      message.Rev = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<VertexFields>): VertexFields {
+    const message = { ...baseVertexFields } as VertexFields;
+    if (object.aid !== undefined && object.aid !== null) {
+      message.aid = object.aid;
+    } else {
+      message.aid = "";
+    }
+    if (object.Key !== undefined && object.Key !== null) {
+      message.Key = object.Key;
+    } else {
+      message.Key = "";
+    }
+    if (object.Rev !== undefined && object.Rev !== null) {
+      message.Rev = object.Rev;
+    } else {
+      message.Rev = "";
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: VertexFields): unknown {
+    const obj: any = {};
+    message.aid !== undefined && (obj.aid = message.aid);
+    message.Key !== undefined && (obj.Key = message.Key);
+    message.Rev !== undefined && (obj.Rev = message.Rev);
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
   },
 };
 
@@ -462,6 +720,217 @@ export const Options = {
     }
     return message;
   },
+  fromJSON(object: any): Options {
+    const message = { ...baseOptions } as Options;
+    message.filter = [];
+    message.expander = [];
+    if (object.sort !== undefined && object.sort !== null) {
+      message.sort = String(object.sort);
+    } else {
+      message.sort = "";
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = String(object.direction);
+    } else {
+      message.direction = "";
+    }
+    if (object.minDepth !== undefined && object.minDepth !== null) {
+      message.minDepth = Number(object.minDepth);
+    } else {
+      message.minDepth = 0;
+    }
+    if (object.startVertex !== undefined && object.startVertex !== null) {
+      message.startVertex = String(object.startVertex);
+    } else {
+      message.startVertex = "";
+    }
+    if (object.visitor !== undefined && object.visitor !== null) {
+      message.visitor = String(object.visitor);
+    } else {
+      message.visitor = "";
+    }
+    if (object.itemOrder !== undefined && object.itemOrder !== null) {
+      message.itemOrder = String(object.itemOrder);
+    } else {
+      message.itemOrder = "";
+    }
+    if (object.strategy !== undefined && object.strategy !== null) {
+      message.strategy = String(object.strategy);
+    } else {
+      message.strategy = "";
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromJSON(e));
+      }
+    }
+    if (object.init !== undefined && object.init !== null) {
+      message.init = String(object.init);
+    } else {
+      message.init = "";
+    }
+    if (object.maxIterations !== undefined && object.maxIterations !== null) {
+      message.maxIterations = Number(object.maxIterations);
+    } else {
+      message.maxIterations = 0;
+    }
+    if (object.maxDepth !== undefined && object.maxDepth !== null) {
+      message.maxDepth = Number(object.maxDepth);
+    } else {
+      message.maxDepth = 0;
+    }
+    if (object.uniqueness !== undefined && object.uniqueness !== null) {
+      message.uniqueness = Uniqueness.fromJSON(object.uniqueness);
+    } else {
+      message.uniqueness = undefined;
+    }
+    if (object.order !== undefined && object.order !== null) {
+      message.order = String(object.order);
+    } else {
+      message.order = "";
+    }
+    if (object.graphName !== undefined && object.graphName !== null) {
+      message.graphName = String(object.graphName);
+    } else {
+      message.graphName = "";
+    }
+    if (object.expander !== undefined && object.expander !== null) {
+      for (const e of object.expander) {
+        message.expander.push(Expander.fromJSON(e));
+      }
+    }
+    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
+      message.edgeCollection = String(object.edgeCollection);
+    } else {
+      message.edgeCollection = "";
+    }
+    if (object.lowestCommonAncestor !== undefined && object.lowestCommonAncestor !== null) {
+      message.lowestCommonAncestor = Boolean(object.lowestCommonAncestor);
+    } else {
+      message.lowestCommonAncestor = false;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Options>): Options {
+    const message = { ...baseOptions } as Options;
+    message.filter = [];
+    message.expander = [];
+    if (object.sort !== undefined && object.sort !== null) {
+      message.sort = object.sort;
+    } else {
+      message.sort = "";
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = object.direction;
+    } else {
+      message.direction = "";
+    }
+    if (object.minDepth !== undefined && object.minDepth !== null) {
+      message.minDepth = object.minDepth;
+    } else {
+      message.minDepth = 0;
+    }
+    if (object.startVertex !== undefined && object.startVertex !== null) {
+      message.startVertex = object.startVertex;
+    } else {
+      message.startVertex = "";
+    }
+    if (object.visitor !== undefined && object.visitor !== null) {
+      message.visitor = object.visitor;
+    } else {
+      message.visitor = "";
+    }
+    if (object.itemOrder !== undefined && object.itemOrder !== null) {
+      message.itemOrder = object.itemOrder;
+    } else {
+      message.itemOrder = "";
+    }
+    if (object.strategy !== undefined && object.strategy !== null) {
+      message.strategy = object.strategy;
+    } else {
+      message.strategy = "";
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromPartial(e));
+      }
+    }
+    if (object.init !== undefined && object.init !== null) {
+      message.init = object.init;
+    } else {
+      message.init = "";
+    }
+    if (object.maxIterations !== undefined && object.maxIterations !== null) {
+      message.maxIterations = object.maxIterations;
+    } else {
+      message.maxIterations = 0;
+    }
+    if (object.maxDepth !== undefined && object.maxDepth !== null) {
+      message.maxDepth = object.maxDepth;
+    } else {
+      message.maxDepth = 0;
+    }
+    if (object.uniqueness !== undefined && object.uniqueness !== null) {
+      message.uniqueness = Uniqueness.fromPartial(object.uniqueness);
+    } else {
+      message.uniqueness = undefined;
+    }
+    if (object.order !== undefined && object.order !== null) {
+      message.order = object.order;
+    } else {
+      message.order = "";
+    }
+    if (object.graphName !== undefined && object.graphName !== null) {
+      message.graphName = object.graphName;
+    } else {
+      message.graphName = "";
+    }
+    if (object.expander !== undefined && object.expander !== null) {
+      for (const e of object.expander) {
+        message.expander.push(Expander.fromPartial(e));
+      }
+    }
+    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
+      message.edgeCollection = object.edgeCollection;
+    } else {
+      message.edgeCollection = "";
+    }
+    if (object.lowestCommonAncestor !== undefined && object.lowestCommonAncestor !== null) {
+      message.lowestCommonAncestor = object.lowestCommonAncestor;
+    } else {
+      message.lowestCommonAncestor = false;
+    }
+    return message;
+  },
+  toJSON(message: Options): unknown {
+    const obj: any = {};
+    message.sort !== undefined && (obj.sort = message.sort);
+    message.direction !== undefined && (obj.direction = message.direction);
+    message.minDepth !== undefined && (obj.minDepth = message.minDepth);
+    message.startVertex !== undefined && (obj.startVertex = message.startVertex);
+    message.visitor !== undefined && (obj.visitor = message.visitor);
+    message.itemOrder !== undefined && (obj.itemOrder = message.itemOrder);
+    message.strategy !== undefined && (obj.strategy = message.strategy);
+    if (message.filter) {
+      obj.filter = message.filter.map(e => e ? Filter.toJSON(e) : undefined);
+    } else {
+      obj.filter = [];
+    }
+    message.init !== undefined && (obj.init = message.init);
+    message.maxIterations !== undefined && (obj.maxIterations = message.maxIterations);
+    message.maxDepth !== undefined && (obj.maxDepth = message.maxDepth);
+    message.uniqueness !== undefined && (obj.uniqueness = message.uniqueness ? Uniqueness.toJSON(message.uniqueness) : undefined);
+    message.order !== undefined && (obj.order = message.order);
+    message.graphName !== undefined && (obj.graphName = message.graphName);
+    if (message.expander) {
+      obj.expander = message.expander.map(e => e ? Expander.toJSON(e) : undefined);
+    } else {
+      obj.expander = [];
+    }
+    message.edgeCollection !== undefined && (obj.edgeCollection = message.edgeCollection);
+    message.lowestCommonAncestor !== undefined && (obj.lowestCommonAncestor = message.lowestCommonAncestor);
+    return obj;
+  },
 };
 
 export const Filter = {
@@ -485,6 +954,29 @@ export const Filter = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Filter {
+    const message = { ...baseFilter } as Filter;
+    if (object.vertex !== undefined && object.vertex !== null) {
+      message.vertex = String(object.vertex);
+    } else {
+      message.vertex = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Filter>): Filter {
+    const message = { ...baseFilter } as Filter;
+    if (object.vertex !== undefined && object.vertex !== null) {
+      message.vertex = object.vertex;
+    } else {
+      message.vertex = "";
+    }
+    return message;
+  },
+  toJSON(message: Filter): unknown {
+    const obj: any = {};
+    message.vertex !== undefined && (obj.vertex = message.vertex);
+    return obj;
   },
 };
 
@@ -514,6 +1006,40 @@ export const Expander = {
     }
     return message;
   },
+  fromJSON(object: any): Expander {
+    const message = { ...baseExpander } as Expander;
+    if (object.edge !== undefined && object.edge !== null) {
+      message.edge = String(object.edge);
+    } else {
+      message.edge = "";
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = String(object.direction);
+    } else {
+      message.direction = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Expander>): Expander {
+    const message = { ...baseExpander } as Expander;
+    if (object.edge !== undefined && object.edge !== null) {
+      message.edge = object.edge;
+    } else {
+      message.edge = "";
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = object.direction;
+    } else {
+      message.direction = "";
+    }
+    return message;
+  },
+  toJSON(message: Expander): unknown {
+    const obj: any = {};
+    message.edge !== undefined && (obj.edge = message.edge);
+    message.direction !== undefined && (obj.direction = message.direction);
+    return obj;
+  },
 };
 
 export const Uniqueness = {
@@ -542,4 +1068,49 @@ export const Uniqueness = {
     }
     return message;
   },
+  fromJSON(object: any): Uniqueness {
+    const message = { ...baseUniqueness } as Uniqueness;
+    if (object.vertices !== undefined && object.vertices !== null) {
+      message.vertices = String(object.vertices);
+    } else {
+      message.vertices = "";
+    }
+    if (object.edges !== undefined && object.edges !== null) {
+      message.edges = String(object.edges);
+    } else {
+      message.edges = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Uniqueness>): Uniqueness {
+    const message = { ...baseUniqueness } as Uniqueness;
+    if (object.vertices !== undefined && object.vertices !== null) {
+      message.vertices = object.vertices;
+    } else {
+      message.vertices = "";
+    }
+    if (object.edges !== undefined && object.edges !== null) {
+      message.edges = object.edges;
+    } else {
+      message.edges = "";
+    }
+    return message;
+  },
+  toJSON(message: Uniqueness): unknown {
+    const obj: any = {};
+    message.vertices !== undefined && (obj.vertices = message.vertices);
+    message.edges !== undefined && (obj.edges = message.edges);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -86,6 +86,29 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
 
 export const ContactPointList = {
@@ -128,6 +151,68 @@ export const ContactPointList = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ContactPointList {
+    const message = { ...baseContactPointList } as ContactPointList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ContactPoint.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
+    const message = { ...baseContactPointList } as ContactPointList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ContactPoint.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: ContactPointList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? ContactPoint.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
   },
 };
 
@@ -187,4 +272,126 @@ export const ContactPoint = {
     }
     return message;
   },
+  fromJSON(object: any): ContactPoint {
+    const message = { ...baseContactPoint } as ContactPoint;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.physicalAddressId !== undefined && object.physicalAddressId !== null) {
+      message.physicalAddressId = String(object.physicalAddressId);
+    } else {
+      message.physicalAddressId = "";
+    }
+    if (object.website !== undefined && object.website !== null) {
+      message.website = String(object.website);
+    } else {
+      message.website = "";
+    }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = String(object.email);
+    } else {
+      message.email = "";
+    }
+    if (object.contactPointTypeId !== undefined && object.contactPointTypeId !== null) {
+      message.contactPointTypeId = String(object.contactPointTypeId);
+    } else {
+      message.contactPointTypeId = "";
+    }
+    if (object.telephone !== undefined && object.telephone !== null) {
+      message.telephone = String(object.telephone);
+    } else {
+      message.telephone = "";
+    }
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = String(object.timezoneId);
+    } else {
+      message.timezoneId = "";
+    }
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = String(object.localeId);
+    } else {
+      message.localeId = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
+    const message = { ...baseContactPoint } as ContactPoint;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.physicalAddressId !== undefined && object.physicalAddressId !== null) {
+      message.physicalAddressId = object.physicalAddressId;
+    } else {
+      message.physicalAddressId = "";
+    }
+    if (object.website !== undefined && object.website !== null) {
+      message.website = object.website;
+    } else {
+      message.website = "";
+    }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = object.email;
+    } else {
+      message.email = "";
+    }
+    if (object.contactPointTypeId !== undefined && object.contactPointTypeId !== null) {
+      message.contactPointTypeId = object.contactPointTypeId;
+    } else {
+      message.contactPointTypeId = "";
+    }
+    if (object.telephone !== undefined && object.telephone !== null) {
+      message.telephone = object.telephone;
+    } else {
+      message.telephone = "";
+    }
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = object.timezoneId;
+    } else {
+      message.timezoneId = "";
+    }
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = object.localeId;
+    } else {
+      message.localeId = "";
+    }
+    return message;
+  },
+  toJSON(message: ContactPoint): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.physicalAddressId !== undefined && (obj.physicalAddressId = message.physicalAddressId);
+    message.website !== undefined && (obj.website = message.website);
+    message.email !== undefined && (obj.email = message.email);
+    message.contactPointTypeId !== undefined && (obj.contactPointTypeId = message.contactPointTypeId);
+    message.telephone !== undefined && (obj.telephone = message.telephone);
+    message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
+    message.localeId !== undefined && (obj.localeId = message.localeId);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -314,6 +314,47 @@ export enum JobOptions_Priority {
   UNRECOGNIZED = -1,
 }
 
+export function jobOptions_PriorityFromJSON(object: any): JobOptions_Priority {
+  switch (object) {
+    case 0:
+    case "NORMAL":
+      return JobOptions_Priority.NORMAL;
+    case 10:
+    case "LOW":
+      return JobOptions_Priority.LOW;
+    case -5:
+    case "MEDIUM":
+      return JobOptions_Priority.MEDIUM;
+    case -10:
+    case "HIGH":
+      return JobOptions_Priority.HIGH;
+    case -15:
+    case "CRITICAL":
+      return JobOptions_Priority.CRITICAL;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return JobOptions_Priority.UNRECOGNIZED;
+  }
+}
+
+export function jobOptions_PriorityToJSON(object: JobOptions_Priority): string {
+  switch (object) {
+    case JobOptions_Priority.NORMAL:
+      return "NORMAL";
+    case JobOptions_Priority.LOW:
+      return "LOW";
+    case JobOptions_Priority.MEDIUM:
+      return "MEDIUM";
+    case JobOptions_Priority.HIGH:
+      return "HIGH";
+    case JobOptions_Priority.CRITICAL:
+      return "CRITICAL";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export enum Backoff_Type {
   /** FIXED -  Retry with the same delay
    */
@@ -324,6 +365,32 @@ export enum Backoff_Type {
   UNRECOGNIZED = -1,
 }
 
+export function backoff_TypeFromJSON(object: any): Backoff_Type {
+  switch (object) {
+    case 0:
+    case "FIXED":
+      return Backoff_Type.FIXED;
+    case 1:
+    case "EXPONENTIAL":
+      return Backoff_Type.EXPONENTIAL;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Backoff_Type.UNRECOGNIZED;
+  }
+}
+
+export function backoff_TypeToJSON(object: Backoff_Type): string {
+  switch (object) {
+    case Backoff_Type.FIXED:
+      return "FIXED";
+    case Backoff_Type.EXPONENTIAL:
+      return "EXPONENTIAL";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 /**  only possible to sort jobs by creation date
  */
 export enum JobReadRequest_SortOrder {
@@ -331,6 +398,37 @@ export enum JobReadRequest_SortOrder {
   ASCENDING = 1,
   DESCENDING = 2,
   UNRECOGNIZED = -1,
+}
+
+export function jobReadRequest_SortOrderFromJSON(object: any): JobReadRequest_SortOrder {
+  switch (object) {
+    case 0:
+    case "UNSORTED":
+      return JobReadRequest_SortOrder.UNSORTED;
+    case 1:
+    case "ASCENDING":
+      return JobReadRequest_SortOrder.ASCENDING;
+    case 2:
+    case "DESCENDING":
+      return JobReadRequest_SortOrder.DESCENDING;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return JobReadRequest_SortOrder.UNRECOGNIZED;
+  }
+}
+
+export function jobReadRequest_SortOrderToJSON(object: JobReadRequest_SortOrder): string {
+  switch (object) {
+    case JobReadRequest_SortOrder.UNSORTED:
+      return "UNSORTED";
+    case JobReadRequest_SortOrder.ASCENDING:
+      return "ASCENDING";
+    case JobReadRequest_SortOrder.DESCENDING:
+      return "DESCENDING";
+    default:
+      return "UNKNOWN";
+  }
 }
 
 export const Deleted = {
@@ -354,6 +452,29 @@ export const Deleted = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
   },
 };
 
@@ -397,6 +518,68 @@ export const JobList = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): JobList {
+    const message = { ...baseJobList } as JobList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Job.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobList>): JobList {
+    const message = { ...baseJobList } as JobList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Job.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: JobList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Job.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
   },
 };
 
@@ -442,6 +625,73 @@ export const Job = {
     }
     return message;
   },
+  fromJSON(object: any): Job {
+    const message = { ...baseJob } as Job;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Data.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.when !== undefined && object.when !== null) {
+      message.when = String(object.when);
+    } else {
+      message.when = "";
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = JobOptions.fromJSON(object.options);
+    } else {
+      message.options = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Job>): Job {
+    const message = { ...baseJob } as Job;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Data.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.when !== undefined && object.when !== null) {
+      message.when = object.when;
+    } else {
+      message.when = "";
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = JobOptions.fromPartial(object.options);
+    } else {
+      message.options = undefined;
+    }
+    return message;
+  },
+  toJSON(message: Job): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.type !== undefined && (obj.type = message.type);
+    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.when !== undefined && (obj.when = message.when);
+    message.options !== undefined && (obj.options = message.options ? JobOptions.toJSON(message.options) : undefined);
+    return obj;
+  },
 };
 
 export const JobOptions = {
@@ -486,6 +736,73 @@ export const JobOptions = {
     }
     return message;
   },
+  fromJSON(object: any): JobOptions {
+    const message = { ...baseJobOptions } as JobOptions;
+    if (object.priority !== undefined && object.priority !== null) {
+      message.priority = jobOptions_PriorityFromJSON(object.priority);
+    } else {
+      message.priority = 0;
+    }
+    if (object.attempts !== undefined && object.attempts !== null) {
+      message.attempts = Number(object.attempts);
+    } else {
+      message.attempts = 0;
+    }
+    if (object.backoff !== undefined && object.backoff !== null) {
+      message.backoff = Backoff.fromJSON(object.backoff);
+    } else {
+      message.backoff = undefined;
+    }
+    if (object.timeout !== undefined && object.timeout !== null) {
+      message.timeout = Number(object.timeout);
+    } else {
+      message.timeout = 0;
+    }
+    if (object.repeat !== undefined && object.repeat !== null) {
+      message.repeat = Repeat.fromJSON(object.repeat);
+    } else {
+      message.repeat = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobOptions>): JobOptions {
+    const message = { ...baseJobOptions } as JobOptions;
+    if (object.priority !== undefined && object.priority !== null) {
+      message.priority = object.priority;
+    } else {
+      message.priority = 0;
+    }
+    if (object.attempts !== undefined && object.attempts !== null) {
+      message.attempts = object.attempts;
+    } else {
+      message.attempts = 0;
+    }
+    if (object.backoff !== undefined && object.backoff !== null) {
+      message.backoff = Backoff.fromPartial(object.backoff);
+    } else {
+      message.backoff = undefined;
+    }
+    if (object.timeout !== undefined && object.timeout !== null) {
+      message.timeout = object.timeout;
+    } else {
+      message.timeout = 0;
+    }
+    if (object.repeat !== undefined && object.repeat !== null) {
+      message.repeat = Repeat.fromPartial(object.repeat);
+    } else {
+      message.repeat = undefined;
+    }
+    return message;
+  },
+  toJSON(message: JobOptions): unknown {
+    const obj: any = {};
+    message.priority !== undefined && (obj.priority = jobOptions_PriorityToJSON(message.priority));
+    message.attempts !== undefined && (obj.attempts = message.attempts);
+    message.backoff !== undefined && (obj.backoff = message.backoff ? Backoff.toJSON(message.backoff) : undefined);
+    message.timeout !== undefined && (obj.timeout = message.timeout);
+    message.repeat !== undefined && (obj.repeat = message.repeat ? Repeat.toJSON(message.repeat) : undefined);
+    return obj;
+  },
 };
 
 export const Repeat = {
@@ -525,6 +842,73 @@ export const Repeat = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Repeat {
+    const message = { ...baseRepeat } as Repeat;
+    if (object.every !== undefined && object.every !== null) {
+      message.every = Number(object.every);
+    } else {
+      message.every = 0;
+    }
+    if (object.cron !== undefined && object.cron !== null) {
+      message.cron = String(object.cron);
+    } else {
+      message.cron = "";
+    }
+    if (object.startDate !== undefined && object.startDate !== null) {
+      message.startDate = String(object.startDate);
+    } else {
+      message.startDate = "";
+    }
+    if (object.endDate !== undefined && object.endDate !== null) {
+      message.endDate = String(object.endDate);
+    } else {
+      message.endDate = "";
+    }
+    if (object.count !== undefined && object.count !== null) {
+      message.count = Number(object.count);
+    } else {
+      message.count = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Repeat>): Repeat {
+    const message = { ...baseRepeat } as Repeat;
+    if (object.every !== undefined && object.every !== null) {
+      message.every = object.every;
+    } else {
+      message.every = 0;
+    }
+    if (object.cron !== undefined && object.cron !== null) {
+      message.cron = object.cron;
+    } else {
+      message.cron = "";
+    }
+    if (object.startDate !== undefined && object.startDate !== null) {
+      message.startDate = object.startDate;
+    } else {
+      message.startDate = "";
+    }
+    if (object.endDate !== undefined && object.endDate !== null) {
+      message.endDate = object.endDate;
+    } else {
+      message.endDate = "";
+    }
+    if (object.count !== undefined && object.count !== null) {
+      message.count = object.count;
+    } else {
+      message.count = 0;
+    }
+    return message;
+  },
+  toJSON(message: Repeat): unknown {
+    const obj: any = {};
+    message.every !== undefined && (obj.every = message.every);
+    message.cron !== undefined && (obj.cron = message.cron);
+    message.startDate !== undefined && (obj.startDate = message.startDate);
+    message.endDate !== undefined && (obj.endDate = message.endDate);
+    message.count !== undefined && (obj.count = message.count);
+    return obj;
   },
 };
 
@@ -566,6 +950,62 @@ export const Data = {
     }
     return message;
   },
+  fromJSON(object: any): Data {
+    const message = { ...baseData } as Data;
+    if (object.timezone !== undefined && object.timezone !== null) {
+      message.timezone = String(object.timezone);
+    } else {
+      message.timezone = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = String(object.subjectId);
+    } else {
+      message.subjectId = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Data>): Data {
+    const message = { ...baseData } as Data;
+    if (object.timezone !== undefined && object.timezone !== null) {
+      message.timezone = object.timezone;
+    } else {
+      message.timezone = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = object.subjectId;
+    } else {
+      message.subjectId = "";
+    }
+    return message;
+  },
+  toJSON(message: Data): unknown {
+    const obj: any = {};
+    message.timezone !== undefined && (obj.timezone = message.timezone);
+    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    return obj;
+  },
 };
 
 export const ScheduledJob = {
@@ -603,6 +1043,62 @@ export const ScheduledJob = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ScheduledJob {
+    const message = { ...baseScheduledJob } as ScheduledJob;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Data.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = String(object.scheduleType);
+    } else {
+      message.scheduleType = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ScheduledJob>): ScheduledJob {
+    const message = { ...baseScheduledJob } as ScheduledJob;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Data.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = object.scheduleType;
+    } else {
+      message.scheduleType = "";
+    }
+    return message;
+  },
+  toJSON(message: ScheduledJob): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.type !== undefined && (obj.type = message.type);
+    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
+    return obj;
   },
 };
 
@@ -646,6 +1142,73 @@ export const JobDone = {
     }
     return message;
   },
+  fromJSON(object: any): JobDone {
+    const message = { ...baseJobDone } as JobDone;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = String(object.scheduleType);
+    } else {
+      message.scheduleType = "";
+    }
+    if (object.deleteScheduled !== undefined && object.deleteScheduled !== null) {
+      message.deleteScheduled = Boolean(object.deleteScheduled);
+    } else {
+      message.deleteScheduled = false;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    if (object.result !== undefined && object.result !== null) {
+      message.result = Any.fromJSON(object.result);
+    } else {
+      message.result = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobDone>): JobDone {
+    const message = { ...baseJobDone } as JobDone;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = object.scheduleType;
+    } else {
+      message.scheduleType = "";
+    }
+    if (object.deleteScheduled !== undefined && object.deleteScheduled !== null) {
+      message.deleteScheduled = object.deleteScheduled;
+    } else {
+      message.deleteScheduled = false;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    if (object.result !== undefined && object.result !== null) {
+      message.result = Any.fromPartial(object.result);
+    } else {
+      message.result = undefined;
+    }
+    return message;
+  },
+  toJSON(message: JobDone): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
+    message.deleteScheduled !== undefined && (obj.deleteScheduled = message.deleteScheduled);
+    message.type !== undefined && (obj.type = message.type);
+    message.result !== undefined && (obj.result = message.result ? Any.toJSON(message.result) : undefined);
+    return obj;
+  },
 };
 
 export const JobFailed = {
@@ -682,6 +1245,62 @@ export const JobFailed = {
     }
     return message;
   },
+  fromJSON(object: any): JobFailed {
+    const message = { ...baseJobFailed } as JobFailed;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = String(object.error);
+    } else {
+      message.error = "";
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = String(object.scheduleType);
+    } else {
+      message.scheduleType = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobFailed>): JobFailed {
+    const message = { ...baseJobFailed } as JobFailed;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = object.error;
+    } else {
+      message.error = "";
+    }
+    if (object.scheduleType !== undefined && object.scheduleType !== null) {
+      message.scheduleType = object.scheduleType;
+    } else {
+      message.scheduleType = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    return message;
+  },
+  toJSON(message: JobFailed): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.error !== undefined && (obj.error = message.error);
+    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
+    message.type !== undefined && (obj.type = message.type);
+    return obj;
+  },
 };
 
 export const Backoff = {
@@ -709,6 +1328,40 @@ export const Backoff = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Backoff {
+    const message = { ...baseBackoff } as Backoff;
+    if (object.delay !== undefined && object.delay !== null) {
+      message.delay = Number(object.delay);
+    } else {
+      message.delay = 0;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = backoff_TypeFromJSON(object.type);
+    } else {
+      message.type = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Backoff>): Backoff {
+    const message = { ...baseBackoff } as Backoff;
+    if (object.delay !== undefined && object.delay !== null) {
+      message.delay = object.delay;
+    } else {
+      message.delay = 0;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = 0;
+    }
+    return message;
+  },
+  toJSON(message: Backoff): unknown {
+    const obj: any = {};
+    message.delay !== undefined && (obj.delay = message.delay);
+    message.type !== undefined && (obj.type = backoff_TypeToJSON(message.type));
+    return obj;
   },
 };
 
@@ -763,6 +1416,90 @@ export const JobReadRequest = {
     }
     return message;
   },
+  fromJSON(object: any): JobReadRequest {
+    const message = { ...baseJobReadRequest } as JobReadRequest;
+    message.field = [];
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = Number(object.limit);
+    } else {
+      message.limit = 0;
+    }
+    if (object.sort !== undefined && object.sort !== null) {
+      message.sort = jobReadRequest_SortOrderFromJSON(object.sort);
+    } else {
+      message.sort = 0;
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      message.filter = JobFilter.fromJSON(object.filter);
+    } else {
+      message.filter = undefined;
+    }
+    if (object.field !== undefined && object.field !== null) {
+      for (const e of object.field) {
+        message.field.push(FieldFilter.fromJSON(e));
+      }
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobReadRequest>): JobReadRequest {
+    const message = { ...baseJobReadRequest } as JobReadRequest;
+    message.field = [];
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = object.limit;
+    } else {
+      message.limit = 0;
+    }
+    if (object.sort !== undefined && object.sort !== null) {
+      message.sort = object.sort;
+    } else {
+      message.sort = 0;
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      message.filter = JobFilter.fromPartial(object.filter);
+    } else {
+      message.filter = undefined;
+    }
+    if (object.field !== undefined && object.field !== null) {
+      for (const e of object.field) {
+        message.field.push(FieldFilter.fromPartial(e));
+      }
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: JobReadRequest): unknown {
+    const obj: any = {};
+    message.limit !== undefined && (obj.limit = message.limit);
+    message.sort !== undefined && (obj.sort = jobReadRequest_SortOrderToJSON(message.sort));
+    message.filter !== undefined && (obj.filter = message.filter ? JobFilter.toJSON(message.filter) : undefined);
+    if (message.field) {
+      obj.field = message.field.map(e => e ? FieldFilter.toJSON(e) : undefined);
+    } else {
+      obj.field = [];
+    }
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const JobFilter = {
@@ -794,4 +1531,55 @@ export const JobFilter = {
     }
     return message;
   },
+  fromJSON(object: any): JobFilter {
+    const message = { ...baseJobFilter } as JobFilter;
+    message.jobIds = [];
+    if (object.jobIds !== undefined && object.jobIds !== null) {
+      for (const e of object.jobIds) {
+        message.jobIds.push(String(e));
+      }
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<JobFilter>): JobFilter {
+    const message = { ...baseJobFilter } as JobFilter;
+    message.jobIds = [];
+    if (object.jobIds !== undefined && object.jobIds !== null) {
+      for (const e of object.jobIds) {
+        message.jobIds.push(e);
+      }
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    return message;
+  },
+  toJSON(message: JobFilter): unknown {
+    const obj: any = {};
+    if (message.jobIds) {
+      obj.jobIds = message.jobIds.map(e => e);
+    } else {
+      obj.jobIds = [];
+    }
+    message.type !== undefined && (obj.type = message.type);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

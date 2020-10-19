@@ -207,6 +207,37 @@ export enum Provider {
   UNRECOGNIZED = -1,
 }
 
+export function providerFromJSON(object: any): Provider {
+  switch (object) {
+    case 0:
+    case "NO_PROVIDER":
+      return Provider.NO_PROVIDER;
+    case 1:
+    case "PaypalExpressGateway":
+      return Provider.PaypalExpressGateway;
+    case 2:
+    case "AuthorizeNetGateway":
+      return Provider.AuthorizeNetGateway;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Provider.UNRECOGNIZED;
+  }
+}
+
+export function providerToJSON(object: Provider): string {
+  switch (object) {
+    case Provider.NO_PROVIDER:
+      return "NO_PROVIDER";
+    case Provider.PaypalExpressGateway:
+      return "PaypalExpressGateway";
+    case Provider.AuthorizeNetGateway:
+      return "AuthorizeNetGateway";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 /**  Possible payment identifiers.
  */
 export enum PaymentIdType {
@@ -214,6 +245,37 @@ export enum PaymentIdType {
   TOKEN = 1,
   TRANSACTION_ID = 2,
   UNRECOGNIZED = -1,
+}
+
+export function paymentIdTypeFromJSON(object: any): PaymentIdType {
+  switch (object) {
+    case 0:
+    case "NO_IDENTIFIER_TYPE":
+      return PaymentIdType.NO_IDENTIFIER_TYPE;
+    case 1:
+    case "TOKEN":
+      return PaymentIdType.TOKEN;
+    case 2:
+    case "TRANSACTION_ID":
+      return PaymentIdType.TRANSACTION_ID;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return PaymentIdType.UNRECOGNIZED;
+  }
+}
+
+export function paymentIdTypeToJSON(object: PaymentIdType): string {
+  switch (object) {
+    case PaymentIdType.NO_IDENTIFIER_TYPE:
+      return "NO_IDENTIFIER_TYPE";
+    case PaymentIdType.TOKEN:
+      return "TOKEN";
+    case PaymentIdType.TRANSACTION_ID:
+      return "TRANSACTION_ID";
+    default:
+      return "UNKNOWN";
+  }
 }
 
 export const SetupRequest = {
@@ -293,6 +355,167 @@ export const SetupRequest = {
     }
     return message;
   },
+  fromJSON(object: any): SetupRequest {
+    const message = { ...baseSetupRequest } as SetupRequest;
+    message.items = [];
+    if (object.ip !== undefined && object.ip !== null) {
+      message.ip = String(object.ip);
+    } else {
+      message.ip = "";
+    }
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Item.fromJSON(e));
+      }
+    }
+    if (object.subtotal !== undefined && object.subtotal !== null) {
+      message.subtotal = Number(object.subtotal);
+    } else {
+      message.subtotal = 0;
+    }
+    if (object.shipping !== undefined && object.shipping !== null) {
+      message.shipping = Number(object.shipping);
+    } else {
+      message.shipping = 0;
+    }
+    if (object.handling !== undefined && object.handling !== null) {
+      message.handling = Number(object.handling);
+    } else {
+      message.handling = 0;
+    }
+    if (object.tax !== undefined && object.tax !== null) {
+      message.tax = Number(object.tax);
+    } else {
+      message.tax = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = String(object.currency);
+    } else {
+      message.currency = "";
+    }
+    if (object.returnUrl !== undefined && object.returnUrl !== null) {
+      message.returnUrl = String(object.returnUrl);
+    } else {
+      message.returnUrl = "";
+    }
+    if (object.cancelReturnUrl !== undefined && object.cancelReturnUrl !== null) {
+      message.cancelReturnUrl = String(object.cancelReturnUrl);
+    } else {
+      message.cancelReturnUrl = "";
+    }
+    if (object.allowGuestCheckout !== undefined && object.allowGuestCheckout !== null) {
+      message.allowGuestCheckout = Boolean(object.allowGuestCheckout);
+    } else {
+      message.allowGuestCheckout = false;
+    }
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = providerFromJSON(object.provider);
+    } else {
+      message.provider = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SetupRequest>): SetupRequest {
+    const message = { ...baseSetupRequest } as SetupRequest;
+    message.items = [];
+    if (object.ip !== undefined && object.ip !== null) {
+      message.ip = object.ip;
+    } else {
+      message.ip = "";
+    }
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Item.fromPartial(e));
+      }
+    }
+    if (object.subtotal !== undefined && object.subtotal !== null) {
+      message.subtotal = object.subtotal;
+    } else {
+      message.subtotal = 0;
+    }
+    if (object.shipping !== undefined && object.shipping !== null) {
+      message.shipping = object.shipping;
+    } else {
+      message.shipping = 0;
+    }
+    if (object.handling !== undefined && object.handling !== null) {
+      message.handling = object.handling;
+    } else {
+      message.handling = 0;
+    }
+    if (object.tax !== undefined && object.tax !== null) {
+      message.tax = object.tax;
+    } else {
+      message.tax = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = object.currency;
+    } else {
+      message.currency = "";
+    }
+    if (object.returnUrl !== undefined && object.returnUrl !== null) {
+      message.returnUrl = object.returnUrl;
+    } else {
+      message.returnUrl = "";
+    }
+    if (object.cancelReturnUrl !== undefined && object.cancelReturnUrl !== null) {
+      message.cancelReturnUrl = object.cancelReturnUrl;
+    } else {
+      message.cancelReturnUrl = "";
+    }
+    if (object.allowGuestCheckout !== undefined && object.allowGuestCheckout !== null) {
+      message.allowGuestCheckout = object.allowGuestCheckout;
+    } else {
+      message.allowGuestCheckout = false;
+    }
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = object.provider;
+    } else {
+      message.provider = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: SetupRequest): unknown {
+    const obj: any = {};
+    message.ip !== undefined && (obj.ip = message.ip);
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Item.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.subtotal !== undefined && (obj.subtotal = message.subtotal);
+    message.shipping !== undefined && (obj.shipping = message.shipping);
+    message.handling !== undefined && (obj.handling = message.handling);
+    message.tax !== undefined && (obj.tax = message.tax);
+    message.currency !== undefined && (obj.currency = message.currency);
+    message.returnUrl !== undefined && (obj.returnUrl = message.returnUrl);
+    message.cancelReturnUrl !== undefined && (obj.cancelReturnUrl = message.cancelReturnUrl);
+    message.allowGuestCheckout !== undefined && (obj.allowGuestCheckout = message.allowGuestCheckout);
+    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const SetupResponse = {
@@ -331,6 +554,68 @@ export const SetupResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): SetupResponse {
+    const message = { ...baseSetupResponse } as SetupResponse;
+    message.paymentErrors = [];
+    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
+      for (const e of object.paymentErrors) {
+        message.paymentErrors.push(PaymentError.fromJSON(e));
+      }
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    if (object.confirmInitiationUrl !== undefined && object.confirmInitiationUrl !== null) {
+      message.confirmInitiationUrl = String(object.confirmInitiationUrl);
+    } else {
+      message.confirmInitiationUrl = "";
+    }
+    if (object.initiatedOn !== undefined && object.initiatedOn !== null) {
+      message.initiatedOn = String(object.initiatedOn);
+    } else {
+      message.initiatedOn = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SetupResponse>): SetupResponse {
+    const message = { ...baseSetupResponse } as SetupResponse;
+    message.paymentErrors = [];
+    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
+      for (const e of object.paymentErrors) {
+        message.paymentErrors.push(PaymentError.fromPartial(e));
+      }
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    if (object.confirmInitiationUrl !== undefined && object.confirmInitiationUrl !== null) {
+      message.confirmInitiationUrl = object.confirmInitiationUrl;
+    } else {
+      message.confirmInitiationUrl = "";
+    }
+    if (object.initiatedOn !== undefined && object.initiatedOn !== null) {
+      message.initiatedOn = object.initiatedOn;
+    } else {
+      message.initiatedOn = "";
+    }
+    return message;
+  },
+  toJSON(message: SetupResponse): unknown {
+    const obj: any = {};
+    if (message.paymentErrors) {
+      obj.paymentErrors = message.paymentErrors.map(e => e ? PaymentError.toJSON(e) : undefined);
+    } else {
+      obj.paymentErrors = [];
+    }
+    message.token !== undefined && (obj.token = message.token);
+    message.confirmInitiationUrl !== undefined && (obj.confirmInitiationUrl = message.confirmInitiationUrl);
+    message.initiatedOn !== undefined && (obj.initiatedOn = message.initiatedOn);
+    return obj;
   },
 };
 
@@ -388,6 +673,106 @@ export const PaymentRequest = {
     }
     return message;
   },
+  fromJSON(object: any): PaymentRequest {
+    const message = { ...basePaymentRequest } as PaymentRequest;
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = providerFromJSON(object.provider);
+    } else {
+      message.provider = 0;
+    }
+    if (object.paymentSum !== undefined && object.paymentSum !== null) {
+      message.paymentSum = Number(object.paymentSum);
+    } else {
+      message.paymentSum = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = String(object.currency);
+    } else {
+      message.currency = "";
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = String(object.paymentId);
+    } else {
+      message.paymentId = "";
+    }
+    if (object.payerId !== undefined && object.payerId !== null) {
+      message.payerId = String(object.payerId);
+    } else {
+      message.payerId = "";
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
+    const message = { ...basePaymentRequest } as PaymentRequest;
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = object.provider;
+    } else {
+      message.provider = 0;
+    }
+    if (object.paymentSum !== undefined && object.paymentSum !== null) {
+      message.paymentSum = object.paymentSum;
+    } else {
+      message.paymentSum = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = object.currency;
+    } else {
+      message.currency = "";
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = object.paymentId;
+    } else {
+      message.paymentId = "";
+    }
+    if (object.payerId !== undefined && object.payerId !== null) {
+      message.payerId = object.payerId;
+    } else {
+      message.payerId = "";
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: PaymentRequest): unknown {
+    const obj: any = {};
+    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.paymentSum !== undefined && (obj.paymentSum = message.paymentSum);
+    message.currency !== undefined && (obj.currency = message.currency);
+    message.paymentId !== undefined && (obj.paymentId = message.paymentId);
+    message.payerId !== undefined && (obj.payerId = message.payerId);
+    message.token !== undefined && (obj.token = message.token);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const CaptureRequest = {
@@ -436,6 +821,84 @@ export const CaptureRequest = {
     }
     return message;
   },
+  fromJSON(object: any): CaptureRequest {
+    const message = { ...baseCaptureRequest } as CaptureRequest;
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = providerFromJSON(object.provider);
+    } else {
+      message.provider = 0;
+    }
+    if (object.paymentSum !== undefined && object.paymentSum !== null) {
+      message.paymentSum = Number(object.paymentSum);
+    } else {
+      message.paymentSum = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = String(object.currency);
+    } else {
+      message.currency = "";
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = String(object.paymentId);
+    } else {
+      message.paymentId = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
+    const message = { ...baseCaptureRequest } as CaptureRequest;
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = object.provider;
+    } else {
+      message.provider = 0;
+    }
+    if (object.paymentSum !== undefined && object.paymentSum !== null) {
+      message.paymentSum = object.paymentSum;
+    } else {
+      message.paymentSum = 0;
+    }
+    if (object.currency !== undefined && object.currency !== null) {
+      message.currency = object.currency;
+    } else {
+      message.currency = "";
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = object.paymentId;
+    } else {
+      message.paymentId = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CaptureRequest): unknown {
+    const obj: any = {};
+    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.paymentSum !== undefined && (obj.paymentSum = message.paymentSum);
+    message.currency !== undefined && (obj.currency = message.currency);
+    message.paymentId !== undefined && (obj.paymentId = message.paymentId);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const PaymentResponse = {
@@ -470,6 +933,57 @@ export const PaymentResponse = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): PaymentResponse {
+    const message = { ...basePaymentResponse } as PaymentResponse;
+    message.paymentErrors = [];
+    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
+      for (const e of object.paymentErrors) {
+        message.paymentErrors.push(PaymentError.fromJSON(e));
+      }
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = String(object.paymentId);
+    } else {
+      message.paymentId = "";
+    }
+    if (object.executedOn !== undefined && object.executedOn !== null) {
+      message.executedOn = String(object.executedOn);
+    } else {
+      message.executedOn = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PaymentResponse>): PaymentResponse {
+    const message = { ...basePaymentResponse } as PaymentResponse;
+    message.paymentErrors = [];
+    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
+      for (const e of object.paymentErrors) {
+        message.paymentErrors.push(PaymentError.fromPartial(e));
+      }
+    }
+    if (object.paymentId !== undefined && object.paymentId !== null) {
+      message.paymentId = object.paymentId;
+    } else {
+      message.paymentId = "";
+    }
+    if (object.executedOn !== undefined && object.executedOn !== null) {
+      message.executedOn = object.executedOn;
+    } else {
+      message.executedOn = "";
+    }
+    return message;
+  },
+  toJSON(message: PaymentResponse): unknown {
+    const obj: any = {};
+    if (message.paymentErrors) {
+      obj.paymentErrors = message.paymentErrors.map(e => e ? PaymentError.toJSON(e) : undefined);
+    } else {
+      obj.paymentErrors = [];
+    }
+    message.paymentId !== undefined && (obj.paymentId = message.paymentId);
+    message.executedOn !== undefined && (obj.executedOn = message.executedOn);
+    return obj;
   },
 };
 
@@ -515,6 +1029,84 @@ export const PaymentCard = {
     }
     return message;
   },
+  fromJSON(object: any): PaymentCard {
+    const message = { ...basePaymentCard } as PaymentCard;
+    if (object.primaryNumber !== undefined && object.primaryNumber !== null) {
+      message.primaryNumber = String(object.primaryNumber);
+    } else {
+      message.primaryNumber = "";
+    }
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = String(object.firstName);
+    } else {
+      message.firstName = "";
+    }
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = String(object.lastName);
+    } else {
+      message.lastName = "";
+    }
+    if (object.month !== undefined && object.month !== null) {
+      message.month = String(object.month);
+    } else {
+      message.month = "";
+    }
+    if (object.year !== undefined && object.year !== null) {
+      message.year = Number(object.year);
+    } else {
+      message.year = 0;
+    }
+    if (object.verificationValue !== undefined && object.verificationValue !== null) {
+      message.verificationValue = String(object.verificationValue);
+    } else {
+      message.verificationValue = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PaymentCard>): PaymentCard {
+    const message = { ...basePaymentCard } as PaymentCard;
+    if (object.primaryNumber !== undefined && object.primaryNumber !== null) {
+      message.primaryNumber = object.primaryNumber;
+    } else {
+      message.primaryNumber = "";
+    }
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = object.firstName;
+    } else {
+      message.firstName = "";
+    }
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = object.lastName;
+    } else {
+      message.lastName = "";
+    }
+    if (object.month !== undefined && object.month !== null) {
+      message.month = object.month;
+    } else {
+      message.month = "";
+    }
+    if (object.year !== undefined && object.year !== null) {
+      message.year = object.year;
+    } else {
+      message.year = 0;
+    }
+    if (object.verificationValue !== undefined && object.verificationValue !== null) {
+      message.verificationValue = object.verificationValue;
+    } else {
+      message.verificationValue = "";
+    }
+    return message;
+  },
+  toJSON(message: PaymentCard): unknown {
+    const obj: any = {};
+    message.primaryNumber !== undefined && (obj.primaryNumber = message.primaryNumber);
+    message.firstName !== undefined && (obj.firstName = message.firstName);
+    message.lastName !== undefined && (obj.lastName = message.lastName);
+    message.month !== undefined && (obj.month = message.month);
+    message.year !== undefined && (obj.year = message.year);
+    message.verificationValue !== undefined && (obj.verificationValue = message.verificationValue);
+    return obj;
+  },
 };
 
 export const Item = {
@@ -550,6 +1142,62 @@ export const Item = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Item {
+    const message = { ...baseItem } as Item;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = Number(object.quantity);
+    } else {
+      message.quantity = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = { ...baseItem } as Item;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = object.quantity;
+    } else {
+      message.quantity = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
+    return message;
+  },
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.quantity !== undefined && (obj.quantity = message.quantity);
+    message.amount !== undefined && (obj.amount = message.amount);
+    return obj;
   },
 };
 
@@ -597,4 +1245,93 @@ export const PaymentError = {
     }
     return message;
   },
+  fromJSON(object: any): PaymentError {
+    const message = { ...basePaymentError } as PaymentError;
+    if (object.killed !== undefined && object.killed !== null) {
+      message.killed = Boolean(object.killed);
+    } else {
+      message.killed = false;
+    }
+    if (object.code !== undefined && object.code !== null) {
+      message.code = Number(object.code);
+    } else {
+      message.code = 0;
+    }
+    if (object.signal !== undefined && object.signal !== null) {
+      message.signal = String(object.signal);
+    } else {
+      message.signal = undefined;
+    }
+    if (object.cmd !== undefined && object.cmd !== null) {
+      message.cmd = String(object.cmd);
+    } else {
+      message.cmd = "";
+    }
+    if (object.stdout !== undefined && object.stdout !== null) {
+      message.stdout = String(object.stdout);
+    } else {
+      message.stdout = "";
+    }
+    if (object.stderr !== undefined && object.stderr !== null) {
+      message.stderr = String(object.stderr);
+    } else {
+      message.stderr = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<PaymentError>): PaymentError {
+    const message = { ...basePaymentError } as PaymentError;
+    if (object.killed !== undefined && object.killed !== null) {
+      message.killed = object.killed;
+    } else {
+      message.killed = false;
+    }
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = 0;
+    }
+    if (object.signal !== undefined && object.signal !== null) {
+      message.signal = object.signal;
+    } else {
+      message.signal = undefined;
+    }
+    if (object.cmd !== undefined && object.cmd !== null) {
+      message.cmd = object.cmd;
+    } else {
+      message.cmd = "";
+    }
+    if (object.stdout !== undefined && object.stdout !== null) {
+      message.stdout = object.stdout;
+    } else {
+      message.stdout = "";
+    }
+    if (object.stderr !== undefined && object.stderr !== null) {
+      message.stderr = object.stderr;
+    } else {
+      message.stderr = "";
+    }
+    return message;
+  },
+  toJSON(message: PaymentError): unknown {
+    const obj: any = {};
+    message.killed !== undefined && (obj.killed = message.killed);
+    message.code !== undefined && (obj.code = message.code);
+    message.signal !== undefined && (obj.signal = message.signal);
+    message.cmd !== undefined && (obj.cmd = message.cmd);
+    message.stdout !== undefined && (obj.stdout = message.stdout);
+    message.stderr !== undefined && (obj.stderr = message.stderr);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -157,6 +157,104 @@ export const Attachment = {
     }
     return message;
   },
+  fromJSON(object: any): Attachment {
+    const message = { ...baseAttachment } as Attachment;
+    if (object.filename !== undefined && object.filename !== null) {
+      message.filename = String(object.filename);
+    } else {
+      message.filename = "";
+    }
+    if (object.text !== undefined && object.text !== null) {
+      message.text = String(object.text);
+    } else {
+      message.text = "";
+    }
+    if (object.buffer !== undefined && object.buffer !== null) {
+      message.buffer = Buffer.from(bytesFromBase64(object.buffer));
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = String(object.path);
+    } else {
+      message.path = "";
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = String(object.contentType);
+    } else {
+      message.contentType = "";
+    }
+    if (object.contentDisposition !== undefined && object.contentDisposition !== null) {
+      message.contentDisposition = String(object.contentDisposition);
+    } else {
+      message.contentDisposition = "";
+    }
+    if (object.cid !== undefined && object.cid !== null) {
+      message.cid = String(object.cid);
+    } else {
+      message.cid = "";
+    }
+    if (object.encoding !== undefined && object.encoding !== null) {
+      message.encoding = String(object.encoding);
+    } else {
+      message.encoding = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Attachment>): Attachment {
+    const message = { ...baseAttachment } as Attachment;
+    if (object.filename !== undefined && object.filename !== null) {
+      message.filename = object.filename;
+    } else {
+      message.filename = "";
+    }
+    if (object.text !== undefined && object.text !== null) {
+      message.text = object.text;
+    } else {
+      message.text = "";
+    }
+    if (object.buffer !== undefined && object.buffer !== null) {
+      message.buffer = object.buffer;
+    } else {
+      message.buffer = new Buffer(0);
+    }
+    if (object.path !== undefined && object.path !== null) {
+      message.path = object.path;
+    } else {
+      message.path = "";
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = object.contentType;
+    } else {
+      message.contentType = "";
+    }
+    if (object.contentDisposition !== undefined && object.contentDisposition !== null) {
+      message.contentDisposition = object.contentDisposition;
+    } else {
+      message.contentDisposition = "";
+    }
+    if (object.cid !== undefined && object.cid !== null) {
+      message.cid = object.cid;
+    } else {
+      message.cid = "";
+    }
+    if (object.encoding !== undefined && object.encoding !== null) {
+      message.encoding = object.encoding;
+    } else {
+      message.encoding = "";
+    }
+    return message;
+  },
+  toJSON(message: Attachment): unknown {
+    const obj: any = {};
+    message.filename !== undefined && (obj.filename = message.filename);
+    message.text !== undefined && (obj.text = message.text);
+    message.buffer !== undefined && (obj.buffer = base64FromBytes(message.buffer !== undefined ? message.buffer : new Buffer(0)));
+    message.path !== undefined && (obj.path = message.path);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.contentDisposition !== undefined && (obj.contentDisposition = message.contentDisposition);
+    message.cid !== undefined && (obj.cid = message.cid);
+    message.encoding !== undefined && (obj.encoding = message.encoding);
+    return obj;
+  },
 };
 
 export const Notification = {
@@ -212,6 +310,101 @@ export const Notification = {
     }
     return message;
   },
+  fromJSON(object: any): Notification {
+    const message = { ...baseNotification } as Notification;
+    message.attachments = [];
+    if (object.email !== undefined && object.email !== null) {
+      message.email = Email.fromJSON(object.email);
+    } else {
+      message.email = undefined;
+    }
+    if (object.log !== undefined && object.log !== null) {
+      message.log = Log.fromJSON(object.log);
+    } else {
+      message.log = undefined;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = String(object.subject);
+    } else {
+      message.subject = "";
+    }
+    if (object.body !== undefined && object.body !== null) {
+      message.body = String(object.body);
+    } else {
+      message.body = "";
+    }
+    if (object.transport !== undefined && object.transport !== null) {
+      message.transport = String(object.transport);
+    } else {
+      message.transport = "";
+    }
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = String(object.provider);
+    } else {
+      message.provider = "";
+    }
+    if (object.attachments !== undefined && object.attachments !== null) {
+      for (const e of object.attachments) {
+        message.attachments.push(Attachment.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Notification>): Notification {
+    const message = { ...baseNotification } as Notification;
+    message.attachments = [];
+    if (object.email !== undefined && object.email !== null) {
+      message.email = Email.fromPartial(object.email);
+    } else {
+      message.email = undefined;
+    }
+    if (object.log !== undefined && object.log !== null) {
+      message.log = Log.fromPartial(object.log);
+    } else {
+      message.log = undefined;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = object.subject;
+    } else {
+      message.subject = "";
+    }
+    if (object.body !== undefined && object.body !== null) {
+      message.body = object.body;
+    } else {
+      message.body = "";
+    }
+    if (object.transport !== undefined && object.transport !== null) {
+      message.transport = object.transport;
+    } else {
+      message.transport = "";
+    }
+    if (object.provider !== undefined && object.provider !== null) {
+      message.provider = object.provider;
+    } else {
+      message.provider = "";
+    }
+    if (object.attachments !== undefined && object.attachments !== null) {
+      for (const e of object.attachments) {
+        message.attachments.push(Attachment.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: Notification): unknown {
+    const obj: any = {};
+    message.email !== undefined && (obj.email = message.email ? Email.toJSON(message.email) : undefined);
+    message.log !== undefined && (obj.log = message.log ? Log.toJSON(message.log) : undefined);
+    message.subject !== undefined && (obj.subject = message.subject);
+    message.body !== undefined && (obj.body = message.body);
+    message.transport !== undefined && (obj.transport = message.transport);
+    message.provider !== undefined && (obj.provider = message.provider);
+    if (message.attachments) {
+      obj.attachments = message.attachments.map(e => e ? Attachment.toJSON(e) : undefined);
+    } else {
+      obj.attachments = [];
+    }
+    return obj;
+  },
 };
 
 export const Email = {
@@ -257,6 +450,80 @@ export const Email = {
     }
     return message;
   },
+  fromJSON(object: any): Email {
+    const message = { ...baseEmail } as Email;
+    message.to = [];
+    message.cc = [];
+    message.bcc = [];
+    if (object.to !== undefined && object.to !== null) {
+      for (const e of object.to) {
+        message.to.push(String(e));
+      }
+    }
+    if (object.cc !== undefined && object.cc !== null) {
+      for (const e of object.cc) {
+        message.cc.push(String(e));
+      }
+    }
+    if (object.bcc !== undefined && object.bcc !== null) {
+      for (const e of object.bcc) {
+        message.bcc.push(String(e));
+      }
+    }
+    if (object.replyto !== undefined && object.replyto !== null) {
+      message.replyto = String(object.replyto);
+    } else {
+      message.replyto = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Email>): Email {
+    const message = { ...baseEmail } as Email;
+    message.to = [];
+    message.cc = [];
+    message.bcc = [];
+    if (object.to !== undefined && object.to !== null) {
+      for (const e of object.to) {
+        message.to.push(e);
+      }
+    }
+    if (object.cc !== undefined && object.cc !== null) {
+      for (const e of object.cc) {
+        message.cc.push(e);
+      }
+    }
+    if (object.bcc !== undefined && object.bcc !== null) {
+      for (const e of object.bcc) {
+        message.bcc.push(e);
+      }
+    }
+    if (object.replyto !== undefined && object.replyto !== null) {
+      message.replyto = object.replyto;
+    } else {
+      message.replyto = "";
+    }
+    return message;
+  },
+  toJSON(message: Email): unknown {
+    const obj: any = {};
+    if (message.to) {
+      obj.to = message.to.map(e => e);
+    } else {
+      obj.to = [];
+    }
+    if (message.cc) {
+      obj.cc = message.cc.map(e => e);
+    } else {
+      obj.cc = [];
+    }
+    if (message.bcc) {
+      obj.bcc = message.bcc.map(e => e);
+    } else {
+      obj.bcc = [];
+    }
+    message.replyto !== undefined && (obj.replyto = message.replyto);
+    return obj;
+  },
 };
 
 export const Log = {
@@ -281,4 +548,63 @@ export const Log = {
     }
     return message;
   },
+  fromJSON(object: any): Log {
+    const message = { ...baseLog } as Log;
+    if (object.level !== undefined && object.level !== null) {
+      message.level = String(object.level);
+    } else {
+      message.level = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Log>): Log {
+    const message = { ...baseLog } as Log;
+    if (object.level !== undefined && object.level !== null) {
+      message.level = object.level;
+    } else {
+      message.level = "";
+    }
+    return message;
+  },
+  toJSON(message: Log): unknown {
+    const obj: any = {};
+    message.level !== undefined && (obj.level = message.level);
+    return obj;
+  },
 };
+
+interface WindowBase64 {
+  atob(b64: string): string;
+  btoa(bin: string): string;
+}
+
+const windowBase64 = (globalThis as unknown as WindowBase64);
+const atob = windowBase64.atob || ((b64: string) => Buffer.from(b64, 'base64').toString('binary'));
+const btoa = windowBase64.btoa || ((bin: string) => Buffer.from(bin, 'binary').toString('base64'));
+
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  for (let i = 0; i < arr.byteLength; ++i) {
+    bin.push(String.fromCharCode(arr[i]));
+  }
+  return btoa(bin.join(''));
+}
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

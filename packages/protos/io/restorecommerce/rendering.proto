@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package io.restorecommerce.rendering;
+
+import "google/protobuf/any.proto";
+
+message Payload {
+  // json with <key, template> pairs
+  // e.g. { 'subject': ..., 'message':....}
+  google.protobuf.Any templates = 1;
+  google.protobuf.Any data = 2;  // data to fill template with
+  string style_url = 3; // stylesheet URL
+
+  enum Strategy { // style-applying 'strategy'
+    INLINE = 0;
+    COPY = 1;
+  }
+  Strategy strategy = 4;  // inlining, copying CSS into <style>, etc...
+  // rendering options JSON object
+  google.protobuf.Any options = 5;
+  // content type for rendering such as 'application/html' or 'application/text'
+  string content_type = 6;
+}
+
+message RenderRequest {
+  string id = 1; // identifies the render request payload
+  // List of templates with associated data and rendering options
+  repeated Payload payload = 2;
+}
+
+message RenderResponse {
+  string id = 1;
+  repeated google.protobuf.Any response = 2;  // error or HTML contents
+}

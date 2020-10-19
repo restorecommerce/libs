@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Attribute } from './attribute';
+import { Attribute } from '../../io/restorecommerce/attribute';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -28,7 +28,7 @@ export interface Subject {
    *  for unauthenticated context
    */
   unauthenticated: boolean;
-  tokenName: string;
+  token: string;
 }
 
 /**
@@ -95,7 +95,7 @@ const baseSubject: object = {
   id: "",
   scope: "",
   unauthenticated: false,
-  tokenName: "",
+  token: "",
 };
 
 const baseApiKey: object = {
@@ -132,7 +132,7 @@ export const Subject = {
       HierarchicalScope.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     writer.uint32(40).bool(message.unauthenticated);
-    writer.uint32(50).string(message.tokenName);
+    writer.uint32(50).string(message.token);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): Subject {
@@ -160,7 +160,7 @@ export const Subject = {
           message.unauthenticated = reader.bool();
           break;
         case 6:
-          message.tokenName = reader.string();
+          message.token = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -168,6 +168,96 @@ export const Subject = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Subject {
+    const message = { ...baseSubject } as Subject;
+    message.roleAssociations = [];
+    message.hierarchicalScopes = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.scope !== undefined && object.scope !== null) {
+      message.scope = String(object.scope);
+    } else {
+      message.scope = "";
+    }
+    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromJSON(e));
+      }
+    }
+    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
+      for (const e of object.hierarchicalScopes) {
+        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
+      }
+    }
+    if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
+      message.unauthenticated = Boolean(object.unauthenticated);
+    } else {
+      message.unauthenticated = false;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Subject>): Subject {
+    const message = { ...baseSubject } as Subject;
+    message.roleAssociations = [];
+    message.hierarchicalScopes = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.scope !== undefined && object.scope !== null) {
+      message.scope = object.scope;
+    } else {
+      message.scope = "";
+    }
+    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromPartial(e));
+      }
+    }
+    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
+      for (const e of object.hierarchicalScopes) {
+        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
+      }
+    }
+    if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
+      message.unauthenticated = object.unauthenticated;
+    } else {
+      message.unauthenticated = false;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  toJSON(message: Subject): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.scope !== undefined && (obj.scope = message.scope);
+    if (message.roleAssociations) {
+      obj.roleAssociations = message.roleAssociations.map(e => e ? RoleAssociation.toJSON(e) : undefined);
+    } else {
+      obj.roleAssociations = [];
+    }
+    if (message.hierarchicalScopes) {
+      obj.hierarchicalScopes = message.hierarchicalScopes.map(e => e ? HierarchicalScope.toJSON(e) : undefined);
+    } else {
+      obj.hierarchicalScopes = [];
+    }
+    message.unauthenticated !== undefined && (obj.unauthenticated = message.unauthenticated);
+    message.token !== undefined && (obj.token = message.token);
+    return obj;
   },
 };
 
@@ -192,6 +282,29 @@ export const ApiKey = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): ApiKey {
+    const message = { ...baseApiKey } as ApiKey;
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ApiKey>): ApiKey {
+    const message = { ...baseApiKey } as ApiKey;
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    return message;
+  },
+  toJSON(message: ApiKey): unknown {
+    const obj: any = {};
+    message.value !== undefined && (obj.value = message.value);
+    return obj;
   },
 };
 
@@ -232,6 +345,68 @@ export const Tokens = {
     }
     return message;
   },
+  fromJSON(object: any): Tokens {
+    const message = { ...baseTokens } as Tokens;
+    message.scopes = [];
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.expiresAt !== undefined && object.expiresAt !== null) {
+      message.expiresAt = Number(object.expiresAt);
+    } else {
+      message.expiresAt = 0;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    if (object.scopes !== undefined && object.scopes !== null) {
+      for (const e of object.scopes) {
+        message.scopes.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Tokens>): Tokens {
+    const message = { ...baseTokens } as Tokens;
+    message.scopes = [];
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.expiresAt !== undefined && object.expiresAt !== null) {
+      message.expiresAt = object.expiresAt;
+    } else {
+      message.expiresAt = 0;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    if (object.scopes !== undefined && object.scopes !== null) {
+      for (const e of object.scopes) {
+        message.scopes.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: Tokens): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.expiresAt !== undefined && (obj.expiresAt = message.expiresAt);
+    message.token !== undefined && (obj.token = message.token);
+    if (message.scopes) {
+      obj.scopes = message.scopes.map(e => e);
+    } else {
+      obj.scopes = [];
+    }
+    return obj;
+  },
 };
 
 export const HierarchicalScope = {
@@ -266,6 +441,57 @@ export const HierarchicalScope = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): HierarchicalScope {
+    const message = { ...baseHierarchicalScope } as HierarchicalScope;
+    message.children = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.children !== undefined && object.children !== null) {
+      for (const e of object.children) {
+        message.children.push(HierarchicalScope.fromJSON(e));
+      }
+    }
+    if (object.role !== undefined && object.role !== null) {
+      message.role = String(object.role);
+    } else {
+      message.role = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<HierarchicalScope>): HierarchicalScope {
+    const message = { ...baseHierarchicalScope } as HierarchicalScope;
+    message.children = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.children !== undefined && object.children !== null) {
+      for (const e of object.children) {
+        message.children.push(HierarchicalScope.fromPartial(e));
+      }
+    }
+    if (object.role !== undefined && object.role !== null) {
+      message.role = object.role;
+    } else {
+      message.role = "";
+    }
+    return message;
+  },
+  toJSON(message: HierarchicalScope): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.children) {
+      obj.children = message.children.map(e => e ? HierarchicalScope.toJSON(e) : undefined);
+    } else {
+      obj.children = [];
+    }
+    message.role !== undefined && (obj.role = message.role);
+    return obj;
   },
 };
 
@@ -302,4 +528,66 @@ export const RoleAssociation = {
     }
     return message;
   },
+  fromJSON(object: any): RoleAssociation {
+    const message = { ...baseRoleAssociation } as RoleAssociation;
+    message.attributes = [];
+    if (object.role !== undefined && object.role !== null) {
+      message.role = String(object.role);
+    } else {
+      message.role = "";
+    }
+    if (object.attributes !== undefined && object.attributes !== null) {
+      for (const e of object.attributes) {
+        message.attributes.push(Attribute.fromJSON(e));
+      }
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<RoleAssociation>): RoleAssociation {
+    const message = { ...baseRoleAssociation } as RoleAssociation;
+    message.attributes = [];
+    if (object.role !== undefined && object.role !== null) {
+      message.role = object.role;
+    } else {
+      message.role = "";
+    }
+    if (object.attributes !== undefined && object.attributes !== null) {
+      for (const e of object.attributes) {
+        message.attributes.push(Attribute.fromPartial(e));
+      }
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: RoleAssociation): unknown {
+    const obj: any = {};
+    message.role !== undefined && (obj.role = message.role);
+    if (message.attributes) {
+      obj.attributes = message.attributes.map(e => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.attributes = [];
+    }
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

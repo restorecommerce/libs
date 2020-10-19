@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Any } from '../../google/protobuf/any';
-import { Subject, ApiKey } from './auth';
+import { Subject, ApiKey } from '../../io/restorecommerce/auth';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -96,6 +96,62 @@ export const CommandRequest = {
     }
     return message;
   },
+  fromJSON(object: any): CommandRequest {
+    const message = { ...baseCommandRequest } as CommandRequest;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
+    const message = { ...baseCommandRequest } as CommandRequest;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CommandRequest): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const CommandResponse = {
@@ -129,4 +185,55 @@ export const CommandResponse = {
     }
     return message;
   },
+  fromJSON(object: any): CommandResponse {
+    const message = { ...baseCommandResponse } as CommandResponse;
+    message.services = [];
+    if (object.services !== undefined && object.services !== null) {
+      for (const e of object.services) {
+        message.services.push(String(e));
+      }
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
+    const message = { ...baseCommandResponse } as CommandResponse;
+    message.services = [];
+    if (object.services !== undefined && object.services !== null) {
+      for (const e of object.services) {
+        message.services.push(e);
+      }
+    }
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Any.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CommandResponse): unknown {
+    const obj: any = {};
+    if (message.services) {
+      obj.services = message.services.map(e => e);
+    } else {
+      obj.services = [];
+    }
+    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

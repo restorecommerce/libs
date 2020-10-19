@@ -7,7 +7,7 @@ export interface ResourcesConfig {
 }
 
 export interface ResourcesContext {
-  identity: {
+  resources: {
     client: ResourcesSrvGrpcClient;
   }
 };

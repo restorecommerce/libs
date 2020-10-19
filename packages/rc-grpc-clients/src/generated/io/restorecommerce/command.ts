@@ -94,6 +94,47 @@ export enum CommandParameter_ParameterType {
   UNRECOGNIZED = -1,
 }
 
+export function commandParameter_ParameterTypeFromJSON(object: any): CommandParameter_ParameterType {
+  switch (object) {
+    case 0:
+    case "boolean_value":
+      return CommandParameter_ParameterType.boolean_value;
+    case 1:
+    case "object_value":
+      return CommandParameter_ParameterType.object_value;
+    case 2:
+    case "array_value":
+      return CommandParameter_ParameterType.array_value;
+    case 3:
+    case "number_value":
+      return CommandParameter_ParameterType.number_value;
+    case 4:
+    case "string_value":
+      return CommandParameter_ParameterType.string_value;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return CommandParameter_ParameterType.UNRECOGNIZED;
+  }
+}
+
+export function commandParameter_ParameterTypeToJSON(object: CommandParameter_ParameterType): string {
+  switch (object) {
+    case CommandParameter_ParameterType.boolean_value:
+      return "boolean_value";
+    case CommandParameter_ParameterType.object_value:
+      return "object_value";
+    case CommandParameter_ParameterType.array_value:
+      return "array_value";
+    case CommandParameter_ParameterType.number_value:
+      return "number_value";
+    case CommandParameter_ParameterType.string_value:
+      return "string_value";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export const Command = {
   encode(message: Command, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -137,6 +178,79 @@ export const Command = {
     }
     return message;
   },
+  fromJSON(object: any): Command {
+    const message = { ...baseCommand } as Command;
+    message.parameters = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.parameters !== undefined && object.parameters !== null) {
+      for (const e of object.parameters) {
+        message.parameters.push(CommandParameter.fromJSON(e));
+      }
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Command>): Command {
+    const message = { ...baseCommand } as Command;
+    message.parameters = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.parameters !== undefined && object.parameters !== null) {
+      for (const e of object.parameters) {
+        message.parameters.push(CommandParameter.fromPartial(e));
+      }
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    return message;
+  },
+  toJSON(message: Command): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    if (message.parameters) {
+      obj.parameters = message.parameters.map(e => e ? CommandParameter.toJSON(e) : undefined);
+    } else {
+      obj.parameters = [];
+    }
+    message.description !== undefined && (obj.description = message.description);
+    return obj;
+  },
 };
 
 export const CommandParameter = {
@@ -172,6 +286,62 @@ export const CommandParameter = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): CommandParameter {
+    const message = { ...baseCommandParameter } as CommandParameter;
+    if (object.field !== undefined && object.field !== null) {
+      message.field = String(object.field);
+    } else {
+      message.field = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = commandParameter_ParameterTypeFromJSON(object.type);
+    } else {
+      message.type = 0;
+    }
+    if (object.properties !== undefined && object.properties !== null) {
+      message.properties = String(object.properties);
+    } else {
+      message.properties = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
+    const message = { ...baseCommandParameter } as CommandParameter;
+    if (object.field !== undefined && object.field !== null) {
+      message.field = object.field;
+    } else {
+      message.field = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = 0;
+    }
+    if (object.properties !== undefined && object.properties !== null) {
+      message.properties = object.properties;
+    } else {
+      message.properties = "";
+    }
+    return message;
+  },
+  toJSON(message: CommandParameter): unknown {
+    const obj: any = {};
+    message.field !== undefined && (obj.field = message.field);
+    message.description !== undefined && (obj.description = message.description);
+    message.type !== undefined && (obj.type = commandParameter_ParameterTypeToJSON(message.type));
+    message.properties !== undefined && (obj.properties = message.properties);
+    return obj;
   },
 };
 
@@ -216,4 +386,77 @@ export const CommandList = {
     }
     return message;
   },
+  fromJSON(object: any): CommandList {
+    const message = { ...baseCommandList } as CommandList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CommandList>): CommandList {
+    const message = { ...baseCommandList } as CommandList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CommandList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Command.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

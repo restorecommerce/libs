@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package io.restorecommerce.command;
+
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+// command resource
+message Command {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;  // command name
+  repeated CommandParameter parameters = 4; // all possible parameters
+  string description = 5; // command description
+}
+
+message CommandParameter {
+  enum ParameterType {
+    boolean_value = 0;
+    object_value = 1;
+    array_value = 2;
+    number_value = 3;
+    string_value = 4;
+  }
+
+  string field = 1; //  field name
+  string description = 2; // field description
+  ParameterType type = 3; // field's type
+  string properties = 4; // dump properties in case of `object_value``
+}
+
+message CommandList {
+  repeated Command items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandList);
+  rpc Create (CommandList) returns (CommandList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (CommandList) returns (CommandList);
+  rpc Upsert (CommandList) returns (CommandList);
+}

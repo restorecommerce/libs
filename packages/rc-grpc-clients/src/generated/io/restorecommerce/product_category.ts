@@ -122,6 +122,95 @@ export const ProductCategory = {
     }
     return message;
   },
+  fromJSON(object: any): ProductCategory {
+    const message = { ...baseProductCategory } as ProductCategory;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
+      message.priceGroupId = String(object.priceGroupId);
+    } else {
+      message.priceGroupId = "";
+    }
+    if (object.image !== undefined && object.image !== null) {
+      message.image = Image.fromJSON(object.image);
+    } else {
+      message.image = undefined;
+    }
+    if (object.parent !== undefined && object.parent !== null) {
+      message.parent = Parent.fromJSON(object.parent);
+    } else {
+      message.parent = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
+    const message = { ...baseProductCategory } as ProductCategory;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
+      message.priceGroupId = object.priceGroupId;
+    } else {
+      message.priceGroupId = "";
+    }
+    if (object.image !== undefined && object.image !== null) {
+      message.image = Image.fromPartial(object.image);
+    } else {
+      message.image = undefined;
+    }
+    if (object.parent !== undefined && object.parent !== null) {
+      message.parent = Parent.fromPartial(object.parent);
+    } else {
+      message.parent = undefined;
+    }
+    return message;
+  },
+  toJSON(message: ProductCategory): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.priceGroupId !== undefined && (obj.priceGroupId = message.priceGroupId);
+    message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
+    message.parent !== undefined && (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
+    return obj;
+  },
 };
 
 export const ProductCategoryList = {
@@ -165,6 +254,68 @@ export const ProductCategoryList = {
     }
     return message;
   },
+  fromJSON(object: any): ProductCategoryList {
+    const message = { ...baseProductCategoryList } as ProductCategoryList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductCategory.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
+    const message = { ...baseProductCategoryList } as ProductCategoryList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductCategory.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: ProductCategoryList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? ProductCategory.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const Deleted = {
@@ -188,6 +339,29 @@ export const Deleted = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
   },
 };
 
@@ -213,4 +387,38 @@ export const Parent = {
     }
     return message;
   },
+  fromJSON(object: any): Parent {
+    const message = { ...baseParent } as Parent;
+    if (object.parentId !== undefined && object.parentId !== null) {
+      message.parentId = String(object.parentId);
+    } else {
+      message.parentId = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Parent>): Parent {
+    const message = { ...baseParent } as Parent;
+    if (object.parentId !== undefined && object.parentId !== null) {
+      message.parentId = object.parentId;
+    } else {
+      message.parentId = "";
+    }
+    return message;
+  },
+  toJSON(message: Parent): unknown {
+    const obj: any = {};
+    message.parentId !== undefined && (obj.parentId = message.parentId);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

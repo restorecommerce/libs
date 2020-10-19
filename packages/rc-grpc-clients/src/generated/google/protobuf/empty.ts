@@ -39,4 +39,27 @@ export const Empty = {
     }
     return message;
   },
+  fromJSON(_: any): Empty {
+    const message = { ...baseEmpty } as Empty;
+    return message;
+  },
+  fromPartial(_: DeepPartial<Empty>): Empty {
+    const message = { ...baseEmpty } as Empty;
+    return message;
+  },
+  toJSON(_: Empty): unknown {
+    const obj: any = {};
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

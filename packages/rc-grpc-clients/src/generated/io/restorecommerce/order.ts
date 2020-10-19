@@ -246,6 +246,68 @@ export const OrderList = {
     }
     return message;
   },
+  fromJSON(object: any): OrderList {
+    const message = { ...baseOrderList } as OrderList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<OrderList>): OrderList {
+    const message = { ...baseOrderList } as OrderList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: OrderList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Order.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const Order = {
@@ -311,6 +373,134 @@ export const Order = {
     }
     return message;
   },
+  fromJSON(object: any): Order {
+    const message = { ...baseOrder } as Order;
+    message.items = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description);
+    } else {
+      message.description = "";
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = String(object.status);
+    } else {
+      message.status = "";
+    }
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Items.fromJSON(e));
+      }
+    }
+    if (object.totalPrice !== undefined && object.totalPrice !== null) {
+      message.totalPrice = Number(object.totalPrice);
+    } else {
+      message.totalPrice = 0;
+    }
+    if (object.shippingContactPointId !== undefined && object.shippingContactPointId !== null) {
+      message.shippingContactPointId = String(object.shippingContactPointId);
+    } else {
+      message.shippingContactPointId = "";
+    }
+    if (object.billingContactPointId !== undefined && object.billingContactPointId !== null) {
+      message.billingContactPointId = String(object.billingContactPointId);
+    } else {
+      message.billingContactPointId = "";
+    }
+    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+      message.totalWeightInKg = Number(object.totalWeightInKg);
+    } else {
+      message.totalWeightInKg = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Order>): Order {
+    const message = { ...baseOrder } as Order;
+    message.items = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description;
+    } else {
+      message.description = "";
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    } else {
+      message.status = "";
+    }
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Items.fromPartial(e));
+      }
+    }
+    if (object.totalPrice !== undefined && object.totalPrice !== null) {
+      message.totalPrice = object.totalPrice;
+    } else {
+      message.totalPrice = 0;
+    }
+    if (object.shippingContactPointId !== undefined && object.shippingContactPointId !== null) {
+      message.shippingContactPointId = object.shippingContactPointId;
+    } else {
+      message.shippingContactPointId = "";
+    }
+    if (object.billingContactPointId !== undefined && object.billingContactPointId !== null) {
+      message.billingContactPointId = object.billingContactPointId;
+    } else {
+      message.billingContactPointId = "";
+    }
+    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+      message.totalWeightInKg = object.totalWeightInKg;
+    } else {
+      message.totalWeightInKg = 0;
+    }
+    return message;
+  },
+  toJSON(message: Order): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    message.status !== undefined && (obj.status = message.status);
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Items.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice);
+    message.shippingContactPointId !== undefined && (obj.shippingContactPointId = message.shippingContactPointId);
+    message.billingContactPointId !== undefined && (obj.billingContactPointId = message.billingContactPointId);
+    message.totalWeightInKg !== undefined && (obj.totalWeightInKg = message.totalWeightInKg);
+    return obj;
+  },
 };
 
 export const Items = {
@@ -340,6 +530,40 @@ export const Items = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Items {
+    const message = { ...baseItems } as Items;
+    if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
+      message.quantityPrice = Number(object.quantityPrice);
+    } else {
+      message.quantityPrice = 0;
+    }
+    if (object.item !== undefined && object.item !== null) {
+      message.item = Item.fromJSON(object.item);
+    } else {
+      message.item = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Items>): Items {
+    const message = { ...baseItems } as Items;
+    if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
+      message.quantityPrice = object.quantityPrice;
+    } else {
+      message.quantityPrice = 0;
+    }
+    if (object.item !== undefined && object.item !== null) {
+      message.item = Item.fromPartial(object.item);
+    } else {
+      message.item = undefined;
+    }
+    return message;
+  },
+  toJSON(message: Items): unknown {
+    const obj: any = {};
+    message.quantityPrice !== undefined && (obj.quantityPrice = message.quantityPrice);
+    message.item !== undefined && (obj.item = message.item ? Item.toJSON(message.item) : undefined);
+    return obj;
   },
 };
 
@@ -429,6 +653,205 @@ export const Item = {
     }
     return message;
   },
+  fromJSON(object: any): Item {
+    const message = { ...baseItem } as Item;
+    if (object.productVariantBundleId !== undefined && object.productVariantBundleId !== null) {
+      message.productVariantBundleId = String(object.productVariantBundleId);
+    } else {
+      message.productVariantBundleId = "";
+    }
+    if (object.productName !== undefined && object.productName !== null) {
+      message.productName = String(object.productName);
+    } else {
+      message.productName = "";
+    }
+    if (object.productDescription !== undefined && object.productDescription !== null) {
+      message.productDescription = String(object.productDescription);
+    } else {
+      message.productDescription = "";
+    }
+    if (object.manufacturerName !== undefined && object.manufacturerName !== null) {
+      message.manufacturerName = String(object.manufacturerName);
+    } else {
+      message.manufacturerName = "";
+    }
+    if (object.manufacturerDescription !== undefined && object.manufacturerDescription !== null) {
+      message.manufacturerDescription = String(object.manufacturerDescription);
+    } else {
+      message.manufacturerDescription = "";
+    }
+    if (object.prototypeName !== undefined && object.prototypeName !== null) {
+      message.prototypeName = String(object.prototypeName);
+    } else {
+      message.prototypeName = "";
+    }
+    if (object.prototypeDescription !== undefined && object.prototypeDescription !== null) {
+      message.prototypeDescription = String(object.prototypeDescription);
+    } else {
+      message.prototypeDescription = "";
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = Number(object.quantity);
+    } else {
+      message.quantity = 0;
+    }
+    if (object.vat !== undefined && object.vat !== null) {
+      message.vat = Number(object.vat);
+    } else {
+      message.vat = 0;
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = Number(object.price);
+    } else {
+      message.price = 0;
+    }
+    if (object.itemType !== undefined && object.itemType !== null) {
+      message.itemType = String(object.itemType);
+    } else {
+      message.itemType = "";
+    }
+    if (object.taricCode !== undefined && object.taricCode !== null) {
+      message.taricCode = Number(object.taricCode);
+    } else {
+      message.taricCode = 0;
+    }
+    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+      message.stockKeepingUnit = String(object.stockKeepingUnit);
+    } else {
+      message.stockKeepingUnit = "";
+    }
+    if (object.weightInKg !== undefined && object.weightInKg !== null) {
+      message.weightInKg = Number(object.weightInKg);
+    } else {
+      message.weightInKg = 0;
+    }
+    if (object.lengthInCm !== undefined && object.lengthInCm !== null) {
+      message.lengthInCm = Number(object.lengthInCm);
+    } else {
+      message.lengthInCm = 0;
+    }
+    if (object.widthInCm !== undefined && object.widthInCm !== null) {
+      message.widthInCm = Number(object.widthInCm);
+    } else {
+      message.widthInCm = 0;
+    }
+    if (object.heightInCm !== undefined && object.heightInCm !== null) {
+      message.heightInCm = Number(object.heightInCm);
+    } else {
+      message.heightInCm = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = { ...baseItem } as Item;
+    if (object.productVariantBundleId !== undefined && object.productVariantBundleId !== null) {
+      message.productVariantBundleId = object.productVariantBundleId;
+    } else {
+      message.productVariantBundleId = "";
+    }
+    if (object.productName !== undefined && object.productName !== null) {
+      message.productName = object.productName;
+    } else {
+      message.productName = "";
+    }
+    if (object.productDescription !== undefined && object.productDescription !== null) {
+      message.productDescription = object.productDescription;
+    } else {
+      message.productDescription = "";
+    }
+    if (object.manufacturerName !== undefined && object.manufacturerName !== null) {
+      message.manufacturerName = object.manufacturerName;
+    } else {
+      message.manufacturerName = "";
+    }
+    if (object.manufacturerDescription !== undefined && object.manufacturerDescription !== null) {
+      message.manufacturerDescription = object.manufacturerDescription;
+    } else {
+      message.manufacturerDescription = "";
+    }
+    if (object.prototypeName !== undefined && object.prototypeName !== null) {
+      message.prototypeName = object.prototypeName;
+    } else {
+      message.prototypeName = "";
+    }
+    if (object.prototypeDescription !== undefined && object.prototypeDescription !== null) {
+      message.prototypeDescription = object.prototypeDescription;
+    } else {
+      message.prototypeDescription = "";
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = object.quantity;
+    } else {
+      message.quantity = 0;
+    }
+    if (object.vat !== undefined && object.vat !== null) {
+      message.vat = object.vat;
+    } else {
+      message.vat = 0;
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    } else {
+      message.price = 0;
+    }
+    if (object.itemType !== undefined && object.itemType !== null) {
+      message.itemType = object.itemType;
+    } else {
+      message.itemType = "";
+    }
+    if (object.taricCode !== undefined && object.taricCode !== null) {
+      message.taricCode = object.taricCode;
+    } else {
+      message.taricCode = 0;
+    }
+    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+      message.stockKeepingUnit = object.stockKeepingUnit;
+    } else {
+      message.stockKeepingUnit = "";
+    }
+    if (object.weightInKg !== undefined && object.weightInKg !== null) {
+      message.weightInKg = object.weightInKg;
+    } else {
+      message.weightInKg = 0;
+    }
+    if (object.lengthInCm !== undefined && object.lengthInCm !== null) {
+      message.lengthInCm = object.lengthInCm;
+    } else {
+      message.lengthInCm = 0;
+    }
+    if (object.widthInCm !== undefined && object.widthInCm !== null) {
+      message.widthInCm = object.widthInCm;
+    } else {
+      message.widthInCm = 0;
+    }
+    if (object.heightInCm !== undefined && object.heightInCm !== null) {
+      message.heightInCm = object.heightInCm;
+    } else {
+      message.heightInCm = 0;
+    }
+    return message;
+  },
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.productVariantBundleId !== undefined && (obj.productVariantBundleId = message.productVariantBundleId);
+    message.productName !== undefined && (obj.productName = message.productName);
+    message.productDescription !== undefined && (obj.productDescription = message.productDescription);
+    message.manufacturerName !== undefined && (obj.manufacturerName = message.manufacturerName);
+    message.manufacturerDescription !== undefined && (obj.manufacturerDescription = message.manufacturerDescription);
+    message.prototypeName !== undefined && (obj.prototypeName = message.prototypeName);
+    message.prototypeDescription !== undefined && (obj.prototypeDescription = message.prototypeDescription);
+    message.quantity !== undefined && (obj.quantity = message.quantity);
+    message.vat !== undefined && (obj.vat = message.vat);
+    message.price !== undefined && (obj.price = message.price);
+    message.itemType !== undefined && (obj.itemType = message.itemType);
+    message.taricCode !== undefined && (obj.taricCode = message.taricCode);
+    message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
+    message.weightInKg !== undefined && (obj.weightInKg = message.weightInKg);
+    message.lengthInCm !== undefined && (obj.lengthInCm = message.lengthInCm);
+    message.widthInCm !== undefined && (obj.widthInCm = message.widthInCm);
+    message.heightInCm !== undefined && (obj.heightInCm = message.heightInCm);
+    return obj;
+  },
 };
 
 export const Deleted = {
@@ -452,6 +875,29 @@ export const Deleted = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
   },
 };
 
@@ -486,6 +932,46 @@ export const OrderDataList = {
     }
     return message;
   },
+  fromJSON(object: any): OrderDataList {
+    const message = { ...baseOrderDataList } as OrderDataList;
+    message.orderData = [];
+    if (object.orderData !== undefined && object.orderData !== null) {
+      for (const e of object.orderData) {
+        message.orderData.push(OrderData.fromJSON(e));
+      }
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<OrderDataList>): OrderDataList {
+    const message = { ...baseOrderDataList } as OrderDataList;
+    message.orderData = [];
+    if (object.orderData !== undefined && object.orderData !== null) {
+      for (const e of object.orderData) {
+        message.orderData.push(OrderData.fromPartial(e));
+      }
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    return message;
+  },
+  toJSON(message: OrderDataList): unknown {
+    const obj: any = {};
+    if (message.orderData) {
+      obj.orderData = message.orderData.map(e => e ? OrderData.toJSON(e) : undefined);
+    } else {
+      obj.orderData = [];
+    }
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    return obj;
+  },
 };
 
 export const OrderData = {
@@ -516,6 +1002,46 @@ export const OrderData = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): OrderData {
+    const message = { ...baseOrderData } as OrderData;
+    message.shipments = [];
+    if (object.orderId !== undefined && object.orderId !== null) {
+      message.orderId = String(object.orderId);
+    } else {
+      message.orderId = "";
+    }
+    if (object.shipments !== undefined && object.shipments !== null) {
+      for (const e of object.shipments) {
+        message.shipments.push(Shipments.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<OrderData>): OrderData {
+    const message = { ...baseOrderData } as OrderData;
+    message.shipments = [];
+    if (object.orderId !== undefined && object.orderId !== null) {
+      message.orderId = object.orderId;
+    } else {
+      message.orderId = "";
+    }
+    if (object.shipments !== undefined && object.shipments !== null) {
+      for (const e of object.shipments) {
+        message.shipments.push(Shipments.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: OrderData): unknown {
+    const obj: any = {};
+    message.orderId !== undefined && (obj.orderId = message.orderId);
+    if (message.shipments) {
+      obj.shipments = message.shipments.map(e => e ? Shipments.toJSON(e) : undefined);
+    } else {
+      obj.shipments = [];
+    }
+    return obj;
   },
 };
 
@@ -569,6 +1095,106 @@ export const Shipments = {
     }
     return message;
   },
+  fromJSON(object: any): Shipments {
+    const message = { ...baseShipments } as Shipments;
+    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+      message.totalWeightInKg = Number(object.totalWeightInKg);
+    } else {
+      message.totalWeightInKg = 0;
+    }
+    if (object.individualWeightInKg !== undefined && object.individualWeightInKg !== null) {
+      message.individualWeightInKg = Number(object.individualWeightInKg);
+    } else {
+      message.individualWeightInKg = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
+    if (object.exportType !== undefined && object.exportType !== null) {
+      message.exportType = String(object.exportType);
+    } else {
+      message.exportType = "";
+    }
+    if (object.exportDescription !== undefined && object.exportDescription !== null) {
+      message.exportDescription = String(object.exportDescription);
+    } else {
+      message.exportDescription = "";
+    }
+    if (object.customsTariffNumber !== undefined && object.customsTariffNumber !== null) {
+      message.customsTariffNumber = String(object.customsTariffNumber);
+    } else {
+      message.customsTariffNumber = "";
+    }
+    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
+      message.invoiceNumber = String(object.invoiceNumber);
+    } else {
+      message.invoiceNumber = "";
+    }
+    if (object.customsValue !== undefined && object.customsValue !== null) {
+      message.customsValue = Number(object.customsValue);
+    } else {
+      message.customsValue = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Shipments>): Shipments {
+    const message = { ...baseShipments } as Shipments;
+    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+      message.totalWeightInKg = object.totalWeightInKg;
+    } else {
+      message.totalWeightInKg = 0;
+    }
+    if (object.individualWeightInKg !== undefined && object.individualWeightInKg !== null) {
+      message.individualWeightInKg = object.individualWeightInKg;
+    } else {
+      message.individualWeightInKg = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
+    if (object.exportType !== undefined && object.exportType !== null) {
+      message.exportType = object.exportType;
+    } else {
+      message.exportType = "";
+    }
+    if (object.exportDescription !== undefined && object.exportDescription !== null) {
+      message.exportDescription = object.exportDescription;
+    } else {
+      message.exportDescription = "";
+    }
+    if (object.customsTariffNumber !== undefined && object.customsTariffNumber !== null) {
+      message.customsTariffNumber = object.customsTariffNumber;
+    } else {
+      message.customsTariffNumber = "";
+    }
+    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
+      message.invoiceNumber = object.invoiceNumber;
+    } else {
+      message.invoiceNumber = "";
+    }
+    if (object.customsValue !== undefined && object.customsValue !== null) {
+      message.customsValue = object.customsValue;
+    } else {
+      message.customsValue = 0;
+    }
+    return message;
+  },
+  toJSON(message: Shipments): unknown {
+    const obj: any = {};
+    message.totalWeightInKg !== undefined && (obj.totalWeightInKg = message.totalWeightInKg);
+    message.individualWeightInKg !== undefined && (obj.individualWeightInKg = message.individualWeightInKg);
+    message.amount !== undefined && (obj.amount = message.amount);
+    message.exportType !== undefined && (obj.exportType = message.exportType);
+    message.exportDescription !== undefined && (obj.exportDescription = message.exportDescription);
+    message.customsTariffNumber !== undefined && (obj.customsTariffNumber = message.customsTariffNumber);
+    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
+    message.customsValue !== undefined && (obj.customsValue = message.customsValue);
+    return obj;
+  },
 };
 
 export const FulfillmentResults = {
@@ -595,6 +1221,35 @@ export const FulfillmentResults = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): FulfillmentResults {
+    const message = { ...baseFulfillmentResults } as FulfillmentResults;
+    message.fulfillmentResults = [];
+    if (object.fulfillmentResults !== undefined && object.fulfillmentResults !== null) {
+      for (const e of object.fulfillmentResults) {
+        message.fulfillmentResults.push(ResponseDetailsList.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<FulfillmentResults>): FulfillmentResults {
+    const message = { ...baseFulfillmentResults } as FulfillmentResults;
+    message.fulfillmentResults = [];
+    if (object.fulfillmentResults !== undefined && object.fulfillmentResults !== null) {
+      for (const e of object.fulfillmentResults) {
+        message.fulfillmentResults.push(ResponseDetailsList.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: FulfillmentResults): unknown {
+    const obj: any = {};
+    if (message.fulfillmentResults) {
+      obj.fulfillmentResults = message.fulfillmentResults.map(e => e ? ResponseDetailsList.toJSON(e) : undefined);
+    } else {
+      obj.fulfillmentResults = [];
+    }
+    return obj;
   },
 };
 
@@ -628,6 +1283,40 @@ export const ResponseDetailsList = {
     }
     return message;
   },
+  fromJSON(object: any): ResponseDetailsList {
+    const message = { ...baseResponseDetailsList } as ResponseDetailsList;
+    if (object.Status !== undefined && object.Status !== null) {
+      message.Status = OrderStatus.fromJSON(object.Status);
+    } else {
+      message.Status = undefined;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = ErrorList.fromJSON(object.error);
+    } else {
+      message.error = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ResponseDetailsList>): ResponseDetailsList {
+    const message = { ...baseResponseDetailsList } as ResponseDetailsList;
+    if (object.Status !== undefined && object.Status !== null) {
+      message.Status = OrderStatus.fromPartial(object.Status);
+    } else {
+      message.Status = undefined;
+    }
+    if (object.error !== undefined && object.error !== null) {
+      message.error = ErrorList.fromPartial(object.error);
+    } else {
+      message.error = undefined;
+    }
+    return message;
+  },
+  toJSON(message: ResponseDetailsList): unknown {
+    const obj: any = {};
+    message.Status !== undefined && (obj.Status = message.Status ? OrderStatus.toJSON(message.Status) : undefined);
+    message.error !== undefined && (obj.error = message.error ? ErrorList.toJSON(message.error) : undefined);
+    return obj;
+  },
 };
 
 export const OrderStatus = {
@@ -655,6 +1344,40 @@ export const OrderStatus = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): OrderStatus {
+    const message = { ...baseOrderStatus } as OrderStatus;
+    if (object.OrderId !== undefined && object.OrderId !== null) {
+      message.OrderId = String(object.OrderId);
+    } else {
+      message.OrderId = "";
+    }
+    if (object.OrderStatus !== undefined && object.OrderStatus !== null) {
+      message.OrderStatus = String(object.OrderStatus);
+    } else {
+      message.OrderStatus = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<OrderStatus>): OrderStatus {
+    const message = { ...baseOrderStatus } as OrderStatus;
+    if (object.OrderId !== undefined && object.OrderId !== null) {
+      message.OrderId = object.OrderId;
+    } else {
+      message.OrderId = "";
+    }
+    if (object.OrderStatus !== undefined && object.OrderStatus !== null) {
+      message.OrderStatus = object.OrderStatus;
+    } else {
+      message.OrderStatus = "";
+    }
+    return message;
+  },
+  toJSON(message: OrderStatus): unknown {
+    const obj: any = {};
+    message.OrderId !== undefined && (obj.OrderId = message.OrderId);
+    message.OrderStatus !== undefined && (obj.OrderStatus = message.OrderStatus);
+    return obj;
   },
 };
 
@@ -690,4 +1413,61 @@ export const ErrorList = {
     }
     return message;
   },
+  fromJSON(object: any): ErrorList {
+    const message = { ...baseErrorList } as ErrorList;
+    message.code = [];
+    message.message = [];
+    if (object.code !== undefined && object.code !== null) {
+      for (const e of object.code) {
+        message.code.push(String(e));
+      }
+    }
+    if (object.message !== undefined && object.message !== null) {
+      for (const e of object.message) {
+        message.message.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ErrorList>): ErrorList {
+    const message = { ...baseErrorList } as ErrorList;
+    message.code = [];
+    message.message = [];
+    if (object.code !== undefined && object.code !== null) {
+      for (const e of object.code) {
+        message.code.push(e);
+      }
+    }
+    if (object.message !== undefined && object.message !== null) {
+      for (const e of object.message) {
+        message.message.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: ErrorList): unknown {
+    const obj: any = {};
+    if (message.code) {
+      obj.code = message.code.map(e => e);
+    } else {
+      obj.code = [];
+    }
+    if (message.message) {
+      obj.message = message.message.map(e => e);
+    } else {
+      obj.message = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

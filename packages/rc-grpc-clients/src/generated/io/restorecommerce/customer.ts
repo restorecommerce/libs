@@ -124,6 +124,68 @@ export const CustomerList = {
     }
     return message;
   },
+  fromJSON(object: any): CustomerList {
+    const message = { ...baseCustomerList } as CustomerList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Customer.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CustomerList>): CustomerList {
+    const message = { ...baseCustomerList } as CustomerList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Customer.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CustomerList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Customer.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const Customer = {
@@ -172,6 +234,73 @@ export const Customer = {
     }
     return message;
   },
+  fromJSON(object: any): Customer {
+    const message = { ...baseCustomer } as Customer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.individualUser !== undefined && object.individualUser !== null) {
+      message.individualUser = IndividualUser.fromJSON(object.individualUser);
+    } else {
+      message.individualUser = undefined;
+    }
+    if (object.orgUser !== undefined && object.orgUser !== null) {
+      message.orgUser = OrgUser.fromJSON(object.orgUser);
+    } else {
+      message.orgUser = undefined;
+    }
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = Guest.fromJSON(object.guest);
+    } else {
+      message.guest = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Customer>): Customer {
+    const message = { ...baseCustomer } as Customer;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.individualUser !== undefined && object.individualUser !== null) {
+      message.individualUser = IndividualUser.fromPartial(object.individualUser);
+    } else {
+      message.individualUser = undefined;
+    }
+    if (object.orgUser !== undefined && object.orgUser !== null) {
+      message.orgUser = OrgUser.fromPartial(object.orgUser);
+    } else {
+      message.orgUser = undefined;
+    }
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = Guest.fromPartial(object.guest);
+    } else {
+      message.guest = undefined;
+    }
+    return message;
+  },
+  toJSON(message: Customer): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.individualUser !== undefined && (obj.individualUser = message.individualUser ? IndividualUser.toJSON(message.individualUser) : undefined);
+    message.orgUser !== undefined && (obj.orgUser = message.orgUser ? OrgUser.toJSON(message.orgUser) : undefined);
+    message.guest !== undefined && (obj.guest = message.guest ? Guest.toJSON(message.guest) : undefined);
+    return obj;
+  },
 };
 
 export const IndividualUser = {
@@ -207,6 +336,57 @@ export const IndividualUser = {
     }
     return message;
   },
+  fromJSON(object: any): IndividualUser {
+    const message = { ...baseIndividualUser } as IndividualUser;
+    message.contactPointIds = [];
+    if (object.userId !== undefined && object.userId !== null) {
+      message.userId = String(object.userId);
+    } else {
+      message.userId = "";
+    }
+    if (object.addressId !== undefined && object.addressId !== null) {
+      message.addressId = String(object.addressId);
+    } else {
+      message.addressId = "";
+    }
+    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+      for (const e of object.contactPointIds) {
+        message.contactPointIds.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
+    const message = { ...baseIndividualUser } as IndividualUser;
+    message.contactPointIds = [];
+    if (object.userId !== undefined && object.userId !== null) {
+      message.userId = object.userId;
+    } else {
+      message.userId = "";
+    }
+    if (object.addressId !== undefined && object.addressId !== null) {
+      message.addressId = object.addressId;
+    } else {
+      message.addressId = "";
+    }
+    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+      for (const e of object.contactPointIds) {
+        message.contactPointIds.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: IndividualUser): unknown {
+    const obj: any = {};
+    message.userId !== undefined && (obj.userId = message.userId);
+    message.addressId !== undefined && (obj.addressId = message.addressId);
+    if (message.contactPointIds) {
+      obj.contactPointIds = message.contactPointIds.map(e => e);
+    } else {
+      obj.contactPointIds = [];
+    }
+    return obj;
+  },
 };
 
 export const OrgUser = {
@@ -234,6 +414,40 @@ export const OrgUser = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): OrgUser {
+    const message = { ...baseOrgUser } as OrgUser;
+    if (object.userId !== undefined && object.userId !== null) {
+      message.userId = String(object.userId);
+    } else {
+      message.userId = "";
+    }
+    if (object.organizationId !== undefined && object.organizationId !== null) {
+      message.organizationId = String(object.organizationId);
+    } else {
+      message.organizationId = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<OrgUser>): OrgUser {
+    const message = { ...baseOrgUser } as OrgUser;
+    if (object.userId !== undefined && object.userId !== null) {
+      message.userId = object.userId;
+    } else {
+      message.userId = "";
+    }
+    if (object.organizationId !== undefined && object.organizationId !== null) {
+      message.organizationId = object.organizationId;
+    } else {
+      message.organizationId = "";
+    }
+    return message;
+  },
+  toJSON(message: OrgUser): unknown {
+    const obj: any = {};
+    message.userId !== undefined && (obj.userId = message.userId);
+    message.organizationId !== undefined && (obj.organizationId = message.organizationId);
+    return obj;
   },
 };
 
@@ -270,4 +484,66 @@ export const Guest = {
     }
     return message;
   },
+  fromJSON(object: any): Guest {
+    const message = { ...baseGuest } as Guest;
+    message.contactPointIds = [];
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = Boolean(object.guest);
+    } else {
+      message.guest = false;
+    }
+    if (object.addressId !== undefined && object.addressId !== null) {
+      message.addressId = String(object.addressId);
+    } else {
+      message.addressId = "";
+    }
+    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+      for (const e of object.contactPointIds) {
+        message.contactPointIds.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Guest>): Guest {
+    const message = { ...baseGuest } as Guest;
+    message.contactPointIds = [];
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = object.guest;
+    } else {
+      message.guest = false;
+    }
+    if (object.addressId !== undefined && object.addressId !== null) {
+      message.addressId = object.addressId;
+    } else {
+      message.addressId = "";
+    }
+    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+      for (const e of object.contactPointIds) {
+        message.contactPointIds.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: Guest): unknown {
+    const obj: any = {};
+    message.guest !== undefined && (obj.guest = message.guest);
+    message.addressId !== undefined && (obj.addressId = message.addressId);
+    if (message.contactPointIds) {
+      obj.contactPointIds = message.contactPointIds.map(e => e);
+    } else {
+      obj.contactPointIds = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

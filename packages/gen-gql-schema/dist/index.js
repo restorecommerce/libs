@@ -24,7 +24,6 @@ const fs = __importStar(require("fs"));
 const typescriptPlugin = __importStar(require("@graphql-codegen/typescript"));
 const typescriptResolversPlugin = __importStar(require("@graphql-codegen/typescript-resolvers"));
 const core_1 = require("@graphql-codegen/core");
-// import {  } from '@graphql-tools/schema';
 async function generateSchemaTypings(schema, outputFile, contextType) {
     try {
         schema;
@@ -33,7 +32,6 @@ async function generateSchemaTypings(schema, outputFile, contextType) {
             // returns the string output, rather than writing to a file
             filename: outputFile,
             schemaAst: schema,
-            // schema: parse(printSchema(schema)),
             plugins: [
                 {
                     typescript: {},

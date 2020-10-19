@@ -96,6 +96,106 @@ export const Image = {
     }
     return message;
   },
+  fromJSON(object: any): Image {
+    const message = { ...baseImage } as Image;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.caption !== undefined && object.caption !== null) {
+      message.caption = String(object.caption);
+    } else {
+      message.caption = "";
+    }
+    if (object.filename !== undefined && object.filename !== null) {
+      message.filename = String(object.filename);
+    } else {
+      message.filename = "";
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = String(object.contentType);
+    } else {
+      message.contentType = "";
+    }
+    if (object.url !== undefined && object.url !== null) {
+      message.url = String(object.url);
+    } else {
+      message.url = "";
+    }
+    if (object.width !== undefined && object.width !== null) {
+      message.width = Number(object.width);
+    } else {
+      message.width = 0;
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = Number(object.height);
+    } else {
+      message.height = 0;
+    }
+    if (object.length !== undefined && object.length !== null) {
+      message.length = Number(object.length);
+    } else {
+      message.length = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Image>): Image {
+    const message = { ...baseImage } as Image;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.caption !== undefined && object.caption !== null) {
+      message.caption = object.caption;
+    } else {
+      message.caption = "";
+    }
+    if (object.filename !== undefined && object.filename !== null) {
+      message.filename = object.filename;
+    } else {
+      message.filename = "";
+    }
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = object.contentType;
+    } else {
+      message.contentType = "";
+    }
+    if (object.url !== undefined && object.url !== null) {
+      message.url = object.url;
+    } else {
+      message.url = "";
+    }
+    if (object.width !== undefined && object.width !== null) {
+      message.width = object.width;
+    } else {
+      message.width = 0;
+    }
+    if (object.height !== undefined && object.height !== null) {
+      message.height = object.height;
+    } else {
+      message.height = 0;
+    }
+    if (object.length !== undefined && object.length !== null) {
+      message.length = object.length;
+    } else {
+      message.length = 0;
+    }
+    return message;
+  },
+  toJSON(message: Image): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.caption !== undefined && (obj.caption = message.caption);
+    message.filename !== undefined && (obj.filename = message.filename);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.url !== undefined && (obj.url = message.url);
+    message.width !== undefined && (obj.width = message.width);
+    message.height !== undefined && (obj.height = message.height);
+    message.length !== undefined && (obj.length = message.length);
+    return obj;
+  },
 };
 
 export const ImageList = {
@@ -127,6 +227,46 @@ export const ImageList = {
     }
     return message;
   },
+  fromJSON(object: any): ImageList {
+    const message = { ...baseImageList } as ImageList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Image.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<ImageList>): ImageList {
+    const message = { ...baseImageList } as ImageList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Image.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    return message;
+  },
+  toJSON(message: ImageList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Image.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    return obj;
+  },
 };
 
 export const Deleted = {
@@ -151,4 +291,38 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -81,6 +81,79 @@ export const SearchRequest = {
     }
     return message;
   },
+  fromJSON(object: any): SearchRequest {
+    const message = { ...baseSearchRequest } as SearchRequest;
+    message.acl = [];
+    if (object.collection !== undefined && object.collection !== null) {
+      message.collection = String(object.collection);
+    } else {
+      message.collection = "";
+    }
+    if (object.text !== undefined && object.text !== null) {
+      message.text = String(object.text);
+    } else {
+      message.text = "";
+    }
+    if (object.acl !== undefined && object.acl !== null) {
+      for (const e of object.acl) {
+        message.acl.push(String(e));
+      }
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
+    const message = { ...baseSearchRequest } as SearchRequest;
+    message.acl = [];
+    if (object.collection !== undefined && object.collection !== null) {
+      message.collection = object.collection;
+    } else {
+      message.collection = "";
+    }
+    if (object.text !== undefined && object.text !== null) {
+      message.text = object.text;
+    } else {
+      message.text = "";
+    }
+    if (object.acl !== undefined && object.acl !== null) {
+      for (const e of object.acl) {
+        message.acl.push(e);
+      }
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: SearchRequest): unknown {
+    const obj: any = {};
+    message.collection !== undefined && (obj.collection = message.collection);
+    message.text !== undefined && (obj.text = message.text);
+    if (message.acl) {
+      obj.acl = message.acl.map(e => e);
+    } else {
+      obj.acl = [];
+    }
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
 };
 
 export const SearchResponse = {
@@ -108,4 +181,44 @@ export const SearchResponse = {
     }
     return message;
   },
+  fromJSON(object: any): SearchResponse {
+    const message = { ...baseSearchResponse } as SearchResponse;
+    message.data = [];
+    if (object.data !== undefined && object.data !== null) {
+      for (const e of object.data) {
+        message.data.push(Any.fromJSON(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<SearchResponse>): SearchResponse {
+    const message = { ...baseSearchResponse } as SearchResponse;
+    message.data = [];
+    if (object.data !== undefined && object.data !== null) {
+      for (const e of object.data) {
+        message.data.push(Any.fromPartial(e));
+      }
+    }
+    return message;
+  },
+  toJSON(message: SearchResponse): unknown {
+    const obj: any = {};
+    if (message.data) {
+      obj.data = message.data.map(e => e ? Any.toJSON(e) : undefined);
+    } else {
+      obj.data = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

@@ -20,4 +20,3 @@ export const IdentityQueryType = new GraphQLObjectType({
 export const schema = new GraphQLSchema({
   query: IdentityQueryType,
 });
-

@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { Subject, ApiKey } from './auth';
-import { Meta } from './meta';
-import { ReadRequest, DeleteRequest } from './resource_base';
+import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Meta } from '../../io/restorecommerce/meta';
+import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
 import { Empty } from '../../google/protobuf/empty';
 import { Writer, Reader } from 'protobufjs/minimal';
 
@@ -84,6 +84,29 @@ export const Deleted = {
     }
     return message;
   },
+  fromJSON(object: any): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = { ...baseDeleted } as Deleted;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    return message;
+  },
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
 };
 
 export const CountryList = {
@@ -126,6 +149,68 @@ export const CountryList = {
       }
     }
     return message;
+  },
+  fromJSON(object: any): CountryList {
+    const message = { ...baseCountryList } as CountryList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Country.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromJSON(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<CountryList>): CountryList {
+    const message = { ...baseCountryList } as CountryList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Country.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.apiKey !== undefined && object.apiKey !== null) {
+      message.apiKey = ApiKey.fromPartial(object.apiKey);
+    } else {
+      message.apiKey = undefined;
+    }
+    return message;
+  },
+  toJSON(message: CountryList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map(e => e ? Country.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
   },
 };
 
@@ -176,4 +261,99 @@ export const Country = {
     }
     return message;
   },
+  fromJSON(object: any): Country {
+    const message = { ...baseCountry } as Country;
+    message.economicAreas = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.countryCode !== undefined && object.countryCode !== null) {
+      message.countryCode = String(object.countryCode);
+    } else {
+      message.countryCode = "";
+    }
+    if (object.geographicalName !== undefined && object.geographicalName !== null) {
+      message.geographicalName = String(object.geographicalName);
+    } else {
+      message.geographicalName = "";
+    }
+    if (object.economicAreas !== undefined && object.economicAreas !== null) {
+      for (const e of object.economicAreas) {
+        message.economicAreas.push(String(e));
+      }
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<Country>): Country {
+    const message = { ...baseCountry } as Country;
+    message.economicAreas = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.countryCode !== undefined && object.countryCode !== null) {
+      message.countryCode = object.countryCode;
+    } else {
+      message.countryCode = "";
+    }
+    if (object.geographicalName !== undefined && object.geographicalName !== null) {
+      message.geographicalName = object.geographicalName;
+    } else {
+      message.geographicalName = "";
+    }
+    if (object.economicAreas !== undefined && object.economicAreas !== null) {
+      for (const e of object.economicAreas) {
+        message.economicAreas.push(e);
+      }
+    }
+    return message;
+  },
+  toJSON(message: Country): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.countryCode !== undefined && (obj.countryCode = message.countryCode);
+    message.geographicalName !== undefined && (obj.geographicalName = message.geographicalName);
+    if (message.economicAreas) {
+      obj.economicAreas = message.economicAreas.map(e => e);
+    } else {
+      obj.economicAreas = [];
+    }
+    return obj;
+  },
 };
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;

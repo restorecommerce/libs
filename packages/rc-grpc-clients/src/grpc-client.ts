@@ -8,9 +8,9 @@ import { ApiKey, Subject } from './generated/io/restorecommerce/auth';
 
 export { DeleteRequest, ReadRequest };
 
-interface ResourceType<TType extends List<TType>> {
-  encode(message: TType, writer: Writer): Writer;
-  decode(input: Uint8Array | Reader, length?: number): TType;
+interface ResourceType<TType> {
+  encode(message: List<TType>, writer: Writer): Writer;
+  decode(input: Uint8Array | Reader, length?: number): List<TType>;
 }
 export interface List<T> {
   items: T[];
@@ -51,7 +51,7 @@ export class RestoreCommerceGrpcClient extends GrpcClient {
     }
   });
 
-  protected createCRUDMethods<TType extends List<TType>>(type: ResourceType<TType>): GrpcServiceMethods<CruudService<TType>> {
+  protected createCRUDMethods<TType>(type: ResourceType<TType>): GrpcServiceMethods<CruudService<TType>> {
     return {
       Create: {
         type: 'unary',

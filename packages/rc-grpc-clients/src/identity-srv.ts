@@ -1,5 +1,26 @@
 import { Empty } from "./generated/google/protobuf/empty";
-import { protobufPackage as userPackageName, ActivateRequest, ChangeEmailRequest, ChangePasswordRequest, ConfirmEmailChangeRequest, ConfirmPasswordChangeRequest, ConfirmUserInvitationRequest, FindByRoleRequest, FindRequest, LoginRequest, OrgIDRequest, RegisterRequest, RequestPasswordChangeRequest, SendInvitationEmailRequest, Service as UserService, UnregisterRequest, User, UserIDs, UserList } from "./generated/io/restorecommerce/user";
+import {
+  protobufPackage as userPackageName,
+  ActivateRequest,
+  ChangeEmailRequest,
+  ChangePasswordRequest,
+  ConfirmEmailChangeRequest,
+  ConfirmPasswordChangeRequest,
+  ConfirmUserInvitationRequest,
+  FindByRoleRequest,
+  FindRequest,
+  LoginRequest,
+  OrgIDRequest,
+  RegisterRequest,
+  RequestPasswordChangeRequest,
+  SendInvitationEmailRequest,
+  Service as UserService,
+  UnregisterRequest,
+  User,
+  UserIDs,
+  UserList,
+  PopulateRoleAssocCacheRequest
+} from "./generated/io/restorecommerce/user";
 import { protobufPackage as rolePackageName, RoleList, Service as RoleService } from "./generated/io/restorecommerce/role";
 import { RestoreCommerceGrpcClient } from "./grpc-client";
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
@@ -8,7 +29,7 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
     packageName: userPackageName,
     serviceName: 'Service',
     methods: {
-      ...this.createCRUDUMethods(UserList),
+      ...this.createCRUDMethods(UserList),
       Activate: {
         type: 'unary',
         serialize: ActivateRequest.encode,
@@ -79,12 +100,17 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
         serialize: UnregisterRequest.encode,
         deserialize: Empty.decode
       },
+      populateRoleAssocCache: {
+        type: 'unary',
+        serialize: PopulateRoleAssocCacheRequest.encode,
+        deserialize: Empty.decode
+      }
     }
   });
 
   role = this.createService<RoleService>({
     packageName: rolePackageName,
     serviceName: 'Service',
-    methods: this.createCRUDUMethods(RoleList)
+    methods: this.createCRUDMethods(RoleList)
   });
 }

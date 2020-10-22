@@ -55,9 +55,9 @@
   "scripts": {
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
-    "build:compile": "tsc -p src/tsconfig.json",
+    "build:compile": "tsc -p tsconfig.lib.json",
     "dev": "npm-run-all build:clean dev:compile",
-    "dev:compile": "tsc -w -p src/tsconfig.json",
+    "dev:compile": "tsc -w -p tsconfig.lib.json",
     "test": "jest",
     "generate": "node -r ts-node/register -r tsconfig-paths/register generate.ts",
     "prepublishOnly": "npm run build"

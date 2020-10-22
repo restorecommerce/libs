@@ -7,19 +7,19 @@ export class ResourcesSrvGrpcClient extends RestoreCommerceGrpcClient {
   address = this.createService<AddressService>({
     packageName: timezonePackageName,
     serviceName: 'Service',
-    methods: this.createCRUDUMethods(AddressList),
+    methods: this.createCRUDMethods(AddressList),
   });
 
   country = this.createService<CountryService>({
     packageName: countryPackageName,
     serviceName: 'Service',
-    methods: this.createCRUDUMethods(CountryList),
+    methods: this.createCRUDMethods(CountryList),
   });
 
   timezone = this.createService<TimezoneService>({
     packageName: addressPackageName,
     serviceName: 'Service',
-    methods: this.createCRUDUMethods(TimezoneList),
+    methods: this.createCRUDMethods(TimezoneList),
   });
 }
 

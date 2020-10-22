@@ -8,7 +8,8 @@
     "publish": "lerna publish --conventional-commits",
     "changed": "lerna changed",
     "test": "lerna run test",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "postinstall": "lerna bootstrap"
   },
   "repository": {
     "type": "git",

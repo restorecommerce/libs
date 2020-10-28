@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package io.restorecommerce.order;
+
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderList);
+  rpc Create (OrderList) returns (OrderList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (OrderList) returns (OrderList);
+  rpc Upsert (OrderList) returns (OrderList);
+  rpc TriggerFulfillment (OrderDataList) returns (FulfillmentResults);
+}
+
+
+message OrderList {
+  repeated Order items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Order {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string description = 4;
+  string status = 5;
+  repeated Items items = 6;
+  // sum of all the quantity_price will be total_price
+  double total_price = 7;
+  // shipping address
+  string shipping_contact_point_id = 8;
+  string billing_contact_point_id = 9;
+  double total_weight_in_kg = 10;
+}
+
+message Items {
+  double quantity_price = 1;
+  Item item = 2;
+}
+
+message Item {
+  // below identifier is id of product, variant or bundle
+  string product_variant_bundle_id = 1;
+  string product_name = 2;
+  string product_description = 3;
+  string manufacturer_name = 4;
+  string manufacturer_description = 5;
+  string prototype_name = 6;
+  string prototype_description = 7;
+  int32 quantity = 8;
+  int32 vat = 9;
+  double price = 10;
+  string item_type = 11;
+  double taric_code = 12;
+  string stock_keeping_unit = 13;
+  double weight_in_kg = 14;
+  int32 length_in_cm = 15;
+  int32 width_in_cm = 16;
+  int32 height_in_cm = 17;
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message OrderDataList {
+  repeated OrderData order_data = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+}
+
+message OrderData {
+  string order_id = 1;
+  repeated Shipments shipments = 2;
+}
+
+message Shipments {
+  double total_weight_in_kg = 1;
+  // below properties are used for international packaging
+  double individual_weight_in_kg = 2; // each items weight
+  int32 amount = 3; // number of items
+  string export_type = 4;
+  string export_description = 5;
+  string customs_tariff_number = 6;
+  string invoice_number = 7;
+  double customs_value = 8;
+}
+
+message FulfillmentResults {
+  repeated ResponseDetailsList fulfillmentResults =1;
+}
+
+message ResponseDetailsList {
+  OrderStatus Status = 1;
+  ErrorList error = 2;
+}
+
+message OrderStatus {
+  string OrderId = 1;
+  string OrderStatus =2;
+}
+
+message ErrorList {
+  repeated string code = 1;
+  repeated string message = 2;
+}

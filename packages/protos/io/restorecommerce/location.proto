@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package io.restorecommerce.location;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (LocationList);
+  rpc Create (LocationList) returns (LocationList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (LocationList) returns (LocationList);
+  rpc Upsert (LocationList) returns (LocationList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message LocationList {
+  repeated Location items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Location {
+  string id = 1; // Location ID, unique, key
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3; // Location name
+  string description = 4; 
+  string organization_id = 5; // Organization to which this location is linked
+  string parent_id = 6;  //  Location which may contain this location; may be null
+  repeated string children_ids = 7;  // Locations contained in this location
+  string address_id = 8;
+  google.protobuf.Any data = 9; /// additional data
+}

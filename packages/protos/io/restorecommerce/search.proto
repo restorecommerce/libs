@@ -1,0 +1,24 @@
+syntax = "proto3";
+package io.restorecommerce.search;
+
+import "google/protobuf/any.proto";
+import "io/restorecommerce/auth.proto";
+
+// Service provides the CRUD operations
+service Service {
+  rpc Search (SearchRequest) returns (SearchResponse);
+}
+
+message SearchRequest {
+  string collection = 1;
+  string text = 2;
+  repeated string acl = 3;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 4;
+    io.restorecommerce.auth.ApiKey api_key = 5;
+  }
+}
+
+message SearchResponse {
+  repeated google.protobuf.Any data = 1;
+}

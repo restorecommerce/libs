@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package io.restorecommerce.timezone;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TimezoneList);
+  rpc Create (TimezoneList) returns (TimezoneList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (TimezoneList) returns (TimezoneList);
+  rpc Upsert (TimezoneList) returns (TimezoneList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message TimezoneList {
+  repeated Timezone items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Timezone {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string value = 3;
+  string description = 4;
+
+  // optional string description = 4;
+
+  // oneof optional_description {
+  //   string description = 4;
+  // }
+}

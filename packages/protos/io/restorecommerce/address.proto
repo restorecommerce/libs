@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package io.restorecommerce.address;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AddressList);
+  rpc Create (AddressList) returns (AddressList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (AddressList) returns (AddressList);
+  rpc Upsert (AddressList) returns (AddressList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message AddressList {
+  repeated Address items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Address {
+  message GeoPoint {
+    double latitude = 1;
+    double longitude = 2;  
+  }
+
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string postcode = 3;
+  string country_id = 4;
+  string locality = 5;
+  string street = 6;
+  string region = 7;
+  
+  GeoPoint geo_coordinates = 8;
+  double altitude = 9;
+  string building_number = 10;
+  AddressAddition address_addition = 11;
+}
+
+message AddressAddition {
+  string field1 = 1;
+  string field2 = 2;
+}

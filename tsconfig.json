@@ -1,13 +1,9 @@
 {
   "files": [],
-  "compilerOptions": {
-    "lib": ["ES2019"],
-    "module": "commonjs",
-    "target": "ES2019"
-  },
   "references": [
     { "path": "./packages/logger/tsconfig.json" },
     { "path": "./packages/grpc-client/tsconfig.json" },
     { "path": "./packages/service-config/tsconfig.json" },
+    { "path": "./packages/facade/tsconfig.json" },
   ]
 }

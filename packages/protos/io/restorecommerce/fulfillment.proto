@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package io.restorecommerce.fulfillment;
+
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc CreateFulfillment (shipmentOrderLists) returns (FulfillmentResults);
+  rpc getLabels (OrderId) returns (LabelResult);
+  rpc trackFulfillment(TrackingNumber) returns ( Status);
+  rpc deleteFulfillment (OrderId) returns (DeleteStatus);
+  rpc getAllFulfillments(FulfillmentStatus) returns (AllFulfillments);
+}
+
+message OrderId {
+  string orderId = 1;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 2;
+    io.restorecommerce.auth.ApiKey api_key = 3;
+  }
+}
+
+message TrackingNumber {
+  string orderId = 1;
+  string shipmentType = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Status {
+  string Status = 1;
+  repeated shipmentStatus shipmentStatus = 2;
+  string OrderId = 3;
+
+}
+
+message AllFulfillments {
+  repeated Items items = 1;
+}
+
+message Items {
+  string fulfillment_status = 1;
+  string order_id = 2;
+  string serviceType =3 ;
+  repeated string shipment_number = 4;
+}
+
+message DeleteStatus {
+  string deleteStatus = 1;
+  Error error = 2;
+}
+
+message shipmentStatus {
+  repeated ShipmentData ShipmentData = 1;
+}
+
+message ShipmentData {
+  string ShipmentNumber = 1;
+  string Status = 2;
+  string ShortStatus = 3;
+  string TimeStamp = 4;
+  string Receiver = 5;
+  string ReceipientName = 6;
+  string Recepientemail = 7;
+  repeated EventDetails EventDetails = 8;
+  string Customer_Reference = 9;
+}
+
+message  EventDetails {
+  string Status = 1;
+  string Location = 2;
+  string Time = 3;
+  string Coutnry = 4;
+}
+
+message  LabelResult{
+  repeated Labels labels  = 1;
+  Error error = 2;
+}
+
+message Labels {
+  string labelUrl = 1;
+  string shipmentNumber= 2;
+  string exportLabelUrl = 3;
+}
+
+message shipmentOrderLists {
+  ShipmentOrder  ShipmentOrder = 1;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 2;
+    io.restorecommerce.auth.ApiKey api_key = 3;
+  }
+}
+
+message ShipmentOrder {
+  repeated FulfillmentList fulfillmentList = 1;
+  io.restorecommerce.meta.Meta meta = 3;
+}
+
+message FulfillmentList {
+  Shipment Shipment = 1;
+  string OrderId = 2;
+  string fulFillmentService = 4;
+}
+
+message Shipment {
+  repeated ShipmentDetails ShipmentDetails = 1;
+  string customerReference = 2;
+  Receiver Receiver = 3;
+  Shipper Shipper = 4;
+  string returnShipmentAccountNumber = 5;
+  string returnShipmentReference = 6;
+  Notification Notification = 7;
+}
+
+message ShipmentDetails {
+  ShipmentItem ShipmentItem = 1;
+}
+
+message ShipmentItem {
+  double weightInKG = 1;
+  string lengthInCM = 2;
+  string widthInCM = 3;
+  string heightInCM = 4;
+  ExportDocument ExportDocument = 5;
+}
+
+message Notification {
+  string recipientEmailAddress =1;
+}
+
+message Address {
+  string streetName = 1;
+  string streetNumber = 2;
+  string addressAddition = 3;
+  string zip = 4;
+  string city = 5;
+  Origin Origin = 6;
+}
+
+message Origin {
+  string country = 1;
+  string countryISOCode = 2;
+}
+
+message Shipper {
+  Name Name = 1;
+  Address Address = 2;
+  Communication Communication = 3;
+}
+
+message Name {
+  string name1 = 1;
+}
+
+message Receiver {
+  string name1 = 1;
+  Address Address = 2;
+  Communication Communication = 3;
+}
+
+message Communication{
+  string phone = 1;
+  string email = 2;
+}
+
+message ExportDocument {
+  string invoiceNumber = 1;
+  string exportType = 2;
+  string exportTypeDescription = 3;
+  string termsOfTrade = 4;
+  string placeOfCommital = 5;
+  double additionalFee = 6;
+  ExportDocPosition ExportDocPosition = 7;
+}
+
+message ExportDocPosition{
+  string description = 1 ;
+  string countryCodeOrigin = 2;
+  string customsTariffNumber = 3;
+  uint32 amount = 4;
+  uint32 netWeightInKG = 5;
+  double customsValue = 6;
+}
+
+message FulfillmentResults {
+  repeated ResponseDetailsList fulfillmentResults =1;
+}
+
+message ResponseDetailsList {
+  FulfillmentStatus Status  = 1;
+  ErrorList error = 2;
+}
+
+message FulfillmentStatus {
+  string OrderId = 1;
+  string OrderStatus =2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message Error {
+  string code = 1;
+  string message = 2;
+}
+
+message ErrorList {
+  repeated string code = 1;
+  repeated string message = 2;
+}

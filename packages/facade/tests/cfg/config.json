@@ -1,0 +1,24 @@
+{
+  "logger": {
+    "console": {
+      "handleExceptions": false,
+      "level": "debug",
+      "colorize": true,
+      "prettyPrint": true
+    }
+  },
+  "facade": {
+    "keys": ["secret"],
+    "port": 5000
+  },
+  "resources": {
+    "client": {
+      "address": "127.0.0.1:5002"
+    }
+  },
+  "identity": {
+    "client": {
+      "address": "127.0.0.1:50051"
+    }
+  }
+}

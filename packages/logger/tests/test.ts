@@ -1,4 +1,3 @@
-import * as should from 'should';
 import { createLogger, RestoreLoggerOptions } from '../src/index';
 
 const opts: RestoreLoggerOptions = {

@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package io.restorecommerce.contact_point;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointList);
+  rpc Create (ContactPointList) returns (ContactPointList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ContactPointList) returns (ContactPointList);
+  rpc Upsert (ContactPointList) returns (ContactPointList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message ContactPointList {
+  repeated ContactPoint items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message ContactPoint {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string physical_address_id = 3;
+  string website = 4;
+  string email = 5;
+  string contact_point_type_id = 6;
+  string telephone = 8;
+  string timezone_id = 9;
+  string locale_id = 10;
+}

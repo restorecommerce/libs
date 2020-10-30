@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.restorecommerce.meta;
+
+import "io/restorecommerce/attribute.proto";
+
+// meta properties common to all resources
+
+message Meta {
+    double created = 1; // timestamp
+    double modified = 2; // timestamp
+    string modified_by = 3; // ID from last User who modified it
+    repeated io.restorecommerce.attribute.Attribute owner = 4;
+}

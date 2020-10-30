@@ -1,0 +1,90 @@
+syntax = "proto3";
+package io.restorecommerce.resourcebase;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+// Service provides the CRUD operations
+service Service {
+  rpc Read (ReadRequest) returns (ResourceList);
+  rpc Create (ResourceList) returns (ResourceList);
+  rpc Delete (DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ResourceList) returns (ResourceList);
+  rpc Upsert (ResourceList) returns (ResourceList);
+}
+
+message FieldFilter {
+  string name = 1;
+  bool include = 2;
+}
+
+message Sort {
+  enum SortOrder {
+    UNSORTED = 0;
+    ASCENDING = 1;
+    DESCENDING = 2;
+  }
+  string field = 1;
+  SortOrder order = 2;
+}
+
+message ReadRequest {
+  uint32 offset = 1;
+  uint32 limit = 2;
+  repeated Sort sort = 3;
+
+  /// Filter based on fieldName|operation, value|list
+  google.protobuf.Struct filter = 4;
+
+  /// Fields selector
+  repeated FieldFilter field = 5;
+  repeated string search = 6;
+
+  /** Check the query parameters of HTTP request.
+    * If query parameter `locales` is given,
+    * return all corresponding localized values.
+    * Otherwise, return always the localized value
+    * with highest priority.
+    * Can be empty, single locale or multiple locales.
+    */
+  repeated string locales_limiter = 7;
+
+  repeated string custom_queries = 8;
+  google.protobuf.Any custom_arguments = 9;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 10;
+    io.restorecommerce.auth.ApiKey api_key = 11;
+  }
+}
+
+message DeleteRequest {
+  /// Request to purge the whole collection
+  bool collection = 1;
+  /// Delete specified documents
+  repeated string ids = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+/// List of resources
+message ResourceList {
+  repeated Resource items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+/// Example resource
+message Resource {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  int32 value = 3;
+  string text = 4;
+}

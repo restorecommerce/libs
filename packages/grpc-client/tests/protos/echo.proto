@@ -1,0 +1,22 @@
+syntax = "proto3";
+package echo;
+
+// import "google/protobuf/wrappers.proto";
+
+// The greeting service definition.
+service EchoService {
+  // Sends a greeting
+  rpc echoUnary (EchoRequest) returns (EchoResponse) {}
+  rpc echoServerStream (EchoRequest) returns (stream EchoResponse) {}
+  rpc echoClientStream (stream EchoRequest) returns (EchoResponse) {}
+  rpc echoBidiStream (stream EchoRequest) returns (stream EchoResponse) {}
+}
+
+message EchoRequest {
+  string message = 1;
+  // google.protobuf.StringValue foo = 2;
+}
+
+message EchoResponse {
+  string message = 1;
+}

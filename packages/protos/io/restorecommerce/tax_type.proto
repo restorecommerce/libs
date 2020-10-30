@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package io.restorecommerce.tax_type;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeList);
+  rpc Create (TaxTypeList) returns (TaxTypeList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (TaxTypeList) returns (TaxTypeList);
+  rpc Upsert (TaxTypeList) returns (TaxTypeList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message TaxTypeList {
+  repeated TaxType items = 1;
+  uint32 total_count = 2;
+  oneof authorization {
+    io.restorecommerce.auth.Subject subject = 3;
+    io.restorecommerce.auth.ApiKey api_key = 4;
+  }
+}
+
+message TaxType {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string type = 3;
+  string description = 4;
+}

@@ -18,7 +18,7 @@
   "dependencies": {
     "cls-hooked": "^4.2.2",
     "winston": "^3.3.3",
-    "winston-elasticsearch": "^0.11.0"
+    "winston-elasticsearch": "0.10.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

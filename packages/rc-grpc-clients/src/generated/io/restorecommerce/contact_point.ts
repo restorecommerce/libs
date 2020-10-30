@@ -88,28 +88,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaContactPointList: { [key in keyof ContactPointList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.contact_point.ContactPoint', name:'ContactPoint'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaContactPoint: { [key in keyof ContactPoint]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  physicalAddressId: 'string',
-  website: 'string',
-  email: 'string',
-  contactPointTypeId: 'string',
-  telephone: 'string',
-  timezoneId: 'string',
-  localeId: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.contact_point'
 
@@ -434,6 +418,33 @@ export const ContactPoint = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaContactPointList: { [key in keyof ContactPointList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.contact_point.ContactPoint', name:'ContactPoint'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaContactPoint: { [key in keyof ContactPoint]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  physicalAddressId: 'string',
+  website: 'string',
+  email: 'string',
+  contactPointTypeId: 'string',
+  telephone: 'string',
+  timezoneId: 'string',
+  localeId: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.contact_point.ContactPointList', response: '.io.restorecommerce.contact_point.ContactPointList', encodeRequest: ReadRequest.encode, decodeResponse: ContactPointList.decode} as MetaS<ReadRequest, ContactPointList>,
+  Create: {request: '.io.restorecommerce.contact_point.ContactPointList', response: '.io.restorecommerce.contact_point.ContactPointList', encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaS<ContactPointList, ContactPointList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.contact_point.ContactPointList', response: '.io.restorecommerce.contact_point.ContactPointList', encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaS<ContactPointList, ContactPointList>,
+  Upsert: {request: '.io.restorecommerce.contact_point.ContactPointList', response: '.io.restorecommerce.contact_point.ContactPointList', encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaS<ContactPointList, ContactPointList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

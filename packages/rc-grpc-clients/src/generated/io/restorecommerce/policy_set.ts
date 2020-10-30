@@ -94,30 +94,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaPolicySet: { [key in keyof PolicySet]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  description: 'string',
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  combiningAlgorithm: 'string',
-  policies: {meta:'array', type:'string'} as MetaA,
-};
-
-export const metaPolicySetList: { [key in keyof PolicySetList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySet', name:'PolicySet'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaPolicySetRQ: { [key in keyof PolicySetRQ]: MetaI | string } = {
-  id: 'string',
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  combiningAlgorithm: 'string',
-  policies: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy.PolicyRQ', name:'PolicyRQ'} as MetaO} as MetaA,
-  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.policy_set'
 
@@ -494,6 +476,35 @@ export const PolicySetRQ = {
   },
 };
 
+export const metaPolicySet: { [key in keyof PolicySet]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  description: 'string',
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  combiningAlgorithm: 'string',
+  policies: {meta:'array', type:'string'} as MetaA,
+}
+export const metaPolicySetList: { [key in keyof PolicySetList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySet', name:'PolicySet'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaPolicySetRQ: { [key in keyof PolicySetRQ]: MetaI | string } = {
+  id: 'string',
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  combiningAlgorithm: 'string',
+  policies: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy.PolicyRQ', name:'PolicyRQ'} as MetaO} as MetaA,
+  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.policy_set.PolicySetList', response: '.io.restorecommerce.policy_set.PolicySetList', encodeRequest: ReadRequest.encode, decodeResponse: PolicySetList.decode} as MetaS<ReadRequest, PolicySetList>,
+  Create: {request: '.io.restorecommerce.policy_set.PolicySetList', response: '.io.restorecommerce.policy_set.PolicySetList', encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaS<PolicySetList, PolicySetList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.policy_set.PolicySetList', response: '.io.restorecommerce.policy_set.PolicySetList', encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaS<PolicySetList, PolicySetList>,
+  Upsert: {request: '.io.restorecommerce.policy_set.PolicySetList', response: '.io.restorecommerce.policy_set.PolicySetList', encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaS<PolicySetList, PolicySetList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

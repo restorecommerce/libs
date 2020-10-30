@@ -90,24 +90,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaPayload: { [key in keyof Payload]: MetaI | string } = {
-  templates: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  styleUrl: 'string',
-  strategy: {meta:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaO,
-  options: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  contentType: 'string',
-};
-
-export const metaRenderRequest: { [key in keyof RenderRequest]: MetaI | string } = {
-  id: 'string',
-  payload: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaO} as MetaA,
-};
-
-export const metaRenderResponse: { [key in keyof RenderResponse]: MetaI | string } = {
-  id: 'string',
-  response: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.rendering'
 
@@ -415,6 +403,22 @@ export const RenderResponse = {
   },
 };
 
+export const metaPayload: { [key in keyof Payload]: MetaI | string } = {
+  templates: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  styleUrl: 'string',
+  strategy: {meta:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaO,
+  options: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  contentType: 'string',
+}
+export const metaRenderRequest: { [key in keyof RenderRequest]: MetaI | string } = {
+  id: 'string',
+  payload: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaO} as MetaA,
+}
+export const metaRenderResponse: { [key in keyof RenderResponse]: MetaI | string } = {
+  id: 'string',
+  response: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

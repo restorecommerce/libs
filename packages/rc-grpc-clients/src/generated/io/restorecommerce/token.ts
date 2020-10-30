@@ -126,37 +126,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaTokenData: { [key in keyof TokenData]: MetaI | string } = {
-  id: 'string',
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  expiresIn: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaIdentifier: { [key in keyof Identifier]: MetaI | string } = {
-  id: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaUniqueIdentifier: { [key in keyof UniqueIdentifier]: MetaI | string } = {
-  uid: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaUserCode: { [key in keyof UserCode]: MetaI | string } = {
-  userCode: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaGrantId: { [key in keyof GrantId]: MetaI | string } = {
-  grantId: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.token'
 
@@ -597,6 +572,42 @@ export const GrantId = {
   },
 };
 
+export const metaTokenData: { [key in keyof TokenData]: MetaI | string } = {
+  id: 'string',
+  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  expiresIn: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaIdentifier: { [key in keyof Identifier]: MetaI | string } = {
+  id: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaUniqueIdentifier: { [key in keyof UniqueIdentifier]: MetaI | string } = {
+  uid: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaUserCode: { [key in keyof UserCode]: MetaI | string } = {
+  userCode: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaGrantId: { [key in keyof GrantId]: MetaI | string } = {
+  grantId: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  upsert: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: TokenData.encode, decodeResponse: Any.decode} as MetaS<TokenData, Any>,
+  find: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
+  findByUid: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: UniqueIdentifier.encode, decodeResponse: Any.decode} as MetaS<UniqueIdentifier, Any>,
+  findByUserCode: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: UserCode.encode, decodeResponse: Any.decode} as MetaS<UserCode, Any>,
+  destroy: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
+  revokeByGrantId: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: GrantId.encode, decodeResponse: Any.decode} as MetaS<GrantId, Any>,
+  consume: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

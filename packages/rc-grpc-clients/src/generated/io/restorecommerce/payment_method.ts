@@ -82,23 +82,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaPaymentMethodList: { [key in keyof PaymentMethodList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaPaymentMethod: { [key in keyof PaymentMethod]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  paymentMethod: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', name:'PaymentMethod_PaymentMethod'} as MetaO,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.payment_method'
 
@@ -388,6 +377,28 @@ export const PaymentMethod = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaPaymentMethodList: { [key in keyof PaymentMethodList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaPaymentMethod: { [key in keyof PaymentMethod]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  paymentMethod: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', name:'PaymentMethod_PaymentMethod'} as MetaO,
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: ReadRequest.encode, decodeResponse: PaymentMethodList.decode} as MetaS<ReadRequest, PaymentMethodList>,
+  Create: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+  Upsert: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

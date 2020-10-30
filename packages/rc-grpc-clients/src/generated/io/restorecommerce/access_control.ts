@@ -79,26 +79,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaRequest: { [key in keyof Request]: MetaI | string } = {
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  context: {meta:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaO,
-};
-
-export const metaContext: { [key in keyof Context]: MetaI | string } = {
-  subject: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  resources: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
-  security: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-};
-
-export const metaResponse: { [key in keyof Response]: MetaI | string } = {
-  decision: {meta:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaO,
-  obligation: 'string',
-  evaluationCacheable: 'boolean',
-};
-
-export const metaReverseQuery: { [key in keyof ReverseQuery]: MetaI | string } = {
-  policySets: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaO} as MetaA,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.access_control'
 
@@ -435,6 +421,27 @@ export const ReverseQuery = {
   },
 };
 
+export const metaRequest: { [key in keyof Request]: MetaI | string } = {
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  context: {meta:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaO,
+}
+export const metaContext: { [key in keyof Context]: MetaI | string } = {
+  subject: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  resources: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+  security: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+}
+export const metaResponse: { [key in keyof Response]: MetaI | string } = {
+  decision: {meta:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaO,
+  obligation: 'string',
+  evaluationCacheable: 'boolean',
+}
+export const metaReverseQuery: { [key in keyof ReverseQuery]: MetaI | string } = {
+  policySets: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaO} as MetaA,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  IsAllowed: {request: '.io.restorecommerce.access_control.Response', response: '.io.restorecommerce.access_control.Response', encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaS<Request, Response>,
+  WhatIsAllowed: {request: '.io.restorecommerce.access_control.ReverseQuery', response: '.io.restorecommerce.access_control.ReverseQuery', encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaS<Request, ReverseQuery>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

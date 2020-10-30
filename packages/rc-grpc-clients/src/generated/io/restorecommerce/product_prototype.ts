@@ -85,25 +85,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaProductPrototype: { [key in keyof ProductPrototype]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  version: 'string',
-  description: 'string',
-  categoryId: 'string',
-};
-
-export const metaProductPrototypeList: { [key in keyof ProductPrototypeList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product_prototype.ProductPrototype', name:'ProductPrototype'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.product_prototype'
 
@@ -383,6 +370,30 @@ export const Deleted = {
   },
 };
 
+export const metaProductPrototype: { [key in keyof ProductPrototype]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  version: 'string',
+  description: 'string',
+  categoryId: 'string',
+}
+export const metaProductPrototypeList: { [key in keyof ProductPrototypeList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product_prototype.ProductPrototype', name:'ProductPrototype'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.product_prototype.ProductPrototypeList', response: '.io.restorecommerce.product_prototype.ProductPrototypeList', encodeRequest: ReadRequest.encode, decodeResponse: ProductPrototypeList.decode} as MetaS<ReadRequest, ProductPrototypeList>,
+  Create: {request: '.io.restorecommerce.product_prototype.ProductPrototypeList', response: '.io.restorecommerce.product_prototype.ProductPrototypeList', encodeRequest: ProductPrototypeList.encode, decodeResponse: ProductPrototypeList.decode} as MetaS<ProductPrototypeList, ProductPrototypeList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.product_prototype.ProductPrototypeList', response: '.io.restorecommerce.product_prototype.ProductPrototypeList', encodeRequest: ProductPrototypeList.encode, decodeResponse: ProductPrototypeList.decode} as MetaS<ProductPrototypeList, ProductPrototypeList>,
+  Upsert: {request: '.io.restorecommerce.product_prototype.ProductPrototypeList', response: '.io.restorecommerce.product_prototype.ProductPrototypeList', encodeRequest: ProductPrototypeList.encode, decodeResponse: ProductPrototypeList.decode} as MetaS<ProductPrototypeList, ProductPrototypeList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

@@ -82,23 +82,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaTimezoneList: { [key in keyof TimezoneList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.timezone.Timezone', name:'Timezone'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaTimezone: { [key in keyof Timezone]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  value: 'string',
-  description: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.timezone'
 
@@ -348,6 +337,28 @@ export const Timezone = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaTimezoneList: { [key in keyof TimezoneList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.timezone.Timezone', name:'Timezone'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaTimezone: { [key in keyof Timezone]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  value: 'string',
+  description: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.timezone.TimezoneList', response: '.io.restorecommerce.timezone.TimezoneList', encodeRequest: ReadRequest.encode, decodeResponse: TimezoneList.decode} as MetaS<ReadRequest, TimezoneList>,
+  Create: {request: '.io.restorecommerce.timezone.TimezoneList', response: '.io.restorecommerce.timezone.TimezoneList', encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.timezone.TimezoneList', response: '.io.restorecommerce.timezone.TimezoneList', encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
+  Upsert: {request: '.io.restorecommerce.timezone.TimezoneList', response: '.io.restorecommerce.timezone.TimezoneList', encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

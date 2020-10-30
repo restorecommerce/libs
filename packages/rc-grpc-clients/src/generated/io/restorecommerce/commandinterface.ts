@@ -80,17 +80,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaCommandRequest: { [key in keyof CommandRequest]: MetaI | string } = {
-  name: 'string',
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaCommandResponse: { [key in keyof CommandResponse]: MetaI | string } = {
-  services: {meta:'array', type:'string'} as MetaA,
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.commandinterface'
 
@@ -265,6 +260,19 @@ export const CommandResponse = {
   },
 };
 
+export const metaCommandRequest: { [key in keyof CommandRequest]: MetaI | string } = {
+  name: 'string',
+  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaCommandResponse: { [key in keyof CommandResponse]: MetaI | string } = {
+  services: {meta:'array', type:'string'} as MetaA,
+  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Command: {request: '.google.protobuf.Any', response: '.google.protobuf.Any', encodeRequest: CommandRequest.encode, decodeResponse: Any.decode} as MetaS<CommandRequest, Any>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

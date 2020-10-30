@@ -9,6 +9,11 @@ import {
   GraphQLObjectType,
   GraphQLUnionType,
 } from "graphql";
+import {
+  ExtractRpcArgument, ExtractRpcReturnType,
+  GrpcClientRpcMethodDefinition, GrpcService,
+  GrpcServiceMethods
+} from "@restorecommerce/grpc-client/dist";
 
 export interface MetaI {
   readonly meta: 'object' | 'array' | 'map' | 'union';
@@ -34,6 +39,13 @@ export interface MetaM extends MetaI {
 export interface MetaU extends MetaI {
   readonly meta: 'union';
   readonly choices: Array<MetaI | string | undefined>;
+}
+
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: any) => any;
+  readonly decodeResponse: (input: Uint8Array | any, length?: number) => R;
 }
 
 const registeredTypings = new Map<string, GraphQLObjectType>();
@@ -136,4 +148,21 @@ const resolveMeta = (key: string, value: MetaI | string): GraphQLOutputType => {
   }
 
   throw new Error("typing value cannot be type of " + typeof valueType);
+}
+
+export const getGQLFunction = <T extends GrpcService, M extends keyof T>
+(service: { [key in keyof T]: MetaS<any, any> }, method: M):
+  GrpcClientRpcMethodDefinition<ExtractRpcArgument<T[M]>, ExtractRpcReturnType<T[M]>> => {
+  return {
+    type: 'unary',
+    serialize: service[method].encodeRequest,
+    deserialize: service[method].decodeResponse
+  };
+}
+
+export const getGQLFunctions = <T extends GrpcService>(service: { [key in keyof T]: MetaS<any, any> }): GrpcServiceMethods<T> => {
+  return Object.keys(service).reduce((obj, methodName) => {
+    obj[methodName] = getGQLFunction(service, methodName);
+    return obj;
+  }, {} as any)
 }

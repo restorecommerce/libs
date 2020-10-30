@@ -131,37 +131,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaAttachment: { [key in keyof Attachment]: MetaI | string } = {
-  filename: 'string',
-  text: 'string',
-  buffer: 'Buffer',
-  path: 'string',
-  contentType: 'string',
-  contentDisposition: 'string',
-  cid: 'string',
-  encoding: 'string',
-};
-
-export const metaNotification: { [key in keyof Notification]: MetaI | string } = {
-  email: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Email', name:'Email'} as MetaO]} as MetaU,
-  log: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Log', name:'Log'} as MetaO]} as MetaU,
-  subject: 'string',
-  body: 'string',
-  transport: 'string',
-  provider: 'string',
-  attachments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.notification.Attachment', name:'Attachment'} as MetaO} as MetaA,
-};
-
-export const metaEmail: { [key in keyof Email]: MetaI | string } = {
-  to: {meta:'array', type:'string'} as MetaA,
-  cc: {meta:'array', type:'string'} as MetaA,
-  bcc: {meta:'array', type:'string'} as MetaA,
-  replyto: 'string',
-};
-
-export const metaLog: { [key in keyof Log]: MetaI | string } = {
-  level: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.notification'
 
@@ -631,6 +606,37 @@ export const Log = {
   },
 };
 
+export const metaAttachment: { [key in keyof Attachment]: MetaI | string } = {
+  filename: 'string',
+  text: 'string',
+  buffer: 'Buffer',
+  path: 'string',
+  contentType: 'string',
+  contentDisposition: 'string',
+  cid: 'string',
+  encoding: 'string',
+}
+export const metaNotification: { [key in keyof Notification]: MetaI | string } = {
+  email: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Email', name:'Email'} as MetaO]} as MetaU,
+  log: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Log', name:'Log'} as MetaO]} as MetaU,
+  subject: 'string',
+  body: 'string',
+  transport: 'string',
+  provider: 'string',
+  attachments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.notification.Attachment', name:'Attachment'} as MetaO} as MetaA,
+}
+export const metaEmail: { [key in keyof Email]: MetaI | string } = {
+  to: {meta:'array', type:'string'} as MetaA,
+  cc: {meta:'array', type:'string'} as MetaA,
+  bcc: {meta:'array', type:'string'} as MetaA,
+  replyto: 'string',
+}
+export const metaLog: { [key in keyof Log]: MetaI | string } = {
+  level: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Send: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: Notification.encode, decodeResponse: Empty.decode} as MetaS<Notification, Empty>,
+}
 interface WindowBase64 {
   atob(b64: string): string;
   btoa(bin: string): string;

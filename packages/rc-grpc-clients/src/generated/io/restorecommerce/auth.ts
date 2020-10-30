@@ -145,37 +145,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaSubject: { [key in keyof Subject]: MetaI | string } = {
-  id: 'string',
-  scope: 'string',
-  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
-  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  unauthenticated: 'boolean',
-  token: 'string',
-};
-
-export const metaApiKey: { [key in keyof ApiKey]: MetaI | string } = {
-  value: 'string',
-};
-
-export const metaTokens: { [key in keyof Tokens]: MetaI | string } = {
-  name: 'string',
-  expiresAt: 'number',
-  token: 'string',
-  scopes: {meta:'array', type:'string'} as MetaA,
-};
-
-export const metaHierarchicalScope: { [key in keyof HierarchicalScope]: MetaI | string } = {
-  id: 'string',
-  children: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  role: 'string',
-};
-
-export const metaRoleAssociation: { [key in keyof RoleAssociation]: MetaI | string } = {
-  role: 'string',
-  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  id: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.auth'
 
@@ -639,6 +614,33 @@ export const RoleAssociation = {
   },
 };
 
+export const metaSubject: { [key in keyof Subject]: MetaI | string } = {
+  id: 'string',
+  scope: 'string',
+  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
+  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
+  unauthenticated: 'boolean',
+  token: 'string',
+}
+export const metaApiKey: { [key in keyof ApiKey]: MetaI | string } = {
+  value: 'string',
+}
+export const metaTokens: { [key in keyof Tokens]: MetaI | string } = {
+  name: 'string',
+  expiresAt: 'number',
+  token: 'string',
+  scopes: {meta:'array', type:'string'} as MetaA,
+}
+export const metaHierarchicalScope: { [key in keyof HierarchicalScope]: MetaI | string } = {
+  id: 'string',
+  children: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
+  role: 'string',
+}
+export const metaRoleAssociation: { [key in keyof RoleAssociation]: MetaI | string } = {
+  role: 'string',
+  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+  id: 'string',
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

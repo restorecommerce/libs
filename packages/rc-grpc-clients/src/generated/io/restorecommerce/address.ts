@@ -114,40 +114,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaAddressList: { [key in keyof AddressList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.address.Address', name:'Address'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaAddress: { [key in keyof Address]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  postcode: 'string',
-  countryId: 'string',
-  locality: 'string',
-  street: 'string',
-  region: 'string',
-  geoCoordinates: {meta:'object', type:'.io.restorecommerce.address.Address.GeoPoint', name:'Address_GeoPoint'} as MetaO,
-  altitude: 'number',
-  buildingNumber: 'string',
-  addressAddition: {meta:'object', type:'.io.restorecommerce.address.AddressAddition', name:'AddressAddition'} as MetaO,
-};
-
-export const metaAddress_GeoPoint: { [key in keyof Address_GeoPoint]: MetaI | string } = {
-  latitude: 'number',
-  longitude: 'number',
-};
-
-export const metaAddressAddition: { [key in keyof AddressAddition]: MetaI | string } = {
-  field1: 'string',
-  field2: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.address'
 
@@ -630,6 +602,43 @@ export const AddressAddition = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaAddressList: { [key in keyof AddressList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.address.Address', name:'Address'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaAddress: { [key in keyof Address]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  postcode: 'string',
+  countryId: 'string',
+  locality: 'string',
+  street: 'string',
+  region: 'string',
+  geoCoordinates: {meta:'object', type:'.io.restorecommerce.address.Address.GeoPoint', name:'Address_GeoPoint'} as MetaO,
+  altitude: 'number',
+  buildingNumber: 'string',
+  addressAddition: {meta:'object', type:'.io.restorecommerce.address.AddressAddition', name:'AddressAddition'} as MetaO,
+}
+export const metaAddress_GeoPoint: { [key in keyof Address_GeoPoint]: MetaI | string } = {
+  latitude: 'number',
+  longitude: 'number',
+}
+export const metaAddressAddition: { [key in keyof AddressAddition]: MetaI | string } = {
+  field1: 'string',
+  field2: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.address.AddressList', response: '.io.restorecommerce.address.AddressList', encodeRequest: ReadRequest.encode, decodeResponse: AddressList.decode} as MetaS<ReadRequest, AddressList>,
+  Create: {request: '.io.restorecommerce.address.AddressList', response: '.io.restorecommerce.address.AddressList', encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.address.AddressList', response: '.io.restorecommerce.address.AddressList', encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
+  Upsert: {request: '.io.restorecommerce.address.AddressList', response: '.io.restorecommerce.address.AddressList', encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

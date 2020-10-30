@@ -109,27 +109,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaCommand: { [key in keyof Command]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  parameters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.command.CommandParameter', name:'CommandParameter'} as MetaO} as MetaA,
-  description: 'string',
-};
-
-export const metaCommandParameter: { [key in keyof CommandParameter]: MetaI | string } = {
-  field: 'string',
-  description: 'string',
-  type: {meta:'object', type:'.io.restorecommerce.command.CommandParameter.ParameterType', name:'CommandParameter_ParameterType'} as MetaO,
-  properties: 'string',
-};
-
-export const metaCommandList: { [key in keyof CommandList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.command.Command', name:'Command'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.command'
 
@@ -498,6 +483,32 @@ export const CommandList = {
   },
 };
 
+export const metaCommand: { [key in keyof Command]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  parameters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.command.CommandParameter', name:'CommandParameter'} as MetaO} as MetaA,
+  description: 'string',
+}
+export const metaCommandParameter: { [key in keyof CommandParameter]: MetaI | string } = {
+  field: 'string',
+  description: 'string',
+  type: {meta:'object', type:'.io.restorecommerce.command.CommandParameter.ParameterType', name:'CommandParameter_ParameterType'} as MetaO,
+  properties: 'string',
+}
+export const metaCommandList: { [key in keyof CommandList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.command.Command', name:'Command'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.command.CommandList', response: '.io.restorecommerce.command.CommandList', encodeRequest: ReadRequest.encode, decodeResponse: CommandList.decode} as MetaS<ReadRequest, CommandList>,
+  Create: {request: '.io.restorecommerce.command.CommandList', response: '.io.restorecommerce.command.CommandList', encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaS<CommandList, CommandList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.command.CommandList', response: '.io.restorecommerce.command.CommandList', encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaS<CommandList, CommandList>,
+  Upsert: {request: '.io.restorecommerce.command.CommandList', response: '.io.restorecommerce.command.CommandList', encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaS<CommandList, CommandList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

@@ -60,17 +60,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaSearchRequest: { [key in keyof SearchRequest]: MetaI | string } = {
-  collection: 'string',
-  text: 'string',
-  acl: {meta:'array', type:'string'} as MetaA,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaSearchResponse: { [key in keyof SearchResponse]: MetaI | string } = {
-  data: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.search'
 
@@ -250,6 +245,19 @@ export const SearchResponse = {
   },
 };
 
+export const metaSearchRequest: { [key in keyof SearchRequest]: MetaI | string } = {
+  collection: 'string',
+  text: 'string',
+  acl: {meta:'array', type:'string'} as MetaA,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaSearchResponse: { [key in keyof SearchResponse]: MetaI | string } = {
+  data: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Search: {request: '.io.restorecommerce.search.SearchResponse', response: '.io.restorecommerce.search.SearchResponse', encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaS<SearchRequest, SearchResponse>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

@@ -45,8 +45,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaEmpty: { [key in keyof Empty]: MetaI | string } = {
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'google.protobuf'
 
@@ -82,6 +86,8 @@ export const Empty = {
   },
 };
 
+export const metaEmpty: { [key in keyof Empty]: MetaI | string } = {
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

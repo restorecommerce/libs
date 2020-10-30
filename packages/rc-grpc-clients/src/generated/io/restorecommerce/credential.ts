@@ -91,26 +91,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaCredentialList: { [key in keyof CredentialList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.credential.Credential', name:'Credential'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaCredential: { [key in keyof Credential]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  description: 'string',
-  user: 'string',
-  pass: 'string',
-  credentials: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.credential'
 
@@ -407,6 +393,31 @@ export const Credential = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaCredentialList: { [key in keyof CredentialList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.credential.Credential', name:'Credential'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaCredential: { [key in keyof Credential]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  description: 'string',
+  user: 'string',
+  pass: 'string',
+  credentials: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.credential.CredentialList', response: '.io.restorecommerce.credential.CredentialList', encodeRequest: ReadRequest.encode, decodeResponse: CredentialList.decode} as MetaS<ReadRequest, CredentialList>,
+  Create: {request: '.io.restorecommerce.credential.CredentialList', response: '.io.restorecommerce.credential.CredentialList', encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaS<CredentialList, CredentialList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.credential.CredentialList', response: '.io.restorecommerce.credential.CredentialList', encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaS<CredentialList, CredentialList>,
+  Upsert: {request: '.io.restorecommerce.credential.CredentialList', response: '.io.restorecommerce.credential.CredentialList', encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaS<CredentialList, CredentialList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

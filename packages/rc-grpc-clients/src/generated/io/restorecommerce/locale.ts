@@ -82,23 +82,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaLocaleList: { [key in keyof LocaleList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.locale.Locale', name:'Locale'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaLocale: { [key in keyof Locale]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  value: 'string',
-  description: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.locale'
 
@@ -348,6 +337,28 @@ export const Locale = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaLocaleList: { [key in keyof LocaleList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.locale.Locale', name:'Locale'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaLocale: { [key in keyof Locale]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  value: 'string',
+  description: 'string',
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: ReadRequest.encode, decodeResponse: LocaleList.decode} as MetaS<ReadRequest, LocaleList>,
+  Create: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+  Upsert: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

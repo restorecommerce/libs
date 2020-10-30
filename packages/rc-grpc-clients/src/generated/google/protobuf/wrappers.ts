@@ -172,41 +172,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDoubleValue: { [key in keyof DoubleValue]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaFloatValue: { [key in keyof FloatValue]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaInt64Value: { [key in keyof Int64Value]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaUInt64Value: { [key in keyof UInt64Value]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaInt32Value: { [key in keyof Int32Value]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaUInt32Value: { [key in keyof UInt32Value]: MetaI | string } = {
-  value: 'number',
-};
-
-export const metaBoolValue: { [key in keyof BoolValue]: MetaI | string } = {
-  value: 'boolean',
-};
-
-export const metaStringValue: { [key in keyof StringValue]: MetaI | string } = {
-  value: 'string',
-};
-
-export const metaBytesValue: { [key in keyof BytesValue]: MetaI | string } = {
-  value: 'Buffer',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 function longToNumber(long: Long) {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
@@ -638,6 +609,33 @@ export const BytesValue = {
   },
 };
 
+export const metaDoubleValue: { [key in keyof DoubleValue]: MetaI | string } = {
+  value: 'number',
+}
+export const metaFloatValue: { [key in keyof FloatValue]: MetaI | string } = {
+  value: 'number',
+}
+export const metaInt64Value: { [key in keyof Int64Value]: MetaI | string } = {
+  value: 'number',
+}
+export const metaUInt64Value: { [key in keyof UInt64Value]: MetaI | string } = {
+  value: 'number',
+}
+export const metaInt32Value: { [key in keyof Int32Value]: MetaI | string } = {
+  value: 'number',
+}
+export const metaUInt32Value: { [key in keyof UInt32Value]: MetaI | string } = {
+  value: 'number',
+}
+export const metaBoolValue: { [key in keyof BoolValue]: MetaI | string } = {
+  value: 'boolean',
+}
+export const metaStringValue: { [key in keyof StringValue]: MetaI | string } = {
+  value: 'string',
+}
+export const metaBytesValue: { [key in keyof BytesValue]: MetaI | string } = {
+  value: 'Buffer',
+}
 if (util.Long !== Long as any) {
   util.Long = Long as any;
   configure();

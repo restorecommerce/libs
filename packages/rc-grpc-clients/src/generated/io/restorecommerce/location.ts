@@ -110,28 +110,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
-
-export const metaLocationList: { [key in keyof LocationList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.location.Location', name:'Location'} as MetaO} as MetaA,
-  totalCount: 'number',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaLocation: { [key in keyof Location]: MetaI | string } = {
-  id: 'string',
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  description: 'string',
-  organizationId: 'string',
-  parentId: 'string',
-  childrenIds: {meta:'array', type:'string'} as MetaA,
-  addressId: 'string',
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.location'
 
@@ -467,6 +451,33 @@ export const Location = {
   },
 };
 
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
+export const metaLocationList: { [key in keyof LocationList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.location.Location', name:'Location'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaLocation: { [key in keyof Location]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  description: 'string',
+  organizationId: 'string',
+  parentId: 'string',
+  childrenIds: {meta:'array', type:'string'} as MetaA,
+  addressId: 'string',
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  Read: {request: '.io.restorecommerce.location.LocationList', response: '.io.restorecommerce.location.LocationList', encodeRequest: ReadRequest.encode, decodeResponse: LocationList.decode} as MetaS<ReadRequest, LocationList>,
+  Create: {request: '.io.restorecommerce.location.LocationList', response: '.io.restorecommerce.location.LocationList', encodeRequest: LocationList.encode, decodeResponse: LocationList.decode} as MetaS<LocationList, LocationList>,
+  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: '.io.restorecommerce.location.LocationList', response: '.io.restorecommerce.location.LocationList', encodeRequest: LocationList.encode, decodeResponse: LocationList.decode} as MetaS<LocationList, LocationList>,
+  Upsert: {request: '.io.restorecommerce.location.LocationList', response: '.io.restorecommerce.location.LocationList', encodeRequest: LocationList.encode, decodeResponse: LocationList.decode} as MetaS<LocationList, LocationList>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

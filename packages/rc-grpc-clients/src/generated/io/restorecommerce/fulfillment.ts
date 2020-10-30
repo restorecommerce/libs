@@ -397,197 +397,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaOrderId: { [key in keyof OrderId]: MetaI | string } = {
-  orderId: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaTrackingNumber: { [key in keyof TrackingNumber]: MetaI | string } = {
-  orderId: 'string',
-  shipmentType: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaStatus: { [key in keyof Status]: MetaI | string } = {
-  Status: 'string',
-  shipmentStatus: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.shipmentStatus', name:'shipmentStatus'} as MetaO} as MetaA,
-  OrderId: 'string',
-};
-
-export const metaAllFulfillments: { [key in keyof AllFulfillments]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.Items', name:'Items'} as MetaO} as MetaA,
-};
-
-export const metaItems: { [key in keyof Items]: MetaI | string } = {
-  fulfillmentStatus: 'string',
-  orderId: 'string',
-  serviceType: 'string',
-  shipmentNumber: {meta:'array', type:'string'} as MetaA,
-};
-
-export const metaDeleteStatus: { [key in keyof DeleteStatus]: MetaI | string } = {
-  deleteStatus: 'string',
-  error: {meta:'object', type:'.io.restorecommerce.fulfillment.Error', name:'Error'} as MetaO,
-};
-
-export const metashipmentStatus: { [key in keyof shipmentStatus]: MetaI | string } = {
-  ShipmentData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentData', name:'ShipmentData'} as MetaO} as MetaA,
-};
-
-export const metaShipmentData: { [key in keyof ShipmentData]: MetaI | string } = {
-  ShipmentNumber: 'string',
-  Status: 'string',
-  ShortStatus: 'string',
-  TimeStamp: 'string',
-  Receiver: 'string',
-  ReceipientName: 'string',
-  Recepientemail: 'string',
-  EventDetails: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.EventDetails', name:'EventDetails'} as MetaO} as MetaA,
-  CustomerReference: 'string',
-};
-
-export const metaEventDetails: { [key in keyof EventDetails]: MetaI | string } = {
-  Status: 'string',
-  Location: 'string',
-  Time: 'string',
-  Coutnry: 'string',
-};
-
-export const metaLabelResult: { [key in keyof LabelResult]: MetaI | string } = {
-  labels: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.Labels', name:'Labels'} as MetaO} as MetaA,
-  error: {meta:'object', type:'.io.restorecommerce.fulfillment.Error', name:'Error'} as MetaO,
-};
-
-export const metaLabels: { [key in keyof Labels]: MetaI | string } = {
-  labelUrl: 'string',
-  shipmentNumber: 'string',
-  exportLabelUrl: 'string',
-};
-
-export const metashipmentOrderLists: { [key in keyof shipmentOrderLists]: MetaI | string } = {
-  ShipmentOrder: {meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentOrder', name:'ShipmentOrder'} as MetaO,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaShipmentOrder: { [key in keyof ShipmentOrder]: MetaI | string } = {
-  fulfillmentList: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.FulfillmentList', name:'FulfillmentList'} as MetaO} as MetaA,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-};
-
-export const metaFulfillmentList: { [key in keyof FulfillmentList]: MetaI | string } = {
-  Shipment: {meta:'object', type:'.io.restorecommerce.fulfillment.Shipment', name:'Shipment'} as MetaO,
-  OrderId: 'string',
-  fulFillmentService: 'string',
-};
-
-export const metaShipment: { [key in keyof Shipment]: MetaI | string } = {
-  ShipmentDetails: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentDetails', name:'ShipmentDetails'} as MetaO} as MetaA,
-  customerReference: 'string',
-  Receiver: {meta:'object', type:'.io.restorecommerce.fulfillment.Receiver', name:'Receiver'} as MetaO,
-  Shipper: {meta:'object', type:'.io.restorecommerce.fulfillment.Shipper', name:'Shipper'} as MetaO,
-  returnShipmentAccountNumber: 'string',
-  returnShipmentReference: 'string',
-  Notification: {meta:'object', type:'.io.restorecommerce.fulfillment.Notification', name:'Notification'} as MetaO,
-};
-
-export const metaShipmentDetails: { [key in keyof ShipmentDetails]: MetaI | string } = {
-  ShipmentItem: {meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentItem', name:'ShipmentItem'} as MetaO,
-};
-
-export const metaShipmentItem: { [key in keyof ShipmentItem]: MetaI | string } = {
-  weightInKG: 'number',
-  lengthInCM: 'string',
-  widthInCM: 'string',
-  heightInCM: 'string',
-  ExportDocument: {meta:'object', type:'.io.restorecommerce.fulfillment.ExportDocument', name:'ExportDocument'} as MetaO,
-};
-
-export const metaNotification: { [key in keyof Notification]: MetaI | string } = {
-  recipientEmailAddress: 'string',
-};
-
-export const metaAddress: { [key in keyof Address]: MetaI | string } = {
-  streetName: 'string',
-  streetNumber: 'string',
-  addressAddition: 'string',
-  zip: 'string',
-  city: 'string',
-  Origin: {meta:'object', type:'.io.restorecommerce.fulfillment.Origin', name:'Origin'} as MetaO,
-};
-
-export const metaOrigin: { [key in keyof Origin]: MetaI | string } = {
-  country: 'string',
-  countryISOCode: 'string',
-};
-
-export const metaShipper: { [key in keyof Shipper]: MetaI | string } = {
-  Name: {meta:'object', type:'.io.restorecommerce.fulfillment.Name', name:'Name'} as MetaO,
-  Address: {meta:'object', type:'.io.restorecommerce.fulfillment.Address', name:'Address'} as MetaO,
-  Communication: {meta:'object', type:'.io.restorecommerce.fulfillment.Communication', name:'Communication'} as MetaO,
-};
-
-export const metaName: { [key in keyof Name]: MetaI | string } = {
-  name1: 'string',
-};
-
-export const metaReceiver: { [key in keyof Receiver]: MetaI | string } = {
-  name1: 'string',
-  Address: {meta:'object', type:'.io.restorecommerce.fulfillment.Address', name:'Address'} as MetaO,
-  Communication: {meta:'object', type:'.io.restorecommerce.fulfillment.Communication', name:'Communication'} as MetaO,
-};
-
-export const metaCommunication: { [key in keyof Communication]: MetaI | string } = {
-  phone: 'string',
-  email: 'string',
-};
-
-export const metaExportDocument: { [key in keyof ExportDocument]: MetaI | string } = {
-  invoiceNumber: 'string',
-  exportType: 'string',
-  exportTypeDescription: 'string',
-  termsOfTrade: 'string',
-  placeOfCommital: 'string',
-  additionalFee: 'number',
-  ExportDocPosition: {meta:'object', type:'.io.restorecommerce.fulfillment.ExportDocPosition', name:'ExportDocPosition'} as MetaO,
-};
-
-export const metaExportDocPosition: { [key in keyof ExportDocPosition]: MetaI | string } = {
-  description: 'string',
-  countryCodeOrigin: 'string',
-  customsTariffNumber: 'string',
-  amount: 'number',
-  netWeightInKG: 'number',
-  customsValue: 'number',
-};
-
-export const metaFulfillmentResults: { [key in keyof FulfillmentResults]: MetaI | string } = {
-  fulfillmentResults: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ResponseDetailsList', name:'ResponseDetailsList'} as MetaO} as MetaA,
-};
-
-export const metaResponseDetailsList: { [key in keyof ResponseDetailsList]: MetaI | string } = {
-  Status: {meta:'object', type:'.io.restorecommerce.fulfillment.FulfillmentStatus', name:'FulfillmentStatus'} as MetaO,
-  error: {meta:'object', type:'.io.restorecommerce.fulfillment.ErrorList', name:'ErrorList'} as MetaO,
-};
-
-export const metaFulfillmentStatus: { [key in keyof FulfillmentStatus]: MetaI | string } = {
-  OrderId: 'string',
-  OrderStatus: 'string',
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-};
-
-export const metaError: { [key in keyof Error]: MetaI | string } = {
-  code: 'string',
-  message: 'string',
-};
-
-export const metaErrorList: { [key in keyof ErrorList]: MetaI | string } = {
-  code: {meta:'array', type:'string'} as MetaA,
-  message: {meta:'array', type:'string'} as MetaA,
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.fulfillment'
 
@@ -3221,6 +3036,174 @@ export const ErrorList = {
   },
 };
 
+export const metaOrderId: { [key in keyof OrderId]: MetaI | string } = {
+  orderId: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaTrackingNumber: { [key in keyof TrackingNumber]: MetaI | string } = {
+  orderId: 'string',
+  shipmentType: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaStatus: { [key in keyof Status]: MetaI | string } = {
+  Status: 'string',
+  shipmentStatus: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.shipmentStatus', name:'shipmentStatus'} as MetaO} as MetaA,
+  OrderId: 'string',
+}
+export const metaAllFulfillments: { [key in keyof AllFulfillments]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.Items', name:'Items'} as MetaO} as MetaA,
+}
+export const metaItems: { [key in keyof Items]: MetaI | string } = {
+  fulfillmentStatus: 'string',
+  orderId: 'string',
+  serviceType: 'string',
+  shipmentNumber: {meta:'array', type:'string'} as MetaA,
+}
+export const metaDeleteStatus: { [key in keyof DeleteStatus]: MetaI | string } = {
+  deleteStatus: 'string',
+  error: {meta:'object', type:'.io.restorecommerce.fulfillment.Error', name:'Error'} as MetaO,
+}
+export const metashipmentStatus: { [key in keyof shipmentStatus]: MetaI | string } = {
+  ShipmentData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentData', name:'ShipmentData'} as MetaO} as MetaA,
+}
+export const metaShipmentData: { [key in keyof ShipmentData]: MetaI | string } = {
+  ShipmentNumber: 'string',
+  Status: 'string',
+  ShortStatus: 'string',
+  TimeStamp: 'string',
+  Receiver: 'string',
+  ReceipientName: 'string',
+  Recepientemail: 'string',
+  EventDetails: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.EventDetails', name:'EventDetails'} as MetaO} as MetaA,
+  CustomerReference: 'string',
+}
+export const metaEventDetails: { [key in keyof EventDetails]: MetaI | string } = {
+  Status: 'string',
+  Location: 'string',
+  Time: 'string',
+  Coutnry: 'string',
+}
+export const metaLabelResult: { [key in keyof LabelResult]: MetaI | string } = {
+  labels: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.Labels', name:'Labels'} as MetaO} as MetaA,
+  error: {meta:'object', type:'.io.restorecommerce.fulfillment.Error', name:'Error'} as MetaO,
+}
+export const metaLabels: { [key in keyof Labels]: MetaI | string } = {
+  labelUrl: 'string',
+  shipmentNumber: 'string',
+  exportLabelUrl: 'string',
+}
+export const metashipmentOrderLists: { [key in keyof shipmentOrderLists]: MetaI | string } = {
+  ShipmentOrder: {meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentOrder', name:'ShipmentOrder'} as MetaO,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaShipmentOrder: { [key in keyof ShipmentOrder]: MetaI | string } = {
+  fulfillmentList: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.FulfillmentList', name:'FulfillmentList'} as MetaO} as MetaA,
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+}
+export const metaFulfillmentList: { [key in keyof FulfillmentList]: MetaI | string } = {
+  Shipment: {meta:'object', type:'.io.restorecommerce.fulfillment.Shipment', name:'Shipment'} as MetaO,
+  OrderId: 'string',
+  fulFillmentService: 'string',
+}
+export const metaShipment: { [key in keyof Shipment]: MetaI | string } = {
+  ShipmentDetails: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentDetails', name:'ShipmentDetails'} as MetaO} as MetaA,
+  customerReference: 'string',
+  Receiver: {meta:'object', type:'.io.restorecommerce.fulfillment.Receiver', name:'Receiver'} as MetaO,
+  Shipper: {meta:'object', type:'.io.restorecommerce.fulfillment.Shipper', name:'Shipper'} as MetaO,
+  returnShipmentAccountNumber: 'string',
+  returnShipmentReference: 'string',
+  Notification: {meta:'object', type:'.io.restorecommerce.fulfillment.Notification', name:'Notification'} as MetaO,
+}
+export const metaShipmentDetails: { [key in keyof ShipmentDetails]: MetaI | string } = {
+  ShipmentItem: {meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentItem', name:'ShipmentItem'} as MetaO,
+}
+export const metaShipmentItem: { [key in keyof ShipmentItem]: MetaI | string } = {
+  weightInKG: 'number',
+  lengthInCM: 'string',
+  widthInCM: 'string',
+  heightInCM: 'string',
+  ExportDocument: {meta:'object', type:'.io.restorecommerce.fulfillment.ExportDocument', name:'ExportDocument'} as MetaO,
+}
+export const metaNotification: { [key in keyof Notification]: MetaI | string } = {
+  recipientEmailAddress: 'string',
+}
+export const metaAddress: { [key in keyof Address]: MetaI | string } = {
+  streetName: 'string',
+  streetNumber: 'string',
+  addressAddition: 'string',
+  zip: 'string',
+  city: 'string',
+  Origin: {meta:'object', type:'.io.restorecommerce.fulfillment.Origin', name:'Origin'} as MetaO,
+}
+export const metaOrigin: { [key in keyof Origin]: MetaI | string } = {
+  country: 'string',
+  countryISOCode: 'string',
+}
+export const metaShipper: { [key in keyof Shipper]: MetaI | string } = {
+  Name: {meta:'object', type:'.io.restorecommerce.fulfillment.Name', name:'Name'} as MetaO,
+  Address: {meta:'object', type:'.io.restorecommerce.fulfillment.Address', name:'Address'} as MetaO,
+  Communication: {meta:'object', type:'.io.restorecommerce.fulfillment.Communication', name:'Communication'} as MetaO,
+}
+export const metaName: { [key in keyof Name]: MetaI | string } = {
+  name1: 'string',
+}
+export const metaReceiver: { [key in keyof Receiver]: MetaI | string } = {
+  name1: 'string',
+  Address: {meta:'object', type:'.io.restorecommerce.fulfillment.Address', name:'Address'} as MetaO,
+  Communication: {meta:'object', type:'.io.restorecommerce.fulfillment.Communication', name:'Communication'} as MetaO,
+}
+export const metaCommunication: { [key in keyof Communication]: MetaI | string } = {
+  phone: 'string',
+  email: 'string',
+}
+export const metaExportDocument: { [key in keyof ExportDocument]: MetaI | string } = {
+  invoiceNumber: 'string',
+  exportType: 'string',
+  exportTypeDescription: 'string',
+  termsOfTrade: 'string',
+  placeOfCommital: 'string',
+  additionalFee: 'number',
+  ExportDocPosition: {meta:'object', type:'.io.restorecommerce.fulfillment.ExportDocPosition', name:'ExportDocPosition'} as MetaO,
+}
+export const metaExportDocPosition: { [key in keyof ExportDocPosition]: MetaI | string } = {
+  description: 'string',
+  countryCodeOrigin: 'string',
+  customsTariffNumber: 'string',
+  amount: 'number',
+  netWeightInKG: 'number',
+  customsValue: 'number',
+}
+export const metaFulfillmentResults: { [key in keyof FulfillmentResults]: MetaI | string } = {
+  fulfillmentResults: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.ResponseDetailsList', name:'ResponseDetailsList'} as MetaO} as MetaA,
+}
+export const metaResponseDetailsList: { [key in keyof ResponseDetailsList]: MetaI | string } = {
+  Status: {meta:'object', type:'.io.restorecommerce.fulfillment.FulfillmentStatus', name:'FulfillmentStatus'} as MetaO,
+  error: {meta:'object', type:'.io.restorecommerce.fulfillment.ErrorList', name:'ErrorList'} as MetaO,
+}
+export const metaFulfillmentStatus: { [key in keyof FulfillmentStatus]: MetaI | string } = {
+  OrderId: 'string',
+  OrderStatus: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+}
+export const metaError: { [key in keyof Error]: MetaI | string } = {
+  code: 'string',
+  message: 'string',
+}
+export const metaErrorList: { [key in keyof ErrorList]: MetaI | string } = {
+  code: {meta:'array', type:'string'} as MetaA,
+  message: {meta:'array', type:'string'} as MetaA,
+}
+export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
+  CreateFulfillment: {request: '.io.restorecommerce.fulfillment.FulfillmentResults', response: '.io.restorecommerce.fulfillment.FulfillmentResults', encodeRequest: shipmentOrderLists.encode, decodeResponse: FulfillmentResults.decode} as MetaS<shipmentOrderLists, FulfillmentResults>,
+  getLabels: {request: '.io.restorecommerce.fulfillment.LabelResult', response: '.io.restorecommerce.fulfillment.LabelResult', encodeRequest: OrderId.encode, decodeResponse: LabelResult.decode} as MetaS<OrderId, LabelResult>,
+  trackFulfillment: {request: '.io.restorecommerce.fulfillment.Status', response: '.io.restorecommerce.fulfillment.Status', encodeRequest: TrackingNumber.encode, decodeResponse: Status.decode} as MetaS<TrackingNumber, Status>,
+  deleteFulfillment: {request: '.io.restorecommerce.fulfillment.DeleteStatus', response: '.io.restorecommerce.fulfillment.DeleteStatus', encodeRequest: OrderId.encode, decodeResponse: DeleteStatus.decode} as MetaS<OrderId, DeleteStatus>,
+  getAllFulfillments: {request: '.io.restorecommerce.fulfillment.AllFulfillments', response: '.io.restorecommerce.fulfillment.AllFulfillments', encodeRequest: FulfillmentStatus.encode, decodeResponse: AllFulfillments.decode} as MetaS<FulfillmentStatus, AllFulfillments>,
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

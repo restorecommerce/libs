@@ -70,25 +70,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaImage: { [key in keyof Image]: MetaI | string } = {
-  id: 'string',
-  caption: 'string',
-  filename: 'string',
-  contentType: 'string',
-  url: 'string',
-  width: 'number',
-  height: 'number',
-  length: 'number',
-};
-
-export const metaImageList: { [key in keyof ImageList]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
-  totalCount: 'number',
-};
-
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'io.restorecommerce.image'
 
@@ -362,6 +349,23 @@ export const Deleted = {
   },
 };
 
+export const metaImage: { [key in keyof Image]: MetaI | string } = {
+  id: 'string',
+  caption: 'string',
+  filename: 'string',
+  contentType: 'string',
+  url: 'string',
+  width: 'number',
+  height: 'number',
+  length: 'number',
+}
+export const metaImageList: { [key in keyof ImageList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
+  totalCount: 'number',
+}
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+}
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin
   ? T

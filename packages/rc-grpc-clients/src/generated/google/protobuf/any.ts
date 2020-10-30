@@ -126,10 +126,12 @@ export interface MetaU extends MetaI {
   readonly choices: Array<MetaI | string | undefined>;
 }
 
-export const metaAny: { [key in keyof Any]: MetaI | string } = {
-  typeUrl: 'string',
-  value: 'Buffer',
-};
+export interface MetaS<T, R> {
+  readonly request: string;
+  readonly response: string;
+  readonly encodeRequest: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+}
 
 export const protobufPackage = 'google.protobuf'
 
@@ -193,6 +195,10 @@ export const Any = {
   },
 };
 
+export const metaAny: { [key in keyof Any]: MetaI | string } = {
+  typeUrl: 'string',
+  value: 'Buffer',
+}
 interface WindowBase64 {
   atob(b64: string): string;
   btoa(bin: string): string;

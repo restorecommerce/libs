@@ -100,6 +100,37 @@ const baseAny: object = {
   typeUrl: "",
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaAny: { [key in keyof Any]: MetaI | string } = {
+  typeUrl: 'string',
+  value: 'Buffer',
+};
+
 export const protobufPackage = 'google.protobuf'
 
 export const Any = {

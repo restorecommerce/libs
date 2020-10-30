@@ -64,6 +64,51 @@ const baseRenderResponse: object = {
   id: "",
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaPayload: { [key in keyof Payload]: MetaI | string } = {
+  templates: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  styleUrl: 'string',
+  strategy: {meta:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaO,
+  options: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  contentType: 'string',
+};
+
+export const metaRenderRequest: { [key in keyof RenderRequest]: MetaI | string } = {
+  id: 'string',
+  payload: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaO} as MetaA,
+};
+
+export const metaRenderResponse: { [key in keyof RenderResponse]: MetaI | string } = {
+  id: 'string',
+  response: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+};
+
 export const protobufPackage = 'io.restorecommerce.rendering'
 
 /**  style-applying 'strategy'

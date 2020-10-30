@@ -146,6 +146,68 @@ const baseStringValue: object = {
 const baseBytesValue: object = {
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaDoubleValue: { [key in keyof DoubleValue]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaFloatValue: { [key in keyof FloatValue]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaInt64Value: { [key in keyof Int64Value]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaUInt64Value: { [key in keyof UInt64Value]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaInt32Value: { [key in keyof Int32Value]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaUInt32Value: { [key in keyof UInt32Value]: MetaI | string } = {
+  value: 'number',
+};
+
+export const metaBoolValue: { [key in keyof BoolValue]: MetaI | string } = {
+  value: 'boolean',
+};
+
+export const metaStringValue: { [key in keyof StringValue]: MetaI | string } = {
+  value: 'string',
+};
+
+export const metaBytesValue: { [key in keyof BytesValue]: MetaI | string } = {
+  value: 'Buffer',
+};
+
 function longToNumber(long: Long) {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
     throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");

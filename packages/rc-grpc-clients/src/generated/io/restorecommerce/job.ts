@@ -303,6 +303,115 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaJobList: { [key in keyof JobList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.job.Job', name:'Job'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaJob: { [key in keyof Job]: MetaI | string } = {
+  id: 'string',
+  type: 'string',
+  data: {meta:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaO,
+  when: 'string',
+  options: {meta:'object', type:'.io.restorecommerce.job.JobOptions', name:'JobOptions'} as MetaO,
+};
+
+export const metaJobOptions: { [key in keyof JobOptions]: MetaI | string } = {
+  priority: {meta:'object', type:'.io.restorecommerce.job.JobOptions.Priority', name:'JobOptions_Priority'} as MetaO,
+  attempts: 'number',
+  backoff: {meta:'object', type:'.io.restorecommerce.job.Backoff', name:'Backoff'} as MetaO,
+  timeout: 'number',
+  repeat: {meta:'object', type:'.io.restorecommerce.job.Repeat', name:'Repeat'} as MetaO,
+};
+
+export const metaRepeat: { [key in keyof Repeat]: MetaI | string } = {
+  every: 'number',
+  cron: 'string',
+  startDate: 'string',
+  endDate: 'string',
+  count: 'number',
+};
+
+export const metaData: { [key in keyof Data]: MetaI | string } = {
+  timezone: 'string',
+  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  subjectId: 'string',
+};
+
+export const metaScheduledJob: { [key in keyof ScheduledJob]: MetaI | string } = {
+  id: 'string',
+  type: 'string',
+  data: {meta:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaO,
+  scheduleType: 'string',
+};
+
+export const metaJobDone: { [key in keyof JobDone]: MetaI | string } = {
+  id: 'string',
+  scheduleType: 'string',
+  deleteScheduled: 'boolean',
+  type: 'string',
+  result: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+};
+
+export const metaJobFailed: { [key in keyof JobFailed]: MetaI | string } = {
+  id: 'string',
+  error: 'string',
+  scheduleType: 'string',
+  type: 'string',
+};
+
+export const metaBackoff: { [key in keyof Backoff]: MetaI | string } = {
+  delay: 'number',
+  type: {meta:'object', type:'.io.restorecommerce.job.Backoff.Type', name:'Backoff_Type'} as MetaO,
+};
+
+export const metaJobReadRequest: { [key in keyof JobReadRequest]: MetaI | string } = {
+  limit: 'number',
+  sort: {meta:'object', type:'.io.restorecommerce.job.JobReadRequest.SortOrder', name:'JobReadRequest_SortOrder'} as MetaO,
+  filter: {meta:'object', type:'.io.restorecommerce.job.JobFilter', name:'JobFilter'} as MetaO,
+  field: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaO} as MetaA,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaJobFilter: { [key in keyof JobFilter]: MetaI | string } = {
+  jobIds: {meta:'array', type:'string'} as MetaA,
+  type: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.job'
 
 export enum JobOptions_Priority {

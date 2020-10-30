@@ -119,6 +119,64 @@ const baseRoleAssociation: object = {
   id: "",
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaSubject: { [key in keyof Subject]: MetaI | string } = {
+  id: 'string',
+  scope: 'string',
+  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
+  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
+  unauthenticated: 'boolean',
+  token: 'string',
+};
+
+export const metaApiKey: { [key in keyof ApiKey]: MetaI | string } = {
+  value: 'string',
+};
+
+export const metaTokens: { [key in keyof Tokens]: MetaI | string } = {
+  name: 'string',
+  expiresAt: 'number',
+  token: 'string',
+  scopes: {meta:'array', type:'string'} as MetaA,
+};
+
+export const metaHierarchicalScope: { [key in keyof HierarchicalScope]: MetaI | string } = {
+  id: 'string',
+  children: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
+  role: 'string',
+};
+
+export const metaRoleAssociation: { [key in keyof RoleAssociation]: MetaI | string } = {
+  role: 'string',
+  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+  id: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.auth'
 
 export const Subject = {

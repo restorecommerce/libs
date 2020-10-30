@@ -44,6 +44,52 @@ const baseDeleted: object = {
   id: "",
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaImage: { [key in keyof Image]: MetaI | string } = {
+  id: 'string',
+  caption: 'string',
+  filename: 'string',
+  contentType: 'string',
+  url: 'string',
+  width: 'number',
+  height: 'number',
+  length: 'number',
+};
+
+export const metaImageList: { [key in keyof ImageList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
+  totalCount: 'number',
+};
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.image'
 
 export const Image = {

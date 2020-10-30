@@ -199,6 +199,112 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaInvoiceList: { [key in keyof InvoiceList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.Invoice', name:'Invoice'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaInvoice: { [key in keyof Invoice]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  timestamp: 'string',
+  customerId: 'string',
+  paymentStatus: 'string',
+  totalAmount: 'number',
+  netAmount: 'number',
+  vatAmount: 'number',
+  document: 'string',
+  invoiceNumber: 'string',
+  customerRemark: 'string',
+};
+
+export const metaInvoicesPositionsData: { [key in keyof InvoicesPositionsData]: MetaI | string } = {
+  invoicesPositionsData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoicePositions', name:'InvoicePositions'} as MetaO} as MetaA,
+};
+
+export const metaInvoicePositions: { [key in keyof InvoicePositions]: MetaI | string } = {
+  id: 'string',
+  invoicePositions: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoicePosition', name:'InvoicePosition'} as MetaO} as MetaA,
+  recipientCustomer: {meta:'object', type:'.io.restorecommerce.invoice.RecipientCustomer', name:'RecipientCustomer'} as MetaO,
+  recipientBillingAddress: {meta:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaO,
+  senderBillingAddress: {meta:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaO,
+  recipientOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
+  senderOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
+};
+
+export const metaRecipientCustomer: { [key in keyof RecipientCustomer]: MetaI | string } = {
+  id: 'string',
+  customerNumber: 'string',
+};
+
+export const metaBillingAddress: { [key in keyof BillingAddress]: MetaI | string } = {
+  email: 'string',
+  website: 'string',
+  street: 'string',
+  buildingNumber: 'string',
+  postcode: 'string',
+  region: 'string',
+  countryName: 'string',
+  telephone: 'string',
+  timezone: 'string',
+  economicArea: 'string',
+};
+
+export const metaInvoicePosition: { [key in keyof InvoicePosition]: MetaI | string } = {
+  currency: 'string',
+  tableList: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoiceRow', name:'InvoiceRow'} as MetaO} as MetaA,
+  totalPrice: {meta:'object', type:'.io.restorecommerce.invoice.InvoicePrice', name:'InvoicePrice'} as MetaO,
+};
+
+export const metaInvoiceRow: { [key in keyof InvoiceRow]: MetaI | string } = {
+  product: 'string',
+  pricePerUnit: 'number',
+  quantity: 'number',
+  vat: 'string',
+  amount: 'number',
+};
+
+export const metaInvoicePrice: { [key in keyof InvoicePrice]: MetaI | string } = {
+  gross: 'number',
+  net: 'number',
+};
+
+export const metaTriggerInvoices: { [key in keyof TriggerInvoices]: MetaI | string } = {
+  ids: {meta:'array', type:'string'} as MetaA,
+};
+
 export const protobufPackage = 'io.restorecommerce.invoice'
 
 export const Deleted = {

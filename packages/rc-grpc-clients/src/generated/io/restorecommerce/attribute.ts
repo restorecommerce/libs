@@ -12,6 +12,37 @@ const baseAttribute: object = {
   value: "",
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaAttribute: { [key in keyof Attribute]: MetaI | string } = {
+  id: 'string',
+  value: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.attribute'
 
 export const Attribute = {

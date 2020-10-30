@@ -537,6 +537,227 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaLoginRequest: { [key in keyof LoginRequest]: MetaI | string } = {
+  identifier: 'string',
+  password: 'string',
+  token: 'string',
+};
+
+export const metaOrgIDRequest: { [key in keyof OrgIDRequest]: MetaI | string } = {
+  orgIds: {meta:'array', type:'string'} as MetaA,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaUserIDs: { [key in keyof UserIDs]: MetaI | string } = {
+  userIds: {meta:'array', type:'string'} as MetaA,
+};
+
+export const metaHierarchicalScopesRequest: { [key in keyof HierarchicalScopesRequest]: MetaI | string } = {
+  subjectId: 'string',
+  token: 'string',
+};
+
+export const metaHierarchicalScopesResponse: { [key in keyof HierarchicalScopesResponse]: MetaI | string } = {
+  subjectId: 'string',
+  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
+  token: 'string',
+};
+
+export const metaPopulateRoleAssocCacheRequest: { [key in keyof PopulateRoleAssocCacheRequest]: MetaI | string } = {
+  id: 'string',
+  token: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaFindRequest: { [key in keyof FindRequest]: MetaI | string } = {
+  id: 'string',
+  name: 'string',
+  email: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaRegisterRequest: { [key in keyof RegisterRequest]: MetaI | string } = {
+  id: 'string',
+  guest: 'boolean',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  firstName: 'string',
+  lastName: 'string',
+  email: 'string',
+  password: 'string',
+  timezoneId: 'string',
+  localeId: 'string',
+  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
+  defaultScope: 'string',
+  userType: {meta:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaO,
+  captchaCode: 'string',
+};
+
+export const metaActivateRequest: { [key in keyof ActivateRequest]: MetaI | string } = {
+  name: 'string',
+  activationCode: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaConfirmUserInvitationRequest: { [key in keyof ConfirmUserInvitationRequest]: MetaI | string } = {
+  name: 'string',
+  password: 'string',
+  activationCode: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaSendInvitationEmailRequest: { [key in keyof SendInvitationEmailRequest]: MetaI | string } = {
+  userId: 'string',
+  invitedByUserId: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaChangePasswordRequest: { [key in keyof ChangePasswordRequest]: MetaI | string } = {
+  id: 'string',
+  password: 'string',
+  newPassword: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaRequestPasswordChangeRequest: { [key in keyof RequestPasswordChangeRequest]: MetaI | string } = {
+  name: {meta:'union', choices: [undefined, 'string']} as MetaU,
+  email: {meta:'union', choices: [undefined, 'string']} as MetaU,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaConfirmPasswordChangeRequest: { [key in keyof ConfirmPasswordChangeRequest]: MetaI | string } = {
+  name: 'string',
+  activationCode: 'string',
+  password: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaChangeEmailRequest: { [key in keyof ChangeEmailRequest]: MetaI | string } = {
+  id: 'string',
+  email: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaConfirmEmailChangeRequest: { [key in keyof ConfirmEmailChangeRequest]: MetaI | string } = {
+  name: 'string',
+  activationCode: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaUnregisterRequest: { [key in keyof UnregisterRequest]: MetaI | string } = {
+  id: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaPasswordChanged: { [key in keyof PasswordChanged]: MetaI | string } = {
+  id: 'string',
+  passwordHash: 'string',
+};
+
+export const metaPasswordChangeRequested: { [key in keyof PasswordChangeRequested]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaEmailChangeRequested: { [key in keyof EmailChangeRequested]: MetaI | string } = {
+  id: 'string',
+  activationCode: 'string',
+  newEmail: 'string',
+};
+
+export const metaEmailChangeConfirmed: { [key in keyof EmailChangeConfirmed]: MetaI | string } = {
+  id: 'string',
+  email: 'string',
+};
+
+export const metaUserList: { [key in keyof UserList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaActivate: { [key in keyof Activate]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaFindByRoleRequest: { [key in keyof FindByRoleRequest]: MetaI | string } = {
+  role: 'string',
+  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaUser: { [key in keyof User]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  firstName: 'string',
+  lastName: 'string',
+  email: 'string',
+  newEmail: 'string',
+  active: 'boolean',
+  activationCode: 'string',
+  password: 'string',
+  passwordHash: 'string',
+  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
+  timezoneId: 'string',
+  localeId: 'string',
+  defaultScope: 'string',
+  unauthenticated: 'boolean',
+  guest: 'boolean',
+  image: {meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO,
+  userType: {meta:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaO,
+  invite: 'boolean',
+  invitedByUserName: 'string',
+  invitedByUserFirstName: 'string',
+  invitedByUserLastName: 'string',
+  tokens: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.Tokens', name:'Tokens'} as MetaO} as MetaA,
+  lastLogin: 'number',
+  lastAccess: 'number',
+};
+
 export const protobufPackage = 'io.restorecommerce.user'
 
 export enum UserType {

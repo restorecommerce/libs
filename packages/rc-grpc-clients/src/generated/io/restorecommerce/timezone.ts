@@ -20,11 +20,8 @@ export interface TimezoneList {
 export interface Timezone {
   id: string;
   meta?: Meta;
-  /**
-   *  string description = 4;
-   */
   value: string;
-  description: string | undefined;
+  description: string;
 }
 
 const baseDeleted: object = {
@@ -38,6 +35,7 @@ const baseTimezoneList: object = {
 const baseTimezone: object = {
   id: "",
   value: "",
+  description: "",
 };
 
 /**
@@ -57,6 +55,50 @@ export interface Service {
   Upsert(request: TimezoneList): Promise<TimezoneList>;
 
 }
+
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaTimezoneList: { [key in keyof TimezoneList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.timezone.Timezone', name:'Timezone'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaTimezone: { [key in keyof Timezone]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  value: 'string',
+  description: 'string',
+};
 
 export const protobufPackage = 'io.restorecommerce.timezone'
 
@@ -219,9 +261,7 @@ export const Timezone = {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
     writer.uint32(26).string(message.value);
-    if (message.description !== undefined) {
-      writer.uint32(34).string(message.description);
-    }
+    writer.uint32(34).string(message.description);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): Timezone {
@@ -270,7 +310,7 @@ export const Timezone = {
     if (object.description !== undefined && object.description !== null) {
       message.description = String(object.description);
     } else {
-      message.description = undefined;
+      message.description = "";
     }
     return message;
   },
@@ -294,7 +334,7 @@ export const Timezone = {
     if (object.description !== undefined && object.description !== null) {
       message.description = object.description;
     } else {
-      message.description = undefined;
+      message.description = "";
     }
     return message;
   },

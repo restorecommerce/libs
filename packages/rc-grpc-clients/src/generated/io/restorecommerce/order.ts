@@ -203,6 +203,121 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaOrderList: { [key in keyof OrderList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Order', name:'Order'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaOrder: { [key in keyof Order]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  description: 'string',
+  status: 'string',
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Items', name:'Items'} as MetaO} as MetaA,
+  totalPrice: 'number',
+  shippingContactPointId: 'string',
+  billingContactPointId: 'string',
+  totalWeightInKg: 'number',
+};
+
+export const metaItems: { [key in keyof Items]: MetaI | string } = {
+  quantityPrice: 'number',
+  item: {meta:'object', type:'.io.restorecommerce.order.Item', name:'Item'} as MetaO,
+};
+
+export const metaItem: { [key in keyof Item]: MetaI | string } = {
+  productVariantBundleId: 'string',
+  productName: 'string',
+  productDescription: 'string',
+  manufacturerName: 'string',
+  manufacturerDescription: 'string',
+  prototypeName: 'string',
+  prototypeDescription: 'string',
+  quantity: 'number',
+  vat: 'number',
+  price: 'number',
+  itemType: 'string',
+  taricCode: 'number',
+  stockKeepingUnit: 'string',
+  weightInKg: 'number',
+  lengthInCm: 'number',
+  widthInCm: 'number',
+  heightInCm: 'number',
+};
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaOrderDataList: { [key in keyof OrderDataList]: MetaI | string } = {
+  orderData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.OrderData', name:'OrderData'} as MetaO} as MetaA,
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+};
+
+export const metaOrderData: { [key in keyof OrderData]: MetaI | string } = {
+  orderId: 'string',
+  shipments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Shipments', name:'Shipments'} as MetaO} as MetaA,
+};
+
+export const metaShipments: { [key in keyof Shipments]: MetaI | string } = {
+  totalWeightInKg: 'number',
+  individualWeightInKg: 'number',
+  amount: 'number',
+  exportType: 'string',
+  exportDescription: 'string',
+  customsTariffNumber: 'string',
+  invoiceNumber: 'string',
+  customsValue: 'number',
+};
+
+export const metaFulfillmentResults: { [key in keyof FulfillmentResults]: MetaI | string } = {
+  fulfillmentResults: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.ResponseDetailsList', name:'ResponseDetailsList'} as MetaO} as MetaA,
+};
+
+export const metaResponseDetailsList: { [key in keyof ResponseDetailsList]: MetaI | string } = {
+  Status: {meta:'object', type:'.io.restorecommerce.order.OrderStatus', name:'OrderStatus'} as MetaO,
+  error: {meta:'object', type:'.io.restorecommerce.order.ErrorList', name:'ErrorList'} as MetaO,
+};
+
+export const metaOrderStatus: { [key in keyof OrderStatus]: MetaI | string } = {
+  OrderId: 'string',
+  OrderStatus: 'string',
+};
+
+export const metaErrorList: { [key in keyof ErrorList]: MetaI | string } = {
+  code: {meta:'array', type:'string'} as MetaA,
+  message: {meta:'array', type:'string'} as MetaA,
+};
+
 export const protobufPackage = 'io.restorecommerce.order'
 
 export const OrderList = {

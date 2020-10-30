@@ -196,6 +196,106 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaSetupRequest: { [key in keyof SetupRequest]: MetaI | string } = {
+  ip: 'string',
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.Item', name:'Item'} as MetaO} as MetaA,
+  subtotal: 'number',
+  shipping: 'number',
+  handling: 'number',
+  tax: 'number',
+  currency: 'string',
+  returnUrl: 'string',
+  cancelReturnUrl: 'string',
+  allowGuestCheckout: 'boolean',
+  provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaSetupResponse: { [key in keyof SetupResponse]: MetaI | string } = {
+  paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,
+  token: 'string',
+  confirmInitiationUrl: 'string',
+  initiatedOn: 'string',
+};
+
+export const metaPaymentRequest: { [key in keyof PaymentRequest]: MetaI | string } = {
+  provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
+  paymentSum: 'number',
+  currency: 'string',
+  paymentId: 'string',
+  payerId: 'string',
+  token: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaCaptureRequest: { [key in keyof CaptureRequest]: MetaI | string } = {
+  provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
+  paymentSum: 'number',
+  currency: 'string',
+  paymentId: 'string',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaPaymentResponse: { [key in keyof PaymentResponse]: MetaI | string } = {
+  paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,
+  paymentId: 'string',
+  executedOn: 'string',
+};
+
+export const metaPaymentCard: { [key in keyof PaymentCard]: MetaI | string } = {
+  primaryNumber: 'string',
+  firstName: 'string',
+  lastName: 'string',
+  month: 'string',
+  year: 'number',
+  verificationValue: 'string',
+};
+
+export const metaItem: { [key in keyof Item]: MetaI | string } = {
+  name: 'string',
+  description: 'string',
+  quantity: 'number',
+  amount: 'number',
+};
+
+export const metaPaymentError: { [key in keyof PaymentError]: MetaI | string } = {
+  killed: 'boolean',
+  code: 'number',
+  signal: 'string',
+  cmd: 'string',
+  stdout: 'string',
+  stderr: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.payment'
 
 /**  Possible service providers. Provider names must be exactly as in config.yml.

@@ -105,6 +105,64 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaAttachment: { [key in keyof Attachment]: MetaI | string } = {
+  filename: 'string',
+  text: 'string',
+  buffer: 'Buffer',
+  path: 'string',
+  contentType: 'string',
+  contentDisposition: 'string',
+  cid: 'string',
+  encoding: 'string',
+};
+
+export const metaNotification: { [key in keyof Notification]: MetaI | string } = {
+  email: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Email', name:'Email'} as MetaO]} as MetaU,
+  log: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Log', name:'Log'} as MetaO]} as MetaU,
+  subject: 'string',
+  body: 'string',
+  transport: 'string',
+  provider: 'string',
+  attachments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.notification.Attachment', name:'Attachment'} as MetaO} as MetaA,
+};
+
+export const metaEmail: { [key in keyof Email]: MetaI | string } = {
+  to: {meta:'array', type:'string'} as MetaA,
+  cc: {meta:'array', type:'string'} as MetaA,
+  bcc: {meta:'array', type:'string'} as MetaA,
+  replyto: 'string',
+};
+
+export const metaLog: { [key in keyof Log]: MetaI | string } = {
+  level: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.notification'
 
 export const Attachment = {

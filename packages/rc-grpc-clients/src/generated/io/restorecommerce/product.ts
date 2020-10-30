@@ -147,6 +147,100 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaMainProduct: { [key in keyof MainProduct]: MetaI | string } = {
+  id: 'string',
+  product: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Product', name:'Product'} as MetaO]} as MetaU,
+  bundle: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Bundle', name:'Bundle'} as MetaO]} as MetaU,
+  active: 'boolean',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+};
+
+export const metaProduct: { [key in keyof Product]: MetaI | string } = {
+  id: 'string',
+  name: 'string',
+  description: 'string',
+  manufacturerId: 'string',
+  taricCode: 'string',
+  prototype: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaO]} as MetaU,
+  category: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaO]} as MetaU,
+  taxTypeId: {meta:'array', type:'string'} as MetaA,
+  variants: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.Variant', name:'Variant'} as MetaO} as MetaA,
+  gtin: 'string',
+};
+
+export const metaIdentifier: { [key in keyof Identifier]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaProductList: { [key in keyof ProductList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.MainProduct', name:'MainProduct'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaVariant: { [key in keyof Variant]: MetaI | string } = {
+  id: 'string',
+  name: 'string',
+  description: 'string',
+  stockLevel: 'number',
+  price: 'number',
+  sale: 'boolean',
+  salePrice: 'number',
+  image: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
+  stockKeepingUnit: 'string',
+  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.VariantAttribute', name:'VariantAttribute'} as MetaO} as MetaA,
+};
+
+export const metaVariantAttribute: { [key in keyof VariantAttribute]: MetaI | string } = {
+  key: 'string',
+  values: {meta:'array', type:'string'} as MetaA,
+};
+
+export const metaBundle: { [key in keyof Bundle]: MetaI | string } = {
+  id: 'string',
+  name: 'string',
+  description: 'string',
+  image: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
+  product: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.BundleProduct', name:'BundleProduct'} as MetaO} as MetaA,
+  price: 'number',
+};
+
+export const metaBundleProduct: { [key in keyof BundleProduct]: MetaI | string } = {
+  productId: 'string',
+  quantity: 'number',
+};
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.product'
 
 export const MainProduct = {

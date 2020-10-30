@@ -53,6 +53,53 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaRequest: { [key in keyof Request]: MetaI | string } = {
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  context: {meta:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaO,
+};
+
+export const metaContext: { [key in keyof Context]: MetaI | string } = {
+  subject: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  resources: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+  security: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+};
+
+export const metaResponse: { [key in keyof Response]: MetaI | string } = {
+  decision: {meta:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaO,
+  obligation: 'string',
+  evaluationCacheable: 'boolean',
+};
+
+export const metaReverseQuery: { [key in keyof ReverseQuery]: MetaI | string } = {
+  policySets: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaO} as MetaA,
+};
+
 export const protobufPackage = 'io.restorecommerce.access_control'
 
 export enum Response_Decision {

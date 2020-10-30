@@ -114,6 +114,77 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaTarget: { [key in keyof Target]: MetaI | string } = {
+  subject: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+  resources: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+  action: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+};
+
+export const metaRule: { [key in keyof Rule]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  name: 'string',
+  description: 'string',
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
+  condition: 'string',
+  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
+  evaluationCacheable: 'boolean',
+};
+
+export const metaRuleRQ: { [key in keyof RuleRQ]: MetaI | string } = {
+  id: 'string',
+  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
+  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
+  condition: 'string',
+  contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
+  evaluationCacheable: 'boolean',
+};
+
+export const metaRuleList: { [key in keyof RuleList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.Rule', name:'Rule'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaContextQuery: { [key in keyof ContextQuery]: MetaI | string } = {
+  filters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.ContextQuery.Filter', name:'ContextQuery_Filter'} as MetaO} as MetaA,
+  query: 'string',
+};
+
+export const metaContextQuery_Filter: { [key in keyof ContextQuery_Filter]: MetaI | string } = {
+  field: 'string',
+  operation: 'string',
+  value: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.rule'
 
 /** *

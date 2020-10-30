@@ -84,6 +84,54 @@ const baseValue: object = {
 const baseListValue: object = {
 };
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaStruct: { [key in keyof Struct]: MetaI | string } = {
+  fields: {meta:'map', key:'string', value:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaM,
+};
+
+export const metaStruct_FieldsEntry: { [key in keyof Struct_FieldsEntry]: MetaI | string } = {
+  key: 'string',
+  value: {meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO,
+};
+
+export const metaValue: { [key in keyof Value]: MetaI | string } = {
+  nullValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.NullValue', name:'NullValue'} as MetaO]} as MetaU,
+  numberValue: {meta:'union', choices: [undefined, 'number']} as MetaU,
+  stringValue: {meta:'union', choices: [undefined, 'string']} as MetaU,
+  boolValue: {meta:'union', choices: [undefined, 'boolean']} as MetaU,
+  structValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaO]} as MetaU,
+  listValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.ListValue', name:'ListValue'} as MetaO]} as MetaU,
+};
+
+export const metaListValue: { [key in keyof ListValue]: MetaI | string } = {
+  values: {meta:'array', type:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaA,
+};
+
 export const protobufPackage = 'google.protobuf'
 
 /** / `NullValue` is a singleton enumeration to represent the null value for the

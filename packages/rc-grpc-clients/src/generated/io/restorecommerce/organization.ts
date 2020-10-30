@@ -144,6 +144,88 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
+  id: 'string',
+};
+
+export const metaDeleteOrgData: { [key in keyof DeleteOrgData]: MetaI | string } = {
+  orgIds: {meta:'array', type:'string'} as MetaA,
+  userIds: {meta:'array', type:'string'} as MetaA,
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaPaymentMethod: { [key in keyof PaymentMethod]: MetaI | string } = {
+  wiretransfer: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.organization.WireTransfer', name:'WireTransfer'} as MetaO]} as MetaU,
+  paypal: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.organization.Paypal', name:'Paypal'} as MetaO]} as MetaU,
+  transferType: {meta:'object', type:'.io.restorecommerce.organization.PaymentMethod.TransferType', name:'PaymentMethod_TransferType'} as MetaO,
+};
+
+export const metaWireTransfer: { [key in keyof WireTransfer]: MetaI | string } = {
+  iban: 'string',
+  bic: 'string',
+  bankName: 'string',
+};
+
+export const metaPaypal: { [key in keyof Paypal]: MetaI | string } = {
+  username: 'string',
+  email: 'string',
+  password: 'string',
+};
+
+export const metaOrganizationList: { [key in keyof OrganizationList]: MetaI | string } = {
+  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO} as MetaA,
+  totalCount: 'number',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaOrganization: { [key in keyof Organization]: MetaI | string } = {
+  id: 'string',
+  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+  addressId: 'string',
+  parentId: 'string',
+  childrenIds: {meta:'array', type:'string'} as MetaA,
+  contactPointIds: {meta:'array', type:'string'} as MetaA,
+  website: 'string',
+  email: 'string',
+  logo: 'string',
+  vatId: 'string',
+  isicV4: 'string',
+  registration: 'string',
+  registrationCourt: 'string',
+  name: 'string',
+  paymentMethods: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.organization.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  systemOwner: 'boolean',
+};
+
 export const protobufPackage = 'io.restorecommerce.organization'
 
 export enum PaymentMethod_TransferType {

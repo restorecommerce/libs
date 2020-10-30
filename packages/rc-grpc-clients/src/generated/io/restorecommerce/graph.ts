@@ -194,6 +194,96 @@ export interface Service {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export const metaTraversalRequest: { [key in keyof TraversalRequest]: MetaI | string } = {
+  startVertex: {meta:'union', choices: [undefined, 'string']} as MetaU,
+  startVertices: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.graph.TraversalRequest.StartVertices', name:'TraversalRequest_StartVertices'} as MetaO]} as MetaU,
+  opts: {meta:'object', type:'.io.restorecommerce.graph.Options', name:'Options'} as MetaO,
+  collectionName: 'string',
+  edgeName: 'string',
+  data: 'boolean',
+  path: 'boolean',
+  aql: 'boolean',
+  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
+  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+};
+
+export const metaTraversalRequest_StartVertices: { [key in keyof TraversalRequest_StartVertices]: MetaI | string } = {
+  vertices: {meta:'array', type:'string'} as MetaA,
+};
+
+export const metaTraversalResponse: { [key in keyof TraversalResponse]: MetaI | string } = {
+  vertexFields: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.VertexFields', name:'VertexFields'} as MetaO} as MetaA,
+  paths: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+};
+
+export const metaVertexFields: { [key in keyof VertexFields]: MetaI | string } = {
+  aid: 'string',
+  Key: 'string',
+  Rev: 'string',
+  id: 'string',
+};
+
+export const metaOptions: { [key in keyof Options]: MetaI | string } = {
+  sort: 'string',
+  direction: 'string',
+  minDepth: 'number',
+  startVertex: 'string',
+  visitor: 'string',
+  itemOrder: 'string',
+  strategy: 'string',
+  filter: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Filter', name:'Filter'} as MetaO} as MetaA,
+  init: 'string',
+  maxIterations: 'number',
+  maxDepth: 'number',
+  uniqueness: {meta:'object', type:'.io.restorecommerce.graph.Uniqueness', name:'Uniqueness'} as MetaO,
+  order: 'string',
+  graphName: 'string',
+  expander: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Expander', name:'Expander'} as MetaO} as MetaA,
+  edgeCollection: 'string',
+  lowestCommonAncestor: 'boolean',
+};
+
+export const metaFilter: { [key in keyof Filter]: MetaI | string } = {
+  vertex: 'string',
+};
+
+export const metaExpander: { [key in keyof Expander]: MetaI | string } = {
+  edge: 'string',
+  direction: 'string',
+};
+
+export const metaUniqueness: { [key in keyof Uniqueness]: MetaI | string } = {
+  vertices: 'string',
+  edges: 'string',
+};
+
 export const protobufPackage = 'io.restorecommerce.graph'
 
 export const TraversalRequest = {

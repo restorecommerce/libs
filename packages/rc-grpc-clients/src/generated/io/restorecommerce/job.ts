@@ -304,7 +304,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -330,10 +330,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.job'
@@ -1606,83 +1614,101 @@ export const JobFilter = {
   },
 };
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaJobList: { [key in keyof JobList]: MetaI | string } = {
+export const metaJobList: { [key in keyof Required<JobList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.job.Job', name:'Job'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaJob: { [key in keyof Job]: MetaI | string } = {
-  id: 'string',
-  type: 'string',
+export const metaJob: { [key in keyof Required<Job>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
   data: {meta:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaO,
-  when: 'string',
+  when: {meta:'builtin', type:'string', original:'string'} as MetaB,
   options: {meta:'object', type:'.io.restorecommerce.job.JobOptions', name:'JobOptions'} as MetaO,
 }
-export const metaJobOptions: { [key in keyof JobOptions]: MetaI | string } = {
+export const metaJobOptions: { [key in keyof Required<JobOptions>]: MetaI | string } = {
   priority: {meta:'object', type:'.io.restorecommerce.job.JobOptions.Priority', name:'JobOptions_Priority'} as MetaO,
-  attempts: 'number',
+  attempts: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   backoff: {meta:'object', type:'.io.restorecommerce.job.Backoff', name:'Backoff'} as MetaO,
-  timeout: 'number',
+  timeout: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   repeat: {meta:'object', type:'.io.restorecommerce.job.Repeat', name:'Repeat'} as MetaO,
 }
-export const metaRepeat: { [key in keyof Repeat]: MetaI | string } = {
-  every: 'number',
-  cron: 'string',
-  startDate: 'string',
-  endDate: 'string',
-  count: 'number',
+export const metaRepeat: { [key in keyof Required<Repeat>]: MetaI | string } = {
+  every: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+  cron: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  startDate: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  endDate: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  count: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
 }
-export const metaData: { [key in keyof Data]: MetaI | string } = {
-  timezone: 'string',
+export const metaData: { [key in keyof Required<Data>]: MetaI | string } = {
+  timezone: {meta:'builtin', type:'string', original:'string'} as MetaB,
   payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  subjectId: 'string',
+  subjectId: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaScheduledJob: { [key in keyof ScheduledJob]: MetaI | string } = {
-  id: 'string',
-  type: 'string',
+export const metaScheduledJob: { [key in keyof Required<ScheduledJob>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
   data: {meta:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaO,
-  scheduleType: 'string',
+  scheduleType: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaJobDone: { [key in keyof JobDone]: MetaI | string } = {
-  id: 'string',
-  scheduleType: 'string',
-  deleteScheduled: 'boolean',
-  type: 'string',
+export const metaJobDone: { [key in keyof Required<JobDone>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  scheduleType: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  deleteScheduled: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
   result: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
-export const metaJobFailed: { [key in keyof JobFailed]: MetaI | string } = {
-  id: 'string',
-  error: 'string',
-  scheduleType: 'string',
-  type: 'string',
+export const metaJobFailed: { [key in keyof Required<JobFailed>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  error: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  scheduleType: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaBackoff: { [key in keyof Backoff]: MetaI | string } = {
-  delay: 'number',
+export const metaBackoff: { [key in keyof Required<Backoff>]: MetaI | string } = {
+  delay: {meta:'builtin', type:'number', original:'double'} as MetaB,
   type: {meta:'object', type:'.io.restorecommerce.job.Backoff.Type', name:'Backoff_Type'} as MetaO,
 }
-export const metaJobReadRequest: { [key in keyof JobReadRequest]: MetaI | string } = {
-  limit: 'number',
+export const metaJobReadRequest: { [key in keyof Required<JobReadRequest>]: MetaI | string } = {
+  limit: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   sort: {meta:'object', type:'.io.restorecommerce.job.JobReadRequest.SortOrder', name:'JobReadRequest_SortOrder'} as MetaO,
   filter: {meta:'object', type:'.io.restorecommerce.job.JobFilter', name:'JobFilter'} as MetaO,
   field: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaO} as MetaA,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaJobFilter: { [key in keyof JobFilter]: MetaI | string } = {
-  jobIds: {meta:'array', type:'string'} as MetaA,
-  type: 'string',
+export const metaJobFilter: { [key in keyof Required<JobFilter>]: MetaI | string } = {
+  jobIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.job.JobList', response: '.io.restorecommerce.job.JobList', encodeRequest: JobReadRequest.encode, decodeResponse: JobList.decode} as MetaS<JobReadRequest, JobList>,
-  Create: {request: '.io.restorecommerce.job.JobList', response: '.io.restorecommerce.job.JobList', encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.job.JobList', response: '.io.restorecommerce.job.JobList', encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
-  Upsert: {request: '.io.restorecommerce.job.JobList', response: '.io.restorecommerce.job.JobList', encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.job.JobReadRequest', name:'JobReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: JobReadRequest.encode, decodeResponse: JobList.decode} as MetaS<JobReadRequest, JobList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaS<JobList, JobList>,
+}
+export const metaPackageIoRestorecommerceJob: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Deleted: ['message', '.io.restorecommerce.job.Deleted', Deleted, metaDeleted],
+  JobList: ['message', '.io.restorecommerce.job.JobList', JobList, metaJobList],
+  Job: ['message', '.io.restorecommerce.job.Job', Job, metaJob],
+  JobOptions: ['message', '.io.restorecommerce.job.JobOptions', JobOptions, metaJobOptions],
+  JobOptions_Priority: ['enum', '.io.restorecommerce.job.JobOptions.Priority', JobOptions_Priority, undefined],
+  Repeat: ['message', '.io.restorecommerce.job.Repeat', Repeat, metaRepeat],
+  Data: ['message', '.io.restorecommerce.job.Data', Data, metaData],
+  ScheduledJob: ['message', '.io.restorecommerce.job.ScheduledJob', ScheduledJob, metaScheduledJob],
+  JobDone: ['message', '.io.restorecommerce.job.JobDone', JobDone, metaJobDone],
+  JobFailed: ['message', '.io.restorecommerce.job.JobFailed', JobFailed, metaJobFailed],
+  Backoff: ['message', '.io.restorecommerce.job.Backoff', Backoff, metaBackoff],
+  Backoff_Type: ['enum', '.io.restorecommerce.job.Backoff.Type', Backoff_Type, undefined],
+  JobReadRequest: ['message', '.io.restorecommerce.job.JobReadRequest', JobReadRequest, metaJobReadRequest],
+  JobReadRequest_SortOrder: ['enum', '.io.restorecommerce.job.JobReadRequest.SortOrder', JobReadRequest_SortOrder, undefined],
+  JobFilter: ['message', '.io.restorecommerce.job.JobFilter', JobFilter, metaJobFilter],
+  Service: ['service', '.io.restorecommerce.job.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

@@ -197,7 +197,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -223,10 +223,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.payment'
@@ -1358,78 +1366,91 @@ export const PaymentError = {
   },
 };
 
-export const metaSetupRequest: { [key in keyof SetupRequest]: MetaI | string } = {
-  ip: 'string',
+export const metaSetupRequest: { [key in keyof Required<SetupRequest>]: MetaI | string } = {
+  ip: {meta:'builtin', type:'string', original:'string'} as MetaB,
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.Item', name:'Item'} as MetaO} as MetaA,
-  subtotal: 'number',
-  shipping: 'number',
-  handling: 'number',
-  tax: 'number',
-  currency: 'string',
-  returnUrl: 'string',
-  cancelReturnUrl: 'string',
-  allowGuestCheckout: 'boolean',
+  subtotal: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  shipping: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  handling: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  tax: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  currency: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  returnUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  cancelReturnUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  allowGuestCheckout: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaSetupResponse: { [key in keyof SetupResponse]: MetaI | string } = {
+export const metaSetupResponse: { [key in keyof Required<SetupResponse>]: MetaI | string } = {
   paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,
-  token: 'string',
-  confirmInitiationUrl: 'string',
-  initiatedOn: 'string',
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  confirmInitiationUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  initiatedOn: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPaymentRequest: { [key in keyof PaymentRequest]: MetaI | string } = {
+export const metaPaymentRequest: { [key in keyof Required<PaymentRequest>]: MetaI | string } = {
   provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
-  paymentSum: 'number',
-  currency: 'string',
-  paymentId: 'string',
-  payerId: 'string',
-  token: 'string',
+  paymentSum: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  currency: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  paymentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  payerId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaCaptureRequest: { [key in keyof CaptureRequest]: MetaI | string } = {
+export const metaCaptureRequest: { [key in keyof Required<CaptureRequest>]: MetaI | string } = {
   provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
-  paymentSum: 'number',
-  currency: 'string',
-  paymentId: 'string',
+  paymentSum: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  currency: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  paymentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaPaymentResponse: { [key in keyof PaymentResponse]: MetaI | string } = {
+export const metaPaymentResponse: { [key in keyof Required<PaymentResponse>]: MetaI | string } = {
   paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,
-  paymentId: 'string',
-  executedOn: 'string',
+  paymentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  executedOn: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPaymentCard: { [key in keyof PaymentCard]: MetaI | string } = {
-  primaryNumber: 'string',
-  firstName: 'string',
-  lastName: 'string',
-  month: 'string',
-  year: 'number',
-  verificationValue: 'string',
+export const metaPaymentCard: { [key in keyof Required<PaymentCard>]: MetaI | string } = {
+  primaryNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  firstName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  lastName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  month: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  year: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  verificationValue: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaItem: { [key in keyof Item]: MetaI | string } = {
-  name: 'string',
-  description: 'string',
-  quantity: 'number',
-  amount: 'number',
+export const metaItem: { [key in keyof Required<Item>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  quantity: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  amount: {meta:'builtin', type:'number', original:'int32'} as MetaB,
 }
-export const metaPaymentError: { [key in keyof PaymentError]: MetaI | string } = {
-  killed: 'boolean',
-  code: 'number',
-  signal: 'string',
-  cmd: 'string',
-  stdout: 'string',
-  stderr: 'string',
+export const metaPaymentError: { [key in keyof Required<PaymentError>]: MetaI | string } = {
+  killed: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  code: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  signal: {meta:'builtin', type:'string', original:'.google.protobuf.StringValue'} as MetaB,
+  cmd: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  stdout: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  stderr: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  SetupAuthorization: {request: '.io.restorecommerce.payment.SetupResponse', response: '.io.restorecommerce.payment.SetupResponse', encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaS<SetupRequest, SetupResponse>,
-  SetupPurchase: {request: '.io.restorecommerce.payment.SetupResponse', response: '.io.restorecommerce.payment.SetupResponse', encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaS<SetupRequest, SetupResponse>,
-  Authorize: {request: '.io.restorecommerce.payment.PaymentResponse', response: '.io.restorecommerce.payment.PaymentResponse', encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<PaymentRequest, PaymentResponse>,
-  Purchase: {request: '.io.restorecommerce.payment.PaymentResponse', response: '.io.restorecommerce.payment.PaymentResponse', encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<PaymentRequest, PaymentResponse>,
-  Capture: {request: '.io.restorecommerce.payment.PaymentResponse', response: '.io.restorecommerce.payment.PaymentResponse', encodeRequest: CaptureRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<CaptureRequest, PaymentResponse>,
+  SetupAuthorization: {request: {meta:'object', type:'.io.restorecommerce.payment.SetupRequest', name:'SetupRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment.SetupResponse', name:'SetupResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaS<SetupRequest, SetupResponse>,
+  SetupPurchase: {request: {meta:'object', type:'.io.restorecommerce.payment.SetupRequest', name:'SetupRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment.SetupResponse', name:'SetupResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaS<SetupRequest, SetupResponse>,
+  Authorize: {request: {meta:'object', type:'.io.restorecommerce.payment.PaymentRequest', name:'PaymentRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<PaymentRequest, PaymentResponse>,
+  Purchase: {request: {meta:'object', type:'.io.restorecommerce.payment.PaymentRequest', name:'PaymentRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<PaymentRequest, PaymentResponse>,
+  Capture: {request: {meta:'object', type:'.io.restorecommerce.payment.CaptureRequest', name:'CaptureRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CaptureRequest.encode, decodeResponse: PaymentResponse.decode} as MetaS<CaptureRequest, PaymentResponse>,
+}
+export const metaPackageIoRestorecommercePayment: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Provider: ['enum', '.io.restorecommerce.payment.Provider', Provider, undefined],
+  PaymentIdType: ['enum', '.io.restorecommerce.payment.PaymentIdType', PaymentIdType, undefined],
+  SetupRequest: ['message', '.io.restorecommerce.payment.SetupRequest', SetupRequest, metaSetupRequest],
+  SetupResponse: ['message', '.io.restorecommerce.payment.SetupResponse', SetupResponse, metaSetupResponse],
+  PaymentRequest: ['message', '.io.restorecommerce.payment.PaymentRequest', PaymentRequest, metaPaymentRequest],
+  CaptureRequest: ['message', '.io.restorecommerce.payment.CaptureRequest', CaptureRequest, metaCaptureRequest],
+  PaymentResponse: ['message', '.io.restorecommerce.payment.PaymentResponse', PaymentResponse, metaPaymentResponse],
+  PaymentCard: ['message', '.io.restorecommerce.payment.PaymentCard', PaymentCard, metaPaymentCard],
+  Item: ['message', '.io.restorecommerce.payment.Item', Item, metaItem],
+  PaymentError: ['message', '.io.restorecommerce.payment.PaymentError', PaymentError, metaPaymentError],
+  Service: ['service', '.io.restorecommerce.payment.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

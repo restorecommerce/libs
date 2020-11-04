@@ -1,6 +1,3 @@
-import { FindRequest, IdentitySrvGrpcClient, LoginRequest, RegisterRequest, ResourcesSrvGrpcClient, User } from '@restorecommerce/rc-grpc-clients';
-import { createServiceConfig } from '@restorecommerce/service-config';
-import { isType } from 'graphql';
 import  { Facade } from '../src/index';
 import { createTestFacade } from './facade';
 

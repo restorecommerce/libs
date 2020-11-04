@@ -1,12 +1,31 @@
-import { metaAttribute } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
-import { metaMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta";
-import { metaItem, metaOrder, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
-import { getGQLObject, registerTyping } from "@gql/protos";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufEmpty } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/empty";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufStruct } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/struct";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufAny } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/any";
+import { metaPackageIoRestorecommerceAttribute } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
+import { metaPackageIoRestorecommerceMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta";
+import { metaPackageIoRestorecommerceOrder } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
+import { metaPackageIoRestorecommerceResourcebase } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base";
+import { metaPackageIoRestorecommerceAuth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth";
+import { registerEnumTyping, registerTyping } from "../../../gql/protos";
 
-registerTyping('.io.restorecommerce.attribute.Attribute', metaAttribute, {name: 'Attribute'});
-registerTyping('.io.restorecommerce.meta.Meta', metaMeta, {name: 'Meta'});
-registerTyping('.io.restorecommerce.order.Item', metaItem, {name: 'Item'});
-registerTyping('.io.restorecommerce.order.Items', metaItem, {name: 'Items'});
-registerTyping('.io.restorecommerce.order.Order', metaOrder, {name: 'Order'});
-
-export const OrderType = getGQLObject('.io.restorecommerce.order.Order');
+export function registerTypings() {
+  [
+    metaPackageGoogleProtobufEmpty,
+    metaPackageGoogleProtobufStruct,
+    metaPackageGoogleProtobufAny,
+    metaPackageIoRestorecommerceAttribute,
+    metaPackageIoRestorecommerceMeta,
+    metaPackageIoRestorecommerceAuth,
+    metaPackageIoRestorecommerceResourcebase,
+    metaPackageIoRestorecommerceOrder
+  ].forEach(m => {
+    for (let key in m) {
+      const val = m[key];
+      if (val[0] === 'message') {
+        registerTyping(val[1], val[3], {name: key}, {name: 'I' + key});
+      } else if (val[0] === 'enum') {
+        registerEnumTyping(val[1], val[2], {name: key});
+      }
+    }
+  });
+}

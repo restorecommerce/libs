@@ -195,7 +195,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -221,10 +221,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.graph'
@@ -1137,64 +1145,75 @@ export const Uniqueness = {
   },
 };
 
-export const metaTraversalRequest: { [key in keyof TraversalRequest]: MetaI | string } = {
-  startVertex: {meta:'union', choices: [undefined, 'string']} as MetaU,
+export const metaTraversalRequest: { [key in keyof Required<TraversalRequest>]: MetaI | string } = {
+  startVertex: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
   startVertices: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.graph.TraversalRequest.StartVertices', name:'TraversalRequest_StartVertices'} as MetaO]} as MetaU,
   opts: {meta:'object', type:'.io.restorecommerce.graph.Options', name:'Options'} as MetaO,
-  collectionName: 'string',
-  edgeName: 'string',
-  data: 'boolean',
-  path: 'boolean',
-  aql: 'boolean',
+  collectionName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  edgeName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  data: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  path: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  aql: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaTraversalRequest_StartVertices: { [key in keyof TraversalRequest_StartVertices]: MetaI | string } = {
-  vertices: {meta:'array', type:'string'} as MetaA,
+export const metaTraversalRequest_StartVertices: { [key in keyof Required<TraversalRequest_StartVertices>]: MetaI | string } = {
+  vertices: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
-export const metaTraversalResponse: { [key in keyof TraversalResponse]: MetaI | string } = {
+export const metaTraversalResponse: { [key in keyof Required<TraversalResponse>]: MetaI | string } = {
   vertexFields: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.VertexFields', name:'VertexFields'} as MetaO} as MetaA,
   paths: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
   data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
-export const metaVertexFields: { [key in keyof VertexFields]: MetaI | string } = {
-  aid: 'string',
-  Key: 'string',
-  Rev: 'string',
-  id: 'string',
+export const metaVertexFields: { [key in keyof Required<VertexFields>]: MetaI | string } = {
+  aid: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  Key: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  Rev: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaOptions: { [key in keyof Options]: MetaI | string } = {
-  sort: 'string',
-  direction: 'string',
-  minDepth: 'number',
-  startVertex: 'string',
-  visitor: 'string',
-  itemOrder: 'string',
-  strategy: 'string',
+export const metaOptions: { [key in keyof Required<Options>]: MetaI | string } = {
+  sort: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  direction: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  minDepth: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+  startVertex: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  visitor: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  itemOrder: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  strategy: {meta:'builtin', type:'string', original:'string'} as MetaB,
   filter: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Filter', name:'Filter'} as MetaO} as MetaA,
-  init: 'string',
-  maxIterations: 'number',
-  maxDepth: 'number',
+  init: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  maxIterations: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+  maxDepth: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   uniqueness: {meta:'object', type:'.io.restorecommerce.graph.Uniqueness', name:'Uniqueness'} as MetaO,
-  order: 'string',
-  graphName: 'string',
+  order: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  graphName: {meta:'builtin', type:'string', original:'string'} as MetaB,
   expander: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Expander', name:'Expander'} as MetaO} as MetaA,
-  edgeCollection: 'string',
-  lowestCommonAncestor: 'boolean',
+  edgeCollection: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  lowestCommonAncestor: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
-export const metaFilter: { [key in keyof Filter]: MetaI | string } = {
-  vertex: 'string',
+export const metaFilter: { [key in keyof Required<Filter>]: MetaI | string } = {
+  vertex: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaExpander: { [key in keyof Expander]: MetaI | string } = {
-  edge: 'string',
-  direction: 'string',
+export const metaExpander: { [key in keyof Required<Expander>]: MetaI | string } = {
+  edge: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  direction: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaUniqueness: { [key in keyof Uniqueness]: MetaI | string } = {
-  vertices: 'string',
-  edges: 'string',
+export const metaUniqueness: { [key in keyof Required<Uniqueness>]: MetaI | string } = {
+  vertices: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  edges: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Traversal: {request: '.io.restorecommerce.graph.TraversalResponse', response: '.io.restorecommerce.graph.TraversalResponse', encodeRequest: TraversalRequest.encode, decodeResponse: TraversalResponse.decode} as MetaS<TraversalRequest, TraversalResponse>,
+  Traversal: {request: {meta:'object', type:'.io.restorecommerce.graph.TraversalRequest', name:'TraversalRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.graph.TraversalResponse', name:'TraversalResponse'} as MetaO, clientStreaming: false, serverStreaming: true, encodeRequest: TraversalRequest.encode, decodeResponse: TraversalResponse.decode} as MetaS<TraversalRequest, TraversalResponse>,
+}
+export const metaPackageIoRestorecommerceGraph: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  TraversalRequest: ['message', '.io.restorecommerce.graph.TraversalRequest', TraversalRequest, metaTraversalRequest],
+  TraversalRequest_StartVertices: ['message', '.io.restorecommerce.graph.TraversalRequest.StartVertices', TraversalRequest_StartVertices, metaTraversalRequest_StartVertices],
+  TraversalResponse: ['message', '.io.restorecommerce.graph.TraversalResponse', TraversalResponse, metaTraversalResponse],
+  VertexFields: ['message', '.io.restorecommerce.graph.VertexFields', VertexFields, metaVertexFields],
+  Options: ['message', '.io.restorecommerce.graph.Options', Options, metaOptions],
+  Filter: ['message', '.io.restorecommerce.graph.Filter', Filter, metaFilter],
+  Expander: ['message', '.io.restorecommerce.graph.Expander', Expander, metaExpander],
+  Uniqueness: ['message', '.io.restorecommerce.graph.Uniqueness', Uniqueness, metaUniqueness],
+  Service: ['service', '.io.restorecommerce.graph.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

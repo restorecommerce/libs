@@ -8,7 +8,7 @@ import {
 } from "./generated/io/restorecommerce/order";
 
 export class OrderingSrvGrpcClient extends RestoreCommerceGrpcClient {
-  fulfillment = this.createService<OrderingService>({
+  ordering = this.createService<OrderingService>({
     packageName: orderingPackageName,
     serviceName: 'Service',
     methods: {

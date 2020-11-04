@@ -13,7 +13,7 @@ const baseAttribute: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -39,10 +39,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.attribute'
@@ -109,9 +117,12 @@ export const Attribute = {
   },
 };
 
-export const metaAttribute: { [key in keyof Attribute]: MetaI | string } = {
-  id: 'string',
-  value: 'string',
+export const metaAttribute: { [key in keyof Required<Attribute>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
+}
+export const metaPackageIoRestorecommerceAttribute: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Attribute: ['message', '.io.restorecommerce.attribute.Attribute', Attribute, metaAttribute],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

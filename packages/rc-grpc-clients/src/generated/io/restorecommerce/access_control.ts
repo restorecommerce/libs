@@ -54,7 +54,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -80,10 +80,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.access_control'
@@ -421,26 +429,34 @@ export const ReverseQuery = {
   },
 };
 
-export const metaRequest: { [key in keyof Request]: MetaI | string } = {
+export const metaRequest: { [key in keyof Required<Request>]: MetaI | string } = {
   target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
   context: {meta:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaO,
 }
-export const metaContext: { [key in keyof Context]: MetaI | string } = {
+export const metaContext: { [key in keyof Required<Context>]: MetaI | string } = {
   subject: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
   resources: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
   security: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
-export const metaResponse: { [key in keyof Response]: MetaI | string } = {
+export const metaResponse: { [key in keyof Required<Response>]: MetaI | string } = {
   decision: {meta:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaO,
-  obligation: 'string',
-  evaluationCacheable: 'boolean',
+  obligation: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
-export const metaReverseQuery: { [key in keyof ReverseQuery]: MetaI | string } = {
+export const metaReverseQuery: { [key in keyof Required<ReverseQuery>]: MetaI | string } = {
   policySets: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaO} as MetaA,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  IsAllowed: {request: '.io.restorecommerce.access_control.Response', response: '.io.restorecommerce.access_control.Response', encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaS<Request, Response>,
-  WhatIsAllowed: {request: '.io.restorecommerce.access_control.ReverseQuery', response: '.io.restorecommerce.access_control.ReverseQuery', encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaS<Request, ReverseQuery>,
+  IsAllowed: {request: {meta:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.access_control.Response', name:'Response'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaS<Request, Response>,
+  WhatIsAllowed: {request: {meta:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.access_control.ReverseQuery', name:'ReverseQuery'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaS<Request, ReverseQuery>,
+}
+export const metaPackageIoRestorecommerceAccess_control: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Request: ['message', '.io.restorecommerce.access_control.Request', Request, metaRequest],
+  Context: ['message', '.io.restorecommerce.access_control.Context', Context, metaContext],
+  Response: ['message', '.io.restorecommerce.access_control.Response', Response, metaResponse],
+  Response_Decision: ['enum', '.io.restorecommerce.access_control.Response.Decision', Response_Decision, undefined],
+  ReverseQuery: ['message', '.io.restorecommerce.access_control.ReverseQuery', ReverseQuery, metaReverseQuery],
+  Service: ['service', '.io.restorecommerce.access_control.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

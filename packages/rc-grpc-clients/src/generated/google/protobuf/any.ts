@@ -101,7 +101,7 @@ const baseAny: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -127,10 +127,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'google.protobuf'
@@ -195,9 +203,12 @@ export const Any = {
   },
 };
 
-export const metaAny: { [key in keyof Any]: MetaI | string } = {
-  typeUrl: 'string',
-  value: 'Buffer',
+export const metaAny: { [key in keyof Required<Any>]: MetaI | string } = {
+  typeUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  value: {meta:'builtin', type:'Buffer', original:'bytes'} as MetaB,
+}
+export const metaPackageGoogleProtobuf: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Any: ['message', '.google.protobuf.Any', Any, metaAny],
 }
 interface WindowBase64 {
   atob(b64: string): string;

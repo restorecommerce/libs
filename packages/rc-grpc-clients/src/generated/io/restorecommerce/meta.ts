@@ -26,7 +26,7 @@ const baseMeta: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -52,10 +52,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.meta'
@@ -161,11 +169,14 @@ export const Meta = {
   },
 };
 
-export const metaMeta: { [key in keyof Meta]: MetaI | string } = {
-  created: 'number',
-  modified: 'number',
-  modifiedBy: 'string',
+export const metaMeta: { [key in keyof Required<Meta>]: MetaI | string } = {
+  created: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  modified: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  modifiedBy: {meta:'builtin', type:'string', original:'string'} as MetaB,
   owner: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+}
+export const metaPackageIoRestorecommerceMeta: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Meta: ['message', '.io.restorecommerce.meta.Meta', Meta, metaMeta],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

@@ -35,7 +35,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -61,10 +61,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.search'
@@ -245,18 +253,23 @@ export const SearchResponse = {
   },
 };
 
-export const metaSearchRequest: { [key in keyof SearchRequest]: MetaI | string } = {
-  collection: 'string',
-  text: 'string',
-  acl: {meta:'array', type:'string'} as MetaA,
+export const metaSearchRequest: { [key in keyof Required<SearchRequest>]: MetaI | string } = {
+  collection: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  text: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  acl: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaSearchResponse: { [key in keyof SearchResponse]: MetaI | string } = {
+export const metaSearchResponse: { [key in keyof Required<SearchResponse>]: MetaI | string } = {
   data: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Search: {request: '.io.restorecommerce.search.SearchResponse', response: '.io.restorecommerce.search.SearchResponse', encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaS<SearchRequest, SearchResponse>,
+  Search: {request: {meta:'object', type:'.io.restorecommerce.search.SearchRequest', name:'SearchRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.search.SearchResponse', name:'SearchResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaS<SearchRequest, SearchResponse>,
+}
+export const metaPackageIoRestorecommerceSearch: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  SearchRequest: ['message', '.io.restorecommerce.search.SearchRequest', SearchRequest, metaSearchRequest],
+  SearchResponse: ['message', '.io.restorecommerce.search.SearchResponse', SearchResponse, metaSearchResponse],
+  Service: ['service', '.io.restorecommerce.search.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

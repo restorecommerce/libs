@@ -20,5 +20,10 @@
     "client": {
       "address": "127.0.0.1:50051"
     }
+  },
+  "ordering": {
+    "client": {
+      "address": "127.0.0.1:50051"
+    }
   }
 }

@@ -61,7 +61,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -87,10 +87,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.tax'
@@ -371,29 +379,35 @@ export const Tax = {
   },
 };
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaTaxList: { [key in keyof TaxList]: MetaI | string } = {
+export const metaTaxList: { [key in keyof Required<TaxList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.tax.Tax', name:'Tax'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaTax: { [key in keyof Tax]: MetaI | string } = {
-  id: 'string',
+export const metaTax: { [key in keyof Required<Tax>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  countryId: 'string',
-  rate: 'number',
-  variant: 'string',
-  typeId: 'string',
+  countryId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  rate: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  variant: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  typeId: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.tax.TaxList', response: '.io.restorecommerce.tax.TaxList', encodeRequest: ReadRequest.encode, decodeResponse: TaxList.decode} as MetaS<ReadRequest, TaxList>,
-  Create: {request: '.io.restorecommerce.tax.TaxList', response: '.io.restorecommerce.tax.TaxList', encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.tax.TaxList', response: '.io.restorecommerce.tax.TaxList', encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
-  Upsert: {request: '.io.restorecommerce.tax.TaxList', response: '.io.restorecommerce.tax.TaxList', encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: TaxList.decode} as MetaS<ReadRequest, TaxList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaS<TaxList, TaxList>,
+}
+export const metaPackageIoRestorecommerceTax: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Deleted: ['message', '.io.restorecommerce.tax.Deleted', Deleted, metaDeleted],
+  TaxList: ['message', '.io.restorecommerce.tax.TaxList', TaxList, metaTaxList],
+  Tax: ['message', '.io.restorecommerce.tax.Tax', Tax, metaTax],
+  Service: ['service', '.io.restorecommerce.tax.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

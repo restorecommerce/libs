@@ -3,7 +3,7 @@ import { FacadeModule } from "../../facade";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 
 export interface OrderingConfig {
-  client: GrpcClientConfig;
+  config: GrpcClientConfig;
 }
 
 export interface OrderingContext {

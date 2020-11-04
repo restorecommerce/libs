@@ -538,7 +538,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -564,10 +564,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.user'
@@ -3341,196 +3349,226 @@ export const User = {
   },
 };
 
-export const metaLoginRequest: { [key in keyof LoginRequest]: MetaI | string } = {
-  identifier: 'string',
-  password: 'string',
-  token: 'string',
+export const metaLoginRequest: { [key in keyof Required<LoginRequest>]: MetaI | string } = {
+  identifier: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaOrgIDRequest: { [key in keyof OrgIDRequest]: MetaI | string } = {
-  orgIds: {meta:'array', type:'string'} as MetaA,
+export const metaOrgIDRequest: { [key in keyof Required<OrgIDRequest>]: MetaI | string } = {
+  orgIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaUserIDs: { [key in keyof UserIDs]: MetaI | string } = {
-  userIds: {meta:'array', type:'string'} as MetaA,
+export const metaUserIDs: { [key in keyof Required<UserIDs>]: MetaI | string } = {
+  userIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
-export const metaHierarchicalScopesRequest: { [key in keyof HierarchicalScopesRequest]: MetaI | string } = {
-  subjectId: 'string',
-  token: 'string',
+export const metaHierarchicalScopesRequest: { [key in keyof Required<HierarchicalScopesRequest>]: MetaI | string } = {
+  subjectId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaHierarchicalScopesResponse: { [key in keyof HierarchicalScopesResponse]: MetaI | string } = {
-  subjectId: 'string',
+export const metaHierarchicalScopesResponse: { [key in keyof Required<HierarchicalScopesResponse>]: MetaI | string } = {
+  subjectId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  token: 'string',
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPopulateRoleAssocCacheRequest: { [key in keyof PopulateRoleAssocCacheRequest]: MetaI | string } = {
-  id: 'string',
-  token: 'string',
+export const metaPopulateRoleAssocCacheRequest: { [key in keyof Required<PopulateRoleAssocCacheRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaFindRequest: { [key in keyof FindRequest]: MetaI | string } = {
-  id: 'string',
-  name: 'string',
-  email: 'string',
+export const metaFindRequest: { [key in keyof Required<FindRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaRegisterRequest: { [key in keyof RegisterRequest]: MetaI | string } = {
-  id: 'string',
-  guest: 'boolean',
+export const metaRegisterRequest: { [key in keyof Required<RegisterRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  guest: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  firstName: 'string',
-  lastName: 'string',
-  email: 'string',
-  password: 'string',
-  timezoneId: 'string',
-  localeId: 'string',
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  firstName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  lastName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  timezoneId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  localeId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
-  defaultScope: 'string',
+  defaultScope: {meta:'builtin', type:'string', original:'string'} as MetaB,
   userType: {meta:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaO,
-  captchaCode: 'string',
+  captchaCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaActivateRequest: { [key in keyof ActivateRequest]: MetaI | string } = {
-  name: 'string',
-  activationCode: 'string',
+export const metaActivateRequest: { [key in keyof Required<ActivateRequest>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaConfirmUserInvitationRequest: { [key in keyof ConfirmUserInvitationRequest]: MetaI | string } = {
-  name: 'string',
-  password: 'string',
-  activationCode: 'string',
+export const metaConfirmUserInvitationRequest: { [key in keyof Required<ConfirmUserInvitationRequest>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaSendInvitationEmailRequest: { [key in keyof SendInvitationEmailRequest]: MetaI | string } = {
-  userId: 'string',
-  invitedByUserId: 'string',
+export const metaSendInvitationEmailRequest: { [key in keyof Required<SendInvitationEmailRequest>]: MetaI | string } = {
+  userId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  invitedByUserId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaChangePasswordRequest: { [key in keyof ChangePasswordRequest]: MetaI | string } = {
-  id: 'string',
-  password: 'string',
-  newPassword: 'string',
+export const metaChangePasswordRequest: { [key in keyof Required<ChangePasswordRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  newPassword: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaRequestPasswordChangeRequest: { [key in keyof RequestPasswordChangeRequest]: MetaI | string } = {
-  name: {meta:'union', choices: [undefined, 'string']} as MetaU,
-  email: {meta:'union', choices: [undefined, 'string']} as MetaU,
+export const metaRequestPasswordChangeRequest: { [key in keyof Required<RequestPasswordChangeRequest>]: MetaI | string } = {
+  name: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+  email: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaConfirmPasswordChangeRequest: { [key in keyof ConfirmPasswordChangeRequest]: MetaI | string } = {
-  name: 'string',
-  activationCode: 'string',
-  password: 'string',
+export const metaConfirmPasswordChangeRequest: { [key in keyof Required<ConfirmPasswordChangeRequest>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaChangeEmailRequest: { [key in keyof ChangeEmailRequest]: MetaI | string } = {
-  id: 'string',
-  email: 'string',
+export const metaChangeEmailRequest: { [key in keyof Required<ChangeEmailRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaConfirmEmailChangeRequest: { [key in keyof ConfirmEmailChangeRequest]: MetaI | string } = {
-  name: 'string',
-  activationCode: 'string',
+export const metaConfirmEmailChangeRequest: { [key in keyof Required<ConfirmEmailChangeRequest>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaUnregisterRequest: { [key in keyof UnregisterRequest]: MetaI | string } = {
-  id: 'string',
+export const metaUnregisterRequest: { [key in keyof Required<UnregisterRequest>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPasswordChanged: { [key in keyof PasswordChanged]: MetaI | string } = {
-  id: 'string',
-  passwordHash: 'string',
+export const metaPasswordChanged: { [key in keyof Required<PasswordChanged>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  passwordHash: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPasswordChangeRequested: { [key in keyof PasswordChangeRequested]: MetaI | string } = {
-  id: 'string',
+export const metaPasswordChangeRequested: { [key in keyof Required<PasswordChangeRequested>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaEmailChangeRequested: { [key in keyof EmailChangeRequested]: MetaI | string } = {
-  id: 'string',
-  activationCode: 'string',
-  newEmail: 'string',
+export const metaEmailChangeRequested: { [key in keyof Required<EmailChangeRequested>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  newEmail: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaEmailChangeConfirmed: { [key in keyof EmailChangeConfirmed]: MetaI | string } = {
-  id: 'string',
-  email: 'string',
+export const metaEmailChangeConfirmed: { [key in keyof Required<EmailChangeConfirmed>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaUserList: { [key in keyof UserList]: MetaI | string } = {
+export const metaUserList: { [key in keyof Required<UserList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaActivate: { [key in keyof Activate]: MetaI | string } = {
-  id: 'string',
+export const metaActivate: { [key in keyof Required<Activate>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaFindByRoleRequest: { [key in keyof FindByRoleRequest]: MetaI | string } = {
-  role: 'string',
+export const metaFindByRoleRequest: { [key in keyof Required<FindByRoleRequest>]: MetaI | string } = {
+  role: {meta:'builtin', type:'string', original:'string'} as MetaB,
   attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaUser: { [key in keyof User]: MetaI | string } = {
-  id: 'string',
+export const metaUser: { [key in keyof Required<User>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  firstName: 'string',
-  lastName: 'string',
-  email: 'string',
-  newEmail: 'string',
-  active: 'boolean',
-  activationCode: 'string',
-  password: 'string',
-  passwordHash: 'string',
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  firstName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  lastName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  newEmail: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  active: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  activationCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  passwordHash: {meta:'builtin', type:'string', original:'string'} as MetaB,
   roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
-  timezoneId: 'string',
-  localeId: 'string',
-  defaultScope: 'string',
-  unauthenticated: 'boolean',
-  guest: 'boolean',
+  timezoneId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  localeId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  defaultScope: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  unauthenticated: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  guest: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   image: {meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO,
   userType: {meta:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaO,
-  invite: 'boolean',
-  invitedByUserName: 'string',
-  invitedByUserFirstName: 'string',
-  invitedByUserLastName: 'string',
+  invite: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  invitedByUserName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  invitedByUserFirstName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  invitedByUserLastName: {meta:'builtin', type:'string', original:'string'} as MetaB,
   tokens: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.Tokens', name:'Tokens'} as MetaO} as MetaA,
-  lastLogin: 'number',
-  lastAccess: 'number',
+  lastLogin: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  lastAccess: {meta:'builtin', type:'number', original:'double'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: ReadRequest.encode, decodeResponse: UserList.decode} as MetaS<ReadRequest, UserList>,
-  Create: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
-  Upsert: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
-  Find: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: FindRequest.encode, decodeResponse: UserList.decode} as MetaS<FindRequest, UserList>,
-  Register: {request: '.io.restorecommerce.user.User', response: '.io.restorecommerce.user.User', encodeRequest: RegisterRequest.encode, decodeResponse: User.decode} as MetaS<RegisterRequest, User>,
-  Activate: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ActivateRequest.encode, decodeResponse: Empty.decode} as MetaS<ActivateRequest, Empty>,
-  ChangePassword: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ChangePasswordRequest.encode, decodeResponse: Empty.decode} as MetaS<ChangePasswordRequest, Empty>,
-  RequestPasswordChange: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: RequestPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<RequestPasswordChangeRequest, Empty>,
-  RequestEmailChange: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ChangeEmailRequest.encode, decodeResponse: Empty.decode} as MetaS<ChangeEmailRequest, Empty>,
-  ConfirmPasswordChange: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ConfirmPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmPasswordChangeRequest, Empty>,
-  ConfirmEmailChange: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ConfirmEmailChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmEmailChangeRequest, Empty>,
-  Unregister: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: UnregisterRequest.encode, decodeResponse: Empty.decode} as MetaS<UnregisterRequest, Empty>,
-  Login: {request: '.io.restorecommerce.user.User', response: '.io.restorecommerce.user.User', encodeRequest: LoginRequest.encode, decodeResponse: User.decode} as MetaS<LoginRequest, User>,
-  FindByRole: {request: '.io.restorecommerce.user.UserList', response: '.io.restorecommerce.user.UserList', encodeRequest: FindByRoleRequest.encode, decodeResponse: UserList.decode} as MetaS<FindByRoleRequest, UserList>,
-  DeleteUsersByOrg: {request: '.io.restorecommerce.user.UserIDs', response: '.io.restorecommerce.user.UserIDs', encodeRequest: OrgIDRequest.encode, decodeResponse: UserIDs.decode} as MetaS<OrgIDRequest, UserIDs>,
-  ConfirmUserInvitation: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: ConfirmUserInvitationRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmUserInvitationRequest, Empty>,
-  SendInvitationEmail: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: SendInvitationEmailRequest.encode, decodeResponse: Empty.decode} as MetaS<SendInvitationEmailRequest, Empty>,
-  populateRoleAssocCache: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: PopulateRoleAssocCacheRequest.encode, decodeResponse: Empty.decode} as MetaS<PopulateRoleAssocCacheRequest, Empty>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: UserList.decode} as MetaS<ReadRequest, UserList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaS<UserList, UserList>,
+  Find: {request: {meta:'object', type:'.io.restorecommerce.user.FindRequest', name:'FindRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: FindRequest.encode, decodeResponse: UserList.decode} as MetaS<FindRequest, UserList>,
+  Register: {request: {meta:'object', type:'.io.restorecommerce.user.RegisterRequest', name:'RegisterRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RegisterRequest.encode, decodeResponse: User.decode} as MetaS<RegisterRequest, User>,
+  Activate: {request: {meta:'object', type:'.io.restorecommerce.user.ActivateRequest', name:'ActivateRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ActivateRequest.encode, decodeResponse: Empty.decode} as MetaS<ActivateRequest, Empty>,
+  ChangePassword: {request: {meta:'object', type:'.io.restorecommerce.user.ChangePasswordRequest', name:'ChangePasswordRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ChangePasswordRequest.encode, decodeResponse: Empty.decode} as MetaS<ChangePasswordRequest, Empty>,
+  RequestPasswordChange: {request: {meta:'object', type:'.io.restorecommerce.user.RequestPasswordChangeRequest', name:'RequestPasswordChangeRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RequestPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<RequestPasswordChangeRequest, Empty>,
+  RequestEmailChange: {request: {meta:'object', type:'.io.restorecommerce.user.ChangeEmailRequest', name:'ChangeEmailRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ChangeEmailRequest.encode, decodeResponse: Empty.decode} as MetaS<ChangeEmailRequest, Empty>,
+  ConfirmPasswordChange: {request: {meta:'object', type:'.io.restorecommerce.user.ConfirmPasswordChangeRequest', name:'ConfirmPasswordChangeRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmPasswordChangeRequest, Empty>,
+  ConfirmEmailChange: {request: {meta:'object', type:'.io.restorecommerce.user.ConfirmEmailChangeRequest', name:'ConfirmEmailChangeRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmEmailChangeRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmEmailChangeRequest, Empty>,
+  Unregister: {request: {meta:'object', type:'.io.restorecommerce.user.UnregisterRequest', name:'UnregisterRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UnregisterRequest.encode, decodeResponse: Empty.decode} as MetaS<UnregisterRequest, Empty>,
+  Login: {request: {meta:'object', type:'.io.restorecommerce.user.LoginRequest', name:'LoginRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: LoginRequest.encode, decodeResponse: User.decode} as MetaS<LoginRequest, User>,
+  FindByRole: {request: {meta:'object', type:'.io.restorecommerce.user.FindByRoleRequest', name:'FindByRoleRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: FindByRoleRequest.encode, decodeResponse: UserList.decode} as MetaS<FindByRoleRequest, UserList>,
+  DeleteUsersByOrg: {request: {meta:'object', type:'.io.restorecommerce.user.OrgIDRequest', name:'OrgIDRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.user.UserIDs', name:'UserIDs'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrgIDRequest.encode, decodeResponse: UserIDs.decode} as MetaS<OrgIDRequest, UserIDs>,
+  ConfirmUserInvitation: {request: {meta:'object', type:'.io.restorecommerce.user.ConfirmUserInvitationRequest', name:'ConfirmUserInvitationRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmUserInvitationRequest.encode, decodeResponse: Empty.decode} as MetaS<ConfirmUserInvitationRequest, Empty>,
+  SendInvitationEmail: {request: {meta:'object', type:'.io.restorecommerce.user.SendInvitationEmailRequest', name:'SendInvitationEmailRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: SendInvitationEmailRequest.encode, decodeResponse: Empty.decode} as MetaS<SendInvitationEmailRequest, Empty>,
+  populateRoleAssocCache: {request: {meta:'object', type:'.io.restorecommerce.user.PopulateRoleAssocCacheRequest', name:'PopulateRoleAssocCacheRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PopulateRoleAssocCacheRequest.encode, decodeResponse: Empty.decode} as MetaS<PopulateRoleAssocCacheRequest, Empty>,
+}
+export const metaPackageIoRestorecommerceUser: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  UserType: ['enum', '.io.restorecommerce.user.UserType', UserType, undefined],
+  LoginRequest: ['message', '.io.restorecommerce.user.LoginRequest', LoginRequest, metaLoginRequest],
+  OrgIDRequest: ['message', '.io.restorecommerce.user.OrgIDRequest', OrgIDRequest, metaOrgIDRequest],
+  UserIDs: ['message', '.io.restorecommerce.user.UserIDs', UserIDs, metaUserIDs],
+  HierarchicalScopesRequest: ['message', '.io.restorecommerce.user.HierarchicalScopesRequest', HierarchicalScopesRequest, metaHierarchicalScopesRequest],
+  HierarchicalScopesResponse: ['message', '.io.restorecommerce.user.HierarchicalScopesResponse', HierarchicalScopesResponse, metaHierarchicalScopesResponse],
+  PopulateRoleAssocCacheRequest: ['message', '.io.restorecommerce.user.PopulateRoleAssocCacheRequest', PopulateRoleAssocCacheRequest, metaPopulateRoleAssocCacheRequest],
+  FindRequest: ['message', '.io.restorecommerce.user.FindRequest', FindRequest, metaFindRequest],
+  RegisterRequest: ['message', '.io.restorecommerce.user.RegisterRequest', RegisterRequest, metaRegisterRequest],
+  ActivateRequest: ['message', '.io.restorecommerce.user.ActivateRequest', ActivateRequest, metaActivateRequest],
+  ConfirmUserInvitationRequest: ['message', '.io.restorecommerce.user.ConfirmUserInvitationRequest', ConfirmUserInvitationRequest, metaConfirmUserInvitationRequest],
+  SendInvitationEmailRequest: ['message', '.io.restorecommerce.user.SendInvitationEmailRequest', SendInvitationEmailRequest, metaSendInvitationEmailRequest],
+  ChangePasswordRequest: ['message', '.io.restorecommerce.user.ChangePasswordRequest', ChangePasswordRequest, metaChangePasswordRequest],
+  RequestPasswordChangeRequest: ['message', '.io.restorecommerce.user.RequestPasswordChangeRequest', RequestPasswordChangeRequest, metaRequestPasswordChangeRequest],
+  ConfirmPasswordChangeRequest: ['message', '.io.restorecommerce.user.ConfirmPasswordChangeRequest', ConfirmPasswordChangeRequest, metaConfirmPasswordChangeRequest],
+  ChangeEmailRequest: ['message', '.io.restorecommerce.user.ChangeEmailRequest', ChangeEmailRequest, metaChangeEmailRequest],
+  ConfirmEmailChangeRequest: ['message', '.io.restorecommerce.user.ConfirmEmailChangeRequest', ConfirmEmailChangeRequest, metaConfirmEmailChangeRequest],
+  UnregisterRequest: ['message', '.io.restorecommerce.user.UnregisterRequest', UnregisterRequest, metaUnregisterRequest],
+  Deleted: ['message', '.io.restorecommerce.user.Deleted', Deleted, metaDeleted],
+  PasswordChanged: ['message', '.io.restorecommerce.user.PasswordChanged', PasswordChanged, metaPasswordChanged],
+  PasswordChangeRequested: ['message', '.io.restorecommerce.user.PasswordChangeRequested', PasswordChangeRequested, metaPasswordChangeRequested],
+  EmailChangeRequested: ['message', '.io.restorecommerce.user.EmailChangeRequested', EmailChangeRequested, metaEmailChangeRequested],
+  EmailChangeConfirmed: ['message', '.io.restorecommerce.user.EmailChangeConfirmed', EmailChangeConfirmed, metaEmailChangeConfirmed],
+  UserList: ['message', '.io.restorecommerce.user.UserList', UserList, metaUserList],
+  Activate: ['message', '.io.restorecommerce.user.Activate', Activate, metaActivate],
+  FindByRoleRequest: ['message', '.io.restorecommerce.user.FindByRoleRequest', FindByRoleRequest, metaFindByRoleRequest],
+  User: ['message', '.io.restorecommerce.user.User', User, metaUser],
+  Service: ['service', '.io.restorecommerce.user.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

@@ -57,7 +57,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -83,10 +83,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.locale'
@@ -337,27 +345,33 @@ export const Locale = {
   },
 };
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaLocaleList: { [key in keyof LocaleList]: MetaI | string } = {
+export const metaLocaleList: { [key in keyof Required<LocaleList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.locale.Locale', name:'Locale'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaLocale: { [key in keyof Locale]: MetaI | string } = {
-  id: 'string',
+export const metaLocale: { [key in keyof Required<Locale>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  value: 'string',
-  description: 'string',
+  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: ReadRequest.encode, decodeResponse: LocaleList.decode} as MetaS<ReadRequest, LocaleList>,
-  Create: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
-  Upsert: {request: '.io.restorecommerce.locale.LocaleList', response: '.io.restorecommerce.locale.LocaleList', encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: LocaleList.decode} as MetaS<ReadRequest, LocaleList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaS<LocaleList, LocaleList>,
+}
+export const metaPackageIoRestorecommerceLocale: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Deleted: ['message', '.io.restorecommerce.locale.Deleted', Deleted, metaDeleted],
+  LocaleList: ['message', '.io.restorecommerce.locale.LocaleList', LocaleList, metaLocaleList],
+  Locale: ['message', '.io.restorecommerce.locale.Locale', Locale, metaLocale],
+  Service: ['service', '.io.restorecommerce.locale.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

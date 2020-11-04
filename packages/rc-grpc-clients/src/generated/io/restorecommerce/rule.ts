@@ -115,7 +115,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -141,10 +141,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.rule'
@@ -840,51 +848,61 @@ export const ContextQuery_Filter = {
   },
 };
 
-export const metaTarget: { [key in keyof Target]: MetaI | string } = {
+export const metaTarget: { [key in keyof Required<Target>]: MetaI | string } = {
   subject: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
   resources: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
   action: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
 }
-export const metaRule: { [key in keyof Rule]: MetaI | string } = {
-  id: 'string',
+export const metaRule: { [key in keyof Required<Rule>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: 'string',
-  description: 'string',
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
   target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
   contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
-  condition: 'string',
+  condition: {meta:'builtin', type:'string', original:'string'} as MetaB,
   effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  evaluationCacheable: 'boolean',
+  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
-export const metaRuleRQ: { [key in keyof RuleRQ]: MetaI | string } = {
-  id: 'string',
+export const metaRuleRQ: { [key in keyof Required<RuleRQ>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
   effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  condition: 'string',
+  condition: {meta:'builtin', type:'string', original:'string'} as MetaB,
   contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
-  evaluationCacheable: 'boolean',
+  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
-export const metaRuleList: { [key in keyof RuleList]: MetaI | string } = {
+export const metaRuleList: { [key in keyof Required<RuleList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.Rule', name:'Rule'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaContextQuery: { [key in keyof ContextQuery]: MetaI | string } = {
+export const metaContextQuery: { [key in keyof Required<ContextQuery>]: MetaI | string } = {
   filters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.ContextQuery.Filter', name:'ContextQuery_Filter'} as MetaO} as MetaA,
-  query: 'string',
+  query: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaContextQuery_Filter: { [key in keyof ContextQuery_Filter]: MetaI | string } = {
-  field: 'string',
-  operation: 'string',
-  value: 'string',
+export const metaContextQuery_Filter: { [key in keyof Required<ContextQuery_Filter>]: MetaI | string } = {
+  field: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  operation: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.rule.RuleList', response: '.io.restorecommerce.rule.RuleList', encodeRequest: ReadRequest.encode, decodeResponse: RuleList.decode} as MetaS<ReadRequest, RuleList>,
-  Create: {request: '.io.restorecommerce.rule.RuleList', response: '.io.restorecommerce.rule.RuleList', encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.rule.RuleList', response: '.io.restorecommerce.rule.RuleList', encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
-  Upsert: {request: '.io.restorecommerce.rule.RuleList', response: '.io.restorecommerce.rule.RuleList', encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: RuleList.decode} as MetaS<ReadRequest, RuleList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
+}
+export const metaPackageIoRestorecommerceRule: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Effect: ['enum', '.io.restorecommerce.rule.Effect', Effect, undefined],
+  Target: ['message', '.io.restorecommerce.rule.Target', Target, metaTarget],
+  Rule: ['message', '.io.restorecommerce.rule.Rule', Rule, metaRule],
+  RuleRQ: ['message', '.io.restorecommerce.rule.RuleRQ', RuleRQ, metaRuleRQ],
+  RuleList: ['message', '.io.restorecommerce.rule.RuleList', RuleList, metaRuleList],
+  ContextQuery: ['message', '.io.restorecommerce.rule.ContextQuery', ContextQuery, metaContextQuery],
+  ContextQuery_Filter: ['message', '.io.restorecommerce.rule.ContextQuery.Filter', ContextQuery_Filter, metaContextQuery_Filter],
+  Service: ['service', '.io.restorecommerce.rule.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

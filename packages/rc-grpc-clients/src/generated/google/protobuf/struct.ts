@@ -85,7 +85,7 @@ const baseListValue: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -111,10 +111,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'google.protobuf'
@@ -468,23 +476,30 @@ export const ListValue = {
   },
 };
 
-export const metaStruct: { [key in keyof Struct]: MetaI | string } = {
+export const metaStruct: { [key in keyof Required<Struct>]: MetaI | string } = {
   fields: {meta:'map', key:'string', value:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaM,
 }
-export const metaStruct_FieldsEntry: { [key in keyof Struct_FieldsEntry]: MetaI | string } = {
-  key: 'string',
+export const metaStruct_FieldsEntry: { [key in keyof Required<Struct_FieldsEntry>]: MetaI | string } = {
+  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
   value: {meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO,
 }
-export const metaValue: { [key in keyof Value]: MetaI | string } = {
+export const metaValue: { [key in keyof Required<Value>]: MetaI | string } = {
   nullValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.NullValue', name:'NullValue'} as MetaO]} as MetaU,
-  numberValue: {meta:'union', choices: [undefined, 'number']} as MetaU,
-  stringValue: {meta:'union', choices: [undefined, 'string']} as MetaU,
-  boolValue: {meta:'union', choices: [undefined, 'boolean']} as MetaU,
+  numberValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'number', original:'double'} as MetaB]} as MetaU,
+  stringValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+  boolValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'boolean', original:'bool'} as MetaB]} as MetaU,
   structValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaO]} as MetaU,
   listValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.ListValue', name:'ListValue'} as MetaO]} as MetaU,
 }
-export const metaListValue: { [key in keyof ListValue]: MetaI | string } = {
+export const metaListValue: { [key in keyof Required<ListValue>]: MetaI | string } = {
   values: {meta:'array', type:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaA,
+}
+export const metaPackageGoogleProtobuf: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  NullValue: ['enum', '.google.protobuf.NullValue', NullValue, undefined],
+  Struct: ['message', '.google.protobuf.Struct', Struct, metaStruct],
+  Struct_FieldsEntry: ['message', '.google.protobuf.Struct.FieldsEntry', Struct_FieldsEntry, metaStruct_FieldsEntry],
+  Value: ['message', '.google.protobuf.Value', Value, metaValue],
+  ListValue: ['message', '.google.protobuf.ListValue', ListValue, metaListValue],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

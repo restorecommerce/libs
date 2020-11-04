@@ -148,7 +148,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -174,10 +174,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.product'
@@ -1171,71 +1179,83 @@ export const Deleted = {
   },
 };
 
-export const metaMainProduct: { [key in keyof MainProduct]: MetaI | string } = {
-  id: 'string',
+export const metaMainProduct: { [key in keyof Required<MainProduct>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   product: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Product', name:'Product'} as MetaO]} as MetaU,
   bundle: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Bundle', name:'Bundle'} as MetaO]} as MetaU,
-  active: 'boolean',
+  active: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
 }
-export const metaProduct: { [key in keyof Product]: MetaI | string } = {
-  id: 'string',
-  name: 'string',
-  description: 'string',
-  manufacturerId: 'string',
-  taricCode: 'string',
+export const metaProduct: { [key in keyof Required<Product>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  manufacturerId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  taricCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
   prototype: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaO]} as MetaU,
   category: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaO]} as MetaU,
-  taxTypeId: {meta:'array', type:'string'} as MetaA,
+  taxTypeId: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
   variants: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.Variant', name:'Variant'} as MetaO} as MetaA,
-  gtin: 'string',
+  gtin: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaIdentifier: { [key in keyof Identifier]: MetaI | string } = {
-  id: 'string',
+export const metaIdentifier: { [key in keyof Required<Identifier>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaProductList: { [key in keyof ProductList]: MetaI | string } = {
+export const metaProductList: { [key in keyof Required<ProductList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.MainProduct', name:'MainProduct'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaVariant: { [key in keyof Variant]: MetaI | string } = {
-  id: 'string',
-  name: 'string',
-  description: 'string',
-  stockLevel: 'number',
-  price: 'number',
-  sale: 'boolean',
-  salePrice: 'number',
+export const metaVariant: { [key in keyof Required<Variant>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  stockLevel: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  price: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  sale: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  salePrice: {meta:'builtin', type:'number', original:'double'} as MetaB,
   image: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
-  stockKeepingUnit: 'string',
+  stockKeepingUnit: {meta:'builtin', type:'string', original:'string'} as MetaB,
   attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.VariantAttribute', name:'VariantAttribute'} as MetaO} as MetaA,
 }
-export const metaVariantAttribute: { [key in keyof VariantAttribute]: MetaI | string } = {
-  key: 'string',
-  values: {meta:'array', type:'string'} as MetaA,
+export const metaVariantAttribute: { [key in keyof Required<VariantAttribute>]: MetaI | string } = {
+  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  values: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
-export const metaBundle: { [key in keyof Bundle]: MetaI | string } = {
-  id: 'string',
-  name: 'string',
-  description: 'string',
+export const metaBundle: { [key in keyof Required<Bundle>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
   image: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
   product: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product.BundleProduct', name:'BundleProduct'} as MetaO} as MetaA,
-  price: 'number',
+  price: {meta:'builtin', type:'number', original:'double'} as MetaB,
 }
-export const metaBundleProduct: { [key in keyof BundleProduct]: MetaI | string } = {
-  productId: 'string',
-  quantity: 'number',
+export const metaBundleProduct: { [key in keyof Required<BundleProduct>]: MetaI | string } = {
+  productId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  quantity: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
 }
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.product.ProductList', response: '.io.restorecommerce.product.ProductList', encodeRequest: ReadRequest.encode, decodeResponse: ProductList.decode} as MetaS<ReadRequest, ProductList>,
-  Create: {request: '.io.restorecommerce.product.ProductList', response: '.io.restorecommerce.product.ProductList', encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.product.ProductList', response: '.io.restorecommerce.product.ProductList', encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
-  Upsert: {request: '.io.restorecommerce.product.ProductList', response: '.io.restorecommerce.product.ProductList', encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ProductList.decode} as MetaS<ReadRequest, ProductList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaS<ProductList, ProductList>,
+}
+export const metaPackageIoRestorecommerceProduct: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  MainProduct: ['message', '.io.restorecommerce.product.MainProduct', MainProduct, metaMainProduct],
+  Product: ['message', '.io.restorecommerce.product.Product', Product, metaProduct],
+  Identifier: ['message', '.io.restorecommerce.product.Identifier', Identifier, metaIdentifier],
+  ProductList: ['message', '.io.restorecommerce.product.ProductList', ProductList, metaProductList],
+  Variant: ['message', '.io.restorecommerce.product.Variant', Variant, metaVariant],
+  VariantAttribute: ['message', '.io.restorecommerce.product.VariantAttribute', VariantAttribute, metaVariantAttribute],
+  Bundle: ['message', '.io.restorecommerce.product.Bundle', Bundle, metaBundle],
+  BundleProduct: ['message', '.io.restorecommerce.product.BundleProduct', BundleProduct, metaBundleProduct],
+  Deleted: ['message', '.io.restorecommerce.product.Deleted', Deleted, metaDeleted],
+  Service: ['service', '.io.restorecommerce.product.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

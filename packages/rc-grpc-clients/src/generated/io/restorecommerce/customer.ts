@@ -82,7 +82,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -108,10 +108,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.customer'
@@ -570,39 +578,47 @@ export const Guest = {
   },
 };
 
-export const metaCustomerList: { [key in keyof CustomerList]: MetaI | string } = {
+export const metaCustomerList: { [key in keyof Required<CustomerList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.customer.Customer', name:'Customer'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaCustomer: { [key in keyof Customer]: MetaI | string } = {
-  id: 'string',
+export const metaCustomer: { [key in keyof Required<Customer>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
   individualUser: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.customer.IndividualUser', name:'IndividualUser'} as MetaO]} as MetaU,
   orgUser: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.customer.OrgUser', name:'OrgUser'} as MetaO]} as MetaU,
   guest: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.customer.Guest', name:'Guest'} as MetaO]} as MetaU,
 }
-export const metaIndividualUser: { [key in keyof IndividualUser]: MetaI | string } = {
-  userId: 'string',
-  addressId: 'string',
-  contactPointIds: {meta:'array', type:'string'} as MetaA,
+export const metaIndividualUser: { [key in keyof Required<IndividualUser>]: MetaI | string } = {
+  userId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  addressId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  contactPointIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
-export const metaOrgUser: { [key in keyof OrgUser]: MetaI | string } = {
-  userId: 'string',
-  organizationId: 'string',
+export const metaOrgUser: { [key in keyof Required<OrgUser>]: MetaI | string } = {
+  userId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  organizationId: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaGuest: { [key in keyof Guest]: MetaI | string } = {
-  guest: 'boolean',
-  addressId: 'string',
-  contactPointIds: {meta:'array', type:'string'} as MetaA,
+export const metaGuest: { [key in keyof Required<Guest>]: MetaI | string } = {
+  guest: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  addressId: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  contactPointIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.customer.CustomerList', response: '.io.restorecommerce.customer.CustomerList', encodeRequest: ReadRequest.encode, decodeResponse: CustomerList.decode} as MetaS<ReadRequest, CustomerList>,
-  Create: {request: '.io.restorecommerce.customer.CustomerList', response: '.io.restorecommerce.customer.CustomerList', encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.customer.CustomerList', response: '.io.restorecommerce.customer.CustomerList', encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
-  Upsert: {request: '.io.restorecommerce.customer.CustomerList', response: '.io.restorecommerce.customer.CustomerList', encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CustomerList.decode} as MetaS<ReadRequest, CustomerList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaS<CustomerList, CustomerList>,
+}
+export const metaPackageIoRestorecommerceCustomer: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  CustomerList: ['message', '.io.restorecommerce.customer.CustomerList', CustomerList, metaCustomerList],
+  Customer: ['message', '.io.restorecommerce.customer.Customer', Customer, metaCustomer],
+  IndividualUser: ['message', '.io.restorecommerce.customer.IndividualUser', IndividualUser, metaIndividualUser],
+  OrgUser: ['message', '.io.restorecommerce.customer.OrgUser', OrgUser, metaOrgUser],
+  Guest: ['message', '.io.restorecommerce.customer.Guest', Guest, metaGuest],
+  Service: ['service', '.io.restorecommerce.customer.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

@@ -57,7 +57,7 @@ export interface Service {
 }
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -83,10 +83,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.payment_method'
@@ -377,27 +385,34 @@ export const PaymentMethod = {
   },
 };
 
-export const metaDeleted: { [key in keyof Deleted]: MetaI | string } = {
-  id: 'string',
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaPaymentMethodList: { [key in keyof PaymentMethodList]: MetaI | string } = {
+export const metaPaymentMethodList: { [key in keyof Required<PaymentMethodList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
-  totalCount: 'number',
+  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
   subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
   apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
 }
-export const metaPaymentMethod: { [key in keyof PaymentMethod]: MetaI | string } = {
-  id: 'string',
+export const metaPaymentMethod: { [key in keyof Required<PaymentMethod>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
   paymentMethod: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', name:'PaymentMethod_PaymentMethod'} as MetaO,
   data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: ReadRequest.encode, decodeResponse: PaymentMethodList.decode} as MetaS<ReadRequest, PaymentMethodList>,
-  Create: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
-  Delete: {request: '.google.protobuf.Empty', response: '.google.protobuf.Empty', encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
-  Upsert: {request: '.io.restorecommerce.payment_method.PaymentMethodList', response: '.io.restorecommerce.payment_method.PaymentMethodList', encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PaymentMethodList.decode} as MetaS<ReadRequest, PaymentMethodList>,
+  Create: {request: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
+  Update: {request: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+  Upsert: {request: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
+}
+export const metaPackageIoRestorecommercePayment_method: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Deleted: ['message', '.io.restorecommerce.payment_method.Deleted', Deleted, metaDeleted],
+  PaymentMethodList: ['message', '.io.restorecommerce.payment_method.PaymentMethodList', PaymentMethodList, metaPaymentMethodList],
+  PaymentMethod: ['message', '.io.restorecommerce.payment_method.PaymentMethod', PaymentMethod, metaPaymentMethod],
+  PaymentMethod_PaymentMethod: ['enum', '.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', PaymentMethod_PaymentMethod, undefined],
+  Service: ['service', '.io.restorecommerce.payment_method.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

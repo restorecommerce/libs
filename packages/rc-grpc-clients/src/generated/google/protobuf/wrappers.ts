@@ -147,7 +147,7 @@ const baseBytesValue: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -173,10 +173,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 function longToNumber(long: Long) {
@@ -609,32 +617,43 @@ export const BytesValue = {
   },
 };
 
-export const metaDoubleValue: { [key in keyof DoubleValue]: MetaI | string } = {
-  value: 'number',
+export const metaDoubleValue: { [key in keyof Required<DoubleValue>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'double'} as MetaB,
 }
-export const metaFloatValue: { [key in keyof FloatValue]: MetaI | string } = {
-  value: 'number',
+export const metaFloatValue: { [key in keyof Required<FloatValue>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'float'} as MetaB,
 }
-export const metaInt64Value: { [key in keyof Int64Value]: MetaI | string } = {
-  value: 'number',
+export const metaInt64Value: { [key in keyof Required<Int64Value>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'int64'} as MetaB,
 }
-export const metaUInt64Value: { [key in keyof UInt64Value]: MetaI | string } = {
-  value: 'number',
+export const metaUInt64Value: { [key in keyof Required<UInt64Value>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'uint64'} as MetaB,
 }
-export const metaInt32Value: { [key in keyof Int32Value]: MetaI | string } = {
-  value: 'number',
+export const metaInt32Value: { [key in keyof Required<Int32Value>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'int32'} as MetaB,
 }
-export const metaUInt32Value: { [key in keyof UInt32Value]: MetaI | string } = {
-  value: 'number',
+export const metaUInt32Value: { [key in keyof Required<UInt32Value>]: MetaI | string } = {
+  value: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
 }
-export const metaBoolValue: { [key in keyof BoolValue]: MetaI | string } = {
-  value: 'boolean',
+export const metaBoolValue: { [key in keyof Required<BoolValue>]: MetaI | string } = {
+  value: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
-export const metaStringValue: { [key in keyof StringValue]: MetaI | string } = {
-  value: 'string',
+export const metaStringValue: { [key in keyof Required<StringValue>]: MetaI | string } = {
+  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaBytesValue: { [key in keyof BytesValue]: MetaI | string } = {
-  value: 'Buffer',
+export const metaBytesValue: { [key in keyof Required<BytesValue>]: MetaI | string } = {
+  value: {meta:'builtin', type:'Buffer', original:'bytes'} as MetaB,
+}
+export const metaPackageGoogleProtobuf: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  DoubleValue: ['message', '.google.protobuf.DoubleValue', DoubleValue, metaDoubleValue],
+  FloatValue: ['message', '.google.protobuf.FloatValue', FloatValue, metaFloatValue],
+  Int64Value: ['message', '.google.protobuf.Int64Value', Int64Value, metaInt64Value],
+  UInt64Value: ['message', '.google.protobuf.UInt64Value', UInt64Value, metaUInt64Value],
+  Int32Value: ['message', '.google.protobuf.Int32Value', Int32Value, metaInt32Value],
+  UInt32Value: ['message', '.google.protobuf.UInt32Value', UInt32Value, metaUInt32Value],
+  BoolValue: ['message', '.google.protobuf.BoolValue', BoolValue, metaBoolValue],
+  StringValue: ['message', '.google.protobuf.StringValue', StringValue, metaStringValue],
+  BytesValue: ['message', '.google.protobuf.BytesValue', BytesValue, metaBytesValue],
 }
 if (util.Long !== Long as any) {
   util.Long = Long as any;

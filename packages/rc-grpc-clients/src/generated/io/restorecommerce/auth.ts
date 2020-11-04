@@ -120,7 +120,7 @@ const baseRoleAssociation: object = {
 };
 
 export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union';
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
 export interface MetaO extends MetaI {
@@ -146,10 +146,18 @@ export interface MetaU extends MetaI {
 }
 
 export interface MetaS<T, R> {
-  readonly request: string;
-  readonly response: string;
-  readonly encodeRequest: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse: (input: Uint8Array | Reader, length?: number) => R;
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
 }
 
 export const protobufPackage = 'io.restorecommerce.auth'
@@ -614,32 +622,39 @@ export const RoleAssociation = {
   },
 };
 
-export const metaSubject: { [key in keyof Subject]: MetaI | string } = {
-  id: 'string',
-  scope: 'string',
+export const metaSubject: { [key in keyof Required<Subject>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  scope: {meta:'builtin', type:'string', original:'string'} as MetaB,
   roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
   hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  unauthenticated: 'boolean',
-  token: 'string',
+  unauthenticated: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaApiKey: { [key in keyof ApiKey]: MetaI | string } = {
-  value: 'string',
+export const metaApiKey: { [key in keyof Required<ApiKey>]: MetaI | string } = {
+  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaTokens: { [key in keyof Tokens]: MetaI | string } = {
-  name: 'string',
-  expiresAt: 'number',
-  token: 'string',
-  scopes: {meta:'array', type:'string'} as MetaA,
+export const metaTokens: { [key in keyof Required<Tokens>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  expiresAt: {meta:'builtin', type:'number', original:'double'} as MetaB,
+  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  scopes: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
 }
-export const metaHierarchicalScope: { [key in keyof HierarchicalScope]: MetaI | string } = {
-  id: 'string',
+export const metaHierarchicalScope: { [key in keyof Required<HierarchicalScope>]: MetaI | string } = {
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   children: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  role: 'string',
+  role: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
-export const metaRoleAssociation: { [key in keyof RoleAssociation]: MetaI | string } = {
-  role: 'string',
+export const metaRoleAssociation: { [key in keyof Required<RoleAssociation>]: MetaI | string } = {
+  role: {meta:'builtin', type:'string', original:'string'} as MetaB,
   attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  id: 'string',
+  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+}
+export const metaPackageIoRestorecommerceAuth: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  Subject: ['message', '.io.restorecommerce.auth.Subject', Subject, metaSubject],
+  ApiKey: ['message', '.io.restorecommerce.auth.ApiKey', ApiKey, metaApiKey],
+  Tokens: ['message', '.io.restorecommerce.auth.Tokens', Tokens, metaTokens],
+  HierarchicalScope: ['message', '.io.restorecommerce.auth.HierarchicalScope', HierarchicalScope, metaHierarchicalScope],
+  RoleAssociation: ['message', '.io.restorecommerce.auth.RoleAssociation', RoleAssociation, metaRoleAssociation],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 type DeepPartial<T> = T extends Builtin

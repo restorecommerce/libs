@@ -3,8 +3,6 @@ import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';
 import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport } from './elasticsearch';
 
-export { Logger };
-
 export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
   file?: RestoreLoggerFileTransportOptions;

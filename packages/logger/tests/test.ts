@@ -13,10 +13,12 @@ const opts: RestoreLoggerOptions = {
 
 describe('a logger', () => {
   it('can be instantiated', (done) => {
-    let logger = createLogger(opts);
-    expect(typeof logger).toBe('object');
-    expect(logger).toBeTruthy();
-    done();
+    try {
+      let logger = createLogger(opts);
+      done();
+    } catch (err) {
+      should.not.exist(err);
+    }
   });
 
   describe('it should log', () => {
@@ -34,7 +36,8 @@ describe('a logger', () => {
       done();
     });
     it('log with level, a message and object', (done) => {
-      logger.log('debug', 'Message with multiple object', { test: 'test' },
+      logger.log('debug', 'Message with multiple objects',
+        { test: 'test' },
         { test2: 'test2' });
       done();
     });

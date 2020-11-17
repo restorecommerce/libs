@@ -1,41 +1,57 @@
 import {
   FulfillmentResults,
-  metaItem,
-  metaOrder,
+  metaPackageIoRestorecommerceOrder,
   metaService,
   Order, OrderDataList, OrderList
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
-import { metaMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta";
-import { metaAttribute } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
+import {
+  metaPackageIoRestorecommerceMeta
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta";
+import {
+  metaPackageIoRestorecommerceAttribute
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
 import { GraphQLList, GraphQLObjectType, GraphQLScalarType } from "graphql";
-import { getGQLFunction, getGQLFunctions, getGQLTyping, registerTyping } from "../src/gql/protos";
+import { getProtoFunction, getProtoFunctions, getTyping, registerPackages } from "../src/gql/protos";
 import { DeleteRequest, Empty, ReadRequest } from "@restorecommerce/rc-grpc-clients";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufEmpty } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/empty";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufStruct } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/struct";
+import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufAny } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/any";
+import { metaPackageIoRestorecommerceAuth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth";
+import { metaPackageIoRestorecommerceResourcebase } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base";
 
 describe("proto-meta", () => {
-  it('should register typing', () => {
-    registerTyping('.io.restorecommerce.attribute.Attribute', metaAttribute, {name: 'Attribute'}, {name: 'IAttribute'});
-    registerTyping('.io.restorecommerce.meta.Meta', metaMeta, {name: 'Meta'}, {name: 'IMeta'});
-    registerTyping('.io.restorecommerce.order.Item', metaItem, {name: 'Item'}, {name: 'IItem'});
-    registerTyping('.io.restorecommerce.order.Items', metaItem, {name: 'Items'}, {name: 'IItems'});
-    registerTyping('.io.restorecommerce.order.Order', metaOrder, {name: 'Order'}, {name: 'IOrder'});
+  it('should register typings', () => {
+    registerPackages(
+      metaPackageGoogleProtobufEmpty,
+      metaPackageGoogleProtobufStruct,
+      metaPackageGoogleProtobufAny,
+      metaPackageIoRestorecommerceAttribute,
+      metaPackageIoRestorecommerceMeta,
+      metaPackageIoRestorecommerceAuth,
+      metaPackageIoRestorecommerceResourcebase,
+      metaPackageIoRestorecommerceOrder
+    );
   });
 
   it('should fail to register typing twice', () => {
     try {
-      expect(registerTyping('.io.restorecommerce.order.Order', metaOrder, {name: 'Order'}, {name: 'IOrder'})).toBeFalsy();
+      expect(registerPackages(metaPackageIoRestorecommerceOrder)).toBeFalsy();
     } catch (e) {
       expect(e).toEqual(new Error(`Typings for object are already registered`))
     }
   });
 
   it('should produce correct GQL Objects', () => {
-    const obj = getGQLTyping('.io.restorecommerce.order.Order');
+    const obj = getTyping('.io.restorecommerce.order.Order');
 
     expect(obj).toBeTruthy();
-    expect(obj).toBeInstanceOf(GraphQLObjectType)
-    expect(obj.name).toEqual('Order');
 
-    const fields = (obj as GraphQLObjectType).getFields();
+    const output = obj.output;
+
+    expect(output).toBeInstanceOf(GraphQLObjectType)
+    expect(output.name).toEqual('Order');
+
+    const fields = (output as GraphQLObjectType).getFields();
 
     for (let key of ['id', 'name', 'description', 'status', 'shippingContactPointId', 'billingContactPointId']) {
       expect(fields[key].type).toBeInstanceOf(GraphQLScalarType);
@@ -50,13 +66,13 @@ describe("proto-meta", () => {
 
     expect(fields.items.type).toBeInstanceOf(GraphQLList);
     expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect((fields.items.type as GraphQLList<any>).ofType).toEqual(getGQLTyping('.io.restorecommerce.order.Items'))
+    expect((fields.items.type as GraphQLList<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items').output)
 
-    expect(fields.meta.type).toEqual(getGQLTyping('.io.restorecommerce.meta.Meta'));
+    expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta').output);
   });
 
   it('should produce a correct GQL function', () => {
-    const fn = getGQLFunction(metaService, 'TriggerFulfillment');
+    const fn = getProtoFunction(metaService, 'TriggerFulfillment');
     expect(fn).toBeTruthy();
     expect(fn.type).toEqual('unary');
     expect(fn.serialize).toEqual(OrderDataList.encode);
@@ -64,7 +80,7 @@ describe("proto-meta", () => {
   });
 
   it('should produce correct GQL function list', () => {
-    const fns = getGQLFunctions(metaService);
+    const fns = getProtoFunctions(metaService);
 
     expect(fns.Read).toBeTruthy();
     expect(fns.Read.type).toEqual('unary');

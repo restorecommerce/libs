@@ -1,9 +1,9 @@
-import { OrderingSrvGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { OrderingSrvGrpcClient } from "./grpc";
 import { FacadeModule } from "../../facade";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { ServiceConfig } from "../../gql/protos";
 
 export interface OrderingConfig {
-  config: GrpcClientConfig;
+  config: ServiceConfig;
 }
 
 export interface OrderingContext {

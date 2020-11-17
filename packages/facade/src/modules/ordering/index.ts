@@ -1,15 +1,17 @@
-import { OrderingSrvGrpcClient } from "@restorecommerce/rc-grpc-clients";
 import { createFacadeModuleFactory } from "../../facade";
 import { FederatedOrderingSchema } from './gql/index';
 import { OrderingConfig, OrderingModule } from "@modules/ordering/interfaces";
+import { OrderingSrvGrpcClient } from "./grpc";
 
-export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>('ordering', (facade, config) => {
+const moduleName = 'ordering';
+
+export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>(moduleName, (facade, config) => {
   const ordering = {
-    client: new OrderingSrvGrpcClient(config.config)
+    client: new OrderingSrvGrpcClient(config.config.client)
   };
 
   facade.addApolloService({
-    name: 'ordering',
+    name: moduleName,
     schema: FederatedOrderingSchema
   });
 

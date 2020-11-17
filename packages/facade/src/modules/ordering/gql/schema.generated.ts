@@ -12,54 +12,33 @@ export type Scalars = {
   Float: number;
   MapScalar: any;
   TodoScalar: any;
-  EmptyScalar: any;
 };
 
-/** The root of all queries */
 export type Query = {
   __typename?: 'Query';
-  Read?: Maybe<OrderList>;
-  Create?: Maybe<OrderList>;
-  Delete?: Maybe<Scalars['EmptyScalar']>;
-  Update?: Maybe<OrderList>;
-  Upsert?: Maybe<OrderList>;
-  TriggerFulfillment?: Maybe<FulfillmentResults>;
+  Read?: Maybe<ProtoReadResponse>;
 };
 
 
-/** The root of all queries */
 export type QueryReadArgs = {
   input?: Maybe<IReadRequest>;
 };
 
-
-/** The root of all queries */
-export type QueryCreateArgs = {
-  input?: Maybe<IOrderList>;
+export type ProtoReadResponse = {
+  __typename?: 'ProtoReadResponse';
+  status: StatusType;
+  payload?: Maybe<OrderList>;
 };
 
-
-/** The root of all queries */
-export type QueryDeleteArgs = {
-  input?: Maybe<IDeleteRequest>;
-};
-
-
-/** The root of all queries */
-export type QueryUpdateArgs = {
-  input?: Maybe<IOrderList>;
-};
-
-
-/** The root of all queries */
-export type QueryUpsertArgs = {
-  input?: Maybe<IOrderList>;
-};
-
-
-/** The root of all queries */
-export type QueryTriggerFulfillmentArgs = {
-  input?: Maybe<IOrderDataList>;
+/** Objects with error returned for GraphQL operations */
+export type StatusType = {
+  __typename?: 'StatusType';
+  /** Status key */
+  key: Scalars['String'];
+  /** Status code */
+  code: Scalars['Int'];
+  /** Status message description */
+  message?: Maybe<Scalars['String']>;
 };
 
 export type OrderList = {
@@ -196,6 +175,46 @@ export type IAny = {
 };
 
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  Create?: Maybe<ProtoCreateResponse>;
+  Delete?: Maybe<ProtoDeleteResponse>;
+  Update?: Maybe<ProtoUpdateResponse>;
+  Upsert?: Maybe<ProtoUpsertResponse>;
+  TriggerFulfillment?: Maybe<ProtoTriggerFulfillmentResponse>;
+};
+
+
+export type MutationCreateArgs = {
+  input?: Maybe<IOrderList>;
+};
+
+
+export type MutationDeleteArgs = {
+  input?: Maybe<IDeleteRequest>;
+};
+
+
+export type MutationUpdateArgs = {
+  input?: Maybe<IOrderList>;
+};
+
+
+export type MutationUpsertArgs = {
+  input?: Maybe<IOrderList>;
+};
+
+
+export type MutationTriggerFulfillmentArgs = {
+  input?: Maybe<IOrderDataList>;
+};
+
+export type ProtoCreateResponse = {
+  __typename?: 'ProtoCreateResponse';
+  status: StatusType;
+  payload?: Maybe<OrderList>;
+};
+
 export type IOrderList = {
   items?: Maybe<Array<Maybe<IOrder>>>;
   totalCount?: Maybe<Scalars['Int']>;
@@ -253,12 +272,34 @@ export type IItem = {
   heightInCm?: Maybe<Scalars['Int']>;
 };
 
+export type ProtoDeleteResponse = {
+  __typename?: 'ProtoDeleteResponse';
+  status: StatusType;
+};
 
 export type IDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Maybe<Scalars['String']>>>;
   subject?: Maybe<Scalars['TodoScalar']>;
   apiKey?: Maybe<Scalars['TodoScalar']>;
+};
+
+export type ProtoUpdateResponse = {
+  __typename?: 'ProtoUpdateResponse';
+  status: StatusType;
+  payload?: Maybe<OrderList>;
+};
+
+export type ProtoUpsertResponse = {
+  __typename?: 'ProtoUpsertResponse';
+  status: StatusType;
+  payload?: Maybe<OrderList>;
+};
+
+export type ProtoTriggerFulfillmentResponse = {
+  __typename?: 'ProtoTriggerFulfillmentResponse';
+  status: StatusType;
+  payload?: Maybe<FulfillmentResults>;
 };
 
 export type FulfillmentResults = {
@@ -372,15 +413,17 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
+  ProtoReadResponse: ResolverTypeWrapper<ProtoReadResponse>;
+  StatusType: ResolverTypeWrapper<StatusType>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   OrderList: ResolverTypeWrapper<OrderList>;
   Order: ResolverTypeWrapper<Order>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Meta: ResolverTypeWrapper<Meta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Attribute: ResolverTypeWrapper<Attribute>;
   Items: ResolverTypeWrapper<Items>;
   Item: ResolverTypeWrapper<Item>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   Subject: ResolverTypeWrapper<Subject>;
   RoleAssociation: ResolverTypeWrapper<RoleAssociation>;
   HierarchicalScope: ResolverTypeWrapper<HierarchicalScope>;
@@ -394,14 +437,19 @@ export type ResolversTypes = ResolversObject<{
   IFieldFilter: IFieldFilter;
   IAny: IAny;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  Mutation: ResolverTypeWrapper<{}>;
+  ProtoCreateResponse: ResolverTypeWrapper<ProtoCreateResponse>;
   IOrderList: IOrderList;
   IOrder: IOrder;
   IMeta: IMeta;
   IAttribute: IAttribute;
   IItems: IItems;
   IItem: IItem;
-  EmptyScalar: ResolverTypeWrapper<Scalars['EmptyScalar']>;
+  ProtoDeleteResponse: ResolverTypeWrapper<ProtoDeleteResponse>;
   IDeleteRequest: IDeleteRequest;
+  ProtoUpdateResponse: ResolverTypeWrapper<ProtoUpdateResponse>;
+  ProtoUpsertResponse: ResolverTypeWrapper<ProtoUpsertResponse>;
+  ProtoTriggerFulfillmentResponse: ResolverTypeWrapper<ProtoTriggerFulfillmentResponse>;
   FulfillmentResults: ResolverTypeWrapper<FulfillmentResults>;
   ResponseDetailsList: ResolverTypeWrapper<ResponseDetailsList>;
   OrderStatus: ResolverTypeWrapper<OrderStatus>;
@@ -414,15 +462,17 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
+  ProtoReadResponse: ProtoReadResponse;
+  StatusType: StatusType;
+  String: Scalars['String'];
+  Int: Scalars['Int'];
   OrderList: OrderList;
   Order: Order;
-  String: Scalars['String'];
   Meta: Meta;
   Float: Scalars['Float'];
   Attribute: Attribute;
   Items: Items;
   Item: Item;
-  Int: Scalars['Int'];
   Subject: Subject;
   RoleAssociation: RoleAssociation;
   HierarchicalScope: HierarchicalScope;
@@ -435,14 +485,19 @@ export type ResolversParentTypes = ResolversObject<{
   IFieldFilter: IFieldFilter;
   IAny: IAny;
   TodoScalar: Scalars['TodoScalar'];
+  Mutation: {};
+  ProtoCreateResponse: ProtoCreateResponse;
   IOrderList: IOrderList;
   IOrder: IOrder;
   IMeta: IMeta;
   IAttribute: IAttribute;
   IItems: IItems;
   IItem: IItem;
-  EmptyScalar: Scalars['EmptyScalar'];
+  ProtoDeleteResponse: ProtoDeleteResponse;
   IDeleteRequest: IDeleteRequest;
+  ProtoUpdateResponse: ProtoUpdateResponse;
+  ProtoUpsertResponse: ProtoUpsertResponse;
+  ProtoTriggerFulfillmentResponse: ProtoTriggerFulfillmentResponse;
   FulfillmentResults: FulfillmentResults;
   ResponseDetailsList: ResponseDetailsList;
   OrderStatus: OrderStatus;
@@ -453,12 +508,20 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type QueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType, RequireFields<QueryReadArgs, never>>;
-  Create?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType, RequireFields<QueryCreateArgs, never>>;
-  Delete?: Resolver<Maybe<ResolversTypes['EmptyScalar']>, ParentType, ContextType, RequireFields<QueryDeleteArgs, never>>;
-  Update?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType, RequireFields<QueryUpdateArgs, never>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType, RequireFields<QueryUpsertArgs, never>>;
-  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['FulfillmentResults']>, ParentType, ContextType, RequireFields<QueryTriggerFulfillmentArgs, never>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoReadResponse']>, ParentType, ContextType, RequireFields<QueryReadArgs, never>>;
+}>;
+
+export type ProtoReadResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoReadResponse'] = ResolversParentTypes['ProtoReadResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type StatusTypeResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
+  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type OrderListResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderList'] = ResolversParentTypes['OrderList']> = ResolversObject<{
@@ -563,9 +626,42 @@ export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<Resolver
   name: 'TodoScalar';
 }
 
-export interface EmptyScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['EmptyScalar'], any> {
-  name: 'EmptyScalar';
-}
+export type MutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  Create?: Resolver<Maybe<ResolversTypes['ProtoCreateResponse']>, ParentType, ContextType, RequireFields<MutationCreateArgs, never>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoDeleteResponse']>, ParentType, ContextType, RequireFields<MutationDeleteArgs, never>>;
+  Update?: Resolver<Maybe<ResolversTypes['ProtoUpdateResponse']>, ParentType, ContextType, RequireFields<MutationUpdateArgs, never>>;
+  Upsert?: Resolver<Maybe<ResolversTypes['ProtoUpsertResponse']>, ParentType, ContextType, RequireFields<MutationUpsertArgs, never>>;
+  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoTriggerFulfillmentResponse']>, ParentType, ContextType, RequireFields<MutationTriggerFulfillmentArgs, never>>;
+}>;
+
+export type ProtoCreateResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoCreateResponse'] = ResolversParentTypes['ProtoCreateResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoDeleteResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoDeleteResponse'] = ResolversParentTypes['ProtoDeleteResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoUpdateResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoUpdateResponse'] = ResolversParentTypes['ProtoUpdateResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoUpsertResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoUpsertResponse'] = ResolversParentTypes['ProtoUpsertResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoTriggerFulfillmentResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoTriggerFulfillmentResponse'] = ResolversParentTypes['ProtoTriggerFulfillmentResponse']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['FulfillmentResults']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type FulfillmentResultsResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['FulfillmentResults'] = ResolversParentTypes['FulfillmentResults']> = ResolversObject<{
   fulfillmentResults?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResponseDetailsList']>>>, ParentType, ContextType>;
@@ -592,6 +688,8 @@ export type ErrorListResolvers<ContextType = OrderingContext, ParentType extends
 
 export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
+  ProtoReadResponse?: ProtoReadResponseResolvers<ContextType>;
+  StatusType?: StatusTypeResolvers<ContextType>;
   OrderList?: OrderListResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   Meta?: MetaResolvers<ContextType>;
@@ -605,7 +703,12 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   Sort_SortOrder?: Sort_SortOrderResolvers;
   MapScalar?: GraphQLScalarType;
   TodoScalar?: GraphQLScalarType;
-  EmptyScalar?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
+  ProtoCreateResponse?: ProtoCreateResponseResolvers<ContextType>;
+  ProtoDeleteResponse?: ProtoDeleteResponseResolvers<ContextType>;
+  ProtoUpdateResponse?: ProtoUpdateResponseResolvers<ContextType>;
+  ProtoUpsertResponse?: ProtoUpsertResponseResolvers<ContextType>;
+  ProtoTriggerFulfillmentResponse?: ProtoTriggerFulfillmentResponseResolvers<ContextType>;
   FulfillmentResults?: FulfillmentResultsResolvers<ContextType>;
   ResponseDetailsList?: ResponseDetailsListResolvers<ContextType>;
   OrderStatus?: OrderStatusResolvers<ContextType>;

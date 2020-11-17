@@ -6,10 +6,10 @@ import { metaPackageIoRestorecommerceMeta } from "@restorecommerce/rc-grpc-clien
 import { metaPackageIoRestorecommerceOrder } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
 import { metaPackageIoRestorecommerceResourcebase } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base";
 import { metaPackageIoRestorecommerceAuth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth";
-import { registerEnumTyping, registerTyping } from "../../../gql/protos";
+import { registerPackages } from "../../../gql/protos";
 
 export function registerTypings() {
-  [
+  registerPackages(
     metaPackageGoogleProtobufEmpty,
     metaPackageGoogleProtobufStruct,
     metaPackageGoogleProtobufAny,
@@ -18,14 +18,5 @@ export function registerTypings() {
     metaPackageIoRestorecommerceAuth,
     metaPackageIoRestorecommerceResourcebase,
     metaPackageIoRestorecommerceOrder
-  ].forEach(m => {
-    for (let key in m) {
-      const val = m[key];
-      if (val[0] === 'message') {
-        registerTyping(val[1], val[3], {name: key}, {name: 'I' + key});
-      } else if (val[0] === 'enum') {
-        registerEnumTyping(val[1], val[2], {name: key});
-      }
-    }
-  });
+  );
 }

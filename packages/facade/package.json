@@ -57,7 +57,7 @@
     "build:compile": "tsc -p tsconfig.lib.json",
     "dev": "npm-run-all build:clean dev:compile",
     "dev:compile": "tsc -w -p src/tsconfig.json",
-    "test": "jest",
+    "test": "jest --runInBand --testTimeout=30000",
     "test:watch": "jest --watch",
     "generate": "ts-node --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
     "prepublishOnly": "npm run build",

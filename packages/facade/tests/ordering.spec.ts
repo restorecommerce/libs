@@ -23,7 +23,7 @@ export function createTestFacade() {
     env: cfg.env,
     logger,
   })
-    .useModule(orderingModule({config: cfg.ordering.client}))
+    .useModule(orderingModule({config: cfg.ordering}))
     .useMiddleware(reqResLogger({logger}));
 }
 
@@ -34,6 +34,7 @@ beforeAll(async () => {
   facade = createTestFacade();
   await facade.start();
   request = agent(facade.server)
+  // await new Promise(resolve => setTimeout(resolve, 20000))
 });
 
 it('should start the facade', () => {
@@ -45,13 +46,67 @@ afterAll(async () => {
   await facade && facade.stop();
 })
 
-it('test', async (done) => {
-  request
-    .post("/graphql")
-    .send({
-      query: "{ Delete }",
-    })
-    .set("Accept", "application/json")
-    .expect("Content-Type", /json/)
-    .expect(200, done);
+describe('ordering', () => {
+  it('should create order', async (done) => {
+    request
+      .post("/graphql")
+      .send({
+        query: `mutation {
+  Create(
+    input: {
+      totalCount: 1
+      apiKey: { value: "API_KEY" }
+      items: [
+        {
+          id: "TEST"
+          meta: { created: 0, modified: 0, modifiedBy: "modifiedBy", owner: [] }
+          name: "name"
+          description: "description"
+          status: "status"
+          items: []
+          totalPrice: 10
+          totalWeightInKg: 1
+          shippingContactPointId: "shippingContactPointId"
+          billingContactPointId: "billingContactPointId"
+        }
+      ]
+    }
+  ) {
+    status {
+      key
+      code
+      message
+    }
+    payload {
+      items {
+        id
+        name
+      }
+      totalCount
+    }
+  }
+}`,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+  it('should delete order', async (done) => {
+    request
+      .post("/graphql")
+      .send({
+        query: `mutation {
+  Delete(input: { ids: ["TEST"], apiKey: { value: "API_KEY" } }) {
+    status {
+      key
+      code
+      message
+    }
+  }
+}`,
+      })
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
 });

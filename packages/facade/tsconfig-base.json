@@ -5,13 +5,6 @@
       "./node_modules/@types"
     ],
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "paths": {
-      "@modules": ["src/modules/index"],
-      "@modules/*": ["src/modules/*"],
-      "@gql": ["src/gql/index"],
-      "@gql/*": ["src/gql/*"]
-    }
-
-  },
+    "allowSyntheticDefaultImports": true
+  }
 }

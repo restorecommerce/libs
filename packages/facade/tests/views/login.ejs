@@ -1,0 +1,12 @@
+<form autocomplete="off" action="/interaction/<%= uid %>/login" method="post">
+  <input required type="text" value="testuser" name="identifier" placeholder="Enter username/email" autofocus="on" value="<%= identifier %>">
+  <input required type="password" value="testpassword" name="password" placeholder="and password">
+  <input required type="checkbox" name="remember" checked>
+  <button type="submit" class="login login-submit">Sign-in</button>
+
+  <% if (error) { %>
+    <div class="error">
+      <%- error.key %>
+    </div>
+  <% } %>
+</form>

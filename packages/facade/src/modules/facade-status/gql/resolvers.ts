@@ -2,10 +2,11 @@ import { Resolvers  } from './schema.generated';
 
 export const resolvers: Resolvers = {
   Query: {
-    async identity(_, {input}, ctx) {
+
+    async status(_, __, ctx) {
       return {
-        message: `Echo: ${input?.echo ?? '-'}`
-      };
+        running: ctx.facade.listening
+      }
     }
   }
 }

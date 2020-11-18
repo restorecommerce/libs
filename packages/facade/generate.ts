@@ -1,7 +1,15 @@
-import { generateSchemaTypings } from "@restorecommerce/gen-gql-schema";
+import { generateSchemaTypings } from "./src_codegen/index";
+import { schema as facadeStatusSchema } from "./src/modules/facade-status/gql/schema";
 import { schema as exampleSchema } from "./tests/example/gql/schema";
 import { schema as timezoneSchema } from "./tests/timezone/gql/schema";
-import { schema as identitySchema } from "./src/modules/identity/gql/schema";
+
+generateSchemaTypings({
+  schema: facadeStatusSchema,
+  outputFile: './src/modules/facade-status/gql/schema.generated.ts',
+  typescriptResolvers: {
+    contextType: '../interfaces#FacadeStatusContext'
+  }
+});
 
 generateSchemaTypings({
   schema: exampleSchema,
@@ -19,10 +27,4 @@ generateSchemaTypings({
   }
 });
 
-generateSchemaTypings({
-  schema: identitySchema,
-  outputFile: './src/modules/identity/gql/schema.generated.ts',
-  typescriptResolvers: {
-    contextType: '../interfaces#IdentityContext'
-  }
-});
+

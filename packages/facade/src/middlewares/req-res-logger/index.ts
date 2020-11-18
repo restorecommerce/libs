@@ -1,5 +1,3 @@
-'use strict';
-
 import _debug from 'debug';
 import * as koa from 'koa';
 import { Logger, createLogger } from '@restorecommerce/logger';

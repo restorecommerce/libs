@@ -2,14 +2,16 @@ import Koa from 'koa';
 import { createLogger, Logger } from '@restorecommerce/logger';
 import { Server } from 'http';
 import { ApolloServer } from 'apollo-server-koa';
+import { AddressInfo } from 'net';
 import { GraphQLSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
-import { Facade, FacadeModule, FacadeModuleBase } from './facade';
-import { AddressInfo } from 'net';
+import { facadeStatusModule } from './modules/facade-status/index';
+import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
 
 export * from './modules/index';
 export * from './middlewares/index';
-export * from './facade';
+export * from './interfaces';
+export * from './utils';
 export * from './gql/index';
 
 interface RestoreCommerceFacadeImplConfig {
@@ -19,7 +21,6 @@ interface RestoreCommerceFacadeImplConfig {
   hostname?: string;
   env?: string;
 }
-
 
 interface FacadeApolloServiceMap {
   [key: string]: {
@@ -33,7 +34,7 @@ export type ApolloServiceArg = {
 } & ({ url: string } | { schema: any })
 
 
-export class RestoreCommerceFacade implements Facade {
+export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> implements Facade<TModules> {
 
   private apolloServices: FacadeApolloServiceMap = {};
 
@@ -42,31 +43,35 @@ export class RestoreCommerceFacade implements Facade {
   readonly logger: Logger;
   readonly port: number;
   readonly hostname: string;
-  readonly koa: Koa;
+  readonly koa: Koa<any, FacadeModulesContext<TModules>>;;
   readonly env: string;
-  modules: { [key: string]: any; };
+  readonly modules: FacadeModule[] = [];
+
+  private startFns: Array<(() => Promise<void>)> = [];
+  private stopFns: Array<(() => Promise<void>)> = [];
 
   constructor({koa, logger, port, hostname, env}: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
     this.koa = koa;
-    this.modules = {};
     this.env = env ?? 'development';
   }
   get server() {
     return this._server;
   }
 
-  get address(): string | AddressInfo | undefined {
-    return this._server && (this._server.address() ?? undefined);
+  get address(): AddressInfo | undefined {
+    const address = this._server?.address();
+    if (address && typeof address === 'object') {
+      return address;
+    }
+    return undefined;
   }
 
   get listening(): boolean {
     return !!this._server && this._server.listening;
   }
-
-  private loadedModules: string[] = [];
 
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext>) {
     this.koa.use(middleware);
@@ -74,35 +79,60 @@ export class RestoreCommerceFacade implements Facade {
   }
 
   useModule<TNewModule extends FacadeModule>(module: TNewModule) {
-    if (this.loadedModules.includes(module.moduleName)) {
+    if (this.modules.some(m => module.moduleName === m.moduleName)) {
       throw new Error(`module ${module.moduleName} already loaded`);
     }
-    this.loadedModules.push(module.moduleName);
+    this.modules.push(module);
     module(this as any);
     return this as any;
   }
 
-  supportsModule<TSupportedModule extends FacadeModuleBase>(module: TSupportedModule): this is Facade<[TSupportedModule]> {
-    return this.loadedModules.includes(module.moduleName);
+  supportsModule<TSupportedModule extends FacadeModuleBase<FacadeBaseContext>>(module: TSupportedModule): this is Facade<[TSupportedModule, ...TModules]> & Facade<[...TModules]> {
+    return this.modules.some(m => module.moduleName === m.moduleName);
   }
 
   addApolloService({name, schema, url}: {name: string, schema: any, url: string}) {
     this.apolloServices[name] = { schema, url };
   }
 
-  start() {
+  onStart(fn: () => Promise<void>): void {
+    debugger;
+    this.startFns.push(fn);
+  }
+  onStop(fn: () => Promise<void>): void {
+    this.stopFns.push(fn);
+  }
+
+  private async runFnQueue(fns: (() => Promise<void>)[]) {
+    const _fns = [...fns];
+    const runQueue = async () => {
+      const fn = _fns.shift();
+      if (fn) {
+        try {
+          await fn();
+        } catch (error) {
+          this.logger.error('Error in start/stop function', error);
+        }
+        await runQueue();
+      }
+    }
+    await runQueue();
+  }
+
+  async start(): Promise<void> {
     if (!this._initialized) {
-      this._initialized = true;
+      this.runFnQueue(this.startFns);
       this.mountApolloServer();
+      this._initialized = true;
     }
     return new Promise<void>((resolve, reject) => {
       try {
         this._server = this.koa.listen(this.port, this.hostname , () => {
           const address = this.address;
-          if (typeof address === 'string') {
-            this.logger.info(`Service is listening on ${address}`);
-          } else if(address) {
+          if(address) {
             this.logger.info(`Service is listening on ${address.address}:${address.port}`);
+          } else {
+            this.logger.info(`Service is listening`);
           }
           resolve();
         });
@@ -112,8 +142,10 @@ export class RestoreCommerceFacade implements Facade {
     });
   }
 
-  stop() {
-    return new Promise<void>((resolve, reject) => {
+  async stop(): Promise<void> {
+    return new Promise<void>(async (resolve, reject) => {
+      await this.runFnQueue(this.stopFns);
+
       this.server?.close((err) => {
         if (err) {
           this.logger.error(`Error stopping service`, err);
@@ -182,14 +214,14 @@ export class RestoreCommerceFacade implements Facade {
 }
 
 export interface FacadeConfig {
-  port: number;
+  port?: number;
   logger?: Logger;
   hostname?: string;
   env?: string;
   keys?: string[];
 }
 
-export function createFacade(config: FacadeConfig): Facade {
+export function createFacade(config: FacadeConfig): Facade<[]> {
   const koa = new Koa<any, any>();
 
   if (config.env) {
@@ -200,6 +232,7 @@ export function createFacade(config: FacadeConfig): Facade {
   }
 
   const logger = config.logger ?? createLogger(config.logger);
+  koa.context.logger = logger;
 
   return new RestoreCommerceFacade({
     koa,
@@ -207,5 +240,5 @@ export function createFacade(config: FacadeConfig): Facade {
     port: config.port,
     hostname: config.hostname,
     env: config.env
-  });
+  }).useModule(facadeStatusModule);
 }

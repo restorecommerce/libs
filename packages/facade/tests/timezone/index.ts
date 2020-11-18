@@ -1,16 +1,6 @@
-import { TimezoneService } from "@restorecommerce/rc-grpc-clients";
-import { FacadeModule, createFacadeModuleFactory } from "../../src";
+import { createFacadeModuleFactory } from "../../src";
 import { FederatedResourcesSchema } from './gql/index';
-
-export interface TimezoneConfig {
-  timezoneService: TimezoneService;
-}
-
-export interface TimezoneContext {
-  timezoneService: TimezoneService;
-};
-
-export type TimezoneModule = FacadeModule<TimezoneContext>;
+import { TimezoneConfig, TimezoneModule } from './interfaces';
 
 export const timezonesModule = createFacadeModuleFactory<TimezoneConfig, TimezoneModule>('timezone', (facade, config) => {
   facade.addApolloService({

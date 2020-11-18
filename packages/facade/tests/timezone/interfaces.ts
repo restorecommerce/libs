@@ -1,11 +1,11 @@
 import { TimezoneService } from "@restorecommerce/rc-grpc-clients";
-import { FacadeModule } from "../../src";
+import { FacadeContext, FacadeModule } from "../../src";
 
 export interface TimezoneConfig {
   timezoneService: TimezoneService;
 }
 
-export interface TimezoneContext {
+export interface TimezoneContext extends FacadeContext {
   timezoneService: TimezoneService;
 };
 

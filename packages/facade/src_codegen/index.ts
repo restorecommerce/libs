@@ -4,10 +4,21 @@ import * as typescriptPlugin from '@graphql-codegen/typescript';
 import * as typescriptResolversPlugin from '@graphql-codegen/typescript-resolvers';
 import { codegen } from '@graphql-codegen/core';
 
-export async function generateSchemaTypings(schema: any, outputFile: string, contextType?: string) {
+export interface GenerateSchemaTypingsArgs {
+  schema: any;
+  outputFile: string;
+  typescript?: {
+    [key: string]: any;
+  },
+  typescriptResolvers?: {
+    contextType?: string;
+    [key: string]: any;
+  };
+}
+
+export async function generateSchemaTypings({schema, outputFile, typescript, typescriptResolvers}: GenerateSchemaTypingsArgs) {
   try {
-    schema
-    const config: any /* typings wrong?  */ = {
+    const codegenConfig: any /* typings wrong?  */ = {
       // used by a plugin internally, although the 'typescript' plugin currently
       // returns the string output, rather than writing to a file
       filename: outputFile,
@@ -15,15 +26,16 @@ export async function generateSchemaTypings(schema: any, outputFile: string, con
       plugins: [
         {
           typescript: {
-            maybeValue: 'T | undefined'
+            maybeValue: 'T | undefined',
+            ...(typescript ?? {})
           },
         },
         {
           typescriptResolvers: {
-            contextType,
             noSchemaStitching: true,
             useIndexSignature: true,
-            federation: true
+            federation: true,
+            ...(typescriptResolvers ?? {})
           },
         },
       ],
@@ -33,7 +45,7 @@ export async function generateSchemaTypings(schema: any, outputFile: string, con
       },
     };
 
-    const output = await codegen(config);
+    const output = await codegen(codegenConfig);
     fs.writeFileSync(outputFile, output);
     console.log('Schema typings generated in' + outputFile);
   } catch(ex) {

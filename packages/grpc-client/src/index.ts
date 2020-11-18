@@ -145,6 +145,7 @@ export class GrpcClient {
         });
 
         clientStream.on('close', () => sub?.unsubscribe());
+        clientStream.on('end', () => sub?.unsubscribe());
         clientStream.on('error', (err) => {
           sub?.unsubscribe();
           reject(err);
@@ -155,8 +156,25 @@ export class GrpcClient {
   bidiStream<TArguments = any, TResponse = any>(
     { methodPath, serialize, deserialize, data}: BidiStreamArgs<TArguments, TResponse>
   ): Observable<TResponse> {
-      // TODO
-    throw 'NOT_IMPLEMENTED';
+    return new Observable<TResponse>((subscriber) => {
+      const bidiStream =
+        this.client.makeBidiStreamRequest<TArguments, TResponse>(
+          methodPath,
+          serialize,
+          deserialize,
+        );
+
+      const sub = data?.subscribe(_data => {
+        bidiStream.write(_data);
+      });
+
+      bidiStream.on('data', value => subscriber.next(value))
+      bidiStream.on('error', err => subscriber.error(err))
+      bidiStream.on('end', () => subscriber.complete())
+      return () => {
+        bidiStream.cancel();
+      }
+    });
   }
 
   close() {

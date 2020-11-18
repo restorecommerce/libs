@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.5...@restorecommerce/logger@0.4.0) (2020-11-09)
+
+
+### Features
+
+* Log objects even if they are the first parameter to the log() function ([cf3b61f](https://github.com/restorecommerce/libs/commit/cf3b61f9bbf112050725c6e01ef69e328bafeab1))
+
+
+
+
+
 ## [0.3.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.4...@restorecommerce/logger@0.3.5) (2020-10-09)
 
 **Note:** Version bump only for package @restorecommerce/logger

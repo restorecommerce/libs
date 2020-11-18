@@ -11,21 +11,26 @@ const rTracerFormat = format.printf((info) => {
   const rid = rTracer.id();
   const time = info.timestamp;
   const level = info.level;
-  const message = info.message;
-  delete (info as any).timestamp;
-  delete (info as any).level;
-  delete (info as any).message;
+  let message = info.message;
+  const splatSym: any = Object.getOwnPropertySymbols(info).find((s) => {
+    return String(s) === 'Symbol(splat)';
+  });
+  const splat = info[splatSym];
+  console.log(splat);
+  delete info.timestamp;
   let object = '';
-  if (Object.entries(info).length !== 0 && info.constructor === Object) {
-    object = JSON.stringify(info);
+  if (splat) {
+    object = JSON.stringify(splat);
+  }
+  if (Object.entries(message).length !== 0 && message.constructor === Object) {
+    message = JSON.stringify(message);
   }
   return rid
-    ? `${level} : ${time} [rid:${rid}] : ${message} ${((object))}`
-    : `${level} : ${time} : ${message} ${(object)}`;
+    ? `${level}: ${time} [rid:${rid}]: ${message} ${((object))}`
+    : `${level}: ${time}: ${message} ${(object)}`;
 });
 
 export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
-
   let formats: any[] = [
     format.simple(),
     format.timestamp(),

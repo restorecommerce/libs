@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey, HierarchicalScope, RoleAssociation, Tokens } from '../../io/restorecommerce/auth';
+import { Subject, RoleAssociation, Tokens } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Attribute } from '../../io/restorecommerce/attribute';
 import { Image } from '../../io/restorecommerce/image';
@@ -27,33 +27,11 @@ export interface LoginRequest {
 
 export interface OrgIDRequest {
   orgIds: string[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface UserIDs {
   userIds: string[];
-}
-
-export interface HierarchicalScopesRequest {
-  subjectId: string;
-  token: string;
-}
-
-export interface HierarchicalScopesResponse {
-  subjectId: string;
-  hierarchicalScopes: HierarchicalScope[];
-  token: string;
-}
-
-export interface PopulateRoleAssocCacheRequest {
-  /**
-   * / User ID
-   */
-  id: string;
-  token: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
 }
 
 export interface FindRequest {
@@ -63,8 +41,11 @@ export interface FindRequest {
   id: string;
   name: string;
   email: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
+}
+
+export interface FindByTokenRequest {
+  token: string;
 }
 
 export interface RegisterRequest {
@@ -93,23 +74,20 @@ export interface ActivateRequest {
    */
   name: string;
   activationCode: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ConfirmUserInvitationRequest {
   name: string;
   password: string;
   activationCode: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface SendInvitationEmailRequest {
   userId: string;
   invitedByUserId: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ChangePasswordRequest {
@@ -119,23 +97,20 @@ export interface ChangePasswordRequest {
   id: string;
   password: string;
   newPassword: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface RequestPasswordChangeRequest {
   name: string | undefined;
   email: string | undefined;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ConfirmPasswordChangeRequest {
   name: string;
   activationCode: string;
   password: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ChangeEmailRequest {
@@ -144,15 +119,13 @@ export interface ChangeEmailRequest {
    */
   id: string;
   email: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ConfirmEmailChangeRequest {
   name: string;
   activationCode: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface UnregisterRequest {
@@ -160,8 +133,7 @@ export interface UnregisterRequest {
    * / User ID
    */
   id: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -224,8 +196,7 @@ export interface EmailChangeConfirmed {
 export interface UserList {
   items: User[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -242,8 +213,7 @@ export interface Activate {
 export interface FindByRoleRequest {
   role: string;
   attributes: Attribute[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -347,25 +317,14 @@ const baseUserIDs: object = {
   userIds: "",
 };
 
-const baseHierarchicalScopesRequest: object = {
-  subjectId: "",
-  token: "",
-};
-
-const baseHierarchicalScopesResponse: object = {
-  subjectId: "",
-  token: "",
-};
-
-const basePopulateRoleAssocCacheRequest: object = {
-  id: "",
-  token: "",
-};
-
 const baseFindRequest: object = {
   id: "",
   name: "",
   email: "",
+};
+
+const baseFindByTokenRequest: object = {
+  token: "",
 };
 
 const baseRegisterRequest: object = {
@@ -533,7 +492,7 @@ export interface Service {
 
   SendInvitationEmail(request: SendInvitationEmailRequest): Promise<Empty>;
 
-  populateRoleAssocCache(request: PopulateRoleAssocCacheRequest): Promise<Empty>;
+  FindByToken(request: FindByTokenRequest): Promise<User>;
 
 }
 
@@ -665,11 +624,8 @@ export const OrgIDRequest = {
     for (const v of message.orgIds) {
       writer.uint32(10).string(v!);
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -686,9 +642,6 @@ export const OrgIDRequest = {
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -710,11 +663,6 @@ export const OrgIDRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<OrgIDRequest>): OrgIDRequest {
@@ -730,11 +678,6 @@ export const OrgIDRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: OrgIDRequest): unknown {
@@ -745,7 +688,6 @@ export const OrgIDRequest = {
       obj.orgIds = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -806,260 +748,13 @@ export const UserIDs = {
   },
 };
 
-export const HierarchicalScopesRequest = {
-  encode(message: HierarchicalScopesRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.subjectId);
-    writer.uint32(18).string(message.token);
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): HierarchicalScopesRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.subjectId = reader.string();
-          break;
-        case 2:
-          message.token = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): HierarchicalScopesRequest {
-    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
-    } else {
-      message.subjectId = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<HierarchicalScopesRequest>): HierarchicalScopesRequest {
-    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
-    } else {
-      message.subjectId = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-  toJSON(message: HierarchicalScopesRequest): unknown {
-    const obj: any = {};
-    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
-    message.token !== undefined && (obj.token = message.token);
-    return obj;
-  },
-};
-
-export const HierarchicalScopesResponse = {
-  encode(message: HierarchicalScopesResponse, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.subjectId);
-    for (const v of message.hierarchicalScopes) {
-      HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    writer.uint32(26).string(message.token);
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): HierarchicalScopesResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.subjectId = reader.string();
-          break;
-        case 2:
-          message.hierarchicalScopes.push(HierarchicalScope.decode(reader, reader.uint32()));
-          break;
-        case 3:
-          message.token = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): HierarchicalScopesResponse {
-    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
-    } else {
-      message.subjectId = "";
-    }
-    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
-      }
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<HierarchicalScopesResponse>): HierarchicalScopesResponse {
-    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
-    } else {
-      message.subjectId = "";
-    }
-    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
-      }
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-  toJSON(message: HierarchicalScopesResponse): unknown {
-    const obj: any = {};
-    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
-    if (message.hierarchicalScopes) {
-      obj.hierarchicalScopes = message.hierarchicalScopes.map(e => e ? HierarchicalScope.toJSON(e) : undefined);
-    } else {
-      obj.hierarchicalScopes = [];
-    }
-    message.token !== undefined && (obj.token = message.token);
-    return obj;
-  },
-};
-
-export const PopulateRoleAssocCacheRequest = {
-  encode(message: PopulateRoleAssocCacheRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.token);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): PopulateRoleAssocCacheRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePopulateRoleAssocCacheRequest } as PopulateRoleAssocCacheRequest;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-        case 2:
-          message.token = reader.string();
-          break;
-        case 3:
-          message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): PopulateRoleAssocCacheRequest {
-    const message = { ...basePopulateRoleAssocCacheRequest } as PopulateRoleAssocCacheRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<PopulateRoleAssocCacheRequest>): PopulateRoleAssocCacheRequest {
-    const message = { ...basePopulateRoleAssocCacheRequest } as PopulateRoleAssocCacheRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  toJSON(message: PopulateRoleAssocCacheRequest): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.token !== undefined && (obj.token = message.token);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
-    return obj;
-  },
-};
-
 export const FindRequest = {
   encode(message: FindRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.name);
     writer.uint32(26).string(message.email);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -1081,9 +776,6 @@ export const FindRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1114,11 +806,6 @@ export const FindRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<FindRequest>): FindRequest {
@@ -1143,11 +830,6 @@ export const FindRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: FindRequest): unknown {
@@ -1156,7 +838,53 @@ export const FindRequest = {
     message.name !== undefined && (obj.name = message.name);
     message.email !== undefined && (obj.email = message.email);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
+    return obj;
+  },
+};
+
+export const FindByTokenRequest = {
+  encode(message: FindByTokenRequest, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.token);
+    return writer;
+  },
+  decode(input: Uint8Array | Reader, length?: number): FindByTokenRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.token = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): FindByTokenRequest {
+    const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<FindByTokenRequest>): FindByTokenRequest {
+    const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  toJSON(message: FindByTokenRequest): unknown {
+    const obj: any = {};
+    message.token !== undefined && (obj.token = message.token);
     return obj;
   },
 };
@@ -1418,11 +1146,8 @@ export const ActivateRequest = {
   encode(message: ActivateRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.activationCode);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1441,9 +1166,6 @@ export const ActivateRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1469,11 +1191,6 @@ export const ActivateRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ActivateRequest>): ActivateRequest {
@@ -1493,11 +1210,6 @@ export const ActivateRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ActivateRequest): unknown {
@@ -1505,7 +1217,6 @@ export const ActivateRequest = {
     message.name !== undefined && (obj.name = message.name);
     message.activationCode !== undefined && (obj.activationCode = message.activationCode);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1515,11 +1226,8 @@ export const ConfirmUserInvitationRequest = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.password);
     writer.uint32(26).string(message.activationCode);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -1541,9 +1249,6 @@ export const ConfirmUserInvitationRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1574,11 +1279,6 @@ export const ConfirmUserInvitationRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ConfirmUserInvitationRequest>): ConfirmUserInvitationRequest {
@@ -1603,11 +1303,6 @@ export const ConfirmUserInvitationRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ConfirmUserInvitationRequest): unknown {
@@ -1616,7 +1311,6 @@ export const ConfirmUserInvitationRequest = {
     message.password !== undefined && (obj.password = message.password);
     message.activationCode !== undefined && (obj.activationCode = message.activationCode);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1625,11 +1319,8 @@ export const SendInvitationEmailRequest = {
   encode(message: SendInvitationEmailRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.userId);
     writer.uint32(18).string(message.invitedByUserId);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1646,11 +1337,8 @@ export const SendInvitationEmailRequest = {
         case 2:
           message.invitedByUserId = reader.string();
           break;
-        case 4:
+        case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1676,11 +1364,6 @@ export const SendInvitationEmailRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<SendInvitationEmailRequest>): SendInvitationEmailRequest {
@@ -1700,11 +1383,6 @@ export const SendInvitationEmailRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: SendInvitationEmailRequest): unknown {
@@ -1712,7 +1390,6 @@ export const SendInvitationEmailRequest = {
     message.userId !== undefined && (obj.userId = message.userId);
     message.invitedByUserId !== undefined && (obj.invitedByUserId = message.invitedByUserId);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1722,11 +1399,8 @@ export const ChangePasswordRequest = {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.password);
     writer.uint32(26).string(message.newPassword);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -1748,9 +1422,6 @@ export const ChangePasswordRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1781,11 +1452,6 @@ export const ChangePasswordRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ChangePasswordRequest>): ChangePasswordRequest {
@@ -1810,11 +1476,6 @@ export const ChangePasswordRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ChangePasswordRequest): unknown {
@@ -1823,7 +1484,6 @@ export const ChangePasswordRequest = {
     message.password !== undefined && (obj.password = message.password);
     message.newPassword !== undefined && (obj.newPassword = message.newPassword);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1836,11 +1496,8 @@ export const RequestPasswordChangeRequest = {
     if (message.email !== undefined) {
       writer.uint32(18).string(message.email);
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1859,9 +1516,6 @@ export const RequestPasswordChangeRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1887,11 +1541,6 @@ export const RequestPasswordChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<RequestPasswordChangeRequest>): RequestPasswordChangeRequest {
@@ -1911,11 +1560,6 @@ export const RequestPasswordChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: RequestPasswordChangeRequest): unknown {
@@ -1923,7 +1567,6 @@ export const RequestPasswordChangeRequest = {
     message.name !== undefined && (obj.name = message.name);
     message.email !== undefined && (obj.email = message.email);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1933,11 +1576,8 @@ export const ConfirmPasswordChangeRequest = {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.activationCode);
     writer.uint32(26).string(message.password);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -1959,9 +1599,6 @@ export const ConfirmPasswordChangeRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1992,11 +1629,6 @@ export const ConfirmPasswordChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ConfirmPasswordChangeRequest>): ConfirmPasswordChangeRequest {
@@ -2021,11 +1653,6 @@ export const ConfirmPasswordChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ConfirmPasswordChangeRequest): unknown {
@@ -2034,7 +1661,6 @@ export const ConfirmPasswordChangeRequest = {
     message.activationCode !== undefined && (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2043,11 +1669,8 @@ export const ChangeEmailRequest = {
   encode(message: ChangeEmailRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.email);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2066,9 +1689,6 @@ export const ChangeEmailRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2094,11 +1714,6 @@ export const ChangeEmailRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ChangeEmailRequest>): ChangeEmailRequest {
@@ -2118,11 +1733,6 @@ export const ChangeEmailRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ChangeEmailRequest): unknown {
@@ -2130,7 +1740,6 @@ export const ChangeEmailRequest = {
     message.id !== undefined && (obj.id = message.id);
     message.email !== undefined && (obj.email = message.email);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2139,11 +1748,8 @@ export const ConfirmEmailChangeRequest = {
   encode(message: ConfirmEmailChangeRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.activationCode);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2162,9 +1768,6 @@ export const ConfirmEmailChangeRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2190,11 +1793,6 @@ export const ConfirmEmailChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ConfirmEmailChangeRequest>): ConfirmEmailChangeRequest {
@@ -2214,11 +1812,6 @@ export const ConfirmEmailChangeRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ConfirmEmailChangeRequest): unknown {
@@ -2226,7 +1819,6 @@ export const ConfirmEmailChangeRequest = {
     message.name !== undefined && (obj.name = message.name);
     message.activationCode !== undefined && (obj.activationCode = message.activationCode);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2234,11 +1826,8 @@ export const ConfirmEmailChangeRequest = {
 export const UnregisterRequest = {
   encode(message: UnregisterRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -2254,9 +1843,6 @@ export const UnregisterRequest = {
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2277,11 +1863,6 @@ export const UnregisterRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<UnregisterRequest>): UnregisterRequest {
@@ -2296,18 +1877,12 @@ export const UnregisterRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: UnregisterRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2613,11 +2188,8 @@ export const UserList = {
       User.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2637,9 +2209,6 @@ export const UserList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2666,11 +2235,6 @@ export const UserList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<UserList>): UserList {
@@ -2691,11 +2255,6 @@ export const UserList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: UserList): unknown {
@@ -2707,7 +2266,6 @@ export const UserList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2765,11 +2323,8 @@ export const FindByRoleRequest = {
     for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2789,9 +2344,6 @@ export const FindByRoleRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2818,11 +2370,6 @@ export const FindByRoleRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<FindByRoleRequest>): FindByRoleRequest {
@@ -2843,11 +2390,6 @@ export const FindByRoleRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: FindByRoleRequest): unknown {
@@ -2859,7 +2401,6 @@ export const FindByRoleRequest = {
       obj.attributes = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

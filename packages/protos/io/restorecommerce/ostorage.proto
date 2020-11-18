@@ -19,10 +19,7 @@ service Service {
 
 message CopyRequest {
   repeated CopyRequestItem items = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 5;
-    io.restorecommerce.auth.ApiKey api_key = 6;
-  }
+  io.restorecommerce.auth.Subject subject = 2;
 }
 
 message CopyResponse {
@@ -64,20 +61,14 @@ message Object {
   io.restorecommerce.meta.Meta meta = 4;
   string url = 5;
   Options options = 6;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 7;
-    io.restorecommerce.auth.ApiKey api_key = 8;
-  }
+  io.restorecommerce.auth.Subject subject = 7;
 }
 
 message GetRequest {
   string key = 1;
   string bucket = 2;
   bool download = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ObjectsData {
@@ -93,10 +84,7 @@ message ObjectData {
 message DeleteRequest {
   string key = 1;
   string bucket = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 5;
-    io.restorecommerce.auth.ApiKey api_key = 6;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Response {
@@ -111,8 +99,5 @@ message Response {
 message ListRequest {
   string bucket = 1;
   google.protobuf.Struct filter = 2; /// Filter based on fieldName|operation, value|list
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 5;
-    io.restorecommerce.auth.ApiKey api_key = 6;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }

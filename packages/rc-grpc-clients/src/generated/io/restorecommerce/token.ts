@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Any } from '../../google/protobuf/any';
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
@@ -8,49 +8,30 @@ export interface TokenData {
   id: string;
   payload?: Any;
   expiresIn: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  type: string;
+  subject?: Subject;
 }
 
 export interface Identifier {
   id: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
-}
-
-export interface UniqueIdentifier {
-  uid: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
-}
-
-export interface UserCode {
-  userCode: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  type: string;
+  subject?: Subject;
 }
 
 export interface GrantId {
   grantId: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 const baseTokenData: object = {
   id: "",
   expiresIn: 0,
+  type: "",
 };
 
 const baseIdentifier: object = {
   id: "",
-};
-
-const baseUniqueIdentifier: object = {
-  uid: "",
-};
-
-const baseUserCode: object = {
-  userCode: "",
+  type: "",
 };
 
 const baseGrantId: object = {
@@ -69,19 +50,9 @@ export interface Service {
   upsert(request: TokenData): Promise<Any>;
 
   /**
-   *  find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)
+   *  find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)  
    */
   find(request: Identifier): Promise<Any>;
-
-  /**
-   *  by default when storing the access_token itself is used as id, this api is used when uid is provided in payload.
-   */
-  findByUid(request: UniqueIdentifier): Promise<Any>;
-
-  /**
-   *  returns previously stored instance of DeviceCode by the end-user entered user code. You only need this method for the deviceFlow feature
-   */
-  findByUserCode(request: UserCode): Promise<Any>;
 
   /**
    *  removes the id_token from redis
@@ -109,11 +80,9 @@ export const TokenData = {
       Any.encode(message.payload, writer.uint32(18).fork()).ldelim();
     }
     writer.uint32(25).double(message.expiresIn);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
+    writer.uint32(34).string(message.type);
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -134,10 +103,10 @@ export const TokenData = {
           message.expiresIn = reader.double();
           break;
         case 4:
-          message.subject = Subject.decode(reader, reader.uint32());
+          message.type = reader.string();
           break;
         case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
+          message.subject = Subject.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -163,15 +132,15 @@ export const TokenData = {
     } else {
       message.expiresIn = 0;
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
     } else {
       message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
     }
     return message;
   },
@@ -192,15 +161,15 @@ export const TokenData = {
     } else {
       message.expiresIn = 0;
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
     } else {
       message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
     }
     return message;
   },
@@ -209,8 +178,8 @@ export const TokenData = {
     message.id !== undefined && (obj.id = message.id);
     message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
     message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn);
+    message.type !== undefined && (obj.type = message.type);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -218,11 +187,9 @@ export const TokenData = {
 export const Identifier = {
   encode(message: Identifier, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
+    writer.uint32(18).string(message.type);
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -237,10 +204,10 @@ export const Identifier = {
           message.id = reader.string();
           break;
         case 2:
-          message.subject = Subject.decode(reader, reader.uint32());
+          message.type = reader.string();
           break;
         case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
+          message.subject = Subject.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -256,15 +223,15 @@ export const Identifier = {
     } else {
       message.id = "";
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
     } else {
       message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
     }
     return message;
   },
@@ -275,185 +242,23 @@ export const Identifier = {
     } else {
       message.id = "";
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
     } else {
       message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
     }
     return message;
   },
   toJSON(message: Identifier): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
+    message.type !== undefined && (obj.type = message.type);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
-    return obj;
-  },
-};
-
-export const UniqueIdentifier = {
-  encode(message: UniqueIdentifier, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.uid);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): UniqueIdentifier {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUniqueIdentifier } as UniqueIdentifier;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.uid = reader.string();
-          break;
-        case 2:
-          message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): UniqueIdentifier {
-    const message = { ...baseUniqueIdentifier } as UniqueIdentifier;
-    if (object.uid !== undefined && object.uid !== null) {
-      message.uid = String(object.uid);
-    } else {
-      message.uid = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<UniqueIdentifier>): UniqueIdentifier {
-    const message = { ...baseUniqueIdentifier } as UniqueIdentifier;
-    if (object.uid !== undefined && object.uid !== null) {
-      message.uid = object.uid;
-    } else {
-      message.uid = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  toJSON(message: UniqueIdentifier): unknown {
-    const obj: any = {};
-    message.uid !== undefined && (obj.uid = message.uid);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
-    return obj;
-  },
-};
-
-export const UserCode = {
-  encode(message: UserCode, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.userCode);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): UserCode {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUserCode } as UserCode;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.userCode = reader.string();
-          break;
-        case 2:
-          message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): UserCode {
-    const message = { ...baseUserCode } as UserCode;
-    if (object.userCode !== undefined && object.userCode !== null) {
-      message.userCode = String(object.userCode);
-    } else {
-      message.userCode = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<UserCode>): UserCode {
-    const message = { ...baseUserCode } as UserCode;
-    if (object.userCode !== undefined && object.userCode !== null) {
-      message.userCode = object.userCode;
-    } else {
-      message.userCode = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
-    return message;
-  },
-  toJSON(message: UserCode): unknown {
-    const obj: any = {};
-    message.userCode !== undefined && (obj.userCode = message.userCode);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -461,11 +266,8 @@ export const UserCode = {
 export const GrantId = {
   encode(message: GrantId, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.grantId);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -481,9 +283,6 @@ export const GrantId = {
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -504,11 +303,6 @@ export const GrantId = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<GrantId>): GrantId {
@@ -523,18 +317,12 @@ export const GrantId = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: GrantId): unknown {
     const obj: any = {};
     message.grantId !== undefined && (obj.grantId = message.grantId);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

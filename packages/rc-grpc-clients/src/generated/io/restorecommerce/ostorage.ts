@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Attribute } from '../../io/restorecommerce/attribute';
 import { Any } from '../../google/protobuf/any';
@@ -11,8 +11,7 @@ import { Writer, Reader } from 'protobufjs/minimal';
 
 export interface CopyRequest {
   items: CopyRequestItem[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface CopyResponse {
@@ -57,16 +56,14 @@ export interface Object {
   meta?: Meta;
   url: string;
   options?: Options;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface GetRequest {
   key: string;
   bucket: string;
   download: boolean;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ObjectsData {
@@ -82,8 +79,7 @@ export interface ObjectData {
 export interface DeleteRequest {
   key: string;
   bucket: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface Response {
@@ -104,8 +100,7 @@ export interface ListRequest {
    * / Filter based on fieldName|operation, value|list
    */
   filter?: Struct;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 const baseCopyRequest: object = {
@@ -193,11 +188,8 @@ export const CopyRequest = {
     for (const v of message.items) {
       CopyRequestItem.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(50).fork()).ldelim();
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -212,11 +204,8 @@ export const CopyRequest = {
         case 1:
           message.items.push(CopyRequestItem.decode(reader, reader.uint32()));
           break;
-        case 5:
+        case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 6:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -238,11 +227,6 @@ export const CopyRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<CopyRequest>): CopyRequest {
@@ -258,11 +242,6 @@ export const CopyRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: CopyRequest): unknown {
@@ -273,7 +252,6 @@ export const CopyRequest = {
       obj.items = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -746,11 +724,8 @@ export const Object = {
     if (message.options !== undefined && message.options !== undefined) {
       Options.encode(message.options, writer.uint32(50).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(58).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -781,9 +756,6 @@ export const Object = {
           break;
         case 7:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 8:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -827,11 +799,6 @@ export const Object = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<Object>): Object {
@@ -871,11 +838,6 @@ export const Object = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: Object): unknown {
@@ -887,7 +849,6 @@ export const Object = {
     message.url !== undefined && (obj.url = message.url);
     message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -897,11 +858,8 @@ export const GetRequest = {
     writer.uint32(10).string(message.key);
     writer.uint32(18).string(message.bucket);
     writer.uint32(24).bool(message.download);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -923,9 +881,6 @@ export const GetRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -956,11 +911,6 @@ export const GetRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<GetRequest>): GetRequest {
@@ -985,11 +935,6 @@ export const GetRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: GetRequest): unknown {
@@ -998,7 +943,6 @@ export const GetRequest = {
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.download !== undefined && (obj.download = message.download);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1142,11 +1086,8 @@ export const DeleteRequest = {
   encode(message: DeleteRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.key);
     writer.uint32(18).string(message.bucket);
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(50).fork()).ldelim();
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1163,11 +1104,8 @@ export const DeleteRequest = {
         case 2:
           message.bucket = reader.string();
           break;
-        case 5:
+        case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 6:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1193,11 +1131,6 @@ export const DeleteRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
@@ -1217,11 +1150,6 @@ export const DeleteRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: DeleteRequest): unknown {
@@ -1229,7 +1157,6 @@ export const DeleteRequest = {
     message.key !== undefined && (obj.key = message.key);
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1373,11 +1300,8 @@ export const ListRequest = {
     if (message.filter !== undefined && message.filter !== undefined) {
       Struct.encode(message.filter, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(50).fork()).ldelim();
+    if (message.subject !== undefined && message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1394,11 +1318,8 @@ export const ListRequest = {
         case 2:
           message.filter = Struct.decode(reader, reader.uint32());
           break;
-        case 5:
+        case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 6:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1424,11 +1345,6 @@ export const ListRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ListRequest>): ListRequest {
@@ -1448,11 +1364,6 @@ export const ListRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ListRequest): unknown {
@@ -1460,7 +1371,6 @@ export const ListRequest = {
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.filter !== undefined && (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

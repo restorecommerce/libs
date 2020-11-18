@@ -9,25 +9,17 @@ import "io/restorecommerce/attribute.proto";
 message Subject {
   string id = 1; // user id
   string scope = 2; // target scope
-  repeated RoleAssociation role_associations = 3; //  role_associations of user creating the user
-  repeated HierarchicalScope hierarchical_scopes = 4; // HR scope of user creating the User
   bool unauthenticated = 5; // for unauthenticated context
   string token = 6;
 }
 
-/**
- * Api Key
- */
-message ApiKey {
-  string value = 1; // ApiKey
-}
-
-
 message Tokens {
   string name = 1; // token name
-  double expires_at = 2; // expiration date for token
+  double expires_in = 2; // expiration date for token
   string token = 3; // token
   repeated string scopes = 4; // identifier for role_association
+  string type = 5; // type of token eg: access_token, refresh_token
+  bool interactive = 6;
 }
 
 message HierarchicalScope {
@@ -42,3 +34,12 @@ message RoleAssociation {
   string id = 3; // identifier for role_association
 }
 
+message HierarchicalScopesRequest {
+  string token = 1;
+}
+
+message HierarchicalScopesResponse {
+  string subject_id = 1;
+  repeated HierarchicalScope hierarchical_scopes = 2;
+  string token = 3;
+}

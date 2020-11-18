@@ -1,20 +1,18 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Writer, Reader } from 'protobufjs/minimal';
 
 
 export interface OrderId {
   orderId: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface TrackingNumber {
   orderId: string;
   shipmentType: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface Status {
@@ -75,8 +73,7 @@ export interface Labels {
 
 export interface shipmentOrderLists {
   ShipmentOrder?: ShipmentOrder;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface ShipmentOrder {
@@ -182,8 +179,7 @@ export interface ResponseDetailsList {
 export interface FulfillmentStatus {
   OrderId: string;
   OrderStatus: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface Error {
@@ -376,11 +372,8 @@ export const protobufPackage = 'io.restorecommerce.fulfillment'
 export const OrderId = {
   encode(message: OrderId, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.orderId);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -396,9 +389,6 @@ export const OrderId = {
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -419,11 +409,6 @@ export const OrderId = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<OrderId>): OrderId {
@@ -438,18 +423,12 @@ export const OrderId = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: OrderId): unknown {
     const obj: any = {};
     message.orderId !== undefined && (obj.orderId = message.orderId);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -458,11 +437,8 @@ export const TrackingNumber = {
   encode(message: TrackingNumber, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.orderId);
     writer.uint32(18).string(message.shipmentType);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -481,9 +457,6 @@ export const TrackingNumber = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -509,11 +482,6 @@ export const TrackingNumber = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<TrackingNumber>): TrackingNumber {
@@ -533,11 +501,6 @@ export const TrackingNumber = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: TrackingNumber): unknown {
@@ -545,7 +508,6 @@ export const TrackingNumber = {
     message.orderId !== undefined && (obj.orderId = message.orderId);
     message.shipmentType !== undefined && (obj.shipmentType = message.shipmentType);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1336,11 +1298,8 @@ export const shipmentOrderLists = {
     if (message.ShipmentOrder !== undefined && message.ShipmentOrder !== undefined) {
       ShipmentOrder.encode(message.ShipmentOrder, writer.uint32(10).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1356,9 +1315,6 @@ export const shipmentOrderLists = {
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1379,11 +1335,6 @@ export const shipmentOrderLists = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<shipmentOrderLists>): shipmentOrderLists {
@@ -1398,18 +1349,12 @@ export const shipmentOrderLists = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: shipmentOrderLists): unknown {
     const obj: any = {};
     message.ShipmentOrder !== undefined && (obj.ShipmentOrder = message.ShipmentOrder ? ShipmentOrder.toJSON(message.ShipmentOrder) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -2769,11 +2714,8 @@ export const FulfillmentStatus = {
   encode(message: FulfillmentStatus, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.OrderId);
     writer.uint32(18).string(message.OrderStatus);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -2792,9 +2734,6 @@ export const FulfillmentStatus = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -2820,11 +2759,6 @@ export const FulfillmentStatus = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<FulfillmentStatus>): FulfillmentStatus {
@@ -2844,11 +2778,6 @@ export const FulfillmentStatus = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: FulfillmentStatus): unknown {
@@ -2856,7 +2785,6 @@ export const FulfillmentStatus = {
     message.OrderId !== undefined && (obj.OrderId = message.OrderId);
     message.OrderStatus !== undefined && (obj.OrderStatus = message.OrderStatus);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

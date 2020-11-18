@@ -17,29 +17,10 @@ export interface Subject {
    */
   scope: string;
   /**
-   *   role_associations of user creating the user
-   */
-  roleAssociations: RoleAssociation[];
-  /**
-   *  HR scope of user creating the User
-   */
-  hierarchicalScopes: HierarchicalScope[];
-  /**
    *  for unauthenticated context
    */
   unauthenticated: boolean;
   token: string;
-}
-
-/**
- * *
- *  Api Key
- */
-export interface ApiKey {
-  /**
-   *  ApiKey
-   */
-  value: string;
 }
 
 export interface Tokens {
@@ -50,7 +31,7 @@ export interface Tokens {
   /**
    *  expiration date for token
    */
-  expiresAt: number;
+  expiresIn: number;
   /**
    *  token
    */
@@ -59,6 +40,11 @@ export interface Tokens {
    *  identifier for role_association
    */
   scopes: string[];
+  /**
+   *  type of token eg: access_token, refresh_token
+   */
+  type: string;
+  interactive: boolean;
 }
 
 export interface HierarchicalScope {
@@ -91,6 +77,16 @@ export interface RoleAssociation {
   id: string;
 }
 
+export interface HierarchicalScopesRequest {
+  token: string;
+}
+
+export interface HierarchicalScopesResponse {
+  subjectId: string;
+  hierarchicalScopes: HierarchicalScope[];
+  token: string;
+}
+
 const baseSubject: object = {
   id: "",
   scope: "",
@@ -98,15 +94,13 @@ const baseSubject: object = {
   token: "",
 };
 
-const baseApiKey: object = {
-  value: "",
-};
-
 const baseTokens: object = {
   name: "",
-  expiresAt: 0,
+  expiresIn: 0,
   token: "",
   scopes: "",
+  type: "",
+  interactive: false,
 };
 
 const baseHierarchicalScope: object = {
@@ -119,18 +113,21 @@ const baseRoleAssociation: object = {
   id: "",
 };
 
+const baseHierarchicalScopesRequest: object = {
+  token: "",
+};
+
+const baseHierarchicalScopesResponse: object = {
+  subjectId: "",
+  token: "",
+};
+
 export const protobufPackage = 'io.restorecommerce.auth'
 
 export const Subject = {
   encode(message: Subject, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.scope);
-    for (const v of message.roleAssociations) {
-      RoleAssociation.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.hierarchicalScopes) {
-      HierarchicalScope.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
     writer.uint32(40).bool(message.unauthenticated);
     writer.uint32(50).string(message.token);
     return writer;
@@ -139,8 +136,6 @@ export const Subject = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSubject } as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -149,12 +144,6 @@ export const Subject = {
           break;
         case 2:
           message.scope = reader.string();
-          break;
-        case 3:
-          message.roleAssociations.push(RoleAssociation.decode(reader, reader.uint32()));
-          break;
-        case 4:
-          message.hierarchicalScopes.push(HierarchicalScope.decode(reader, reader.uint32()));
           break;
         case 5:
           message.unauthenticated = reader.bool();
@@ -171,8 +160,6 @@ export const Subject = {
   },
   fromJSON(object: any): Subject {
     const message = { ...baseSubject } as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -182,16 +169,6 @@ export const Subject = {
       message.scope = String(object.scope);
     } else {
       message.scope = "";
-    }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromJSON(e));
-      }
-    }
-    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
-      }
     }
     if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
       message.unauthenticated = Boolean(object.unauthenticated);
@@ -207,8 +184,6 @@ export const Subject = {
   },
   fromPartial(object: DeepPartial<Subject>): Subject {
     const message = { ...baseSubject } as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -218,16 +193,6 @@ export const Subject = {
       message.scope = object.scope;
     } else {
       message.scope = "";
-    }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromPartial(e));
-      }
-    }
-    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
-      }
     }
     if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
       message.unauthenticated = object.unauthenticated;
@@ -245,65 +210,8 @@ export const Subject = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.scope !== undefined && (obj.scope = message.scope);
-    if (message.roleAssociations) {
-      obj.roleAssociations = message.roleAssociations.map(e => e ? RoleAssociation.toJSON(e) : undefined);
-    } else {
-      obj.roleAssociations = [];
-    }
-    if (message.hierarchicalScopes) {
-      obj.hierarchicalScopes = message.hierarchicalScopes.map(e => e ? HierarchicalScope.toJSON(e) : undefined);
-    } else {
-      obj.hierarchicalScopes = [];
-    }
     message.unauthenticated !== undefined && (obj.unauthenticated = message.unauthenticated);
     message.token !== undefined && (obj.token = message.token);
-    return obj;
-  },
-};
-
-export const ApiKey = {
-  encode(message: ApiKey, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.value);
-    return writer;
-  },
-  decode(input: Uint8Array | Reader, length?: number): ApiKey {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseApiKey } as ApiKey;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.value = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-  fromJSON(object: any): ApiKey {
-    const message = { ...baseApiKey } as ApiKey;
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    return message;
-  },
-  fromPartial(object: DeepPartial<ApiKey>): ApiKey {
-    const message = { ...baseApiKey } as ApiKey;
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
-    return message;
-  },
-  toJSON(message: ApiKey): unknown {
-    const obj: any = {};
-    message.value !== undefined && (obj.value = message.value);
     return obj;
   },
 };
@@ -311,11 +219,13 @@ export const ApiKey = {
 export const Tokens = {
   encode(message: Tokens, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.name);
-    writer.uint32(17).double(message.expiresAt);
+    writer.uint32(17).double(message.expiresIn);
     writer.uint32(26).string(message.token);
     for (const v of message.scopes) {
       writer.uint32(34).string(v!);
     }
+    writer.uint32(42).string(message.type);
+    writer.uint32(48).bool(message.interactive);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): Tokens {
@@ -330,13 +240,19 @@ export const Tokens = {
           message.name = reader.string();
           break;
         case 2:
-          message.expiresAt = reader.double();
+          message.expiresIn = reader.double();
           break;
         case 3:
           message.token = reader.string();
           break;
         case 4:
           message.scopes.push(reader.string());
+          break;
+        case 5:
+          message.type = reader.string();
+          break;
+        case 6:
+          message.interactive = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -353,10 +269,10 @@ export const Tokens = {
     } else {
       message.name = "";
     }
-    if (object.expiresAt !== undefined && object.expiresAt !== null) {
-      message.expiresAt = Number(object.expiresAt);
+    if (object.expiresIn !== undefined && object.expiresIn !== null) {
+      message.expiresIn = Number(object.expiresIn);
     } else {
-      message.expiresAt = 0;
+      message.expiresIn = 0;
     }
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
@@ -368,6 +284,16 @@ export const Tokens = {
         message.scopes.push(String(e));
       }
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
+    if (object.interactive !== undefined && object.interactive !== null) {
+      message.interactive = Boolean(object.interactive);
+    } else {
+      message.interactive = false;
+    }
     return message;
   },
   fromPartial(object: DeepPartial<Tokens>): Tokens {
@@ -378,10 +304,10 @@ export const Tokens = {
     } else {
       message.name = "";
     }
-    if (object.expiresAt !== undefined && object.expiresAt !== null) {
-      message.expiresAt = object.expiresAt;
+    if (object.expiresIn !== undefined && object.expiresIn !== null) {
+      message.expiresIn = object.expiresIn;
     } else {
-      message.expiresAt = 0;
+      message.expiresIn = 0;
     }
     if (object.token !== undefined && object.token !== null) {
       message.token = object.token;
@@ -393,18 +319,30 @@ export const Tokens = {
         message.scopes.push(e);
       }
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
+    }
+    if (object.interactive !== undefined && object.interactive !== null) {
+      message.interactive = object.interactive;
+    } else {
+      message.interactive = false;
+    }
     return message;
   },
   toJSON(message: Tokens): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.expiresAt !== undefined && (obj.expiresAt = message.expiresAt);
+    message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn);
     message.token !== undefined && (obj.token = message.token);
     if (message.scopes) {
       obj.scopes = message.scopes.map(e => e);
     } else {
       obj.scopes = [];
     }
+    message.type !== undefined && (obj.type = message.type);
+    message.interactive !== undefined && (obj.interactive = message.interactive);
     return obj;
   },
 };
@@ -577,6 +515,139 @@ export const RoleAssociation = {
       obj.attributes = [];
     }
     message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+};
+
+export const HierarchicalScopesRequest = {
+  encode(message: HierarchicalScopesRequest, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.token);
+    return writer;
+  },
+  decode(input: Uint8Array | Reader, length?: number): HierarchicalScopesRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.token = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): HierarchicalScopesRequest {
+    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<HierarchicalScopesRequest>): HierarchicalScopesRequest {
+    const message = { ...baseHierarchicalScopesRequest } as HierarchicalScopesRequest;
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  toJSON(message: HierarchicalScopesRequest): unknown {
+    const obj: any = {};
+    message.token !== undefined && (obj.token = message.token);
+    return obj;
+  },
+};
+
+export const HierarchicalScopesResponse = {
+  encode(message: HierarchicalScopesResponse, writer: Writer = Writer.create()): Writer {
+    writer.uint32(10).string(message.subjectId);
+    for (const v of message.hierarchicalScopes) {
+      HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    writer.uint32(26).string(message.token);
+    return writer;
+  },
+  decode(input: Uint8Array | Reader, length?: number): HierarchicalScopesResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
+    message.hierarchicalScopes = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.subjectId = reader.string();
+          break;
+        case 2:
+          message.hierarchicalScopes.push(HierarchicalScope.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.token = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+  fromJSON(object: any): HierarchicalScopesResponse {
+    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
+    message.hierarchicalScopes = [];
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = String(object.subjectId);
+    } else {
+      message.subjectId = "";
+    }
+    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
+      for (const e of object.hierarchicalScopes) {
+        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
+      }
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  fromPartial(object: DeepPartial<HierarchicalScopesResponse>): HierarchicalScopesResponse {
+    const message = { ...baseHierarchicalScopesResponse } as HierarchicalScopesResponse;
+    message.hierarchicalScopes = [];
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = object.subjectId;
+    } else {
+      message.subjectId = "";
+    }
+    if (object.hierarchicalScopes !== undefined && object.hierarchicalScopes !== null) {
+      for (const e of object.hierarchicalScopes) {
+        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
+      }
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = "";
+    }
+    return message;
+  },
+  toJSON(message: HierarchicalScopesResponse): unknown {
+    const obj: any = {};
+    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    if (message.hierarchicalScopes) {
+      obj.hierarchicalScopes = message.hierarchicalScopes.map(e => e ? HierarchicalScope.toJSON(e) : undefined);
+    } else {
+      obj.hierarchicalScopes = [];
+    }
+    message.token !== undefined && (obj.token = message.token);
     return obj;
   },
 };

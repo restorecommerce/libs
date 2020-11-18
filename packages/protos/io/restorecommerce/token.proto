@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package io.restorecommerce.token;
 
-import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "google/protobuf/any.proto";
 
@@ -10,53 +9,28 @@ import "google/protobuf/any.proto";
 * Microservice definition.
 */
 service Service {
-  rpc upsert(TokenData) returns (google.protobuf.Any); // creates or upserts ID_token to `Redis` and returns sucess or failure message
-  rpc find(Identifier) returns (google.protobuf.Any); // find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)
-  rpc findByUid(UniqueIdentifier) returns (google.protobuf.Any); // by default when storing the access_token itself is used as id, this api is used when uid is provided in payload.
-  rpc findByUserCode(UserCode) returns (google.protobuf.Any); // returns previously stored instance of DeviceCode by the end-user entered user code. You only need this method for the deviceFlow feature
-  rpc destroy(Identifier) returns (google.protobuf.Any); // removes the id_token from redis
-  rpc revokeByGrantId(GrantId) returns (google.protobuf.Any); // Destroy/Drop/Remove a stored id_token by its grantId property reference.
-  rpc consume(Identifier) returns (google.protobuf.Any);  // Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).
+  rpc upsert (TokenData) returns (google.protobuf.Any); // creates or upserts ID_token to `Redis` and returns sucess or failure message
+  rpc find (Identifier) returns (google.protobuf.Any); // find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)  
+  rpc destroy (Identifier) returns (google.protobuf.Any); // removes the id_token from redis
+  rpc revokeByGrantId (GrantId) returns (google.protobuf.Any); // Destroy/Drop/Remove a stored id_token by its grantId property reference.
+  rpc consume (Identifier) returns (google.protobuf.Any);  // Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).
 }
 
 message TokenData {
   string id = 1;
   google.protobuf.Any payload = 2;
   double expires_in = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  string type = 4;
+  io.restorecommerce.auth.Subject subject = 5;
 }
 
 message Identifier {
   string id = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
-}
-
-message UniqueIdentifier {
-  string uid = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
-}
-
-message UserCode {
- string user_code = 1;
- oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+  string type = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message GrantId {
   string grant_id = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+  io.restorecommerce.auth.Subject subject = 2;
 }

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Any } from '../../google/protobuf/any';
 import { Writer, Reader } from 'protobufjs/minimal';
 
@@ -8,8 +8,7 @@ export interface SearchRequest {
   collection: string;
   text: string;
   acl: string[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface SearchResponse {
@@ -43,11 +42,8 @@ export const SearchRequest = {
     for (const v of message.acl) {
       writer.uint32(26).string(v!);
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -70,9 +66,6 @@ export const SearchRequest = {
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 5:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -104,11 +97,6 @@ export const SearchRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
@@ -134,11 +122,6 @@ export const SearchRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: SearchRequest): unknown {
@@ -151,7 +134,6 @@ export const SearchRequest = {
       obj.acl = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

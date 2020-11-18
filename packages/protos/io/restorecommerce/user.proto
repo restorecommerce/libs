@@ -33,7 +33,7 @@ service Service {
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
-  rpc populateRoleAssocCache(PopulateRoleAssocCacheRequest) returns (google.protobuf.Empty);
+  rpc FindByToken (FindByTokenRequest) returns (User);
 }
 
 /**
@@ -48,44 +48,22 @@ message LoginRequest {
 
 message OrgIDRequest {
   repeated string org_ids = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+  io.restorecommerce.auth.Subject subject = 2;
 }
 
 message UserIDs {
   repeated string user_ids = 1;
 }
 
-message HierarchicalScopesRequest {
-  string subject_id = 1;
-  string token = 2;
-}
-
-message HierarchicalScopesResponse {
-  string subject_id = 1;
-  repeated io.restorecommerce.auth.HierarchicalScope hierarchical_scopes = 2;
-  string token = 3;
-}
-
-message PopulateRoleAssocCacheRequest {
-  string id = 1; /// User ID
-  string token = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
-}
-
 message FindRequest {
   string id = 1; /// User ID
   string name = 2;
   string email = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message FindByTokenRequest {
+  string token = 1;
 }
 
 enum UserType {
@@ -116,39 +94,27 @@ message RegisterRequest {
 message ActivateRequest {
   string name = 1; /// User name (unique)
   string activation_code = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmUserInvitationRequest {
   string name = 1;
   string password = 2;
   string activation_code = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  io.restorecommerce.auth.Subject subject = 4;
 }
 
 message SendInvitationEmailRequest {
   string user_id = 1;
   string invited_by_user_id = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ChangePasswordRequest {
   string id = 1; /// User ID
   string password = 2;
   string new_password = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  io.restorecommerce.auth.Subject subject = 4;
 }
 
 message RequestPasswordChangeRequest {
@@ -156,46 +122,31 @@ message RequestPasswordChangeRequest {
     string name = 1;
     string email = 2;
   }
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmPasswordChangeRequest {
   string name = 1;
   string activation_code = 2;
   string password = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 4;
-    io.restorecommerce.auth.ApiKey api_key = 5;
-  }
+  io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ChangeEmailRequest {
   string id = 1; /// User ID
   string email = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmEmailChangeRequest {
   string name = 1;
   string activation_code = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message UnregisterRequest {
   string id = 1; /// User ID
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+  io.restorecommerce.auth.Subject subject = 2;
 }
 
 /**
@@ -245,10 +196,7 @@ message EmailChangeConfirmed {
 message UserList {
   repeated User items = 1;
   uint32 total_count = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 /**
@@ -261,10 +209,7 @@ message Activate {
 message FindByRoleRequest {
   string role = 1;
   repeated io.restorecommerce.attribute.Attribute attributes = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 /**

@@ -1,7 +1,8 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Organization } from '../../io/restorecommerce/organization';
+import { Any } from '../../google/protobuf/any';
 import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
 import { Empty } from '../../google/protobuf/empty';
 import { Writer, Reader } from 'protobufjs/minimal';
@@ -18,8 +19,7 @@ export interface Deleted {
 export interface InvoiceList {
   items: Invoice[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -62,6 +62,7 @@ export interface InvoicePositions {
   senderBillingAddress?: BillingAddress;
   recipientOrganization?: Organization;
   senderOrganization?: Organization;
+  paymentMethodDetails?: Any;
 }
 
 export interface RecipientCustomer {
@@ -254,11 +255,8 @@ export const InvoiceList = {
       Invoice.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -278,9 +276,6 @@ export const InvoiceList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -307,11 +302,6 @@ export const InvoiceList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<InvoiceList>): InvoiceList {
@@ -332,11 +322,6 @@ export const InvoiceList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: InvoiceList): unknown {
@@ -348,7 +333,6 @@ export const InvoiceList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -629,6 +613,9 @@ export const InvoicePositions = {
     if (message.senderOrganization !== undefined && message.senderOrganization !== undefined) {
       Organization.encode(message.senderOrganization, writer.uint32(58).fork()).ldelim();
     }
+    if (message.paymentMethodDetails !== undefined && message.paymentMethodDetails !== undefined) {
+      Any.encode(message.paymentMethodDetails, writer.uint32(66).fork()).ldelim();
+    }
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): InvoicePositions {
@@ -659,6 +646,9 @@ export const InvoicePositions = {
           break;
         case 7:
           message.senderOrganization = Organization.decode(reader, reader.uint32());
+          break;
+        case 8:
+          message.paymentMethodDetails = Any.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -705,6 +695,11 @@ export const InvoicePositions = {
     } else {
       message.senderOrganization = undefined;
     }
+    if (object.paymentMethodDetails !== undefined && object.paymentMethodDetails !== null) {
+      message.paymentMethodDetails = Any.fromJSON(object.paymentMethodDetails);
+    } else {
+      message.paymentMethodDetails = undefined;
+    }
     return message;
   },
   fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
@@ -745,6 +740,11 @@ export const InvoicePositions = {
     } else {
       message.senderOrganization = undefined;
     }
+    if (object.paymentMethodDetails !== undefined && object.paymentMethodDetails !== null) {
+      message.paymentMethodDetails = Any.fromPartial(object.paymentMethodDetails);
+    } else {
+      message.paymentMethodDetails = undefined;
+    }
     return message;
   },
   toJSON(message: InvoicePositions): unknown {
@@ -760,6 +760,7 @@ export const InvoicePositions = {
     message.senderBillingAddress !== undefined && (obj.senderBillingAddress = message.senderBillingAddress ? BillingAddress.toJSON(message.senderBillingAddress) : undefined);
     message.recipientOrganization !== undefined && (obj.recipientOrganization = message.recipientOrganization ? Organization.toJSON(message.recipientOrganization) : undefined);
     message.senderOrganization !== undefined && (obj.senderOrganization = message.senderOrganization ? Organization.toJSON(message.senderOrganization) : undefined);
+    message.paymentMethodDetails !== undefined && (obj.paymentMethodDetails = message.paymentMethodDetails ? Any.toJSON(message.paymentMethodDetails) : undefined);
     return obj;
   },
 };

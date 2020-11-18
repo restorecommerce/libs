@@ -23,46 +23,13 @@ message Deleted {
 message DeleteOrgData {
   repeated string org_ids = 1;
   repeated string user_ids = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
-}
-
-message PaymentMethod {
-  oneof payment_method {
-    WireTransfer wiretransfer = 1;
-    Paypal paypal = 2;
-  }
-
-  enum TransferType {
-    RECEIVE = 0;
-    SEND = 1;
-    BOTH = 2;
-  }
-
-  TransferType transferType = 10;
-}
-
-message WireTransfer {
-  string iban = 1;
-  string bic = 2;
-  string bankName = 3;  
-}
-
-message Paypal {
-  string username = 1;
-  string email = 2;
-  string password = 3;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message OrganizationList {
   repeated Organization items = 1;
   uint32 total_count = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Organization {
@@ -80,7 +47,6 @@ message Organization {
   string registration = 12;
   string registration_court = 13;
   string name = 14;
-  repeated PaymentMethod payment_methods = 15;
+  repeated string payment_method_ids = 15;
   google.protobuf.Any data = 16; /// additional data
-  bool system_owner = 17;
 }

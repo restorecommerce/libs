@@ -34,10 +34,7 @@ message Deleted {
 message JobList {
   repeated Job items = 1;
   uint32 total_count = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 /**
@@ -152,10 +149,7 @@ message JobReadRequest {
 
   // Fields selector
   repeated io.restorecommerce.resourcebase.FieldFilter field = 3;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 5;
-    io.restorecommerce.auth.ApiKey api_key = 6;
-  }
+  io.restorecommerce.auth.Subject subject = 5;
 }
 
 // filter

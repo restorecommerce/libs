@@ -18,19 +18,13 @@ service Service {
 
 message OrderId {
   string orderId = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+io.restorecommerce.auth.Subject subject = 2;
 }
 
 message TrackingNumber {
   string orderId = 1;
   string shipmentType = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Status {
@@ -92,10 +86,7 @@ message Labels {
 
 message shipmentOrderLists {
   ShipmentOrder  ShipmentOrder = 1;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 2;
-    io.restorecommerce.auth.ApiKey api_key = 3;
-  }
+io.restorecommerce.auth.Subject subject = 2;
 }
 
 message ShipmentOrder {
@@ -201,10 +192,7 @@ message ResponseDetailsList {
 message FulfillmentStatus {
   string OrderId = 1;
   string OrderStatus =2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Error {

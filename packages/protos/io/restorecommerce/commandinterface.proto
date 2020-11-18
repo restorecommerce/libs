@@ -10,10 +10,7 @@ message CommandRequest {
   //  command identifier (used to demultiplex operation in the command implementation)
   string name = 1;
   google.protobuf.Any payload = 2;  // variable payload
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 // used to push responses to Kafka

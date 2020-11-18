@@ -31,14 +31,16 @@ function createTestFacade() {
   }).useModule(identityModule({
       identitySrvClientConfig: cfg.identity.client,
       oidc: {
-        client_id: 'CLIENT_ID',
-        client_secret: 'CLIENT_SECRET',
+        client_id: 'TEST_CLIENT_ID',
+        client_secret: 'TEST_CLIENT_SECRET',
         cookies: {
-          keys: ['COOKIE_SECRET']
+          keys: ['TEST_COOKIE_SECRET']
         },
-        issuer:
-
-
+        issuer: 'http://localhost:5000',
+        redirect_uris: ['http://localhost:5000/session'],
+        jwks: {
+          keys: []
+        },
       }
     }))
     .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))

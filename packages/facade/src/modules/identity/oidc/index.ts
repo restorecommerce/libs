@@ -6,6 +6,7 @@ import { IdentityContext } from '../interfaces';
 import { OIDCConfig } from './interfaces';
 import { createOIDCRouter } from './router';
 import { createIdentityServiceAdapterClass } from './adapter';
+import { loginUser } from './user';
 
 export { OIDCConfig };
 export { createOIDCRouter, CreateOIDCRouterArgs } from './router';
@@ -17,7 +18,7 @@ export interface CreateOIDCArgs {
   env: string;
 }
 
-export function createOIDC({ identitySrvClient, env, logger, config: { tokenService, cookies, redirect_uris, client_id, client_secret, issuer, jwks, templates } }: CreateOIDCArgs) {
+export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, tokenService, cookies, redirect_uris, client_id, client_secret, issuer, jwks, templates } }: CreateOIDCArgs) {
   const adapterClass = createIdentityServiceAdapterClass(tokenService ?? identitySrvClient.token, logger);
   const provider = new Provider(issuer, {
     adapter: adapterClass,
@@ -108,6 +109,7 @@ export function createOIDC({ identitySrvClient, env, logger, config: { tokenServ
   provider.use(helmet());
 
   const router = createOIDCRouter({
+    loginFn: loginFn ?? loginUser,
     templates,
     logger,
     provider,

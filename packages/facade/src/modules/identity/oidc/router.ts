@@ -3,9 +3,9 @@ import { InteractionResults, Provider } from 'oidc-provider';
 import bodyParser from 'koa-body';
 import { Logger } from '@restorecommerce/logger';
 import { IdentityContext } from '../interfaces';
-import { OIDCTemplateEngine } from './templates';
-import { AuthUser, loginUser } from './user';
-import { OIDCHbsTemplates } from './interfaces';
+import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
+// import { AuthUser, loginUser } from './user';
+import { OIDCHbsTemplates, OIDCLoginFn } from './interfaces';
 
 
 export interface CreateOIDCRouterArgs {
@@ -13,9 +13,10 @@ export interface CreateOIDCRouterArgs {
   provider: Provider;
   env?: string;
   templates?: OIDCHbsTemplates;
+  loginFn: OIDCLoginFn;
 }
 
-export function createOIDCRouter({logger, provider, env, templates }: CreateOIDCRouterArgs): Router<{}, IdentityContext> {
+export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): Router<{}, IdentityContext> {
 
   const dev = env === 'development';
 
@@ -60,19 +61,19 @@ export function createOIDCRouter({logger, provider, env, templates }: CreateOIDC
 
     const body = ctx.request.body;
 
-    const identifier = typeof body?.identifier === 'string' ? body.identifier : undefined;
-    const password = typeof body?.password === 'string' ? body.password : undefined;
-    const remember = !!(body?.remember);
+    const { error, user, identifier, remember }  = await loginFn(ctx, body);
 
-    if (!identifier || !password) {
+    console.log(error, user);
+
+    if (error || !user) {
       ctx.type = 'html';
       ctx.response.body = await tplEngine.login({
         title: 'Login',
         uid,
         identifier,
-        error: {
-          key: 'NO_IDENTIFIER_OR_PASSWORD',
-          message: 'No identifier or password'
+        error: error ?? {
+          key: 'ERROR',
+          message: 'Error'
         },
         dev,
         dbg: {
@@ -82,14 +83,6 @@ export function createOIDCRouter({logger, provider, env, templates }: CreateOIDC
         }
       });
       return;
-    }
-
-    let user: AuthUser | undefined = undefined;
-
-    try {
-      user = await loginUser(ctx.identity.client.user, identifier, password);
-    } catch (error) {
-      console.error(error);
     }
 
     if (!user) {

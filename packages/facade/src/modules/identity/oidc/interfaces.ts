@@ -1,5 +1,6 @@
-import { TokenService } from '@restorecommerce/rc-grpc-clients';
+import { TokenService, User } from '@restorecommerce/rc-grpc-clients';
 import { JSONWebKeySet, } from 'jose';
+import { IdentityContext } from '../interfaces';
 
 export interface OIDCHbsTemplates {
   login?: string;
@@ -8,6 +9,7 @@ export interface OIDCHbsTemplates {
 
 export interface OIDCConfig {
   tokenService?: TokenService;
+  loginFn?: OIDCLoginFn;
   issuer: string;
   jwks: JSONWebKeySet;
   client_id: string;
@@ -17,4 +19,32 @@ export interface OIDCConfig {
   };
   templates?: OIDCHbsTemplates;
   redirect_uris: string[];
+}
+
+export interface OIDCError {
+  key: string;
+  message?: string;
+}
+
+export type AuthUserKeyWhitelist =
+  'id' |
+  'name' |
+  'email' |
+  'localeId' |
+  'timezoneId' |
+  'roleAssociations' |
+  'firstName' |
+  'lastName' |
+  'defaultScope' |
+  'tokens';
+
+export type AuthUser = Pick<User, AuthUserKeyWhitelist>;
+
+export interface OIDCLoginFn {
+  (ctx: IdentityContext, body: any): Promise<{
+    user?: AuthUser;
+    error?: OIDCError;
+    identifier?: string;
+    remember?: boolean;
+  }>;
 }

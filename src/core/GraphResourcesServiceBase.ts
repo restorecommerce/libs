@@ -76,6 +76,11 @@ export class GraphResourcesServiceBase {
         idPropertyMapping.set(collectionArray[1], this.bufferFiledCfg[resourceName]);
         marshallRequired = true;
       }
+      // sanitize fields to remove _key, _rev and rename _id to id field
+      delete eachVertex._key;
+      delete eachVertex._rev;
+      eachVertex['id'] = eachVertex._id;
+      delete eachVertex._id;
     }
     let completeDecodedData = [];
     if (marshallRequired || (queryResult && queryResult.data && queryResult.data.value)) {

@@ -7,14 +7,13 @@ import { ServiceBase } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';
-import * as srvConfig from '@restorecommerce/service-config';
+import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
 import * as _ from 'lodash';
 import * as co from 'co';
 
-const config = chassis.config;
 const database = chassis.database;
-let cfg = srvConfig(process.cwd() + '/test');
+let cfg = createServiceConfig(process.cwd() + '/test');
 let server = new chassis.Server(cfg.get('server'));
 /*
  * Note: To run this test, a running ArangoDB is required.

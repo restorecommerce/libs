@@ -8,7 +8,7 @@ import { toObject } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Events, Topic } from '@restorecommerce/kafka-client';
-import * as srvConfig from '@restorecommerce/service-config';
+import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
 import * as _ from 'lodash';
 
@@ -60,7 +60,7 @@ describe('ServiceBase', () => {
   let cfg;
   before(async function before() {
     // Load test config from chassis service config
-    cfg = srvConfig(process.cwd() + '/test');
+    cfg = createServiceConfig(process.cwd() + '/test');
     server = new chassis.Server(cfg.get('server'));
     events = new Events(cfg.get('events:testevents'), server.logger);
     await events.start();

@@ -4,6 +4,7 @@ import { toObject } from '../index';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic } from '@restorecommerce/kafka-client';
 import { ServiceCall, ReadRequest, CreateRequest, DeleteRequest, UpdateRequest, UpsertRequest } from './interfaces';
+import { Logger } from 'winston';
 
 const errors = chassis.errors;
 
@@ -12,7 +13,7 @@ const errors = chassis.errors;
  * CRUD resource operations.
  */
 export class ServiceBase {
-  logger: chassis.Logger;
+  logger: Logger;
   name: string;
   events: any;
   resourceapi: ResourcesAPIBase;
@@ -24,7 +25,7 @@ export class ServiceBase {
    * @param [object] logger Chassis logger.
    * @param [object] resourceapi ResourceAPI object.
    */
-  constructor(entityName: string, entityEvents: any, logger: chassis.Logger,
+  constructor(entityName: string, entityEvents: any, logger: Logger,
     resourceapi: ResourcesAPIBase, isEventsEnabled?: boolean) {
     this.logger = logger;
     this.name = entityName;

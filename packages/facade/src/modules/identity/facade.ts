@@ -1,10 +1,10 @@
-import  { createFacade, reqResLogger, FacadeContext, identityModule } from '../src/index';
+import  { createFacade, reqResLogger, identityModule, FacadeContext, Facade } from '../src/index';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
 import { timezonesModule } from './timezone';
 import { exampleModule } from './example';
-import { ResourcesSrvGrpcClient} from '@restorecommerce/rc-grpc-clients';
+import { ResourcesSrvGrpcClient , IdentitySrvGrpcClient} from '@restorecommerce/rc-grpc-clients';
 
 const CONFIG_PATH = __dirname;
 
@@ -24,21 +24,24 @@ function createTestFacade() {
   const resourcesClient = new ResourcesSrvGrpcClient(cfg.resources.client);
 
   return createFacade({
-    // ...cfg.facade,
-
+    ...cfg.facade,
     env: cfg.env,
-    logger
-  }).useModule(identityModule({
-      identitySrvClientConfig: cfg.identity.client,
+    logger,
+  })
+    .useModule(identityModule({
+      client: cfg.identity.client,
       oidc: {
-        client_id: 'CLIENT_ID',
-        client_secret: 'CLIENT_SECRET',
-        cookies: {
-          keys: ['COOKIE_SECRET']
+        client_id: 'test_id',
+        client_secret: 'test_secret',
+        issuer: 'http://localhost:5000',
+        redirect_uris: ['http://localhost:5000/session'],
+        // redirect_uris: ['http://localhost:5000/session', 'https://oauth.pstmn.io/v1/callback'],
+        jwks: {
+          keys: []
         },
-        issuer:
-
-
+        cookies: {
+          keys: ['test']
+        }
       }
     }))
     .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))

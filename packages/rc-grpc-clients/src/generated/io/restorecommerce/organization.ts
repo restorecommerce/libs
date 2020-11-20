@@ -691,29 +691,12 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaDeleteOrgData: { [key in keyof Required<DeleteOrgData>]: MetaI | string } = {
   orgIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
   userIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-}
-export const metaPaymentMethod: { [key in keyof Required<PaymentMethod>]: MetaI | string } = {
-  wiretransfer: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.organization.WireTransfer', name:'WireTransfer'} as MetaO]} as MetaU,
-  paypal: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.organization.Paypal', name:'Paypal'} as MetaO]} as MetaU,
-  transferType: {meta:'object', type:'.io.restorecommerce.organization.PaymentMethod.TransferType', name:'PaymentMethod_TransferType'} as MetaO,
-}
-export const metaWireTransfer: { [key in keyof Required<WireTransfer>]: MetaI | string } = {
-  iban: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bic: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bankName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-}
-export const metaPaypal: { [key in keyof Required<Paypal>]: MetaI | string } = {
-  username: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  password: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaOrganizationList: { [key in keyof Required<OrganizationList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaOrganization: { [key in keyof Required<Organization>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
@@ -730,9 +713,8 @@ export const metaOrganization: { [key in keyof Required<Organization>]: MetaI | 
   registration: {meta:'builtin', type:'string', original:'string'} as MetaB,
   registrationCourt: {meta:'builtin', type:'string', original:'string'} as MetaB,
   name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  paymentMethods: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.organization.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
+  paymentMethodIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
   data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  systemOwner: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
   Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrganizationList.decode} as MetaS<ReadRequest, OrganizationList>,
@@ -744,10 +726,6 @@ export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
 export const metaPackageIoRestorecommerceOrganization: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
   Deleted: ['message', '.io.restorecommerce.organization.Deleted', Deleted, metaDeleted],
   DeleteOrgData: ['message', '.io.restorecommerce.organization.DeleteOrgData', DeleteOrgData, metaDeleteOrgData],
-  PaymentMethod: ['message', '.io.restorecommerce.organization.PaymentMethod', PaymentMethod, metaPaymentMethod],
-  PaymentMethod_TransferType: ['enum', '.io.restorecommerce.organization.PaymentMethod.TransferType', PaymentMethod_TransferType, undefined],
-  WireTransfer: ['message', '.io.restorecommerce.organization.WireTransfer', WireTransfer, metaWireTransfer],
-  Paypal: ['message', '.io.restorecommerce.organization.Paypal', Paypal, metaPaypal],
   OrganizationList: ['message', '.io.restorecommerce.organization.OrganizationList', OrganizationList, metaOrganizationList],
   Organization: ['message', '.io.restorecommerce.organization.Organization', Organization, metaOrganization],
   Service: ['service', '.io.restorecommerce.organization.Service', undefined, metaService],

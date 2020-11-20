@@ -6,7 +6,7 @@ import { orderingModule } from "../src/modules/ordering";
 
 const CONFIG_PATH = __dirname;
 
-export function createTestFacade() {
+function createTestFacade() {
   const serviceConfig = createServiceConfig(CONFIG_PATH);
 
   const cfg = {
@@ -27,7 +27,35 @@ export function createTestFacade() {
     .useMiddleware(reqResLogger({logger}));
 }
 
-let facade: Facade;
+function expectSuccess(done, payloadValidator: (payload) => void = () => {}) {
+  return (err, res) => {
+    if (err) {
+      done(err);
+    }
+
+    expect(res.body).toBeInstanceOf(Object);
+    expect(res.body.data).toBeInstanceOf(Object);
+    expect(res.body.data.ordering).toBeInstanceOf(Object);
+
+    const key = Object.keys(res.body.data.ordering)[0];
+    expect(res.body.data.ordering[key]).toBeInstanceOf(Object);
+    expect(res.body.data.ordering[key].status).toBeInstanceOf(Object);
+
+    const status = res.body.data.ordering[key].status;
+    expect(status.key).toEqual('');
+    expect(status.code).toEqual(1);
+    expect(status.message).toEqual('Success');
+
+    if ('payload' in res.body.data.ordering[key]) {
+      expect(res.body.data.ordering[key].payload).toBeInstanceOf(Object);
+      payloadValidator(res.body.data.ordering[key].payload)
+    }
+
+    done();
+  };
+}
+
+let facade: Facade<any>;
 let request: SuperAgentTest;
 
 beforeAll(async () => {
@@ -52,61 +80,94 @@ describe('ordering', () => {
       .post("/graphql")
       .send({
         query: `mutation {
-  Create(
-    input: {
-      totalCount: 1
-      apiKey: { value: "API_KEY" }
-      items: [
-        {
-          id: "TEST"
-          meta: { created: 0, modified: 0, modifiedBy: "modifiedBy", owner: [] }
-          name: "name"
-          description: "description"
-          status: "status"
-          items: []
-          totalPrice: 10
-          totalWeightInKg: 1
-          shippingContactPointId: "shippingContactPointId"
-          billingContactPointId: "billingContactPointId"
+  ordering {
+    Create(
+      input: {
+        totalCount: 1
+        items: [
+          {
+            id: "TEST"
+            meta: {
+              created: 0
+              modified: 0
+              modifiedBy: "modifiedBy"
+              owner: []
+            }
+            name: "name"
+            description: "description"
+            status: "status"
+            items: []
+            totalPrice: 10
+            totalWeightInKg: 1
+            shippingContactPointId: "shippingContactPointId"
+            billingContactPointId: "billingContactPointId"
+          }
+        ]
+        subject: {
+          id: "N/A"
+          scope: "N/A"
+          unauthenticated: false
+          token: "N/A"
         }
-      ]
-    }
-  ) {
-    status {
-      key
-      code
-      message
-    }
-    payload {
-      items {
-        id
-        name
       }
-      totalCount
+    ) {
+      status {
+        key
+        code
+        message
+      }
+      payload {
+        items {
+          id
+          name
+        }
+        totalCount
+      }
     }
   }
 }`,
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
-      .expect(200, done);
+      .expect(200)
+      .end(expectSuccess(done, (payload) => {
+        expect(payload.items).toBeInstanceOf(Array);
+        expect(payload.items).toHaveLength(1);
+        expect(payload.items[0]).toBeInstanceOf(Object);
+        expect(payload.items[0].id).toEqual('TEST');
+        expect(payload.items[0].name).toEqual('name');
+      }));
   });
   it('should delete order', async (done) => {
     request
       .post("/graphql")
       .send({
         query: `mutation {
-  Delete(input: { ids: ["TEST"], apiKey: { value: "API_KEY" } }) {
-    status {
-      key
-      code
-      message
+  ordering {
+    Delete(
+      input: {
+        ids: ["TEST"]
+        collection: false
+        subject: {
+          id: "N/A"
+          scope: "N/A"
+          unauthenticated: false
+          token: "N/A"
+        }
+      }
+    ) {
+      status {
+        key
+        code
+        message
+      }
     }
   }
 }`,
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
-      .expect(200, done);
+      .expect(200)
+      .end(expectSuccess(done));
   });
 });

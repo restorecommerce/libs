@@ -10,7 +10,7 @@ import {
 import {
   metaPackageIoRestorecommerceAttribute
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
-import { GraphQLList, GraphQLObjectType, GraphQLScalarType } from "graphql";
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from "graphql";
 import { getProtoFunction, getProtoFunctions, getTyping, registerPackages } from "../src/gql/protos";
 import { DeleteRequest, Empty, ReadRequest } from "@restorecommerce/rc-grpc-clients";
 import { metaPackageGoogleProtobuf as metaPackageGoogleProtobufEmpty } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/empty";
@@ -54,21 +54,27 @@ describe("proto-meta", () => {
     const fields = (output as GraphQLObjectType).getFields();
 
     for (let key of ['id', 'name', 'description', 'status', 'shippingContactPointId', 'billingContactPointId']) {
-      expect(fields[key].type).toBeInstanceOf(GraphQLScalarType);
-      expect((fields[key].type as GraphQLScalarType).name).toEqual('String')
+      expect(fields[key].type).toBeInstanceOf(GraphQLNonNull);
+      expect((fields[key].type as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLScalarType);
+      expect((fields[key].type as GraphQLNonNull<any>).ofType.name).toEqual('String')
     }
 
-    expect(fields.totalPrice.type).toBeInstanceOf(GraphQLScalarType);
-    expect((fields.totalPrice.type as GraphQLScalarType).name).toEqual('Float')
+    expect(fields.totalPrice.type).toBeInstanceOf(GraphQLNonNull);
+    expect((fields.totalPrice.type as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLScalarType);
+    expect((fields.totalPrice.type as GraphQLNonNull<any>).ofType.name).toEqual('Float')
 
-    expect(fields.totalWeightInKg.type).toBeInstanceOf(GraphQLScalarType);
-    expect((fields.totalWeightInKg.type as GraphQLScalarType).name).toEqual('Float')
+    expect(fields.totalWeightInKg.type).toBeInstanceOf(GraphQLNonNull);
+    expect((fields.totalWeightInKg.type as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLScalarType);
+    expect((fields.totalWeightInKg.type as GraphQLNonNull<any>).ofType.name).toEqual('Float')
 
-    expect(fields.items.type).toBeInstanceOf(GraphQLList);
-    expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect((fields.items.type as GraphQLList<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items').output)
+    expect(fields.items.type).toBeInstanceOf(GraphQLNonNull);
+    expect((fields.items.type as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLList);
+    expect(((fields.items.type as GraphQLNonNull<any>).ofType as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLNonNull);
+    expect((((fields.items.type as GraphQLNonNull<any>).ofType as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLObjectType);
+    expect((((fields.items.type as GraphQLNonNull<any>).ofType as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items').output)
 
-    expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta').output);
+    expect(fields.meta.type).toBeInstanceOf(GraphQLNonNull);
+    expect((fields.meta.type as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.meta.Meta').output);
   });
 
   it('should produce a correct GQL function', () => {

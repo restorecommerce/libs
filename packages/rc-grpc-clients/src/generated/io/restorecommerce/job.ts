@@ -1584,8 +1584,7 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaJobList: { [key in keyof Required<JobList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.job.Job', name:'Job'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaJob: { [key in keyof Required<Job>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
@@ -1642,8 +1641,7 @@ export const metaJobReadRequest: { [key in keyof Required<JobReadRequest>]: Meta
   sort: {meta:'object', type:'.io.restorecommerce.job.JobReadRequest.SortOrder', name:'JobReadRequest_SortOrder'} as MetaO,
   filter: {meta:'object', type:'.io.restorecommerce.job.JobFilter', name:'JobFilter'} as MetaO,
   field: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaO} as MetaA,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaJobFilter: { [key in keyof Required<JobFilter>]: MetaI | string } = {
   jobIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,

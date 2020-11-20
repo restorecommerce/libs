@@ -372,34 +372,21 @@ export const metaTokenData: { [key in keyof Required<TokenData>]: MetaI | string
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
   expiresIn: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaIdentifier: { [key in keyof Required<Identifier>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-}
-export const metaUniqueIdentifier: { [key in keyof Required<UniqueIdentifier>]: MetaI | string } = {
-  uid: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
-}
-export const metaUserCode: { [key in keyof Required<UserCode>]: MetaI | string } = {
-  userCode: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaGrantId: { [key in keyof Required<GrantId>]: MetaI | string } = {
   grantId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
   upsert: {request: {meta:'object', type:'.io.restorecommerce.token.TokenData', name:'TokenData'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TokenData.encode, decodeResponse: Any.decode} as MetaS<TokenData, Any>,
   find: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
-  findByUid: {request: {meta:'object', type:'.io.restorecommerce.token.UniqueIdentifier', name:'UniqueIdentifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UniqueIdentifier.encode, decodeResponse: Any.decode} as MetaS<UniqueIdentifier, Any>,
-  findByUserCode: {request: {meta:'object', type:'.io.restorecommerce.token.UserCode', name:'UserCode'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: UserCode.encode, decodeResponse: Any.decode} as MetaS<UserCode, Any>,
   destroy: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
   revokeByGrantId: {request: {meta:'object', type:'.io.restorecommerce.token.GrantId', name:'GrantId'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: GrantId.encode, decodeResponse: Any.decode} as MetaS<GrantId, Any>,
   consume: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
@@ -407,8 +394,6 @@ export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
 export const metaPackageIoRestorecommerceToken: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
   TokenData: ['message', '.io.restorecommerce.token.TokenData', TokenData, metaTokenData],
   Identifier: ['message', '.io.restorecommerce.token.Identifier', Identifier, metaIdentifier],
-  UniqueIdentifier: ['message', '.io.restorecommerce.token.UniqueIdentifier', UniqueIdentifier, metaUniqueIdentifier],
-  UserCode: ['message', '.io.restorecommerce.token.UserCode', UserCode, metaUserCode],
   GrantId: ['message', '.io.restorecommerce.token.GrantId', GrantId, metaGrantId],
   Service: ['service', '.io.restorecommerce.token.Service', undefined, metaService],
 }

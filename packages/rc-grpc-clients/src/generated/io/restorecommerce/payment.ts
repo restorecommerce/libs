@@ -1324,8 +1324,7 @@ export const metaSetupRequest: { [key in keyof Required<SetupRequest>]: MetaI | 
   cancelReturnUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
   allowGuestCheckout: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaSetupResponse: { [key in keyof Required<SetupResponse>]: MetaI | string } = {
   paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,
@@ -1340,16 +1339,14 @@ export const metaPaymentRequest: { [key in keyof Required<PaymentRequest>]: Meta
   paymentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   payerId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   token: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaCaptureRequest: { [key in keyof Required<CaptureRequest>]: MetaI | string } = {
   provider: {meta:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaO,
   paymentSum: {meta:'builtin', type:'number', original:'int32'} as MetaB,
   currency: {meta:'builtin', type:'string', original:'string'} as MetaB,
   paymentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaPaymentResponse: { [key in keyof Required<PaymentResponse>]: MetaI | string } = {
   paymentErrors: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaO} as MetaA,

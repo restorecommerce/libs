@@ -428,13 +428,13 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaPaymentMethodList: { [key in keyof Required<PaymentMethodList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod', name:'PaymentMethod'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaPaymentMethod: { [key in keyof Required<PaymentMethod>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  paymentMethod: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', name:'PaymentMethod_PaymentMethod'} as MetaO,
+  paymentMethod: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodEnum', name:'PaymentMethodEnum'} as MetaO,
+  transferType: {meta:'object', type:'.io.restorecommerce.payment_method.TransferTypeEnum', name:'TransferTypeEnum'} as MetaO,
   data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
 export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
@@ -445,10 +445,11 @@ export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
   Upsert: {request: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaS<PaymentMethodList, PaymentMethodList>,
 }
 export const metaPackageIoRestorecommercePayment_method: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  PaymentMethodEnum: ['enum', '.io.restorecommerce.payment_method.PaymentMethodEnum', PaymentMethodEnum, undefined],
+  TransferTypeEnum: ['enum', '.io.restorecommerce.payment_method.TransferTypeEnum', TransferTypeEnum, undefined],
   Deleted: ['message', '.io.restorecommerce.payment_method.Deleted', Deleted, metaDeleted],
   PaymentMethodList: ['message', '.io.restorecommerce.payment_method.PaymentMethodList', PaymentMethodList, metaPaymentMethodList],
   PaymentMethod: ['message', '.io.restorecommerce.payment_method.PaymentMethod', PaymentMethod, metaPaymentMethod],
-  PaymentMethod_PaymentMethod: ['enum', '.io.restorecommerce.payment_method.PaymentMethod.PaymentMethod', PaymentMethod_PaymentMethod, undefined],
   Service: ['service', '.io.restorecommerce.payment_method.Service', undefined, metaService],
 }
 type Builtin = Date | Function | Uint8Array | string | number | undefined;

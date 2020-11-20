@@ -239,8 +239,7 @@ export const metaSearchRequest: { [key in keyof Required<SearchRequest>]: MetaI 
   collection: {meta:'builtin', type:'string', original:'string'} as MetaB,
   text: {meta:'builtin', type:'string', original:'string'} as MetaB,
   acl: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaSearchResponse: { [key in keyof Required<SearchResponse>]: MetaI | string } = {
   data: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,

@@ -316,8 +316,7 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaContactPointTypeList: { [key in keyof Required<ContactPointTypeList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointType', name:'ContactPointType'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaContactPointType: { [key in keyof Required<ContactPointType>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

@@ -16,16 +16,21 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  Read?: Maybe<ProtoReadResponse>;
+  ordering?: Maybe<OrderingQuery>;
+};
+
+export type OrderingQuery = {
+  __typename?: 'OrderingQuery';
+  Read?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
 };
 
 
-export type QueryReadArgs = {
-  input?: Maybe<IReadRequest>;
+export type OrderingQueryReadArgs = {
+  input: IReadRequest;
 };
 
-export type ProtoReadResponse = {
-  __typename?: 'ProtoReadResponse';
+export type ProtoIoRestorecommerceOrderOrderList = {
+  __typename?: 'ProtoIoRestorecommerceOrderOrderList';
   status: StatusType;
   payload?: Maybe<OrderList>;
 };
@@ -43,113 +48,90 @@ export type StatusType = {
 
 export type OrderList = {
   __typename?: 'OrderList';
-  items?: Maybe<Array<Maybe<Order>>>;
-  totalCount?: Maybe<Scalars['Int']>;
+  items: Array<Order>;
+  totalCount: Scalars['Int'];
   subject: Subject;
-  apiKey: ApiKey;
 };
 
 export type Order = {
   __typename?: 'Order';
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<Meta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-  items?: Maybe<Array<Maybe<Items>>>;
-  totalPrice?: Maybe<Scalars['Float']>;
-  shippingContactPointId?: Maybe<Scalars['String']>;
-  billingContactPointId?: Maybe<Scalars['String']>;
-  totalWeightInKg?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  meta: Meta;
+  name: Scalars['String'];
+  description: Scalars['String'];
+  status: Scalars['String'];
+  items: Array<Items>;
+  totalPrice: Scalars['Float'];
+  shippingContactPointId: Scalars['String'];
+  billingContactPointId: Scalars['String'];
+  totalWeightInKg: Scalars['Float'];
 };
 
 export type Meta = {
   __typename?: 'Meta';
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<Maybe<Attribute>>>;
+  created: Scalars['Float'];
+  modified: Scalars['Float'];
+  modifiedBy: Scalars['String'];
+  owner: Array<Attribute>;
 };
 
 export type Attribute = {
   __typename?: 'Attribute';
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type Items = {
   __typename?: 'Items';
-  quantityPrice?: Maybe<Scalars['Float']>;
-  item?: Maybe<Item>;
+  quantityPrice: Scalars['Float'];
+  item: Item;
 };
 
 export type Item = {
   __typename?: 'Item';
-  productVariantBundleId?: Maybe<Scalars['String']>;
-  productName?: Maybe<Scalars['String']>;
-  productDescription?: Maybe<Scalars['String']>;
-  manufacturerName?: Maybe<Scalars['String']>;
-  manufacturerDescription?: Maybe<Scalars['String']>;
-  prototypeName?: Maybe<Scalars['String']>;
-  prototypeDescription?: Maybe<Scalars['String']>;
-  quantity?: Maybe<Scalars['Int']>;
-  vat?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Float']>;
-  itemType?: Maybe<Scalars['String']>;
-  taricCode?: Maybe<Scalars['Float']>;
-  stockKeepingUnit?: Maybe<Scalars['String']>;
-  weightInKg?: Maybe<Scalars['Float']>;
-  lengthInCm?: Maybe<Scalars['Int']>;
-  widthInCm?: Maybe<Scalars['Int']>;
-  heightInCm?: Maybe<Scalars['Int']>;
+  productVariantBundleId: Scalars['String'];
+  productName: Scalars['String'];
+  productDescription: Scalars['String'];
+  manufacturerName: Scalars['String'];
+  manufacturerDescription: Scalars['String'];
+  prototypeName: Scalars['String'];
+  prototypeDescription: Scalars['String'];
+  quantity: Scalars['Int'];
+  vat: Scalars['Int'];
+  price: Scalars['Float'];
+  itemType: Scalars['String'];
+  taricCode: Scalars['Float'];
+  stockKeepingUnit: Scalars['String'];
+  weightInKg: Scalars['Float'];
+  lengthInCm: Scalars['Int'];
+  widthInCm: Scalars['Int'];
+  heightInCm: Scalars['Int'];
 };
 
 export type Subject = {
   __typename?: 'Subject';
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<Maybe<RoleAssociation>>>;
-  hierarchicalScopes?: Maybe<Array<Maybe<HierarchicalScope>>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type RoleAssociation = {
-  __typename?: 'RoleAssociation';
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<Maybe<Attribute>>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type HierarchicalScope = {
-  __typename?: 'HierarchicalScope';
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<Maybe<HierarchicalScope>>>;
-  role?: Maybe<Scalars['String']>;
-};
-
-export type ApiKey = {
-  __typename?: 'ApiKey';
-  value?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  scope: Scalars['String'];
+  unauthenticated: Scalars['Boolean'];
+  token: Scalars['String'];
 };
 
 export type IReadRequest = {
-  offset?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<Maybe<ISort>>>;
-  filter?: Maybe<IStruct>;
-  field?: Maybe<Array<Maybe<IFieldFilter>>>;
-  search?: Maybe<Array<Maybe<Scalars['String']>>>;
-  localesLimiter?: Maybe<Array<Maybe<Scalars['String']>>>;
-  customQueries?: Maybe<Array<Maybe<Scalars['String']>>>;
-  customArguments?: Maybe<IAny>;
-  subject?: Maybe<Scalars['TodoScalar']>;
-  apiKey?: Maybe<Scalars['TodoScalar']>;
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+  sort: Array<ISort>;
+  filter: IStruct;
+  field: Array<IFieldFilter>;
+  search: Array<Scalars['String']>;
+  localesLimiter: Array<Scalars['String']>;
+  customQueries: Array<Scalars['String']>;
+  customArguments: IAny;
+  subject: ISubject;
 };
 
 export type ISort = {
-  field?: Maybe<Scalars['String']>;
-  order?: Maybe<Sort_SortOrder>;
+  field: Scalars['String'];
+  order: Sort_SortOrder;
 };
 
 export enum Sort_SortOrder {
@@ -160,190 +142,182 @@ export enum Sort_SortOrder {
 }
 
 export type IStruct = {
-  fields?: Maybe<Scalars['MapScalar']>;
+  fields: Scalars['MapScalar'];
 };
 
 
 export type IFieldFilter = {
-  name?: Maybe<Scalars['String']>;
-  include?: Maybe<Scalars['Boolean']>;
+  name: Scalars['String'];
+  include: Scalars['Boolean'];
 };
 
 export type IAny = {
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  typeUrl: Scalars['String'];
+  value: Scalars['TodoScalar'];
 };
 
+
+export type ISubject = {
+  id: Scalars['String'];
+  scope: Scalars['String'];
+  unauthenticated: Scalars['Boolean'];
+  token: Scalars['String'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
-  Create?: Maybe<ProtoCreateResponse>;
-  Delete?: Maybe<ProtoDeleteResponse>;
-  Update?: Maybe<ProtoUpdateResponse>;
-  Upsert?: Maybe<ProtoUpsertResponse>;
-  TriggerFulfillment?: Maybe<ProtoTriggerFulfillmentResponse>;
+  ordering?: Maybe<OrderingMutation>;
+};
+
+export type OrderingMutation = {
+  __typename?: 'OrderingMutation';
+  Create?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Update?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  Upsert?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  TriggerFulfillment?: Maybe<ProtoIoRestorecommerceOrderFulfillmentResults>;
 };
 
 
-export type MutationCreateArgs = {
-  input?: Maybe<IOrderList>;
+export type OrderingMutationCreateArgs = {
+  input: IOrderList;
 };
 
 
-export type MutationDeleteArgs = {
-  input?: Maybe<IDeleteRequest>;
+export type OrderingMutationDeleteArgs = {
+  input: IDeleteRequest;
 };
 
 
-export type MutationUpdateArgs = {
-  input?: Maybe<IOrderList>;
+export type OrderingMutationUpdateArgs = {
+  input: IOrderList;
 };
 
 
-export type MutationUpsertArgs = {
-  input?: Maybe<IOrderList>;
+export type OrderingMutationUpsertArgs = {
+  input: IOrderList;
 };
 
 
-export type MutationTriggerFulfillmentArgs = {
-  input?: Maybe<IOrderDataList>;
-};
-
-export type ProtoCreateResponse = {
-  __typename?: 'ProtoCreateResponse';
-  status: StatusType;
-  payload?: Maybe<OrderList>;
+export type OrderingMutationTriggerFulfillmentArgs = {
+  input: IOrderDataList;
 };
 
 export type IOrderList = {
-  items?: Maybe<Array<Maybe<IOrder>>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<Scalars['TodoScalar']>;
-  apiKey?: Maybe<Scalars['TodoScalar']>;
+  items: Array<IOrder>;
+  totalCount: Scalars['Int'];
+  subject: ISubject;
 };
 
 export type IOrder = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
-  items?: Maybe<Array<Maybe<IItems>>>;
-  totalPrice?: Maybe<Scalars['Float']>;
-  shippingContactPointId?: Maybe<Scalars['String']>;
-  billingContactPointId?: Maybe<Scalars['String']>;
-  totalWeightInKg?: Maybe<Scalars['Float']>;
+  id: Scalars['String'];
+  meta: IMeta;
+  name: Scalars['String'];
+  description: Scalars['String'];
+  status: Scalars['String'];
+  items: Array<IItems>;
+  totalPrice: Scalars['Float'];
+  shippingContactPointId: Scalars['String'];
+  billingContactPointId: Scalars['String'];
+  totalWeightInKg: Scalars['Float'];
 };
 
 export type IMeta = {
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<Maybe<IAttribute>>>;
+  created: Scalars['Float'];
+  modified: Scalars['Float'];
+  modifiedBy: Scalars['String'];
+  owner: Array<IAttribute>;
 };
 
 export type IAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type IItems = {
-  quantityPrice?: Maybe<Scalars['Float']>;
-  item?: Maybe<IItem>;
+  quantityPrice: Scalars['Float'];
+  item: IItem;
 };
 
 export type IItem = {
-  productVariantBundleId?: Maybe<Scalars['String']>;
-  productName?: Maybe<Scalars['String']>;
-  productDescription?: Maybe<Scalars['String']>;
-  manufacturerName?: Maybe<Scalars['String']>;
-  manufacturerDescription?: Maybe<Scalars['String']>;
-  prototypeName?: Maybe<Scalars['String']>;
-  prototypeDescription?: Maybe<Scalars['String']>;
-  quantity?: Maybe<Scalars['Int']>;
-  vat?: Maybe<Scalars['Int']>;
-  price?: Maybe<Scalars['Float']>;
-  itemType?: Maybe<Scalars['String']>;
-  taricCode?: Maybe<Scalars['Float']>;
-  stockKeepingUnit?: Maybe<Scalars['String']>;
-  weightInKg?: Maybe<Scalars['Float']>;
-  lengthInCm?: Maybe<Scalars['Int']>;
-  widthInCm?: Maybe<Scalars['Int']>;
-  heightInCm?: Maybe<Scalars['Int']>;
+  productVariantBundleId: Scalars['String'];
+  productName: Scalars['String'];
+  productDescription: Scalars['String'];
+  manufacturerName: Scalars['String'];
+  manufacturerDescription: Scalars['String'];
+  prototypeName: Scalars['String'];
+  prototypeDescription: Scalars['String'];
+  quantity: Scalars['Int'];
+  vat: Scalars['Int'];
+  price: Scalars['Float'];
+  itemType: Scalars['String'];
+  taricCode: Scalars['Float'];
+  stockKeepingUnit: Scalars['String'];
+  weightInKg: Scalars['Float'];
+  lengthInCm: Scalars['Int'];
+  widthInCm: Scalars['Int'];
+  heightInCm: Scalars['Int'];
 };
 
-export type ProtoDeleteResponse = {
-  __typename?: 'ProtoDeleteResponse';
+export type ProtoGoogleProtobufEmpty = {
+  __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
 };
 
 export type IDeleteRequest = {
-  collection?: Maybe<Scalars['Boolean']>;
-  ids?: Maybe<Array<Maybe<Scalars['String']>>>;
-  subject?: Maybe<Scalars['TodoScalar']>;
-  apiKey?: Maybe<Scalars['TodoScalar']>;
+  collection: Scalars['Boolean'];
+  ids: Array<Scalars['String']>;
+  subject: ISubject;
 };
 
-export type ProtoUpdateResponse = {
-  __typename?: 'ProtoUpdateResponse';
-  status: StatusType;
-  payload?: Maybe<OrderList>;
-};
-
-export type ProtoUpsertResponse = {
-  __typename?: 'ProtoUpsertResponse';
-  status: StatusType;
-  payload?: Maybe<OrderList>;
-};
-
-export type ProtoTriggerFulfillmentResponse = {
-  __typename?: 'ProtoTriggerFulfillmentResponse';
+export type ProtoIoRestorecommerceOrderFulfillmentResults = {
+  __typename?: 'ProtoIoRestorecommerceOrderFulfillmentResults';
   status: StatusType;
   payload?: Maybe<FulfillmentResults>;
 };
 
 export type FulfillmentResults = {
   __typename?: 'FulfillmentResults';
-  fulfillmentResults?: Maybe<Array<Maybe<ResponseDetailsList>>>;
+  fulfillmentResults: Array<ResponseDetailsList>;
 };
 
 export type ResponseDetailsList = {
   __typename?: 'ResponseDetailsList';
-  Status?: Maybe<OrderStatus>;
-  error?: Maybe<ErrorList>;
+  Status: OrderStatus;
+  error: ErrorList;
 };
 
 export type OrderStatus = {
   __typename?: 'OrderStatus';
-  OrderId?: Maybe<Scalars['String']>;
-  OrderStatus?: Maybe<Scalars['String']>;
+  OrderId: Scalars['String'];
+  OrderStatus: Scalars['String'];
 };
 
 export type ErrorList = {
   __typename?: 'ErrorList';
-  code?: Maybe<Array<Maybe<Scalars['String']>>>;
-  message?: Maybe<Array<Maybe<Scalars['String']>>>;
+  code: Array<Scalars['String']>;
+  message: Array<Scalars['String']>;
 };
 
 export type IOrderDataList = {
-  orderData?: Maybe<Array<Maybe<IOrderData>>>;
-  meta?: Maybe<IMeta>;
+  orderData: Array<IOrderData>;
+  meta: IMeta;
 };
 
 export type IOrderData = {
-  orderId?: Maybe<Scalars['String']>;
-  shipments?: Maybe<Array<Maybe<IShipments>>>;
+  orderId: Scalars['String'];
+  shipments: Array<IShipments>;
 };
 
 export type IShipments = {
-  totalWeightInKg?: Maybe<Scalars['Float']>;
-  individualWeightInKg?: Maybe<Scalars['Float']>;
-  amount?: Maybe<Scalars['Int']>;
-  exportType?: Maybe<Scalars['String']>;
-  exportDescription?: Maybe<Scalars['String']>;
-  customsTariffNumber?: Maybe<Scalars['String']>;
-  invoiceNumber?: Maybe<Scalars['String']>;
-  customsValue?: Maybe<Scalars['Float']>;
+  totalWeightInKg: Scalars['Float'];
+  individualWeightInKg: Scalars['Float'];
+  amount: Scalars['Int'];
+  exportType: Scalars['String'];
+  exportDescription: Scalars['String'];
+  customsTariffNumber: Scalars['String'];
+  invoiceNumber: Scalars['String'];
+  customsValue: Scalars['Float'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -413,7 +387,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
-  ProtoReadResponse: ResolverTypeWrapper<ProtoReadResponse>;
+  OrderingQuery: ResolverTypeWrapper<OrderingQuery>;
+  ProtoIoRestorecommerceOrderOrderList: ResolverTypeWrapper<ProtoIoRestorecommerceOrderOrderList>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
@@ -425,10 +400,7 @@ export type ResolversTypes = ResolversObject<{
   Items: ResolverTypeWrapper<Items>;
   Item: ResolverTypeWrapper<Item>;
   Subject: ResolverTypeWrapper<Subject>;
-  RoleAssociation: ResolverTypeWrapper<RoleAssociation>;
-  HierarchicalScope: ResolverTypeWrapper<HierarchicalScope>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ApiKey: ResolverTypeWrapper<ApiKey>;
   IReadRequest: IReadRequest;
   ISort: ISort;
   Sort_SortOrder: Sort_SortOrder;
@@ -437,19 +409,18 @@ export type ResolversTypes = ResolversObject<{
   IFieldFilter: IFieldFilter;
   IAny: IAny;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  ISubject: ISubject;
   Mutation: ResolverTypeWrapper<{}>;
-  ProtoCreateResponse: ResolverTypeWrapper<ProtoCreateResponse>;
+  OrderingMutation: ResolverTypeWrapper<OrderingMutation>;
   IOrderList: IOrderList;
   IOrder: IOrder;
   IMeta: IMeta;
   IAttribute: IAttribute;
   IItems: IItems;
   IItem: IItem;
-  ProtoDeleteResponse: ResolverTypeWrapper<ProtoDeleteResponse>;
+  ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IDeleteRequest: IDeleteRequest;
-  ProtoUpdateResponse: ResolverTypeWrapper<ProtoUpdateResponse>;
-  ProtoUpsertResponse: ResolverTypeWrapper<ProtoUpsertResponse>;
-  ProtoTriggerFulfillmentResponse: ResolverTypeWrapper<ProtoTriggerFulfillmentResponse>;
+  ProtoIoRestorecommerceOrderFulfillmentResults: ResolverTypeWrapper<ProtoIoRestorecommerceOrderFulfillmentResults>;
   FulfillmentResults: ResolverTypeWrapper<FulfillmentResults>;
   ResponseDetailsList: ResolverTypeWrapper<ResponseDetailsList>;
   OrderStatus: ResolverTypeWrapper<OrderStatus>;
@@ -462,7 +433,8 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
-  ProtoReadResponse: ProtoReadResponse;
+  OrderingQuery: OrderingQuery;
+  ProtoIoRestorecommerceOrderOrderList: ProtoIoRestorecommerceOrderOrderList;
   StatusType: StatusType;
   String: Scalars['String'];
   Int: Scalars['Int'];
@@ -474,10 +446,7 @@ export type ResolversParentTypes = ResolversObject<{
   Items: Items;
   Item: Item;
   Subject: Subject;
-  RoleAssociation: RoleAssociation;
-  HierarchicalScope: HierarchicalScope;
   Boolean: Scalars['Boolean'];
-  ApiKey: ApiKey;
   IReadRequest: IReadRequest;
   ISort: ISort;
   IStruct: IStruct;
@@ -485,19 +454,18 @@ export type ResolversParentTypes = ResolversObject<{
   IFieldFilter: IFieldFilter;
   IAny: IAny;
   TodoScalar: Scalars['TodoScalar'];
+  ISubject: ISubject;
   Mutation: {};
-  ProtoCreateResponse: ProtoCreateResponse;
+  OrderingMutation: OrderingMutation;
   IOrderList: IOrderList;
   IOrder: IOrder;
   IMeta: IMeta;
   IAttribute: IAttribute;
   IItems: IItems;
   IItem: IItem;
-  ProtoDeleteResponse: ProtoDeleteResponse;
+  ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
   IDeleteRequest: IDeleteRequest;
-  ProtoUpdateResponse: ProtoUpdateResponse;
-  ProtoUpsertResponse: ProtoUpsertResponse;
-  ProtoTriggerFulfillmentResponse: ProtoTriggerFulfillmentResponse;
+  ProtoIoRestorecommerceOrderFulfillmentResults: ProtoIoRestorecommerceOrderFulfillmentResults;
   FulfillmentResults: FulfillmentResults;
   ResponseDetailsList: ResponseDetailsList;
   OrderStatus: OrderStatus;
@@ -508,10 +476,15 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type QueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoReadResponse']>, ParentType, ContextType, RequireFields<QueryReadArgs, never>>;
+  ordering?: Resolver<Maybe<ResolversTypes['OrderingQuery']>, ParentType, ContextType>;
 }>;
 
-export type ProtoReadResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoReadResponse'] = ResolversParentTypes['ProtoReadResponse']> = ResolversObject<{
+export type OrderingQueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingQuery'] = ResolversParentTypes['OrderingQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingQueryReadArgs, 'input'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoIoRestorecommerceOrderOrderListResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrderOrderList'] = ResolversParentTypes['ProtoIoRestorecommerceOrderOrderList']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -525,94 +498,72 @@ export type StatusTypeResolvers<ContextType = OrderingContext, ParentType extend
 }>;
 
 export type OrderListResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderList'] = ResolversParentTypes['OrderList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Order']>>>, ParentType, ContextType>;
-  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   subject?: Resolver<ResolversTypes['Subject'], ParentType, ContextType>;
-  apiKey?: Resolver<ResolversTypes['ApiKey'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type OrderResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<ResolversTypes['Meta']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  items?: Resolver<Maybe<Array<Maybe<ResolversTypes['Items']>>>, ParentType, ContextType>;
-  totalPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  shippingContactPointId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  billingContactPointId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  totalWeightInKg?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  meta?: Resolver<ResolversTypes['Meta'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  items?: Resolver<Array<ResolversTypes['Items']>, ParentType, ContextType>;
+  totalPrice?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  shippingContactPointId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  billingContactPointId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  totalWeightInKg?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type MetaResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Meta'] = ResolversParentTypes['Meta']> = ResolversObject<{
-  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  owner?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attribute']>>>, ParentType, ContextType>;
+  created?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  modified?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  modifiedBy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  owner?: Resolver<Array<ResolversTypes['Attribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AttributeResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Attribute'] = ResolversParentTypes['Attribute']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ItemsResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Items'] = ResolversParentTypes['Items']> = ResolversObject<{
-  quantityPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  item?: Resolver<Maybe<ResolversTypes['Item']>, ParentType, ContextType>;
+  quantityPrice?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  item?: Resolver<ResolversTypes['Item'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ItemResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Item'] = ResolversParentTypes['Item']> = ResolversObject<{
-  productVariantBundleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  productName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  productDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  manufacturerName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  manufacturerDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  prototypeName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  prototypeDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  vat?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  itemType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  taricCode?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  weightInKg?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  lengthInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  widthInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  heightInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  productVariantBundleId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  productName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  productDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  manufacturerName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  manufacturerDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  prototypeName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  prototypeDescription?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  vat?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  itemType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  taricCode?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  stockKeepingUnit?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  weightInKg?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  lengthInCm?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  widthInCm?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  heightInCm?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SubjectResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Subject'] = ResolversParentTypes['Subject']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  scope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  roleAssociations?: Resolver<Maybe<Array<Maybe<ResolversTypes['RoleAssociation']>>>, ParentType, ContextType>;
-  hierarchicalScopes?: Resolver<Maybe<Array<Maybe<ResolversTypes['HierarchicalScope']>>>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type RoleAssociationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['RoleAssociation'] = ResolversParentTypes['RoleAssociation']> = ResolversObject<{
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attributes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Attribute']>>>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type HierarchicalScopeResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['HierarchicalScope'] = ResolversParentTypes['HierarchicalScope']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  children?: Resolver<Maybe<Array<Maybe<ResolversTypes['HierarchicalScope']>>>, ParentType, ContextType>;
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ApiKeyResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ApiKey'] = ResolversParentTypes['ApiKey']> = ResolversObject<{
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  scope?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  unauthenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -627,68 +578,56 @@ export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<Resolver
 }
 
 export type MutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoCreateResponse']>, ParentType, ContextType, RequireFields<MutationCreateArgs, never>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoDeleteResponse']>, ParentType, ContextType, RequireFields<MutationDeleteArgs, never>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoUpdateResponse']>, ParentType, ContextType, RequireFields<MutationUpdateArgs, never>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoUpsertResponse']>, ParentType, ContextType, RequireFields<MutationUpsertArgs, never>>;
-  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoTriggerFulfillmentResponse']>, ParentType, ContextType, RequireFields<MutationTriggerFulfillmentArgs, never>>;
+  ordering?: Resolver<Maybe<ResolversTypes['OrderingMutation']>, ParentType, ContextType>;
 }>;
 
-export type ProtoCreateResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoCreateResponse'] = ResolversParentTypes['ProtoCreateResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
+export type OrderingMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingMutation'] = ResolversParentTypes['OrderingMutation']> = ResolversObject<{
+  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationCreateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OrderingMutationDeleteArgs, 'input'>>;
+  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpdateArgs, 'input'>>;
+  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpsertArgs, 'input'>>;
+  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderFulfillmentResults']>, ParentType, ContextType, RequireFields<OrderingMutationTriggerFulfillmentArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoDeleteResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoDeleteResponse'] = ResolversParentTypes['ProtoDeleteResponse']> = ResolversObject<{
+export type ProtoGoogleProtobufEmptyResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoGoogleProtobufEmpty'] = ResolversParentTypes['ProtoGoogleProtobufEmpty']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoUpdateResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoUpdateResponse'] = ResolversParentTypes['ProtoUpdateResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ProtoUpsertResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoUpsertResponse'] = ResolversParentTypes['ProtoUpsertResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['OrderList']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ProtoTriggerFulfillmentResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoTriggerFulfillmentResponse'] = ResolversParentTypes['ProtoTriggerFulfillmentResponse']> = ResolversObject<{
+export type ProtoIoRestorecommerceOrderFulfillmentResultsResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrderFulfillmentResults'] = ResolversParentTypes['ProtoIoRestorecommerceOrderFulfillmentResults']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   payload?: Resolver<Maybe<ResolversTypes['FulfillmentResults']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type FulfillmentResultsResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['FulfillmentResults'] = ResolversParentTypes['FulfillmentResults']> = ResolversObject<{
-  fulfillmentResults?: Resolver<Maybe<Array<Maybe<ResolversTypes['ResponseDetailsList']>>>, ParentType, ContextType>;
+  fulfillmentResults?: Resolver<Array<ResolversTypes['ResponseDetailsList']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResponseDetailsListResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ResponseDetailsList'] = ResolversParentTypes['ResponseDetailsList']> = ResolversObject<{
-  Status?: Resolver<Maybe<ResolversTypes['OrderStatus']>, ParentType, ContextType>;
-  error?: Resolver<Maybe<ResolversTypes['ErrorList']>, ParentType, ContextType>;
+  Status?: Resolver<ResolversTypes['OrderStatus'], ParentType, ContextType>;
+  error?: Resolver<ResolversTypes['ErrorList'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type OrderStatusResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderStatus'] = ResolversParentTypes['OrderStatus']> = ResolversObject<{
-  OrderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  OrderStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  OrderId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  OrderStatus?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ErrorListResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ErrorList'] = ResolversParentTypes['ErrorList']> = ResolversObject<{
-  code?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
-  message?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  code?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  message?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
-  ProtoReadResponse?: ProtoReadResponseResolvers<ContextType>;
+  OrderingQuery?: OrderingQueryResolvers<ContextType>;
+  ProtoIoRestorecommerceOrderOrderList?: ProtoIoRestorecommerceOrderOrderListResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   OrderList?: OrderListResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
@@ -697,18 +636,13 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   Items?: ItemsResolvers<ContextType>;
   Item?: ItemResolvers<ContextType>;
   Subject?: SubjectResolvers<ContextType>;
-  RoleAssociation?: RoleAssociationResolvers<ContextType>;
-  HierarchicalScope?: HierarchicalScopeResolvers<ContextType>;
-  ApiKey?: ApiKeyResolvers<ContextType>;
   Sort_SortOrder?: Sort_SortOrderResolvers;
   MapScalar?: GraphQLScalarType;
   TodoScalar?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
-  ProtoCreateResponse?: ProtoCreateResponseResolvers<ContextType>;
-  ProtoDeleteResponse?: ProtoDeleteResponseResolvers<ContextType>;
-  ProtoUpdateResponse?: ProtoUpdateResponseResolvers<ContextType>;
-  ProtoUpsertResponse?: ProtoUpsertResponseResolvers<ContextType>;
-  ProtoTriggerFulfillmentResponse?: ProtoTriggerFulfillmentResponseResolvers<ContextType>;
+  OrderingMutation?: OrderingMutationResolvers<ContextType>;
+  ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
+  ProtoIoRestorecommerceOrderFulfillmentResults?: ProtoIoRestorecommerceOrderFulfillmentResultsResolvers<ContextType>;
   FulfillmentResults?: FulfillmentResultsResolvers<ContextType>;
   ResponseDetailsList?: ResponseDetailsListResolvers<ContextType>;
   OrderStatus?: OrderStatusResolvers<ContextType>;

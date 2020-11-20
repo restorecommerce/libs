@@ -1119,8 +1119,7 @@ export const metaTraversalRequest: { [key in keyof Required<TraversalRequest>]: 
   data: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   path: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   aql: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaTraversalRequest_StartVertices: { [key in keyof Required<TraversalRequest_StartVertices>]: MetaI | string } = {
   vertices: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
@@ -1131,10 +1130,9 @@ export const metaTraversalResponse: { [key in keyof Required<TraversalResponse>]
   data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
 export const metaVertexFields: { [key in keyof Required<VertexFields>]: MetaI | string } = {
-  aid: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  Key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  Rev: {meta:'builtin', type:'string', original:'string'} as MetaB,
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  rev: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }
 export const metaOptions: { [key in keyof Required<Options>]: MetaI | string } = {
   sort: {meta:'builtin', type:'string', original:'string'} as MetaB,

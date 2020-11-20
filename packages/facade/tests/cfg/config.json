@@ -26,16 +26,11 @@
   "ordering": {
     "client": {
       "address": "127.0.0.1:50065"
-    },
-    "methods": {
-      "whitelist": [
-        "Read",
-        "Create",
-        "Delete",
-        "Update",
-        "Upsert",
-        "TriggerFulfillment"
-      ]
+    }
+  },
+  "payment": {
+    "client": {
+      "address": "127.0.0.1:50078"
     }
   }
 }

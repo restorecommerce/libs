@@ -192,6 +192,47 @@ export interface ServerReflection {
 
 }
 
+export interface MetaI {
+  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+}
+
+export interface MetaO extends MetaI {
+  readonly meta: 'object';
+  readonly type: string;
+  readonly name: string;
+}
+
+export interface MetaA extends MetaI {
+  readonly meta: 'array';
+  readonly type: MetaI | string;
+}
+
+export interface MetaM extends MetaI {
+  readonly meta: 'map';
+  readonly key: string;
+  readonly value: MetaI | string;
+}
+
+export interface MetaU extends MetaI {
+  readonly meta: 'union';
+  readonly choices: Array<MetaI | string | undefined>;
+}
+
+export interface MetaS<T, R> {
+  readonly request: MetaO;
+  readonly response: MetaO;
+  readonly clientStreaming: boolean;
+  readonly serverStreaming: boolean;
+  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
+  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
+}
+
+export interface MetaB extends MetaI {
+  readonly meta: 'builtin';
+  readonly type: string;
+  readonly original: string;
+}
+
 export const protobufPackage = 'grpc.reflection.v1alpha'
 
 export const ServerReflectionRequest = {
@@ -836,6 +877,58 @@ export const ErrorResponse = {
   },
 };
 
+export const metaServerReflectionRequest: { [key in keyof Required<ServerReflectionRequest>]: MetaI | string } = {
+  host: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  fileByFilename: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+  fileContainingSymbol: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+  fileContainingExtension: {meta:'union', choices: [undefined, {meta:'object', type:'.grpc.reflection.v1alpha.ExtensionRequest', name:'ExtensionRequest'} as MetaO]} as MetaU,
+  allExtensionNumbersOfType: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+  listServices: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
+}
+export const metaExtensionRequest: { [key in keyof Required<ExtensionRequest>]: MetaI | string } = {
+  containingType: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  extensionNumber: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+}
+export const metaServerReflectionResponse: { [key in keyof Required<ServerReflectionResponse>]: MetaI | string } = {
+  validHost: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  originalRequest: {meta:'object', type:'.grpc.reflection.v1alpha.ServerReflectionRequest', name:'ServerReflectionRequest'} as MetaO,
+  fileDescriptorResponse: {meta:'union', choices: [undefined, {meta:'object', type:'.grpc.reflection.v1alpha.FileDescriptorResponse', name:'FileDescriptorResponse'} as MetaO]} as MetaU,
+  allExtensionNumbersResponse: {meta:'union', choices: [undefined, {meta:'object', type:'.grpc.reflection.v1alpha.ExtensionNumberResponse', name:'ExtensionNumberResponse'} as MetaO]} as MetaU,
+  listServicesResponse: {meta:'union', choices: [undefined, {meta:'object', type:'.grpc.reflection.v1alpha.ListServiceResponse', name:'ListServiceResponse'} as MetaO]} as MetaU,
+  errorResponse: {meta:'union', choices: [undefined, {meta:'object', type:'.grpc.reflection.v1alpha.ErrorResponse', name:'ErrorResponse'} as MetaO]} as MetaU,
+}
+export const metaFileDescriptorResponse: { [key in keyof Required<FileDescriptorResponse>]: MetaI | string } = {
+  fileDescriptorProto: {meta:'array', type:{meta:'builtin', type:'Buffer', original:'bytes'} as MetaB} as MetaA,
+}
+export const metaExtensionNumberResponse: { [key in keyof Required<ExtensionNumberResponse>]: MetaI | string } = {
+  baseTypeName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  extensionNumber: {meta:'array', type:{meta:'builtin', type:'number', original:'int32'} as MetaB} as MetaA,
+}
+export const metaListServiceResponse: { [key in keyof Required<ListServiceResponse>]: MetaI | string } = {
+  service: {meta:'array', type:{meta:'object', type:'.grpc.reflection.v1alpha.ServiceResponse', name:'ServiceResponse'} as MetaO} as MetaA,
+}
+export const metaServiceResponse: { [key in keyof Required<ServiceResponse>]: MetaI | string } = {
+  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  label: {meta:'builtin', type:'string', original:'string'} as MetaB,
+}
+export const metaErrorResponse: { [key in keyof Required<ErrorResponse>]: MetaI | string } = {
+  errorCode: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+  errorMessage: {meta:'builtin', type:'string', original:'string'} as MetaB,
+}
+export const metaServerReflection: { [key in keyof ServerReflection]: MetaS<any, any> } = {
+  ServerReflectionInfo: {request: {meta:'object', type:'.grpc.reflection.v1alpha.ServerReflectionRequest', name:'ServerReflectionRequest'} as MetaO, response: {meta:'object', type:'.grpc.reflection.v1alpha.ServerReflectionResponse', name:'ServerReflectionResponse'} as MetaO, clientStreaming: true, serverStreaming: true, encodeRequest: ServerReflectionRequest.encode, decodeResponse: ServerReflectionResponse.decode} as MetaS<ServerReflectionRequest, ServerReflectionResponse>,
+}
+export const metaPackageGrpcReflectionV1alpha: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+  ServerReflectionRequest: ['message', '.grpc.reflection.v1alpha.ServerReflectionRequest', ServerReflectionRequest, metaServerReflectionRequest],
+  ExtensionRequest: ['message', '.grpc.reflection.v1alpha.ExtensionRequest', ExtensionRequest, metaExtensionRequest],
+  ServerReflectionResponse: ['message', '.grpc.reflection.v1alpha.ServerReflectionResponse', ServerReflectionResponse, metaServerReflectionResponse],
+  FileDescriptorResponse: ['message', '.grpc.reflection.v1alpha.FileDescriptorResponse', FileDescriptorResponse, metaFileDescriptorResponse],
+  ExtensionNumberResponse: ['message', '.grpc.reflection.v1alpha.ExtensionNumberResponse', ExtensionNumberResponse, metaExtensionNumberResponse],
+  ListServiceResponse: ['message', '.grpc.reflection.v1alpha.ListServiceResponse', ListServiceResponse, metaListServiceResponse],
+  ServiceResponse: ['message', '.grpc.reflection.v1alpha.ServiceResponse', ServiceResponse, metaServiceResponse],
+  ErrorResponse: ['message', '.grpc.reflection.v1alpha.ErrorResponse', ErrorResponse, metaErrorResponse],
+  ServerReflection: ['service', '.grpc.reflection.v1alpha.ServerReflection', undefined, metaServerReflection],
+}
 interface WindowBase64 {
   atob(b64: string): string;
   btoa(bin: string): string;

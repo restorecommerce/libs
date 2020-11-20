@@ -253,8 +253,7 @@ export const CommandResponse = {
 export const metaCommandRequest: { [key in keyof Required<CommandRequest>]: MetaI | string } = {
   name: {meta:'builtin', type:'string', original:'string'} as MetaB,
   payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaCommandResponse: { [key in keyof Required<CommandResponse>]: MetaI | string } = {
   services: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,

@@ -271,8 +271,7 @@ export const Courier = {
 export const metaCourierList: { [key in keyof Required<CourierList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment_courier.Courier', name:'Courier'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaCourier: { [key in keyof Required<Courier>]: MetaI | string } = {
   name: {meta:'builtin', type:'string', original:'string'} as MetaB,

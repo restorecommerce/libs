@@ -447,8 +447,7 @@ export const metaProductCategory: { [key in keyof Required<ProductCategory>]: Me
 export const metaProductCategoryList: { [key in keyof Required<ProductCategoryList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.product_category.ProductCategory', name:'ProductCategory'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

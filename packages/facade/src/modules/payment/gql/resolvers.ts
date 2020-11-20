@@ -1,16 +1,16 @@
 import { Resolvers } from './schema.generated';
-import { OrderingContext } from "../interfaces";
+import { PaymentContext } from "../interfaces";
 import { generateResolver, getGQLResolverFunctions, registerResolverFunction } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceOrder,
+  metaPackageIoRestorecommercePayment,
   metaService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/payment";
 import { mutations, queries } from "./utils";
-import { OrderingSrvGrpcClient } from "../grpc";
+import { PaymentSrvGrpcClient } from "../grpc";
 
-const namespace = 'ordering';
+const namespace = 'payment';
 
-const func = getGQLResolverFunctions<OrderingSrvGrpcClient, OrderingContext>(metaService, metaPackageIoRestorecommerceOrder, namespace, namespace);
+const func = getGQLResolverFunctions<PaymentSrvGrpcClient, PaymentContext>(metaService, metaPackageIoRestorecommercePayment, namespace, namespace);
 
 Object.keys(func).forEach(key => {
   registerResolverFunction(namespace, key, func[key], !queries.has(key) && mutations.has(key));

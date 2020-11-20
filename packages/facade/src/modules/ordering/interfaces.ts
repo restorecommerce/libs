@@ -1,12 +1,12 @@
 import { OrderingSrvGrpcClient } from "./grpc";
-import { FacadeModule } from "../../facade";
 import { ServiceConfig } from "../../gql/protos";
+import { FacadeModule, FacadeContext } from "../../interfaces";
 
 export interface OrderingConfig {
   config: ServiceConfig;
 }
 
-export interface OrderingContext {
+export interface OrderingContext extends FacadeContext {
   ordering: {
     client: OrderingSrvGrpcClient;
   }

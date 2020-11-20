@@ -31,6 +31,10 @@ const TodoScalar = new GraphQLScalarType({
   }
 });
 
+export const clearRegistry = () => {
+  registeredTypings.clear();
+}
+
 export const registerPackages = (...packs: MetaP[]) => {
   packs.forEach(pack => {
     for (let key of Object.keys(pack)) {
@@ -53,7 +57,8 @@ export const registerTyping = <T>(
   inputOpts: Omit<Readonly<GraphQLInputObjectTypeConfig>, 'fields'>,
 ) => {
   if (registeredTypings.has(type)) {
-    throw new Error("Typings for object are already registered");
+    // TODO Log debug "Typings for object are already registered"
+    return;
   }
 
   const fields = (): GraphQLFieldConfigMap<any, any> => {
@@ -62,7 +67,7 @@ export const registerTyping = <T>(
       // @ts-ignore
       const value = typings[key];
       result[key] = {
-        type: resolveMeta(key, value, type, opts.name, false) as GraphQLOutputType
+        type: GraphQLNonNull(resolveMeta(key, value, type, opts.name, false) as GraphQLOutputType)
       };
     }
     return result;
@@ -74,7 +79,7 @@ export const registerTyping = <T>(
       // @ts-ignore
       const value = typings[key];
       result[key] = {
-        type: resolveMeta(key, value, type, opts.name, true) as GraphQLInputType
+        type: GraphQLNonNull(resolveMeta(key, value, type, opts.name, true) as GraphQLInputType)
       };
     }
     return result;
@@ -104,6 +109,11 @@ export const registerEnumTyping = <T = { [key: string]: any }>(
   pack: MetaP,
   opts: Omit<Readonly<GraphQLEnumTypeConfig>, 'values'>
 ) => {
+  if (registeredTypings.has(type)) {
+    // TODO Log debug "Typings for enum are already registered"
+    return;
+  }
+
   const values: GraphQLEnumValueConfigMap = {};
 
   for (const key of Object.keys(obj)) {
@@ -156,7 +166,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
 
           return registeredTypings.get(objType)!.input
         case "array":
-          return GraphQLList(resolveMeta(key, (obj as MetaA).type, rootObjType, objName, input))
+          return GraphQLList(GraphQLNonNull(resolveMeta(key, (obj as MetaA).type, rootObjType, objName, input)))
         case "map":
           // TODO
           return MapScalar;

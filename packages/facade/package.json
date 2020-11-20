@@ -81,8 +81,7 @@
     "test:watch": "jest --watch",
     "dev:serve": "TS_NODE_PROJECT=tsconfig.test.json nodemon -e ts,hbs -w ./tests -w ./src -x node --inspect=7000 -r ts-node/register tests/server.ts",
     "generate": "ts-node --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
-    "prepublishOnly": "npm run build",
-    "postinstall": "bash ./fix-graphql.sh"
+    "prepublishOnly": "npm run build"
   },
   "engines": {
     "node": ">= 12.18.0"

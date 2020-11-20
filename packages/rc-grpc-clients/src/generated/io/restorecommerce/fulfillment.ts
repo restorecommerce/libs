@@ -2974,14 +2974,12 @@ export const ErrorList = {
 
 export const metaOrderId: { [key in keyof Required<OrderId>]: MetaI | string } = {
   orderId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaTrackingNumber: { [key in keyof Required<TrackingNumber>]: MetaI | string } = {
   orderId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   shipmentType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaStatus: { [key in keyof Required<Status>]: MetaI | string } = {
   Status: {meta:'builtin', type:'string', original:'string'} as MetaB,
@@ -3032,8 +3030,7 @@ export const metaLabels: { [key in keyof Required<Labels>]: MetaI | string } = {
 }
 export const metashipmentOrderLists: { [key in keyof Required<shipmentOrderLists>]: MetaI | string } = {
   ShipmentOrder: {meta:'object', type:'.io.restorecommerce.fulfillment.ShipmentOrder', name:'ShipmentOrder'} as MetaO,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaShipmentOrder: { [key in keyof Required<ShipmentOrder>]: MetaI | string } = {
   fulfillmentList: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment.FulfillmentList', name:'FulfillmentList'} as MetaO} as MetaA,
@@ -3122,8 +3119,7 @@ export const metaResponseDetailsList: { [key in keyof Required<ResponseDetailsLi
 export const metaFulfillmentStatus: { [key in keyof Required<FulfillmentStatus>]: MetaI | string } = {
   OrderId: {meta:'builtin', type:'string', original:'string'} as MetaB,
   OrderStatus: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaError: { [key in keyof Required<Error>]: MetaI | string } = {
   code: {meta:'builtin', type:'string', original:'string'} as MetaB,

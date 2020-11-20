@@ -857,8 +857,7 @@ export const metaRuleRQ: { [key in keyof Required<RuleRQ>]: MetaI | string } = {
 export const metaRuleList: { [key in keyof Required<RuleList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.Rule', name:'Rule'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaContextQuery: { [key in keyof Required<ContextQuery>]: MetaI | string } = {
   filters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.ContextQuery.Filter', name:'ContextQuery_Filter'} as MetaO} as MetaA,

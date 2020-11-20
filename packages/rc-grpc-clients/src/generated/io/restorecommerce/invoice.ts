@@ -1369,8 +1369,7 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaInvoiceList: { [key in keyof Required<InvoiceList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.Invoice', name:'Invoice'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaInvoice: { [key in keyof Required<Invoice>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
@@ -1396,6 +1395,7 @@ export const metaInvoicePositions: { [key in keyof Required<InvoicePositions>]: 
   senderBillingAddress: {meta:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaO,
   recipientOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
   senderOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
+  paymentMethodDetails: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
 }
 export const metaRecipientCustomer: { [key in keyof Required<RecipientCustomer>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

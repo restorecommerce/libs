@@ -1,9 +1,11 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLResolveInfo } from "graphql";
-import { GraphQLFieldConfig, GraphQLFieldConfigMap } from "graphql/type/definition";
+import { GraphQLNonNull, GraphQLObjectType, GraphQLResolveInfo, GraphQLSchema } from "graphql";
+import { GraphQLFieldConfig, GraphQLFieldConfigMap, Thunk } from "graphql/type/definition";
 import { GrpcService } from "@restorecommerce/grpc-client";
 import { StatusType } from "../";
 import { MetaP, MetaPS, MetaS, ServiceConfig } from "./types";
 import { getTyping } from "./registry";
+
+const typeCache = new Map<string, GraphQLObjectType>();
 
 export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, TContext>
 (service: { [key in keyof T]: MetaS<any, any> }, method: M): GraphQLFieldConfig<TSource, TContext> => {
@@ -26,10 +28,16 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
     }
   }
 
-  const out = new GraphQLObjectType({
-    name: "Proto" + method + "Response",
-    fields,
-  });
+  const outName = "Proto" + m.response.type.replace(/(?:\.|^)(\w)/g, v => v.toUpperCase()).replace(/\./g, '');
+
+  let out = typeCache.get(outName);
+  if (!out) {
+    out = new GraphQLObjectType({
+      name: outName,
+      fields,
+    });
+    typeCache.set(outName, out);
+  }
 
   const typing = getTyping(m.request.type);
   if (!typing) {
@@ -40,16 +48,16 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
     type: out,
     args: m.request.type === '.google.protobuf.Empty' ? undefined : {
       input: {
-        type: typing.input!
+        type: GraphQLNonNull(typing.input!)
       }
     }
   }
 }
 
 export const getGQLSchemas = <T extends GrpcService, TSource, TContext, B extends keyof T>(
-  service: { [key in keyof T]: MetaS<any, any> }, filter: (service: B) => boolean):
+  service: { [key in keyof T]: MetaS<any, any> }):
   GraphQLFieldConfigMap<TSource, TContext> => {
-  return Object.keys(service).filter(filter as any).reduce((obj, methodName) => {
+  return Object.keys(service).reduce((obj, methodName) => {
     obj[methodName] = getGQLSchema(service, methodName);
     return obj;
   }, {} as any)
@@ -70,10 +78,10 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 };
 
 export const getGQLResolverFunctions =
-  <T extends Record<string, any>, Context extends ServiceClient<Context, keyof Context, T>, Service = any, Result = ResolverFn<any, any, ServiceClient<Context, keyof Context, T>, any>, B extends keyof T = any, C extends keyof T[B] = any>
-  (meta: { [key in keyof Service]: MetaS<any, any> }, pack: MetaP, key: keyof Context, serviceKey: B, filter: (service: C) => boolean): { [key in keyof Service]: Result } => {
-    return Object.keys(meta).filter(filter as any).reduce((obj, method) => {
-      (obj as any)[method] = async (_: any, args: any, context: ServiceClient<Context, keyof Context, T>) => {
+  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, Service = any, Result = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, C extends keyof T[B] = any>
+  (meta: { [key in keyof Service]: MetaS<any, any> }, pack: MetaP, key: keyof CTX, serviceKey: B): { [key in keyof Service]: Result } => {
+    return Object.keys(meta).reduce((obj, method) => {
+      (obj as any)[method] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
         const serviceMethod = (meta as any)[method] as MetaS<any, any>;
@@ -111,9 +119,106 @@ export const getGQLResolverFunctions =
     }, {} as { [key in keyof Service]: Result })
   }
 
-export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<any, any> } = any, T = any, Key extends keyof M = any>(metaService: M, queries: Key[], config: ServiceConfig): { queries: Set<Key>, mutations: Set<Key> } => {
-  const mut: Set<Key> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) < 0) as any)
-  const que: Set<Key> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) >= 0) as any)
+const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverFn<any, any, ServiceClient<any, any, any>, any>>>>();
+
+export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
+(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, mutation: boolean = false) => {
+  if (!namespaceResolverRegistry.has(namespace)) {
+    namespaceResolverRegistry.set(namespace, new Map());
+  }
+
+  if (!namespaceResolverRegistry.get(namespace)!.has(mutation)) {
+    namespaceResolverRegistry.get(namespace)!.set(mutation, new Map());
+  }
+
+  if (namespaceResolverRegistry.get(namespace)!.get(mutation)!.has(name)) {
+    throw new Error(`Namespace "${namespace}" already contains a function: ${name} (mutation: ${mutation})`);
+  }
+
+  namespaceResolverRegistry.get(namespace)!.get(mutation)!.set(name, func);
+}
+
+export const generateResolver = (namespace: string) => {
+  if (!namespaceResolverRegistry.has(namespace)) {
+    throw new Error(`Namespace "${namespace}" has no registered functions`)
+  }
+
+  const resolvers: any = {};
+
+  if (namespaceResolverRegistry.get(namespace)!.has(false)) {
+    resolvers.Query = {
+      [namespace]: () => Object.fromEntries(namespaceResolverRegistry.get(namespace)!.get(false)!)
+    };
+  }
+
+  if (namespaceResolverRegistry.get(namespace)!.has(true)) {
+    resolvers.Mutation = {
+      [namespace]: () => Object.fromEntries(namespaceResolverRegistry.get(namespace)!.get(true)!)
+    };
+  }
+
+  return resolvers;
+}
+
+const namespaceResolverSchemaRegistry = new Map<string, Map<boolean, Map<string, Thunk<GraphQLFieldConfig<any, any>>>>>();
+
+export const registerResolverSchema = (namespace: string, name: string, schema: Thunk<GraphQLFieldConfig<any, any>>, mutation: boolean = false) => {
+  if (!namespaceResolverSchemaRegistry.has(namespace)) {
+    namespaceResolverSchemaRegistry.set(namespace, new Map());
+  }
+
+  if (!namespaceResolverSchemaRegistry.get(namespace)!.has(mutation)) {
+    namespaceResolverSchemaRegistry.get(namespace)!.set(mutation, new Map());
+  }
+
+  if (namespaceResolverSchemaRegistry.get(namespace)!.get(mutation)!.has(name)) {
+    throw new Error(`Namespace "${namespace}" already contains a schema: ${name} (mutation: ${mutation})`);
+  }
+
+  namespaceResolverSchemaRegistry.get(namespace)!.get(mutation)!.set(name, schema);
+}
+
+export const generateSchema = (namespace: string, prefix: string) => {
+  if (!namespaceResolverSchemaRegistry.has(namespace)) {
+    throw new Error(`Namespace "${namespace}" has no registered schemas`)
+  }
+
+  const config: any = {};
+
+  if (namespaceResolverSchemaRegistry.get(namespace)!.has(false)) {
+    config.query = new GraphQLObjectType({
+      name: 'Query',
+      fields: {
+        [namespace]: {
+          type: new GraphQLObjectType({
+            name: prefix + 'Query',
+            fields: Object.fromEntries(namespaceResolverSchemaRegistry.get(namespace)!.get(false)!) as GraphQLFieldConfigMap<any, any>
+          })
+        }
+      }
+    });
+  }
+
+  if (namespaceResolverSchemaRegistry.get(namespace)!.has(true)) {
+    config.mutation = new GraphQLObjectType({
+      name: 'Mutation',
+      fields: {
+        [namespace]: {
+          type: new GraphQLObjectType({
+            name: prefix + 'Mutation',
+            fields: Object.fromEntries(namespaceResolverSchemaRegistry.get(namespace)!.get(true)!) as GraphQLFieldConfigMap<any, any>
+          })
+        }
+      }
+    });
+  }
+
+  return new GraphQLSchema(config);
+}
+
+export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<any, any> } = any, T = any, Key extends keyof M = any, R extends keyof M = any>(metaService: M, queries: Key[], config: ServiceConfig): { queries: Set<R>, mutations: Set<R> } => {
+  const mut: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) < 0) as any)
+  const que: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) >= 0) as any)
 
   if (config.methods) {
     if (config.methods.whitelist) {

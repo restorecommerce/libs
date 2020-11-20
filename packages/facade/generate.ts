@@ -2,8 +2,9 @@ import { generateSchemaTypings } from "./src_codegen/index";
 import { schema as facadeStatusSchema } from "./src/modules/facade-status/gql/schema";
 import { schema as exampleSchema } from "./tests/example/gql/schema";
 import { schema as timezoneSchema } from "./tests/timezone/gql/schema";
-import { schema as identitySchema } from "./src/modules/identity/gql/schema";
 import { schema as orderingSchema } from "./src/modules/ordering/gql/schema";
+import { schema as paymentSchema } from "./src/modules/payment/gql/schema";
+import { clearRegistry } from "./src/gql/protos";
 
 generateSchemaTypings({
   schema: facadeStatusSchema,
@@ -32,9 +33,17 @@ generateSchemaTypings({
 
 
 generateSchemaTypings({
-  schema: orderingSchema,
+  schema: orderingSchema(),
   outputFile: './src/modules/ordering/gql/schema.generated.ts',
   typescriptResolvers: {
     contextType: '../interfaces#OrderingContext'
+  }
+});
+
+generateSchemaTypings({
+  schema: paymentSchema(),
+  outputFile: './src/modules/payment/gql/schema.generated.ts',
+  typescriptResolvers: {
+    contextType: '../interfaces#PaymentContext'
   }
 });

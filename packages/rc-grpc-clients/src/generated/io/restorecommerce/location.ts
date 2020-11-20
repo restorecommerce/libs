@@ -447,8 +447,7 @@ export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } =
 export const metaLocationList: { [key in keyof Required<LocationList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.location.Location', name:'Location'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaLocation: { [key in keyof Required<Location>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

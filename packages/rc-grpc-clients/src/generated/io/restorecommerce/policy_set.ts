@@ -478,8 +478,7 @@ export const metaPolicySet: { [key in keyof Required<PolicySet>]: MetaI | string
 export const metaPolicySetList: { [key in keyof Required<PolicySetList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySet', name:'PolicySet'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaPolicySetRQ: { [key in keyof Required<PolicySetRQ>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

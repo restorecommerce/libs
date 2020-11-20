@@ -454,8 +454,7 @@ export const Deleted = {
 export const metaAuthenticationLogList: { [key in keyof Required<AuthenticationLogList>]: MetaI | string } = {
   items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLog', name:'AuthenticationLog'} as MetaO} as MetaA,
   totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO]} as MetaU,
-  apiKey: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.auth.ApiKey', name:'ApiKey'} as MetaO]} as MetaU,
+  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
 }
 export const metaAuthenticationLog: { [key in keyof Required<AuthenticationLog>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,

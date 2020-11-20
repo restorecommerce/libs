@@ -1,7 +1,7 @@
-import { createFacadeModuleFactory } from "../../facade";
 import { FederatedOrderingSchema } from './gql/index';
-import { OrderingConfig, OrderingModule } from "@modules/ordering/interfaces";
+import { OrderingConfig, OrderingModule } from "./interfaces";
 import { OrderingSrvGrpcClient } from "./grpc";
+import { createFacadeModuleFactory } from "../../utils";
 
 const moduleName = 'ordering';
 
@@ -12,7 +12,7 @@ export const orderingModule = createFacadeModuleFactory<OrderingConfig, Ordering
 
   facade.addApolloService({
     name: moduleName,
-    schema: FederatedOrderingSchema
+    schema: FederatedOrderingSchema()
   });
 
   facade.koa.use(async (ctx, next) => {

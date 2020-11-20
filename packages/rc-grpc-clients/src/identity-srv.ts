@@ -19,12 +19,24 @@ import {
   User,
   UserIDs,
   UserList,
-  PopulateRoleAssocCacheRequest
+  UserType,
+  FindByTokenRequest
 } from "./generated/io/restorecommerce/user";
+import {
+  GrantId,
+  Identifier,
+  Service as TokenService, TokenData,
+  protobufPackage as tokenPackageName
+} from "./generated/io/restorecommerce/token";
 import { protobufPackage as rolePackageName, RoleList, Service as RoleService } from "./generated/io/restorecommerce/role";
 import { RestoreCommerceGrpcClient } from "./grpc-client";
+import { ServerReflection as ServerReflectionService, protobufPackage as serverReflectionServicePackageName, ServerReflectionRequest, ServerReflectionResponse } from './generated/grpc/reflection/v1alpha/reflection';
+import { Any } from './generated/google/protobuf/any';
 
 export {
+  UserService,
+  UserType,
+  RoleService,
   Empty,
   ActivateRequest,
   ChangeEmailRequest,
@@ -43,10 +55,44 @@ export {
   User,
   UserIDs,
   UserList,
-  PopulateRoleAssocCacheRequest
+  TokenService,
+  ServerReflectionService,
+  ServerReflectionRequest,
+  ServerReflectionResponse,
 };
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
+  token = this.createService<TokenService>({
+    packageName: tokenPackageName,
+    serviceName: 'Service',
+    methods: {
+      consume: {
+        type: 'unary',
+        serialize: Identifier.encode,
+        deserialize: Any.decode
+      },
+      destroy: {
+        type: 'unary',
+        serialize: Identifier.encode,
+        deserialize: Any.decode
+      },
+      find: {
+        type: 'unary',
+        serialize: Identifier.encode,
+        deserialize: Any.decode
+      },
+      revokeByGrantId: {
+        type: 'unary',
+        serialize: GrantId.encode,
+        deserialize: Any.decode
+      },
+      upsert: {
+        type: 'unary',
+        serialize: TokenData.encode,
+        deserialize: Any.decode
+      },
+    }
+  })
 
   user = this.createService<UserService>({
     packageName: userPackageName,
@@ -123,11 +169,11 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
         serialize: UnregisterRequest.encode,
         deserialize: Empty.decode
       },
-      populateRoleAssocCache: {
+      FindByToken: {
         type: 'unary',
-        serialize: PopulateRoleAssocCacheRequest.encode,
-        deserialize: Empty.decode
-      },
+        serialize: FindByTokenRequest.encode,
+        deserialize: User.decode
+      }
     }
   });
 

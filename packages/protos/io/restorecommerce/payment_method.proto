@@ -27,21 +27,24 @@ message Deleted {
 message PaymentMethodList {
     repeated PaymentMethod items = 1;
     uint32 total_count = 2;
-    oneof authorization {
-        io.restorecommerce.auth.Subject subject = 3;
-        io.restorecommerce.auth.ApiKey api_key = 4;
-    }
+    io.restorecommerce.auth.Subject subject = 3;
+}
+
+enum PaymentMethodEnum {
+    WIRE_TRANSFER = 0;
+    DIRECT_DEBIT = 1;
+    PAYPAL = 2;
+}
+enum TransferTypeEnum {
+    RECEIVE = 0;
+    SEND = 1;
+    BOTH = 2;
 }
 
 message PaymentMethod {
     string id = 1;
     io.restorecommerce.meta.Meta meta = 2;
-    PaymentMethod payment_method = 3;
-    google.protobuf.Any data = 4;
-
-    enum PaymentMethod {
-        WIRETRANSFER = 0;
-        DIRECTDEBIT = 1;
-        PAYPAL = 2;
-    }
+    PaymentMethodEnum payment_method = 3;
+    TransferTypeEnum transfer_type = 4;
+    google.protobuf.Any data = 5;
 }

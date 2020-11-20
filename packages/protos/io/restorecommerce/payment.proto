@@ -33,10 +33,7 @@ message SetupRequest {
   string cancel_return_url = 9;
   bool allow_guest_checkout = 10;
   Provider provider = 11;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 12;
-    io.restorecommerce.auth.ApiKey api_key = 13;
-  }
+  io.restorecommerce.auth.Subject subject = 12;
 }
 
 // Response object for setup calls.
@@ -55,10 +52,7 @@ message PaymentRequest {
   string payment_id = 4;
   string payer_id = 5;
   string token = 6;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 7;
-    io.restorecommerce.auth.ApiKey api_key = 8;
-  }
+  io.restorecommerce.auth.Subject subject = 7;
 }
 
 // Request object for capture call for both standard and cardless payments.
@@ -67,10 +61,7 @@ message CaptureRequest {
   int32 payment_sum = 2;
   string currency = 3;
   string payment_id = 4;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 5;
-    io.restorecommerce.auth.ApiKey api_key = 6;
-  }
+  io.restorecommerce.auth.Subject subject = 5;
 }
 
 // Unified response object for authorization, purchase and capture calls

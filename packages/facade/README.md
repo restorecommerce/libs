@@ -2,19 +2,18 @@
 # @restorecommerce/facade
 
 ```ts
+import { createLogger } from '@restorecommerce/logger';
 import { createFacade } from '@restorecommerce/facade';
 import { exampleModule } from './example-module';
 
-const env = cfg.get('NODE_ENV');
-const facadeConfig = cfg.get('facade');
-const identityConfig = cfg.get('identity');
+const logger = createLogger(cfg.logger);
+const env = process.env.NODE_ENV;
 
-const facade: AppFacade = createFacade({
-  ...facadeConfig,
+const facade = createFacade({
+  port: 5000,
   logger,
   env
-})
-.addModule(exampleModule, { message: 'foo' });
+}).useModule(exampleModule, { message: 'foo' });
 
 facade.start();
 ```
@@ -28,7 +27,3 @@ facade.start();
 ## Provided koa middlewares
 
 - [reqResLogger](src/middlewares/req-res-logger)
-
-## Provided modules
-
-- [identity](src/modules/identity)

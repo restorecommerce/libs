@@ -1,8 +1,7 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { IdentityContext } from '../interfaces';
+import { FacadeStatusContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -15,24 +14,13 @@ export type Scalars = {
 /** The root of all queries */
 export type Query = {
   __typename?: 'Query';
-  identity?: Maybe<ExampleType>;
+  status?: Maybe<FacadeStatusType>;
 };
 
-
-/** The root of all queries */
-export type QueryIdentityArgs = {
-  input?: Maybe<ExampleInputType>;
-};
-
-/** An Example */
-export type ExampleType = {
-  __typename?: 'ExampleType';
-  message: Scalars['String'];
-};
-
-/** An Example input */
-export type ExampleInputType = {
-  echo?: Maybe<Scalars['String']>;
+/** The facade status */
+export type FacadeStatusType = {
+  __typename?: 'FacadeStatusType';
+  running: Scalars['Boolean'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -102,33 +90,31 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
-  ExampleType: ResolverTypeWrapper<ExampleType>;
-  String: ResolverTypeWrapper<Scalars['String']>;
-  ExampleInputType: ExampleInputType;
+  FacadeStatusType: ResolverTypeWrapper<FacadeStatusType>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
-  ExampleType: ExampleType;
-  String: Scalars['String'];
-  ExampleInputType: ExampleInputType;
+  FacadeStatusType: FacadeStatusType;
   Boolean: Scalars['Boolean'];
+  String: Scalars['String'];
 }>;
 
-export type QueryResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  identity?: Resolver<Maybe<ResolversTypes['ExampleType']>, ParentType, ContextType, RequireFields<QueryIdentityArgs, never>>;
+export type QueryResolvers<ContextType = FacadeStatusContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  status?: Resolver<Maybe<ResolversTypes['FacadeStatusType']>, ParentType, ContextType>;
 }>;
 
-export type ExampleTypeResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ExampleType'] = ResolversParentTypes['ExampleType']> = ResolversObject<{
-  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type FacadeStatusTypeResolvers<ContextType = FacadeStatusContext, ParentType extends ResolversParentTypes['FacadeStatusType'] = ResolversParentTypes['FacadeStatusType']> = ResolversObject<{
+  running?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
+export type Resolvers<ContextType = FacadeStatusContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
-  ExampleType?: ExampleTypeResolvers<ContextType>;
+  FacadeStatusType?: FacadeStatusTypeResolvers<ContextType>;
 }>;
 
 
@@ -136,4 +122,4 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
  * @deprecated
  * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
  */
-export type IResolvers<ContextType = IdentityContext> = Resolvers<ContextType>;
+export type IResolvers<ContextType = FacadeStatusContext> = Resolvers<ContextType>;

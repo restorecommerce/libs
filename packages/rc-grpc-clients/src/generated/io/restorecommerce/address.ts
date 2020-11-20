@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
 import { Empty } from '../../google/protobuf/empty';
@@ -13,8 +13,7 @@ export interface Deleted {
 export interface AddressList {
   items: Address[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface Address {
@@ -184,11 +183,8 @@ export const AddressList = {
       Address.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -208,9 +204,6 @@ export const AddressList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -237,11 +230,6 @@ export const AddressList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<AddressList>): AddressList {
@@ -262,11 +250,6 @@ export const AddressList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: AddressList): unknown {
@@ -278,7 +261,6 @@ export const AddressList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

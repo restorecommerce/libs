@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/organization.proto";
 import "io/restorecommerce/auth.proto";
+import "google/protobuf/any.proto";
 
 /*
 * Microservice definition.
@@ -29,10 +30,7 @@ message Deleted {
 message InvoiceList {
   repeated Invoice items = 1;
   uint32 total_count = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 /*
@@ -67,6 +65,7 @@ message InvoicePositions {
   BillingAddress sender_billing_address = 5;
   io.restorecommerce.organization.Organization recipient_organization = 6;
   io.restorecommerce.organization.Organization sender_organization = 7;
+  google.protobuf.Any payment_method_details = 8;
 }
 
 message RecipientCustomer {

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Any } from '../../google/protobuf/any';
 import { Meta } from '../../io/restorecommerce/meta';
 import { FieldFilter, DeleteRequest } from '../../io/restorecommerce/resource_base';
@@ -23,8 +23,7 @@ export interface Deleted {
 export interface JobList {
   items: Job[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -204,8 +203,7 @@ export interface JobReadRequest {
    *  Fields selector
    */
   field: FieldFilter[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -525,11 +523,8 @@ export const JobList = {
       Job.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -549,9 +544,6 @@ export const JobList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -578,11 +570,6 @@ export const JobList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<JobList>): JobList {
@@ -603,11 +590,6 @@ export const JobList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: JobList): unknown {
@@ -619,7 +601,6 @@ export const JobList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -1416,11 +1397,8 @@ export const JobReadRequest = {
     for (const v of message.field) {
       FieldFilter.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -1446,9 +1424,6 @@ export const JobReadRequest = {
           break;
         case 5:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 6:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1485,11 +1460,6 @@ export const JobReadRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<JobReadRequest>): JobReadRequest {
@@ -1520,11 +1490,6 @@ export const JobReadRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: JobReadRequest): unknown {
@@ -1538,7 +1503,6 @@ export const JobReadRequest = {
       obj.field = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

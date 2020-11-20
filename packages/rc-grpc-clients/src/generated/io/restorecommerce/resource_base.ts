@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Struct } from '../../google/protobuf/struct';
 import { Any } from '../../google/protobuf/any';
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Empty } from '../../google/protobuf/empty';
 import { Writer, Reader } from 'protobufjs/minimal';
@@ -41,8 +41,7 @@ export interface ReadRequest {
   localesLimiter: string[];
   customQueries: string[];
   customArguments?: Any;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface DeleteRequest {
@@ -54,8 +53,7 @@ export interface DeleteRequest {
    * / Delete specified documents
    */
   ids: string[];
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -64,8 +62,7 @@ export interface DeleteRequest {
 export interface ResourceList {
   items: Resource[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -358,11 +355,8 @@ export const ReadRequest = {
     if (message.customArguments !== undefined && message.customArguments !== undefined) {
       Any.encode(message.customArguments, writer.uint32(74).fork()).ldelim();
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(82).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -407,9 +401,6 @@ export const ReadRequest = {
           break;
         case 10:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -475,11 +466,6 @@ export const ReadRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
@@ -539,11 +525,6 @@ export const ReadRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ReadRequest): unknown {
@@ -578,7 +559,6 @@ export const ReadRequest = {
     }
     message.customArguments !== undefined && (obj.customArguments = message.customArguments ? Any.toJSON(message.customArguments) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -589,11 +569,8 @@ export const DeleteRequest = {
     for (const v of message.ids) {
       writer.uint32(18).string(v!);
     }
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -613,9 +590,6 @@ export const DeleteRequest = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -642,11 +616,6 @@ export const DeleteRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
@@ -667,11 +636,6 @@ export const DeleteRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: DeleteRequest): unknown {
@@ -683,7 +647,6 @@ export const DeleteRequest = {
       obj.ids = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -694,11 +657,8 @@ export const ResourceList = {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -718,9 +678,6 @@ export const ResourceList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -747,11 +704,6 @@ export const ResourceList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
@@ -772,11 +724,6 @@ export const ResourceList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: ResourceList): unknown {
@@ -788,7 +735,6 @@ export const ResourceList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

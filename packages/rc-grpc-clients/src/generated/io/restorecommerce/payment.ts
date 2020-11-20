@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Writer, Reader } from 'protobufjs/minimal';
 import { StringValue } from '../../google/protobuf/wrappers';
 
@@ -19,8 +19,7 @@ export interface SetupRequest {
   cancelReturnUrl: string;
   allowGuestCheckout: boolean;
   provider: Provider;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -43,8 +42,7 @@ export interface PaymentRequest {
   paymentId: string;
   payerId: string;
   token: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -55,8 +53,7 @@ export interface CaptureRequest {
   paymentSum: number;
   currency: string;
   paymentId: string;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 /**
@@ -334,11 +331,8 @@ export const SetupRequest = {
     writer.uint32(74).string(message.cancelReturnUrl);
     writer.uint32(80).bool(message.allowGuestCheckout);
     writer.uint32(88).int32(message.provider);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(98).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(106).fork()).ldelim();
     }
     return writer;
   },
@@ -385,9 +379,6 @@ export const SetupRequest = {
           break;
         case 12:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 13:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -459,11 +450,6 @@ export const SetupRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<SetupRequest>): SetupRequest {
@@ -529,11 +515,6 @@ export const SetupRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: SetupRequest): unknown {
@@ -554,7 +535,6 @@ export const SetupRequest = {
     message.allowGuestCheckout !== undefined && (obj.allowGuestCheckout = message.allowGuestCheckout);
     message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -668,11 +648,8 @@ export const PaymentRequest = {
     writer.uint32(34).string(message.paymentId);
     writer.uint32(42).string(message.payerId);
     writer.uint32(50).string(message.token);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(58).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -703,9 +680,6 @@ export const PaymentRequest = {
           break;
         case 7:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 8:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -751,11 +725,6 @@ export const PaymentRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
@@ -795,11 +764,6 @@ export const PaymentRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: PaymentRequest): unknown {
@@ -811,7 +775,6 @@ export const PaymentRequest = {
     message.payerId !== undefined && (obj.payerId = message.payerId);
     message.token !== undefined && (obj.token = message.token);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -822,11 +785,8 @@ export const CaptureRequest = {
     writer.uint32(16).int32(message.paymentSum);
     writer.uint32(26).string(message.currency);
     writer.uint32(34).string(message.paymentId);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -851,9 +811,6 @@ export const CaptureRequest = {
           break;
         case 5:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 6:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -889,11 +846,6 @@ export const CaptureRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
@@ -923,11 +875,6 @@ export const CaptureRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: CaptureRequest): unknown {
@@ -937,7 +884,6 @@ export const CaptureRequest = {
     message.currency !== undefined && (obj.currency = message.currency);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };

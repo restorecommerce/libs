@@ -1,3 +1,11 @@
+### 0.0.14 (November 4th, 2020)
+
+- renamed vertex fields
+
+### 0.0.13 (October 30th, 2020)
+
+- removed ApiKey from oneof authorization for requests and restructured subject
+
 ### 0.0.12 (October 14th, 2020)
 
 - updated ostorage proto to include data (google.protobuf.any) in options

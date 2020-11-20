@@ -51,10 +51,7 @@ message RuleRQ { // used for `whatIsAllowed` / reverse queries
 message RuleList {
   repeated Rule items = 1;
   uint32 total_count = 2;
-  oneof authorization {
-    io.restorecommerce.auth.Subject subject = 3;
-    io.restorecommerce.auth.ApiKey api_key = 4;
-  }
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 // Query to pull resources from an external service

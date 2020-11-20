@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Meta } from '../../io/restorecommerce/meta';
 import { Any } from '../../google/protobuf/any';
 import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
@@ -14,14 +14,14 @@ export interface Deleted {
 export interface PaymentMethodList {
   items: PaymentMethod[];
   totalCount: number;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface PaymentMethod {
   id: string;
   meta?: Meta;
-  paymentMethod: PaymentMethod_PaymentMethod;
+  paymentMethod: PaymentMethodEnum;
+  transferType: TransferTypeEnum;
   data?: Any;
 }
 
@@ -36,6 +36,7 @@ const basePaymentMethodList: object = {
 const basePaymentMethod: object = {
   id: "",
   paymentMethod: 0,
+  transferType: 0,
 };
 
 /**
@@ -99,39 +100,77 @@ export interface MetaB extends MetaI {
 
 export const protobufPackage = 'io.restorecommerce.payment_method'
 
-export enum PaymentMethod_PaymentMethod {
-  WIRETRANSFER = 0,
-  DIRECTDEBIT = 1,
+export enum PaymentMethodEnum {
+  WIRE_TRANSFER = 0,
+  DIRECT_DEBIT = 1,
   PAYPAL = 2,
   UNRECOGNIZED = -1,
 }
 
-export function paymentMethod_PaymentMethodFromJSON(object: any): PaymentMethod_PaymentMethod {
+export function paymentMethodEnumFromJSON(object: any): PaymentMethodEnum {
   switch (object) {
     case 0:
-    case "WIRETRANSFER":
-      return PaymentMethod_PaymentMethod.WIRETRANSFER;
+    case "WIRE_TRANSFER":
+      return PaymentMethodEnum.WIRE_TRANSFER;
     case 1:
-    case "DIRECTDEBIT":
-      return PaymentMethod_PaymentMethod.DIRECTDEBIT;
+    case "DIRECT_DEBIT":
+      return PaymentMethodEnum.DIRECT_DEBIT;
     case 2:
     case "PAYPAL":
-      return PaymentMethod_PaymentMethod.PAYPAL;
+      return PaymentMethodEnum.PAYPAL;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return PaymentMethod_PaymentMethod.UNRECOGNIZED;
+      return PaymentMethodEnum.UNRECOGNIZED;
   }
 }
 
-export function paymentMethod_PaymentMethodToJSON(object: PaymentMethod_PaymentMethod): string {
+export function paymentMethodEnumToJSON(object: PaymentMethodEnum): string {
   switch (object) {
-    case PaymentMethod_PaymentMethod.WIRETRANSFER:
-      return "WIRETRANSFER";
-    case PaymentMethod_PaymentMethod.DIRECTDEBIT:
-      return "DIRECTDEBIT";
-    case PaymentMethod_PaymentMethod.PAYPAL:
+    case PaymentMethodEnum.WIRE_TRANSFER:
+      return "WIRE_TRANSFER";
+    case PaymentMethodEnum.DIRECT_DEBIT:
+      return "DIRECT_DEBIT";
+    case PaymentMethodEnum.PAYPAL:
       return "PAYPAL";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export enum TransferTypeEnum {
+  RECEIVE = 0,
+  SEND = 1,
+  BOTH = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function transferTypeEnumFromJSON(object: any): TransferTypeEnum {
+  switch (object) {
+    case 0:
+    case "RECEIVE":
+      return TransferTypeEnum.RECEIVE;
+    case 1:
+    case "SEND":
+      return TransferTypeEnum.SEND;
+    case 2:
+    case "BOTH":
+      return TransferTypeEnum.BOTH;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return TransferTypeEnum.UNRECOGNIZED;
+  }
+}
+
+export function transferTypeEnumToJSON(object: TransferTypeEnum): string {
+  switch (object) {
+    case TransferTypeEnum.RECEIVE:
+      return "RECEIVE";
+    case TransferTypeEnum.SEND:
+      return "SEND";
+    case TransferTypeEnum.BOTH:
+      return "BOTH";
     default:
       return "UNKNOWN";
   }
@@ -190,11 +229,8 @@ export const PaymentMethodList = {
       PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -214,9 +250,6 @@ export const PaymentMethodList = {
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 4:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -243,11 +276,6 @@ export const PaymentMethodList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
@@ -268,11 +296,6 @@ export const PaymentMethodList = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: PaymentMethodList): unknown {
@@ -284,7 +307,6 @@ export const PaymentMethodList = {
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -296,8 +318,9 @@ export const PaymentMethod = {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
     writer.uint32(24).int32(message.paymentMethod);
+    writer.uint32(32).int32(message.transferType);
     if (message.data !== undefined && message.data !== undefined) {
-      Any.encode(message.data, writer.uint32(34).fork()).ldelim();
+      Any.encode(message.data, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -318,6 +341,9 @@ export const PaymentMethod = {
           message.paymentMethod = reader.int32() as any;
           break;
         case 4:
+          message.transferType = reader.int32() as any;
+          break;
+        case 5:
           message.data = Any.decode(reader, reader.uint32());
           break;
         default:
@@ -340,9 +366,14 @@ export const PaymentMethod = {
       message.meta = undefined;
     }
     if (object.paymentMethod !== undefined && object.paymentMethod !== null) {
-      message.paymentMethod = paymentMethod_PaymentMethodFromJSON(object.paymentMethod);
+      message.paymentMethod = paymentMethodEnumFromJSON(object.paymentMethod);
     } else {
       message.paymentMethod = 0;
+    }
+    if (object.transferType !== undefined && object.transferType !== null) {
+      message.transferType = transferTypeEnumFromJSON(object.transferType);
+    } else {
+      message.transferType = 0;
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromJSON(object.data);
@@ -368,6 +399,11 @@ export const PaymentMethod = {
     } else {
       message.paymentMethod = 0;
     }
+    if (object.transferType !== undefined && object.transferType !== null) {
+      message.transferType = object.transferType;
+    } else {
+      message.transferType = 0;
+    }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromPartial(object.data);
     } else {
@@ -379,7 +415,8 @@ export const PaymentMethod = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.paymentMethod !== undefined && (obj.paymentMethod = paymentMethod_PaymentMethodToJSON(message.paymentMethod));
+    message.paymentMethod !== undefined && (obj.paymentMethod = paymentMethodEnumToJSON(message.paymentMethod));
+    message.transferType !== undefined && (obj.transferType = transferTypeEnumToJSON(message.transferType));
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },

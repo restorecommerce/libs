@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Subject, ApiKey } from '../../io/restorecommerce/auth';
+import { Subject } from '../../io/restorecommerce/auth';
 import { Any } from '../../google/protobuf/any';
 import { Observable } from 'rxjs';
 import { Writer, Reader } from 'protobufjs/minimal';
@@ -17,8 +17,7 @@ export interface TraversalRequest {
   data: boolean;
   path: boolean;
   aql: boolean;
-  subject?: Subject | undefined;
-  apiKey?: ApiKey | undefined;
+  subject?: Subject;
 }
 
 export interface TraversalRequest_StartVertices {
@@ -32,10 +31,9 @@ export interface TraversalResponse {
 }
 
 export interface VertexFields {
-  aid: string;
-  Key: string;
-  Rev: string;
   id: string;
+  key: string;
+  rev: string;
 }
 
 export interface Options {
@@ -148,10 +146,9 @@ const baseTraversalResponse: object = {
 };
 
 const baseVertexFields: object = {
-  aid: "",
-  Key: "",
-  Rev: "",
   id: "",
+  key: "",
+  rev: "",
 };
 
 const baseOptions: object = {
@@ -253,11 +250,8 @@ export const TraversalRequest = {
     writer.uint32(48).bool(message.data);
     writer.uint32(56).bool(message.path);
     writer.uint32(64).bool(message.aql);
-    if (message.subject !== undefined) {
+    if (message.subject !== undefined && message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(74).fork()).ldelim();
-    }
-    if (message.apiKey !== undefined) {
-      ApiKey.encode(message.apiKey, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -294,9 +288,6 @@ export const TraversalRequest = {
           break;
         case 9:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 10:
-          message.apiKey = ApiKey.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -352,11 +343,6 @@ export const TraversalRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromJSON(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
@@ -406,11 +392,6 @@ export const TraversalRequest = {
     } else {
       message.subject = undefined;
     }
-    if (object.apiKey !== undefined && object.apiKey !== null) {
-      message.apiKey = ApiKey.fromPartial(object.apiKey);
-    } else {
-      message.apiKey = undefined;
-    }
     return message;
   },
   toJSON(message: TraversalRequest): unknown {
@@ -424,7 +405,6 @@ export const TraversalRequest = {
     message.path !== undefined && (obj.path = message.path);
     message.aql !== undefined && (obj.aql = message.aql);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    message.apiKey !== undefined && (obj.apiKey = message.apiKey ? ApiKey.toJSON(message.apiKey) : undefined);
     return obj;
   },
 };
@@ -577,10 +557,9 @@ export const TraversalResponse = {
 
 export const VertexFields = {
   encode(message: VertexFields, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.aid);
-    writer.uint32(18).string(message.Key);
-    writer.uint32(26).string(message.Rev);
-    writer.uint32(34).string(message.id);
+    writer.uint32(10).string(message.id);
+    writer.uint32(18).string(message.key);
+    writer.uint32(26).string(message.rev);
     return writer;
   },
   decode(input: Uint8Array | Reader, length?: number): VertexFields {
@@ -591,16 +570,13 @@ export const VertexFields = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.aid = reader.string();
+          message.id = reader.string();
           break;
         case 2:
-          message.Key = reader.string();
+          message.key = reader.string();
           break;
         case 3:
-          message.Rev = reader.string();
-          break;
-        case 4:
-          message.id = reader.string();
+          message.rev = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -611,58 +587,47 @@ export const VertexFields = {
   },
   fromJSON(object: any): VertexFields {
     const message = { ...baseVertexFields } as VertexFields;
-    if (object.aid !== undefined && object.aid !== null) {
-      message.aid = String(object.aid);
-    } else {
-      message.aid = "";
-    }
-    if (object.Key !== undefined && object.Key !== null) {
-      message.Key = String(object.Key);
-    } else {
-      message.Key = "";
-    }
-    if (object.Rev !== undefined && object.Rev !== null) {
-      message.Rev = String(object.Rev);
-    } else {
-      message.Rev = "";
-    }
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
       message.id = "";
     }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.rev !== undefined && object.rev !== null) {
+      message.rev = String(object.rev);
+    } else {
+      message.rev = "";
+    }
     return message;
   },
   fromPartial(object: DeepPartial<VertexFields>): VertexFields {
     const message = { ...baseVertexFields } as VertexFields;
-    if (object.aid !== undefined && object.aid !== null) {
-      message.aid = object.aid;
-    } else {
-      message.aid = "";
-    }
-    if (object.Key !== undefined && object.Key !== null) {
-      message.Key = object.Key;
-    } else {
-      message.Key = "";
-    }
-    if (object.Rev !== undefined && object.Rev !== null) {
-      message.Rev = object.Rev;
-    } else {
-      message.Rev = "";
-    }
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
       message.id = "";
     }
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.rev !== undefined && object.rev !== null) {
+      message.rev = object.rev;
+    } else {
+      message.rev = "";
+    }
     return message;
   },
   toJSON(message: VertexFields): unknown {
     const obj: any = {};
-    message.aid !== undefined && (obj.aid = message.aid);
-    message.Key !== undefined && (obj.Key = message.Key);
-    message.Rev !== undefined && (obj.Rev = message.Rev);
     message.id !== undefined && (obj.id = message.id);
+    message.key !== undefined && (obj.key = message.key);
+    message.rev !== undefined && (obj.rev = message.rev);
     return obj;
   },
 };

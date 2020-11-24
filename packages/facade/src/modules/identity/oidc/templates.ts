@@ -20,9 +20,15 @@ export interface OIDCTemplateContext {
   };
 }
 
+export interface OIDCTemplateConsentContext extends OIDCTemplateContext {
+  uid: string;
+  details?: any;
+}
+
 export interface OIDCTemplateLoginContext extends OIDCTemplateContext {
+  uid: string;
   identifier?: string;
-  uid?: string;
+  remember?: boolean;
 }
 
 hbs.registerHelper('json', (object) => {
@@ -32,7 +38,8 @@ hbs.registerHelper('json', (object) => {
 export class OIDCTemplateEngine {
 
   private layoutHbs?: HandlebarsTemplateDelegate<any>;
-  private loginHbs?: HandlebarsTemplateDelegate<any>;
+  private loginHbs?: HandlebarsTemplateDelegate<OIDCTemplateLoginContext>;
+  private consentHbs?: HandlebarsTemplateDelegate<OIDCTemplateConsentContext>;
 
   constructor(private templates: OIDCHbsTemplates | undefined) { }
 
@@ -61,4 +68,19 @@ export class OIDCTemplateEngine {
       body: html
     });
   }
+  async consent(context: OIDCTemplateConsentContext) {
+    if (!this.consentHbs) {
+      const consentTpl = this.templates?.consent ?? await new Promise<string>((resolve, reject) => {
+        fs.readFile(path.resolve(__dirname, 'views/consent.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+      });
+      this.consentHbs = hbs.compile(consentTpl);
+    }
+
+    let html = this.consentHbs(context);
+    return this.layout({
+      ...context,
+      body: html
+    });
+  }
+
 }

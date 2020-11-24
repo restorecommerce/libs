@@ -5,6 +5,7 @@ import { IdentityContext } from '../interfaces';
 export interface OIDCHbsTemplates {
   login?: string;
   layout?: string;
+  consent?: string;
 }
 
 export interface OIDCConfig {
@@ -19,6 +20,7 @@ export interface OIDCConfig {
   };
   templates?: OIDCHbsTemplates;
   redirect_uris: string[];
+  post_logout_redirect_uris: string[];
 }
 
 export interface OIDCError {

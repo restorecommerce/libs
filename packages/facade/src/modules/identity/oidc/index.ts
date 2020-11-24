@@ -6,7 +6,7 @@ import { IdentityContext } from '../interfaces';
 import { OIDCConfig } from './interfaces';
 import { createOIDCRouter } from './router';
 import { createIdentityServiceAdapterClass } from './adapter';
-import { loginUser } from './user';
+import { findUserById, loginUser } from './user';
 
 export { OIDCConfig };
 export { createOIDCRouter, CreateOIDCRouterArgs } from './router';
@@ -18,28 +18,33 @@ export interface CreateOIDCArgs {
   env: string;
 }
 
-export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, tokenService, cookies, redirect_uris, client_id, client_secret, issuer, jwks, templates } }: CreateOIDCArgs) {
+export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, post_logout_redirect_uris, tokenService, cookies, redirect_uris, client_id, client_secret, issuer, jwks, templates } }: CreateOIDCArgs) {
   const adapterClass = createIdentityServiceAdapterClass(tokenService ?? identitySrvClient.token, logger);
   const provider = new Provider(issuer, {
     adapter: adapterClass,
     clients: [{
+      post_logout_redirect_uris,
       client_id,
       client_secret,
       id_token_signed_response_alg: 'HS256',
       grant_types: ['refresh_token', 'authorization_code'],
       redirect_uris,
-      scopes: ['openid'],
+      scopes: ['openid', 'offline_access'],
       response_types: [
-        'code',
-        'none'
+        'code'
+        // 'none'
       ],
       token_endpoint_auth_method: 'client_secret_basic',
+      // token_endpoint_auth_method: 'client_secret_post',
     }],
-    issueRefreshToken:  async (ctx, client, code) => {
-      // Always issue refresh token
-      return client.grantTypeAllowed('refresh_token');
-    },
+    // issueRefreshToken:  async (ctx, client, code) => {
+    //   // Always issue refresh token
+    //   return client.grantTypeAllowed('refresh_token');
+    // },
     jwks,
+    formats: {
+      AccessToken: 'jwt',
+    },
     cookies: {
       long: { signed: false, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
       short: { signed: false },
@@ -49,20 +54,33 @@ export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, 
     // passing it our Account model method is sufficient, it should return a Promise that resolves
     // with an object with accountId property and a claims method.
     findAccount: async (ctx: any, id: string) => {
-      const userService = (ctx as IdentityContext).identity.client.user;
-      console.log('findAccount', id);
-      return {
-        accountId: id,
-        claims: async (use, scope) => {
-          console.log('claims', id, use, scope);
-          return {
-            sub: id,
-            data: {
-              id
+      try {
+        const userService = (ctx as IdentityContext)?.identitySrvClient?.user;
+        return {
+          accountId: id,
+          claims: async (use, scope) => {
+            console.log('claims', use, scope);
+
+            try {
+              const user = await findUserById(userService, id);
+              return {
+                sub: id,
+                data: user
+              };
+            } catch (error) {
+              logger.error('OIDC findAccount claims error', error);
+              return {
+                sub: id,
+                data: {
+                  id,
+                }
+              };
             }
-          };
-        },
-      };
+          },
+        };
+      } catch (error) {
+        logger.error('OIDC findAccount error', error);
+      }
     },
     claims: {
       acr: null,

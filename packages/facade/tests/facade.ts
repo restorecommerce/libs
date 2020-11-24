@@ -5,6 +5,9 @@ import { createLogger } from '@restorecommerce/logger';
 import { timezonesModule } from './timezone';
 import { exampleModule } from './example';
 import { ResourcesSrvGrpcClient} from '@restorecommerce/rc-grpc-clients';
+import { TokenServiceStub } from './token-service-stub';
+
+const jwks = require('./jwks.json');
 
 const CONFIG_PATH = __dirname;
 
@@ -31,16 +34,21 @@ function createTestFacade() {
   }).useModule(identityModule({
       identitySrvClientConfig: cfg.identity.client,
       oidc: {
+        tokenService: new TokenServiceStub(),
         client_id: 'TEST_CLIENT_ID',
         client_secret: 'TEST_CLIENT_SECRET',
         cookies: {
           keys: ['TEST_COOKIE_SECRET']
         },
         issuer: 'http://localhost:5000',
-        redirect_uris: ['http://localhost:5000/session'],
-        jwks: {
-          keys: []
-        },
+        redirect_uris: [
+          'http://localhost:5000/session',
+          'http://localhost:4200'
+        ],
+        post_logout_redirect_uris: [
+          'http://localhost:4200'
+        ],
+        jwks,
       }
     }))
     .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))

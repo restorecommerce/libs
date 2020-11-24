@@ -5,7 +5,8 @@ import { Logger } from '@restorecommerce/logger';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
 // import { AuthUser, loginUser } from './user';
-import { OIDCHbsTemplates, OIDCLoginFn } from './interfaces';
+import { OIDCError, OIDCHbsTemplates, OIDCLoginFn } from './interfaces';
+import { ParameterizedContext } from 'koa';
 
 
 export interface CreateOIDCRouterArgs {
@@ -45,10 +46,54 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
         });
         return;
       }
+      case 'consent': {
+        console.log('consent', prompt.details);
+        ctx.type = 'html';
+        ctx.body = await tplEngine.consent({
+          title: 'Authorize',
+          dev,
+          uid,
+          details: prompt.details,
+          dbg: {
+            params,
+            prompt,
+            session
+          }
+        });
+        return;
+      }
       default:
         return next();
     }
   });
+
+  router.post('/interaction/:uid/confirm', bodyParser({
+    text: false, json: false
+  }), async (ctx) => {
+    const { prompt: { name, details } } = await provider.interactionDetails(ctx.req, ctx.res);
+
+    const consent: any = {};
+
+    // any scopes you do not wish to grant go in here
+    //   otherwise details.scopes.new.concat(details.scopes.accepted) will be granted
+    consent.rejectedScopes = [];
+
+    // any claims you do not wish to grant go in here
+    //   otherwise all claims mapped to granted scopes
+    //   and details.claims.new.concat(details.claims.accepted) will be granted
+    consent.rejectedClaims = [];
+
+    // replace = false means previously rejected scopes and claims remain rejected
+    // changing this to true will remove those rejections in favour of just what you rejected above
+    consent.replace = false;
+
+    const result = { consent };
+    return provider.interactionFinished(ctx.req, ctx.res, result, {
+      mergeWithLastSubmission: true,
+    });
+  });
+
+
 
   router.post('/interaction/:uid/login', bodyParser({
     text: false, json: false
@@ -59,18 +104,13 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
       throw new Error('INVALID_PROMPT');
     }
 
-    const body = ctx.request.body;
-
-    const { error, user, identifier, remember }  = await loginFn(ctx, body);
-
-    console.log(error, user);
-
-    if (error || !user) {
-      ctx.type = 'html';
+    const render = async ({error, identifier, remember}: {error?: OIDCError, identifier?: string, remember?: boolean} = {}) => {
+      ctx.response.type = 'html';
       ctx.response.body = await tplEngine.login({
         title: 'Login',
         uid,
         identifier,
+        remember,
         error: error ?? {
           key: 'ERROR',
           message: 'Error'
@@ -85,24 +125,33 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
       return;
     }
 
-    if (!user) {
-      ctx.type = 'html';
-      ctx.response.body = await tplEngine.login({
-        title: 'Login',
-        dev,
-        uid,
+    const body = typeof ctx.request.body === 'object' && ctx.request.body ? ctx.request.body : undefined;
+
+    if (!body) {
+      logger.error('OIDC login invalid body', body);
+
+      return render();
+    }
+    const { error, user, identifier, remember }  = await loginFn(ctx, body);
+
+    if (error || !user) {
+      logger.error('OIDC login callback error', error);
+      return render({
+        error,
         identifier,
+        remember
+      });
+    }
+
+    if (!user) {
+      return render({
         error: {
           key: 'INVALID_IDENTIFIER_OR_PASSWORD',
           message: 'Invalid identifier or password'
         },
-        dbg: {
-          params,
-          prompt,
-          session
-        }
-      });
-      return;
+        identifier,
+        remember
+      })
     }
 
     const result: InteractionResults = {
@@ -134,19 +183,19 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
     });
   });
 
-  router.get('/session', async (ctx) => {
-    const _ctx = provider.app.createContext(ctx.req, ctx.res);
-    // const session = await provider.Session.get(_ctx)
-    const x = new provider.OIDCContext(ctx)
+  // router.get('/session', async (ctx) => {
+  //   const _ctx = provider.app.createContext(ctx.req, ctx.res);
+  //   // const session = await provider.Session.get(_ctx)
+  //   const x = new provider.OIDCContext(ctx)
 
-    // new provider.OIDCContext(ctx)
+  //   // new provider.OIDCContext(ctx)
 
-    ctx.response.body = {
-      ats: x.getAccessToken(),
-      at: provider.AccessToken.find(x.getAccessToken()),
-      // session
-    };
-  });
+  //   ctx.response.body = {
+  //     ats: x.getAccessToken(),
+  //     at: provider.AccessToken.find(x.getAccessToken()),
+  //     // session
+  //   };
+  // });
 
   return router;
 };

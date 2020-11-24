@@ -4,7 +4,8 @@ import LRU from 'lru-cache';
 import { Adapter, AdapterConstructor, AdapterPayload } from 'oidc-provider';
 import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils';
 
-const delegate = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
+// const delegate = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
+const delegate = (type: string) => ['dsa'].includes(type);
 
 export function createIdentityServiceAdapterClass(tokenService: TokenService, logger: Logger): AdapterConstructor {
   return class IdentityServiceAdapter implements Adapter {
@@ -50,18 +51,21 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
 
     async find(id: string): Promise<void | undefined | AdapterPayload> {
       console.log('[facade] find', this.type, ...arguments);
+      let result;
       if (delegate(this.type)) {
-        const result = await tokenService.find({
+        result = await tokenService.find({
           id,
           type: this.type,
         });
         if (result) {
-          return unmarshallProtobufAny(result);
+          result = unmarshallProtobufAny(result);
         }
-        return undefined;
+        result = undefined;
       } else {
-        return this.tokenStorage.get(this.key(id));
+        result = this.tokenStorage.get(this.key(id));
       }
+      // console.log('[facade] find result', this.type, result);
+      return result;
     }
 
     async findByUid(uid: string): Promise<void | undefined | AdapterPayload> {

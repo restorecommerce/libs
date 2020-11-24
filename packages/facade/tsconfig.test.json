@@ -4,6 +4,6 @@
     "baseUrl": "."
   },
   "include": [
-    "./tests/**/*.ts"
+    "./tests/**/*.ts", "tests/generate-keysjts"
   ]
 }

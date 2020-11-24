@@ -13,3 +13,5 @@ export interface PaymentContext extends FacadeContext {
 }
 
 export type PaymentModule = FacadeModule<PaymentContext>;
+
+export const namespace = 'payment';

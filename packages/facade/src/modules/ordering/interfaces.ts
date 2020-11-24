@@ -13,3 +13,5 @@ export interface OrderingContext extends FacadeContext {
 }
 
 export type OrderingModule = FacadeModule<OrderingContext>;
+
+export const namespace = 'ordering';

@@ -4,6 +4,8 @@ import { GrpcService } from "@restorecommerce/grpc-client";
 import { StatusType } from "../";
 import { MetaP, MetaPS, MetaS, ServiceConfig } from "./types";
 import { getTyping } from "./registry";
+import { createServiceConfig } from "@restorecommerce/service-config";
+import { join } from "path";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
@@ -78,8 +80,8 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 };
 
 export const getGQLResolverFunctions =
-  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, Service = any, Result = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, C extends keyof T[B] = any>
-  (meta: { [key in keyof Service]: MetaS<any, any> }, pack: MetaP, key: keyof CTX, serviceKey: B): { [key in keyof Service]: Result } => {
+  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
+  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
     return Object.keys(meta).reduce((obj, method) => {
       (obj as any)[method] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
@@ -116,7 +118,7 @@ export const getGQLResolverFunctions =
         }
       };
       return obj;
-    }, {} as { [key in keyof Service]: Result })
+    }, {} as { [key in keyof SRV]: R })
   }
 
 const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverFn<any, any, ServiceClient<any, any, any>, any>>>>();
@@ -271,3 +273,34 @@ export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<
     queries: que
   };
 }
+
+export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B extends keyof T>
+(service: { [key in keyof T]: MetaS<any, any> }, namespace: string, prefix: string) => {
+  // TODO Configurable
+  const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
+  const {mutations, queries} = getWhitelistBlacklistConfig(service, [], serviceConfig.get(namespace))
+
+  const schemas = getGQLSchemas(service);
+
+  Object.keys(schemas).forEach(key => {
+    registerResolverSchema(namespace, key, schemas[key], !queries.has(key) && mutations.has(key))
+  })
+
+  return generateSchema(namespace, prefix);
+}
+
+export const getAndGenerateResolvers =
+  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
+  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, namespace: NS): { [key in keyof SRV]: R } => {
+    // TODO Configurable
+    const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
+    const {mutations, queries} = getWhitelistBlacklistConfig(meta, [], serviceConfig.get(namespace as any))
+
+    const func = getGQLResolverFunctions<T, CTX>(meta, pack, namespace, namespace);
+
+    Object.keys(func).forEach(k => {
+      registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k));
+    });
+
+    return generateResolver(namespace as string)
+  }

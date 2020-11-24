@@ -1,17 +1,15 @@
-import { FederatedOrderingSchema } from './gql/index';
-import { OrderingConfig, OrderingModule } from "./interfaces";
+import { FederatedOrderingSchema } from './gql/federation';
+import { namespace, OrderingConfig, OrderingModule } from "./interfaces";
 import { OrderingSrvGrpcClient } from "./grpc";
 import { createFacadeModuleFactory } from "../../utils";
 
-const moduleName = 'ordering';
-
-export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>(moduleName, (facade, config) => {
+export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>(namespace, (facade, config) => {
   const ordering = {
     client: new OrderingSrvGrpcClient(config.config.client)
   };
 
   facade.addApolloService({
-    name: moduleName,
+    name: namespace,
     schema: FederatedOrderingSchema()
   });
 

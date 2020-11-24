@@ -70,26 +70,26 @@ function createTestFacade() {
     .useMiddleware(reqResLogger({logger}));
 }
 
-let facade: Facade<any>;
-let request: SuperAgentTest;
-
-beforeAll(async () => {
-  facade = createTestFacade();
-  await facade.start();
-  request = agent(facade.server)
-  // await new Promise(resolve => setTimeout(resolve, 20000))
-});
-
-it('should start the facade', () => {
-  expect(facade).toBeTruthy();
-  expect(facade.listening).toBe(true);
-});
-
-afterAll(async () => {
-  await facade && facade.stop();
-})
-
 describe('extend', () => {
+  let facade: Facade<any>;
+  let request: SuperAgentTest;
+
+  beforeAll(async () => {
+    facade = createTestFacade();
+    await facade.start();
+    request = agent(facade.server)
+    // await new Promise(resolve => setTimeout(resolve, 20000))
+  });
+
+  afterAll(async () => {
+    await facade && facade.stop();
+  })
+
+  it('should start the facade', () => {
+    expect(facade).toBeTruthy();
+    expect(facade.listening).toBe(true);
+  });
+
   it('should call custom function', async (done) => {
     request
       .post("/graphql")

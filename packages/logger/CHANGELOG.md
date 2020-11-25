@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.0...@restorecommerce/logger@0.4.1) (2020-11-25)
+
+
+### Bug Fixes
+
+* remove console.log ([80541bb](https://github.com/restorecommerce/libs/commit/80541bbd48b543825fbad3d2af67206d77a7e6e9))
+
+
+
+
+
 # [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.5...@restorecommerce/logger@0.4.0) (2020-11-09)
 
 

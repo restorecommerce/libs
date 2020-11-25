@@ -16,7 +16,6 @@ const rTracerFormat = format.printf((info) => {
     return String(s) === 'Symbol(splat)';
   });
   const splat = info[splatSym];
-  console.log(splat);
   delete info.timestamp;
   let object = '';
   if (splat) {

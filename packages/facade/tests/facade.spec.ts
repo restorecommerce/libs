@@ -9,16 +9,12 @@ let url
 
 beforeAll(async () => {
   await facade.start();
-  const x  = facade.address as AddressInfo;
-  url = x.address + ':' + x.port;
-  console.log(url);
-
+  const a  = facade.address as AddressInfo;
+  url = a.address + ':' + a.port;
 });
 
 
 it('should start the facade', () => {
-
-
   expect(facade).toBeTruthy();
   expect(facade.listening).toBe(true);
 });

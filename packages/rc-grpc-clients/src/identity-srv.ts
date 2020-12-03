@@ -28,9 +28,11 @@ import {
   Service as TokenService, TokenData,
   protobufPackage as tokenPackageName
 } from "./generated/io/restorecommerce/token";
+import {
+  Subject
+} from "./generated/io/restorecommerce/auth";
 import { protobufPackage as rolePackageName, RoleList, Service as RoleService } from "./generated/io/restorecommerce/role";
 import { RestoreCommerceGrpcClient } from "./grpc-client";
-import { ServerReflection as ServerReflectionService, protobufPackage as serverReflectionServicePackageName, ServerReflectionRequest, ServerReflectionResponse } from './generated/grpc/reflection/v1alpha/reflection';
 import { Any } from './generated/google/protobuf/any';
 
 export {
@@ -56,9 +58,7 @@ export {
   UserIDs,
   UserList,
   TokenService,
-  ServerReflectionService,
-  ServerReflectionRequest,
-  ServerReflectionResponse,
+  Subject
 };
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {

@@ -16,7 +16,7 @@ describe('a logger', () => {
       let logger = createLogger(opts);
       done();
     } catch (err) {
-      should.not.exist(err);
+      throw 'Nope';
     }
   });
 

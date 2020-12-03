@@ -1,5 +1,5 @@
 import { Subject } from 'rxjs';
-import { IdentitySrvGrpcClient, RegisterRequest, FindRequest, UserType, LoginRequest, ServerReflectionRequest, DeleteRequest } from '../src/index';
+import { IdentitySrvGrpcClient, RegisterRequest, FindRequest, UserType, LoginRequest, DeleteRequest } from '../src/index';
 
 
 describe('identity client', () => {
@@ -16,7 +16,7 @@ describe('identity client', () => {
     done();
   });
 
-  it('should register and delete a user', async () => {
+  // it('should register and delete a user', async () => {
 
     // const resultFind = await identityClient.user.Find(FindRequest.fromPartial({
     //   name: 'testuser2'
@@ -65,23 +65,11 @@ describe('identity client', () => {
     // console.log(resultActivate);
 
 
-    const resultLogin = await identityClient.user.Login(LoginRequest.fromPartial({
-      identifier: 'testuser',
-      password: 'testpassword',
-    }));
+    // const resultLogin = await identityClient.user.Login(LoginRequest.fromPartial({
+    //   identifier: 'testuser',
+    //   password: 'testpassword',
+    // }));
 
-    console.log(resultLogin);
-  });
+    // console.log(resultLogin);
+  // });
 });
-
-
-
-// result.subscribe(x => {
-//   console.log(x.listServicesResponse?.service);
-//   done();
-// });
-
-// req.next(ServerReflectionRequest.fromPartial({
-//   listServices: 'a'
-
-// }));

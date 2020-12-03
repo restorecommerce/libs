@@ -1,10 +1,13 @@
-import  { createFacade, reqResLogger, FacadeContext, Facade } from '../src/index';
+import  { createFacade, reqResLogger, FacadeContext, identityModule } from '../src/index';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
 import { timezonesModule } from './timezone';
 import { exampleModule } from './example';
 import { ResourcesSrvGrpcClient} from '@restorecommerce/rc-grpc-clients';
+import { TokenServiceStub } from './token-service-stub';
+
+const jwks = require('./jwks.json');
 
 const CONFIG_PATH = __dirname;
 
@@ -28,7 +31,26 @@ function createTestFacade() {
 
     env: cfg.env,
     logger
-  })
+  }).useModule(identityModule({
+      identitySrvClientConfig: cfg.identity.client,
+      oidc: {
+        // remoteTokenService: new TokenServiceStub(),
+        client_id: 'TEST_CLIENT_ID',
+        client_secret: 'TEST_CLIENT_SECRET',
+        cookies: {
+          keys: ['TEST_COOKIE_SECRET']
+        },
+        issuer: 'http://localhost:5000',
+        redirect_uris: [
+          'http://localhost:5000/session',
+          'http://localhost:4200'
+        ],
+        post_logout_redirect_uris: [
+          'http://localhost:4200'
+        ],
+        jwks,
+      }
+    }))
     .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))
     .useModule(exampleModule(cfg.example))
     .useMiddleware(reqResLogger({ logger }));

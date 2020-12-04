@@ -1,5 +1,5 @@
 import { GraphQLInputObjectType, GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull, GraphQLID } from 'graphql';
-import { MetaType, AttributeInputType } from '../../../src';
+import { MetaType, AttributeInputType } from '../../../src/gql/types';
 
 const fields = {
   id: {

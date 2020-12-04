@@ -107,7 +107,9 @@ describe('ordering', () => {
           id: "N/A"
           scope: "N/A"
           unauthenticated: false
-          token: "N/A"
+          token: "N/A",
+          hierarchicalScopes: [],
+          roleAssociations: []
         }
       }
     ) {
@@ -153,6 +155,8 @@ describe('ordering', () => {
           scope: "N/A"
           unauthenticated: false
           token: "N/A"
+          hierarchicalScopes: []
+          roleAssociations: []
         }
       }
     ) {

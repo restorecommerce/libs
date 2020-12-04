@@ -4,6 +4,7 @@ import { schema as exampleSchema } from "./tests/example/gql/schema";
 import { schema as timezoneSchema } from "./tests/timezone/gql/schema";
 import { schema as orderingSchema } from "./src/modules/ordering/gql/schema";
 import { schema as paymentSchema } from "./src/modules/payment/gql/schema";
+import { schema as resourceSchema } from "./src/modules/resource/gql/schema";
 import { clearRegistry } from "./src/gql/protos";
 
 generateSchemaTypings({
@@ -45,5 +46,13 @@ generateSchemaTypings({
   outputFile: './src/modules/payment/gql/schema.generated.ts',
   typescriptResolvers: {
     contextType: '../interfaces#PaymentContext'
+  }
+});
+
+generateSchemaTypings({
+  schema: resourceSchema(),
+  outputFile: './src/modules/resource/gql/schema.generated.ts',
+  typescriptResolvers: {
+    contextType: '../interfaces#ResourceContext'
   }
 });

@@ -39,10 +39,11 @@ export const registerPackages = (...packs: MetaP[]) => {
   packs.forEach(pack => {
     for (let key of Object.keys(pack)) {
       const val = pack[key];
+      const fullName = val[1].replace(/(?:\.|^)(\w)/g, v => v.toUpperCase()).replace(/\./g, '');
       if (val[0] === 'message') {
-        registerTyping(val[1], val[3], key, pack, {name: key}, {name: 'I' + key});
+        registerTyping(val[1], val[3], key, pack, {name: fullName}, {name: 'I' + fullName});
       } else if (val[0] === 'enum') {
-        registerEnumTyping(val[1], val[2], key, pack, {name: key});
+        registerEnumTyping(val[1], val[2], key, pack, {name: fullName});
       }
     }
   });
@@ -195,7 +196,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
           });
 
           if (optional && realTypes.length === 1) {
-            return GraphQLNonNull(realTypes[0]);
+            return realTypes[0];
           }
 
           return new GraphQLUnionType({

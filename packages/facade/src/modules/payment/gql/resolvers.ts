@@ -7,4 +7,4 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/payment";
 import { PaymentSrvGrpcClient } from "../grpc";
 
-export const resolvers: Resolvers = getAndGenerateResolvers<PaymentSrvGrpcClient, PaymentContext>(metaService, metaPackageIoRestorecommercePayment, namespace);
+export const resolvers: () => Resolvers = () => getAndGenerateResolvers<PaymentSrvGrpcClient, PaymentContext>(metaService, metaPackageIoRestorecommercePayment, namespace);

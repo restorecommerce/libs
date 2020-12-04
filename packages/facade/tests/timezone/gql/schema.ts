@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema } from "graphql";
-import { createSchemaCRUDFields } from '../../../src/index';
+import { createSchemaCRUDFields } from '../../../src/gql/helpers/schema';
 import { TimezoneCreateInputType, TimezoneType, TimezoneUpdateInputType } from './types';
 
 export const { queryFields, mutationFields } = createSchemaCRUDFields({

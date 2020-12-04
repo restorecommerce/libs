@@ -10,7 +10,7 @@ export const paymentModule = createFacadeModuleFactory<PaymentConfig, PaymentMod
 
   facade.addApolloService({
     name: namespace,
-    schema: FederatedPaymentSchema
+    schema: FederatedPaymentSchema()
   });
 
   facade.koa.use(async (ctx, next) => {

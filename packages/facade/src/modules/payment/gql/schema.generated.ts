@@ -14,7 +14,7 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  payment?: Maybe<PaymentMutation>;
+  payment: PaymentMutation;
 };
 
 export type PaymentMutation = {
@@ -28,33 +28,33 @@ export type PaymentMutation = {
 
 
 export type PaymentMutationSetupAuthorizationArgs = {
-  input: ISetupRequest;
+  input: IIoRestorecommercePaymentSetupRequest;
 };
 
 
 export type PaymentMutationSetupPurchaseArgs = {
-  input: ISetupRequest;
+  input: IIoRestorecommercePaymentSetupRequest;
 };
 
 
 export type PaymentMutationAuthorizeArgs = {
-  input: IPaymentRequest;
+  input: IIoRestorecommercePaymentPaymentRequest;
 };
 
 
 export type PaymentMutationPurchaseArgs = {
-  input: IPaymentRequest;
+  input: IIoRestorecommercePaymentPaymentRequest;
 };
 
 
 export type PaymentMutationCaptureArgs = {
-  input: ICaptureRequest;
+  input: IIoRestorecommercePaymentCaptureRequest;
 };
 
 export type ProtoIoRestorecommercePaymentSetupResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentSetupResponse';
   status: StatusType;
-  payload?: Maybe<SetupResponse>;
+  payload?: Maybe<IoRestorecommercePaymentSetupResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
@@ -68,16 +68,16 @@ export type StatusType = {
   message?: Maybe<Scalars['String']>;
 };
 
-export type SetupResponse = {
-  __typename?: 'SetupResponse';
-  paymentErrors: Array<PaymentError>;
+export type IoRestorecommercePaymentSetupResponse = {
+  __typename?: 'IoRestorecommercePaymentSetupResponse';
+  paymentErrors: Array<IoRestorecommercePaymentPaymentError>;
   token: Scalars['String'];
   confirmInitiationUrl: Scalars['String'];
   initiatedOn: Scalars['String'];
 };
 
-export type PaymentError = {
-  __typename?: 'PaymentError';
+export type IoRestorecommercePaymentPaymentError = {
+  __typename?: 'IoRestorecommercePaymentPaymentError';
   killed: Scalars['Boolean'];
   code: Scalars['Int'];
   signal: Scalars['String'];
@@ -86,9 +86,9 @@ export type PaymentError = {
   stderr: Scalars['String'];
 };
 
-export type ISetupRequest = {
+export type IIoRestorecommercePaymentSetupRequest = {
   ip: Scalars['String'];
-  items: Array<IItem>;
+  items: Array<IIoRestorecommercePaymentItem>;
   subtotal: Scalars['Int'];
   shipping: Scalars['Int'];
   handling: Scalars['Int'];
@@ -97,60 +97,79 @@ export type ISetupRequest = {
   returnUrl: Scalars['String'];
   cancelReturnUrl: Scalars['String'];
   allowGuestCheckout: Scalars['Boolean'];
-  provider: Provider;
-  subject: ISubject;
+  provider: IoRestorecommercePaymentProvider;
+  subject: IIoRestorecommerceAuthSubject;
 };
 
-export type IItem = {
+export type IIoRestorecommercePaymentItem = {
   name: Scalars['String'];
   description: Scalars['String'];
   quantity: Scalars['Int'];
   amount: Scalars['Int'];
 };
 
-export enum Provider {
+export enum IoRestorecommercePaymentProvider {
   NoProvider = 0,
   PaypalExpressGateway = 1,
   AuthorizeNetGateway = 2,
   Unrecognized = -1
 }
 
-export type ISubject = {
+export type IIoRestorecommerceAuthSubject = {
   id: Scalars['String'];
   scope: Scalars['String'];
+  roleAssociations: Array<IIoRestorecommerceAuthRoleAssociation>;
+  hierarchicalScopes: Array<IIoRestorecommerceAuthHierarchicalScope>;
   unauthenticated: Scalars['Boolean'];
   token: Scalars['String'];
+};
+
+export type IIoRestorecommerceAuthRoleAssociation = {
+  role: Scalars['String'];
+  attributes: Array<IIoRestorecommerceAttributeAttribute>;
+  id: Scalars['String'];
+};
+
+export type IIoRestorecommerceAttributeAttribute = {
+  id: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type IIoRestorecommerceAuthHierarchicalScope = {
+  id: Scalars['String'];
+  children: Array<IIoRestorecommerceAuthHierarchicalScope>;
+  role: Scalars['String'];
 };
 
 export type ProtoIoRestorecommercePaymentPaymentResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentPaymentResponse';
   status: StatusType;
-  payload?: Maybe<PaymentResponse>;
+  payload?: Maybe<IoRestorecommercePaymentPaymentResponse>;
 };
 
-export type PaymentResponse = {
-  __typename?: 'PaymentResponse';
-  paymentErrors: Array<PaymentError>;
+export type IoRestorecommercePaymentPaymentResponse = {
+  __typename?: 'IoRestorecommercePaymentPaymentResponse';
+  paymentErrors: Array<IoRestorecommercePaymentPaymentError>;
   paymentId: Scalars['String'];
   executedOn: Scalars['String'];
 };
 
-export type IPaymentRequest = {
-  provider: Provider;
+export type IIoRestorecommercePaymentPaymentRequest = {
+  provider: IoRestorecommercePaymentProvider;
   paymentSum: Scalars['Int'];
   currency: Scalars['String'];
   paymentId: Scalars['String'];
   payerId: Scalars['String'];
   token: Scalars['String'];
-  subject: ISubject;
+  subject: IIoRestorecommerceAuthSubject;
 };
 
-export type ICaptureRequest = {
-  provider: Provider;
+export type IIoRestorecommercePaymentCaptureRequest = {
+  provider: IoRestorecommercePaymentProvider;
   paymentSum: Scalars['Int'];
   currency: Scalars['String'];
   paymentId: Scalars['String'];
-  subject: ISubject;
+  subject: IIoRestorecommerceAuthSubject;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -225,17 +244,20 @@ export type ResolversTypes = ResolversObject<{
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  SetupResponse: ResolverTypeWrapper<SetupResponse>;
-  PaymentError: ResolverTypeWrapper<PaymentError>;
+  IoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<IoRestorecommercePaymentSetupResponse>;
+  IoRestorecommercePaymentPaymentError: ResolverTypeWrapper<IoRestorecommercePaymentPaymentError>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  ISetupRequest: ISetupRequest;
-  IItem: IItem;
-  Provider: Provider;
-  ISubject: ISubject;
+  IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
+  IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
+  IoRestorecommercePaymentProvider: IoRestorecommercePaymentProvider;
+  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
+  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ProtoIoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentPaymentResponse>;
-  PaymentResponse: ResolverTypeWrapper<PaymentResponse>;
-  IPaymentRequest: IPaymentRequest;
-  ICaptureRequest: ICaptureRequest;
+  IoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<IoRestorecommercePaymentPaymentResponse>;
+  IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
+  IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -246,20 +268,23 @@ export type ResolversParentTypes = ResolversObject<{
   StatusType: StatusType;
   String: Scalars['String'];
   Int: Scalars['Int'];
-  SetupResponse: SetupResponse;
-  PaymentError: PaymentError;
+  IoRestorecommercePaymentSetupResponse: IoRestorecommercePaymentSetupResponse;
+  IoRestorecommercePaymentPaymentError: IoRestorecommercePaymentPaymentError;
   Boolean: Scalars['Boolean'];
-  ISetupRequest: ISetupRequest;
-  IItem: IItem;
-  ISubject: ISubject;
+  IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
+  IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
+  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
+  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ProtoIoRestorecommercePaymentPaymentResponse: ProtoIoRestorecommercePaymentPaymentResponse;
-  PaymentResponse: PaymentResponse;
-  IPaymentRequest: IPaymentRequest;
-  ICaptureRequest: ICaptureRequest;
+  IoRestorecommercePaymentPaymentResponse: IoRestorecommercePaymentPaymentResponse;
+  IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
+  IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
 }>;
 
 export type MutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  payment?: Resolver<Maybe<ResolversTypes['PaymentMutation']>, ParentType, ContextType>;
+  payment?: Resolver<ResolversTypes['PaymentMutation'], ParentType, ContextType>;
 }>;
 
 export type PaymentMutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentMutation'] = ResolversParentTypes['PaymentMutation']> = ResolversObject<{
@@ -273,7 +298,7 @@ export type PaymentMutationResolvers<ContextType = PaymentContext, ParentType ex
 
 export type ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['SetupResponse']>, ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentSetupResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -284,15 +309,15 @@ export type StatusTypeResolvers<ContextType = PaymentContext, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SetupResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['SetupResponse'] = ResolversParentTypes['SetupResponse']> = ResolversObject<{
-  paymentErrors?: Resolver<Array<ResolversTypes['PaymentError']>, ParentType, ContextType>;
+export type IoRestorecommercePaymentSetupResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['IoRestorecommercePaymentSetupResponse'] = ResolversParentTypes['IoRestorecommercePaymentSetupResponse']> = ResolversObject<{
+  paymentErrors?: Resolver<Array<ResolversTypes['IoRestorecommercePaymentPaymentError']>, ParentType, ContextType>;
   token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   confirmInitiationUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   initiatedOn?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PaymentErrorResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentError'] = ResolversParentTypes['PaymentError']> = ResolversObject<{
+export type IoRestorecommercePaymentPaymentErrorResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['IoRestorecommercePaymentPaymentError'] = ResolversParentTypes['IoRestorecommercePaymentPaymentError']> = ResolversObject<{
   killed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   signal?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -302,16 +327,16 @@ export type PaymentErrorResolvers<ContextType = PaymentContext, ParentType exten
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProviderResolvers = { NO_PROVIDER: 'undefined', PaypalExpressGateway: 1, AuthorizeNetGateway: 2, UNRECOGNIZED: -1 };
+export type IoRestorecommercePaymentProviderResolvers = { NO_PROVIDER: 'undefined', PaypalExpressGateway: 1, AuthorizeNetGateway: 2, UNRECOGNIZED: -1 };
 
 export type ProtoIoRestorecommercePaymentPaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['PaymentResponse']>, ParentType, ContextType>;
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentResponse'] = ResolversParentTypes['PaymentResponse']> = ResolversObject<{
-  paymentErrors?: Resolver<Array<ResolversTypes['PaymentError']>, ParentType, ContextType>;
+export type IoRestorecommercePaymentPaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['IoRestorecommercePaymentPaymentResponse'] = ResolversParentTypes['IoRestorecommercePaymentPaymentResponse']> = ResolversObject<{
+  paymentErrors?: Resolver<Array<ResolversTypes['IoRestorecommercePaymentPaymentError']>, ParentType, ContextType>;
   paymentId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   executedOn?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -322,11 +347,11 @@ export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   PaymentMutation?: PaymentMutationResolvers<ContextType>;
   ProtoIoRestorecommercePaymentSetupResponse?: ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
-  SetupResponse?: SetupResponseResolvers<ContextType>;
-  PaymentError?: PaymentErrorResolvers<ContextType>;
-  Provider?: ProviderResolvers;
+  IoRestorecommercePaymentSetupResponse?: IoRestorecommercePaymentSetupResponseResolvers<ContextType>;
+  IoRestorecommercePaymentPaymentError?: IoRestorecommercePaymentPaymentErrorResolvers<ContextType>;
+  IoRestorecommercePaymentProvider?: IoRestorecommercePaymentProviderResolvers;
   ProtoIoRestorecommercePaymentPaymentResponse?: ProtoIoRestorecommercePaymentPaymentResponseResolvers<ContextType>;
-  PaymentResponse?: PaymentResponseResolvers<ContextType>;
+  IoRestorecommercePaymentPaymentResponse?: IoRestorecommercePaymentPaymentResponseResolvers<ContextType>;
 }>;
 
 

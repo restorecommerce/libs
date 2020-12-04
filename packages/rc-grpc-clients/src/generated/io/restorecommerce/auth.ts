@@ -752,6 +752,8 @@ export const HierarchicalScopesResponse = {
 export const metaSubject: { [key in keyof Required<Subject>]: MetaI | string } = {
   id: {meta:'builtin', type:'string', original:'string'} as MetaB,
   scope: {meta:'builtin', type:'string', original:'string'} as MetaB,
+  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
+  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
   unauthenticated: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
   token: {meta:'builtin', type:'string', original:'string'} as MetaB,
 }

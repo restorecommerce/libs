@@ -15,7 +15,7 @@
   },
   "resources": {
     "client": {
-      "address": "127.0.0.1:5002"
+      "address": "127.0.0.1:50053"
     }
   },
   "identity": {
@@ -31,6 +31,11 @@
   "payment": {
     "client": {
       "address": "127.0.0.1:50078"
+    }
+  },
+  "resource": {
+    "client": {
+      "address": "127.0.0.1:50053"
     }
   }
 }

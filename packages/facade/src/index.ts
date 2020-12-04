@@ -43,7 +43,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   readonly logger: Logger;
   readonly port: number;
   readonly hostname: string;
-  readonly koa: Koa<any, FacadeModulesContext<TModules>>;;
+  readonly koa: Koa<any, FacadeModulesContext<TModules>>;
   readonly env: string;
   readonly modules: FacadeModule[] = [];
 

@@ -2,4 +2,4 @@ dist
 coverage
 codegen
 
-schema.generated.ts
+debug-run.ts

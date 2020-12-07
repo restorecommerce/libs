@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/logger",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Opinionated wrapper and configurator for the winston logging toolkit",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

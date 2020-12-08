@@ -10,7 +10,7 @@ export const resourceModule = createFacadeModuleFactory<ResourceConfig, Resource
 
   facade.addApolloService({
     name: namespace,
-    schema: FederatedResourceSchema()
+    schema: FederatedResourceSchema(config.config)
   });
 
   facade.koa.use(async (ctx, next) => {

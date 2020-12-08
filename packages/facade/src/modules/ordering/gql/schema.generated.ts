@@ -11,52 +11,22 @@ export type Scalars = {
   Int: number;
   Float: number;
   MapScalar: any;
-  TodoScalar: any;
+  Upload: any;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  ordering: OrderingMutation;
+export type Query = {
+  __typename?: 'Query';
+  ordering: OrderingQuery;
 };
 
-export type OrderingMutation = {
-  __typename?: 'OrderingMutation';
+export type OrderingQuery = {
+  __typename?: 'OrderingQuery';
   Read?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
-  Create?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
-  TriggerFulfillment?: Maybe<ProtoIoRestorecommerceOrderFulfillmentResults>;
 };
 
 
-export type OrderingMutationReadArgs = {
+export type OrderingQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
-};
-
-
-export type OrderingMutationCreateArgs = {
-  input: IIoRestorecommerceOrderOrderList;
-};
-
-
-export type OrderingMutationDeleteArgs = {
-  input: IIoRestorecommerceResourcebaseDeleteRequest;
-};
-
-
-export type OrderingMutationUpdateArgs = {
-  input: IIoRestorecommerceOrderOrderList;
-};
-
-
-export type OrderingMutationUpsertArgs = {
-  input: IIoRestorecommerceOrderOrderList;
-};
-
-
-export type OrderingMutationTriggerFulfillmentArgs = {
-  input: IIoRestorecommerceOrderOrderDataList;
 };
 
 export type ProtoIoRestorecommerceOrderOrderList = {
@@ -199,7 +169,7 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 
 export type IGoogleProtobufAny = {
   typeUrl: Scalars['String'];
-  value: Scalars['TodoScalar'];
+  value: Scalars['Upload'];
 };
 
 
@@ -227,6 +197,45 @@ export type IIoRestorecommerceAuthHierarchicalScope = {
   id: Scalars['String'];
   children: Array<IIoRestorecommerceAuthHierarchicalScope>;
   role: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  ordering: OrderingMutation;
+};
+
+export type OrderingMutation = {
+  __typename?: 'OrderingMutation';
+  Create?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Update?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  Upsert?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  TriggerFulfillment?: Maybe<ProtoIoRestorecommerceOrderFulfillmentResults>;
+};
+
+
+export type OrderingMutationCreateArgs = {
+  input: IIoRestorecommerceOrderOrderList;
+};
+
+
+export type OrderingMutationDeleteArgs = {
+  input: IIoRestorecommerceResourcebaseDeleteRequest;
+};
+
+
+export type OrderingMutationUpdateArgs = {
+  input: IIoRestorecommerceOrderOrderList;
+};
+
+
+export type OrderingMutationUpsertArgs = {
+  input: IIoRestorecommerceOrderOrderList;
+};
+
+
+export type OrderingMutationTriggerFulfillmentArgs = {
+  input: IIoRestorecommerceOrderOrderDataList;
 };
 
 export type IIoRestorecommerceOrderOrderList = {
@@ -407,8 +416,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Mutation: ResolverTypeWrapper<{}>;
-  OrderingMutation: ResolverTypeWrapper<OrderingMutation>;
+  Query: ResolverTypeWrapper<{}>;
+  OrderingQuery: ResolverTypeWrapper<OrderingQuery>;
   ProtoIoRestorecommerceOrderOrderList: ResolverTypeWrapper<ProtoIoRestorecommerceOrderOrderList>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -431,11 +440,13 @@ export type ResolversTypes = ResolversObject<{
   MapScalar: ResolverTypeWrapper<Scalars['MapScalar']>;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
   IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
+  Mutation: ResolverTypeWrapper<{}>;
+  OrderingMutation: ResolverTypeWrapper<OrderingMutation>;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -455,8 +466,8 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Mutation: {};
-  OrderingMutation: OrderingMutation;
+  Query: {};
+  OrderingQuery: OrderingQuery;
   ProtoIoRestorecommerceOrderOrderList: ProtoIoRestorecommerceOrderOrderList;
   StatusType: StatusType;
   String: Scalars['String'];
@@ -478,11 +489,13 @@ export type ResolversParentTypes = ResolversObject<{
   MapScalar: Scalars['MapScalar'];
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  TodoScalar: Scalars['TodoScalar'];
+  Upload: Scalars['Upload'];
   IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
   IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
+  Mutation: {};
+  OrderingMutation: OrderingMutation;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -500,17 +513,12 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceOrderShipments: IIoRestorecommerceOrderShipments;
 }>;
 
-export type MutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  ordering?: Resolver<ResolversTypes['OrderingMutation'], ParentType, ContextType>;
+export type QueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  ordering?: Resolver<ResolversTypes['OrderingQuery'], ParentType, ContextType>;
 }>;
 
-export type OrderingMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingMutation'] = ResolversParentTypes['OrderingMutation']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationReadArgs, 'input'>>;
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationCreateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OrderingMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpsertArgs, 'input'>>;
-  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderFulfillmentResults']>, ParentType, ContextType, RequireFields<OrderingMutationTriggerFulfillmentArgs, 'input'>>;
+export type OrderingQueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingQuery'] = ResolversParentTypes['OrderingQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -619,9 +627,22 @@ export interface MapScalarScalarConfig extends GraphQLScalarTypeConfig<Resolvers
   name: 'MapScalar';
 }
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload';
 }
+
+export type MutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  ordering?: Resolver<ResolversTypes['OrderingMutation'], ParentType, ContextType>;
+}>;
+
+export type OrderingMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingMutation'] = ResolversParentTypes['OrderingMutation']> = ResolversObject<{
+  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationCreateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OrderingMutationDeleteArgs, 'input'>>;
+  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpdateArgs, 'input'>>;
+  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpsertArgs, 'input'>>;
+  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderFulfillmentResults']>, ParentType, ContextType, RequireFields<OrderingMutationTriggerFulfillmentArgs, 'input'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type ProtoGoogleProtobufEmptyResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoGoogleProtobufEmpty'] = ResolversParentTypes['ProtoGoogleProtobufEmpty']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
@@ -658,8 +679,8 @@ export type IoRestorecommerceOrderErrorListResolvers<ContextType = OrderingConte
 }>;
 
 export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
-  Mutation?: MutationResolvers<ContextType>;
-  OrderingMutation?: OrderingMutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  OrderingQuery?: OrderingQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOrderOrderList?: ProtoIoRestorecommerceOrderOrderListResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceOrderOrderList?: IoRestorecommerceOrderOrderListResolvers<ContextType>;
@@ -673,7 +694,9 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   IoRestorecommerceAuthHierarchicalScope?: IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
   MapScalar?: GraphQLScalarType;
-  TodoScalar?: GraphQLScalarType;
+  Upload?: GraphQLScalarType;
+  Mutation?: MutationResolvers<ContextType>;
+  OrderingMutation?: OrderingMutationResolvers<ContextType>;
   ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
   ProtoIoRestorecommerceOrderFulfillmentResults?: ProtoIoRestorecommerceOrderFulfillmentResultsResolvers<ContextType>;
   IoRestorecommerceOrderFulfillmentResults?: IoRestorecommerceOrderFulfillmentResultsResolvers<ContextType>;

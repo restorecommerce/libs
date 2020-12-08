@@ -16,34 +16,44 @@ import { metaService as locationMetaService } from "@restorecommerce/rc-grpc-cli
 import { metaService as organizationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
 import { metaService as taxMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
 import { metaService as tax_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
-import { namespace } from "../interfaces";
-import { createServiceConfig } from "@restorecommerce/service-config";
-import { join } from "path";
+import { namespace, ResourceServiceConfig } from "../interfaces";
 
 registerTypings();
 
-const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
+export const schema = (cfg: ResourceServiceConfig) => {
+  const subServices = [
+    [addressMetaService, 'address', ['Read']],
+    [countryMetaService, 'country', ['Read']],
+    [timezoneMetaService, 'timezone', ['Read']],
+    [contact_point_typeMetaService, 'contact_point_type', ['Read']],
+    [customerMetaService, 'customer', ['Read']],
+    [contact_pointMetaService, 'contact_point', ['Read']],
+    [localeMetaService, 'locale', ['Read']],
+    [locationMetaService, 'location', ['Read']],
+    [organizationMetaService, 'organization', ['Read']],
+    [taxMetaService, 'tax', ['Read']],
+    [tax_typeMetaService, 'tax_type', ['Read']],
+  ];
 
-[
-  [addressMetaService, 'address'],
-  [countryMetaService, 'country'],
-  [timezoneMetaService, 'timezone'],
-  [contact_point_typeMetaService, 'contact_point_type'],
-  [customerMetaService, 'customer'],
-  [contact_pointMetaService, 'contact_point'],
-  [localeMetaService, 'locale'],
-  [locationMetaService, 'location'],
-  [organizationMetaService, 'organization'],
-  [taxMetaService, 'tax'],
-  [tax_typeMetaService, 'tax_type'],
-].forEach(([service, subspace]: any) => {
-  const {mutations, queries} = getWhitelistBlacklistConfig(service, [], serviceConfig.get(namespace))
+  subServices.forEach(([service, subspace, queryList]: any) => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg)
 
-  const schemas = getGQLSchemas(service);
+    const schemas = getGQLSchemas(service);
 
-  Object.keys(schemas).forEach(key => {
-    registerResolverSchema(namespace, key, schemas[key], !queries.has(key) && mutations.has(key), subspace)
-  })
-});
+    Object.keys(schemas).forEach(key => {
+      registerResolverSchema(cfg.root ? subspace : namespace, key, schemas[key], !queries.has(key) && mutations.has(key), cfg.root ? undefined : subspace)
+    })
+  });
 
-export const schema = () => generateSchema(namespace, 'Resource');
+  if (cfg.root) {
+    return generateSchema(subServices.map(srv => {
+      const name = srv[1] as string;
+      return {
+        prefix: 'Resource' + name.substr(0, 1).toUpperCase() + name.substr(1).toLowerCase(),
+        namespace: name
+      } as any
+    }));
+  }
+
+  return generateSchema([{prefix: 'Resource', namespace}]);
+}

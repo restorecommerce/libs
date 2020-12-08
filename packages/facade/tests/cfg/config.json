@@ -36,6 +36,49 @@
   "resource": {
     "client": {
       "address": "127.0.0.1:50053"
+    },
+    "root": false
+  },
+  "catalog": {
+    "client": {
+      "address": "127.0.0.1:50068"
+    },
+    "root": false
+  },
+  "invoicing": {
+    "client": {
+      "address": "127.0.0.1:50058"
+    }
+  },
+  "fulfillment": {
+    "client": {
+      "address": "127.0.0.1:50067"
+    }
+  },
+  "indexing": {
+    "client": {
+      "address": "127.0.0.1:50064"
+    }
+  },
+  "scheduling": {
+    "client": {
+      "address": "127.0.0.1:50054"
+    }
+  },
+  "notification": {
+    "client": {
+      "address": "127.0.0.1:50052"
+    }
+  },
+  "access_control": {
+    "client": {
+      "address": "127.0.0.1:50061"
+    },
+    "root": false
+  },
+  "ostorage": {
+    "client": {
+      "address": "127.0.0.1:50066"
     }
   }
 }

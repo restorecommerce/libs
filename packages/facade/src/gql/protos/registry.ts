@@ -8,6 +8,8 @@ import {
 } from "graphql";
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
 import { MetaA, MetaB, MetaI, MetaO, MetaP, MetaPTypes, MetaU } from "./types";
+import { GraphQLUpload } from 'graphql-upload';
+
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType;
@@ -209,7 +211,10 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
             default:
               throw new Error("unknown typing type '" + builtin + "' for key '" + key + "' in: " + objName)
             case "Buffer":
-              // TODO Buffer
+              if (input) {
+                return GraphQLUpload;
+              }
+              // TODO Output Buffer
               return TodoScalar
             case "boolean":
               return GraphQLBoolean

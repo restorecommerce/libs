@@ -2,8 +2,12 @@ import { ResourceSrvGrpcClient } from "./grpc";
 import { ServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
+export interface ResourceServiceConfig extends ServiceConfig {
+  root: boolean;
+}
+
 export interface ResourceConfig {
-  config: ServiceConfig;
+  config: ResourceServiceConfig;
 }
 
 export interface ResourceContext extends FacadeContext {

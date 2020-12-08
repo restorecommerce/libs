@@ -1,10 +1,9 @@
 import { Resolvers } from './schema.generated';
-import { namespace, ResourceContext } from "../interfaces";
+import { namespace, ResourceServiceConfig, ResourceContext } from "../interfaces";
 import {
   generateResolver,
-  getAndGenerateResolvers,
   getGQLResolverFunctions,
-  getWhitelistBlacklistConfig, MetaP, MetaS,
+  getWhitelistBlacklistConfig,
   registerResolverFunction,
 } from "../../../gql/protos";
 import {
@@ -52,47 +51,35 @@ import {
   metaService as tax_typeMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
 import { ResourceSrvGrpcClient } from "../grpc";
-import { createServiceConfig } from "@restorecommerce/service-config";
-import { join } from "path";
 
-export const resolvers: () => Resolvers = () => {
-  const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
+export const resolvers: (cfg: ResourceServiceConfig) => Resolvers = (cfg: ResourceServiceConfig) => {
+  const subServices = [
+    [addressMetaService, metaPackageIoRestorecommerceAddress, 'address', ['Read']],
+    [countryMetaService, metaPackageIoRestorecommerceCountry, 'country', ['Read']],
+    [timezoneMetaService, metaPackageIoRestorecommerceTimezone, 'timezone', ['Read']],
+    [contact_point_typeMetaService, metaPackageIoRestorecommerceContact_point_type, 'contact_point_type', ['Read']],
+    [customerMetaService, metaPackageIoRestorecommerceCustomer, 'customer', ['Read']],
+    [contact_pointMetaService, metaPackageIoRestorecommerceContact_point, 'contact_point', ['Read']],
+    [localeMetaService, metaPackageIoRestorecommerceLocale, 'locale', ['Read']],
+    [locationMetaService, metaPackageIoRestorecommerceLocation, 'location', ['Read']],
+    [organizationMetaService, metaPackageIoRestorecommerceOrganization, 'organization', ['Read']],
+    [taxMetaService, metaPackageIoRestorecommerceTax, 'tax', ['Read']],
+    [tax_typeMetaService, metaPackageIoRestorecommerceTax_type, 'tax_type', ['Read']],
+  ];
 
-  [
-    [addressMetaService, metaPackageIoRestorecommerceAddress, 'address'],
-    [countryMetaService, metaPackageIoRestorecommerceCountry, 'country'],
-    [timezoneMetaService, metaPackageIoRestorecommerceTimezone, 'timezone'],
-    [contact_point_typeMetaService, metaPackageIoRestorecommerceContact_point_type, 'contact_point_type'],
-    [customerMetaService, metaPackageIoRestorecommerceCustomer, 'customer'],
-    [contact_pointMetaService, metaPackageIoRestorecommerceContact_point, 'contact_point'],
-    [localeMetaService, metaPackageIoRestorecommerceLocale, 'locale'],
-    [locationMetaService, metaPackageIoRestorecommerceLocation, 'location'],
-    [organizationMetaService, metaPackageIoRestorecommerceOrganization, 'organization'],
-    [taxMetaService, metaPackageIoRestorecommerceTax, 'tax'],
-    [tax_typeMetaService, metaPackageIoRestorecommerceTax_type, 'tax_type'],
-  ].forEach(([meta, pack, subspace]: any) => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(meta, [], serviceConfig.get(namespace as any))
+  subServices.forEach(([meta, pack, subspace, queryList]: any) => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(meta, queryList, cfg)
 
     const func = getGQLResolverFunctions<ResourceSrvGrpcClient, ResourceContext>(meta, pack, namespace, subspace || namespace);
 
     Object.keys(func).forEach(k => {
-      registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace);
+      registerResolverFunction(cfg.root ? subspace : namespace, k, func[k], !queries.has(k) && mutations.has(k), cfg.root ? undefined : subspace);
     });
   });
 
-  /*
-  const addressResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(addressMetaService, metaPackageIoRestorecommerceAddress, namespace, 'address');
-  const countryResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(countryMetaService, metaPackageIoRestorecommerceCountry, namespace, 'country');
-  const timezoneResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(timezoneMetaService, metaPackageIoRestorecommerceTimezone, namespace, 'timezone');
-  const contact_point_typeResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(contact_point_typeMetaService, metaPackageIoRestorecommerceContact_point_type, namespace, 'contact_point_type');
-  const customerResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(customerMetaService, metaPackageIoRestorecommerceCustomer, namespace, 'customer');
-  const contact_pointResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(contact_pointMetaService, metaPackageIoRestorecommerceContact_point, namespace, 'contact_point');
-  const localeResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(localeMetaService, metaPackageIoRestorecommerceLocale, namespace, 'locale');
-  const locationResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(locationMetaService, metaPackageIoRestorecommerceLocation, namespace, 'location');
-  const organizationResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(organizationMetaService, metaPackageIoRestorecommerceOrganization, namespace, 'organization');
-  const taxResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(taxMetaService, metaPackageIoRestorecommerceTax, namespace, 'tax');
-  const tax_typeResolvers: Resolvers = getAndGenerateResolvers<ResourceSrvGrpcClient, ResourceContext>(tax_typeMetaService, metaPackageIoRestorecommerceTax_type, namespace, 'tax_type');
-  */
+  if (cfg.root) {
+    return generateResolver(...subServices.map(srv => srv[2] as string));
+  }
 
   return generateResolver(namespace);
 }

@@ -83,19 +83,23 @@ export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
   (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
     return Object.keys(meta).reduce((obj, method) => {
+      const serviceMethod = (meta as any)[method] as MetaS<any, any>;
+      const typing = getTyping(serviceMethod.request.type)!;
+      const methodMeta = typing.meta as MetaPS;
+      const defaults = methodMeta[2].fromPartial({});
+
       (obj as any)[method] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
-        const serviceMethod = (meta as any)[method] as MetaS<any, any>;
-        const typing = getTyping(serviceMethod.request.type)!;
-        const methodMeta = typing.meta as MetaPS
 
         try {
           const req = {
             // Fill defaults
-            ...methodMeta[2].fromPartial({}),
+            ...defaults,
             ...args.input
           };
+
+          // TODO Handle client-stream methods
           const result = await service[method](req);
           return {
             payload: result,
@@ -155,46 +159,53 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
   space.set(name, func);
 }
 
-export const generateResolver = (namespace: string) => {
-  if (!namespaceResolverRegistry.has(namespace)) {
-    throw new Error(`Namespace "${namespace}" has no registered functions`)
-  }
+export const generateResolver = (...namespaces: string[]) => {
+  const queryResolvers: any = {};
+  const mutationResolvers: any = {};
+
+  namespaces.forEach(ns => {
+    if (!namespaceResolverRegistry.has(ns)) {
+      throw new Error(`Namespace "${ns}" has no registered functions`)
+    }
+
+    if (namespaceResolverRegistry.get(ns)!.has(false)) {
+      const res: any = {};
+
+      namespaceResolverRegistry.get(ns)!.get(false)!.forEach((value, key) => {
+        if (value instanceof Map) {
+          res[key] = Object.fromEntries(value)
+        } else {
+          res[key] = value;
+        }
+      });
+
+      queryResolvers[ns] = () => res;
+    }
+
+    if (namespaceResolverRegistry.get(ns)!.has(true)) {
+      const res: any = {};
+
+      namespaceResolverRegistry.get(ns)!.get(true)!.forEach((value, key) => {
+        if (value instanceof Map) {
+          res[key] = Object.fromEntries(value)
+        } else {
+          res[key] = value;
+        }
+      });
+
+      mutationResolvers[ns] = () => res;
+    }
+  });
 
   const resolvers: any = {};
 
-  if (namespaceResolverRegistry.get(namespace)!.has(false)) {
-    const res: any = {};
-
-    namespaceResolverRegistry.get(namespace)!.get(false)!.forEach((value, key) => {
-      if (value instanceof Map) {
-        res[key] = Object.fromEntries(value)
-      } else {
-        res[key] = value;
-      }
-    });
-
-    resolvers.Query = {
-      [namespace]: () => res
-    };
+  if (Object.keys(queryResolvers).length > 0) {
+    resolvers.Query = queryResolvers;
   }
 
-  if (namespaceResolverRegistry.get(namespace)!.has(true)) {
-    const res: any = {};
-
-    namespaceResolverRegistry.get(namespace)!.get(true)!.forEach((value, key) => {
-      if (value instanceof Map) {
-        res[key] = Object.fromEntries(value)
-      } else {
-        res[key] = value;
-      }
-    });
-
-    resolvers.Mutation = {
-      [namespace]: () => res
-    };
+  if (Object.keys(mutationResolvers).length > 0) {
+    resolvers.Mutation = mutationResolvers;
   }
-
-  console.log(namespace, resolvers);
 
   return resolvers;
 }
@@ -230,70 +241,79 @@ export const registerResolverSchema = (namespace: string, name: string, schema: 
   space.set(name, schema);
 }
 
-export const generateSchema = (namespace: string, prefix: string) => {
-  if (!namespaceResolverSchemaRegistry.has(namespace)) {
-    throw new Error(`Namespace "${namespace}" has no registered schemas`)
-  }
+export const generateSchema = (setup: { prefix: string, namespace: string }[]) => {
+  const queryFields: GraphQLFieldConfigMap<any, any> = {};
+  const mutationFields: GraphQLFieldConfigMap<any, any> = {};
+
+  setup.forEach(s => {
+    if (!namespaceResolverSchemaRegistry.has(s.namespace)) {
+      throw new Error(`Namespace "${s.namespace}" has no registered schemas`)
+    }
+
+    if (namespaceResolverSchemaRegistry.get(s.namespace)!.has(false)) {
+      const fields: GraphQLFieldConfigMap<any, any> = {};
+
+      namespaceResolverSchemaRegistry.get(s.namespace)!.get(false)!.forEach((value, key) => {
+        if (value instanceof Map) {
+          const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
+          fields[key] = {
+            type: GraphQLNonNull(new GraphQLObjectType({
+              name: s.prefix + capitalName + 'Query',
+              fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
+            }))
+          };
+        } else {
+          fields[key] = value as any;
+        }
+      });
+
+      queryFields[s.namespace] = {
+        type: GraphQLNonNull(new GraphQLObjectType({
+          name: s.prefix + 'Query',
+          fields
+        }))
+      };
+    }
+
+    if (namespaceResolverSchemaRegistry.get(s.namespace)!.has(true)) {
+      const fields: GraphQLFieldConfigMap<any, any> = {};
+
+      namespaceResolverSchemaRegistry.get(s.namespace)!.get(true)!.forEach((value, key) => {
+        if (value instanceof Map) {
+          const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
+          fields[key] = {
+            type: GraphQLNonNull(new GraphQLObjectType({
+              name: s.prefix + capitalName + 'Mutation',
+              fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
+            }))
+          };
+        } else {
+          fields[key] = value as any;
+        }
+      });
+
+      mutationFields[s.namespace] = {
+        type: GraphQLNonNull(new GraphQLObjectType({
+          name: s.prefix + 'Mutation',
+          fields
+        }))
+      }
+    }
+  });
 
   const config: any = {};
 
-  if (namespaceResolverSchemaRegistry.get(namespace)!.has(false)) {
-    const fields: GraphQLFieldConfigMap<any, any> = {};
-
-    namespaceResolverSchemaRegistry.get(namespace)!.get(false)!.forEach((value, key) => {
-      if (value instanceof Map) {
-        const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
-        fields[key] = {
-          type: GraphQLNonNull(new GraphQLObjectType({
-            name: prefix + capitalName + 'Query',
-            fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
-          }))
-        };
-      } else {
-        fields[key] = value as any;
-      }
-    });
-
+  if (Object.keys(queryFields).length > 0) {
     config.query = new GraphQLObjectType({
       name: 'Query',
-      fields: {
-        [namespace]: {
-          type: GraphQLNonNull(new GraphQLObjectType({
-            name: prefix + 'Query',
-            fields
-          }))
-        }
-      }
+      fields: queryFields
     });
   }
 
-  if (namespaceResolverSchemaRegistry.get(namespace)!.has(true)) {
-    const fields: GraphQLFieldConfigMap<any, any> = {};
-
-    namespaceResolverSchemaRegistry.get(namespace)!.get(true)!.forEach((value, key) => {
-      if (value instanceof Map) {
-        const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
-        fields[key] = {
-          type: GraphQLNonNull(new GraphQLObjectType({
-            name: prefix + capitalName + 'Mutation',
-            fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
-          }))
-        };
-      } else {
-        fields[key] = value as any;
-      }
-    });
-
+  if (Object.keys(mutationFields).length > 0) {
     config.mutation = new GraphQLObjectType({
       name: 'Mutation',
-      fields: {
-        [namespace]: {
-          type: GraphQLNonNull(new GraphQLObjectType({
-            name: prefix + 'Mutation',
-            fields
-          }))
-        }
-      }
+      fields: mutationFields
     });
   }
 
@@ -357,10 +377,8 @@ export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<
 }
 
 export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B extends keyof T>
-(service: { [key in keyof T]: MetaS<any, any> }, namespace: string, prefix: string) => {
-  // TODO Configurable
-  const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
-  const {mutations, queries} = getWhitelistBlacklistConfig(service, [], serviceConfig.get(namespace))
+(service: { [key in keyof T]: MetaS<any, any> }, namespace: string, prefix: string, cfg: ServiceConfig, queryList: B[]) => {
+  const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg)
 
   const schemas = getGQLSchemas(service);
 
@@ -368,17 +386,15 @@ export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B
     registerResolverSchema(namespace, key, schemas[key], !queries.has(key) && mutations.has(key))
   })
 
-  return generateSchema(namespace, prefix);
+  return generateSchema([{prefix, namespace}]);
 }
 
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, namespace: NS, subspace: string | undefined = undefined): { [key in keyof SRV]: R } => {
-    // TODO Configurable
-    const serviceConfig = createServiceConfig(join(process.cwd(), 'tests'));
-    const {mutations, queries} = getWhitelistBlacklistConfig(meta, [], serviceConfig.get(namespace as any))
+  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, namespace: NS, cfg: ServiceConfig, queryList: (keyof SRV)[], subspace: string | undefined = undefined, serviceKey: B | undefined = undefined): { [key in keyof SRV]: R } => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(meta, queryList, cfg);
 
-    const func = getGQLResolverFunctions<T, CTX>(meta, pack, namespace, subspace || namespace);
+    const func = getGQLResolverFunctions<T, CTX>(meta, pack, namespace, serviceKey || subspace || namespace);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace);

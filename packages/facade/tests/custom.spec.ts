@@ -50,7 +50,7 @@ function createTestFacade() {
     facade.addApolloService({
       name: namespace,
       schema: buildFederatedSchema({
-        typeDefs: gql(printSchema(generateSchema(namespace, 'Custom'))),
+        typeDefs: gql(printSchema(generateSchema([{prefix: 'Custom', namespace}]))),
         resolvers: generateResolver(namespace)
       })
     });

@@ -10,7 +10,7 @@ export const orderingModule = createFacadeModuleFactory<OrderingConfig, Ordering
 
   facade.addApolloService({
     name: namespace,
-    schema: FederatedOrderingSchema()
+    schema: FederatedOrderingSchema(config.config)
   });
 
   facade.koa.use(async (ctx, next) => {

@@ -194,6 +194,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       subscriptions: false, // not supported when using federation - but not used anyway
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
+        this.logger.debug('Error while processing request', { error });
         return {
           message: error.message,
           locations: error.locations,

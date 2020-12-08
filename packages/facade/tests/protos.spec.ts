@@ -49,7 +49,7 @@ describe("proto-meta", () => {
     const output = obj.output;
 
     expect(output).toBeInstanceOf(GraphQLObjectType)
-    expect(output.name).toEqual('Order');
+    expect(output.name).toEqual('IoRestorecommerceOrderOrder');
 
     const fields = (output as GraphQLObjectType).getFields();
 

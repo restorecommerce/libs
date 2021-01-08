@@ -21,10 +21,10 @@ export default {
       ],
       "name": "1 (EU)",
       "offers": {
-        "basePrice": 10.6,
+        "basePrice": 10.45,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.85,
+        "stepPrice": 0.80,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -36,10 +36,10 @@ export default {
       ],
       "name": "1 (non-EU)",
       "offers": {
-        "basePrice": 13.25,
+        "basePrice": 16.60,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 1.5,
+        "stepPrice": 1.2,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -59,10 +59,10 @@ export default {
       ],
       "name": "2 (EU)",
       "offers": {
-        "basePrice": 11.35,
+        "basePrice": 10.90,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.95,
+        "stepPrice": 0.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -84,10 +84,10 @@ export default {
       ],
       "name": "3 (EU)",
       "offers": {
-        "basePrice": 11.45,
+        "basePrice": 11.05,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 1.05,
+        "stepPrice": 0.95,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -107,10 +107,10 @@ export default {
       ],
       "name": "3 (non-EU)",
       "offers": {
-        "basePrice": 14.2,
+        "basePrice": 15.5,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 1.5,
+        "stepPrice": 1.6,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -130,10 +130,10 @@ export default {
         "TR"
       ],
       "offers": {
-        "basePrice": 22.95,
+        "basePrice": 24.55,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 2.9,
+        "stepPrice": 2.75,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -188,10 +188,10 @@ export default {
         "VN"
       ],
       "offers": {
-        "basePrice": 23.35,
+        "basePrice": 26.35,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 5.2,
+        "stepPrice": 6.1,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -294,168 +294,14 @@ export default {
         "VE",
         "CF"
       ],
-      "offers": [
-        {
-          "maxWeight": 1000,
-          "price": 32.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 2000,
-          "price": 35.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 3000,
-          "price": 38.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 4000,
-          "price": 41.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 5000,
-          "price": 45.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 6000,
-          "price": 48.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 7000,
-          "price": 51.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 8000,
-          "price": 54.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 9000,
-          "price": 58.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 10000,
-          "price": 61.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 11000,
-          "price": 64.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 12000,
-          "price": 67.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 13000,
-          "price": 71.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 14000,
-          "price": 74.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 15000,
-          "price": 77.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 16000,
-          "price": 80.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 17000,
-          "price": 84.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 18000,
-          "price": 87.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 19000,
-          "price": 90.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 20000,
-          "price": 93.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 21000,
-          "price": 97.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 22000,
-          "price": 100.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 23000,
-          "price": 103.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 24000,
-          "price": 106.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 25000,
-          "price": 110.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 26000,
-          "price": 113.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 27000,
-          "price": 116.55,
-          "type": "package"
-        },
-        {
-          "maxWeight": 28000,
-          "price": 119.8,
-          "type": "package"
-        },
-        {
-          "maxWeight": 29000,
-          "price": 123.05,
-          "type": "package"
-        },
-        {
-          "maxWeight": 30000,
-          "price": 126.3,
-          "type": "package"
-        },
-        {
-          "maxWeight": 31000,
-          "price": 129.56,
-          "type": "package"
-        },
-        {
-          "maxWeight": 31500,
-          "price": 131.18,
-          "type": "package"
-        }
-      ]
+      "offers": {
+        "basePrice": 36.0,
+        "maxWeight": 31500,
+        "roundingPrice": "ROUND_UP",
+        "stepPrice": 7.4,
+        "stepWeight": 1000,
+        "type": "package"
+      }
     },
     "national": {
       "countryCodes": [
@@ -464,32 +310,32 @@ export default {
       "offers": [
         {
           "maxWeight": 1000,
-          "price": 4.15,
+          "price": 4.25,
           "type": "package"
         },
         {
           "maxWeight": 3000,
-          "price": 4.7,
+          "price": 4.85,
           "type": "package"
         },
         {
           "maxWeight": 5000,
-          "price": 5.75,
+          "price": 5.80,
           "type": "package"
         },
         {
           "maxWeight": 10000,
-          "price": 6.9,
+          "price": 7.45,
           "type": "package"
         },
         {
           "maxWeight": 20000,
-          "price": 9.3,
+          "price": 11.40,
           "type": "package"
         },
         {
           "maxWeight": 31500,
-          "price": 11.4,
+          "price": 13.8,
           "type": "package"
         }
       ]

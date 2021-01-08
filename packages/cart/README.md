@@ -1,8 +1,8 @@
 # Cart
 
-<img src="http://img.shields.io/npm/v/%40restorecommerce%2Fgql%2Dbot.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/cart?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/cart)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/cart?branch=master)
+<img src="http://img.shields.io/npm/v/@restorecommerce/cart.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/cart?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/cart)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/cart?branch=master)
 
-[version]: http://img.shields.io/npm/v/%40restorecommerce%2Fcart.svg?style=flat-square
+[version]: http://img.shields.io/npm/v/@restorecommerce/cart.svg?style=flat-square
 [build]: http://img.shields.io/travis/restorecommerce/cart/master.svg?style=flat-square
 [depend]: https://img.shields.io/david/restorecommerce/cart.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/cart/master.svg?style=flat-square
@@ -424,8 +424,9 @@ npm test
 
 Courier Plans:
 
-- [DHL business](/src/resources/dhl-business.ts) based on contract based pricing not publicly available.
-- [DHL public](/src/resources/dhl-public.ts) based on private customer pricing info [pdf](https://www.dhl.de/content/dam/images/pdf/dhl-paket-pk-preisuebersicht-012020.pdf) | [de](https://www.dhl.de/de/privatkunden/pakete-versenden/deutschlandweit-versenden/paket.html) | [intl](https://www.dhl.de/en/privatkunden/preise/preise-international.html) | [web](https://www.dhl.de/popweb/gw2/nepal/ProductOrder.action)
+- [DHL premium business](/src/resources/dhl-premium-business.ts) based on contract based pricing not publicly available.
+- [DHL private customers](/src/resources/dhl-private.ts) based on private customer pricing info [pdf](https://www.dhl.de/content/dam/images/pdf/dhl-paket-pk-preisuebersicht-012020.pdf) | [de](https://www.dhl.de/de/privatkunden/pakete-versenden/deutschlandweit-versenden/paket.html) | [intl](https://www.dhl.de/en/privatkunden/preise/preise-international.html) | [web](https://www.dhl.de/popweb/gw2/nepal/ProductOrder.action)
+- [DHL express](/src/resources/dhl-express.ts) based on contract based pricing not publicly available.
 
 ## Calculation Logic
 

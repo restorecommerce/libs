@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 import publicDHL from '../resources/dhl-private';
-import premiumDHL from '../resources/dhl-business';
+import premiumDHL from '../resources/dhl-premium-business';
 import expressDHL from '../resources/dhl-express';
 import { IItem } from './IItem';
 

@@ -113,43 +113,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -830,52 +830,52 @@ export const ContextQuery_Filter = {
   },
 };
 
-export const metaTarget: { [key in keyof Required<Target>]: MetaI | string } = {
-  subject: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  resources: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  action: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
+export const metaTarget: { [key in keyof Required<Target>]: MetaBase | string } = {
+  subject: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
+  resources: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
+  action: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
 }
-export const metaRule: { [key in keyof Required<Rule>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
-  condition: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaRule: { [key in keyof Required<Rule>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
+  contextQuery: {kind:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaMessage,
+  condition: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
+  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaRuleRQ: { [key in keyof Required<RuleRQ>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  condition: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contextQuery: {meta:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaO,
-  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaRuleRQ: { [key in keyof Required<RuleRQ>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
+  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
+  condition: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contextQuery: {kind:'object', type:'.io.restorecommerce.rule.ContextQuery', name:'ContextQuery'} as MetaMessage,
+  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaRuleList: { [key in keyof Required<RuleList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.Rule', name:'Rule'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaRuleList: { [key in keyof Required<RuleList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rule.Rule', name:'Rule'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaContextQuery: { [key in keyof Required<ContextQuery>]: MetaI | string } = {
-  filters: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.ContextQuery.Filter', name:'ContextQuery_Filter'} as MetaO} as MetaA,
-  query: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaContextQuery: { [key in keyof Required<ContextQuery>]: MetaBase | string } = {
+  filters: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rule.ContextQuery.Filter', name:'ContextQuery_Filter'} as MetaMessage} as MetaArray,
+  query: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaContextQuery_Filter: { [key in keyof Required<ContextQuery_Filter>]: MetaI | string } = {
-  field: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  operation: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaContextQuery_Filter: { [key in keyof Required<ContextQuery_Filter>]: MetaBase | string } = {
+  field: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  operation: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  value: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: RuleList.decode} as MetaS<ReadRequest, RuleList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaS<RuleList, RuleList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: RuleList.decode} as MetaService<ReadRequest, RuleList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaService<RuleList, RuleList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaService<RuleList, RuleList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.rule.RuleList', name:'RuleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RuleList.encode, decodeResponse: RuleList.decode} as MetaService<RuleList, RuleList>,
 }
-export const metaPackageIoRestorecommerceRule: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Effect: ['enum', '.io.restorecommerce.rule.Effect', Effect, undefined],
   Target: ['message', '.io.restorecommerce.rule.Target', Target, metaTarget],
   Rule: ['message', '.io.restorecommerce.rule.Rule', Rule, metaRule],

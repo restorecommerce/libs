@@ -55,43 +55,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -327,28 +327,28 @@ export const Timezone = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaTimezoneList: { [key in keyof Required<TimezoneList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.timezone.Timezone', name:'Timezone'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaTimezoneList: { [key in keyof Required<TimezoneList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.timezone.Timezone', name:'Timezone'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaTimezone: { [key in keyof Required<Timezone>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  value: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaTimezone: { [key in keyof Required<Timezone>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  value: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: TimezoneList.decode} as MetaS<ReadRequest, TimezoneList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaS<TimezoneList, TimezoneList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: TimezoneList.decode} as MetaService<ReadRequest, TimezoneList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaService<TimezoneList, TimezoneList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaService<TimezoneList, TimezoneList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.timezone.TimezoneList', name:'TimezoneList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TimezoneList.encode, decodeResponse: TimezoneList.decode} as MetaService<TimezoneList, TimezoneList>,
 }
-export const metaPackageIoRestorecommerceTimezone: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Deleted: ['message', '.io.restorecommerce.timezone.Deleted', Deleted, metaDeleted],
   TimezoneList: ['message', '.io.restorecommerce.timezone.TimezoneList', TimezoneList, metaTimezoneList],
   Timezone: ['message', '.io.restorecommerce.timezone.Timezone', Timezone, metaTimezone],

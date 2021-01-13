@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, InvoicingContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceInvoice,
+  metadata as metaPackageIoRestorecommerceInvoice,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/invoice";
 import { InvoicingSrvGrpcClient } from "../grpc";

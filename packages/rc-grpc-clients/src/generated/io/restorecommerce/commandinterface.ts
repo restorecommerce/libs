@@ -53,43 +53,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -250,19 +250,19 @@ export const CommandResponse = {
   },
 };
 
-export const metaCommandRequest: { [key in keyof Required<CommandRequest>]: MetaI | string } = {
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaCommandRequest: { [key in keyof Required<CommandRequest>]: MetaBase | string } = {
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  payload: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaCommandResponse: { [key in keyof Required<CommandResponse>]: MetaI | string } = {
-  services: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaCommandResponse: { [key in keyof Required<CommandResponse>]: MetaBase | string } = {
+  services: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  payload: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Command: {request: {meta:'object', type:'.io.restorecommerce.commandinterface.CommandRequest', name:'CommandRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CommandRequest.encode, decodeResponse: Any.decode} as MetaS<CommandRequest, Any>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Command: {request: {kind:'object', type:'.io.restorecommerce.commandinterface.CommandRequest', name:'CommandRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CommandRequest.encode, decodeResponse: Any.decode} as MetaService<CommandRequest, Any>,
 }
-export const metaPackageIoRestorecommerceCommandinterface: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   CommandRequest: ['message', '.io.restorecommerce.commandinterface.CommandRequest', CommandRequest, metaCommandRequest],
   CommandResponse: ['message', '.io.restorecommerce.commandinterface.CommandResponse', CommandResponse, metaCommandResponse],
   Service: ['service', '.io.restorecommerce.commandinterface.Service', undefined, metaService],

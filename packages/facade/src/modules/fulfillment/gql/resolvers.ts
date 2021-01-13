@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, FulfillmentContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceFulfillment,
+  metadata as metaPackageIoRestorecommerceFulfillment,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment";
 import { FulfillmentSrvGrpcClient } from "../grpc";

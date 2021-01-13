@@ -71,43 +71,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -368,30 +368,30 @@ export const GrantId = {
   },
 };
 
-export const metaTokenData: { [key in keyof Required<TokenData>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  payload: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  expiresIn: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaTokenData: { [key in keyof Required<TokenData>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  payload: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  expiresIn: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaIdentifier: { [key in keyof Required<Identifier>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaIdentifier: { [key in keyof Required<Identifier>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaGrantId: { [key in keyof Required<GrantId>]: MetaI | string } = {
-  grantId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaGrantId: { [key in keyof Required<GrantId>]: MetaBase | string } = {
+  grantId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  upsert: {request: {meta:'object', type:'.io.restorecommerce.token.TokenData', name:'TokenData'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: TokenData.encode, decodeResponse: Any.decode} as MetaS<TokenData, Any>,
-  find: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
-  destroy: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
-  revokeByGrantId: {request: {meta:'object', type:'.io.restorecommerce.token.GrantId', name:'GrantId'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: GrantId.encode, decodeResponse: Any.decode} as MetaS<GrantId, Any>,
-  consume: {request: {meta:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaO, response: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaS<Identifier, Any>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  upsert: {request: {kind:'object', type:'.io.restorecommerce.token.TokenData', name:'TokenData'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TokenData.encode, decodeResponse: Any.decode} as MetaService<TokenData, Any>,
+  find: {request: {kind:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaService<Identifier, Any>,
+  destroy: {request: {kind:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaService<Identifier, Any>,
+  revokeByGrantId: {request: {kind:'object', type:'.io.restorecommerce.token.GrantId', name:'GrantId'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: GrantId.encode, decodeResponse: Any.decode} as MetaService<GrantId, Any>,
+  consume: {request: {kind:'object', type:'.io.restorecommerce.token.Identifier', name:'Identifier'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Identifier.encode, decodeResponse: Any.decode} as MetaService<Identifier, Any>,
 }
-export const metaPackageIoRestorecommerceToken: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   TokenData: ['message', '.io.restorecommerce.token.TokenData', TokenData, metaTokenData],
   Identifier: ['message', '.io.restorecommerce.token.Identifier', Identifier, metaIdentifier],
   GrantId: ['message', '.io.restorecommerce.token.GrantId', GrantId, metaGrantId],

@@ -89,43 +89,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -451,34 +451,34 @@ export const Deleted = {
   },
 };
 
-export const metaAuthenticationLogList: { [key in keyof Required<AuthenticationLogList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLog', name:'AuthenticationLog'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaAuthenticationLogList: { [key in keyof Required<AuthenticationLogList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLog', name:'AuthenticationLog'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaAuthenticationLog: { [key in keyof Required<AuthenticationLog>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  ipv4Address: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  ipv6Address: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  operatingSystem: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  userAgent: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  date: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  activity: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  subjectId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  tokenName: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaAuthenticationLog: { [key in keyof Required<AuthenticationLog>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  ipv4Address: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  ipv6Address: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  operatingSystem: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  userAgent: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  date: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  activity: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  subjectId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  tokenName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AuthenticationLogList.decode} as MetaS<ReadRequest, AuthenticationLogList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaS<AuthenticationLogList, AuthenticationLogList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaS<AuthenticationLogList, AuthenticationLogList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaS<AuthenticationLogList, AuthenticationLogList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<ReadRequest, AuthenticationLogList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
 }
-export const metaPackageIoRestorecommerceAuthentication_log: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   AuthenticationLogList: ['message', '.io.restorecommerce.authentication_log.AuthenticationLogList', AuthenticationLogList, metaAuthenticationLogList],
   AuthenticationLog: ['message', '.io.restorecommerce.authentication_log.AuthenticationLog', AuthenticationLog, metaAuthenticationLog],
   Deleted: ['message', '.io.restorecommerce.authentication_log.Deleted', Deleted, metaDeleted],

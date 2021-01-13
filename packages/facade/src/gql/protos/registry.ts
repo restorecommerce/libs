@@ -7,8 +7,9 @@ import {
   GraphQLObjectTypeConfig, GraphQLOutputType, GraphQLString, GraphQLUnionType
 } from "graphql";
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
-import { MetaA, MetaB, MetaI, MetaO, MetaP, MetaPTypes, MetaU } from "./types";
+import { MetaArray, MetaPrimitive, MetaBase, MetaMessage, MetaP, MetaPTypes, MetaUnion } from "./types";
 import { GraphQLUpload } from 'graphql-upload';
+import { capitalizeProtoName } from "./utils";
 
 
 export interface TypingData {
@@ -41,7 +42,7 @@ export const registerPackages = (...packs: MetaP[]) => {
   packs.forEach(pack => {
     for (let key of Object.keys(pack)) {
       const val = pack[key];
-      const fullName = val[1].replace(/(?:\.|^)(\w)/g, v => v.toUpperCase()).replace(/\./g, '');
+      const fullName = capitalizeProtoName(val[1]);
       if (val[0] === 'message') {
         registerTyping(val[1], val[3], key, pack, {name: fullName}, {name: 'I' + fullName});
       } else if (val[0] === 'enum') {
@@ -53,7 +54,7 @@ export const registerPackages = (...packs: MetaP[]) => {
 
 export const registerTyping = <T>(
   type: string,
-  typings: { [key in keyof T]: MetaI | string },
+  typings: { [key in keyof T]: MetaBase | string },
   nodeName: string,
   pack: MetaP,
   opts: Omit<Readonly<GraphQLObjectTypeConfig<any, any>>, 'fields'>,
@@ -147,18 +148,18 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType => {
+const resolveMeta = (key: string, value: MetaBase | string, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType => {
   const valueType = typeof value;
   switch (valueType) {
     case "object":
-      if (!('meta' in (value as object))) {
+      if (!('kind' in (value as object))) {
         throw Error("unknown typing object type");
       }
 
-      const obj = value as MetaI;
-      switch (obj.meta) {
+      const obj = value as MetaBase;
+      switch (obj.kind) {
         case "object":
-          const objType = (obj as MetaO).type;
+          const objType = (obj as MetaMessage).type;
           if (!registeredTypings.has(objType)) {
             throw new Error("Typing '" + objType + "' not registered for key '" + key + "' in object: " + objName);
           }
@@ -169,7 +170,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
 
           return registeredTypings.get(objType)!.input
         case "array":
-          return GraphQLList(GraphQLNonNull(resolveMeta(key, (obj as MetaA).type, rootObjType, objName, input)))
+          return GraphQLList(GraphQLNonNull(resolveMeta(key, (obj as MetaArray).type, rootObjType, objName, input)))
         case "map":
           // TODO
           return MapScalar;
@@ -179,7 +180,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
             return TodoScalar
           }
 
-          const choices = (obj as MetaU).choices;
+          const choices = (obj as MetaUnion).choices;
 
           let optional = false;
           const realTypes: GraphQLObjectType[] = [];
@@ -206,7 +207,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
             types: realTypes,
           });
         case "builtin":
-          const builtin = (obj as MetaB).type;
+          const builtin = (obj as MetaPrimitive).type;
           switch (builtin) {
             default:
               throw new Error("unknown typing type '" + builtin + "' for key '" + key + "' in: " + objName)
@@ -222,7 +223,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
               return GraphQLString
             case "bigint":
             case "number":
-              switch ((obj as MetaB).original) {
+              switch ((obj as MetaPrimitive).original) {
                 default:
                   return GraphQLInt
                 case 'double':
@@ -238,7 +239,7 @@ const resolveMeta = (key: string, value: MetaI | string, rootObjType: string, ob
           break
       }
 
-      throw new Error("unknown meta object: " + obj.meta);
+      throw new Error("unknown meta object: " + obj.kind);
     case "string":
       switch (value) {
         default:

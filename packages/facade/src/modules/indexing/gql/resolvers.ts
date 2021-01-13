@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, IndexingContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceSearch,
+  metadata as metaPackageIoRestorecommerceSearch,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search";
 import { IndexingSrvGrpcClient } from "../grpc";

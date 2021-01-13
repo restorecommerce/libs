@@ -8,23 +8,23 @@ import {
 } from "../../../gql/protos";
 import {
   metaService as productMetaService,
-  metaPackageIoRestorecommerceProduct
+  metadata as metaPackageIoRestorecommerceProduct
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
 import {
   metaService as product_prototypeMetaService,
-  metaPackageIoRestorecommerceProduct_prototype
+  metadata as metaPackageIoRestorecommerceProduct_prototype
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
 import {
   metaService as product_categoryMetaService,
-  metaPackageIoRestorecommerceProduct_category
+  metadata as metaPackageIoRestorecommerceProduct_category
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
 import {
   metaService as price_groupMetaService,
-  metaPackageIoRestorecommercePrice_group
+  metadata as metaPackageIoRestorecommercePrice_group
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
 import {
   metaService as manufacturerMetaService,
-  metaPackageIoRestorecommerceManufacturer
+  metadata as metaPackageIoRestorecommerceManufacturer
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
 import { CatalogSrvGrpcClient } from "../grpc";
 

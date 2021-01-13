@@ -33,43 +33,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -235,19 +235,19 @@ export const SearchResponse = {
   },
 };
 
-export const metaSearchRequest: { [key in keyof Required<SearchRequest>]: MetaI | string } = {
-  collection: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  text: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  acl: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaSearchRequest: { [key in keyof Required<SearchRequest>]: MetaBase | string } = {
+  collection: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  text: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  acl: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaSearchResponse: { [key in keyof Required<SearchResponse>]: MetaI | string } = {
-  data: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+export const metaSearchResponse: { [key in keyof Required<SearchResponse>]: MetaBase | string } = {
+  data: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Search: {request: {meta:'object', type:'.io.restorecommerce.search.SearchRequest', name:'SearchRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.search.SearchResponse', name:'SearchResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaS<SearchRequest, SearchResponse>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Search: {request: {kind:'object', type:'.io.restorecommerce.search.SearchRequest', name:'SearchRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.search.SearchResponse', name:'SearchResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaService<SearchRequest, SearchResponse>,
 }
-export const metaPackageIoRestorecommerceSearch: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   SearchRequest: ['message', '.io.restorecommerce.search.SearchRequest', SearchRequest, metaSearchRequest],
   SearchResponse: ['message', '.io.restorecommerce.search.SearchResponse', SearchResponse, metaSearchResponse],
   Service: ['service', '.io.restorecommerce.search.Service', undefined, metaService],

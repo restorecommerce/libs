@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, SchedulingContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceJob,
+  metadata as metaPackageIoRestorecommerceJob,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job";
 import { SchedulingSrvGrpcClient } from "../grpc";

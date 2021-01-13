@@ -125,43 +125,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -833,50 +833,50 @@ export const Resource = {
   },
 };
 
-export const metaFieldFilter: { [key in keyof Required<FieldFilter>]: MetaI | string } = {
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  include: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaFieldFilter: { [key in keyof Required<FieldFilter>]: MetaBase | string } = {
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  include: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaSort: { [key in keyof Required<Sort>]: MetaI | string } = {
-  field: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  order: {meta:'object', type:'.io.restorecommerce.resourcebase.Sort.SortOrder', name:'Sort_SortOrder'} as MetaO,
+export const metaSort: { [key in keyof Required<Sort>]: MetaBase | string } = {
+  field: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  order: {kind:'object', type:'.io.restorecommerce.resourcebase.Sort.SortOrder', name:'Sort_SortOrder'} as MetaMessage,
 }
-export const metaReadRequest: { [key in keyof Required<ReadRequest>]: MetaI | string } = {
-  offset: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  limit: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  sort: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.Sort', name:'Sort'} as MetaO} as MetaA,
-  filter: {meta:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaO,
-  field: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaO} as MetaA,
-  search: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  localesLimiter: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  customQueries: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  customArguments: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaReadRequest: { [key in keyof Required<ReadRequest>]: MetaBase | string } = {
+  offset: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  limit: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  sort: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.Sort', name:'Sort'} as MetaMessage} as MetaArray,
+  filter: {kind:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaMessage,
+  field: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaMessage} as MetaArray,
+  search: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  localesLimiter: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  customQueries: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  customArguments: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaI | string } = {
-  collection: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  ids: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaBase | string } = {
+  collection: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  ids: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaResourceList: { [key in keyof Required<ResourceList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.resourcebase.Resource', name:'Resource'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaResourceList: { [key in keyof Required<ResourceList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.Resource', name:'Resource'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaResource: { [key in keyof Required<Resource>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  value: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  text: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaResource: { [key in keyof Required<Resource>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  value: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  text: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ResourceList.decode} as MetaS<ReadRequest, ResourceList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaS<ResourceList, ResourceList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaS<ResourceList, ResourceList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaS<ResourceList, ResourceList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ResourceList.decode} as MetaService<ReadRequest, ResourceList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
 }
-export const metaPackageIoRestorecommerceResourcebase: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   FieldFilter: ['message', '.io.restorecommerce.resourcebase.FieldFilter', FieldFilter, metaFieldFilter],
   Sort: ['message', '.io.restorecommerce.resourcebase.Sort', Sort, metaSort],
   Sort_SortOrder: ['enum', '.io.restorecommerce.resourcebase.Sort.SortOrder', Sort_SortOrder, undefined],

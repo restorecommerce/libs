@@ -4,11 +4,11 @@ import {
   GrpcClientRpcMethodDefinition,
   GrpcService, GrpcServiceMethods
 } from "@restorecommerce/grpc-client";
-import { MetaS } from "./types";
+import { MetaService } from "./types";
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
 
 export const getProtoFunction = <T extends GrpcService, M extends keyof T>
-(service: { [key in keyof T]: MetaS<any, any> }, method: M):
+(service: { [key in keyof T]: MetaService<any, any> }, method: M):
   GrpcClientRpcMethodDefinition<ExtractRpcArgument<T[M]>, ExtractRpcReturnType<T[M]>> => {
   const m = service[method];
   if (!m.encodeRequest || !m.decodeResponse) {
@@ -31,14 +31,14 @@ export const getProtoFunction = <T extends GrpcService, M extends keyof T>
   };
 }
 
-export const getProtoFunctions = <T, M extends GrpcService = any>(service: { [key in keyof T]: MetaS<any, any> }): GrpcServiceMethods<M> => {
+export const getProtoFunctions = <T, M extends GrpcService = any>(service: { [key in keyof T]: MetaService<any, any> }): GrpcServiceMethods<M> => {
   return Object.keys(service).reduce((obj, methodName) => {
     obj[methodName] = getProtoFunction(service, methodName);
     return obj;
   }, {} as any)
 }
 
-export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, serviceName: string, service: { [key in keyof T]: MetaS<any, any> }): T => {
+export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, serviceName: string, service: { [key in keyof T]: MetaService<any, any> }): T => {
   return self['createService']<T>({
     packageName,
     serviceName,

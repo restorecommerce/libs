@@ -2,15 +2,16 @@ import { GraphQLNonNull, GraphQLObjectType, GraphQLResolveInfo, GraphQLSchema } 
 import { GraphQLFieldConfig, GraphQLFieldConfigMap, Thunk } from "graphql/type/definition";
 import { GrpcService } from "@restorecommerce/grpc-client";
 import { StatusType } from "../";
-import { MetaP, MetaPS, MetaS, ServiceConfig } from "./types";
+import { MetaP, MetaPS, MetaService, ServiceConfig } from "./types";
 import { getTyping } from "./registry";
 import { createServiceConfig } from "@restorecommerce/service-config";
 import { join } from "path";
+import { capitalizeProtoName } from "./utils";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
 export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, TContext>
-(service: { [key in keyof T]: MetaS<any, any> }, method: M): GraphQLFieldConfig<TSource, TContext> => {
+(service: { [key in keyof T]: MetaService<any, any> }, method: M): GraphQLFieldConfig<TSource, TContext> => {
   const m = service[method];
 
   const fields: any = {
@@ -30,7 +31,7 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
     }
   }
 
-  const outName = "Proto" + m.response.type.replace(/(?:\.|^)(\w)/g, v => v.toUpperCase()).replace(/\./g, '');
+  const outName = "Proto" + capitalizeProtoName(m.response.type);
 
   let out = typeCache.get(outName);
   if (!out) {
@@ -57,7 +58,7 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
 }
 
 export const getGQLSchemas = <T extends GrpcService, TSource, TContext, B extends keyof T>(
-  service: { [key in keyof T]: MetaS<any, any> }):
+  service: { [key in keyof T]: MetaService<any, any> }):
   GraphQLFieldConfigMap<TSource, TContext> => {
   return Object.keys(service).reduce((obj, methodName) => {
     obj[methodName] = getGQLSchema(service, methodName);
@@ -81,9 +82,9 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
+  (meta: { [key in keyof SRV]: MetaService<any, any> }, pack: MetaP, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
     return Object.keys(meta).reduce((obj, method) => {
-      const serviceMethod = (meta as any)[method] as MetaS<any, any>;
+      const serviceMethod = (meta as any)[method] as MetaService<any, any>;
       const typing = getTyping(serviceMethod.request.type)!;
       const methodMeta = typing.meta as MetaPS;
       const defaults = methodMeta[2].fromPartial({});
@@ -255,7 +256,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
 
       namespaceResolverSchemaRegistry.get(s.namespace)!.get(false)!.forEach((value, key) => {
         if (value instanceof Map) {
-          const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
+          const capitalName = capitalizeProtoName(key);
           fields[key] = {
             type: GraphQLNonNull(new GraphQLObjectType({
               name: s.prefix + capitalName + 'Query',
@@ -280,7 +281,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
 
       namespaceResolverSchemaRegistry.get(s.namespace)!.get(true)!.forEach((value, key) => {
         if (value instanceof Map) {
-          const capitalName = key.substr(0, 1).toUpperCase() + key.substr(1).toLowerCase();
+          const capitalName = capitalizeProtoName(key);
           fields[key] = {
             type: GraphQLNonNull(new GraphQLObjectType({
               name: s.prefix + capitalName + 'Mutation',
@@ -320,7 +321,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
   return new GraphQLSchema(config);
 }
 
-export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<any, any> } = any, T = any, Key extends keyof M = any, R extends keyof M = any>(metaService: M, queries: Key[], config: ServiceConfig): { queries: Set<R>, mutations: Set<R> } => {
+export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaService<any, any> } = any, T = any, Key extends keyof M = any, R extends keyof M = any>(metaService: M, queries: Key[], config: ServiceConfig): { queries: Set<R>, mutations: Set<R> } => {
   const mut: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) < 0) as any)
   const que: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) >= 0) as any)
 
@@ -377,7 +378,7 @@ export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaS<
 }
 
 export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B extends keyof T>
-(service: { [key in keyof T]: MetaS<any, any> }, namespace: string, prefix: string, cfg: ServiceConfig, queryList: B[]) => {
+(service: { [key in keyof T]: MetaService<any, any> }, namespace: string, prefix: string, cfg: ServiceConfig, queryList: B[]) => {
   const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg)
 
   const schemas = getGQLSchemas(service);
@@ -391,7 +392,7 @@ export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B
 
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (meta: { [key in keyof SRV]: MetaS<any, any> }, pack: MetaP, namespace: NS, cfg: ServiceConfig, queryList: (keyof SRV)[], subspace: string | undefined = undefined, serviceKey: B | undefined = undefined): { [key in keyof SRV]: R } => {
+  (meta: { [key in keyof SRV]: MetaService<any, any> }, pack: MetaP, namespace: NS, cfg: ServiceConfig, queryList: (keyof SRV)[], subspace: string | undefined = undefined, serviceKey: B | undefined = undefined): { [key in keyof SRV]: R } => {
     const {mutations, queries} = getWhitelistBlacklistConfig(meta, queryList, cfg);
 
     const func = getGQLResolverFunctions<T, CTX>(meta, pack, namespace, serviceKey || subspace || namespace);

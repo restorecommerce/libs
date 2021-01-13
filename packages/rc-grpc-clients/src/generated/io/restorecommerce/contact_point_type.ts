@@ -53,43 +53,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -310,27 +310,27 @@ export const ContactPointType = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaContactPointTypeList: { [key in keyof Required<ContactPointTypeList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointType', name:'ContactPointType'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaContactPointTypeList: { [key in keyof Required<ContactPointTypeList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointType', name:'ContactPointType'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaContactPointType: { [key in keyof Required<ContactPointType>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaContactPointType: { [key in keyof Required<ContactPointType>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ContactPointTypeList.decode} as MetaS<ReadRequest, ContactPointTypeList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaS<ContactPointTypeList, ContactPointTypeList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaS<ContactPointTypeList, ContactPointTypeList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaS<ContactPointTypeList, ContactPointTypeList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ContactPointTypeList.decode} as MetaService<ReadRequest, ContactPointTypeList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaService<ContactPointTypeList, ContactPointTypeList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaService<ContactPointTypeList, ContactPointTypeList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point_type.ContactPointTypeList', name:'ContactPointTypeList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointTypeList.encode, decodeResponse: ContactPointTypeList.decode} as MetaService<ContactPointTypeList, ContactPointTypeList>,
 }
-export const metaPackageIoRestorecommerceContact_point_type: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Deleted: ['message', '.io.restorecommerce.contact_point_type.Deleted', Deleted, metaDeleted],
   ContactPointTypeList: ['message', '.io.restorecommerce.contact_point_type.ContactPointTypeList', ContactPointTypeList, metaContactPointTypeList],
   ContactPointType: ['message', '.io.restorecommerce.contact_point_type.ContactPointType', ContactPointType, metaContactPointType],

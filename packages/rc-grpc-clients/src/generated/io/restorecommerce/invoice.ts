@@ -200,43 +200,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -1363,83 +1363,83 @@ export const TriggerInvoices = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaInvoiceList: { [key in keyof Required<InvoiceList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.Invoice', name:'Invoice'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaInvoiceList: { [key in keyof Required<InvoiceList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.Invoice', name:'Invoice'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaInvoice: { [key in keyof Required<Invoice>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  timestamp: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  customerId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  paymentStatus: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  totalAmount: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  netAmount: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  vatAmount: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  document: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  invoiceNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  customerRemark: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaInvoice: { [key in keyof Required<Invoice>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  timestamp: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  customerId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  paymentStatus: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  totalAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  netAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  vatAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  document: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  invoiceNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  customerRemark: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaInvoicesPositionsData: { [key in keyof Required<InvoicesPositionsData>]: MetaI | string } = {
-  invoicesPositionsData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoicePositions', name:'InvoicePositions'} as MetaO} as MetaA,
+export const metaInvoicesPositionsData: { [key in keyof Required<InvoicesPositionsData>]: MetaBase | string } = {
+  invoicesPositionsData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoicePositions', name:'InvoicePositions'} as MetaMessage} as MetaArray,
 }
-export const metaInvoicePositions: { [key in keyof Required<InvoicePositions>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  invoicePositions: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoicePosition', name:'InvoicePosition'} as MetaO} as MetaA,
-  recipientCustomer: {meta:'object', type:'.io.restorecommerce.invoice.RecipientCustomer', name:'RecipientCustomer'} as MetaO,
-  recipientBillingAddress: {meta:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaO,
-  senderBillingAddress: {meta:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaO,
-  recipientOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
-  senderOrganization: {meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO,
-  paymentMethodDetails: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaInvoicePositions: { [key in keyof Required<InvoicePositions>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  invoicePositions: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoicePosition', name:'InvoicePosition'} as MetaMessage} as MetaArray,
+  recipientCustomer: {kind:'object', type:'.io.restorecommerce.invoice.RecipientCustomer', name:'RecipientCustomer'} as MetaMessage,
+  recipientBillingAddress: {kind:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaMessage,
+  senderBillingAddress: {kind:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaMessage,
+  recipientOrganization: {kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage,
+  senderOrganization: {kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage,
+  paymentMethodDetails: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaRecipientCustomer: { [key in keyof Required<RecipientCustomer>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  customerNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaRecipientCustomer: { [key in keyof Required<RecipientCustomer>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  customerNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaBillingAddress: { [key in keyof Required<BillingAddress>]: MetaI | string } = {
-  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  website: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  street: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  buildingNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  postcode: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  region: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  countryName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  telephone: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  timezone: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  economicArea: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaBillingAddress: { [key in keyof Required<BillingAddress>]: MetaBase | string } = {
+  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  website: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  street: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  buildingNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  postcode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  region: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  countryName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  telephone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  timezone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  economicArea: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaInvoicePosition: { [key in keyof Required<InvoicePosition>]: MetaI | string } = {
-  currency: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  tableList: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.invoice.InvoiceRow', name:'InvoiceRow'} as MetaO} as MetaA,
-  totalPrice: {meta:'object', type:'.io.restorecommerce.invoice.InvoicePrice', name:'InvoicePrice'} as MetaO,
+export const metaInvoicePosition: { [key in keyof Required<InvoicePosition>]: MetaBase | string } = {
+  currency: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  tableList: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoiceRow', name:'InvoiceRow'} as MetaMessage} as MetaArray,
+  totalPrice: {kind:'object', type:'.io.restorecommerce.invoice.InvoicePrice', name:'InvoicePrice'} as MetaMessage,
 }
-export const metaInvoiceRow: { [key in keyof Required<InvoiceRow>]: MetaI | string } = {
-  product: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  pricePerUnit: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  quantity: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  vat: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  amount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+export const metaInvoiceRow: { [key in keyof Required<InvoiceRow>]: MetaBase | string } = {
+  product: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  pricePerUnit: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  quantity: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  vat: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  amount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
 }
-export const metaInvoicePrice: { [key in keyof Required<InvoicePrice>]: MetaI | string } = {
-  gross: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  net: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+export const metaInvoicePrice: { [key in keyof Required<InvoicePrice>]: MetaBase | string } = {
+  gross: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  net: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
 }
-export const metaTriggerInvoices: { [key in keyof Required<TriggerInvoices>]: MetaI | string } = {
-  ids: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
+export const metaTriggerInvoices: { [key in keyof Required<TriggerInvoices>]: MetaBase | string } = {
+  ids: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: InvoiceList.decode} as MetaS<ReadRequest, InvoiceList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaS<InvoiceList, InvoiceList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaS<InvoiceList, InvoiceList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaS<InvoiceList, InvoiceList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: InvoiceList.decode} as MetaService<ReadRequest, InvoiceList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
 }
-export const metaPackageIoRestorecommerceInvoice: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Deleted: ['message', '.io.restorecommerce.invoice.Deleted', Deleted, metaDeleted],
   InvoiceList: ['message', '.io.restorecommerce.invoice.InvoiceList', InvoiceList, metaInvoiceList],
   Invoice: ['message', '.io.restorecommerce.invoice.Invoice', Invoice, metaInvoice],

@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, OstorageContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceOstorage,
+  metadata as metaPackageIoRestorecommerceOstorage,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/ostorage";
 import { OstorageSrvGrpcClient } from "../grpc";

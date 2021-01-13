@@ -107,43 +107,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -685,45 +685,45 @@ export const Organization = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaDeleteOrgData: { [key in keyof Required<DeleteOrgData>]: MetaI | string } = {
-  orgIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  userIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaDeleteOrgData: { [key in keyof Required<DeleteOrgData>]: MetaBase | string } = {
+  orgIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  userIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaOrganizationList: { [key in keyof Required<OrganizationList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaOrganizationList: { [key in keyof Required<OrganizationList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaOrganization: { [key in keyof Required<Organization>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  addressId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  parentId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  childrenIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  contactPointIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  website: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  email: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  logo: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  vatId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  isicV4: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  registration: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  registrationCourt: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  paymentMethodIds: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaOrganization: { [key in keyof Required<Organization>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  addressId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  parentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  childrenIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  contactPointIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  website: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  logo: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  vatId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  isicV4: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  registration: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  registrationCourt: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  paymentMethodIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrganizationList.decode} as MetaS<ReadRequest, OrganizationList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaS<OrganizationList, OrganizationList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaS<OrganizationList, OrganizationList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaS<OrganizationList, OrganizationList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrganizationList.decode} as MetaService<ReadRequest, OrganizationList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
 }
-export const metaPackageIoRestorecommerceOrganization: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Deleted: ['message', '.io.restorecommerce.organization.Deleted', Deleted, metaDeleted],
   DeleteOrgData: ['message', '.io.restorecommerce.organization.DeleteOrgData', DeleteOrgData, metaDeleteOrgData],
   OrganizationList: ['message', '.io.restorecommerce.organization.OrganizationList', OrganizationList, metaOrganizationList],

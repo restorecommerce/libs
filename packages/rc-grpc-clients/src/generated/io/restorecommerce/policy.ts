@@ -81,43 +81,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -540,39 +540,39 @@ export const PolicyList = {
   },
 };
 
-export const metaPolicy: { [key in keyof Required<Policy>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  rules: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  combiningAlgorithm: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaPolicy: { [key in keyof Required<Policy>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  rules: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
+  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
+  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaPolicyRQ: { [key in keyof Required<PolicyRQ>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  combiningAlgorithm: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  rules: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rule.RuleRQ', name:'RuleRQ'} as MetaO} as MetaA,
-  effect: {meta:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaO,
-  hasRules: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaPolicyRQ: { [key in keyof Required<PolicyRQ>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
+  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  rules: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rule.RuleRQ', name:'RuleRQ'} as MetaMessage} as MetaArray,
+  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
+  hasRules: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaPolicyList: { [key in keyof Required<PolicyList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy.Policy', name:'Policy'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaPolicyList: { [key in keyof Required<PolicyList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy.Policy', name:'Policy'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PolicyList.decode} as MetaS<ReadRequest, PolicyList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaS<PolicyList, PolicyList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaS<PolicyList, PolicyList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaS<PolicyList, PolicyList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PolicyList.decode} as MetaService<ReadRequest, PolicyList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
 }
-export const metaPackageIoRestorecommercePolicy: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Policy: ['message', '.io.restorecommerce.policy.Policy', Policy, metaPolicy],
   PolicyRQ: ['message', '.io.restorecommerce.policy.PolicyRQ', PolicyRQ, metaPolicyRQ],
   PolicyList: ['message', '.io.restorecommerce.policy.PolicyList', PolicyList, metaPolicyList],

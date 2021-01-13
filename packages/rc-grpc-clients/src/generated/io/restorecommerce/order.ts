@@ -202,43 +202,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -1484,91 +1484,91 @@ export const ErrorList = {
   },
 };
 
-export const metaOrderList: { [key in keyof Required<OrderList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Order', name:'Order'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaOrderList: { [key in keyof Required<OrderList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Order', name:'Order'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaOrder: { [key in keyof Required<Order>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  status: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Items', name:'Items'} as MetaO} as MetaA,
-  totalPrice: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  shippingContactPointId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  billingContactPointId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  totalWeightInKg: {meta:'builtin', type:'number', original:'double'} as MetaB,
+export const metaOrder: { [key in keyof Required<Order>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  status: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Items', name:'Items'} as MetaMessage} as MetaArray,
+  totalPrice: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  shippingContactPointId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  billingContactPointId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  totalWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
 }
-export const metaItems: { [key in keyof Required<Items>]: MetaI | string } = {
-  quantityPrice: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  item: {meta:'object', type:'.io.restorecommerce.order.Item', name:'Item'} as MetaO,
+export const metaItems: { [key in keyof Required<Items>]: MetaBase | string } = {
+  quantityPrice: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  item: {kind:'object', type:'.io.restorecommerce.order.Item', name:'Item'} as MetaMessage,
 }
-export const metaItem: { [key in keyof Required<Item>]: MetaI | string } = {
-  productVariantBundleId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  productName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  productDescription: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  manufacturerName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  manufacturerDescription: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  prototypeName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  prototypeDescription: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  quantity: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  vat: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  price: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  itemType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  taricCode: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  stockKeepingUnit: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  weightInKg: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  lengthInCm: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  widthInCm: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  heightInCm: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+export const metaItem: { [key in keyof Required<Item>]: MetaBase | string } = {
+  productVariantBundleId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  productName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  productDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  manufacturerName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  manufacturerDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  prototypeName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  prototypeDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  quantity: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  vat: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  price: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  itemType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  taricCode: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  stockKeepingUnit: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  weightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  lengthInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  widthInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  heightInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaOrderDataList: { [key in keyof Required<OrderDataList>]: MetaI | string } = {
-  orderData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.OrderData', name:'OrderData'} as MetaO} as MetaA,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+export const metaOrderDataList: { [key in keyof Required<OrderDataList>]: MetaBase | string } = {
+  orderData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.OrderData', name:'OrderData'} as MetaMessage} as MetaArray,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
 }
-export const metaOrderData: { [key in keyof Required<OrderData>]: MetaI | string } = {
-  orderId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  shipments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.Shipments', name:'Shipments'} as MetaO} as MetaA,
+export const metaOrderData: { [key in keyof Required<OrderData>]: MetaBase | string } = {
+  orderId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  shipments: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Shipments', name:'Shipments'} as MetaMessage} as MetaArray,
 }
-export const metaShipments: { [key in keyof Required<Shipments>]: MetaI | string } = {
-  totalWeightInKg: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  individualWeightInKg: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  amount: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  exportType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  exportDescription: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  customsTariffNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  invoiceNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  customsValue: {meta:'builtin', type:'number', original:'double'} as MetaB,
+export const metaShipments: { [key in keyof Required<Shipments>]: MetaBase | string } = {
+  totalWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  individualWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  amount: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  exportType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  exportDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  customsTariffNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  invoiceNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  customsValue: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
 }
-export const metaFulfillmentResults: { [key in keyof Required<FulfillmentResults>]: MetaI | string } = {
-  fulfillmentResults: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.order.ResponseDetailsList', name:'ResponseDetailsList'} as MetaO} as MetaA,
+export const metaFulfillmentResults: { [key in keyof Required<FulfillmentResults>]: MetaBase | string } = {
+  fulfillmentResults: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.ResponseDetailsList', name:'ResponseDetailsList'} as MetaMessage} as MetaArray,
 }
-export const metaResponseDetailsList: { [key in keyof Required<ResponseDetailsList>]: MetaI | string } = {
-  Status: {meta:'object', type:'.io.restorecommerce.order.OrderStatus', name:'OrderStatus'} as MetaO,
-  error: {meta:'object', type:'.io.restorecommerce.order.ErrorList', name:'ErrorList'} as MetaO,
+export const metaResponseDetailsList: { [key in keyof Required<ResponseDetailsList>]: MetaBase | string } = {
+  Status: {kind:'object', type:'.io.restorecommerce.order.OrderStatus', name:'OrderStatus'} as MetaMessage,
+  error: {kind:'object', type:'.io.restorecommerce.order.ErrorList', name:'ErrorList'} as MetaMessage,
 }
-export const metaOrderStatus: { [key in keyof Required<OrderStatus>]: MetaI | string } = {
-  OrderId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  OrderStatus: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaOrderStatus: { [key in keyof Required<OrderStatus>]: MetaBase | string } = {
+  OrderId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  OrderStatus: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaErrorList: { [key in keyof Required<ErrorList>]: MetaI | string } = {
-  code: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  message: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
+export const metaErrorList: { [key in keyof Required<ErrorList>]: MetaBase | string } = {
+  code: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  message: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrderList.decode} as MetaS<ReadRequest, OrderList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaS<OrderList, OrderList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaS<OrderList, OrderList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaS<OrderList, OrderList>,
-  TriggerFulfillment: {request: {meta:'object', type:'.io.restorecommerce.order.OrderDataList', name:'OrderDataList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.order.FulfillmentResults', name:'FulfillmentResults'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: OrderDataList.encode, decodeResponse: FulfillmentResults.decode} as MetaS<OrderDataList, FulfillmentResults>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrderList.decode} as MetaService<ReadRequest, OrderList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
+  TriggerFulfillment: {request: {kind:'object', type:'.io.restorecommerce.order.OrderDataList', name:'OrderDataList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.FulfillmentResults', name:'FulfillmentResults'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderDataList.encode, decodeResponse: FulfillmentResults.decode} as MetaService<OrderDataList, FulfillmentResults>,
 }
-export const metaPackageIoRestorecommerceOrder: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   OrderList: ['message', '.io.restorecommerce.order.OrderList', OrderList, metaOrderList],
   Order: ['message', '.io.restorecommerce.order.Order', Order, metaOrder],
   Items: ['message', '.io.restorecommerce.order.Items', Items, metaItems],

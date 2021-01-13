@@ -44,43 +44,43 @@ const baseDeleted: object = {
   id: "",
 };
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -357,24 +357,24 @@ export const Deleted = {
   },
 };
 
-export const metaImage: { [key in keyof Required<Image>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  caption: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  filename: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  url: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  width: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  height: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  length: {meta:'builtin', type:'number', original:'double'} as MetaB,
+export const metaImage: { [key in keyof Required<Image>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  caption: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  filename: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  width: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  height: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  length: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
 }
-export const metaImageList: { [key in keyof Required<ImageList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
+export const metaImageList: { [key in keyof Required<ImageList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaPackageIoRestorecommerceImage: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Image: ['message', '.io.restorecommerce.image.Image', Image, metaImage],
   ImageList: ['message', '.io.restorecommerce.image.ImageList', ImageList, metaImageList],
   Deleted: ['message', '.io.restorecommerce.image.Deleted', Deleted, metaDeleted],

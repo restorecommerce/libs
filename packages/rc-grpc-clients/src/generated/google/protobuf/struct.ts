@@ -84,43 +84,43 @@ const baseValue: object = {
 const baseListValue: object = {
 };
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -476,25 +476,25 @@ export const ListValue = {
   },
 };
 
-export const metaStruct: { [key in keyof Required<Struct>]: MetaI | string } = {
-  fields: {meta:'map', key:'string', value:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaM,
+export const metaStruct: { [key in keyof Required<Struct>]: MetaBase | string } = {
+  fields: {kind:'map', key:'string', value:{kind:'object', type:'.google.protobuf.Value', name:'Value'} as MetaMessage} as MetaMap,
 }
-export const metaStruct_FieldsEntry: { [key in keyof Required<Struct_FieldsEntry>]: MetaI | string } = {
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  value: {meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO,
+export const metaStruct_FieldsEntry: { [key in keyof Required<Struct_FieldsEntry>]: MetaBase | string } = {
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  value: {kind:'object', type:'.google.protobuf.Value', name:'Value'} as MetaMessage,
 }
-export const metaValue: { [key in keyof Required<Value>]: MetaI | string } = {
-  nullValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.NullValue', name:'NullValue'} as MetaO]} as MetaU,
-  numberValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'number', original:'double'} as MetaB]} as MetaU,
-  stringValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
-  boolValue: {meta:'union', choices: [undefined, {meta:'builtin', type:'boolean', original:'bool'} as MetaB]} as MetaU,
-  structValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaO]} as MetaU,
-  listValue: {meta:'union', choices: [undefined, {meta:'object', type:'.google.protobuf.ListValue', name:'ListValue'} as MetaO]} as MetaU,
+export const metaValue: { [key in keyof Required<Value>]: MetaBase | string } = {
+  nullValue: {kind:'union', choices: [undefined, {kind:'object', type:'.google.protobuf.NullValue', name:'NullValue'} as MetaMessage]} as MetaUnion,
+  numberValue: {kind:'union', choices: [undefined, {kind:'builtin', type:'number', original:'double'} as MetaPrimitive]} as MetaUnion,
+  stringValue: {kind:'union', choices: [undefined, {kind:'builtin', type:'string', original:'string'} as MetaPrimitive]} as MetaUnion,
+  boolValue: {kind:'union', choices: [undefined, {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive]} as MetaUnion,
+  structValue: {kind:'union', choices: [undefined, {kind:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaMessage]} as MetaUnion,
+  listValue: {kind:'union', choices: [undefined, {kind:'object', type:'.google.protobuf.ListValue', name:'ListValue'} as MetaMessage]} as MetaUnion,
 }
-export const metaListValue: { [key in keyof Required<ListValue>]: MetaI | string } = {
-  values: {meta:'array', type:{meta:'object', type:'.google.protobuf.Value', name:'Value'} as MetaO} as MetaA,
+export const metaListValue: { [key in keyof Required<ListValue>]: MetaBase | string } = {
+  values: {kind:'array', type:{kind:'object', type:'.google.protobuf.Value', name:'Value'} as MetaMessage} as MetaArray,
 }
-export const metaPackageGoogleProtobuf: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   NullValue: ['enum', '.google.protobuf.NullValue', NullValue, undefined],
   Struct: ['message', '.google.protobuf.Struct', Struct, metaStruct],
   Struct_FieldsEntry: ['message', '.google.protobuf.Struct.FieldsEntry', Struct_FieldsEntry, metaStruct_FieldsEntry],

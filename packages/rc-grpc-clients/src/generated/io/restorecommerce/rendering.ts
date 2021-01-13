@@ -64,43 +64,43 @@ const baseRenderResponse: object = {
   id: "",
 };
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -411,23 +411,23 @@ export const RenderResponse = {
   },
 };
 
-export const metaPayload: { [key in keyof Required<Payload>]: MetaI | string } = {
-  templates: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  styleUrl: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  strategy: {meta:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaO,
-  options: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  contentType: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaPayload: { [key in keyof Required<Payload>]: MetaBase | string } = {
+  templates: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  styleUrl: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  strategy: {kind:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaMessage,
+  options: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaRenderRequest: { [key in keyof Required<RenderRequest>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  payload: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaO} as MetaA,
+export const metaRenderRequest: { [key in keyof Required<RenderRequest>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  payload: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaMessage} as MetaArray,
 }
-export const metaRenderResponse: { [key in keyof Required<RenderResponse>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  response: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
+export const metaRenderResponse: { [key in keyof Required<RenderResponse>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  response: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
 }
-export const metaPackageIoRestorecommerceRendering: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Payload: ['message', '.io.restorecommerce.rendering.Payload', Payload, metaPayload],
   Payload_Strategy: ['enum', '.io.restorecommerce.rendering.Payload.Strategy', Payload_Strategy, undefined],
   RenderRequest: ['message', '.io.restorecommerce.rendering.RenderRequest', RenderRequest, metaRenderRequest],

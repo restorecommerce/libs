@@ -87,43 +87,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -592,43 +592,43 @@ export const AddressAddition = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaAddressList: { [key in keyof Required<AddressList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.address.Address', name:'Address'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaAddressList: { [key in keyof Required<AddressList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.address.Address', name:'Address'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaAddress: { [key in keyof Required<Address>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  postcode: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  countryId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  locality: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  street: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  region: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  geoCoordinates: {meta:'object', type:'.io.restorecommerce.address.Address.GeoPoint', name:'Address_GeoPoint'} as MetaO,
-  altitude: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  buildingNumber: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  addressAddition: {meta:'object', type:'.io.restorecommerce.address.AddressAddition', name:'AddressAddition'} as MetaO,
+export const metaAddress: { [key in keyof Required<Address>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  postcode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  countryId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  locality: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  street: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  region: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  geoCoordinates: {kind:'object', type:'.io.restorecommerce.address.Address.GeoPoint', name:'Address_GeoPoint'} as MetaMessage,
+  altitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  buildingNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  addressAddition: {kind:'object', type:'.io.restorecommerce.address.AddressAddition', name:'AddressAddition'} as MetaMessage,
 }
-export const metaAddress_GeoPoint: { [key in keyof Required<Address_GeoPoint>]: MetaI | string } = {
-  latitude: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  longitude: {meta:'builtin', type:'number', original:'double'} as MetaB,
+export const metaAddress_GeoPoint: { [key in keyof Required<Address_GeoPoint>]: MetaBase | string } = {
+  latitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  longitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
 }
-export const metaAddressAddition: { [key in keyof Required<AddressAddition>]: MetaI | string } = {
-  field1: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  field2: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaAddressAddition: { [key in keyof Required<AddressAddition>]: MetaBase | string } = {
+  field1: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  field2: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AddressList.decode} as MetaS<ReadRequest, AddressList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaS<AddressList, AddressList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AddressList.decode} as MetaService<ReadRequest, AddressList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
 }
-export const metaPackageIoRestorecommerceAddress: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Deleted: ['message', '.io.restorecommerce.address.Deleted', Deleted, metaDeleted],
   AddressList: ['message', '.io.restorecommerce.address.AddressList', AddressList, metaAddressList],
   Address: ['message', '.io.restorecommerce.address.Address', Address, metaAddress],

@@ -105,43 +105,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -614,38 +614,38 @@ export const Log = {
   },
 };
 
-export const metaAttachment: { [key in keyof Required<Attachment>]: MetaI | string } = {
-  filename: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  text: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  buffer: {meta:'builtin', type:'Buffer', original:'bytes'} as MetaB,
-  path: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentDisposition: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  cid: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  encoding: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaAttachment: { [key in keyof Required<Attachment>]: MetaBase | string } = {
+  filename: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  text: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  buffer: {kind:'builtin', type:'Buffer', original:'bytes'} as MetaPrimitive,
+  path: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentDisposition: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  cid: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  encoding: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaNotification: { [key in keyof Required<Notification>]: MetaI | string } = {
-  email: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Email', name:'Email'} as MetaO]} as MetaU,
-  log: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.notification.Log', name:'Log'} as MetaO]} as MetaU,
-  subject: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  body: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  transport: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  provider: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  attachments: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.notification.Attachment', name:'Attachment'} as MetaO} as MetaA,
+export const metaNotification: { [key in keyof Required<Notification>]: MetaBase | string } = {
+  email: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.notification.Email', name:'Email'} as MetaMessage]} as MetaUnion,
+  log: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.notification.Log', name:'Log'} as MetaMessage]} as MetaUnion,
+  subject: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  body: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  transport: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  provider: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  attachments: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.notification.Attachment', name:'Attachment'} as MetaMessage} as MetaArray,
 }
-export const metaEmail: { [key in keyof Required<Email>]: MetaI | string } = {
-  to: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  cc: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  bcc: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  replyto: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaEmail: { [key in keyof Required<Email>]: MetaBase | string } = {
+  to: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  cc: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  bcc: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  replyto: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaLog: { [key in keyof Required<Log>]: MetaI | string } = {
-  level: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaLog: { [key in keyof Required<Log>]: MetaBase | string } = {
+  level: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Send: {request: {meta:'object', type:'.io.restorecommerce.notification.Notification', name:'Notification'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Notification.encode, decodeResponse: Empty.decode} as MetaS<Notification, Empty>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Send: {request: {kind:'object', type:'.io.restorecommerce.notification.Notification', name:'Notification'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Notification.encode, decodeResponse: Empty.decode} as MetaService<Notification, Empty>,
 }
-export const metaPackageIoRestorecommerceNotification: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Attachment: ['message', '.io.restorecommerce.notification.Attachment', Attachment, metaAttachment],
   Notification: ['message', '.io.restorecommerce.notification.Notification', Notification, metaNotification],
   Email: ['message', '.io.restorecommerce.notification.Email', Email, metaEmail],

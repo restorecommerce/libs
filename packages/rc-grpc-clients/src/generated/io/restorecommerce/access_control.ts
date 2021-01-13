@@ -53,43 +53,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -429,28 +429,28 @@ export const ReverseQuery = {
   },
 };
 
-export const metaRequest: { [key in keyof Required<Request>]: MetaI | string } = {
-  target: {meta:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaO,
-  context: {meta:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaO,
+export const metaRequest: { [key in keyof Required<Request>]: MetaBase | string } = {
+  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
+  context: {kind:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaMessage,
 }
-export const metaContext: { [key in keyof Required<Context>]: MetaI | string } = {
-  subject: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  resources: {meta:'array', type:{meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO} as MetaA,
-  security: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaContext: { [key in keyof Required<Context>]: MetaBase | string } = {
+  subject: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  resources: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
+  security: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaResponse: { [key in keyof Required<Response>]: MetaI | string } = {
-  decision: {meta:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaO,
-  obligation: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  evaluationCacheable: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaResponse: { [key in keyof Required<Response>]: MetaBase | string } = {
+  decision: {kind:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaMessage,
+  obligation: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaReverseQuery: { [key in keyof Required<ReverseQuery>]: MetaI | string } = {
-  policySets: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaO} as MetaA,
+export const metaReverseQuery: { [key in keyof Required<ReverseQuery>]: MetaBase | string } = {
+  policySets: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaMessage} as MetaArray,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  IsAllowed: {request: {meta:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.access_control.Response', name:'Response'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaS<Request, Response>,
-  WhatIsAllowed: {request: {meta:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.access_control.ReverseQuery', name:'ReverseQuery'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaS<Request, ReverseQuery>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  IsAllowed: {request: {kind:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.access_control.Response', name:'Response'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaService<Request, Response>,
+  WhatIsAllowed: {request: {kind:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.access_control.ReverseQuery', name:'ReverseQuery'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaService<Request, ReverseQuery>,
 }
-export const metaPackageIoRestorecommerceAccess_control: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Request: ['message', '.io.restorecommerce.access_control.Request', Request, metaRequest],
   Context: ['message', '.io.restorecommerce.access_control.Context', Context, metaContext],
   Response: ['message', '.io.restorecommerce.access_control.Response', Response, metaResponse],

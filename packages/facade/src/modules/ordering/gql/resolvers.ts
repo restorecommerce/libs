@@ -2,7 +2,7 @@ import { Resolvers } from './schema.generated';
 import { namespace, OrderingContext } from "../interfaces";
 import { getAndGenerateResolvers, ServiceConfig, } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceOrder,
+  metadata as metaPackageIoRestorecommerceOrder,
   metaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
 import { OrderingSrvGrpcClient } from "../grpc";

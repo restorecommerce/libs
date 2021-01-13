@@ -130,43 +130,43 @@ const baseHierarchicalScopesResponse: object = {
   token: "",
 };
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -749,41 +749,41 @@ export const HierarchicalScopesResponse = {
   },
 };
 
-export const metaSubject: { [key in keyof Required<Subject>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  scope: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  roleAssociations: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaO} as MetaA,
-  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  unauthenticated: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaSubject: { [key in keyof Required<Subject>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  scope: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  roleAssociations: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaMessage} as MetaArray,
+  hierarchicalScopes: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaMessage} as MetaArray,
+  unauthenticated: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaTokens: { [key in keyof Required<Tokens>]: MetaI | string } = {
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  expiresIn: {meta:'builtin', type:'number', original:'double'} as MetaB,
-  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  scopes: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
-  type: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  interactive: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaTokens: { [key in keyof Required<Tokens>]: MetaBase | string } = {
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  expiresIn: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  scopes: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  interactive: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaHierarchicalScope: { [key in keyof Required<HierarchicalScope>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  children: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  role: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaHierarchicalScope: { [key in keyof Required<HierarchicalScope>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  children: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaMessage} as MetaArray,
+  role: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaRoleAssociation: { [key in keyof Required<RoleAssociation>]: MetaI | string } = {
-  role: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  attributes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaRoleAssociation: { [key in keyof Required<RoleAssociation>]: MetaBase | string } = {
+  role: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  attributes: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaHierarchicalScopesRequest: { [key in keyof Required<HierarchicalScopesRequest>]: MetaI | string } = {
-  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaHierarchicalScopesRequest: { [key in keyof Required<HierarchicalScopesRequest>]: MetaBase | string } = {
+  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaHierarchicalScopesResponse: { [key in keyof Required<HierarchicalScopesResponse>]: MetaI | string } = {
-  subjectId: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  hierarchicalScopes: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaO} as MetaA,
-  token: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaHierarchicalScopesResponse: { [key in keyof Required<HierarchicalScopesResponse>]: MetaBase | string } = {
+  subjectId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  hierarchicalScopes: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.HierarchicalScope', name:'HierarchicalScope'} as MetaMessage} as MetaArray,
+  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaPackageIoRestorecommerceAuth: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   Subject: ['message', '.io.restorecommerce.auth.Subject', Subject, metaSubject],
   Tokens: ['message', '.io.restorecommerce.auth.Tokens', Tokens, metaTokens],
   HierarchicalScope: ['message', '.io.restorecommerce.auth.HierarchicalScope', HierarchicalScope, metaHierarchicalScope],

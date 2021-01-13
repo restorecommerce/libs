@@ -47,7 +47,7 @@
     "test": "jest",
     "test:dev": "jest --watch",
     "prepublishOnly": "npm run build",
-    "generate": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputMetaTypings=true --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto"
+    "generate": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto"
   },
   "engines": {
     "node": ">= 12.18.0"

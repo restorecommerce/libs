@@ -43,43 +43,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -268,25 +268,25 @@ export const Courier = {
   },
 };
 
-export const metaCourierList: { [key in keyof Required<CourierList>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.fulfillment_courier.Courier', name:'Courier'} as MetaO} as MetaA,
-  totalCount: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaCourierList: { [key in keyof Required<CourierList>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.fulfillment_courier.Courier', name:'Courier'} as MetaMessage} as MetaArray,
+  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaCourier: { [key in keyof Required<Courier>]: MetaI | string } = {
-  name: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  description: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaCourier: { [key in keyof Required<Courier>]: MetaBase | string } = {
+  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Read: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CourierList.decode} as MetaS<ReadRequest, CourierList>,
-  Create: {request: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaS<CourierList, CourierList>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  Update: {request: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaS<CourierList, CourierList>,
-  Upsert: {request: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaS<CourierList, CourierList>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CourierList.decode} as MetaService<ReadRequest, CourierList>,
+  Create: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  Update: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
+  Upsert: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
 }
-export const metaPackageIoRestorecommerceFulfillment_courier: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   CourierList: ['message', '.io.restorecommerce.fulfillment_courier.CourierList', CourierList, metaCourierList],
   Courier: ['message', '.io.restorecommerce.fulfillment_courier.Courier', Courier, metaCourier],
   Service: ['service', '.io.restorecommerce.fulfillment_courier.Service', undefined, metaService],

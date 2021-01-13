@@ -181,43 +181,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -1416,87 +1416,87 @@ export const ListRequest = {
   },
 };
 
-export const metaCopyRequest: { [key in keyof Required<CopyRequest>]: MetaI | string } = {
-  items: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.ostorage.CopyRequestItem', name:'CopyRequestItem'} as MetaO} as MetaA,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaCopyRequest: { [key in keyof Required<CopyRequest>]: MetaBase | string } = {
+  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.CopyRequestItem', name:'CopyRequestItem'} as MetaMessage} as MetaArray,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaCopyResponse: { [key in keyof Required<CopyResponse>]: MetaI | string } = {
-  response: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.ostorage.CopyResponseItem', name:'CopyResponseItem'} as MetaO} as MetaA,
+export const metaCopyResponse: { [key in keyof Required<CopyResponse>]: MetaBase | string } = {
+  response: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.CopyResponseItem', name:'CopyResponseItem'} as MetaMessage} as MetaArray,
 }
-export const metaCopyRequestItem: { [key in keyof Required<CopyRequestItem>]: MetaI | string } = {
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  copySource: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  options: {meta:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaO,
+export const metaCopyRequestItem: { [key in keyof Required<CopyRequestItem>]: MetaBase | string } = {
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  copySource: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
 }
-export const metaCopyResponseItem: { [key in keyof Required<CopyResponseItem>]: MetaI | string } = {
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  copySource: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  options: {meta:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaO,
+export const metaCopyResponseItem: { [key in keyof Required<CopyResponseItem>]: MetaBase | string } = {
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  copySource: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
 }
-export const metaOptions: { [key in keyof Required<Options>]: MetaI | string } = {
-  encoding: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentType: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentLanguage: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  contentDisposition: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  length: {meta:'builtin', type:'number', original:'int32'} as MetaB,
-  version: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  md5: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  tags: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaOptions: { [key in keyof Required<Options>]: MetaBase | string } = {
+  encoding: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentLanguage: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  contentDisposition: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  length: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
+  version: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  md5: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  tags: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
+  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaObject: { [key in keyof Required<Object>]: MetaI | string } = {
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  object: {meta:'builtin', type:'Buffer', original:'bytes'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  url: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  options: {meta:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaO,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaObject: { [key in keyof Required<Object>]: MetaBase | string } = {
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  object: {kind:'builtin', type:'Buffer', original:'bytes'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaGetRequest: { [key in keyof Required<GetRequest>]: MetaI | string } = {
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  download: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaGetRequest: { [key in keyof Required<GetRequest>]: MetaBase | string } = {
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  download: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaObjectsData: { [key in keyof Required<ObjectsData>]: MetaI | string } = {
-  objectData: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.ostorage.ObjectData', name:'ObjectData'} as MetaO} as MetaA,
+export const metaObjectsData: { [key in keyof Required<ObjectsData>]: MetaBase | string } = {
+  objectData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.ObjectData', name:'ObjectData'} as MetaMessage} as MetaArray,
 }
-export const metaObjectData: { [key in keyof Required<ObjectData>]: MetaI | string } = {
-  objectName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  url: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
+export const metaObjectData: { [key in keyof Required<ObjectData>]: MetaBase | string } = {
+  objectName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
 }
-export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaI | string } = {
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaBase | string } = {
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaResponse: { [key in keyof Required<Response>]: MetaI | string } = {
-  url: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  meta: {meta:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaO,
-  tags: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaO} as MetaA,
-  length: {meta:'builtin', type:'number', original:'int32'} as MetaB,
+export const metaResponse: { [key in keyof Required<Response>]: MetaBase | string } = {
+  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+  tags: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
+  length: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
 }
-export const metaListRequest: { [key in keyof Required<ListRequest>]: MetaI | string } = {
-  bucket: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  filter: {meta:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaO,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaListRequest: { [key in keyof Required<ListRequest>]: MetaBase | string } = {
+  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  filter: {kind:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaMessage,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Get: {request: {meta:'object', type:'.io.restorecommerce.ostorage.GetRequest', name:'GetRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaO, clientStreaming: false, serverStreaming: true, encodeRequest: GetRequest.encode, decodeResponse: Object.decode} as MetaS<GetRequest, Object>,
-  Put: {request: {meta:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.ostorage.Response', name:'Response'} as MetaO, clientStreaming: true, serverStreaming: false, encodeRequest: Object.encode, decodeResponse: Response.decode} as MetaS<Object, Response>,
-  Delete: {request: {meta:'object', type:'.io.restorecommerce.ostorage.DeleteRequest', name:'DeleteRequest'} as MetaO, response: {meta:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaS<DeleteRequest, Empty>,
-  List: {request: {meta:'object', type:'.io.restorecommerce.ostorage.ListRequest', name:'ListRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.ostorage.ObjectsData', name:'ObjectsData'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: ListRequest.encode, decodeResponse: ObjectsData.decode} as MetaS<ListRequest, ObjectsData>,
-  Copy: {request: {meta:'object', type:'.io.restorecommerce.ostorage.CopyRequest', name:'CopyRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.ostorage.CopyResponse', name:'CopyResponse'} as MetaO, clientStreaming: false, serverStreaming: false, encodeRequest: CopyRequest.encode, decodeResponse: CopyResponse.decode} as MetaS<CopyRequest, CopyResponse>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Get: {request: {kind:'object', type:'.io.restorecommerce.ostorage.GetRequest', name:'GetRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaMessage, clientStreaming: false, serverStreaming: true, encodeRequest: GetRequest.encode, decodeResponse: Object.decode} as MetaService<GetRequest, Object>,
+  Put: {request: {kind:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.Response', name:'Response'} as MetaMessage, clientStreaming: true, serverStreaming: false, encodeRequest: Object.encode, decodeResponse: Response.decode} as MetaService<Object, Response>,
+  Delete: {request: {kind:'object', type:'.io.restorecommerce.ostorage.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
+  List: {request: {kind:'object', type:'.io.restorecommerce.ostorage.ListRequest', name:'ListRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.ObjectsData', name:'ObjectsData'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ListRequest.encode, decodeResponse: ObjectsData.decode} as MetaService<ListRequest, ObjectsData>,
+  Copy: {request: {kind:'object', type:'.io.restorecommerce.ostorage.CopyRequest', name:'CopyRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.CopyResponse', name:'CopyResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CopyRequest.encode, decodeResponse: CopyResponse.decode} as MetaService<CopyRequest, CopyResponse>,
 }
-export const metaPackageIoRestorecommerceOstorage: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   CopyRequest: ['message', '.io.restorecommerce.ostorage.CopyRequest', CopyRequest, metaCopyRequest],
   CopyResponse: ['message', '.io.restorecommerce.ostorage.CopyResponse', CopyResponse, metaCopyResponse],
   CopyRequestItem: ['message', '.io.restorecommerce.ostorage.CopyRequestItem', CopyRequestItem, metaCopyRequestItem],

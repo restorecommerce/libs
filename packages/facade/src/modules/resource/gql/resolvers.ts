@@ -7,47 +7,47 @@ import {
   registerResolverFunction,
 } from "../../../gql/protos";
 import {
-  metaPackageIoRestorecommerceAddress,
+  metadata as metaPackageIoRestorecommerceAddress,
   metaService as addressMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address";
 import {
-  metaPackageIoRestorecommerceCountry,
+  metadata as metaPackageIoRestorecommerceCountry,
   metaService as countryMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country";
 import {
-  metaPackageIoRestorecommerceTimezone,
+  metadata as metaPackageIoRestorecommerceTimezone,
   metaService as timezoneMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone";
 import {
-  metaPackageIoRestorecommerceContact_point_type,
+  metadata as metaPackageIoRestorecommerceContact_point_type,
   metaService as contact_point_typeMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type";
 import {
-  metaPackageIoRestorecommerceCustomer,
+  metadata as metaPackageIoRestorecommerceCustomer,
   metaService as customerMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer";
 import {
-  metaPackageIoRestorecommerceContact_point,
+  metadata as metaPackageIoRestorecommerceContact_point,
   metaService as contact_pointMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point";
 import {
-  metaPackageIoRestorecommerceLocale,
+  metadata as metaPackageIoRestorecommerceLocale,
   metaService as localeMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale";
 import {
-  metaPackageIoRestorecommerceLocation,
+  metadata as metaPackageIoRestorecommerceLocation,
   metaService as locationMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location";
 import {
-  metaPackageIoRestorecommerceOrganization,
+  metadata as metaPackageIoRestorecommerceOrganization,
   metaService as organizationMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
 import {
-  metaPackageIoRestorecommerceTax,
+  metadata as metaPackageIoRestorecommerceTax,
   metaService as taxMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
 import {
-  metaPackageIoRestorecommerceTax_type,
+  metadata as metaPackageIoRestorecommerceTax_type,
   metaService as tax_typeMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
 import { ResourceSrvGrpcClient } from "../grpc";

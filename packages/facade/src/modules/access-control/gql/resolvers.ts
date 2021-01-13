@@ -8,19 +8,19 @@ import {
 } from "../../../gql/protos";
 import {
   metaService as access_controlMetaService,
-  metaPackageIoRestorecommerceAccess_control
+  metadata as metaPackageIoRestorecommerceAccess_control
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control";
 import {
   metaService as policyMetaService,
-  metaPackageIoRestorecommercePolicy
+  metadata as metaPackageIoRestorecommercePolicy
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy";
 import {
   metaService as ruleMetaService,
-  metaPackageIoRestorecommerceRule
+  metadata as metaPackageIoRestorecommerceRule
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule";
 import {
   metaService as policy_setMetaService,
-  metaPackageIoRestorecommercePolicy_set
+  metadata as metaPackageIoRestorecommercePolicy_set
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
 import { AccessControlSrvGrpcClient } from "../grpc";
 

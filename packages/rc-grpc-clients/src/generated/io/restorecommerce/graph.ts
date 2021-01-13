@@ -191,43 +191,43 @@ export interface Service {
 
 }
 
-export interface MetaI {
-  readonly meta: 'object' | 'array' | 'map' | 'union' | 'builtin';
+export interface MetaBase {
+  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
 }
 
-export interface MetaO extends MetaI {
-  readonly meta: 'object';
+export interface MetaMessage extends MetaBase {
+  readonly kind: 'object';
   readonly type: string;
   readonly name: string;
 }
 
-export interface MetaA extends MetaI {
-  readonly meta: 'array';
-  readonly type: MetaI | string;
+export interface MetaArray extends MetaBase {
+  readonly kind: 'array';
+  readonly type: MetaBase | string;
 }
 
-export interface MetaM extends MetaI {
-  readonly meta: 'map';
+export interface MetaMap extends MetaBase {
+  readonly kind: 'map';
   readonly key: string;
-  readonly value: MetaI | string;
+  readonly value: MetaBase | string;
 }
 
-export interface MetaU extends MetaI {
-  readonly meta: 'union';
-  readonly choices: Array<MetaI | string | undefined>;
+export interface MetaUnion extends MetaBase {
+  readonly kind: 'union';
+  readonly choices: Array<MetaBase | string | undefined>;
 }
 
-export interface MetaS<T, R> {
-  readonly request: MetaO;
-  readonly response: MetaO;
+export interface MetaService<T, R> {
+  readonly request: MetaMessage;
+  readonly response: MetaMessage;
   readonly clientStreaming: boolean;
   readonly serverStreaming: boolean;
   readonly encodeRequest?: (message: T, writer: Writer) => Writer;
   readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
 }
 
-export interface MetaB extends MetaI {
-  readonly meta: 'builtin';
+export interface MetaPrimitive extends MetaBase {
+  readonly kind: 'builtin';
   readonly type: string;
   readonly original: string;
 }
@@ -1110,64 +1110,64 @@ export const Uniqueness = {
   },
 };
 
-export const metaTraversalRequest: { [key in keyof Required<TraversalRequest>]: MetaI | string } = {
-  startVertex: {meta:'union', choices: [undefined, {meta:'builtin', type:'string', original:'string'} as MetaB]} as MetaU,
-  startVertices: {meta:'union', choices: [undefined, {meta:'object', type:'.io.restorecommerce.graph.TraversalRequest.StartVertices', name:'TraversalRequest_StartVertices'} as MetaO]} as MetaU,
-  opts: {meta:'object', type:'.io.restorecommerce.graph.Options', name:'Options'} as MetaO,
-  collectionName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  edgeName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  data: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  path: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  aql: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
-  subject: {meta:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaO,
+export const metaTraversalRequest: { [key in keyof Required<TraversalRequest>]: MetaBase | string } = {
+  startVertex: {kind:'union', choices: [undefined, {kind:'builtin', type:'string', original:'string'} as MetaPrimitive]} as MetaUnion,
+  startVertices: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.graph.TraversalRequest.StartVertices', name:'TraversalRequest_StartVertices'} as MetaMessage]} as MetaUnion,
+  opts: {kind:'object', type:'.io.restorecommerce.graph.Options', name:'Options'} as MetaMessage,
+  collectionName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  edgeName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  data: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  path: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  aql: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
 }
-export const metaTraversalRequest_StartVertices: { [key in keyof Required<TraversalRequest_StartVertices>]: MetaI | string } = {
-  vertices: {meta:'array', type:{meta:'builtin', type:'string', original:'string'} as MetaB} as MetaA,
+export const metaTraversalRequest_StartVertices: { [key in keyof Required<TraversalRequest_StartVertices>]: MetaBase | string } = {
+  vertices: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
 }
-export const metaTraversalResponse: { [key in keyof Required<TraversalResponse>]: MetaI | string } = {
-  vertexFields: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.VertexFields', name:'VertexFields'} as MetaO} as MetaA,
-  paths: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
-  data: {meta:'object', type:'.google.protobuf.Any', name:'Any'} as MetaO,
+export const metaTraversalResponse: { [key in keyof Required<TraversalResponse>]: MetaBase | string } = {
+  vertexFields: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.graph.VertexFields', name:'VertexFields'} as MetaMessage} as MetaArray,
+  paths: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
 }
-export const metaVertexFields: { [key in keyof Required<VertexFields>]: MetaI | string } = {
-  id: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  key: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  rev: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaVertexFields: { [key in keyof Required<VertexFields>]: MetaBase | string } = {
+  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  rev: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaOptions: { [key in keyof Required<Options>]: MetaI | string } = {
-  sort: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  direction: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  minDepth: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  startVertex: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  visitor: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  itemOrder: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  strategy: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  filter: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Filter', name:'Filter'} as MetaO} as MetaA,
-  init: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  maxIterations: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  maxDepth: {meta:'builtin', type:'number', original:'uint32'} as MetaB,
-  uniqueness: {meta:'object', type:'.io.restorecommerce.graph.Uniqueness', name:'Uniqueness'} as MetaO,
-  order: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  graphName: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  expander: {meta:'array', type:{meta:'object', type:'.io.restorecommerce.graph.Expander', name:'Expander'} as MetaO} as MetaA,
-  edgeCollection: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  lowestCommonAncestor: {meta:'builtin', type:'boolean', original:'bool'} as MetaB,
+export const metaOptions: { [key in keyof Required<Options>]: MetaBase | string } = {
+  sort: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  direction: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  minDepth: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  startVertex: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  visitor: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  itemOrder: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  strategy: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  filter: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.graph.Filter', name:'Filter'} as MetaMessage} as MetaArray,
+  init: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  maxIterations: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  maxDepth: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
+  uniqueness: {kind:'object', type:'.io.restorecommerce.graph.Uniqueness', name:'Uniqueness'} as MetaMessage,
+  order: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  graphName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  expander: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.graph.Expander', name:'Expander'} as MetaMessage} as MetaArray,
+  edgeCollection: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  lowestCommonAncestor: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
 }
-export const metaFilter: { [key in keyof Required<Filter>]: MetaI | string } = {
-  vertex: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaFilter: { [key in keyof Required<Filter>]: MetaBase | string } = {
+  vertex: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaExpander: { [key in keyof Required<Expander>]: MetaI | string } = {
-  edge: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  direction: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaExpander: { [key in keyof Required<Expander>]: MetaBase | string } = {
+  edge: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  direction: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaUniqueness: { [key in keyof Required<Uniqueness>]: MetaI | string } = {
-  vertices: {meta:'builtin', type:'string', original:'string'} as MetaB,
-  edges: {meta:'builtin', type:'string', original:'string'} as MetaB,
+export const metaUniqueness: { [key in keyof Required<Uniqueness>]: MetaBase | string } = {
+  vertices: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+  edges: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
 }
-export const metaService: { [key in keyof Service]: MetaS<any, any> } = {
-  Traversal: {request: {meta:'object', type:'.io.restorecommerce.graph.TraversalRequest', name:'TraversalRequest'} as MetaO, response: {meta:'object', type:'.io.restorecommerce.graph.TraversalResponse', name:'TraversalResponse'} as MetaO, clientStreaming: false, serverStreaming: true, encodeRequest: TraversalRequest.encode, decodeResponse: TraversalResponse.decode} as MetaS<TraversalRequest, TraversalResponse>,
+export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
+  Traversal: {request: {kind:'object', type:'.io.restorecommerce.graph.TraversalRequest', name:'TraversalRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.graph.TraversalResponse', name:'TraversalResponse'} as MetaMessage, clientStreaming: false, serverStreaming: true, encodeRequest: TraversalRequest.encode, decodeResponse: TraversalResponse.decode} as MetaService<TraversalRequest, TraversalResponse>,
 }
-export const metaPackageIoRestorecommerceGraph: { [key: string]: ['service', string, any, { [key: string]: MetaS<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaI | string }] } = {
+export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
   TraversalRequest: ['message', '.io.restorecommerce.graph.TraversalRequest', TraversalRequest, metaTraversalRequest],
   TraversalRequest_StartVertices: ['message', '.io.restorecommerce.graph.TraversalRequest.StartVertices', TraversalRequest_StartVertices, metaTraversalRequest_StartVertices],
   TraversalResponse: ['message', '.io.restorecommerce.graph.TraversalResponse', TraversalResponse, metaTraversalResponse],

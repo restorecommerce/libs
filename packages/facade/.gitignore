@@ -1,5 +1,3 @@
 dist
 coverage
 codegen
-
-debug-run.ts

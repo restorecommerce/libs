@@ -16,6 +16,7 @@ import { metaService as locationMetaService } from "@restorecommerce/rc-grpc-cli
 import { metaService as organizationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
 import { metaService as taxMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
 import { metaService as tax_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
+import { metaService as commandMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
 import { namespace, ResourceServiceConfig } from "../interfaces";
 
 registerTypings();
@@ -33,6 +34,7 @@ export const schema = (cfg: ResourceServiceConfig) => {
     [organizationMetaService, 'organization', ['Read']],
     [taxMetaService, 'tax', ['Read']],
     [tax_typeMetaService, 'tax_type', ['Read']],
+    [commandMetaService, 'command', ['Read']],
   ];
 
   subServices.forEach(([service, subspace, queryList]: any) => {

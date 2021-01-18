@@ -11,7 +11,7 @@ export interface AccessControlConfig {
 }
 
 export interface AccessControlContext extends FacadeContext {
-  accessControl: {
+  access_control: {
     client: AccessControlSrvGrpcClient;
   }
 }

@@ -14,7 +14,7 @@ export const accessControlModule = createFacadeModuleFactory<AccessControlConfig
   });
 
   facade.koa.use(async (ctx, next) => {
-    ctx.accessControl = accessControl;
+    ctx.access_control = accessControl;
     await next();
   });
 });

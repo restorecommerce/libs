@@ -36,6 +36,9 @@ import { namespace as accessControlNamespace } from "./src/modules/access-contro
 import { schema as ostorageSchema } from "./src/modules/ostorage/gql/schema";
 import { namespace as ostorageNamespace } from "./src/modules/ostorage/interfaces";
 
+import { schema as identitySchema } from "./src/modules/identity/gql/schema";
+import { namespace as identityNamespace } from "./src/modules/identity/interfaces";
+
 import { createServiceConfig } from "@restorecommerce/service-config";
 import { join } from "path";
 
@@ -151,5 +154,13 @@ generateSchemaTypings({
   outputFile: './src/modules/ostorage/gql/schema.generated.ts',
   typescriptResolvers: {
     contextType: '../interfaces#OstorageContext'
+  }
+});
+
+generateSchemaTypings({
+  schema: identitySchema(cfg.get(identityNamespace)),
+  outputFile: './src/modules/identity/gql/schema.generated.ts',
+  typescriptResolvers: {
+    contextType: '../interfaces#IdentityContext'
   }
 });

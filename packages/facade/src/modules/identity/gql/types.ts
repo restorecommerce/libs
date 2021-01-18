@@ -1,23 +1,22 @@
-import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInputObjectType } from 'graphql';
+import { metadata as metaPackageIoRestorecommerceAttribute } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/attribute";
+import { metadata as metaPackageIoRestorecommerceMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta";
+import { metadata as metaPackageIoRestorecommerceResourcebase } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base";
+import { metadata as metaPackageIoRestorecommerceAuth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth";
+import { metadata as metaPackageIoRestorecommerceUser } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+import { metadata as metaPackageIoRestorecommerceRole } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
+import { metadata as metaPackageIoRestorecommerceAuthentication_log } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
+import { metadata as metaPackageIoRestorecommerceToken } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { registerPackages } from "../../../gql/protos";
 
-
-export const ExampleType = new GraphQLObjectType({
-  name: 'ExampleType',
-  description: 'An Example',
-  fields: {
-    message: {
-      type: GraphQLNonNull(GraphQLString)
-    },
-  },
-});
-
-
-export const ExampleInputType = new GraphQLInputObjectType({
-  name: 'ExampleInputType',
-  description: 'An Example input',
-  fields: {
-    echo: {
-      type: GraphQLString
-    },
-  },
-});
+export function registerTypings() {
+  registerPackages(
+    metaPackageIoRestorecommerceAttribute,
+    metaPackageIoRestorecommerceMeta,
+    metaPackageIoRestorecommerceAuth,
+    metaPackageIoRestorecommerceResourcebase,
+    metaPackageIoRestorecommerceUser,
+    metaPackageIoRestorecommerceRole,
+    metaPackageIoRestorecommerceAuthentication_log,
+    metaPackageIoRestorecommerceToken,
+  );
+}

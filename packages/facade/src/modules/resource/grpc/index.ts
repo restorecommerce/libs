@@ -54,6 +54,11 @@ import {
   protobufPackage as tax_typeProtobufPackage,
   Service as tax_typeService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
+import {
+  metaService as commandMetaService,
+  protobufPackage as commandProtobufPackage,
+  Service as commandService
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 
@@ -73,4 +78,5 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   organization = getGRPCService<organizationService>(this, organizationProtobufPackage, 'Service', organizationMetaService);
   tax = getGRPCService<taxService>(this, taxProtobufPackage, 'Service', taxMetaService);
   tax_type = getGRPCService<tax_typeService>(this, tax_typeProtobufPackage, 'Service', tax_typeMetaService);
+  command: any = getGRPCService<commandService>(this, commandProtobufPackage, 'Service', commandMetaService);
 }

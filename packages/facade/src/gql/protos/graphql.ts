@@ -1,12 +1,24 @@
-import { GraphQLNonNull, GraphQLObjectType, GraphQLResolveInfo, GraphQLSchema } from "graphql";
-import { GraphQLFieldConfig, GraphQLFieldConfigMap, Thunk } from "graphql/type/definition";
+import {
+  GraphQLInputField,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLResolveInfo,
+  GraphQLSchema
+} from "graphql";
+import {
+  GraphQLEnumType,
+  GraphQLFieldConfig,
+  GraphQLFieldConfigMap,
+  GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
+  Thunk
+} from "graphql/type/definition";
 import { GrpcService } from "@restorecommerce/grpc-client";
 import { StatusType } from "../";
 import { MetaP, MetaPS, MetaService, ServiceConfig } from "./types";
 import { getTyping } from "./registry";
-import { createServiceConfig } from "@restorecommerce/service-config";
-import { join } from "path";
 import { capitalizeProtoName } from "./utils";
+import { Readable } from "stream";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
@@ -66,6 +78,51 @@ export const getGQLSchemas = <T extends GrpcService, TSource, TContext, B extend
   }, {} as any)
 }
 
+export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType): Promise<any> => {
+  if (model instanceof GraphQLEnumType) {
+    return data;
+  }
+
+  if (model instanceof GraphQLInputObjectType) {
+    const fields = model.getFields();
+    for (let key of Object.keys(fields)) {
+      data[key] = await recursiveUploadToBuffer(data[key], fields[key].type);
+    }
+  }
+
+  if (model instanceof GraphQLNonNull) {
+    return await recursiveUploadToBuffer(data, model.ofType);
+  }
+
+  if (model instanceof GraphQLList) {
+    for (let i = 0; i < data.length; i++) {
+      data[i] = await recursiveUploadToBuffer(data[i], model.ofType);
+    }
+  }
+
+  if (model instanceof GraphQLScalarType) {
+    switch (model.name) {
+      case "Upload":
+        if (typeof data !== 'object') {
+          return Buffer.from(data.toString(), 'utf8');
+        }
+
+        let fileData = await data;
+        const upload = await fileData.promise;
+        const stream: Readable = upload.createReadStream();
+
+        const chunks = [];
+        for await (let chunk of stream) {
+          chunks.push(chunk)
+        }
+
+        return Buffer.concat(chunks);
+    }
+  }
+
+  return data;
+}
+
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
@@ -92,12 +149,13 @@ export const getGQLResolverFunctions =
       (obj as any)[method] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
-
         try {
+          const converted = await recursiveUploadToBuffer(args.input, typing.input);
+
           const req = {
             // Fill defaults
             ...defaults,
-            ...args.input
+            ...converted
           };
 
           // TODO Handle client-stream methods

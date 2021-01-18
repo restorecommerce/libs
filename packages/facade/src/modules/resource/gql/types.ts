@@ -16,6 +16,7 @@ import { metadata as metaPackageIoRestorecommerceLocation } from "@restorecommer
 import { metadata as metaPackageIoRestorecommerceOrganization } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
 import { metadata as metaPackageIoRestorecommerceTax } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
 import { metadata as metaPackageIoRestorecommerceTax_type } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
+import { metadata as metaPackageIoRestorecommerceCommand } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
 import { registerPackages } from "../../../gql/protos";
 
 export function registerTypings() {
@@ -37,6 +38,7 @@ export function registerTypings() {
     metaPackageIoRestorecommerceLocation,
     metaPackageIoRestorecommerceOrganization,
     metaPackageIoRestorecommerceTax_type,
-    metaPackageIoRestorecommerceTax
+    metaPackageIoRestorecommerceTax,
+    metaPackageIoRestorecommerceCommand
   );
 }

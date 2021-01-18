@@ -50,6 +50,10 @@ import {
   metadata as metaPackageIoRestorecommerceTax_type,
   metaService as tax_typeMetaService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
+import {
+  metadata as metaPackageIoRestorecommerceCommand_type,
+  metaService as commandMetaService
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
 import { ResourceSrvGrpcClient } from "../grpc";
 
 export const resolvers: (cfg: ResourceServiceConfig) => Resolvers = (cfg: ResourceServiceConfig) => {
@@ -65,6 +69,7 @@ export const resolvers: (cfg: ResourceServiceConfig) => Resolvers = (cfg: Resour
     [organizationMetaService, metaPackageIoRestorecommerceOrganization, 'organization', ['Read']],
     [taxMetaService, metaPackageIoRestorecommerceTax, 'tax', ['Read']],
     [tax_typeMetaService, metaPackageIoRestorecommerceTax_type, 'tax_type', ['Read']],
+    [commandMetaService, metaPackageIoRestorecommerceCommand_type, 'command', ['Read']],
   ];
 
   subServices.forEach(([meta, pack, subspace, queryList]: any) => {

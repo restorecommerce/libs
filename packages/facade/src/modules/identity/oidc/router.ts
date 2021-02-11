@@ -1,7 +1,7 @@
 import Router from 'koa-router';
 import { InteractionResults, Provider } from 'oidc-provider';
 import bodyParser from 'koa-body';
-import { Logger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
 // import { AuthUser, loginUser } from './user';

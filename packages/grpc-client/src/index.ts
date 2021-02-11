@@ -104,7 +104,7 @@ export class GrpcClient {
         serialize,
         deserialize,
         data,
-        (err, value) => err ? reject(err) : resolve(value)
+        (err, value) => err ? reject(err) : resolve(value!)
       );
     });
   }
@@ -138,7 +138,7 @@ export class GrpcClient {
           methodPath,
           serialize,
           deserialize,
-          (err, value) => err ? reject(err) : resolve(value)
+          (err, value) => err ? reject(err) : resolve(value!)
         );
         const sub = data?.subscribe(_data => {
           clientStream.write(_data);

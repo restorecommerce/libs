@@ -1,5 +1,6 @@
 import Koa from 'koa';
-import { createLogger, Logger } from '@restorecommerce/logger';
+import { createLogger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 import { Server } from 'http';
 import { ApolloServer } from 'apollo-server-koa';
 import { AddressInfo } from 'net';

@@ -1,4 +1,4 @@
-import { Logger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 import { TokenService } from '@restorecommerce/rc-grpc-clients';
 import { Adapter, AdapterConstructor, AdapterPayload } from 'oidc-provider';
 import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils';

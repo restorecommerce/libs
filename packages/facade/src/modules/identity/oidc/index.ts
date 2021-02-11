@@ -1,7 +1,7 @@
 import { Provider } from 'oidc-provider';
 import helmet from 'koa-helmet';
 import { IdentitySrvGrpcClient, TokenService } from '@restorecommerce/rc-grpc-clients';
-import { Logger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCConfig } from './interfaces';
 import { createOIDCRouter } from './router';

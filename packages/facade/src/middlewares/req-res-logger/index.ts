@@ -1,6 +1,7 @@
 import _debug from 'debug';
 import * as koa from 'koa';
-import { Logger, createLogger } from '@restorecommerce/logger';
+import { createLogger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 
 const debug = _debug('@restorecommerce/koa-req-res-logger');
 

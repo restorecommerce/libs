@@ -1,5 +1,5 @@
 import Koa from 'koa';
-import { Logger } from '@restorecommerce/logger';
+import { Logger } from 'winston';
 import { Server } from 'http';
 import { AddressInfo } from 'net';
 

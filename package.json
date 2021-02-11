@@ -1,9 +1,9 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
-  "author": "Invend GmbH",
+  "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/resource-base-interface.git"
@@ -17,11 +17,11 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "^0.1.7",
+    "@restorecommerce/chassis-srv": "^0.1.9",
     "@restorecommerce/grpc-client": "^0.0.8",
     "@restorecommerce/kafka-client": "^0.1.13",
-    "@restorecommerce/protos": "^0.0.15",
-    "@restorecommerce/service-config": "^0.3.2",
+    "@restorecommerce/protos": "^0.0.20",
+    "@restorecommerce/service-config": "^0.3.4",
     "bluebird": "^3.7.2",
     "lodash": "^4.17.20",
     "redis": "^3.0.2"

@@ -1,3 +1,7 @@
+### 0.0.7 (February 11th, 2021)
+
+- updated dependencies
+
 ### 0.0.6 (November 18th, 2020)
 
 - renamed fields _id, _rev, _key in graph proto

@@ -1,9 +1,8 @@
 import { AccessControlSrvGrpcClient } from "./grpc";
-import { ServiceConfig } from "../../gql/protos";
+import { SubSpaceServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
-export interface AccessControlServiceConfig extends ServiceConfig {
-  root: boolean;
+export interface AccessControlServiceConfig extends SubSpaceServiceConfig {
 }
 
 export interface AccessControlConfig {

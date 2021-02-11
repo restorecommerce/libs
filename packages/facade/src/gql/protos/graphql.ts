@@ -14,11 +14,13 @@ import {
   Thunk
 } from "graphql/type/definition";
 import { StatusType } from "../";
-import { ServiceConfig } from "./types";
+import { ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping } from "./registry";
 import { capitalizeProtoName } from "./utils";
 import { Readable } from "stream";
 import { IMethodDescriptorProto, IServiceDescriptorProto } from "protobufjs/ext/descriptor";
+import { AccessControlSrvGrpcClient } from "../../modules/access-control/grpc";
+import { AccessControlContext, namespace } from "../../modules/access-control/interfaces";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
@@ -468,3 +470,43 @@ export const getAndGenerateResolvers =
 
     return generateResolver(namespace as string)
   }
+
+export const generateSubServiceSchemas = (subServices: SubService[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
+  subServices.forEach((sub) => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
+
+    const schemas = getGQLSchemas(sub.service);
+
+    Object.keys(schemas).forEach(key => {
+      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key], !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name)
+    })
+  });
+
+  if (config.root) {
+    return generateSchema(subServices.map(srv => ({
+        prefix: prefix + srv.name.substr(0, 1).toUpperCase() + srv.name.substr(1).toLowerCase(),
+        namespace: srv.name
+      } as any)
+    ));
+  }
+
+  return generateSchema([{prefix, namespace}]);
+}
+
+export const generateSubServiceResolvers = <T>(subServices: SubService[], config: SubSpaceServiceConfig, namespace: string): T => {
+  subServices.forEach((sub) => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
+
+    const func = getGQLResolverFunctions<AccessControlSrvGrpcClient, AccessControlContext>(sub.service, namespace, sub.name || namespace);
+
+    Object.keys(func).forEach(k => {
+      registerResolverFunction(config.root ? sub.name : namespace, k, func[k], !queries.has(k) && mutations.has(k), config.root ? undefined : sub.name);
+    });
+  });
+
+  if (config.root) {
+    return generateResolver(...subServices.map(srv => srv.name));
+  }
+
+  return generateResolver(namespace);
+}

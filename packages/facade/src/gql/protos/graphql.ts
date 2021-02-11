@@ -13,37 +13,35 @@ import {
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
   Thunk
 } from "graphql/type/definition";
-import { GrpcService } from "@restorecommerce/grpc-client";
 import { StatusType } from "../";
-import { MetaP, MetaPS, MetaService, ServiceConfig } from "./types";
+import { ServiceConfig } from "./types";
 import { getTyping } from "./registry";
 import { capitalizeProtoName } from "./utils";
 import { Readable } from "stream";
+import { IMethodDescriptorProto, IServiceDescriptorProto } from "protobufjs/ext/descriptor";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
-export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, TContext>
-(service: { [key in keyof T]: MetaService<any, any> }, method: M): GraphQLFieldConfig<TSource, TContext> => {
-  const m = service[method];
-
+export const getGQLSchema = <TSource, TContext>
+(method: IMethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
   const fields: any = {
     status: {
       type: new GraphQLNonNull(StatusType),
     },
   }
 
-  const responseTyping = getTyping(m.response.type);
+  const responseTyping = getTyping(method.outputType!);
   if (!responseTyping) {
-    throw Error("Method doesn't have registered typings: " + m.response.type);
+    throw Error("Method doesn't have registered typings: " + method.outputType!);
   }
 
-  if (m.response.type !== '.google.protobuf.Empty') {
+  if (method.outputType! !== '.google.protobuf.Empty') {
     fields['payload'] = {
       type: responseTyping.output,
     }
   }
 
-  const outName = "Proto" + capitalizeProtoName(m.response.type);
+  const outName = "Proto" + capitalizeProtoName(method.outputType!);
 
   let out = typeCache.get(outName);
   if (!out) {
@@ -54,14 +52,14 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
     typeCache.set(outName, out);
   }
 
-  const typing = getTyping(m.request.type);
+  const typing = getTyping(method.inputType!);
   if (!typing) {
-    throw Error("Method doesn't have registered typings: " + m.request.type);
+    throw Error("Method doesn't have registered typings: " + method.inputType!);
   }
 
   return {
     type: out,
-    args: m.request.type === '.google.protobuf.Empty' ? undefined : {
+    args: method.inputType! === '.google.protobuf.Empty' ? undefined : {
       input: {
         type: GraphQLNonNull(typing.input!)
       }
@@ -69,13 +67,11 @@ export const getGQLSchema = <T extends GrpcService, M extends keyof T, TSource, 
   }
 }
 
-export const getGQLSchemas = <T extends GrpcService, TSource, TContext, B extends keyof T>(
-  service: { [key in keyof T]: MetaService<any, any> }):
-  GraphQLFieldConfigMap<TSource, TContext> => {
-  return Object.keys(service).reduce((obj, methodName) => {
-    obj[methodName] = getGQLSchema(service, methodName);
+export const getGQLSchemas = <TSource, TContext>(service: IServiceDescriptorProto): GraphQLFieldConfigMap<TSource, TContext> => {
+  return service.method?.reduce((obj, method) => {
+    obj[method.name!] = getGQLSchema(method);
     return obj;
-  }, {} as any)
+  }, {} as any);
 }
 
 export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType): Promise<any> => {
@@ -139,14 +135,25 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (meta: { [key in keyof SRV]: MetaService<any, any> }, pack: MetaP, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
-    return Object.keys(meta).reduce((obj, method) => {
-      const serviceMethod = (meta as any)[method] as MetaService<any, any>;
-      const typing = getTyping(serviceMethod.request.type)!;
-      const methodMeta = typing.meta as MetaPS;
-      const defaults = methodMeta[2].fromPartial({});
+  (service: IServiceDescriptorProto, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
+    if (!service.method) {
+      return {} as { [key in keyof SRV]: R };
+    }
 
-      (obj as any)[method] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
+    return service.method.reduce((obj, method) => {
+      const typing = getTyping(method.inputType!)!;
+
+      if (!typing) {
+        throw Error(`Method '${method.name}' could not find input type: ${method.inputType}`);
+      }
+
+      if (!('fromPartial' in typing.processor)) {
+        throw Error(`Method ${method.name} input type '${method.inputType}' does not contain 'fromPartial' function`);
+      }
+
+      const defaults = typing.processor.fromPartial({});
+
+      (obj as any)[method.name!] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
         try {
@@ -159,7 +166,7 @@ export const getGQLResolverFunctions =
           };
 
           // TODO Handle client-stream methods
-          const result = await service[method](req);
+          const result = await service[method.name!](req);
           return {
             payload: result,
             status: {
@@ -181,7 +188,7 @@ export const getGQLResolverFunctions =
         }
       };
       return obj;
-    }, {} as { [key in keyof SRV]: R })
+    }, {} as { [key in keyof SRV]: R });
   }
 
 type ResolverBaseOrSub =
@@ -379,9 +386,9 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
   return new GraphQLSchema(config);
 }
 
-export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaService<any, any> } = any, T = any, Key extends keyof M = any, R extends keyof M = any>(metaService: M, queries: Key[], config: ServiceConfig): { queries: Set<R>, mutations: Set<R> } => {
-  const mut: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) < 0) as any)
-  const que: Set<R> = new Set(Object.keys(metaService).filter(key => queries.indexOf(key as any) >= 0) as any)
+export const getWhitelistBlacklistConfig = (metaService: IServiceDescriptorProto, queries: string[], config: ServiceConfig): { queries: Set<string>, mutations: Set<string> } => {
+  const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) < 0) as any)
+  const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) >= 0) as any)
 
   if (config.methods) {
     if (config.methods.whitelist) {
@@ -435,8 +442,8 @@ export const getWhitelistBlacklistConfig = <M extends { [key in keyof T]: MetaSe
   };
 }
 
-export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B extends keyof T>
-(service: { [key in keyof T]: MetaService<any, any> }, namespace: string, prefix: string, cfg: ServiceConfig, queryList: B[]) => {
+export const getAndGenerateSchema = <TSource, TContext>
+(service: IServiceDescriptorProto, namespace: string, prefix: string, cfg: ServiceConfig, queryList: string[]) => {
   const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg)
 
   const schemas = getGQLSchemas(service);
@@ -449,11 +456,11 @@ export const getAndGenerateSchema = <T extends GrpcService, TSource, TContext, B
 }
 
 export const getAndGenerateResolvers =
-  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (meta: { [key in keyof SRV]: MetaService<any, any> }, pack: MetaP, namespace: NS, cfg: ServiceConfig, queryList: (keyof SRV)[], subspace: string | undefined = undefined, serviceKey: B | undefined = undefined): { [key in keyof SRV]: R } => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(meta, queryList, cfg);
+  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, NS extends keyof CTX = any>
+  (service: IServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg);
 
-    const func = getGQLResolverFunctions<T, CTX>(meta, pack, namespace, serviceKey || subspace || namespace);
+    const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace);

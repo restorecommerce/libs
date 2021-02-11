@@ -1,47 +1,59 @@
-import {
-  ExtractRpcArgument,
-  ExtractRpcReturnType,
-  GrpcClientRpcMethodDefinition,
-  GrpcService, GrpcServiceMethods
-} from "@restorecommerce/grpc-client";
-import { MetaService } from "./types";
+import { GrpcClientRpcMethodDefinition, GrpcService, GrpcServiceMethods } from "@restorecommerce/grpc-client";
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { IServiceDescriptorProto, IMethodDescriptorProto } from "protobufjs/ext/descriptor";
+import { getTyping } from "./registry";
 
-export const getProtoFunction = <T extends GrpcService, M extends keyof T>
-(service: { [key in keyof T]: MetaService<any, any> }, method: M):
-  GrpcClientRpcMethodDefinition<ExtractRpcArgument<T[M]>, ExtractRpcReturnType<T[M]>> => {
-  const m = service[method];
-  if (!m.encodeRequest || !m.decodeResponse) {
+export const getProtoFunction = (method: IMethodDescriptorProto): GrpcClientRpcMethodDefinition<any, any> => {
+  const inputMessage = getTyping(method.inputType!);
+  const outputMessage = getTyping(method.outputType!);
+
+  if (!inputMessage) {
+    throw Error(`Method '${method.name}' could not find input type: ${method.inputType}`);
+  }
+
+  if (!outputMessage) {
+    throw Error(`Method '${method.name}' could not find output type: ${method.outputType}`);
+  }
+
+  if (!inputMessage.processor || !outputMessage.processor) {
     throw Error("Method does not contain encodeRequest or decodeResponse metadata");
   }
 
+  if (!('encode' in inputMessage.processor)) {
+    throw Error(`Method ${method.name} input type '${method.inputType}' does not contain 'encode' function`);
+  }
+
+  if (!('decode' in outputMessage.processor)) {
+    throw Error(`Method ${method.name} output type '${method.inputType}' does not contain 'decode' function`);
+  }
+
   let type: 'unary' | 'clientStream' | 'serverStream' | 'bidiStream' = 'unary';
-  if (m.clientStreaming && m.serverStreaming) {
+  if (method.clientStreaming && method.serverStreaming) {
     type = 'bidiStream';
-  } else if (m.clientStreaming) {
+  } else if (method.clientStreaming) {
     type = 'clientStream';
-  } else if (m.serverStreaming) {
+  } else if (method.serverStreaming) {
     type = 'serverStream';
   }
 
   return {
     type,
-    serialize: m.encodeRequest!,
-    deserialize: m.decodeResponse!
+    serialize: inputMessage.processor.encode,
+    deserialize: outputMessage.processor.decode
   };
 }
 
-export const getProtoFunctions = <T, M extends GrpcService = any>(service: { [key in keyof T]: MetaService<any, any> }): GrpcServiceMethods<M> => {
-  return Object.keys(service).reduce((obj, methodName) => {
-    obj[methodName] = getProtoFunction(service, methodName);
+export const getProtoFunctions = <M extends GrpcService = any>(service: IServiceDescriptorProto): GrpcServiceMethods<M> => {
+  return service.method?.reduce((obj, method) => {
+    obj[method.name!] = getProtoFunction(method);
     return obj;
-  }, {} as any)
+  }, {} as any);
 }
 
-export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, serviceName: string, service: { [key in keyof T]: MetaService<any, any> }): T => {
+export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, service: IServiceDescriptorProto): T => {
   return self['createService']<T>({
     packageName,
-    serviceName,
+    serviceName: service.name!,
     methods: getProtoFunctions<T>(service)
   });
 }

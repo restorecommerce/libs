@@ -1,6 +1,6 @@
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
 import {
-  metaService,
+  protoMetadata,
   protobufPackage,
   Service
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/notification";
@@ -11,5 +11,5 @@ export class NotificationSrvGrpcClient extends RestoreCommerceGrpcClient {
   constructor(cfg: GrpcClientConfig) {
     super(cfg);
   }
-  notification = getGRPCService<Service>(this, protobufPackage, 'Service', metaService);
+  notification = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
 }

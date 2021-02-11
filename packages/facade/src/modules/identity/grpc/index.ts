@@ -1,21 +1,21 @@
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
 import {
-  metaService as userMetaService,
+  protoMetadata as userMetaService,
   protobufPackage as userProtobufPackage,
   Service as userService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
 import {
-  metaService as roleMetaService,
+  protoMetadata as roleMetaService,
   protobufPackage as roleProtobufPackage,
   Service as roleService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
 import {
-  metaService as authentication_logMetaService,
+  protoMetadata as authentication_logMetaService,
   protobufPackage as authentication_logProtobufPackage,
   Service as authentication_logService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
 import {
-  metaService as tokenMetaService,
+  protoMetadata as tokenMetaService,
   protobufPackage as tokenProtobufPackage,
   Service as tokenService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
@@ -27,8 +27,8 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
     super(cfg);
   }
 
-  user = getGRPCService<userService>(this, userProtobufPackage, 'Service', userMetaService);
-  role = getGRPCService<roleService>(this, roleProtobufPackage, 'Service', roleMetaService);
-  authentication_log = getGRPCService<authentication_logService>(this, authentication_logProtobufPackage, 'Service', authentication_logMetaService);
-  token = getGRPCService<tokenService>(this, tokenProtobufPackage, 'Service', tokenMetaService);
+  user = getGRPCService<userService>(this, userProtobufPackage, userMetaService.fileDescriptor.service![0]);
+  role = getGRPCService<roleService>(this, roleProtobufPackage, roleMetaService.fileDescriptor.service![0]);
+  authentication_log = getGRPCService<authentication_logService>(this, authentication_logProtobufPackage, authentication_logMetaService.fileDescriptor.service![0]);
+  token = getGRPCService<tokenService>(this, tokenProtobufPackage, tokenMetaService.fileDescriptor.service![0]);
 }

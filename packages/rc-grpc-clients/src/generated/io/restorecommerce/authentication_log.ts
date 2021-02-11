@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.authentication_log";
 
 export interface AuthenticationLogList {
   items: AuthenticationLog[];
@@ -12,38 +27,23 @@ export interface AuthenticationLogList {
   subject?: Subject;
 }
 
-/**
- * *
- *  Authentication Log
- */
+/** Authentication Log */
 export interface AuthenticationLog {
-  /**
-   *  log id
-   */
+  /** log id */
   id: string;
   ipv4Address: string;
   ipv6Address: string;
   operatingSystem: string;
   userAgent: string;
-  /**
-   *  time stamp of login, logout or token update
-   */
+  /** time stamp of login, logout or token update */
   date: number;
-  /**
-   *  login, logout
-   */
+  /** login, logout */
   activity: string;
-  /**
-   *  meta info
-   */
+  /** meta info */
   meta?: Meta;
-  /**
-   *  subject id
-   */
+  /** subject id */
   subjectId: string;
-  /**
-   *  token name associated with io.restorecommerce.auth.Token.token_name
-   */
+  /** token name associated with io.restorecommerce.auth.Token.token_name */
   tokenName: string;
 }
 
@@ -51,89 +51,13 @@ export interface Deleted {
   id: string;
 }
 
-const baseAuthenticationLogList: object = {
-  totalCount: 0,
-};
-
-const baseAuthenticationLog: object = {
-  id: "",
-  ipv4Address: "",
-  ipv6Address: "",
-  operatingSystem: "",
-  userAgent: "",
-  date: 0,
-  activity: "",
-  subjectId: "",
-  tokenName: "",
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<AuthenticationLogList>;
-
-  Create(request: AuthenticationLogList): Promise<AuthenticationLogList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: AuthenticationLogList): Promise<AuthenticationLogList>;
-
-  Upsert(request: AuthenticationLogList): Promise<AuthenticationLogList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.authentication_log'
+const baseAuthenticationLogList: object = { totalCount: 0 };
 
 export const AuthenticationLogList = {
-  encode(message: AuthenticationLogList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AuthenticationLogList,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.items) {
       AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -143,7 +67,8 @@ export const AuthenticationLogList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): AuthenticationLogList {
+
+  decode(input: Reader | Uint8Array, length?: number): AuthenticationLogList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAuthenticationLogList } as AuthenticationLogList;
@@ -167,6 +92,7 @@ export const AuthenticationLogList = {
     }
     return message;
   },
+
   fromJSON(object: any): AuthenticationLogList {
     const message = { ...baseAuthenticationLogList } as AuthenticationLogList;
     message.items = [];
@@ -187,7 +113,10 @@ export const AuthenticationLogList = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<AuthenticationLogList>): AuthenticationLogList {
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogList>
+  ): AuthenticationLogList {
     const message = { ...baseAuthenticationLogList } as AuthenticationLogList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
@@ -207,17 +136,35 @@ export const AuthenticationLogList = {
     }
     return message;
   },
+
   toJSON(message: AuthenticationLogList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? AuthenticationLog.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? AuthenticationLog.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseAuthenticationLog: object = {
+  id: "",
+  ipv4Address: "",
+  ipv6Address: "",
+  operatingSystem: "",
+  userAgent: "",
+  date: 0,
+  activity: "",
+  subjectId: "",
+  tokenName: "",
 };
 
 export const AuthenticationLog = {
@@ -236,7 +183,8 @@ export const AuthenticationLog = {
     writer.uint32(82).string(message.tokenName);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): AuthenticationLog {
+
+  decode(input: Reader | Uint8Array, length?: number): AuthenticationLog {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAuthenticationLog } as AuthenticationLog;
@@ -280,6 +228,7 @@ export const AuthenticationLog = {
     }
     return message;
   },
+
   fromJSON(object: any): AuthenticationLog {
     const message = { ...baseAuthenticationLog } as AuthenticationLog;
     if (object.id !== undefined && object.id !== null) {
@@ -297,7 +246,10 @@ export const AuthenticationLog = {
     } else {
       message.ipv6Address = "";
     }
-    if (object.operatingSystem !== undefined && object.operatingSystem !== null) {
+    if (
+      object.operatingSystem !== undefined &&
+      object.operatingSystem !== null
+    ) {
       message.operatingSystem = String(object.operatingSystem);
     } else {
       message.operatingSystem = "";
@@ -334,6 +286,7 @@ export const AuthenticationLog = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<AuthenticationLog>): AuthenticationLog {
     const message = { ...baseAuthenticationLog } as AuthenticationLog;
     if (object.id !== undefined && object.id !== null) {
@@ -351,7 +304,10 @@ export const AuthenticationLog = {
     } else {
       message.ipv6Address = "";
     }
-    if (object.operatingSystem !== undefined && object.operatingSystem !== null) {
+    if (
+      object.operatingSystem !== undefined &&
+      object.operatingSystem !== null
+    ) {
       message.operatingSystem = object.operatingSystem;
     } else {
       message.operatingSystem = "";
@@ -388,28 +344,36 @@ export const AuthenticationLog = {
     }
     return message;
   },
+
   toJSON(message: AuthenticationLog): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.ipv4Address !== undefined && (obj.ipv4Address = message.ipv4Address);
-    message.ipv6Address !== undefined && (obj.ipv6Address = message.ipv6Address);
-    message.operatingSystem !== undefined && (obj.operatingSystem = message.operatingSystem);
+    message.ipv4Address !== undefined &&
+      (obj.ipv4Address = message.ipv4Address);
+    message.ipv6Address !== undefined &&
+      (obj.ipv6Address = message.ipv6Address);
+    message.operatingSystem !== undefined &&
+      (obj.operatingSystem = message.operatingSystem);
     message.userAgent !== undefined && (obj.userAgent = message.userAgent);
     message.date !== undefined && (obj.date = message.date);
     message.activity !== undefined && (obj.activity = message.activity);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.subjectId !== undefined && (obj.subjectId = message.subjectId);
     message.tokenName !== undefined && (obj.tokenName = message.tokenName);
     return obj;
   },
 };
 
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -426,6 +390,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -435,6 +400,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -444,6 +410,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -451,41 +418,255 @@ export const Deleted = {
   },
 };
 
-export const metaAuthenticationLogList: { [key in keyof Required<AuthenticationLogList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLog', name:'AuthenticationLog'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<AuthenticationLogList>;
+  Create(request: AuthenticationLogList): Promise<AuthenticationLogList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: AuthenticationLogList): Promise<AuthenticationLogList>;
+  Upsert(request: AuthenticationLogList): Promise<AuthenticationLogList>;
 }
-export const metaAuthenticationLog: { [key in keyof Required<AuthenticationLog>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  ipv4Address: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  ipv6Address: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  operatingSystem: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  userAgent: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  date: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  activity: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  subjectId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  tokenName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<ReadRequest, AuthenticationLogList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.authentication_log.AuthenticationLogList', name:'AuthenticationLogList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AuthenticationLogList.encode, decodeResponse: AuthenticationLogList.decode} as MetaService<AuthenticationLogList, AuthenticationLogList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  AuthenticationLogList: ['message', '.io.restorecommerce.authentication_log.AuthenticationLogList', AuthenticationLogList, metaAuthenticationLogList],
-  AuthenticationLog: ['message', '.io.restorecommerce.authentication_log.AuthenticationLog', AuthenticationLog, metaAuthenticationLog],
-  Deleted: ['message', '.io.restorecommerce.authentication_log.Deleted', Deleted, metaDeleted],
-  Service: ['service', '.io.restorecommerce.authentication_log.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "AuthenticationLogList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName:
+              ".io.restorecommerce.authentication_log.AuthenticationLog",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "AuthenticationLog",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "ipv4_address",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "ipv4Address",
+          },
+          {
+            name: "ipv6_address",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "ipv6Address",
+          },
+          {
+            name: "operating_system",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "operatingSystem",
+          },
+          {
+            name: "user_agent",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "userAgent",
+          },
+          {
+            name: "date",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "date",
+          },
+          {
+            name: "activity",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activity",
+          },
+          {
+            name: "meta",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "subject_id",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "subjectId",
+          },
+          {
+            name: "token_name",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "tokenName",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+          },
+          {
+            name: "Create",
+            inputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+            outputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+            outputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+          },
+          {
+            name: "Upsert",
+            inputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+            outputType:
+              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/authentication_log.proto",
+    package: "io.restorecommerce.authentication_log",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [12, 0, 18, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+        {
+          path: [4, 1],
+          span: [29, 0, 40, 1],
+          leadingComments: "*\n Authentication Log\n",
+        },
+        {
+          path: [4, 1, 2, 0],
+          span: [30, 2, 16],
+          trailingComments: " log id\n",
+        },
+        {
+          path: [4, 1, 2, 5],
+          span: [35, 2, 18],
+          trailingComments: " time stamp of login, logout or token update\n",
+        },
+        {
+          path: [4, 1, 2, 6],
+          span: [36, 2, 22],
+          trailingComments: " login, logout\n",
+        },
+        {
+          path: [4, 1, 2, 7],
+          span: [37, 2, 40],
+          trailingComments: " meta info\n",
+        },
+        {
+          path: [4, 1, 2, 8],
+          span: [38, 2, 24],
+          trailingComments: " subject id\n",
+        },
+        {
+          path: [4, 1, 2, 9],
+          span: [39, 2, 25],
+          trailingComments:
+            " token name associated with io.restorecommerce.auth.Token.token_name\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.authentication_log.AuthenticationLogList": AuthenticationLogList,
+    ".io.restorecommerce.authentication_log.AuthenticationLog": AuthenticationLog,
+    ".io.restorecommerce.authentication_log.Deleted": Deleted,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

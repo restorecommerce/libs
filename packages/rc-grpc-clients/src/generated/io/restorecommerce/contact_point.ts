@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.contact_point";
 
 export interface Deleted {
   id: string;
@@ -28,88 +43,15 @@ export interface ContactPoint {
   localeId: string;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseContactPointList: object = {
-  totalCount: 0,
-};
-
-const baseContactPoint: object = {
-  id: "",
-  physicalAddressId: "",
-  website: "",
-  email: "",
-  contactPointTypeId: "",
-  telephone: "",
-  timezoneId: "",
-  localeId: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<ContactPointList>;
-
-  Create(request: ContactPointList): Promise<ContactPointList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: ContactPointList): Promise<ContactPointList>;
-
-  Upsert(request: ContactPointList): Promise<ContactPointList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.contact_point'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -126,6 +68,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -135,6 +78,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -144,12 +88,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseContactPointList: object = { totalCount: 0 };
 
 export const ContactPointList = {
   encode(message: ContactPointList, writer: Writer = Writer.create()): Writer {
@@ -162,7 +109,8 @@ export const ContactPointList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ContactPointList {
+
+  decode(input: Reader | Uint8Array, length?: number): ContactPointList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseContactPointList } as ContactPointList;
@@ -186,6 +134,7 @@ export const ContactPointList = {
     }
     return message;
   },
+
   fromJSON(object: any): ContactPointList {
     const message = { ...baseContactPointList } as ContactPointList;
     message.items = [];
@@ -206,6 +155,7 @@ export const ContactPointList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
     const message = { ...baseContactPointList } as ContactPointList;
     message.items = [];
@@ -226,17 +176,34 @@ export const ContactPointList = {
     }
     return message;
   },
+
   toJSON(message: ContactPointList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? ContactPoint.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ContactPoint.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseContactPoint: object = {
+  id: "",
+  physicalAddressId: "",
+  website: "",
+  email: "",
+  contactPointTypeId: "",
+  telephone: "",
+  timezoneId: "",
+  localeId: "",
 };
 
 export const ContactPoint = {
@@ -254,7 +221,8 @@ export const ContactPoint = {
     writer.uint32(82).string(message.localeId);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ContactPoint {
+
+  decode(input: Reader | Uint8Array, length?: number): ContactPoint {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseContactPoint } as ContactPoint;
@@ -295,6 +263,7 @@ export const ContactPoint = {
     }
     return message;
   },
+
   fromJSON(object: any): ContactPoint {
     const message = { ...baseContactPoint } as ContactPoint;
     if (object.id !== undefined && object.id !== null) {
@@ -307,7 +276,10 @@ export const ContactPoint = {
     } else {
       message.meta = undefined;
     }
-    if (object.physicalAddressId !== undefined && object.physicalAddressId !== null) {
+    if (
+      object.physicalAddressId !== undefined &&
+      object.physicalAddressId !== null
+    ) {
       message.physicalAddressId = String(object.physicalAddressId);
     } else {
       message.physicalAddressId = "";
@@ -322,7 +294,10 @@ export const ContactPoint = {
     } else {
       message.email = "";
     }
-    if (object.contactPointTypeId !== undefined && object.contactPointTypeId !== null) {
+    if (
+      object.contactPointTypeId !== undefined &&
+      object.contactPointTypeId !== null
+    ) {
       message.contactPointTypeId = String(object.contactPointTypeId);
     } else {
       message.contactPointTypeId = "";
@@ -344,6 +319,7 @@ export const ContactPoint = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
     const message = { ...baseContactPoint } as ContactPoint;
     if (object.id !== undefined && object.id !== null) {
@@ -356,7 +332,10 @@ export const ContactPoint = {
     } else {
       message.meta = undefined;
     }
-    if (object.physicalAddressId !== undefined && object.physicalAddressId !== null) {
+    if (
+      object.physicalAddressId !== undefined &&
+      object.physicalAddressId !== null
+    ) {
       message.physicalAddressId = object.physicalAddressId;
     } else {
       message.physicalAddressId = "";
@@ -371,7 +350,10 @@ export const ContactPoint = {
     } else {
       message.email = "";
     }
-    if (object.contactPointTypeId !== undefined && object.contactPointTypeId !== null) {
+    if (
+      object.contactPointTypeId !== undefined &&
+      object.contactPointTypeId !== null
+    ) {
       message.contactPointTypeId = object.contactPointTypeId;
     } else {
       message.contactPointTypeId = "";
@@ -393,14 +375,18 @@ export const ContactPoint = {
     }
     return message;
   },
+
   toJSON(message: ContactPoint): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.physicalAddressId !== undefined && (obj.physicalAddressId = message.physicalAddressId);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.physicalAddressId !== undefined &&
+      (obj.physicalAddressId = message.physicalAddressId);
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
-    message.contactPointTypeId !== undefined && (obj.contactPointTypeId = message.contactPointTypeId);
+    message.contactPointTypeId !== undefined &&
+      (obj.contactPointTypeId = message.contactPointTypeId);
     message.telephone !== undefined && (obj.telephone = message.telephone);
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
@@ -408,40 +394,195 @@ export const ContactPoint = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface Service {
+  Read(request: ReadRequest): Promise<ContactPointList>;
+  Create(request: ContactPointList): Promise<ContactPointList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: ContactPointList): Promise<ContactPointList>;
+  Upsert(request: ContactPointList): Promise<ContactPointList>;
 }
-export const metaContactPointList: { [key in keyof Required<ContactPointList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.contact_point.ContactPoint', name:'ContactPoint'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaContactPoint: { [key in keyof Required<ContactPoint>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  physicalAddressId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  website: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contactPointTypeId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  telephone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  timezoneId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  localeId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ContactPointList.decode} as MetaService<ReadRequest, ContactPointList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaService<ContactPointList, ContactPointList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaService<ContactPointList, ContactPointList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.contact_point.ContactPointList', name:'ContactPointList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ContactPointList.encode, decodeResponse: ContactPointList.decode} as MetaService<ContactPointList, ContactPointList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.contact_point.Deleted', Deleted, metaDeleted],
-  ContactPointList: ['message', '.io.restorecommerce.contact_point.ContactPointList', ContactPointList, metaContactPointList],
-  ContactPoint: ['message', '.io.restorecommerce.contact_point.ContactPoint', ContactPoint, metaContactPoint],
-  Service: ['service', '.io.restorecommerce.contact_point.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "ContactPointList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.contact_point.ContactPoint",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ContactPoint",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "physical_address_id",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "physicalAddressId",
+          },
+          {
+            name: "website",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "website",
+          },
+          {
+            name: "email",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "contact_point_type_id",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contactPointTypeId",
+          },
+          {
+            name: "telephone",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "telephone",
+          },
+          {
+            name: "timezone_id",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timezoneId",
+          },
+          {
+            name: "locale_id",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "localeId",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.contact_point.ContactPointList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.contact_point.ContactPointList",
+            outputType: ".io.restorecommerce.contact_point.ContactPointList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.contact_point.ContactPointList",
+            outputType: ".io.restorecommerce.contact_point.ContactPointList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.contact_point.ContactPointList",
+            outputType: ".io.restorecommerce.contact_point.ContactPointList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/contact_point.proto",
+    package: "io.restorecommerce.contact_point",
+    sourceCodeInfo: { location: [] },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.contact_point.Deleted": Deleted,
+    ".io.restorecommerce.contact_point.ContactPointList": ContactPointList,
+    ".io.restorecommerce.contact_point.ContactPoint": ContactPoint,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -1,348 +1,72 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Any } from '../../google/protobuf/any';
-import { Meta } from '../../io/restorecommerce/meta';
-import { FieldFilter, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  FieldFilter,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
 
+export const protobufPackage = "io.restorecommerce.job";
 
 /**
- * *
- *  A Kafka event.
- *  Send when a job resource got deleted.
+ * A Kafka event.
+ * Send when a job resource got deleted.
  */
 export interface Deleted {
   id: string;
 }
 
-/**
- * *
- *  A list of jobs.
- */
+/** A list of jobs. */
 export interface JobList {
   items: Job[];
   totalCount: number;
   subject?: Subject;
 }
 
-/**
- * *
- *  A Job resource
- */
+/** A Job resource */
 export interface Job {
-  /**
-   *  Job ID
-   */
+  /** Job ID */
   id: string;
-  /**
-   *  Job type
-   */
+  /** Job type */
   type: string;
-  /**
-   *  Job-specific data with variable payload
-   */
+  /** Job-specific data with variable payload */
   data?: Data;
-  /**
-   *  Used to specify the time at which the job is run
-   */
+  /** Used to specify the time at which the job is run */
   when: string;
-  /**
-   *  The job options
-   */
+  /** The job options */
   options?: JobOptions;
 }
 
-/**
- * *
- *  Job Options
- */
+/** Job Options */
 export interface JobOptions {
-  /**
-   *  Job priority
-   */
+  /** Job priority */
   priority: JobOptions_Priority;
-  /**
-   *  Amount of possible failing runs until job fails
-   */
+  /** Amount of possible failing runs until job fails */
   attempts: number;
-  /**
-   *  Delay settings between failed job runs
-   */
+  /** Delay settings between failed job runs */
   backoff?: Backoff;
-  /**
-   *  The timeout of the job
-   */
+  /** The timeout of the job */
   timeout: number;
-  /**
-   *  Used for periodic jobs
-   */
+  /** Used for periodic jobs */
   repeat?: Repeat;
 }
-
-export interface Repeat {
-  every: number;
-  cron: string;
-  startDate: string;
-  endDate: string;
-  count: number;
-}
-
-/**
- *  Data which is stored within a job instance
- */
-export interface Data {
-  timezone: string;
-  /**
-   *  optional variable payload
-   */
-  payload?: Any;
-  meta?: Meta;
-  /**
-   *  id of job creator
-   */
-  subjectId: string;
-}
-
-/**
- * *
- *  A scheduled Job.
- *  Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.
- */
-export interface ScheduledJob {
-  /**
-   *  Job instance ID
-   */
-  id: string;
-  type: string;
-  /**
-   *  Job-specific data with variable payload
-   */
-  data?: Data;
-  /**
-   *  Type of schedule (ONCE, RECURR, etc)
-   */
-  scheduleType: string;
-}
-
-/**
- * *
- *  A finished scheduled Job.
- *  Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.
- */
-export interface JobDone {
-  /**
-   *  Job instance ID
-   */
-  id: string;
-  /**
-   *  Type of schedule (ONCE, RECURR, etc)
-   */
-  scheduleType: string;
-  /**
-   *  Whether to delete scheduled job
-   */
-  deleteScheduled: boolean;
-  /**
-   *  Job type
-   */
-  type: string;
-  result?: Any;
-}
-
-/**
- * *
- *  A failed scheduled Job event from the Job Service.
- *  Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.
- */
-export interface JobFailed {
-  /**
-   *  Job instance ID
-   */
-  id: string;
-  /**
-   *  Error message
-   */
-  error: string;
-  /**
-   *  Type of job ex: ONCE, RECURR etc.
-   */
-  scheduleType: string;
-  /**
-   *  Job type
-   */
-  type: string;
-}
-
-/**
- * *
- *  Delay between retries.
- */
-export interface Backoff {
-  /**
-   *  Time until retry in milliseconds
-   */
-  delay: number;
-  /**
-   *  Calculation of the delay
-   */
-  type: Backoff_Type;
-}
-
-/**
- *  Job-specific read request
- */
-export interface JobReadRequest {
-  limit: number;
-  sort: JobReadRequest_SortOrder;
-  /**
-   *  Filter based on fieldName|operation, value|list
-   */
-  filter?: JobFilter;
-  /**
-   *  Fields selector
-   */
-  field: FieldFilter[];
-  subject?: Subject;
-}
-
-/**
- *  filter
- */
-export interface JobFilter {
-  jobIds: string[];
-  type: string;
-}
-
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseJobList: object = {
-  totalCount: 0,
-};
-
-const baseJob: object = {
-  id: "",
-  type: "",
-  when: "",
-};
-
-const baseJobOptions: object = {
-  priority: 0,
-  attempts: 0,
-  timeout: 0,
-};
-
-const baseRepeat: object = {
-  every: 0,
-  cron: "",
-  startDate: "",
-  endDate: "",
-  count: 0,
-};
-
-const baseData: object = {
-  timezone: "",
-  subjectId: "",
-};
-
-const baseScheduledJob: object = {
-  id: "",
-  type: "",
-  scheduleType: "",
-};
-
-const baseJobDone: object = {
-  id: "",
-  scheduleType: "",
-  deleteScheduled: false,
-  type: "",
-};
-
-const baseJobFailed: object = {
-  id: "",
-  error: "",
-  scheduleType: "",
-  type: "",
-};
-
-const baseBackoff: object = {
-  delay: 0,
-  type: 0,
-};
-
-const baseJobReadRequest: object = {
-  limit: 0,
-  sort: 0,
-};
-
-const baseJobFilter: object = {
-  jobIds: "",
-  type: "",
-};
-
-/**
- * *
- *  The microservice for scheduling jobs.
- *  Provides CRUD operations.
- */
-export interface Service {
-
-  Read(request: JobReadRequest): Promise<JobList>;
-
-  Create(request: JobList): Promise<JobList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: JobList): Promise<JobList>;
-
-  Upsert(request: JobList): Promise<JobList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.job'
 
 export enum JobOptions_Priority {
   NORMAL = 0,
@@ -394,12 +118,81 @@ export function jobOptions_PriorityToJSON(object: JobOptions_Priority): string {
   }
 }
 
+export interface Repeat {
+  every: number;
+  cron: string;
+  startDate: string;
+  endDate: string;
+  count: number;
+}
+
+/** Data which is stored within a job instance */
+export interface Data {
+  timezone: string;
+  /** optional variable payload */
+  payload?: Any;
+  meta?: Meta;
+  /** id of job creator */
+  subjectId: string;
+}
+
+/**
+ * A scheduled Job.
+ * Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.
+ */
+export interface ScheduledJob {
+  /** Job instance ID */
+  id: string;
+  type: string;
+  /** Job-specific data with variable payload */
+  data?: Data;
+  /** Type of schedule (ONCE, RECURR, etc) */
+  scheduleType: string;
+}
+
+/**
+ * A finished scheduled Job.
+ * Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.
+ */
+export interface JobDone {
+  /** Job instance ID */
+  id: string;
+  /** Type of schedule (ONCE, RECURR, etc) */
+  scheduleType: string;
+  /** Whether to delete scheduled job */
+  deleteScheduled: boolean;
+  /** Job type */
+  type: string;
+  result?: Any;
+}
+
+/**
+ * A failed scheduled Job event from the Job Service.
+ * Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.
+ */
+export interface JobFailed {
+  /** Job instance ID */
+  id: string;
+  /** Error message */
+  error: string;
+  /** Type of job ex: ONCE, RECURR etc. */
+  scheduleType: string;
+  /** Job type */
+  type: string;
+}
+
+/** Delay between retries. */
+export interface Backoff {
+  /** Time until retry in milliseconds */
+  delay: number;
+  /** Calculation of the delay */
+  type: Backoff_Type;
+}
+
 export enum Backoff_Type {
-  /** FIXED -  Retry with the same delay
-   */
+  /** FIXED - Retry with the same delay */
   FIXED = 0,
-  /** EXPONENTIAL -  Exponential delay increase between retries
-   */
+  /** EXPONENTIAL - Exponential delay increase between retries */
   EXPONENTIAL = 1,
   UNRECOGNIZED = -1,
 }
@@ -430,8 +223,18 @@ export function backoff_TypeToJSON(object: Backoff_Type): string {
   }
 }
 
-/**  only possible to sort jobs by creation date
- */
+/** Job-specific read request */
+export interface JobReadRequest {
+  limit: number;
+  sort: JobReadRequest_SortOrder;
+  /** Filter based on fieldName|operation, value|list */
+  filter?: JobFilter;
+  /** Fields selector */
+  field: FieldFilter[];
+  subject?: Subject;
+}
+
+/** only possible to sort jobs by creation date */
 export enum JobReadRequest_SortOrder {
   UNSORTED = 0,
   ASCENDING = 1,
@@ -439,7 +242,9 @@ export enum JobReadRequest_SortOrder {
   UNRECOGNIZED = -1,
 }
 
-export function jobReadRequest_SortOrderFromJSON(object: any): JobReadRequest_SortOrder {
+export function jobReadRequest_SortOrderFromJSON(
+  object: any
+): JobReadRequest_SortOrder {
   switch (object) {
     case 0:
     case "UNSORTED":
@@ -457,7 +262,9 @@ export function jobReadRequest_SortOrderFromJSON(object: any): JobReadRequest_So
   }
 }
 
-export function jobReadRequest_SortOrderToJSON(object: JobReadRequest_SortOrder): string {
+export function jobReadRequest_SortOrderToJSON(
+  object: JobReadRequest_SortOrder
+): string {
   switch (object) {
     case JobReadRequest_SortOrder.UNSORTED:
       return "UNSORTED";
@@ -470,12 +277,21 @@ export function jobReadRequest_SortOrderToJSON(object: JobReadRequest_SortOrder)
   }
 }
 
+/** filter */
+export interface JobFilter {
+  jobIds: string[];
+  type: string;
+}
+
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -492,6 +308,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -501,6 +318,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -510,12 +328,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseJobList: object = { totalCount: 0 };
 
 export const JobList = {
   encode(message: JobList, writer: Writer = Writer.create()): Writer {
@@ -528,7 +349,8 @@ export const JobList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobList {
+
+  decode(input: Reader | Uint8Array, length?: number): JobList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobList } as JobList;
@@ -552,6 +374,7 @@ export const JobList = {
     }
     return message;
   },
+
   fromJSON(object: any): JobList {
     const message = { ...baseJobList } as JobList;
     message.items = [];
@@ -572,6 +395,7 @@ export const JobList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobList>): JobList {
     const message = { ...baseJobList } as JobList;
     message.items = [];
@@ -592,18 +416,24 @@ export const JobList = {
     }
     return message;
   },
+
   toJSON(message: JobList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Job.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Job.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseJob: object = { id: "", type: "", when: "" };
 
 export const Job = {
   encode(message: Job, writer: Writer = Writer.create()): Writer {
@@ -618,7 +448,8 @@ export const Job = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Job {
+
+  decode(input: Reader | Uint8Array, length?: number): Job {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJob } as Job;
@@ -647,6 +478,7 @@ export const Job = {
     }
     return message;
   },
+
   fromJSON(object: any): Job {
     const message = { ...baseJob } as Job;
     if (object.id !== undefined && object.id !== null) {
@@ -676,6 +508,7 @@ export const Job = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Job>): Job {
     const message = { ...baseJob } as Job;
     if (object.id !== undefined && object.id !== null) {
@@ -705,16 +538,23 @@ export const Job = {
     }
     return message;
   },
+
   toJSON(message: Job): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
-    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Data.toJSON(message.data) : undefined);
     message.when !== undefined && (obj.when = message.when);
-    message.options !== undefined && (obj.options = message.options ? JobOptions.toJSON(message.options) : undefined);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? JobOptions.toJSON(message.options)
+        : undefined);
     return obj;
   },
 };
+
+const baseJobOptions: object = { priority: 0, attempts: 0, timeout: 0 };
 
 export const JobOptions = {
   encode(message: JobOptions, writer: Writer = Writer.create()): Writer {
@@ -729,7 +569,8 @@ export const JobOptions = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobOptions {
+
+  decode(input: Reader | Uint8Array, length?: number): JobOptions {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobOptions } as JobOptions;
@@ -758,6 +599,7 @@ export const JobOptions = {
     }
     return message;
   },
+
   fromJSON(object: any): JobOptions {
     const message = { ...baseJobOptions } as JobOptions;
     if (object.priority !== undefined && object.priority !== null) {
@@ -787,6 +629,7 @@ export const JobOptions = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobOptions>): JobOptions {
     const message = { ...baseJobOptions } as JobOptions;
     if (object.priority !== undefined && object.priority !== null) {
@@ -816,15 +659,29 @@ export const JobOptions = {
     }
     return message;
   },
+
   toJSON(message: JobOptions): unknown {
     const obj: any = {};
-    message.priority !== undefined && (obj.priority = jobOptions_PriorityToJSON(message.priority));
+    message.priority !== undefined &&
+      (obj.priority = jobOptions_PriorityToJSON(message.priority));
     message.attempts !== undefined && (obj.attempts = message.attempts);
-    message.backoff !== undefined && (obj.backoff = message.backoff ? Backoff.toJSON(message.backoff) : undefined);
+    message.backoff !== undefined &&
+      (obj.backoff = message.backoff
+        ? Backoff.toJSON(message.backoff)
+        : undefined);
     message.timeout !== undefined && (obj.timeout = message.timeout);
-    message.repeat !== undefined && (obj.repeat = message.repeat ? Repeat.toJSON(message.repeat) : undefined);
+    message.repeat !== undefined &&
+      (obj.repeat = message.repeat ? Repeat.toJSON(message.repeat) : undefined);
     return obj;
   },
+};
+
+const baseRepeat: object = {
+  every: 0,
+  cron: "",
+  startDate: "",
+  endDate: "",
+  count: 0,
 };
 
 export const Repeat = {
@@ -836,7 +693,8 @@ export const Repeat = {
     writer.uint32(40).uint32(message.count);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Repeat {
+
+  decode(input: Reader | Uint8Array, length?: number): Repeat {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRepeat } as Repeat;
@@ -865,6 +723,7 @@ export const Repeat = {
     }
     return message;
   },
+
   fromJSON(object: any): Repeat {
     const message = { ...baseRepeat } as Repeat;
     if (object.every !== undefined && object.every !== null) {
@@ -894,6 +753,7 @@ export const Repeat = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Repeat>): Repeat {
     const message = { ...baseRepeat } as Repeat;
     if (object.every !== undefined && object.every !== null) {
@@ -923,6 +783,7 @@ export const Repeat = {
     }
     return message;
   },
+
   toJSON(message: Repeat): unknown {
     const obj: any = {};
     message.every !== undefined && (obj.every = message.every);
@@ -933,6 +794,8 @@ export const Repeat = {
     return obj;
   },
 };
+
+const baseData: object = { timezone: "", subjectId: "" };
 
 export const Data = {
   encode(message: Data, writer: Writer = Writer.create()): Writer {
@@ -946,7 +809,8 @@ export const Data = {
     writer.uint32(34).string(message.subjectId);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Data {
+
+  decode(input: Reader | Uint8Array, length?: number): Data {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseData } as Data;
@@ -972,6 +836,7 @@ export const Data = {
     }
     return message;
   },
+
   fromJSON(object: any): Data {
     const message = { ...baseData } as Data;
     if (object.timezone !== undefined && object.timezone !== null) {
@@ -996,6 +861,7 @@ export const Data = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Data>): Data {
     const message = { ...baseData } as Data;
     if (object.timezone !== undefined && object.timezone !== null) {
@@ -1020,15 +886,20 @@ export const Data = {
     }
     return message;
   },
+
   toJSON(message: Data): unknown {
     const obj: any = {};
     message.timezone !== undefined && (obj.timezone = message.timezone);
-    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.subjectId !== undefined && (obj.subjectId = message.subjectId);
     return obj;
   },
 };
+
+const baseScheduledJob: object = { id: "", type: "", scheduleType: "" };
 
 export const ScheduledJob = {
   encode(message: ScheduledJob, writer: Writer = Writer.create()): Writer {
@@ -1040,7 +911,8 @@ export const ScheduledJob = {
     writer.uint32(34).string(message.scheduleType);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ScheduledJob {
+
+  decode(input: Reader | Uint8Array, length?: number): ScheduledJob {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseScheduledJob } as ScheduledJob;
@@ -1066,6 +938,7 @@ export const ScheduledJob = {
     }
     return message;
   },
+
   fromJSON(object: any): ScheduledJob {
     const message = { ...baseScheduledJob } as ScheduledJob;
     if (object.id !== undefined && object.id !== null) {
@@ -1090,6 +963,7 @@ export const ScheduledJob = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ScheduledJob>): ScheduledJob {
     const message = { ...baseScheduledJob } as ScheduledJob;
     if (object.id !== undefined && object.id !== null) {
@@ -1114,14 +988,24 @@ export const ScheduledJob = {
     }
     return message;
   },
+
   toJSON(message: ScheduledJob): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
-    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
-    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
+    message.data !== undefined &&
+      (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.scheduleType !== undefined &&
+      (obj.scheduleType = message.scheduleType);
     return obj;
   },
+};
+
+const baseJobDone: object = {
+  id: "",
+  scheduleType: "",
+  deleteScheduled: false,
+  type: "",
 };
 
 export const JobDone = {
@@ -1135,7 +1019,8 @@ export const JobDone = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobDone {
+
+  decode(input: Reader | Uint8Array, length?: number): JobDone {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobDone } as JobDone;
@@ -1164,6 +1049,7 @@ export const JobDone = {
     }
     return message;
   },
+
   fromJSON(object: any): JobDone {
     const message = { ...baseJobDone } as JobDone;
     if (object.id !== undefined && object.id !== null) {
@@ -1176,7 +1062,10 @@ export const JobDone = {
     } else {
       message.scheduleType = "";
     }
-    if (object.deleteScheduled !== undefined && object.deleteScheduled !== null) {
+    if (
+      object.deleteScheduled !== undefined &&
+      object.deleteScheduled !== null
+    ) {
       message.deleteScheduled = Boolean(object.deleteScheduled);
     } else {
       message.deleteScheduled = false;
@@ -1193,6 +1082,7 @@ export const JobDone = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobDone>): JobDone {
     const message = { ...baseJobDone } as JobDone;
     if (object.id !== undefined && object.id !== null) {
@@ -1205,7 +1095,10 @@ export const JobDone = {
     } else {
       message.scheduleType = "";
     }
-    if (object.deleteScheduled !== undefined && object.deleteScheduled !== null) {
+    if (
+      object.deleteScheduled !== undefined &&
+      object.deleteScheduled !== null
+    ) {
       message.deleteScheduled = object.deleteScheduled;
     } else {
       message.deleteScheduled = false;
@@ -1222,16 +1115,22 @@ export const JobDone = {
     }
     return message;
   },
+
   toJSON(message: JobDone): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
-    message.deleteScheduled !== undefined && (obj.deleteScheduled = message.deleteScheduled);
+    message.scheduleType !== undefined &&
+      (obj.scheduleType = message.scheduleType);
+    message.deleteScheduled !== undefined &&
+      (obj.deleteScheduled = message.deleteScheduled);
     message.type !== undefined && (obj.type = message.type);
-    message.result !== undefined && (obj.result = message.result ? Any.toJSON(message.result) : undefined);
+    message.result !== undefined &&
+      (obj.result = message.result ? Any.toJSON(message.result) : undefined);
     return obj;
   },
 };
+
+const baseJobFailed: object = { id: "", error: "", scheduleType: "", type: "" };
 
 export const JobFailed = {
   encode(message: JobFailed, writer: Writer = Writer.create()): Writer {
@@ -1241,7 +1140,8 @@ export const JobFailed = {
     writer.uint32(34).string(message.type);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobFailed {
+
+  decode(input: Reader | Uint8Array, length?: number): JobFailed {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobFailed } as JobFailed;
@@ -1267,6 +1167,7 @@ export const JobFailed = {
     }
     return message;
   },
+
   fromJSON(object: any): JobFailed {
     const message = { ...baseJobFailed } as JobFailed;
     if (object.id !== undefined && object.id !== null) {
@@ -1291,6 +1192,7 @@ export const JobFailed = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobFailed>): JobFailed {
     const message = { ...baseJobFailed } as JobFailed;
     if (object.id !== undefined && object.id !== null) {
@@ -1315,15 +1217,19 @@ export const JobFailed = {
     }
     return message;
   },
+
   toJSON(message: JobFailed): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.error !== undefined && (obj.error = message.error);
-    message.scheduleType !== undefined && (obj.scheduleType = message.scheduleType);
+    message.scheduleType !== undefined &&
+      (obj.scheduleType = message.scheduleType);
     message.type !== undefined && (obj.type = message.type);
     return obj;
   },
 };
+
+const baseBackoff: object = { delay: 0, type: 0 };
 
 export const Backoff = {
   encode(message: Backoff, writer: Writer = Writer.create()): Writer {
@@ -1331,7 +1237,8 @@ export const Backoff = {
     writer.uint32(16).int32(message.type);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Backoff {
+
+  decode(input: Reader | Uint8Array, length?: number): Backoff {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBackoff } as Backoff;
@@ -1351,6 +1258,7 @@ export const Backoff = {
     }
     return message;
   },
+
   fromJSON(object: any): Backoff {
     const message = { ...baseBackoff } as Backoff;
     if (object.delay !== undefined && object.delay !== null) {
@@ -1365,6 +1273,7 @@ export const Backoff = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Backoff>): Backoff {
     const message = { ...baseBackoff } as Backoff;
     if (object.delay !== undefined && object.delay !== null) {
@@ -1379,6 +1288,7 @@ export const Backoff = {
     }
     return message;
   },
+
   toJSON(message: Backoff): unknown {
     const obj: any = {};
     message.delay !== undefined && (obj.delay = message.delay);
@@ -1386,6 +1296,8 @@ export const Backoff = {
     return obj;
   },
 };
+
+const baseJobReadRequest: object = { limit: 0, sort: 0 };
 
 export const JobReadRequest = {
   encode(message: JobReadRequest, writer: Writer = Writer.create()): Writer {
@@ -1402,7 +1314,8 @@ export const JobReadRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobReadRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): JobReadRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobReadRequest } as JobReadRequest;
@@ -1432,6 +1345,7 @@ export const JobReadRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): JobReadRequest {
     const message = { ...baseJobReadRequest } as JobReadRequest;
     message.field = [];
@@ -1462,6 +1376,7 @@ export const JobReadRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobReadRequest>): JobReadRequest {
     const message = { ...baseJobReadRequest } as JobReadRequest;
     message.field = [];
@@ -1492,20 +1407,32 @@ export const JobReadRequest = {
     }
     return message;
   },
+
   toJSON(message: JobReadRequest): unknown {
     const obj: any = {};
     message.limit !== undefined && (obj.limit = message.limit);
-    message.sort !== undefined && (obj.sort = jobReadRequest_SortOrderToJSON(message.sort));
-    message.filter !== undefined && (obj.filter = message.filter ? JobFilter.toJSON(message.filter) : undefined);
+    message.sort !== undefined &&
+      (obj.sort = jobReadRequest_SortOrderToJSON(message.sort));
+    message.filter !== undefined &&
+      (obj.filter = message.filter
+        ? JobFilter.toJSON(message.filter)
+        : undefined);
     if (message.field) {
-      obj.field = message.field.map(e => e ? FieldFilter.toJSON(e) : undefined);
+      obj.field = message.field.map((e) =>
+        e ? FieldFilter.toJSON(e) : undefined
+      );
     } else {
       obj.field = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseJobFilter: object = { jobIds: "", type: "" };
 
 export const JobFilter = {
   encode(message: JobFilter, writer: Writer = Writer.create()): Writer {
@@ -1515,7 +1442,8 @@ export const JobFilter = {
     writer.uint32(18).string(message.type);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): JobFilter {
+
+  decode(input: Reader | Uint8Array, length?: number): JobFilter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseJobFilter } as JobFilter;
@@ -1536,6 +1464,7 @@ export const JobFilter = {
     }
     return message;
   },
+
   fromJSON(object: any): JobFilter {
     const message = { ...baseJobFilter } as JobFilter;
     message.jobIds = [];
@@ -1551,6 +1480,7 @@ export const JobFilter = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<JobFilter>): JobFilter {
     const message = { ...baseJobFilter } as JobFilter;
     message.jobIds = [];
@@ -1566,10 +1496,11 @@ export const JobFilter = {
     }
     return message;
   },
+
   toJSON(message: JobFilter): unknown {
     const obj: any = {};
     if (message.jobIds) {
-      obj.jobIds = message.jobIds.map(e => e);
+      obj.jobIds = message.jobIds.map((e) => e);
     } else {
       obj.jobIds = [];
     }
@@ -1578,102 +1509,742 @@ export const JobFilter = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/**
+ * The microservice for scheduling jobs.
+ * Provides CRUD operations.
+ */
+export interface Service {
+  Read(request: JobReadRequest): Promise<JobList>;
+  Create(request: JobList): Promise<JobList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: JobList): Promise<JobList>;
+  Upsert(request: JobList): Promise<JobList>;
 }
-export const metaJobList: { [key in keyof Required<JobList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.job.Job', name:'Job'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaJob: { [key in keyof Required<Job>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  data: {kind:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaMessage,
-  when: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  options: {kind:'object', type:'.io.restorecommerce.job.JobOptions', name:'JobOptions'} as MetaMessage,
-}
-export const metaJobOptions: { [key in keyof Required<JobOptions>]: MetaBase | string } = {
-  priority: {kind:'object', type:'.io.restorecommerce.job.JobOptions.Priority', name:'JobOptions_Priority'} as MetaMessage,
-  attempts: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  backoff: {kind:'object', type:'.io.restorecommerce.job.Backoff', name:'Backoff'} as MetaMessage,
-  timeout: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  repeat: {kind:'object', type:'.io.restorecommerce.job.Repeat', name:'Repeat'} as MetaMessage,
-}
-export const metaRepeat: { [key in keyof Required<Repeat>]: MetaBase | string } = {
-  every: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  cron: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  startDate: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  endDate: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  count: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaData: { [key in keyof Required<Data>]: MetaBase | string } = {
-  timezone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  payload: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  subjectId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaScheduledJob: { [key in keyof Required<ScheduledJob>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  data: {kind:'object', type:'.io.restorecommerce.job.Data', name:'Data'} as MetaMessage,
-  scheduleType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaJobDone: { [key in keyof Required<JobDone>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  scheduleType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  deleteScheduled: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  result: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaJobFailed: { [key in keyof Required<JobFailed>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  error: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  scheduleType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaBackoff: { [key in keyof Required<Backoff>]: MetaBase | string } = {
-  delay: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  type: {kind:'object', type:'.io.restorecommerce.job.Backoff.Type', name:'Backoff_Type'} as MetaMessage,
-}
-export const metaJobReadRequest: { [key in keyof Required<JobReadRequest>]: MetaBase | string } = {
-  limit: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  sort: {kind:'object', type:'.io.restorecommerce.job.JobReadRequest.SortOrder', name:'JobReadRequest_SortOrder'} as MetaMessage,
-  filter: {kind:'object', type:'.io.restorecommerce.job.JobFilter', name:'JobFilter'} as MetaMessage,
-  field: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaMessage} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaJobFilter: { [key in keyof Required<JobFilter>]: MetaBase | string } = {
-  jobIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  type: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.job.JobReadRequest', name:'JobReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: JobReadRequest.encode, decodeResponse: JobList.decode} as MetaService<JobReadRequest, JobList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaService<JobList, JobList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaService<JobList, JobList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.job.JobList', name:'JobList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: JobList.encode, decodeResponse: JobList.decode} as MetaService<JobList, JobList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.job.Deleted', Deleted, metaDeleted],
-  JobList: ['message', '.io.restorecommerce.job.JobList', JobList, metaJobList],
-  Job: ['message', '.io.restorecommerce.job.Job', Job, metaJob],
-  JobOptions: ['message', '.io.restorecommerce.job.JobOptions', JobOptions, metaJobOptions],
-  JobOptions_Priority: ['enum', '.io.restorecommerce.job.JobOptions.Priority', JobOptions_Priority, undefined],
-  Repeat: ['message', '.io.restorecommerce.job.Repeat', Repeat, metaRepeat],
-  Data: ['message', '.io.restorecommerce.job.Data', Data, metaData],
-  ScheduledJob: ['message', '.io.restorecommerce.job.ScheduledJob', ScheduledJob, metaScheduledJob],
-  JobDone: ['message', '.io.restorecommerce.job.JobDone', JobDone, metaJobDone],
-  JobFailed: ['message', '.io.restorecommerce.job.JobFailed', JobFailed, metaJobFailed],
-  Backoff: ['message', '.io.restorecommerce.job.Backoff', Backoff, metaBackoff],
-  Backoff_Type: ['enum', '.io.restorecommerce.job.Backoff.Type', Backoff_Type, undefined],
-  JobReadRequest: ['message', '.io.restorecommerce.job.JobReadRequest', JobReadRequest, metaJobReadRequest],
-  JobReadRequest_SortOrder: ['enum', '.io.restorecommerce.job.JobReadRequest.SortOrder', JobReadRequest_SortOrder, undefined],
-  JobFilter: ['message', '.io.restorecommerce.job.JobFilter', JobFilter, metaJobFilter],
-  Service: ['service', '.io.restorecommerce.job.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/any.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "JobList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.Job",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Job",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "type",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "type",
+          },
+          {
+            name: "data",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.Data",
+            jsonName: "data",
+          },
+          {
+            name: "when",
+            number: 21,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "when",
+          },
+          {
+            name: "options",
+            number: 30,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.JobOptions",
+            jsonName: "options",
+          },
+        ],
+      },
+      {
+        name: "JobOptions",
+        field: [
+          {
+            name: "priority",
+            number: 13,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.job.JobOptions.Priority",
+            jsonName: "priority",
+          },
+          {
+            name: "attempts",
+            number: 14,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "attempts",
+          },
+          {
+            name: "backoff",
+            number: 15,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.Backoff",
+            jsonName: "backoff",
+          },
+          {
+            name: "timeout",
+            number: 16,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "timeout",
+          },
+          {
+            name: "repeat",
+            number: 20,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.Repeat",
+            jsonName: "repeat",
+          },
+        ],
+        enumType: [
+          {
+            name: "Priority",
+            value: [
+              { name: "NORMAL", number: 0 },
+              { name: "LOW", number: 10 },
+              { name: "MEDIUM", number: -5 },
+              { name: "HIGH", number: -10 },
+              { name: "CRITICAL", number: -15 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "Repeat",
+        field: [
+          {
+            name: "every",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "every",
+          },
+          {
+            name: "cron",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "cron",
+          },
+          {
+            name: "startDate",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "startDate",
+          },
+          {
+            name: "endDate",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "endDate",
+          },
+          {
+            name: "count",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "count",
+          },
+        ],
+      },
+      {
+        name: "Data",
+        field: [
+          {
+            name: "timezone",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timezone",
+          },
+          {
+            name: "payload",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "payload",
+          },
+          {
+            name: "meta",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "subject_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "subjectId",
+          },
+        ],
+      },
+      {
+        name: "ScheduledJob",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "type",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "type",
+          },
+          {
+            name: "data",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.Data",
+            jsonName: "data",
+          },
+          {
+            name: "schedule_type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "scheduleType",
+          },
+        ],
+      },
+      {
+        name: "JobDone",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "schedule_type",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "scheduleType",
+          },
+          {
+            name: "delete_scheduled",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "deleteScheduled",
+          },
+          {
+            name: "type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "type",
+          },
+          {
+            name: "result",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "result",
+          },
+        ],
+      },
+      {
+        name: "JobFailed",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "error",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "error",
+          },
+          {
+            name: "schedule_type",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "scheduleType",
+          },
+          {
+            name: "type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "type",
+          },
+        ],
+      },
+      {
+        name: "Backoff",
+        field: [
+          {
+            name: "delay",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "delay",
+          },
+          {
+            name: "type",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.job.Backoff.Type",
+            jsonName: "type",
+          },
+        ],
+        enumType: [
+          {
+            name: "Type",
+            value: [
+              { name: "FIXED", number: 0 },
+              { name: "EXPONENTIAL", number: 1 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "JobReadRequest",
+        field: [
+          {
+            name: "limit",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "limit",
+          },
+          {
+            name: "sort",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.job.JobReadRequest.SortOrder",
+            jsonName: "sort",
+          },
+          {
+            name: "filter",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.job.JobFilter",
+            jsonName: "filter",
+          },
+          {
+            name: "field",
+            number: 3,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.resourcebase.FieldFilter",
+            jsonName: "field",
+          },
+          {
+            name: "subject",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+        enumType: [
+          {
+            name: "SortOrder",
+            value: [
+              { name: "UNSORTED", number: 0 },
+              { name: "ASCENDING", number: 1 },
+              { name: "DESCENDING", number: 2 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "JobFilter",
+        field: [
+          {
+            name: "job_ids",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "jobIds",
+          },
+          {
+            name: "type",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "type",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.job.JobReadRequest",
+            outputType: ".io.restorecommerce.job.JobList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.job.JobList",
+            outputType: ".io.restorecommerce.job.JobList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.job.JobList",
+            outputType: ".io.restorecommerce.job.JobList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.job.JobList",
+            outputType: ".io.restorecommerce.job.JobList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/job.proto",
+    package: "io.restorecommerce.job",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [14, 0, 20, 1],
+          leadingComments:
+            "*\n The microservice for scheduling jobs.\n Provides CRUD operations.\n",
+        },
+        {
+          path: [4, 0],
+          span: [26, 0, 28, 1],
+          leadingComments:
+            "*\n A Kafka event.\n Send when a job resource got deleted.\n",
+        },
+        {
+          path: [4, 1],
+          span: [33, 0, 37, 1],
+          leadingComments: "*\n A list of jobs.\n",
+        },
+        {
+          path: [4, 2],
+          span: [42, 0, 51, 1],
+          leadingComments: "*\n A Job resource\n",
+        },
+        {
+          path: [4, 2, 2, 0],
+          span: [43, 2, 16],
+          trailingComments: " Job ID\n",
+        },
+        {
+          path: [4, 2, 2, 1],
+          span: [45, 2, 19],
+          trailingComments: " Job type\n",
+        },
+        {
+          path: [4, 2, 2, 2],
+          span: [46, 2, 17],
+          trailingComments: " Job-specific data with variable payload\n",
+        },
+        {
+          path: [4, 2, 2, 3],
+          span: [48, 2, 19],
+          trailingComments:
+            " Used to specify the time at which the job is run\n",
+        },
+        {
+          path: [4, 2, 2, 4],
+          span: [50, 2, 26],
+          trailingComments: " The job options\n",
+        },
+        {
+          path: [4, 3],
+          span: [56, 0, 71, 1],
+          leadingComments: "*\n Job Options\n",
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [65, 2, 25],
+          trailingComments: " Job priority\n",
+        },
+        {
+          path: [4, 3, 2, 1],
+          span: [66, 2, 23],
+          trailingComments:
+            " Amount of possible failing runs until job fails\n",
+        },
+        {
+          path: [4, 3, 2, 2],
+          span: [67, 2, 23],
+          trailingComments: " Delay settings between failed job runs\n",
+        },
+        {
+          path: [4, 3, 2, 3],
+          span: [68, 2, 22],
+          trailingComments: " The timeout of the job\n",
+        },
+        {
+          path: [4, 3, 2, 4],
+          span: [70, 2, 21],
+          trailingComments: " Used for periodic jobs\n",
+        },
+        {
+          path: [4, 5],
+          span: [82, 0, 87, 1],
+          leadingComments: " Data which is stored within a job instance\n",
+        },
+        {
+          path: [4, 5, 2, 1],
+          span: [84, 2, 34],
+          trailingComments: " optional variable payload\n",
+        },
+        {
+          path: [4, 5, 2, 3],
+          span: [86, 2, 24],
+          trailingComments: " id of job creator\n",
+        },
+        {
+          path: [4, 6],
+          span: [93, 0, 98, 1],
+          leadingComments:
+            "*\n A scheduled Job.\n Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.\n",
+        },
+        {
+          path: [4, 6, 2, 0],
+          span: [94, 2, 16],
+          trailingComments: " Job instance ID\n",
+        },
+        {
+          path: [4, 6, 2, 2],
+          span: [96, 2, 16],
+          trailingComments: " Job-specific data with variable payload\n",
+        },
+        {
+          path: [4, 6, 2, 3],
+          span: [97, 2, 27],
+          trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
+        },
+        {
+          path: [4, 7],
+          span: [104, 0, 110, 1],
+          leadingComments:
+            "*\n A finished scheduled Job.\n Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.\n",
+        },
+        {
+          path: [4, 7, 2, 0],
+          span: [105, 2, 16],
+          trailingComments: " Job instance ID\n",
+        },
+        {
+          path: [4, 7, 2, 1],
+          span: [106, 2, 27],
+          trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
+        },
+        {
+          path: [4, 7, 2, 2],
+          span: [107, 2, 28],
+          trailingComments: " Whether to delete scheduled job\n",
+        },
+        {
+          path: [4, 7, 2, 3],
+          span: [108, 2, 18],
+          trailingComments: " Job type\n",
+        },
+        {
+          path: [4, 8],
+          span: [116, 0, 121, 1],
+          leadingComments:
+            "*\n A failed scheduled Job event from the Job Service.\n Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.\n",
+        },
+        {
+          path: [4, 8, 2, 0],
+          span: [117, 2, 16],
+          trailingComments: " Job instance ID\n",
+        },
+        {
+          path: [4, 8, 2, 1],
+          span: [118, 2, 19],
+          trailingComments: " Error message\n",
+        },
+        {
+          path: [4, 8, 2, 2],
+          span: [119, 2, 27],
+          trailingComments: " Type of job ex: ONCE, RECURR etc.\n",
+        },
+        {
+          path: [4, 8, 2, 3],
+          span: [120, 2, 18],
+          trailingComments: " Job type\n",
+        },
+        {
+          path: [4, 9],
+          span: [126, 0, 133, 1],
+          leadingComments: "*\n Delay between retries.\n",
+        },
+        {
+          path: [4, 9, 4, 0, 2, 0],
+          span: [128, 4, 14],
+          trailingComments: " Retry with the same delay\n",
+        },
+        {
+          path: [4, 9, 4, 0, 2, 1],
+          span: [129, 4, 20],
+          trailingComments: " Exponential delay increase between retries\n",
+        },
+        {
+          path: [4, 9, 2, 0],
+          span: [131, 2, 19],
+          trailingComments: " Time until retry in milliseconds\n",
+        },
+        {
+          path: [4, 9, 2, 1],
+          span: [132, 2, 16],
+          trailingComments: " Calculation of the delay\n",
+        },
+        {
+          path: [4, 10],
+          span: [136, 0, 152, 1],
+          leadingComments: " Job-specific read request\n",
+        },
+        {
+          path: [4, 10, 4, 0],
+          span: [139, 2, 143, 3],
+          leadingComments: " only possible to sort jobs by creation date\n",
+        },
+        {
+          path: [4, 10, 2, 2],
+          span: [147, 2, 23],
+          leadingComments: " Filter based on fieldName|operation, value|list\n",
+        },
+        {
+          path: [4, 10, 2, 3],
+          span: [150, 2, 65],
+          leadingComments: " Fields selector\n",
+        },
+        { path: [4, 11], span: [155, 0, 158, 1], leadingComments: " filter\n" },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.job.Deleted": Deleted,
+    ".io.restorecommerce.job.JobList": JobList,
+    ".io.restorecommerce.job.Job": Job,
+    ".io.restorecommerce.job.JobOptions": JobOptions,
+    ".io.restorecommerce.job.JobOptions.Priority": JobOptions_Priority,
+    ".io.restorecommerce.job.Repeat": Repeat,
+    ".io.restorecommerce.job.Data": Data,
+    ".io.restorecommerce.job.ScheduledJob": ScheduledJob,
+    ".io.restorecommerce.job.JobDone": JobDone,
+    ".io.restorecommerce.job.JobFailed": JobFailed,
+    ".io.restorecommerce.job.Backoff": Backoff,
+    ".io.restorecommerce.job.Backoff.Type": Backoff_Type,
+    ".io.restorecommerce.job.JobReadRequest": JobReadRequest,
+    ".io.restorecommerce.job.JobReadRequest.SortOrder": JobReadRequest_SortOrder,
+    ".io.restorecommerce.job.JobFilter": JobFilter,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

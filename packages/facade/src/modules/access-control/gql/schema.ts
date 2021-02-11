@@ -5,20 +5,20 @@ import {
   getWhitelistBlacklistConfig,
   registerResolverSchema
 } from "../../../gql/protos";
-import { metaService as access_controlMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control";
-import { metaService as policyMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy";
-import { metaService as ruleMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule";
-import { metaService as policy_setMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
+import { protoMetadata as access_controlMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control";
+import { protoMetadata as policyMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy";
+import { protoMetadata as ruleMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule";
+import { protoMetadata as policy_setMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
 import { namespace, AccessControlServiceConfig } from "../interfaces";
 
 registerTypings();
 
 export const schema = (cfg: AccessControlServiceConfig) => {
   const subServices = [
-    [access_controlMetaService, 'access_control', ['IsAllowed', 'WhatIsAllowed']],
-    [policyMetaService, 'policy', ['Read']],
-    [ruleMetaService, 'rule', ['Read']],
-    [policy_setMetaService, 'policy_set', ['Read']],
+    [access_controlMeta.fileDescriptor.service![0], 'access_control', ['IsAllowed', 'WhatIsAllowed']],
+    [policyMeta.fileDescriptor.service![0], 'policy', ['Read']],
+    [ruleMeta.fileDescriptor.service![0], 'rule', ['Read']],
+    [policy_setMeta.fileDescriptor.service![0], 'policy_set', ['Read']],
   ];
 
   subServices.forEach(([service, subspace, queryList]: any) => {

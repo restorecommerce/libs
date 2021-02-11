@@ -1,31 +1,46 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Organization } from '../../io/restorecommerce/organization';
-import { Any } from '../../google/protobuf/any';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Organization,
+  protoMetadata as io_restorecommerce_organization_protoMetadata,
+} from "../../io/restorecommerce/organization";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.invoice";
 
 export interface Deleted {
   id: string;
 }
 
-/**
- *
- *  For multiple invoices
- */
+/** For multiple invoices */
 export interface InvoiceList {
   items: Invoice[];
   totalCount: number;
   subject?: Subject;
 }
 
-/**
- *
- *  A simple invoice.
- */
+/** A simple invoice. */
 export interface Invoice {
   id: string;
   meta?: Meta;
@@ -34,27 +49,20 @@ export interface Invoice {
   paymentStatus: string;
   totalAmount: number;
   netAmount: number;
-  /**
-   *  difference between net and total
-   */
+  /** difference between net and total */
   vatAmount: number;
   document: string;
   invoiceNumber: string;
   customerRemark: string;
 }
 
-/**
- * *
- *  List of Invoice Positions data
- */
+/** List of Invoice Positions data */
 export interface InvoicesPositionsData {
   invoicesPositionsData: InvoicePositions[];
 }
 
 export interface InvoicePositions {
-  /**
-   *  contract or customer identifier
-   */
+  /** contract or customer identifier */
   id: string;
   invoicePositions: InvoicePosition[];
   recipientCustomer?: RecipientCustomer;
@@ -66,13 +74,9 @@ export interface InvoicePositions {
 }
 
 export interface RecipientCustomer {
-  /**
-   *  customer id - used to store the resource in DB
-   */
+  /** customer id - used to store the resource in DB */
   id: string;
-  /**
-   *  displayed in invoice - auto generated per customer
-   */
+  /** displayed in invoice - auto generated per customer */
   customerNumber: string;
 }
 
@@ -109,146 +113,19 @@ export interface InvoicePrice {
 }
 
 export interface TriggerInvoices {
-  /**
-   *  list of id referring to contract_ids or customer_ids
-   */
+  /** list of id referring to contract_ids or customer_ids */
   ids: string[];
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseInvoiceList: object = {
-  totalCount: 0,
-};
-
-const baseInvoice: object = {
-  id: "",
-  timestamp: "",
-  customerId: "",
-  paymentStatus: "",
-  totalAmount: 0,
-  netAmount: 0,
-  vatAmount: 0,
-  document: "",
-  invoiceNumber: "",
-  customerRemark: "",
-};
-
-const baseInvoicesPositionsData: object = {
-};
-
-const baseInvoicePositions: object = {
-  id: "",
-};
-
-const baseRecipientCustomer: object = {
-  id: "",
-  customerNumber: "",
-};
-
-const baseBillingAddress: object = {
-  email: "",
-  website: "",
-  street: "",
-  buildingNumber: "",
-  postcode: "",
-  region: "",
-  countryName: "",
-  telephone: "",
-  timezone: "",
-  economicArea: "",
-};
-
-const baseInvoicePosition: object = {
-  currency: "",
-};
-
-const baseInvoiceRow: object = {
-  product: "",
-  pricePerUnit: 0,
-  quantity: 0,
-  vat: "",
-  amount: 0,
-};
-
-const baseInvoicePrice: object = {
-  gross: 0,
-  net: 0,
-};
-
-const baseTriggerInvoices: object = {
-  ids: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<InvoiceList>;
-
-  Create(request: InvoiceList): Promise<InvoiceList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: InvoiceList): Promise<InvoiceList>;
-
-  Upsert(request: InvoiceList): Promise<InvoiceList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.invoice'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -265,6 +142,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -274,6 +152,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -283,12 +162,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseInvoiceList: object = { totalCount: 0 };
 
 export const InvoiceList = {
   encode(message: InvoiceList, writer: Writer = Writer.create()): Writer {
@@ -301,7 +183,8 @@ export const InvoiceList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoiceList {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoiceList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoiceList } as InvoiceList;
@@ -325,6 +208,7 @@ export const InvoiceList = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoiceList {
     const message = { ...baseInvoiceList } as InvoiceList;
     message.items = [];
@@ -345,6 +229,7 @@ export const InvoiceList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<InvoiceList>): InvoiceList {
     const message = { ...baseInvoiceList } as InvoiceList;
     message.items = [];
@@ -365,17 +250,34 @@ export const InvoiceList = {
     }
     return message;
   },
+
   toJSON(message: InvoiceList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Invoice.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Invoice.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseInvoice: object = {
+  id: "",
+  timestamp: "",
+  customerId: "",
+  paymentStatus: "",
+  totalAmount: 0,
+  netAmount: 0,
+  vatAmount: 0,
+  document: "",
+  invoiceNumber: "",
+  customerRemark: "",
 };
 
 export const Invoice = {
@@ -395,7 +297,8 @@ export const Invoice = {
     writer.uint32(98).string(message.customerRemark);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Invoice {
+
+  decode(input: Reader | Uint8Array, length?: number): Invoice {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoice } as Invoice;
@@ -442,6 +345,7 @@ export const Invoice = {
     }
     return message;
   },
+
   fromJSON(object: any): Invoice {
     const message = { ...baseInvoice } as Invoice;
     if (object.id !== undefined && object.id !== null) {
@@ -501,6 +405,7 @@ export const Invoice = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Invoice>): Invoice {
     const message = { ...baseInvoice } as Invoice;
     if (object.id !== undefined && object.id !== null) {
@@ -560,31 +465,43 @@ export const Invoice = {
     }
     return message;
   },
+
   toJSON(message: Invoice): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.timestamp !== undefined && (obj.timestamp = message.timestamp);
     message.customerId !== undefined && (obj.customerId = message.customerId);
-    message.paymentStatus !== undefined && (obj.paymentStatus = message.paymentStatus);
-    message.totalAmount !== undefined && (obj.totalAmount = message.totalAmount);
+    message.paymentStatus !== undefined &&
+      (obj.paymentStatus = message.paymentStatus);
+    message.totalAmount !== undefined &&
+      (obj.totalAmount = message.totalAmount);
     message.netAmount !== undefined && (obj.netAmount = message.netAmount);
     message.vatAmount !== undefined && (obj.vatAmount = message.vatAmount);
     message.document !== undefined && (obj.document = message.document);
-    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
-    message.customerRemark !== undefined && (obj.customerRemark = message.customerRemark);
+    message.invoiceNumber !== undefined &&
+      (obj.invoiceNumber = message.invoiceNumber);
+    message.customerRemark !== undefined &&
+      (obj.customerRemark = message.customerRemark);
     return obj;
   },
 };
 
+const baseInvoicesPositionsData: object = {};
+
 export const InvoicesPositionsData = {
-  encode(message: InvoicesPositionsData, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: InvoicesPositionsData,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.invoicesPositionsData) {
       InvoicePositions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoicesPositionsData {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoicesPositionsData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
@@ -593,7 +510,9 @@ export const InvoicesPositionsData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.invoicesPositionsData.push(InvoicePositions.decode(reader, reader.uint32()));
+          message.invoicesPositionsData.push(
+            InvoicePositions.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -602,30 +521,43 @@ export const InvoicesPositionsData = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoicesPositionsData {
     const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
     message.invoicesPositionsData = [];
-    if (object.invoicesPositionsData !== undefined && object.invoicesPositionsData !== null) {
+    if (
+      object.invoicesPositionsData !== undefined &&
+      object.invoicesPositionsData !== null
+    ) {
       for (const e of object.invoicesPositionsData) {
         message.invoicesPositionsData.push(InvoicePositions.fromJSON(e));
       }
     }
     return message;
   },
-  fromPartial(object: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
+
+  fromPartial(
+    object: DeepPartial<InvoicesPositionsData>
+  ): InvoicesPositionsData {
     const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
     message.invoicesPositionsData = [];
-    if (object.invoicesPositionsData !== undefined && object.invoicesPositionsData !== null) {
+    if (
+      object.invoicesPositionsData !== undefined &&
+      object.invoicesPositionsData !== null
+    ) {
       for (const e of object.invoicesPositionsData) {
         message.invoicesPositionsData.push(InvoicePositions.fromPartial(e));
       }
     }
     return message;
   },
+
   toJSON(message: InvoicesPositionsData): unknown {
     const obj: any = {};
     if (message.invoicesPositionsData) {
-      obj.invoicesPositionsData = message.invoicesPositionsData.map(e => e ? InvoicePositions.toJSON(e) : undefined);
+      obj.invoicesPositionsData = message.invoicesPositionsData.map((e) =>
+        e ? InvoicePositions.toJSON(e) : undefined
+      );
     } else {
       obj.invoicesPositionsData = [];
     }
@@ -633,33 +565,72 @@ export const InvoicesPositionsData = {
   },
 };
 
+const baseInvoicePositions: object = { id: "" };
+
 export const InvoicePositions = {
   encode(message: InvoicePositions, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     for (const v of message.invoicePositions) {
       InvoicePosition.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.recipientCustomer !== undefined && message.recipientCustomer !== undefined) {
-      RecipientCustomer.encode(message.recipientCustomer, writer.uint32(26).fork()).ldelim();
+    if (
+      message.recipientCustomer !== undefined &&
+      message.recipientCustomer !== undefined
+    ) {
+      RecipientCustomer.encode(
+        message.recipientCustomer,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
-    if (message.recipientBillingAddress !== undefined && message.recipientBillingAddress !== undefined) {
-      BillingAddress.encode(message.recipientBillingAddress, writer.uint32(34).fork()).ldelim();
+    if (
+      message.recipientBillingAddress !== undefined &&
+      message.recipientBillingAddress !== undefined
+    ) {
+      BillingAddress.encode(
+        message.recipientBillingAddress,
+        writer.uint32(34).fork()
+      ).ldelim();
     }
-    if (message.senderBillingAddress !== undefined && message.senderBillingAddress !== undefined) {
-      BillingAddress.encode(message.senderBillingAddress, writer.uint32(42).fork()).ldelim();
+    if (
+      message.senderBillingAddress !== undefined &&
+      message.senderBillingAddress !== undefined
+    ) {
+      BillingAddress.encode(
+        message.senderBillingAddress,
+        writer.uint32(42).fork()
+      ).ldelim();
     }
-    if (message.recipientOrganization !== undefined && message.recipientOrganization !== undefined) {
-      Organization.encode(message.recipientOrganization, writer.uint32(50).fork()).ldelim();
+    if (
+      message.recipientOrganization !== undefined &&
+      message.recipientOrganization !== undefined
+    ) {
+      Organization.encode(
+        message.recipientOrganization,
+        writer.uint32(50).fork()
+      ).ldelim();
     }
-    if (message.senderOrganization !== undefined && message.senderOrganization !== undefined) {
-      Organization.encode(message.senderOrganization, writer.uint32(58).fork()).ldelim();
+    if (
+      message.senderOrganization !== undefined &&
+      message.senderOrganization !== undefined
+    ) {
+      Organization.encode(
+        message.senderOrganization,
+        writer.uint32(58).fork()
+      ).ldelim();
     }
-    if (message.paymentMethodDetails !== undefined && message.paymentMethodDetails !== undefined) {
-      Any.encode(message.paymentMethodDetails, writer.uint32(66).fork()).ldelim();
+    if (
+      message.paymentMethodDetails !== undefined &&
+      message.paymentMethodDetails !== undefined
+    ) {
+      Any.encode(
+        message.paymentMethodDetails,
+        writer.uint32(66).fork()
+      ).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoicePositions {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoicePositions {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoicePositions } as InvoicePositions;
@@ -671,22 +642,39 @@ export const InvoicePositions = {
           message.id = reader.string();
           break;
         case 2:
-          message.invoicePositions.push(InvoicePosition.decode(reader, reader.uint32()));
+          message.invoicePositions.push(
+            InvoicePosition.decode(reader, reader.uint32())
+          );
           break;
         case 3:
-          message.recipientCustomer = RecipientCustomer.decode(reader, reader.uint32());
+          message.recipientCustomer = RecipientCustomer.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 4:
-          message.recipientBillingAddress = BillingAddress.decode(reader, reader.uint32());
+          message.recipientBillingAddress = BillingAddress.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 5:
-          message.senderBillingAddress = BillingAddress.decode(reader, reader.uint32());
+          message.senderBillingAddress = BillingAddress.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 6:
-          message.recipientOrganization = Organization.decode(reader, reader.uint32());
+          message.recipientOrganization = Organization.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 7:
-          message.senderOrganization = Organization.decode(reader, reader.uint32());
+          message.senderOrganization = Organization.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 8:
           message.paymentMethodDetails = Any.decode(reader, reader.uint32());
@@ -698,6 +686,7 @@ export const InvoicePositions = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoicePositions {
     const message = { ...baseInvoicePositions } as InvoicePositions;
     message.invoicePositions = [];
@@ -706,43 +695,75 @@ export const InvoicePositions = {
     } else {
       message.id = "";
     }
-    if (object.invoicePositions !== undefined && object.invoicePositions !== null) {
+    if (
+      object.invoicePositions !== undefined &&
+      object.invoicePositions !== null
+    ) {
       for (const e of object.invoicePositions) {
         message.invoicePositions.push(InvoicePosition.fromJSON(e));
       }
     }
-    if (object.recipientCustomer !== undefined && object.recipientCustomer !== null) {
-      message.recipientCustomer = RecipientCustomer.fromJSON(object.recipientCustomer);
+    if (
+      object.recipientCustomer !== undefined &&
+      object.recipientCustomer !== null
+    ) {
+      message.recipientCustomer = RecipientCustomer.fromJSON(
+        object.recipientCustomer
+      );
     } else {
       message.recipientCustomer = undefined;
     }
-    if (object.recipientBillingAddress !== undefined && object.recipientBillingAddress !== null) {
-      message.recipientBillingAddress = BillingAddress.fromJSON(object.recipientBillingAddress);
+    if (
+      object.recipientBillingAddress !== undefined &&
+      object.recipientBillingAddress !== null
+    ) {
+      message.recipientBillingAddress = BillingAddress.fromJSON(
+        object.recipientBillingAddress
+      );
     } else {
       message.recipientBillingAddress = undefined;
     }
-    if (object.senderBillingAddress !== undefined && object.senderBillingAddress !== null) {
-      message.senderBillingAddress = BillingAddress.fromJSON(object.senderBillingAddress);
+    if (
+      object.senderBillingAddress !== undefined &&
+      object.senderBillingAddress !== null
+    ) {
+      message.senderBillingAddress = BillingAddress.fromJSON(
+        object.senderBillingAddress
+      );
     } else {
       message.senderBillingAddress = undefined;
     }
-    if (object.recipientOrganization !== undefined && object.recipientOrganization !== null) {
-      message.recipientOrganization = Organization.fromJSON(object.recipientOrganization);
+    if (
+      object.recipientOrganization !== undefined &&
+      object.recipientOrganization !== null
+    ) {
+      message.recipientOrganization = Organization.fromJSON(
+        object.recipientOrganization
+      );
     } else {
       message.recipientOrganization = undefined;
     }
-    if (object.senderOrganization !== undefined && object.senderOrganization !== null) {
-      message.senderOrganization = Organization.fromJSON(object.senderOrganization);
+    if (
+      object.senderOrganization !== undefined &&
+      object.senderOrganization !== null
+    ) {
+      message.senderOrganization = Organization.fromJSON(
+        object.senderOrganization
+      );
     } else {
       message.senderOrganization = undefined;
     }
-    if (object.paymentMethodDetails !== undefined && object.paymentMethodDetails !== null) {
+    if (
+      object.paymentMethodDetails !== undefined &&
+      object.paymentMethodDetails !== null
+    ) {
       message.paymentMethodDetails = Any.fromJSON(object.paymentMethodDetails);
     } else {
       message.paymentMethodDetails = undefined;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
     const message = { ...baseInvoicePositions } as InvoicePositions;
     message.invoicePositions = [];
@@ -751,60 +772,116 @@ export const InvoicePositions = {
     } else {
       message.id = "";
     }
-    if (object.invoicePositions !== undefined && object.invoicePositions !== null) {
+    if (
+      object.invoicePositions !== undefined &&
+      object.invoicePositions !== null
+    ) {
       for (const e of object.invoicePositions) {
         message.invoicePositions.push(InvoicePosition.fromPartial(e));
       }
     }
-    if (object.recipientCustomer !== undefined && object.recipientCustomer !== null) {
-      message.recipientCustomer = RecipientCustomer.fromPartial(object.recipientCustomer);
+    if (
+      object.recipientCustomer !== undefined &&
+      object.recipientCustomer !== null
+    ) {
+      message.recipientCustomer = RecipientCustomer.fromPartial(
+        object.recipientCustomer
+      );
     } else {
       message.recipientCustomer = undefined;
     }
-    if (object.recipientBillingAddress !== undefined && object.recipientBillingAddress !== null) {
-      message.recipientBillingAddress = BillingAddress.fromPartial(object.recipientBillingAddress);
+    if (
+      object.recipientBillingAddress !== undefined &&
+      object.recipientBillingAddress !== null
+    ) {
+      message.recipientBillingAddress = BillingAddress.fromPartial(
+        object.recipientBillingAddress
+      );
     } else {
       message.recipientBillingAddress = undefined;
     }
-    if (object.senderBillingAddress !== undefined && object.senderBillingAddress !== null) {
-      message.senderBillingAddress = BillingAddress.fromPartial(object.senderBillingAddress);
+    if (
+      object.senderBillingAddress !== undefined &&
+      object.senderBillingAddress !== null
+    ) {
+      message.senderBillingAddress = BillingAddress.fromPartial(
+        object.senderBillingAddress
+      );
     } else {
       message.senderBillingAddress = undefined;
     }
-    if (object.recipientOrganization !== undefined && object.recipientOrganization !== null) {
-      message.recipientOrganization = Organization.fromPartial(object.recipientOrganization);
+    if (
+      object.recipientOrganization !== undefined &&
+      object.recipientOrganization !== null
+    ) {
+      message.recipientOrganization = Organization.fromPartial(
+        object.recipientOrganization
+      );
     } else {
       message.recipientOrganization = undefined;
     }
-    if (object.senderOrganization !== undefined && object.senderOrganization !== null) {
-      message.senderOrganization = Organization.fromPartial(object.senderOrganization);
+    if (
+      object.senderOrganization !== undefined &&
+      object.senderOrganization !== null
+    ) {
+      message.senderOrganization = Organization.fromPartial(
+        object.senderOrganization
+      );
     } else {
       message.senderOrganization = undefined;
     }
-    if (object.paymentMethodDetails !== undefined && object.paymentMethodDetails !== null) {
-      message.paymentMethodDetails = Any.fromPartial(object.paymentMethodDetails);
+    if (
+      object.paymentMethodDetails !== undefined &&
+      object.paymentMethodDetails !== null
+    ) {
+      message.paymentMethodDetails = Any.fromPartial(
+        object.paymentMethodDetails
+      );
     } else {
       message.paymentMethodDetails = undefined;
     }
     return message;
   },
+
   toJSON(message: InvoicePositions): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     if (message.invoicePositions) {
-      obj.invoicePositions = message.invoicePositions.map(e => e ? InvoicePosition.toJSON(e) : undefined);
+      obj.invoicePositions = message.invoicePositions.map((e) =>
+        e ? InvoicePosition.toJSON(e) : undefined
+      );
     } else {
       obj.invoicePositions = [];
     }
-    message.recipientCustomer !== undefined && (obj.recipientCustomer = message.recipientCustomer ? RecipientCustomer.toJSON(message.recipientCustomer) : undefined);
-    message.recipientBillingAddress !== undefined && (obj.recipientBillingAddress = message.recipientBillingAddress ? BillingAddress.toJSON(message.recipientBillingAddress) : undefined);
-    message.senderBillingAddress !== undefined && (obj.senderBillingAddress = message.senderBillingAddress ? BillingAddress.toJSON(message.senderBillingAddress) : undefined);
-    message.recipientOrganization !== undefined && (obj.recipientOrganization = message.recipientOrganization ? Organization.toJSON(message.recipientOrganization) : undefined);
-    message.senderOrganization !== undefined && (obj.senderOrganization = message.senderOrganization ? Organization.toJSON(message.senderOrganization) : undefined);
-    message.paymentMethodDetails !== undefined && (obj.paymentMethodDetails = message.paymentMethodDetails ? Any.toJSON(message.paymentMethodDetails) : undefined);
+    message.recipientCustomer !== undefined &&
+      (obj.recipientCustomer = message.recipientCustomer
+        ? RecipientCustomer.toJSON(message.recipientCustomer)
+        : undefined);
+    message.recipientBillingAddress !== undefined &&
+      (obj.recipientBillingAddress = message.recipientBillingAddress
+        ? BillingAddress.toJSON(message.recipientBillingAddress)
+        : undefined);
+    message.senderBillingAddress !== undefined &&
+      (obj.senderBillingAddress = message.senderBillingAddress
+        ? BillingAddress.toJSON(message.senderBillingAddress)
+        : undefined);
+    message.recipientOrganization !== undefined &&
+      (obj.recipientOrganization = message.recipientOrganization
+        ? Organization.toJSON(message.recipientOrganization)
+        : undefined);
+    message.senderOrganization !== undefined &&
+      (obj.senderOrganization = message.senderOrganization
+        ? Organization.toJSON(message.senderOrganization)
+        : undefined);
+    message.paymentMethodDetails !== undefined &&
+      (obj.paymentMethodDetails = message.paymentMethodDetails
+        ? Any.toJSON(message.paymentMethodDetails)
+        : undefined);
     return obj;
   },
 };
+
+const baseRecipientCustomer: object = { id: "", customerNumber: "" };
 
 export const RecipientCustomer = {
   encode(message: RecipientCustomer, writer: Writer = Writer.create()): Writer {
@@ -812,7 +889,8 @@ export const RecipientCustomer = {
     writer.uint32(18).string(message.customerNumber);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RecipientCustomer {
+
+  decode(input: Reader | Uint8Array, length?: number): RecipientCustomer {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRecipientCustomer } as RecipientCustomer;
@@ -832,6 +910,7 @@ export const RecipientCustomer = {
     }
     return message;
   },
+
   fromJSON(object: any): RecipientCustomer {
     const message = { ...baseRecipientCustomer } as RecipientCustomer;
     if (object.id !== undefined && object.id !== null) {
@@ -846,6 +925,7 @@ export const RecipientCustomer = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<RecipientCustomer>): RecipientCustomer {
     const message = { ...baseRecipientCustomer } as RecipientCustomer;
     if (object.id !== undefined && object.id !== null) {
@@ -860,12 +940,27 @@ export const RecipientCustomer = {
     }
     return message;
   },
+
   toJSON(message: RecipientCustomer): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.customerNumber !== undefined && (obj.customerNumber = message.customerNumber);
+    message.customerNumber !== undefined &&
+      (obj.customerNumber = message.customerNumber);
     return obj;
   },
+};
+
+const baseBillingAddress: object = {
+  email: "",
+  website: "",
+  street: "",
+  buildingNumber: "",
+  postcode: "",
+  region: "",
+  countryName: "",
+  telephone: "",
+  timezone: "",
+  economicArea: "",
 };
 
 export const BillingAddress = {
@@ -882,7 +977,8 @@ export const BillingAddress = {
     writer.uint32(90).string(message.economicArea);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): BillingAddress {
+
+  decode(input: Reader | Uint8Array, length?: number): BillingAddress {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBillingAddress } as BillingAddress;
@@ -926,6 +1022,7 @@ export const BillingAddress = {
     }
     return message;
   },
+
   fromJSON(object: any): BillingAddress {
     const message = { ...baseBillingAddress } as BillingAddress;
     if (object.email !== undefined && object.email !== null) {
@@ -980,6 +1077,7 @@ export const BillingAddress = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<BillingAddress>): BillingAddress {
     const message = { ...baseBillingAddress } as BillingAddress;
     if (object.email !== undefined && object.email !== null) {
@@ -1034,21 +1132,27 @@ export const BillingAddress = {
     }
     return message;
   },
+
   toJSON(message: BillingAddress): unknown {
     const obj: any = {};
     message.email !== undefined && (obj.email = message.email);
     message.website !== undefined && (obj.website = message.website);
     message.street !== undefined && (obj.street = message.street);
-    message.buildingNumber !== undefined && (obj.buildingNumber = message.buildingNumber);
+    message.buildingNumber !== undefined &&
+      (obj.buildingNumber = message.buildingNumber);
     message.postcode !== undefined && (obj.postcode = message.postcode);
     message.region !== undefined && (obj.region = message.region);
-    message.countryName !== undefined && (obj.countryName = message.countryName);
+    message.countryName !== undefined &&
+      (obj.countryName = message.countryName);
     message.telephone !== undefined && (obj.telephone = message.telephone);
     message.timezone !== undefined && (obj.timezone = message.timezone);
-    message.economicArea !== undefined && (obj.economicArea = message.economicArea);
+    message.economicArea !== undefined &&
+      (obj.economicArea = message.economicArea);
     return obj;
   },
 };
+
+const baseInvoicePosition: object = { currency: "" };
 
 export const InvoicePosition = {
   encode(message: InvoicePosition, writer: Writer = Writer.create()): Writer {
@@ -1057,11 +1161,15 @@ export const InvoicePosition = {
       InvoiceRow.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.totalPrice !== undefined && message.totalPrice !== undefined) {
-      InvoicePrice.encode(message.totalPrice, writer.uint32(26).fork()).ldelim();
+      InvoicePrice.encode(
+        message.totalPrice,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoicePosition {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoicePosition {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoicePosition } as InvoicePosition;
@@ -1085,6 +1193,7 @@ export const InvoicePosition = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoicePosition {
     const message = { ...baseInvoicePosition } as InvoicePosition;
     message.tableList = [];
@@ -1105,6 +1214,7 @@ export const InvoicePosition = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
     const message = { ...baseInvoicePosition } as InvoicePosition;
     message.tableList = [];
@@ -1125,17 +1235,31 @@ export const InvoicePosition = {
     }
     return message;
   },
+
   toJSON(message: InvoicePosition): unknown {
     const obj: any = {};
     message.currency !== undefined && (obj.currency = message.currency);
     if (message.tableList) {
-      obj.tableList = message.tableList.map(e => e ? InvoiceRow.toJSON(e) : undefined);
+      obj.tableList = message.tableList.map((e) =>
+        e ? InvoiceRow.toJSON(e) : undefined
+      );
     } else {
       obj.tableList = [];
     }
-    message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice ? InvoicePrice.toJSON(message.totalPrice) : undefined);
+    message.totalPrice !== undefined &&
+      (obj.totalPrice = message.totalPrice
+        ? InvoicePrice.toJSON(message.totalPrice)
+        : undefined);
     return obj;
   },
+};
+
+const baseInvoiceRow: object = {
+  product: "",
+  pricePerUnit: 0,
+  quantity: 0,
+  vat: "",
+  amount: 0,
 };
 
 export const InvoiceRow = {
@@ -1147,7 +1271,8 @@ export const InvoiceRow = {
     writer.uint32(40).uint32(message.amount);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoiceRow {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoiceRow {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoiceRow } as InvoiceRow;
@@ -1176,6 +1301,7 @@ export const InvoiceRow = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoiceRow {
     const message = { ...baseInvoiceRow } as InvoiceRow;
     if (object.product !== undefined && object.product !== null) {
@@ -1205,6 +1331,7 @@ export const InvoiceRow = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<InvoiceRow>): InvoiceRow {
     const message = { ...baseInvoiceRow } as InvoiceRow;
     if (object.product !== undefined && object.product !== null) {
@@ -1234,10 +1361,12 @@ export const InvoiceRow = {
     }
     return message;
   },
+
   toJSON(message: InvoiceRow): unknown {
     const obj: any = {};
     message.product !== undefined && (obj.product = message.product);
-    message.pricePerUnit !== undefined && (obj.pricePerUnit = message.pricePerUnit);
+    message.pricePerUnit !== undefined &&
+      (obj.pricePerUnit = message.pricePerUnit);
     message.quantity !== undefined && (obj.quantity = message.quantity);
     message.vat !== undefined && (obj.vat = message.vat);
     message.amount !== undefined && (obj.amount = message.amount);
@@ -1245,13 +1374,16 @@ export const InvoiceRow = {
   },
 };
 
+const baseInvoicePrice: object = { gross: 0, net: 0 };
+
 export const InvoicePrice = {
   encode(message: InvoicePrice, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).uint32(message.gross);
     writer.uint32(16).uint32(message.net);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): InvoicePrice {
+
+  decode(input: Reader | Uint8Array, length?: number): InvoicePrice {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInvoicePrice } as InvoicePrice;
@@ -1271,6 +1403,7 @@ export const InvoicePrice = {
     }
     return message;
   },
+
   fromJSON(object: any): InvoicePrice {
     const message = { ...baseInvoicePrice } as InvoicePrice;
     if (object.gross !== undefined && object.gross !== null) {
@@ -1285,6 +1418,7 @@ export const InvoicePrice = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<InvoicePrice>): InvoicePrice {
     const message = { ...baseInvoicePrice } as InvoicePrice;
     if (object.gross !== undefined && object.gross !== null) {
@@ -1299,6 +1433,7 @@ export const InvoicePrice = {
     }
     return message;
   },
+
   toJSON(message: InvoicePrice): unknown {
     const obj: any = {};
     message.gross !== undefined && (obj.gross = message.gross);
@@ -1307,6 +1442,8 @@ export const InvoicePrice = {
   },
 };
 
+const baseTriggerInvoices: object = { ids: "" };
+
 export const TriggerInvoices = {
   encode(message: TriggerInvoices, writer: Writer = Writer.create()): Writer {
     for (const v of message.ids) {
@@ -1314,7 +1451,8 @@ export const TriggerInvoices = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): TriggerInvoices {
+
+  decode(input: Reader | Uint8Array, length?: number): TriggerInvoices {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseTriggerInvoices } as TriggerInvoices;
@@ -1332,6 +1470,7 @@ export const TriggerInvoices = {
     }
     return message;
   },
+
   fromJSON(object: any): TriggerInvoices {
     const message = { ...baseTriggerInvoices } as TriggerInvoices;
     message.ids = [];
@@ -1342,6 +1481,7 @@ export const TriggerInvoices = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<TriggerInvoices>): TriggerInvoices {
     const message = { ...baseTriggerInvoices } as TriggerInvoices;
     message.ids = [];
@@ -1352,10 +1492,11 @@ export const TriggerInvoices = {
     }
     return message;
   },
+
   toJSON(message: TriggerInvoices): unknown {
     const obj: any = {};
     if (message.ids) {
-      obj.ids = message.ids.map(e => e);
+      obj.ids = message.ids.map((e) => e);
     } else {
       obj.ids = [];
     }
@@ -1363,98 +1504,546 @@ export const TriggerInvoices = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<InvoiceList>;
+  Create(request: InvoiceList): Promise<InvoiceList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: InvoiceList): Promise<InvoiceList>;
+  Upsert(request: InvoiceList): Promise<InvoiceList>;
 }
-export const metaInvoiceList: { [key in keyof Required<InvoiceList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.Invoice', name:'Invoice'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaInvoice: { [key in keyof Required<Invoice>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  timestamp: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  customerId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  paymentStatus: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  totalAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  netAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  vatAmount: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  document: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invoiceNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  customerRemark: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaInvoicesPositionsData: { [key in keyof Required<InvoicesPositionsData>]: MetaBase | string } = {
-  invoicesPositionsData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoicePositions', name:'InvoicePositions'} as MetaMessage} as MetaArray,
-}
-export const metaInvoicePositions: { [key in keyof Required<InvoicePositions>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invoicePositions: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoicePosition', name:'InvoicePosition'} as MetaMessage} as MetaArray,
-  recipientCustomer: {kind:'object', type:'.io.restorecommerce.invoice.RecipientCustomer', name:'RecipientCustomer'} as MetaMessage,
-  recipientBillingAddress: {kind:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaMessage,
-  senderBillingAddress: {kind:'object', type:'.io.restorecommerce.invoice.BillingAddress', name:'BillingAddress'} as MetaMessage,
-  recipientOrganization: {kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage,
-  senderOrganization: {kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage,
-  paymentMethodDetails: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaRecipientCustomer: { [key in keyof Required<RecipientCustomer>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  customerNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaBillingAddress: { [key in keyof Required<BillingAddress>]: MetaBase | string } = {
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  website: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  street: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  buildingNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  postcode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  region: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  countryName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  telephone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  timezone: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  economicArea: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaInvoicePosition: { [key in keyof Required<InvoicePosition>]: MetaBase | string } = {
-  currency: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  tableList: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.invoice.InvoiceRow', name:'InvoiceRow'} as MetaMessage} as MetaArray,
-  totalPrice: {kind:'object', type:'.io.restorecommerce.invoice.InvoicePrice', name:'InvoicePrice'} as MetaMessage,
-}
-export const metaInvoiceRow: { [key in keyof Required<InvoiceRow>]: MetaBase | string } = {
-  product: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  pricePerUnit: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  quantity: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  vat: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  amount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaInvoicePrice: { [key in keyof Required<InvoicePrice>]: MetaBase | string } = {
-  gross: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  net: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaTriggerInvoices: { [key in keyof Required<TriggerInvoices>]: MetaBase | string } = {
-  ids: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: InvoiceList.decode} as MetaService<ReadRequest, InvoiceList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.invoice.InvoiceList', name:'InvoiceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: InvoiceList.encode, decodeResponse: InvoiceList.decode} as MetaService<InvoiceList, InvoiceList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.invoice.Deleted', Deleted, metaDeleted],
-  InvoiceList: ['message', '.io.restorecommerce.invoice.InvoiceList', InvoiceList, metaInvoiceList],
-  Invoice: ['message', '.io.restorecommerce.invoice.Invoice', Invoice, metaInvoice],
-  InvoicesPositionsData: ['message', '.io.restorecommerce.invoice.InvoicesPositionsData', InvoicesPositionsData, metaInvoicesPositionsData],
-  InvoicePositions: ['message', '.io.restorecommerce.invoice.InvoicePositions', InvoicePositions, metaInvoicePositions],
-  RecipientCustomer: ['message', '.io.restorecommerce.invoice.RecipientCustomer', RecipientCustomer, metaRecipientCustomer],
-  BillingAddress: ['message', '.io.restorecommerce.invoice.BillingAddress', BillingAddress, metaBillingAddress],
-  InvoicePosition: ['message', '.io.restorecommerce.invoice.InvoicePosition', InvoicePosition, metaInvoicePosition],
-  InvoiceRow: ['message', '.io.restorecommerce.invoice.InvoiceRow', InvoiceRow, metaInvoiceRow],
-  InvoicePrice: ['message', '.io.restorecommerce.invoice.InvoicePrice', InvoicePrice, metaInvoicePrice],
-  TriggerInvoices: ['message', '.io.restorecommerce.invoice.TriggerInvoices', TriggerInvoices, metaTriggerInvoices],
-  Service: ['service', '.io.restorecommerce.invoice.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/organization.proto",
+      "io/restorecommerce/auth.proto",
+      "google/protobuf/any.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "InvoiceList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.Invoice",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Invoice",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "timestamp",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timestamp",
+          },
+          {
+            name: "customer_id",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "customerId",
+          },
+          {
+            name: "payment_status",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "paymentStatus",
+          },
+          {
+            name: "total_amount",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "totalAmount",
+          },
+          {
+            name: "net_amount",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "netAmount",
+          },
+          {
+            name: "vat_amount",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "vatAmount",
+          },
+          {
+            name: "document",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "document",
+          },
+          {
+            name: "invoice_number",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invoiceNumber",
+          },
+          {
+            name: "customer_remark",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "customerRemark",
+          },
+        ],
+      },
+      {
+        name: "InvoicesPositionsData",
+        field: [
+          {
+            name: "invoices_positions_data",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.InvoicePositions",
+            jsonName: "invoicesPositionsData",
+          },
+        ],
+      },
+      {
+        name: "InvoicePositions",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "invoice_positions",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.InvoicePosition",
+            jsonName: "invoicePositions",
+          },
+          {
+            name: "recipient_customer",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.RecipientCustomer",
+            jsonName: "recipientCustomer",
+          },
+          {
+            name: "recipient_billing_address",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.BillingAddress",
+            jsonName: "recipientBillingAddress",
+          },
+          {
+            name: "sender_billing_address",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.BillingAddress",
+            jsonName: "senderBillingAddress",
+          },
+          {
+            name: "recipient_organization",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.organization.Organization",
+            jsonName: "recipientOrganization",
+          },
+          {
+            name: "sender_organization",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.organization.Organization",
+            jsonName: "senderOrganization",
+          },
+          {
+            name: "payment_method_details",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "paymentMethodDetails",
+          },
+        ],
+      },
+      {
+        name: "RecipientCustomer",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "customer_number",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "customerNumber",
+          },
+        ],
+      },
+      {
+        name: "BillingAddress",
+        field: [
+          {
+            name: "email",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "website",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "website",
+          },
+          {
+            name: "street",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "street",
+          },
+          {
+            name: "building_number",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "buildingNumber",
+          },
+          {
+            name: "postcode",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "postcode",
+          },
+          {
+            name: "region",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "region",
+          },
+          {
+            name: "country_name",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "countryName",
+          },
+          {
+            name: "telephone",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "telephone",
+          },
+          {
+            name: "timezone",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timezone",
+          },
+          {
+            name: "economic_area",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "economicArea",
+          },
+        ],
+      },
+      {
+        name: "InvoicePosition",
+        field: [
+          {
+            name: "currency",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "currency",
+          },
+          {
+            name: "tableList",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.InvoiceRow",
+            jsonName: "tableList",
+          },
+          {
+            name: "totalPrice",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.invoice.InvoicePrice",
+            jsonName: "totalPrice",
+          },
+        ],
+      },
+      {
+        name: "InvoiceRow",
+        field: [
+          {
+            name: "product",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "product",
+          },
+          {
+            name: "pricePerUnit",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "pricePerUnit",
+          },
+          {
+            name: "quantity",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "quantity",
+          },
+          {
+            name: "vat",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "vat",
+          },
+          {
+            name: "amount",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "amount",
+          },
+        ],
+      },
+      {
+        name: "InvoicePrice",
+        field: [
+          {
+            name: "gross",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "gross",
+          },
+          {
+            name: "net",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "net",
+          },
+        ],
+      },
+      {
+        name: "TriggerInvoices",
+        field: [
+          {
+            name: "ids",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "ids",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.invoice.InvoiceList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/invoice.proto",
+    package: "io.restorecommerce.invoice",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [14, 0, 20, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+        {
+          path: [4, 1],
+          span: [29, 0, 33, 1],
+          leadingComments: "\n For multiple invoices\n",
+        },
+        {
+          path: [4, 2],
+          span: [38, 0, 50, 1],
+          leadingComments: "\n A simple invoice.\n",
+        },
+        {
+          path: [4, 2, 2, 7],
+          span: [46, 2, 24],
+          trailingComments: " difference between net and total\n",
+        },
+        {
+          path: [4, 3],
+          span: [55, 0, 57, 1],
+          leadingComments: "*\n List of Invoice Positions data\n",
+        },
+        {
+          path: [4, 4, 2, 0],
+          span: [60, 2, 16],
+          trailingComments: " contract or customer identifier\n",
+        },
+        {
+          path: [4, 5, 2, 0],
+          span: [71, 2, 16],
+          trailingComments: " customer id - used to store the resource in DB\n",
+        },
+        {
+          path: [4, 5, 2, 1],
+          span: [72, 2, 29],
+          trailingComments:
+            " displayed in invoice - auto generated per customer\n",
+        },
+        {
+          path: [4, 10, 2, 0],
+          span: [108, 2, 26],
+          trailingComments:
+            " list of id referring to contract_ids or customer_ids\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.invoice.Deleted": Deleted,
+    ".io.restorecommerce.invoice.InvoiceList": InvoiceList,
+    ".io.restorecommerce.invoice.Invoice": Invoice,
+    ".io.restorecommerce.invoice.InvoicesPositionsData": InvoicesPositionsData,
+    ".io.restorecommerce.invoice.InvoicePositions": InvoicePositions,
+    ".io.restorecommerce.invoice.RecipientCustomer": RecipientCustomer,
+    ".io.restorecommerce.invoice.BillingAddress": BillingAddress,
+    ".io.restorecommerce.invoice.InvoicePosition": InvoicePosition,
+    ".io.restorecommerce.invoice.InvoiceRow": InvoiceRow,
+    ".io.restorecommerce.invoice.InvoicePrice": InvoicePrice,
+    ".io.restorecommerce.invoice.TriggerInvoices": TriggerInvoices,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_organization_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+    google_protobuf_any_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

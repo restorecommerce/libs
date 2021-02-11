@@ -1,12 +1,36 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Target, Effect, effectFromJSON, effectToJSON } from '../../io/restorecommerce/rule';
-import { Subject } from '../../io/restorecommerce/auth';
-import { PolicyRQ } from '../../io/restorecommerce/policy';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Target,
+  Effect,
+  effectFromJSON,
+  effectToJSON,
+  protoMetadata as io_restorecommerce_rule_protoMetadata,
+} from "../../io/restorecommerce/rule";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  PolicyRQ,
+  protoMetadata as io_restorecommerce_policy_protoMetadata,
+} from "../../io/restorecommerce/policy";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.policy_set";
 
 export interface PolicySet {
   id: string;
@@ -15,9 +39,7 @@ export interface PolicySet {
   description: string;
   target?: Target;
   combiningAlgorithm: string;
-  /**
-   *  policy IDs
-   */
+  /** policy IDs */
   policies: string[];
 }
 
@@ -43,73 +65,6 @@ const basePolicySet: object = {
   policies: "",
 };
 
-const basePolicySetList: object = {
-  totalCount: 0,
-};
-
-const basePolicySetRQ: object = {
-  id: "",
-  combiningAlgorithm: "",
-  effect: 0,
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<PolicySetList>;
-
-  Create(request: PolicySetList): Promise<PolicySetList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: PolicySetList): Promise<PolicySetList>;
-
-  Upsert(request: PolicySetList): Promise<PolicySetList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.policy_set'
-
 export const PolicySet = {
   encode(message: PolicySet, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -127,7 +82,8 @@ export const PolicySet = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PolicySet {
+
+  decode(input: Reader | Uint8Array, length?: number): PolicySet {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicySet } as PolicySet;
@@ -163,6 +119,7 @@ export const PolicySet = {
     }
     return message;
   },
+
   fromJSON(object: any): PolicySet {
     const message = { ...basePolicySet } as PolicySet;
     message.policies = [];
@@ -191,7 +148,10 @@ export const PolicySet = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
       message.combiningAlgorithm = "";
@@ -203,6 +163,7 @@ export const PolicySet = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PolicySet>): PolicySet {
     const message = { ...basePolicySet } as PolicySet;
     message.policies = [];
@@ -231,7 +192,10 @@ export const PolicySet = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
       message.combiningAlgorithm = "";
@@ -243,22 +207,29 @@ export const PolicySet = {
     }
     return message;
   },
+
   toJSON(message: PolicySet): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.policies) {
-      obj.policies = message.policies.map(e => e);
+      obj.policies = message.policies.map((e) => e);
     } else {
       obj.policies = [];
     }
     return obj;
   },
 };
+
+const basePolicySetList: object = { totalCount: 0 };
 
 export const PolicySetList = {
   encode(message: PolicySetList, writer: Writer = Writer.create()): Writer {
@@ -271,7 +242,8 @@ export const PolicySetList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PolicySetList {
+
+  decode(input: Reader | Uint8Array, length?: number): PolicySetList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicySetList } as PolicySetList;
@@ -295,6 +267,7 @@ export const PolicySetList = {
     }
     return message;
   },
+
   fromJSON(object: any): PolicySetList {
     const message = { ...basePolicySetList } as PolicySetList;
     message.items = [];
@@ -315,6 +288,7 @@ export const PolicySetList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PolicySetList>): PolicySetList {
     const message = { ...basePolicySetList } as PolicySetList;
     message.items = [];
@@ -335,18 +309,26 @@ export const PolicySetList = {
     }
     return message;
   },
+
   toJSON(message: PolicySetList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? PolicySet.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? PolicySet.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const basePolicySetRQ: object = { id: "", combiningAlgorithm: "", effect: 0 };
 
 export const PolicySetRQ = {
   encode(message: PolicySetRQ, writer: Writer = Writer.create()): Writer {
@@ -361,7 +343,8 @@ export const PolicySetRQ = {
     writer.uint32(40).int32(message.effect);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PolicySetRQ {
+
+  decode(input: Reader | Uint8Array, length?: number): PolicySetRQ {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicySetRQ } as PolicySetRQ;
@@ -391,6 +374,7 @@ export const PolicySetRQ = {
     }
     return message;
   },
+
   fromJSON(object: any): PolicySetRQ {
     const message = { ...basePolicySetRQ } as PolicySetRQ;
     message.policies = [];
@@ -404,7 +388,10 @@ export const PolicySetRQ = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
       message.combiningAlgorithm = "";
@@ -421,6 +408,7 @@ export const PolicySetRQ = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PolicySetRQ>): PolicySetRQ {
     const message = { ...basePolicySetRQ } as PolicySetRQ;
     message.policies = [];
@@ -434,7 +422,10 @@ export const PolicySetRQ = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
       message.combiningAlgorithm = "";
@@ -451,13 +442,18 @@ export const PolicySetRQ = {
     }
     return message;
   },
+
   toJSON(message: PolicySetRQ): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.policies) {
-      obj.policies = message.policies.map(e => e ? PolicyRQ.toJSON(e) : undefined);
+      obj.policies = message.policies.map((e) =>
+        e ? PolicyRQ.toJSON(e) : undefined
+      );
     } else {
       obj.policies = [];
     }
@@ -466,42 +462,225 @@ export const PolicySetRQ = {
   },
 };
 
-export const metaPolicySet: { [key in keyof Required<PolicySet>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
-  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  policies: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+export interface Service {
+  Read(request: ReadRequest): Promise<PolicySetList>;
+  Create(request: PolicySetList): Promise<PolicySetList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: PolicySetList): Promise<PolicySetList>;
+  Upsert(request: PolicySetList): Promise<PolicySetList>;
 }
-export const metaPolicySetList: { [key in keyof Required<PolicySetList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy_set.PolicySet', name:'PolicySet'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaPolicySetRQ: { [key in keyof Required<PolicySetRQ>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
-  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  policies: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy.PolicyRQ', name:'PolicyRQ'} as MetaMessage} as MetaArray,
-  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PolicySetList.decode} as MetaService<ReadRequest, PolicySetList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaService<PolicySetList, PolicySetList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaService<PolicySetList, PolicySetList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy_set.PolicySetList', name:'PolicySetList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicySetList.encode, decodeResponse: PolicySetList.decode} as MetaService<PolicySetList, PolicySetList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  PolicySet: ['message', '.io.restorecommerce.policy_set.PolicySet', PolicySet, metaPolicySet],
-  PolicySetList: ['message', '.io.restorecommerce.policy_set.PolicySetList', PolicySetList, metaPolicySetList],
-  PolicySetRQ: ['message', '.io.restorecommerce.policy_set.PolicySetRQ', PolicySetRQ, metaPolicySetRQ],
-  Service: ['service', '.io.restorecommerce.policy_set.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/policy.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/rule.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "PolicySet",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "target",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.Target",
+            jsonName: "target",
+          },
+          {
+            name: "combining_algorithm",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "combiningAlgorithm",
+          },
+          {
+            name: "policies",
+            number: 7,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "policies",
+          },
+        ],
+      },
+      {
+        name: "PolicySetList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.policy_set.PolicySet",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "PolicySetRQ",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "target",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.Target",
+            jsonName: "target",
+          },
+          {
+            name: "combining_algorithm",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "combiningAlgorithm",
+          },
+          {
+            name: "policies",
+            number: 4,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.policy.PolicyRQ",
+            jsonName: "policies",
+          },
+          {
+            name: "effect",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.rule.Effect",
+            jsonName: "effect",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.policy_set.PolicySetList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.policy_set.PolicySetList",
+            outputType: ".io.restorecommerce.policy_set.PolicySetList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.policy_set.PolicySetList",
+            outputType: ".io.restorecommerce.policy_set.PolicySetList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.policy_set.PolicySetList",
+            outputType: ".io.restorecommerce.policy_set.PolicySetList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/policy_set.proto",
+    package: "io.restorecommerce.policy_set",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 2, 6],
+          span: [19, 2, 31],
+          trailingComments: " policy IDs\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.policy_set.PolicySet": PolicySet,
+    ".io.restorecommerce.policy_set.PolicySetList": PolicySetList,
+    ".io.restorecommerce.policy_set.PolicySetRQ": PolicySetRQ,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_policy_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+    io_restorecommerce_rule_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

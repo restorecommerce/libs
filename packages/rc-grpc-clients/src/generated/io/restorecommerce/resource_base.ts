@@ -1,11 +1,28 @@
 /* eslint-disable */
-import { Struct } from '../../google/protobuf/struct';
-import { Any } from '../../google/protobuf/any';
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Struct,
+  protoMetadata as google_protobuf_struct_protoMetadata,
+} from "../../google/protobuf/struct";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
 
+export const protobufPackage = "io.restorecommerce.resourcebase";
 
 export interface FieldFilter {
   name: string;
@@ -16,157 +33,6 @@ export interface Sort {
   field: string;
   order: Sort_SortOrder;
 }
-
-export interface ReadRequest {
-  offset: number;
-  limit: number;
-  sort: Sort[];
-  /**
-   * / Filter based on fieldName|operation, value|list
-   */
-  filter?: Struct;
-  /**
-   * / Fields selector
-   */
-  field: FieldFilter[];
-  search: string[];
-  /**
-   * * Check the query parameters of HTTP request.
-   *  If query parameter `locales` is given,
-   *  return all corresponding localized values.
-   *  Otherwise, return always the localized value
-   *  with highest priority.
-   *  Can be empty, single locale or multiple locales.
-   */
-  localesLimiter: string[];
-  customQueries: string[];
-  customArguments?: Any;
-  subject?: Subject;
-}
-
-export interface DeleteRequest {
-  /**
-   * / Request to purge the whole collection
-   */
-  collection: boolean;
-  /**
-   * / Delete specified documents
-   */
-  ids: string[];
-  subject?: Subject;
-}
-
-/**
- * / List of resources
- */
-export interface ResourceList {
-  items: Resource[];
-  totalCount: number;
-  subject?: Subject;
-}
-
-/**
- * / Example resource
- */
-export interface Resource {
-  id: string;
-  meta?: Meta;
-  value: number;
-  text: string;
-}
-
-const baseFieldFilter: object = {
-  name: "",
-  include: false,
-};
-
-const baseSort: object = {
-  field: "",
-  order: 0,
-};
-
-const baseReadRequest: object = {
-  offset: 0,
-  limit: 0,
-  search: "",
-  localesLimiter: "",
-  customQueries: "",
-};
-
-const baseDeleteRequest: object = {
-  collection: false,
-  ids: "",
-};
-
-const baseResourceList: object = {
-  totalCount: 0,
-};
-
-const baseResource: object = {
-  id: "",
-  value: 0,
-  text: "",
-};
-
-/**
- *  Service provides the CRUD operations
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<ResourceList>;
-
-  Create(request: ResourceList): Promise<ResourceList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: ResourceList): Promise<ResourceList>;
-
-  Upsert(request: ResourceList): Promise<ResourceList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.resourcebase'
 
 export enum Sort_SortOrder {
   UNSORTED = 0,
@@ -206,13 +72,62 @@ export function sort_SortOrderToJSON(object: Sort_SortOrder): string {
   }
 }
 
+export interface ReadRequest {
+  offset: number;
+  limit: number;
+  sort: Sort[];
+  /** / Filter based on fieldName|operation, value|list */
+  filter?: Struct;
+  /** / Fields selector */
+  field: FieldFilter[];
+  search: string[];
+  /**
+   * Check the query parameters of HTTP request.
+   * If query parameter `locales` is given,
+   * return all corresponding localized values.
+   * Otherwise, return always the localized value
+   * with highest priority.
+   * Can be empty, single locale or multiple locales.
+   */
+  localesLimiter: string[];
+  customQueries: string[];
+  customArguments?: Any;
+  subject?: Subject;
+}
+
+export interface DeleteRequest {
+  /** / Request to purge the whole collection */
+  collection: boolean;
+  /** / Delete specified documents */
+  ids: string[];
+  subject?: Subject;
+}
+
+/** / List of resources */
+export interface ResourceList {
+  items: Resource[];
+  totalCount: number;
+  subject?: Subject;
+}
+
+/** / Example resource */
+export interface Resource {
+  id: string;
+  meta?: Meta;
+  value: number;
+  text: string;
+}
+
+const baseFieldFilter: object = { name: "", include: false };
+
 export const FieldFilter = {
   encode(message: FieldFilter, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(16).bool(message.include);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FieldFilter {
+
+  decode(input: Reader | Uint8Array, length?: number): FieldFilter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFieldFilter } as FieldFilter;
@@ -232,6 +147,7 @@ export const FieldFilter = {
     }
     return message;
   },
+
   fromJSON(object: any): FieldFilter {
     const message = { ...baseFieldFilter } as FieldFilter;
     if (object.name !== undefined && object.name !== null) {
@@ -246,6 +162,7 @@ export const FieldFilter = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FieldFilter>): FieldFilter {
     const message = { ...baseFieldFilter } as FieldFilter;
     if (object.name !== undefined && object.name !== null) {
@@ -260,6 +177,7 @@ export const FieldFilter = {
     }
     return message;
   },
+
   toJSON(message: FieldFilter): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
@@ -268,13 +186,16 @@ export const FieldFilter = {
   },
 };
 
+const baseSort: object = { field: "", order: 0 };
+
 export const Sort = {
   encode(message: Sort, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.field);
     writer.uint32(16).int32(message.order);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Sort {
+
+  decode(input: Reader | Uint8Array, length?: number): Sort {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSort } as Sort;
@@ -294,6 +215,7 @@ export const Sort = {
     }
     return message;
   },
+
   fromJSON(object: any): Sort {
     const message = { ...baseSort } as Sort;
     if (object.field !== undefined && object.field !== null) {
@@ -308,6 +230,7 @@ export const Sort = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Sort>): Sort {
     const message = { ...baseSort } as Sort;
     if (object.field !== undefined && object.field !== null) {
@@ -322,12 +245,22 @@ export const Sort = {
     }
     return message;
   },
+
   toJSON(message: Sort): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
+    message.order !== undefined &&
+      (obj.order = sort_SortOrderToJSON(message.order));
     return obj;
   },
+};
+
+const baseReadRequest: object = {
+  offset: 0,
+  limit: 0,
+  search: "",
+  localesLimiter: "",
+  customQueries: "",
 };
 
 export const ReadRequest = {
@@ -352,7 +285,10 @@ export const ReadRequest = {
     for (const v of message.customQueries) {
       writer.uint32(66).string(v!);
     }
-    if (message.customArguments !== undefined && message.customArguments !== undefined) {
+    if (
+      message.customArguments !== undefined &&
+      message.customArguments !== undefined
+    ) {
       Any.encode(message.customArguments, writer.uint32(74).fork()).ldelim();
     }
     if (message.subject !== undefined && message.subject !== undefined) {
@@ -360,7 +296,8 @@ export const ReadRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ReadRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): ReadRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseReadRequest } as ReadRequest;
@@ -409,6 +346,7 @@ export const ReadRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ReadRequest {
     const message = { ...baseReadRequest } as ReadRequest;
     message.sort = [];
@@ -456,7 +394,10 @@ export const ReadRequest = {
         message.customQueries.push(String(e));
       }
     }
-    if (object.customArguments !== undefined && object.customArguments !== null) {
+    if (
+      object.customArguments !== undefined &&
+      object.customArguments !== null
+    ) {
       message.customArguments = Any.fromJSON(object.customArguments);
     } else {
       message.customArguments = undefined;
@@ -468,6 +409,7 @@ export const ReadRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = { ...baseReadRequest } as ReadRequest;
     message.sort = [];
@@ -515,7 +457,10 @@ export const ReadRequest = {
         message.customQueries.push(e);
       }
     }
-    if (object.customArguments !== undefined && object.customArguments !== null) {
+    if (
+      object.customArguments !== undefined &&
+      object.customArguments !== null
+    ) {
       message.customArguments = Any.fromPartial(object.customArguments);
     } else {
       message.customArguments = undefined;
@@ -527,41 +472,53 @@ export const ReadRequest = {
     }
     return message;
   },
+
   toJSON(message: ReadRequest): unknown {
     const obj: any = {};
     message.offset !== undefined && (obj.offset = message.offset);
     message.limit !== undefined && (obj.limit = message.limit);
     if (message.sort) {
-      obj.sort = message.sort.map(e => e ? Sort.toJSON(e) : undefined);
+      obj.sort = message.sort.map((e) => (e ? Sort.toJSON(e) : undefined));
     } else {
       obj.sort = [];
     }
-    message.filter !== undefined && (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
+    message.filter !== undefined &&
+      (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
     if (message.field) {
-      obj.field = message.field.map(e => e ? FieldFilter.toJSON(e) : undefined);
+      obj.field = message.field.map((e) =>
+        e ? FieldFilter.toJSON(e) : undefined
+      );
     } else {
       obj.field = [];
     }
     if (message.search) {
-      obj.search = message.search.map(e => e);
+      obj.search = message.search.map((e) => e);
     } else {
       obj.search = [];
     }
     if (message.localesLimiter) {
-      obj.localesLimiter = message.localesLimiter.map(e => e);
+      obj.localesLimiter = message.localesLimiter.map((e) => e);
     } else {
       obj.localesLimiter = [];
     }
     if (message.customQueries) {
-      obj.customQueries = message.customQueries.map(e => e);
+      obj.customQueries = message.customQueries.map((e) => e);
     } else {
       obj.customQueries = [];
     }
-    message.customArguments !== undefined && (obj.customArguments = message.customArguments ? Any.toJSON(message.customArguments) : undefined);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.customArguments !== undefined &&
+      (obj.customArguments = message.customArguments
+        ? Any.toJSON(message.customArguments)
+        : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseDeleteRequest: object = { collection: false, ids: "" };
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: Writer = Writer.create()): Writer {
@@ -574,7 +531,8 @@ export const DeleteRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): DeleteRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): DeleteRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleteRequest } as DeleteRequest;
@@ -598,6 +556,7 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): DeleteRequest {
     const message = { ...baseDeleteRequest } as DeleteRequest;
     message.ids = [];
@@ -618,6 +577,7 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = { ...baseDeleteRequest } as DeleteRequest;
     message.ids = [];
@@ -638,18 +598,24 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   toJSON(message: DeleteRequest): unknown {
     const obj: any = {};
     message.collection !== undefined && (obj.collection = message.collection);
     if (message.ids) {
-      obj.ids = message.ids.map(e => e);
+      obj.ids = message.ids.map((e) => e);
     } else {
       obj.ids = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseResourceList: object = { totalCount: 0 };
 
 export const ResourceList = {
   encode(message: ResourceList, writer: Writer = Writer.create()): Writer {
@@ -662,7 +628,8 @@ export const ResourceList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ResourceList {
+
+  decode(input: Reader | Uint8Array, length?: number): ResourceList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResourceList } as ResourceList;
@@ -686,6 +653,7 @@ export const ResourceList = {
     }
     return message;
   },
+
   fromJSON(object: any): ResourceList {
     const message = { ...baseResourceList } as ResourceList;
     message.items = [];
@@ -706,6 +674,7 @@ export const ResourceList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = { ...baseResourceList } as ResourceList;
     message.items = [];
@@ -726,18 +695,26 @@ export const ResourceList = {
     }
     return message;
   },
+
   toJSON(message: ResourceList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Resource.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseResource: object = { id: "", value: 0, text: "" };
 
 export const Resource = {
   encode(message: Resource, writer: Writer = Writer.create()): Writer {
@@ -749,7 +726,8 @@ export const Resource = {
     writer.uint32(34).string(message.text);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Resource {
+
+  decode(input: Reader | Uint8Array, length?: number): Resource {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResource } as Resource;
@@ -775,6 +753,7 @@ export const Resource = {
     }
     return message;
   },
+
   fromJSON(object: any): Resource {
     const message = { ...baseResource } as Resource;
     if (object.id !== undefined && object.id !== null) {
@@ -799,6 +778,7 @@ export const Resource = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = { ...baseResource } as Resource;
     if (object.id !== undefined && object.id !== null) {
@@ -823,71 +803,368 @@ export const Resource = {
     }
     return message;
   },
+
   toJSON(message: Resource): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = message.value);
     message.text !== undefined && (obj.text = message.text);
     return obj;
   },
 };
 
-export const metaFieldFilter: { [key in keyof Required<FieldFilter>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  include: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+/** Service provides the CRUD operations */
+export interface Service {
+  Read(request: ReadRequest): Promise<ResourceList>;
+  Create(request: ResourceList): Promise<ResourceList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: ResourceList): Promise<ResourceList>;
+  Upsert(request: ResourceList): Promise<ResourceList>;
 }
-export const metaSort: { [key in keyof Required<Sort>]: MetaBase | string } = {
-  field: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  order: {kind:'object', type:'.io.restorecommerce.resourcebase.Sort.SortOrder', name:'Sort_SortOrder'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaReadRequest: { [key in keyof Required<ReadRequest>]: MetaBase | string } = {
-  offset: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  limit: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  sort: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.Sort', name:'Sort'} as MetaMessage} as MetaArray,
-  filter: {kind:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaMessage,
-  field: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.FieldFilter', name:'FieldFilter'} as MetaMessage} as MetaArray,
-  search: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  localesLimiter: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  customQueries: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  customArguments: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaBase | string } = {
-  collection: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  ids: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaResourceList: { [key in keyof Required<ResourceList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.resourcebase.Resource', name:'Resource'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaResource: { [key in keyof Required<Resource>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  value: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  text: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ResourceList.decode} as MetaService<ReadRequest, ResourceList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.resourcebase.ResourceList', name:'ResourceList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ResourceList.encode, decodeResponse: ResourceList.decode} as MetaService<ResourceList, ResourceList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  FieldFilter: ['message', '.io.restorecommerce.resourcebase.FieldFilter', FieldFilter, metaFieldFilter],
-  Sort: ['message', '.io.restorecommerce.resourcebase.Sort', Sort, metaSort],
-  Sort_SortOrder: ['enum', '.io.restorecommerce.resourcebase.Sort.SortOrder', Sort_SortOrder, undefined],
-  ReadRequest: ['message', '.io.restorecommerce.resourcebase.ReadRequest', ReadRequest, metaReadRequest],
-  DeleteRequest: ['message', '.io.restorecommerce.resourcebase.DeleteRequest', DeleteRequest, metaDeleteRequest],
-  ResourceList: ['message', '.io.restorecommerce.resourcebase.ResourceList', ResourceList, metaResourceList],
-  Resource: ['message', '.io.restorecommerce.resourcebase.Resource', Resource, metaResource],
-  Service: ['service', '.io.restorecommerce.resourcebase.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "google/protobuf/any.proto",
+      "google/protobuf/struct.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "FieldFilter",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "include",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "include",
+          },
+        ],
+      },
+      {
+        name: "Sort",
+        field: [
+          {
+            name: "field",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "field",
+          },
+          {
+            name: "order",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.resourcebase.Sort.SortOrder",
+            jsonName: "order",
+          },
+        ],
+        enumType: [
+          {
+            name: "SortOrder",
+            value: [
+              { name: "UNSORTED", number: 0 },
+              { name: "ASCENDING", number: 1 },
+              { name: "DESCENDING", number: 2 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "ReadRequest",
+        field: [
+          {
+            name: "offset",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "offset",
+          },
+          {
+            name: "limit",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "limit",
+          },
+          {
+            name: "sort",
+            number: 3,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.resourcebase.Sort",
+            jsonName: "sort",
+          },
+          {
+            name: "filter",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Struct",
+            jsonName: "filter",
+          },
+          {
+            name: "field",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.resourcebase.FieldFilter",
+            jsonName: "field",
+          },
+          {
+            name: "search",
+            number: 6,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "search",
+          },
+          {
+            name: "locales_limiter",
+            number: 7,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "localesLimiter",
+          },
+          {
+            name: "custom_queries",
+            number: 8,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "customQueries",
+          },
+          {
+            name: "custom_arguments",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "customArguments",
+          },
+          {
+            name: "subject",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "DeleteRequest",
+        field: [
+          {
+            name: "collection",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "collection",
+          },
+          {
+            name: "ids",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "ids",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ResourceList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.resourcebase.Resource",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Resource",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "value",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "value",
+          },
+          {
+            name: "text",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "text",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/resource_base.proto",
+    package: "io.restorecommerce.resourcebase",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [10, 0, 16, 1],
+          leadingComments: " Service provides the CRUD operations\n",
+        },
+        {
+          path: [4, 2, 2, 3],
+          span: [39, 2, 36],
+          leadingComments:
+            "/ Filter based on fieldName|operation, value|list\n",
+        },
+        {
+          path: [4, 2, 2, 4],
+          span: [42, 2, 33],
+          leadingComments: "/ Fields selector\n",
+        },
+        {
+          path: [4, 2, 2, 6],
+          span: [52, 2, 38],
+          leadingComments:
+            "* Check the query parameters of HTTP request.\n If query parameter `locales` is given,\n return all corresponding localized values.\n Otherwise, return always the localized value\n with highest priority.\n Can be empty, single locale or multiple locales.\n",
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [61, 2, 22],
+          leadingComments: "/ Request to purge the whole collection\n",
+        },
+        {
+          path: [4, 3, 2, 1],
+          span: [63, 2, 26],
+          leadingComments: "/ Delete specified documents\n",
+        },
+        {
+          path: [4, 4],
+          span: [68, 0, 72, 1],
+          leadingComments: "/ List of resources\n",
+        },
+        {
+          path: [4, 5],
+          span: [75, 0, 80, 1],
+          leadingComments: "/ Example resource\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.resourcebase.FieldFilter": FieldFilter,
+    ".io.restorecommerce.resourcebase.Sort": Sort,
+    ".io.restorecommerce.resourcebase.Sort.SortOrder": Sort_SortOrder,
+    ".io.restorecommerce.resourcebase.ReadRequest": ReadRequest,
+    ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
+    ".io.restorecommerce.resourcebase.ResourceList": ResourceList,
+    ".io.restorecommerce.resourcebase.Resource": Resource,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    google_protobuf_struct_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -1,207 +1,109 @@
 /* eslint-disable */
-import * as Long from 'long';
-import { Writer, Reader, util, configure } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import * as Long from "long";
+import { util, configure, Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "google.protobuf";
 
 /**
- *  Wrapper message for `double`.
+ * Wrapper message for `double`.
  *
- *  The JSON representation for `DoubleValue` is JSON number.
+ * The JSON representation for `DoubleValue` is JSON number.
  */
 export interface DoubleValue {
-  /**
-   *  The double value.
-   */
+  /** The double value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `float`.
+ * Wrapper message for `float`.
  *
- *  The JSON representation for `FloatValue` is JSON number.
+ * The JSON representation for `FloatValue` is JSON number.
  */
 export interface FloatValue {
-  /**
-   *  The float value.
-   */
+  /** The float value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `int64`.
+ * Wrapper message for `int64`.
  *
- *  The JSON representation for `Int64Value` is JSON string.
+ * The JSON representation for `Int64Value` is JSON string.
  */
 export interface Int64Value {
-  /**
-   *  The int64 value.
-   */
+  /** The int64 value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `uint64`.
+ * Wrapper message for `uint64`.
  *
- *  The JSON representation for `UInt64Value` is JSON string.
+ * The JSON representation for `UInt64Value` is JSON string.
  */
 export interface UInt64Value {
-  /**
-   *  The uint64 value.
-   */
+  /** The uint64 value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `int32`.
+ * Wrapper message for `int32`.
  *
- *  The JSON representation for `Int32Value` is JSON number.
+ * The JSON representation for `Int32Value` is JSON number.
  */
 export interface Int32Value {
-  /**
-   *  The int32 value.
-   */
+  /** The int32 value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `uint32`.
+ * Wrapper message for `uint32`.
  *
- *  The JSON representation for `UInt32Value` is JSON number.
+ * The JSON representation for `UInt32Value` is JSON number.
  */
 export interface UInt32Value {
-  /**
-   *  The uint32 value.
-   */
+  /** The uint32 value. */
   value: number;
 }
 
 /**
- *  Wrapper message for `bool`.
+ * Wrapper message for `bool`.
  *
- *  The JSON representation for `BoolValue` is JSON `true` and `false`.
+ * The JSON representation for `BoolValue` is JSON `true` and `false`.
  */
 export interface BoolValue {
-  /**
-   *  The bool value.
-   */
+  /** The bool value. */
   value: boolean;
 }
 
 /**
- *  Wrapper message for `string`.
+ * Wrapper message for `string`.
  *
- *  The JSON representation for `StringValue` is JSON string.
+ * The JSON representation for `StringValue` is JSON string.
  */
 export interface StringValue {
-  /**
-   *  The string value.
-   */
+  /** The string value. */
   value: string;
 }
 
 /**
- *  Wrapper message for `bytes`.
+ * Wrapper message for `bytes`.
  *
- *  The JSON representation for `BytesValue` is JSON string.
+ * The JSON representation for `BytesValue` is JSON string.
  */
 export interface BytesValue {
-  /**
-   *  The bytes value.
-   */
+  /** The bytes value. */
   value: Buffer;
 }
 
-const baseDoubleValue: object = {
-  value: 0,
-};
-
-const baseFloatValue: object = {
-  value: 0,
-};
-
-const baseInt64Value: object = {
-  value: 0,
-};
-
-const baseUInt64Value: object = {
-  value: 0,
-};
-
-const baseInt32Value: object = {
-  value: 0,
-};
-
-const baseUInt32Value: object = {
-  value: 0,
-};
-
-const baseBoolValue: object = {
-  value: false,
-};
-
-const baseStringValue: object = {
-  value: "",
-};
-
-const baseBytesValue: object = {
-};
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-function longToNumber(long: Long) {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-export const protobufPackage = 'google.protobuf'
+const baseDoubleValue: object = { value: 0 };
 
 export const DoubleValue = {
   encode(message: DoubleValue, writer: Writer = Writer.create()): Writer {
     writer.uint32(9).double(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): DoubleValue {
+
+  decode(input: Reader | Uint8Array, length?: number): DoubleValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDoubleValue } as DoubleValue;
@@ -218,6 +120,7 @@ export const DoubleValue = {
     }
     return message;
   },
+
   fromJSON(object: any): DoubleValue {
     const message = { ...baseDoubleValue } as DoubleValue;
     if (object.value !== undefined && object.value !== null) {
@@ -227,6 +130,7 @@ export const DoubleValue = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<DoubleValue>): DoubleValue {
     const message = { ...baseDoubleValue } as DoubleValue;
     if (object.value !== undefined && object.value !== null) {
@@ -236,6 +140,7 @@ export const DoubleValue = {
     }
     return message;
   },
+
   toJSON(message: DoubleValue): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -243,12 +148,15 @@ export const DoubleValue = {
   },
 };
 
+const baseFloatValue: object = { value: 0 };
+
 export const FloatValue = {
   encode(message: FloatValue, writer: Writer = Writer.create()): Writer {
     writer.uint32(13).float(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FloatValue {
+
+  decode(input: Reader | Uint8Array, length?: number): FloatValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFloatValue } as FloatValue;
@@ -265,6 +173,7 @@ export const FloatValue = {
     }
     return message;
   },
+
   fromJSON(object: any): FloatValue {
     const message = { ...baseFloatValue } as FloatValue;
     if (object.value !== undefined && object.value !== null) {
@@ -274,6 +183,7 @@ export const FloatValue = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FloatValue>): FloatValue {
     const message = { ...baseFloatValue } as FloatValue;
     if (object.value !== undefined && object.value !== null) {
@@ -283,6 +193,7 @@ export const FloatValue = {
     }
     return message;
   },
+
   toJSON(message: FloatValue): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -290,12 +201,15 @@ export const FloatValue = {
   },
 };
 
+const baseInt64Value: object = { value: 0 };
+
 export const Int64Value = {
   encode(message: Int64Value, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).int64(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Int64Value {
+
+  decode(input: Reader | Uint8Array, length?: number): Int64Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInt64Value } as Int64Value;
@@ -312,6 +226,7 @@ export const Int64Value = {
     }
     return message;
   },
+
   fromJSON(object: any): Int64Value {
     const message = { ...baseInt64Value } as Int64Value;
     if (object.value !== undefined && object.value !== null) {
@@ -321,6 +236,7 @@ export const Int64Value = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Int64Value>): Int64Value {
     const message = { ...baseInt64Value } as Int64Value;
     if (object.value !== undefined && object.value !== null) {
@@ -330,6 +246,7 @@ export const Int64Value = {
     }
     return message;
   },
+
   toJSON(message: Int64Value): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -337,12 +254,15 @@ export const Int64Value = {
   },
 };
 
+const baseUInt64Value: object = { value: 0 };
+
 export const UInt64Value = {
   encode(message: UInt64Value, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).uint64(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): UInt64Value {
+
+  decode(input: Reader | Uint8Array, length?: number): UInt64Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUInt64Value } as UInt64Value;
@@ -359,6 +279,7 @@ export const UInt64Value = {
     }
     return message;
   },
+
   fromJSON(object: any): UInt64Value {
     const message = { ...baseUInt64Value } as UInt64Value;
     if (object.value !== undefined && object.value !== null) {
@@ -368,6 +289,7 @@ export const UInt64Value = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<UInt64Value>): UInt64Value {
     const message = { ...baseUInt64Value } as UInt64Value;
     if (object.value !== undefined && object.value !== null) {
@@ -377,6 +299,7 @@ export const UInt64Value = {
     }
     return message;
   },
+
   toJSON(message: UInt64Value): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -384,12 +307,15 @@ export const UInt64Value = {
   },
 };
 
+const baseInt32Value: object = { value: 0 };
+
 export const Int32Value = {
   encode(message: Int32Value, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).int32(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Int32Value {
+
+  decode(input: Reader | Uint8Array, length?: number): Int32Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseInt32Value } as Int32Value;
@@ -406,6 +332,7 @@ export const Int32Value = {
     }
     return message;
   },
+
   fromJSON(object: any): Int32Value {
     const message = { ...baseInt32Value } as Int32Value;
     if (object.value !== undefined && object.value !== null) {
@@ -415,6 +342,7 @@ export const Int32Value = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Int32Value>): Int32Value {
     const message = { ...baseInt32Value } as Int32Value;
     if (object.value !== undefined && object.value !== null) {
@@ -424,6 +352,7 @@ export const Int32Value = {
     }
     return message;
   },
+
   toJSON(message: Int32Value): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -431,12 +360,15 @@ export const Int32Value = {
   },
 };
 
+const baseUInt32Value: object = { value: 0 };
+
 export const UInt32Value = {
   encode(message: UInt32Value, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).uint32(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): UInt32Value {
+
+  decode(input: Reader | Uint8Array, length?: number): UInt32Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUInt32Value } as UInt32Value;
@@ -453,6 +385,7 @@ export const UInt32Value = {
     }
     return message;
   },
+
   fromJSON(object: any): UInt32Value {
     const message = { ...baseUInt32Value } as UInt32Value;
     if (object.value !== undefined && object.value !== null) {
@@ -462,6 +395,7 @@ export const UInt32Value = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<UInt32Value>): UInt32Value {
     const message = { ...baseUInt32Value } as UInt32Value;
     if (object.value !== undefined && object.value !== null) {
@@ -471,6 +405,7 @@ export const UInt32Value = {
     }
     return message;
   },
+
   toJSON(message: UInt32Value): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -478,12 +413,15 @@ export const UInt32Value = {
   },
 };
 
+const baseBoolValue: object = { value: false };
+
 export const BoolValue = {
   encode(message: BoolValue, writer: Writer = Writer.create()): Writer {
     writer.uint32(8).bool(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): BoolValue {
+
+  decode(input: Reader | Uint8Array, length?: number): BoolValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBoolValue } as BoolValue;
@@ -500,6 +438,7 @@ export const BoolValue = {
     }
     return message;
   },
+
   fromJSON(object: any): BoolValue {
     const message = { ...baseBoolValue } as BoolValue;
     if (object.value !== undefined && object.value !== null) {
@@ -509,6 +448,7 @@ export const BoolValue = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<BoolValue>): BoolValue {
     const message = { ...baseBoolValue } as BoolValue;
     if (object.value !== undefined && object.value !== null) {
@@ -518,6 +458,7 @@ export const BoolValue = {
     }
     return message;
   },
+
   toJSON(message: BoolValue): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -525,12 +466,15 @@ export const BoolValue = {
   },
 };
 
+const baseStringValue: object = { value: "" };
+
 export const StringValue = {
   encode(message: StringValue, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): StringValue {
+
+  decode(input: Reader | Uint8Array, length?: number): StringValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseStringValue } as StringValue;
@@ -547,6 +491,7 @@ export const StringValue = {
     }
     return message;
   },
+
   fromJSON(object: any): StringValue {
     const message = { ...baseStringValue } as StringValue;
     if (object.value !== undefined && object.value !== null) {
@@ -556,6 +501,7 @@ export const StringValue = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<StringValue>): StringValue {
     const message = { ...baseStringValue } as StringValue;
     if (object.value !== undefined && object.value !== null) {
@@ -565,6 +511,7 @@ export const StringValue = {
     }
     return message;
   },
+
   toJSON(message: StringValue): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
@@ -572,12 +519,15 @@ export const StringValue = {
   },
 };
 
+const baseBytesValue: object = {};
+
 export const BytesValue = {
   encode(message: BytesValue, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).bytes(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): BytesValue {
+
+  decode(input: Reader | Uint8Array, length?: number): BytesValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBytesValue } as BytesValue;
@@ -594,6 +544,7 @@ export const BytesValue = {
     }
     return message;
   },
+
   fromJSON(object: any): BytesValue {
     const message = { ...baseBytesValue } as BytesValue;
     if (object.value !== undefined && object.value !== null) {
@@ -601,6 +552,7 @@ export const BytesValue = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<BytesValue>): BytesValue {
     const message = { ...baseBytesValue } as BytesValue;
     if (object.value !== undefined && object.value !== null) {
@@ -610,83 +562,306 @@ export const BytesValue = {
     }
     return message;
   },
+
   toJSON(message: BytesValue): unknown {
     const obj: any = {};
-    message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Buffer(0)));
+    message.value !== undefined &&
+      (obj.value = base64FromBytes(
+        message.value !== undefined ? message.value : new Buffer(0)
+      ));
     return obj;
   },
 };
 
-export const metaDoubleValue: { [key in keyof Required<DoubleValue>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-}
-export const metaFloatValue: { [key in keyof Required<FloatValue>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'float'} as MetaPrimitive,
-}
-export const metaInt64Value: { [key in keyof Required<Int64Value>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'int64'} as MetaPrimitive,
-}
-export const metaUInt64Value: { [key in keyof Required<UInt64Value>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'uint64'} as MetaPrimitive,
-}
-export const metaInt32Value: { [key in keyof Required<Int32Value>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-}
-export const metaUInt32Value: { [key in keyof Required<UInt32Value>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaBoolValue: { [key in keyof Required<BoolValue>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-}
-export const metaStringValue: { [key in keyof Required<StringValue>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaBytesValue: { [key in keyof Required<BytesValue>]: MetaBase | string } = {
-  value: {kind:'builtin', type:'Buffer', original:'bytes'} as MetaPrimitive,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  DoubleValue: ['message', '.google.protobuf.DoubleValue', DoubleValue, metaDoubleValue],
-  FloatValue: ['message', '.google.protobuf.FloatValue', FloatValue, metaFloatValue],
-  Int64Value: ['message', '.google.protobuf.Int64Value', Int64Value, metaInt64Value],
-  UInt64Value: ['message', '.google.protobuf.UInt64Value', UInt64Value, metaUInt64Value],
-  Int32Value: ['message', '.google.protobuf.Int32Value', Int32Value, metaInt32Value],
-  UInt32Value: ['message', '.google.protobuf.UInt32Value', UInt32Value, metaUInt32Value],
-  BoolValue: ['message', '.google.protobuf.BoolValue', BoolValue, metaBoolValue],
-  StringValue: ['message', '.google.protobuf.StringValue', StringValue, metaStringValue],
-  BytesValue: ['message', '.google.protobuf.BytesValue', BytesValue, metaBytesValue],
-}
-if (util.Long !== Long as any) {
-  util.Long = Long as any;
-  configure();
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
 
-interface WindowBase64 {
-  atob(b64: string): string;
-  btoa(bin: string): string;
-}
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "DoubleValue",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "FloatValue",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_FLOAT",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "Int64Value",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT64",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "UInt64Value",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT64",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "Int32Value",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "UInt32Value",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "BoolValue",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "StringValue",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "value",
+          },
+        ],
+      },
+      {
+        name: "BytesValue",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BYTES",
+            jsonName: "value",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    name: "google/protobuf/wrappers.proto",
+    package: "google.protobuf",
+    options: {
+      javaPackage: "com.google.protobuf",
+      javaOuterClassname: "WrappersProto",
+      javaMultipleFiles: true,
+      goPackage: "github.com/golang/protobuf/ptypes/wrappers",
+      ccEnableArenas: true,
+      objcClassPrefix: "GPB",
+      csharpNamespace: "Google.Protobuf.WellKnownTypes",
+    },
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [55, 0, 58, 1],
+          leadingComments:
+            " Wrapper message for `double`.\n\n The JSON representation for `DoubleValue` is JSON number.\n",
+        },
+        {
+          path: [4, 0, 2, 0],
+          span: [57, 2, 19],
+          leadingComments: " The double value.\n",
+        },
+        {
+          path: [4, 1],
+          span: [63, 0, 66, 1],
+          leadingComments:
+            " Wrapper message for `float`.\n\n The JSON representation for `FloatValue` is JSON number.\n",
+        },
+        {
+          path: [4, 1, 2, 0],
+          span: [65, 2, 18],
+          leadingComments: " The float value.\n",
+        },
+        {
+          path: [4, 2],
+          span: [71, 0, 74, 1],
+          leadingComments:
+            " Wrapper message for `int64`.\n\n The JSON representation for `Int64Value` is JSON string.\n",
+        },
+        {
+          path: [4, 2, 2, 0],
+          span: [73, 2, 18],
+          leadingComments: " The int64 value.\n",
+        },
+        {
+          path: [4, 3],
+          span: [79, 0, 82, 1],
+          leadingComments:
+            " Wrapper message for `uint64`.\n\n The JSON representation for `UInt64Value` is JSON string.\n",
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [81, 2, 19],
+          leadingComments: " The uint64 value.\n",
+        },
+        {
+          path: [4, 4],
+          span: [87, 0, 90, 1],
+          leadingComments:
+            " Wrapper message for `int32`.\n\n The JSON representation for `Int32Value` is JSON number.\n",
+        },
+        {
+          path: [4, 4, 2, 0],
+          span: [89, 2, 18],
+          leadingComments: " The int32 value.\n",
+        },
+        {
+          path: [4, 5],
+          span: [95, 0, 98, 1],
+          leadingComments:
+            " Wrapper message for `uint32`.\n\n The JSON representation for `UInt32Value` is JSON number.\n",
+        },
+        {
+          path: [4, 5, 2, 0],
+          span: [97, 2, 19],
+          leadingComments: " The uint32 value.\n",
+        },
+        {
+          path: [4, 6],
+          span: [103, 0, 106, 1],
+          leadingComments:
+            " Wrapper message for `bool`.\n\n The JSON representation for `BoolValue` is JSON `true` and `false`.\n",
+        },
+        {
+          path: [4, 6, 2, 0],
+          span: [105, 2, 17],
+          leadingComments: " The bool value.\n",
+        },
+        {
+          path: [4, 7],
+          span: [111, 0, 114, 1],
+          leadingComments:
+            " Wrapper message for `string`.\n\n The JSON representation for `StringValue` is JSON string.\n",
+        },
+        {
+          path: [4, 7, 2, 0],
+          span: [113, 2, 19],
+          leadingComments: " The string value.\n",
+        },
+        {
+          path: [4, 8],
+          span: [119, 0, 122, 1],
+          leadingComments:
+            " Wrapper message for `bytes`.\n\n The JSON representation for `BytesValue` is JSON string.\n",
+        },
+        {
+          path: [4, 8, 2, 0],
+          span: [121, 2, 18],
+          leadingComments: " The bytes value.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".google.protobuf.DoubleValue": DoubleValue,
+    ".google.protobuf.FloatValue": FloatValue,
+    ".google.protobuf.Int64Value": Int64Value,
+    ".google.protobuf.UInt64Value": UInt64Value,
+    ".google.protobuf.Int32Value": Int32Value,
+    ".google.protobuf.UInt32Value": UInt32Value,
+    ".google.protobuf.BoolValue": BoolValue,
+    ".google.protobuf.StringValue": StringValue,
+    ".google.protobuf.BytesValue": BytesValue,
+  },
+  dependencies: [],
+};
 
-const windowBase64 = (globalThis as unknown as WindowBase64);
-const atob = windowBase64.atob || ((b64: string) => Buffer.from(b64, 'base64').toString('binary'));
-const btoa = windowBase64.btoa || ((bin: string) => Buffer.from(bin, 'binary').toString('base64'));
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw new Error("Unable to locate global object");
+})();
 
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const arr = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
+    arr[i] = bin.charCodeAt(i);
   }
   return arr;
 }
 
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
   for (let i = 0; i < arr.byteLength; ++i) {
     bin.push(String.fromCharCode(arr[i]));
   }
-  return btoa(bin.join(''));
+  return btoa(bin.join(""));
 }
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
@@ -695,3 +870,16 @@ type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+// @ts-ignore
+if (util.Long !== Long) {
+  util.Long = Long as any;
+  configure();
+}

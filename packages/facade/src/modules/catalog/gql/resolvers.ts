@@ -6,41 +6,26 @@ import {
   getWhitelistBlacklistConfig,
   registerResolverFunction,
 } from "../../../gql/protos";
-import {
-  metaService as productMetaService,
-  metadata as metaPackageIoRestorecommerceProduct
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
-import {
-  metaService as product_prototypeMetaService,
-  metadata as metaPackageIoRestorecommerceProduct_prototype
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
-import {
-  metaService as product_categoryMetaService,
-  metadata as metaPackageIoRestorecommerceProduct_category
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
-import {
-  metaService as price_groupMetaService,
-  metadata as metaPackageIoRestorecommercePrice_group
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
-import {
-  metaService as manufacturerMetaService,
-  metadata as metaPackageIoRestorecommerceManufacturer
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
+import { protoMetadata as productMeta, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
+import { protoMetadata as product_prototypeMeta, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
+import { protoMetadata as product_categoryMeta, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
+import { protoMetadata as price_groupMeta, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
+import { protoMetadata as manufacturerMeta, } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
 import { CatalogSrvGrpcClient } from "../grpc";
 
 export const resolvers: (cfg: CatalogServiceConfig) => Resolvers = (cfg: CatalogServiceConfig) => {
   const subServices = [
-    [productMetaService, metaPackageIoRestorecommerceProduct, 'product', ['Read']],
-    [product_prototypeMetaService, metaPackageIoRestorecommerceProduct_prototype, 'product_prototype', ['Read']],
-    [product_categoryMetaService, metaPackageIoRestorecommerceProduct_category, 'product_category', ['Read']],
-    [price_groupMetaService, metaPackageIoRestorecommercePrice_group, 'price_group', ['Read']],
-    [manufacturerMetaService, metaPackageIoRestorecommerceManufacturer, 'manufacturer', ['Read']],
+    [productMeta.fileDescriptor.service![0], 'product', ['Read']],
+    [product_prototypeMeta.fileDescriptor.service![0], 'product_prototype', ['Read']],
+    [product_categoryMeta.fileDescriptor.service![0], 'product_category', ['Read']],
+    [price_groupMeta.fileDescriptor.service![0], 'price_group', ['Read']],
+    [manufacturerMeta.fileDescriptor.service![0], 'manufacturer', ['Read']],
   ];
 
-  subServices.forEach(([meta, pack, subspace, queryList]: any) => {
+  subServices.forEach(([meta, subspace, queryList]: any) => {
     const {mutations, queries} = getWhitelistBlacklistConfig(meta, queryList, cfg)
 
-    const func = getGQLResolverFunctions<CatalogSrvGrpcClient, CatalogContext>(meta, pack, namespace, subspace || namespace);
+    const func = getGQLResolverFunctions<CatalogSrvGrpcClient, CatalogContext>(meta, namespace, subspace || namespace);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(cfg.root ? subspace : namespace, k, func[k], !queries.has(k) && mutations.has(k), cfg.root ? undefined : subspace);

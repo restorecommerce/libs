@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.order";
 
 export interface OrderList {
   items: Order[];
@@ -19,13 +34,9 @@ export interface Order {
   description: string;
   status: string;
   items: Items[];
-  /**
-   *  sum of all the quantity_price will be total_price
-   */
+  /** sum of all the quantity_price will be total_price */
   totalPrice: number;
-  /**
-   *  shipping address
-   */
+  /** shipping address */
   shippingContactPointId: string;
   billingContactPointId: string;
   totalWeightInKg: number;
@@ -37,9 +48,7 @@ export interface Items {
 }
 
 export interface Item {
-  /**
-   *  below identifier is id of product, variant or bundle
-   */
+  /** below identifier is id of product, variant or bundle */
   productVariantBundleId: string;
   productName: string;
   productDescription: string;
@@ -75,13 +84,9 @@ export interface OrderData {
 
 export interface Shipments {
   totalWeightInKg: number;
-  /**
-   *  below properties are used for international packaging
-   */
+  /** below properties are used for international packaging */
   individualWeightInKg: number;
-  /**
-   *  number of items
-   */
+  /** number of items */
   amount: number;
   exportType: string;
   exportDescription: string;
@@ -109,141 +114,7 @@ export interface ErrorList {
   message: string[];
 }
 
-const baseOrderList: object = {
-  totalCount: 0,
-};
-
-const baseOrder: object = {
-  id: "",
-  name: "",
-  description: "",
-  status: "",
-  totalPrice: 0,
-  shippingContactPointId: "",
-  billingContactPointId: "",
-  totalWeightInKg: 0,
-};
-
-const baseItems: object = {
-  quantityPrice: 0,
-};
-
-const baseItem: object = {
-  productVariantBundleId: "",
-  productName: "",
-  productDescription: "",
-  manufacturerName: "",
-  manufacturerDescription: "",
-  prototypeName: "",
-  prototypeDescription: "",
-  quantity: 0,
-  vat: 0,
-  price: 0,
-  itemType: "",
-  taricCode: 0,
-  stockKeepingUnit: "",
-  weightInKg: 0,
-  lengthInCm: 0,
-  widthInCm: 0,
-  heightInCm: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseOrderDataList: object = {
-};
-
-const baseOrderData: object = {
-  orderId: "",
-};
-
-const baseShipments: object = {
-  totalWeightInKg: 0,
-  individualWeightInKg: 0,
-  amount: 0,
-  exportType: "",
-  exportDescription: "",
-  customsTariffNumber: "",
-  invoiceNumber: "",
-  customsValue: 0,
-};
-
-const baseFulfillmentResults: object = {
-};
-
-const baseResponseDetailsList: object = {
-};
-
-const baseOrderStatus: object = {
-  OrderId: "",
-  OrderStatus: "",
-};
-
-const baseErrorList: object = {
-  code: "",
-  message: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<OrderList>;
-
-  Create(request: OrderList): Promise<OrderList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: OrderList): Promise<OrderList>;
-
-  Upsert(request: OrderList): Promise<OrderList>;
-
-  TriggerFulfillment(request: OrderDataList): Promise<FulfillmentResults>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.order'
+const baseOrderList: object = { totalCount: 0 };
 
 export const OrderList = {
   encode(message: OrderList, writer: Writer = Writer.create()): Writer {
@@ -256,7 +127,8 @@ export const OrderList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrderList {
+
+  decode(input: Reader | Uint8Array, length?: number): OrderList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrderList } as OrderList;
@@ -280,6 +152,7 @@ export const OrderList = {
     }
     return message;
   },
+
   fromJSON(object: any): OrderList {
     const message = { ...baseOrderList } as OrderList;
     message.items = [];
@@ -300,6 +173,7 @@ export const OrderList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrderList>): OrderList {
     const message = { ...baseOrderList } as OrderList;
     message.items = [];
@@ -320,17 +194,32 @@ export const OrderList = {
     }
     return message;
   },
+
   toJSON(message: OrderList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Order.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Order.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseOrder: object = {
+  id: "",
+  name: "",
+  description: "",
+  status: "",
+  totalPrice: 0,
+  shippingContactPointId: "",
+  billingContactPointId: "",
+  totalWeightInKg: 0,
 };
 
 export const Order = {
@@ -351,7 +240,8 @@ export const Order = {
     writer.uint32(81).double(message.totalWeightInKg);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Order {
+
+  decode(input: Reader | Uint8Array, length?: number): Order {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrder } as Order;
@@ -396,6 +286,7 @@ export const Order = {
     }
     return message;
   },
+
   fromJSON(object: any): Order {
     const message = { ...baseOrder } as Order;
     message.items = [];
@@ -434,23 +325,33 @@ export const Order = {
     } else {
       message.totalPrice = 0;
     }
-    if (object.shippingContactPointId !== undefined && object.shippingContactPointId !== null) {
+    if (
+      object.shippingContactPointId !== undefined &&
+      object.shippingContactPointId !== null
+    ) {
       message.shippingContactPointId = String(object.shippingContactPointId);
     } else {
       message.shippingContactPointId = "";
     }
-    if (object.billingContactPointId !== undefined && object.billingContactPointId !== null) {
+    if (
+      object.billingContactPointId !== undefined &&
+      object.billingContactPointId !== null
+    ) {
       message.billingContactPointId = String(object.billingContactPointId);
     } else {
       message.billingContactPointId = "";
     }
-    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+    if (
+      object.totalWeightInKg !== undefined &&
+      object.totalWeightInKg !== null
+    ) {
       message.totalWeightInKg = Number(object.totalWeightInKg);
     } else {
       message.totalWeightInKg = 0;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Order>): Order {
     const message = { ...baseOrder } as Order;
     message.items = [];
@@ -489,42 +390,59 @@ export const Order = {
     } else {
       message.totalPrice = 0;
     }
-    if (object.shippingContactPointId !== undefined && object.shippingContactPointId !== null) {
+    if (
+      object.shippingContactPointId !== undefined &&
+      object.shippingContactPointId !== null
+    ) {
       message.shippingContactPointId = object.shippingContactPointId;
     } else {
       message.shippingContactPointId = "";
     }
-    if (object.billingContactPointId !== undefined && object.billingContactPointId !== null) {
+    if (
+      object.billingContactPointId !== undefined &&
+      object.billingContactPointId !== null
+    ) {
       message.billingContactPointId = object.billingContactPointId;
     } else {
       message.billingContactPointId = "";
     }
-    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+    if (
+      object.totalWeightInKg !== undefined &&
+      object.totalWeightInKg !== null
+    ) {
       message.totalWeightInKg = object.totalWeightInKg;
     } else {
       message.totalWeightInKg = 0;
     }
     return message;
   },
+
   toJSON(message: Order): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.status !== undefined && (obj.status = message.status);
     if (message.items) {
-      obj.items = message.items.map(e => e ? Items.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Items.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice);
-    message.shippingContactPointId !== undefined && (obj.shippingContactPointId = message.shippingContactPointId);
-    message.billingContactPointId !== undefined && (obj.billingContactPointId = message.billingContactPointId);
-    message.totalWeightInKg !== undefined && (obj.totalWeightInKg = message.totalWeightInKg);
+    message.shippingContactPointId !== undefined &&
+      (obj.shippingContactPointId = message.shippingContactPointId);
+    message.billingContactPointId !== undefined &&
+      (obj.billingContactPointId = message.billingContactPointId);
+    message.totalWeightInKg !== undefined &&
+      (obj.totalWeightInKg = message.totalWeightInKg);
     return obj;
   },
 };
+
+const baseItems: object = { quantityPrice: 0 };
 
 export const Items = {
   encode(message: Items, writer: Writer = Writer.create()): Writer {
@@ -534,7 +452,8 @@ export const Items = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Items {
+
+  decode(input: Reader | Uint8Array, length?: number): Items {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseItems } as Items;
@@ -554,6 +473,7 @@ export const Items = {
     }
     return message;
   },
+
   fromJSON(object: any): Items {
     const message = { ...baseItems } as Items;
     if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
@@ -568,6 +488,7 @@ export const Items = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Items>): Items {
     const message = { ...baseItems } as Items;
     if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
@@ -582,12 +503,35 @@ export const Items = {
     }
     return message;
   },
+
   toJSON(message: Items): unknown {
     const obj: any = {};
-    message.quantityPrice !== undefined && (obj.quantityPrice = message.quantityPrice);
-    message.item !== undefined && (obj.item = message.item ? Item.toJSON(message.item) : undefined);
+    message.quantityPrice !== undefined &&
+      (obj.quantityPrice = message.quantityPrice);
+    message.item !== undefined &&
+      (obj.item = message.item ? Item.toJSON(message.item) : undefined);
     return obj;
   },
+};
+
+const baseItem: object = {
+  productVariantBundleId: "",
+  productName: "",
+  productDescription: "",
+  manufacturerName: "",
+  manufacturerDescription: "",
+  prototypeName: "",
+  prototypeDescription: "",
+  quantity: 0,
+  vat: 0,
+  price: 0,
+  itemType: "",
+  taricCode: 0,
+  stockKeepingUnit: "",
+  weightInKg: 0,
+  lengthInCm: 0,
+  widthInCm: 0,
+  heightInCm: 0,
 };
 
 export const Item = {
@@ -611,7 +555,8 @@ export const Item = {
     writer.uint32(136).int32(message.heightInCm);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Item {
+
+  decode(input: Reader | Uint8Array, length?: number): Item {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseItem } as Item;
@@ -676,9 +621,13 @@ export const Item = {
     }
     return message;
   },
+
   fromJSON(object: any): Item {
     const message = { ...baseItem } as Item;
-    if (object.productVariantBundleId !== undefined && object.productVariantBundleId !== null) {
+    if (
+      object.productVariantBundleId !== undefined &&
+      object.productVariantBundleId !== null
+    ) {
       message.productVariantBundleId = String(object.productVariantBundleId);
     } else {
       message.productVariantBundleId = "";
@@ -688,17 +637,26 @@ export const Item = {
     } else {
       message.productName = "";
     }
-    if (object.productDescription !== undefined && object.productDescription !== null) {
+    if (
+      object.productDescription !== undefined &&
+      object.productDescription !== null
+    ) {
       message.productDescription = String(object.productDescription);
     } else {
       message.productDescription = "";
     }
-    if (object.manufacturerName !== undefined && object.manufacturerName !== null) {
+    if (
+      object.manufacturerName !== undefined &&
+      object.manufacturerName !== null
+    ) {
       message.manufacturerName = String(object.manufacturerName);
     } else {
       message.manufacturerName = "";
     }
-    if (object.manufacturerDescription !== undefined && object.manufacturerDescription !== null) {
+    if (
+      object.manufacturerDescription !== undefined &&
+      object.manufacturerDescription !== null
+    ) {
       message.manufacturerDescription = String(object.manufacturerDescription);
     } else {
       message.manufacturerDescription = "";
@@ -708,7 +666,10 @@ export const Item = {
     } else {
       message.prototypeName = "";
     }
-    if (object.prototypeDescription !== undefined && object.prototypeDescription !== null) {
+    if (
+      object.prototypeDescription !== undefined &&
+      object.prototypeDescription !== null
+    ) {
       message.prototypeDescription = String(object.prototypeDescription);
     } else {
       message.prototypeDescription = "";
@@ -738,7 +699,10 @@ export const Item = {
     } else {
       message.taricCode = 0;
     }
-    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+    if (
+      object.stockKeepingUnit !== undefined &&
+      object.stockKeepingUnit !== null
+    ) {
       message.stockKeepingUnit = String(object.stockKeepingUnit);
     } else {
       message.stockKeepingUnit = "";
@@ -765,9 +729,13 @@ export const Item = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Item>): Item {
     const message = { ...baseItem } as Item;
-    if (object.productVariantBundleId !== undefined && object.productVariantBundleId !== null) {
+    if (
+      object.productVariantBundleId !== undefined &&
+      object.productVariantBundleId !== null
+    ) {
       message.productVariantBundleId = object.productVariantBundleId;
     } else {
       message.productVariantBundleId = "";
@@ -777,17 +745,26 @@ export const Item = {
     } else {
       message.productName = "";
     }
-    if (object.productDescription !== undefined && object.productDescription !== null) {
+    if (
+      object.productDescription !== undefined &&
+      object.productDescription !== null
+    ) {
       message.productDescription = object.productDescription;
     } else {
       message.productDescription = "";
     }
-    if (object.manufacturerName !== undefined && object.manufacturerName !== null) {
+    if (
+      object.manufacturerName !== undefined &&
+      object.manufacturerName !== null
+    ) {
       message.manufacturerName = object.manufacturerName;
     } else {
       message.manufacturerName = "";
     }
-    if (object.manufacturerDescription !== undefined && object.manufacturerDescription !== null) {
+    if (
+      object.manufacturerDescription !== undefined &&
+      object.manufacturerDescription !== null
+    ) {
       message.manufacturerDescription = object.manufacturerDescription;
     } else {
       message.manufacturerDescription = "";
@@ -797,7 +774,10 @@ export const Item = {
     } else {
       message.prototypeName = "";
     }
-    if (object.prototypeDescription !== undefined && object.prototypeDescription !== null) {
+    if (
+      object.prototypeDescription !== undefined &&
+      object.prototypeDescription !== null
+    ) {
       message.prototypeDescription = object.prototypeDescription;
     } else {
       message.prototypeDescription = "";
@@ -827,7 +807,10 @@ export const Item = {
     } else {
       message.taricCode = 0;
     }
-    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+    if (
+      object.stockKeepingUnit !== undefined &&
+      object.stockKeepingUnit !== null
+    ) {
       message.stockKeepingUnit = object.stockKeepingUnit;
     } else {
       message.stockKeepingUnit = "";
@@ -854,21 +837,30 @@ export const Item = {
     }
     return message;
   },
+
   toJSON(message: Item): unknown {
     const obj: any = {};
-    message.productVariantBundleId !== undefined && (obj.productVariantBundleId = message.productVariantBundleId);
-    message.productName !== undefined && (obj.productName = message.productName);
-    message.productDescription !== undefined && (obj.productDescription = message.productDescription);
-    message.manufacturerName !== undefined && (obj.manufacturerName = message.manufacturerName);
-    message.manufacturerDescription !== undefined && (obj.manufacturerDescription = message.manufacturerDescription);
-    message.prototypeName !== undefined && (obj.prototypeName = message.prototypeName);
-    message.prototypeDescription !== undefined && (obj.prototypeDescription = message.prototypeDescription);
+    message.productVariantBundleId !== undefined &&
+      (obj.productVariantBundleId = message.productVariantBundleId);
+    message.productName !== undefined &&
+      (obj.productName = message.productName);
+    message.productDescription !== undefined &&
+      (obj.productDescription = message.productDescription);
+    message.manufacturerName !== undefined &&
+      (obj.manufacturerName = message.manufacturerName);
+    message.manufacturerDescription !== undefined &&
+      (obj.manufacturerDescription = message.manufacturerDescription);
+    message.prototypeName !== undefined &&
+      (obj.prototypeName = message.prototypeName);
+    message.prototypeDescription !== undefined &&
+      (obj.prototypeDescription = message.prototypeDescription);
     message.quantity !== undefined && (obj.quantity = message.quantity);
     message.vat !== undefined && (obj.vat = message.vat);
     message.price !== undefined && (obj.price = message.price);
     message.itemType !== undefined && (obj.itemType = message.itemType);
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
-    message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
+    message.stockKeepingUnit !== undefined &&
+      (obj.stockKeepingUnit = message.stockKeepingUnit);
     message.weightInKg !== undefined && (obj.weightInKg = message.weightInKg);
     message.lengthInCm !== undefined && (obj.lengthInCm = message.lengthInCm);
     message.widthInCm !== undefined && (obj.widthInCm = message.widthInCm);
@@ -877,12 +869,15 @@ export const Item = {
   },
 };
 
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -899,6 +894,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -908,6 +904,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -917,12 +914,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseOrderDataList: object = {};
 
 export const OrderDataList = {
   encode(message: OrderDataList, writer: Writer = Writer.create()): Writer {
@@ -934,7 +934,8 @@ export const OrderDataList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrderDataList {
+
+  decode(input: Reader | Uint8Array, length?: number): OrderDataList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrderDataList } as OrderDataList;
@@ -955,6 +956,7 @@ export const OrderDataList = {
     }
     return message;
   },
+
   fromJSON(object: any): OrderDataList {
     const message = { ...baseOrderDataList } as OrderDataList;
     message.orderData = [];
@@ -970,6 +972,7 @@ export const OrderDataList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrderDataList>): OrderDataList {
     const message = { ...baseOrderDataList } as OrderDataList;
     message.orderData = [];
@@ -985,17 +988,23 @@ export const OrderDataList = {
     }
     return message;
   },
+
   toJSON(message: OrderDataList): unknown {
     const obj: any = {};
     if (message.orderData) {
-      obj.orderData = message.orderData.map(e => e ? OrderData.toJSON(e) : undefined);
+      obj.orderData = message.orderData.map((e) =>
+        e ? OrderData.toJSON(e) : undefined
+      );
     } else {
       obj.orderData = [];
     }
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
   },
 };
+
+const baseOrderData: object = { orderId: "" };
 
 export const OrderData = {
   encode(message: OrderData, writer: Writer = Writer.create()): Writer {
@@ -1005,7 +1014,8 @@ export const OrderData = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrderData {
+
+  decode(input: Reader | Uint8Array, length?: number): OrderData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrderData } as OrderData;
@@ -1026,6 +1036,7 @@ export const OrderData = {
     }
     return message;
   },
+
   fromJSON(object: any): OrderData {
     const message = { ...baseOrderData } as OrderData;
     message.shipments = [];
@@ -1041,6 +1052,7 @@ export const OrderData = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrderData>): OrderData {
     const message = { ...baseOrderData } as OrderData;
     message.shipments = [];
@@ -1056,16 +1068,30 @@ export const OrderData = {
     }
     return message;
   },
+
   toJSON(message: OrderData): unknown {
     const obj: any = {};
     message.orderId !== undefined && (obj.orderId = message.orderId);
     if (message.shipments) {
-      obj.shipments = message.shipments.map(e => e ? Shipments.toJSON(e) : undefined);
+      obj.shipments = message.shipments.map((e) =>
+        e ? Shipments.toJSON(e) : undefined
+      );
     } else {
       obj.shipments = [];
     }
     return obj;
   },
+};
+
+const baseShipments: object = {
+  totalWeightInKg: 0,
+  individualWeightInKg: 0,
+  amount: 0,
+  exportType: "",
+  exportDescription: "",
+  customsTariffNumber: "",
+  invoiceNumber: "",
+  customsValue: 0,
 };
 
 export const Shipments = {
@@ -1080,7 +1106,8 @@ export const Shipments = {
     writer.uint32(65).double(message.customsValue);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Shipments {
+
+  decode(input: Reader | Uint8Array, length?: number): Shipments {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseShipments } as Shipments;
@@ -1118,14 +1145,21 @@ export const Shipments = {
     }
     return message;
   },
+
   fromJSON(object: any): Shipments {
     const message = { ...baseShipments } as Shipments;
-    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+    if (
+      object.totalWeightInKg !== undefined &&
+      object.totalWeightInKg !== null
+    ) {
       message.totalWeightInKg = Number(object.totalWeightInKg);
     } else {
       message.totalWeightInKg = 0;
     }
-    if (object.individualWeightInKg !== undefined && object.individualWeightInKg !== null) {
+    if (
+      object.individualWeightInKg !== undefined &&
+      object.individualWeightInKg !== null
+    ) {
       message.individualWeightInKg = Number(object.individualWeightInKg);
     } else {
       message.individualWeightInKg = 0;
@@ -1140,12 +1174,18 @@ export const Shipments = {
     } else {
       message.exportType = "";
     }
-    if (object.exportDescription !== undefined && object.exportDescription !== null) {
+    if (
+      object.exportDescription !== undefined &&
+      object.exportDescription !== null
+    ) {
       message.exportDescription = String(object.exportDescription);
     } else {
       message.exportDescription = "";
     }
-    if (object.customsTariffNumber !== undefined && object.customsTariffNumber !== null) {
+    if (
+      object.customsTariffNumber !== undefined &&
+      object.customsTariffNumber !== null
+    ) {
       message.customsTariffNumber = String(object.customsTariffNumber);
     } else {
       message.customsTariffNumber = "";
@@ -1162,14 +1202,21 @@ export const Shipments = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Shipments>): Shipments {
     const message = { ...baseShipments } as Shipments;
-    if (object.totalWeightInKg !== undefined && object.totalWeightInKg !== null) {
+    if (
+      object.totalWeightInKg !== undefined &&
+      object.totalWeightInKg !== null
+    ) {
       message.totalWeightInKg = object.totalWeightInKg;
     } else {
       message.totalWeightInKg = 0;
     }
-    if (object.individualWeightInKg !== undefined && object.individualWeightInKg !== null) {
+    if (
+      object.individualWeightInKg !== undefined &&
+      object.individualWeightInKg !== null
+    ) {
       message.individualWeightInKg = object.individualWeightInKg;
     } else {
       message.individualWeightInKg = 0;
@@ -1184,12 +1231,18 @@ export const Shipments = {
     } else {
       message.exportType = "";
     }
-    if (object.exportDescription !== undefined && object.exportDescription !== null) {
+    if (
+      object.exportDescription !== undefined &&
+      object.exportDescription !== null
+    ) {
       message.exportDescription = object.exportDescription;
     } else {
       message.exportDescription = "";
     }
-    if (object.customsTariffNumber !== undefined && object.customsTariffNumber !== null) {
+    if (
+      object.customsTariffNumber !== undefined &&
+      object.customsTariffNumber !== null
+    ) {
       message.customsTariffNumber = object.customsTariffNumber;
     } else {
       message.customsTariffNumber = "";
@@ -1206,28 +1259,41 @@ export const Shipments = {
     }
     return message;
   },
+
   toJSON(message: Shipments): unknown {
     const obj: any = {};
-    message.totalWeightInKg !== undefined && (obj.totalWeightInKg = message.totalWeightInKg);
-    message.individualWeightInKg !== undefined && (obj.individualWeightInKg = message.individualWeightInKg);
+    message.totalWeightInKg !== undefined &&
+      (obj.totalWeightInKg = message.totalWeightInKg);
+    message.individualWeightInKg !== undefined &&
+      (obj.individualWeightInKg = message.individualWeightInKg);
     message.amount !== undefined && (obj.amount = message.amount);
     message.exportType !== undefined && (obj.exportType = message.exportType);
-    message.exportDescription !== undefined && (obj.exportDescription = message.exportDescription);
-    message.customsTariffNumber !== undefined && (obj.customsTariffNumber = message.customsTariffNumber);
-    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
-    message.customsValue !== undefined && (obj.customsValue = message.customsValue);
+    message.exportDescription !== undefined &&
+      (obj.exportDescription = message.exportDescription);
+    message.customsTariffNumber !== undefined &&
+      (obj.customsTariffNumber = message.customsTariffNumber);
+    message.invoiceNumber !== undefined &&
+      (obj.invoiceNumber = message.invoiceNumber);
+    message.customsValue !== undefined &&
+      (obj.customsValue = message.customsValue);
     return obj;
   },
 };
 
+const baseFulfillmentResults: object = {};
+
 export const FulfillmentResults = {
-  encode(message: FulfillmentResults, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FulfillmentResults,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.fulfillmentResults) {
       ResponseDetailsList.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FulfillmentResults {
+
+  decode(input: Reader | Uint8Array, length?: number): FulfillmentResults {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFulfillmentResults } as FulfillmentResults;
@@ -1236,7 +1302,9 @@ export const FulfillmentResults = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.fulfillmentResults.push(ResponseDetailsList.decode(reader, reader.uint32()));
+          message.fulfillmentResults.push(
+            ResponseDetailsList.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1245,30 +1313,41 @@ export const FulfillmentResults = {
     }
     return message;
   },
+
   fromJSON(object: any): FulfillmentResults {
     const message = { ...baseFulfillmentResults } as FulfillmentResults;
     message.fulfillmentResults = [];
-    if (object.fulfillmentResults !== undefined && object.fulfillmentResults !== null) {
+    if (
+      object.fulfillmentResults !== undefined &&
+      object.fulfillmentResults !== null
+    ) {
       for (const e of object.fulfillmentResults) {
         message.fulfillmentResults.push(ResponseDetailsList.fromJSON(e));
       }
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FulfillmentResults>): FulfillmentResults {
     const message = { ...baseFulfillmentResults } as FulfillmentResults;
     message.fulfillmentResults = [];
-    if (object.fulfillmentResults !== undefined && object.fulfillmentResults !== null) {
+    if (
+      object.fulfillmentResults !== undefined &&
+      object.fulfillmentResults !== null
+    ) {
       for (const e of object.fulfillmentResults) {
         message.fulfillmentResults.push(ResponseDetailsList.fromPartial(e));
       }
     }
     return message;
   },
+
   toJSON(message: FulfillmentResults): unknown {
     const obj: any = {};
     if (message.fulfillmentResults) {
-      obj.fulfillmentResults = message.fulfillmentResults.map(e => e ? ResponseDetailsList.toJSON(e) : undefined);
+      obj.fulfillmentResults = message.fulfillmentResults.map((e) =>
+        e ? ResponseDetailsList.toJSON(e) : undefined
+      );
     } else {
       obj.fulfillmentResults = [];
     }
@@ -1276,8 +1355,13 @@ export const FulfillmentResults = {
   },
 };
 
+const baseResponseDetailsList: object = {};
+
 export const ResponseDetailsList = {
-  encode(message: ResponseDetailsList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ResponseDetailsList,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.Status !== undefined && message.Status !== undefined) {
       OrderStatus.encode(message.Status, writer.uint32(10).fork()).ldelim();
     }
@@ -1286,7 +1370,8 @@ export const ResponseDetailsList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ResponseDetailsList {
+
+  decode(input: Reader | Uint8Array, length?: number): ResponseDetailsList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResponseDetailsList } as ResponseDetailsList;
@@ -1306,6 +1391,7 @@ export const ResponseDetailsList = {
     }
     return message;
   },
+
   fromJSON(object: any): ResponseDetailsList {
     const message = { ...baseResponseDetailsList } as ResponseDetailsList;
     if (object.Status !== undefined && object.Status !== null) {
@@ -1320,6 +1406,7 @@ export const ResponseDetailsList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ResponseDetailsList>): ResponseDetailsList {
     const message = { ...baseResponseDetailsList } as ResponseDetailsList;
     if (object.Status !== undefined && object.Status !== null) {
@@ -1334,13 +1421,20 @@ export const ResponseDetailsList = {
     }
     return message;
   },
+
   toJSON(message: ResponseDetailsList): unknown {
     const obj: any = {};
-    message.Status !== undefined && (obj.Status = message.Status ? OrderStatus.toJSON(message.Status) : undefined);
-    message.error !== undefined && (obj.error = message.error ? ErrorList.toJSON(message.error) : undefined);
+    message.Status !== undefined &&
+      (obj.Status = message.Status
+        ? OrderStatus.toJSON(message.Status)
+        : undefined);
+    message.error !== undefined &&
+      (obj.error = message.error ? ErrorList.toJSON(message.error) : undefined);
     return obj;
   },
 };
+
+const baseOrderStatus: object = { OrderId: "", OrderStatus: "" };
 
 export const OrderStatus = {
   encode(message: OrderStatus, writer: Writer = Writer.create()): Writer {
@@ -1348,7 +1442,8 @@ export const OrderStatus = {
     writer.uint32(18).string(message.OrderStatus);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrderStatus {
+
+  decode(input: Reader | Uint8Array, length?: number): OrderStatus {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrderStatus } as OrderStatus;
@@ -1368,6 +1463,7 @@ export const OrderStatus = {
     }
     return message;
   },
+
   fromJSON(object: any): OrderStatus {
     const message = { ...baseOrderStatus } as OrderStatus;
     if (object.OrderId !== undefined && object.OrderId !== null) {
@@ -1382,6 +1478,7 @@ export const OrderStatus = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrderStatus>): OrderStatus {
     const message = { ...baseOrderStatus } as OrderStatus;
     if (object.OrderId !== undefined && object.OrderId !== null) {
@@ -1396,13 +1493,17 @@ export const OrderStatus = {
     }
     return message;
   },
+
   toJSON(message: OrderStatus): unknown {
     const obj: any = {};
     message.OrderId !== undefined && (obj.OrderId = message.OrderId);
-    message.OrderStatus !== undefined && (obj.OrderStatus = message.OrderStatus);
+    message.OrderStatus !== undefined &&
+      (obj.OrderStatus = message.OrderStatus);
     return obj;
   },
 };
+
+const baseErrorList: object = { code: "", message: "" };
 
 export const ErrorList = {
   encode(message: ErrorList, writer: Writer = Writer.create()): Writer {
@@ -1414,7 +1515,8 @@ export const ErrorList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ErrorList {
+
+  decode(input: Reader | Uint8Array, length?: number): ErrorList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseErrorList } as ErrorList;
@@ -1436,6 +1538,7 @@ export const ErrorList = {
     }
     return message;
   },
+
   fromJSON(object: any): ErrorList {
     const message = { ...baseErrorList } as ErrorList;
     message.code = [];
@@ -1452,6 +1555,7 @@ export const ErrorList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ErrorList>): ErrorList {
     const message = { ...baseErrorList } as ErrorList;
     message.code = [];
@@ -1468,15 +1572,16 @@ export const ErrorList = {
     }
     return message;
   },
+
   toJSON(message: ErrorList): unknown {
     const obj: any = {};
     if (message.code) {
-      obj.code = message.code.map(e => e);
+      obj.code = message.code.map((e) => e);
     } else {
       obj.code = [];
     }
     if (message.message) {
-      obj.message = message.message.map(e => e);
+      obj.message = message.message.map((e) => e);
     } else {
       obj.message = [];
     }
@@ -1484,107 +1589,568 @@ export const ErrorList = {
   },
 };
 
-export const metaOrderList: { [key in keyof Required<OrderList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Order', name:'Order'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+export interface Service {
+  Read(request: ReadRequest): Promise<OrderList>;
+  Create(request: OrderList): Promise<OrderList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: OrderList): Promise<OrderList>;
+  Upsert(request: OrderList): Promise<OrderList>;
+  TriggerFulfillment(request: OrderDataList): Promise<FulfillmentResults>;
 }
-export const metaOrder: { [key in keyof Required<Order>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  status: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Items', name:'Items'} as MetaMessage} as MetaArray,
-  totalPrice: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  shippingContactPointId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  billingContactPointId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  totalWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaItems: { [key in keyof Required<Items>]: MetaBase | string } = {
-  quantityPrice: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  item: {kind:'object', type:'.io.restorecommerce.order.Item', name:'Item'} as MetaMessage,
-}
-export const metaItem: { [key in keyof Required<Item>]: MetaBase | string } = {
-  productVariantBundleId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  productName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  productDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  manufacturerName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  manufacturerDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  prototypeName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  prototypeDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  quantity: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  vat: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  price: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  itemType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  taricCode: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  stockKeepingUnit: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  weightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  lengthInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  widthInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  heightInCm: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-}
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaOrderDataList: { [key in keyof Required<OrderDataList>]: MetaBase | string } = {
-  orderData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.OrderData', name:'OrderData'} as MetaMessage} as MetaArray,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-}
-export const metaOrderData: { [key in keyof Required<OrderData>]: MetaBase | string } = {
-  orderId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  shipments: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.Shipments', name:'Shipments'} as MetaMessage} as MetaArray,
-}
-export const metaShipments: { [key in keyof Required<Shipments>]: MetaBase | string } = {
-  totalWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  individualWeightInKg: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  amount: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  exportType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  exportDescription: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  customsTariffNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invoiceNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  customsValue: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-}
-export const metaFulfillmentResults: { [key in keyof Required<FulfillmentResults>]: MetaBase | string } = {
-  fulfillmentResults: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.order.ResponseDetailsList', name:'ResponseDetailsList'} as MetaMessage} as MetaArray,
-}
-export const metaResponseDetailsList: { [key in keyof Required<ResponseDetailsList>]: MetaBase | string } = {
-  Status: {kind:'object', type:'.io.restorecommerce.order.OrderStatus', name:'OrderStatus'} as MetaMessage,
-  error: {kind:'object', type:'.io.restorecommerce.order.ErrorList', name:'ErrorList'} as MetaMessage,
-}
-export const metaOrderStatus: { [key in keyof Required<OrderStatus>]: MetaBase | string } = {
-  OrderId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  OrderStatus: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaErrorList: { [key in keyof Required<ErrorList>]: MetaBase | string } = {
-  code: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  message: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrderList.decode} as MetaService<ReadRequest, OrderList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.OrderList', name:'OrderList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderList.encode, decodeResponse: OrderList.decode} as MetaService<OrderList, OrderList>,
-  TriggerFulfillment: {request: {kind:'object', type:'.io.restorecommerce.order.OrderDataList', name:'OrderDataList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.order.FulfillmentResults', name:'FulfillmentResults'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrderDataList.encode, decodeResponse: FulfillmentResults.decode} as MetaService<OrderDataList, FulfillmentResults>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  OrderList: ['message', '.io.restorecommerce.order.OrderList', OrderList, metaOrderList],
-  Order: ['message', '.io.restorecommerce.order.Order', Order, metaOrder],
-  Items: ['message', '.io.restorecommerce.order.Items', Items, metaItems],
-  Item: ['message', '.io.restorecommerce.order.Item', Item, metaItem],
-  Deleted: ['message', '.io.restorecommerce.order.Deleted', Deleted, metaDeleted],
-  OrderDataList: ['message', '.io.restorecommerce.order.OrderDataList', OrderDataList, metaOrderDataList],
-  OrderData: ['message', '.io.restorecommerce.order.OrderData', OrderData, metaOrderData],
-  Shipments: ['message', '.io.restorecommerce.order.Shipments', Shipments, metaShipments],
-  FulfillmentResults: ['message', '.io.restorecommerce.order.FulfillmentResults', FulfillmentResults, metaFulfillmentResults],
-  ResponseDetailsList: ['message', '.io.restorecommerce.order.ResponseDetailsList', ResponseDetailsList, metaResponseDetailsList],
-  OrderStatus: ['message', '.io.restorecommerce.order.OrderStatus', OrderStatus, metaOrderStatus],
-  ErrorList: ['message', '.io.restorecommerce.order.ErrorList', ErrorList, metaErrorList],
-  Service: ['service', '.io.restorecommerce.order.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "OrderList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.Order",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Order",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "status",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "status",
+          },
+          {
+            name: "items",
+            number: 6,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.Items",
+            jsonName: "items",
+          },
+          {
+            name: "total_price",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "totalPrice",
+          },
+          {
+            name: "shipping_contact_point_id",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "shippingContactPointId",
+          },
+          {
+            name: "billing_contact_point_id",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "billingContactPointId",
+          },
+          {
+            name: "total_weight_in_kg",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "totalWeightInKg",
+          },
+        ],
+      },
+      {
+        name: "Items",
+        field: [
+          {
+            name: "quantity_price",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "quantityPrice",
+          },
+          {
+            name: "item",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.Item",
+            jsonName: "item",
+          },
+        ],
+      },
+      {
+        name: "Item",
+        field: [
+          {
+            name: "product_variant_bundle_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "productVariantBundleId",
+          },
+          {
+            name: "product_name",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "productName",
+          },
+          {
+            name: "product_description",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "productDescription",
+          },
+          {
+            name: "manufacturer_name",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "manufacturerName",
+          },
+          {
+            name: "manufacturer_description",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "manufacturerDescription",
+          },
+          {
+            name: "prototype_name",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "prototypeName",
+          },
+          {
+            name: "prototype_description",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "prototypeDescription",
+          },
+          {
+            name: "quantity",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "quantity",
+          },
+          {
+            name: "vat",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "vat",
+          },
+          {
+            name: "price",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "price",
+          },
+          {
+            name: "item_type",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "itemType",
+          },
+          {
+            name: "taric_code",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "taricCode",
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 13,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "stockKeepingUnit",
+          },
+          {
+            name: "weight_in_kg",
+            number: 14,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "weightInKg",
+          },
+          {
+            name: "length_in_cm",
+            number: 15,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "lengthInCm",
+          },
+          {
+            name: "width_in_cm",
+            number: 16,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "widthInCm",
+          },
+          {
+            name: "height_in_cm",
+            number: 17,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "heightInCm",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "OrderDataList",
+        field: [
+          {
+            name: "order_data",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.OrderData",
+            jsonName: "orderData",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+        ],
+      },
+      {
+        name: "OrderData",
+        field: [
+          {
+            name: "order_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "orderId",
+          },
+          {
+            name: "shipments",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.Shipments",
+            jsonName: "shipments",
+          },
+        ],
+      },
+      {
+        name: "Shipments",
+        field: [
+          {
+            name: "total_weight_in_kg",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "totalWeightInKg",
+          },
+          {
+            name: "individual_weight_in_kg",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "individualWeightInKg",
+          },
+          {
+            name: "amount",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "amount",
+          },
+          {
+            name: "export_type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "exportType",
+          },
+          {
+            name: "export_description",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "exportDescription",
+          },
+          {
+            name: "customs_tariff_number",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "customsTariffNumber",
+          },
+          {
+            name: "invoice_number",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invoiceNumber",
+          },
+          {
+            name: "customs_value",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "customsValue",
+          },
+        ],
+      },
+      {
+        name: "FulfillmentResults",
+        field: [
+          {
+            name: "fulfillmentResults",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.ResponseDetailsList",
+            jsonName: "fulfillmentResults",
+          },
+        ],
+      },
+      {
+        name: "ResponseDetailsList",
+        field: [
+          {
+            name: "Status",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.OrderStatus",
+            jsonName: "Status",
+          },
+          {
+            name: "error",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.order.ErrorList",
+            jsonName: "error",
+          },
+        ],
+      },
+      {
+        name: "OrderStatus",
+        field: [
+          {
+            name: "OrderId",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "OrderId",
+          },
+          {
+            name: "OrderStatus",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "OrderStatus",
+          },
+        ],
+      },
+      {
+        name: "ErrorList",
+        field: [
+          {
+            name: "code",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "code",
+          },
+          {
+            name: "message",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "message",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.order.OrderList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderList",
+          },
+          {
+            name: "TriggerFulfillment",
+            inputType: ".io.restorecommerce.order.OrderDataList",
+            outputType: ".io.restorecommerce.order.FulfillmentResults",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/order.proto",
+    package: "io.restorecommerce.order",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 1, 2, 6],
+          span: [33, 2, 25],
+          leadingComments:
+            " sum of all the quantity_price will be total_price\n",
+        },
+        {
+          path: [4, 1, 2, 7],
+          span: [35, 2, 39],
+          leadingComments: " shipping address\n",
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [47, 2, 39],
+          leadingComments:
+            " below identifier is id of product, variant or bundle\n",
+        },
+        {
+          path: [4, 7, 2, 1],
+          span: [83, 2, 37],
+          leadingComments:
+            " below properties are used for international packaging\n",
+          trailingComments: " each items weight\n",
+        },
+        {
+          path: [4, 7, 2, 2],
+          span: [84, 2, 19],
+          trailingComments: " number of items\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.order.OrderList": OrderList,
+    ".io.restorecommerce.order.Order": Order,
+    ".io.restorecommerce.order.Items": Items,
+    ".io.restorecommerce.order.Item": Item,
+    ".io.restorecommerce.order.Deleted": Deleted,
+    ".io.restorecommerce.order.OrderDataList": OrderDataList,
+    ".io.restorecommerce.order.OrderData": OrderData,
+    ".io.restorecommerce.order.Shipments": Shipments,
+    ".io.restorecommerce.order.FulfillmentResults": FulfillmentResults,
+    ".io.restorecommerce.order.ResponseDetailsList": ResponseDetailsList,
+    ".io.restorecommerce.order.OrderStatus": OrderStatus,
+    ".io.restorecommerce.order.ErrorList": ErrorList,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

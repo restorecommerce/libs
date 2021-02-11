@@ -1,14 +1,27 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Subject } from '../../io/restorecommerce/auth';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.manufacturer";
 
-/**
- *  Manufacturer resource
- */
+/** Manufacturer resource */
 export interface Manufacturer {
   id: string;
   meta?: Meta;
@@ -26,76 +39,7 @@ export interface Deleted {
   id: string;
 }
 
-const baseManufacturer: object = {
-  id: "",
-  name: "",
-  description: "",
-};
-
-const baseManufacturerList: object = {
-  totalCount: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<ManufacturerList>;
-
-  Create(request: ManufacturerList): Promise<ManufacturerList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: ManufacturerList): Promise<ManufacturerList>;
-
-  Upsert(request: ManufacturerList): Promise<ManufacturerList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.manufacturer'
+const baseManufacturer: object = { id: "", name: "", description: "" };
 
 export const Manufacturer = {
   encode(message: Manufacturer, writer: Writer = Writer.create()): Writer {
@@ -107,7 +51,8 @@ export const Manufacturer = {
     writer.uint32(34).string(message.description);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Manufacturer {
+
+  decode(input: Reader | Uint8Array, length?: number): Manufacturer {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseManufacturer } as Manufacturer;
@@ -133,6 +78,7 @@ export const Manufacturer = {
     }
     return message;
   },
+
   fromJSON(object: any): Manufacturer {
     const message = { ...baseManufacturer } as Manufacturer;
     if (object.id !== undefined && object.id !== null) {
@@ -157,6 +103,7 @@ export const Manufacturer = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Manufacturer>): Manufacturer {
     const message = { ...baseManufacturer } as Manufacturer;
     if (object.id !== undefined && object.id !== null) {
@@ -181,15 +128,20 @@ export const Manufacturer = {
     }
     return message;
   },
+
   toJSON(message: Manufacturer): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     return obj;
   },
 };
+
+const baseManufacturerList: object = { totalCount: 0 };
 
 export const ManufacturerList = {
   encode(message: ManufacturerList, writer: Writer = Writer.create()): Writer {
@@ -202,7 +154,8 @@ export const ManufacturerList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ManufacturerList {
+
+  decode(input: Reader | Uint8Array, length?: number): ManufacturerList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseManufacturerList } as ManufacturerList;
@@ -226,6 +179,7 @@ export const ManufacturerList = {
     }
     return message;
   },
+
   fromJSON(object: any): ManufacturerList {
     const message = { ...baseManufacturerList } as ManufacturerList;
     message.items = [];
@@ -246,6 +200,7 @@ export const ManufacturerList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ManufacturerList>): ManufacturerList {
     const message = { ...baseManufacturerList } as ManufacturerList;
     message.items = [];
@@ -266,25 +221,34 @@ export const ManufacturerList = {
     }
     return message;
   },
+
   toJSON(message: ManufacturerList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Manufacturer.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Manufacturer.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -301,6 +265,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -310,6 +275,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -319,6 +285,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -326,35 +293,168 @@ export const Deleted = {
   },
 };
 
-export const metaManufacturer: { [key in keyof Required<Manufacturer>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface Service {
+  Read(request: ReadRequest): Promise<ManufacturerList>;
+  Create(request: ManufacturerList): Promise<ManufacturerList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: ManufacturerList): Promise<ManufacturerList>;
+  Upsert(request: ManufacturerList): Promise<ManufacturerList>;
 }
-export const metaManufacturerList: { [key in keyof Required<ManufacturerList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.manufacturer.Manufacturer', name:'Manufacturer'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ManufacturerList.decode} as MetaService<ReadRequest, ManufacturerList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ManufacturerList.encode, decodeResponse: ManufacturerList.decode} as MetaService<ManufacturerList, ManufacturerList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ManufacturerList.encode, decodeResponse: ManufacturerList.decode} as MetaService<ManufacturerList, ManufacturerList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.manufacturer.ManufacturerList', name:'ManufacturerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ManufacturerList.encode, decodeResponse: ManufacturerList.decode} as MetaService<ManufacturerList, ManufacturerList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Manufacturer: ['message', '.io.restorecommerce.manufacturer.Manufacturer', Manufacturer, metaManufacturer],
-  ManufacturerList: ['message', '.io.restorecommerce.manufacturer.ManufacturerList', ManufacturerList, metaManufacturerList],
-  Deleted: ['message', '.io.restorecommerce.manufacturer.Deleted', Deleted, metaDeleted],
-  Service: ['service', '.io.restorecommerce.manufacturer.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Manufacturer",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+        ],
+      },
+      {
+        name: "ManufacturerList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.manufacturer.Manufacturer",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+            outputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+            outputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+            outputType: ".io.restorecommerce.manufacturer.ManufacturerList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/manufacturer.proto",
+    package: "io.restorecommerce.manufacturer",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [10, 0, 15, 1],
+          leadingComments: " Manufacturer resource\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.manufacturer.Manufacturer": Manufacturer,
+    ".io.restorecommerce.manufacturer.ManufacturerList": ManufacturerList,
+    ".io.restorecommerce.manufacturer.Deleted": Deleted,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

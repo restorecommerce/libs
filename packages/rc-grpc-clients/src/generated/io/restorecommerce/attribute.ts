@@ -1,59 +1,15 @@
 /* eslint-disable */
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "io.restorecommerce.attribute";
 
 export interface Attribute {
   id: string;
   value: string;
 }
 
-const baseAttribute: object = {
-  id: "",
-  value: "",
-};
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.attribute'
+const baseAttribute: object = { id: "", value: "" };
 
 export const Attribute = {
   encode(message: Attribute, writer: Writer = Writer.create()): Writer {
@@ -61,7 +17,8 @@ export const Attribute = {
     writer.uint32(18).string(message.value);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Attribute {
+
+  decode(input: Reader | Uint8Array, length?: number): Attribute {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAttribute } as Attribute;
@@ -81,6 +38,7 @@ export const Attribute = {
     }
     return message;
   },
+
   fromJSON(object: any): Attribute {
     const message = { ...baseAttribute } as Attribute;
     if (object.id !== undefined && object.id !== null) {
@@ -95,6 +53,7 @@ export const Attribute = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Attribute>): Attribute {
     const message = { ...baseAttribute } as Attribute;
     if (object.id !== undefined && object.id !== null) {
@@ -109,6 +68,7 @@ export const Attribute = {
     }
     return message;
   },
+
   toJSON(message: Attribute): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -117,15 +77,52 @@ export const Attribute = {
   },
 };
 
-export const metaAttribute: { [key in keyof Required<Attribute>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  value: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Attribute: ['message', '.io.restorecommerce.attribute.Attribute', Attribute, metaAttribute],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Attribute",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "value",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "value",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    name: "io/restorecommerce/attribute.proto",
+    package: "io.restorecommerce.attribute",
+    sourceCodeInfo: { location: [] },
+    syntax: "proto3",
+  } as any,
+  references: { ".io.restorecommerce.attribute.Attribute": Attribute },
+  dependencies: [],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

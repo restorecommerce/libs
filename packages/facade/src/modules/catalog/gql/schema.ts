@@ -5,22 +5,22 @@ import {
   getWhitelistBlacklistConfig,
   registerResolverSchema
 } from "../../../gql/protos";
-import { metaService as productMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
-import { metaService as product_prototypeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
-import { metaService as product_categoryMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
-import { metaService as price_groupMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
-import { metaService as manufacturerMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
+import { protoMetadata as productMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
+import { protoMetadata as product_prototypeMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
+import { protoMetadata as product_categoryMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
+import { protoMetadata as price_groupMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
+import { protoMetadata as manufacturerMeta } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
 import { namespace, CatalogServiceConfig } from "../interfaces";
 
 registerTypings();
 
 export const schema = (cfg: CatalogServiceConfig) => {
   const subServices = [
-    [productMetaService, 'product', ['Read']],
-    [product_prototypeMetaService, 'product_prototype', ['Read']],
-    [product_categoryMetaService, 'product_category', ['Read']],
-    [price_groupMetaService, 'price_group', ['Read']],
-    [manufacturerMetaService, 'manufacturer', ['Read']],
+    [productMeta.fileDescriptor.service![0], 'product', ['Read']],
+    [product_prototypeMeta.fileDescriptor.service![0], 'product_prototype', ['Read']],
+    [product_categoryMeta.fileDescriptor.service![0], 'product_category', ['Read']],
+    [price_groupMeta.fileDescriptor.service![0], 'price_group', ['Read']],
+    [manufacturerMeta.fileDescriptor.service![0], 'manufacturer', ['Read']],
   ];
 
   subServices.forEach(([service, subspace, queryList]: any) => {

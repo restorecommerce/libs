@@ -1,15 +1,26 @@
 /* eslint-disable */
-import { Target } from '../../io/restorecommerce/rule';
-import { Any } from '../../google/protobuf/any';
-import { PolicySetRQ } from '../../io/restorecommerce/policy_set';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Target,
+  protoMetadata as io_restorecommerce_rule_protoMetadata,
+} from "../../io/restorecommerce/rule";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import {
+  PolicySetRQ,
+  protoMetadata as io_restorecommerce_policy_set_protoMetadata,
+} from "../../io/restorecommerce/policy_set";
+import { Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "io.restorecommerce.access_control";
 
 export interface Request {
   target?: Target;
   /**
-   *  generic data structure which can be provided
-   *  to a contextQuery (see io/restorecommerce/rule.proto)
+   * generic data structure which can be provided
+   * to a contextQuery (see io/restorecommerce/rule.proto)
    */
   context?: Context;
 }
@@ -25,76 +36,6 @@ export interface Response {
   obligation: string;
   evaluationCacheable: boolean;
 }
-
-export interface ReverseQuery {
-  policySets: PolicySetRQ[];
-}
-
-const baseRequest: object = {
-};
-
-const baseContext: object = {
-};
-
-const baseResponse: object = {
-  decision: 0,
-  obligation: "",
-  evaluationCacheable: false,
-};
-
-const baseReverseQuery: object = {
-};
-
-export interface Service {
-
-  IsAllowed(request: Request): Promise<Response>;
-
-  WhatIsAllowed(request: Request): Promise<ReverseQuery>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.access_control'
 
 export enum Response_Decision {
   PERMIT = 0,
@@ -140,6 +81,12 @@ export function response_DecisionToJSON(object: Response_Decision): string {
   }
 }
 
+export interface ReverseQuery {
+  policySets: PolicySetRQ[];
+}
+
+const baseRequest: object = {};
+
 export const Request = {
   encode(message: Request, writer: Writer = Writer.create()): Writer {
     if (message.target !== undefined && message.target !== undefined) {
@@ -150,7 +97,8 @@ export const Request = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Request {
+
+  decode(input: Reader | Uint8Array, length?: number): Request {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRequest } as Request;
@@ -170,6 +118,7 @@ export const Request = {
     }
     return message;
   },
+
   fromJSON(object: any): Request {
     const message = { ...baseRequest } as Request;
     if (object.target !== undefined && object.target !== null) {
@@ -184,6 +133,7 @@ export const Request = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Request>): Request {
     const message = { ...baseRequest } as Request;
     if (object.target !== undefined && object.target !== null) {
@@ -198,13 +148,20 @@ export const Request = {
     }
     return message;
   },
+
   toJSON(message: Request): unknown {
     const obj: any = {};
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.context !== undefined && (obj.context = message.context ? Context.toJSON(message.context) : undefined);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.context !== undefined &&
+      (obj.context = message.context
+        ? Context.toJSON(message.context)
+        : undefined);
     return obj;
   },
 };
+
+const baseContext: object = {};
 
 export const Context = {
   encode(message: Context, writer: Writer = Writer.create()): Writer {
@@ -219,7 +176,8 @@ export const Context = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Context {
+
+  decode(input: Reader | Uint8Array, length?: number): Context {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseContext } as Context;
@@ -243,6 +201,7 @@ export const Context = {
     }
     return message;
   },
+
   fromJSON(object: any): Context {
     const message = { ...baseContext } as Context;
     message.resources = [];
@@ -263,6 +222,7 @@ export const Context = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Context>): Context {
     const message = { ...baseContext } as Context;
     message.resources = [];
@@ -283,17 +243,30 @@ export const Context = {
     }
     return message;
   },
+
   toJSON(message: Context): unknown {
     const obj: any = {};
-    message.subject !== undefined && (obj.subject = message.subject ? Any.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject ? Any.toJSON(message.subject) : undefined);
     if (message.resources) {
-      obj.resources = message.resources.map(e => e ? Any.toJSON(e) : undefined);
+      obj.resources = message.resources.map((e) =>
+        e ? Any.toJSON(e) : undefined
+      );
     } else {
       obj.resources = [];
     }
-    message.security !== undefined && (obj.security = message.security ? Any.toJSON(message.security) : undefined);
+    message.security !== undefined &&
+      (obj.security = message.security
+        ? Any.toJSON(message.security)
+        : undefined);
     return obj;
   },
+};
+
+const baseResponse: object = {
+  decision: 0,
+  obligation: "",
+  evaluationCacheable: false,
 };
 
 export const Response = {
@@ -303,7 +276,8 @@ export const Response = {
     writer.uint32(24).bool(message.evaluationCacheable);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Response {
+
+  decode(input: Reader | Uint8Array, length?: number): Response {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResponse } as Response;
@@ -326,6 +300,7 @@ export const Response = {
     }
     return message;
   },
+
   fromJSON(object: any): Response {
     const message = { ...baseResponse } as Response;
     if (object.decision !== undefined && object.decision !== null) {
@@ -338,13 +313,17 @@ export const Response = {
     } else {
       message.obligation = "";
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Response>): Response {
     const message = { ...baseResponse } as Response;
     if (object.decision !== undefined && object.decision !== null) {
@@ -357,21 +336,29 @@ export const Response = {
     } else {
       message.obligation = "";
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = object.evaluationCacheable;
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   toJSON(message: Response): unknown {
     const obj: any = {};
-    message.decision !== undefined && (obj.decision = response_DecisionToJSON(message.decision));
+    message.decision !== undefined &&
+      (obj.decision = response_DecisionToJSON(message.decision));
     message.obligation !== undefined && (obj.obligation = message.obligation);
-    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
+
+const baseReverseQuery: object = {};
 
 export const ReverseQuery = {
   encode(message: ReverseQuery, writer: Writer = Writer.create()): Writer {
@@ -380,7 +367,8 @@ export const ReverseQuery = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ReverseQuery {
+
+  decode(input: Reader | Uint8Array, length?: number): ReverseQuery {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseReverseQuery } as ReverseQuery;
@@ -398,6 +386,7 @@ export const ReverseQuery = {
     }
     return message;
   },
+
   fromJSON(object: any): ReverseQuery {
     const message = { ...baseReverseQuery } as ReverseQuery;
     message.policySets = [];
@@ -408,6 +397,7 @@ export const ReverseQuery = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
     const message = { ...baseReverseQuery } as ReverseQuery;
     message.policySets = [];
@@ -418,10 +408,13 @@ export const ReverseQuery = {
     }
     return message;
   },
+
   toJSON(message: ReverseQuery): unknown {
     const obj: any = {};
     if (message.policySets) {
-      obj.policySets = message.policySets.map(e => e ? PolicySetRQ.toJSON(e) : undefined);
+      obj.policySets = message.policySets.map((e) =>
+        e ? PolicySetRQ.toJSON(e) : undefined
+      );
     } else {
       obj.policySets = [];
     }
@@ -429,37 +422,178 @@ export const ReverseQuery = {
   },
 };
 
-export const metaRequest: { [key in keyof Required<Request>]: MetaBase | string } = {
-  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
-  context: {kind:'object', type:'.io.restorecommerce.access_control.Context', name:'Context'} as MetaMessage,
+export interface Service {
+  IsAllowed(request: Request): Promise<Response>;
+  WhatIsAllowed(request: Request): Promise<ReverseQuery>;
 }
-export const metaContext: { [key in keyof Required<Context>]: MetaBase | string } = {
-  subject: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  resources: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
-  security: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaResponse: { [key in keyof Required<Response>]: MetaBase | string } = {
-  decision: {kind:'object', type:'.io.restorecommerce.access_control.Response.Decision', name:'Response_Decision'} as MetaMessage,
-  obligation: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-}
-export const metaReverseQuery: { [key in keyof Required<ReverseQuery>]: MetaBase | string } = {
-  policySets: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy_set.PolicySetRQ', name:'PolicySetRQ'} as MetaMessage} as MetaArray,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  IsAllowed: {request: {kind:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.access_control.Response', name:'Response'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: Response.decode} as MetaService<Request, Response>,
-  WhatIsAllowed: {request: {kind:'object', type:'.io.restorecommerce.access_control.Request', name:'Request'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.access_control.ReverseQuery', name:'ReverseQuery'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: Request.encode, decodeResponse: ReverseQuery.decode} as MetaService<Request, ReverseQuery>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Request: ['message', '.io.restorecommerce.access_control.Request', Request, metaRequest],
-  Context: ['message', '.io.restorecommerce.access_control.Context', Context, metaContext],
-  Response: ['message', '.io.restorecommerce.access_control.Response', Response, metaResponse],
-  Response_Decision: ['enum', '.io.restorecommerce.access_control.Response.Decision', Response_Decision, undefined],
-  ReverseQuery: ['message', '.io.restorecommerce.access_control.ReverseQuery', ReverseQuery, metaReverseQuery],
-  Service: ['service', '.io.restorecommerce.access_control.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/any.proto",
+      "io/restorecommerce/rule.proto",
+      "io/restorecommerce/policy_set.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Request",
+        field: [
+          {
+            name: "target",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.Target",
+            jsonName: "target",
+          },
+          {
+            name: "context",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.access_control.Context",
+            jsonName: "context",
+          },
+        ],
+      },
+      {
+        name: "Context",
+        field: [
+          {
+            name: "subject",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "subject",
+          },
+          {
+            name: "resources",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "resources",
+          },
+          {
+            name: "security",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "security",
+          },
+        ],
+      },
+      {
+        name: "Response",
+        field: [
+          {
+            name: "decision",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.access_control.Response.Decision",
+            jsonName: "decision",
+          },
+          {
+            name: "obligation",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "obligation",
+          },
+          {
+            name: "evaluation_cacheable",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "evaluationCacheable",
+          },
+        ],
+        enumType: [
+          {
+            name: "Decision",
+            value: [
+              { name: "PERMIT", number: 0 },
+              { name: "DENY", number: 1 },
+              { name: "NOT_APPLICABLE", number: 2 },
+              { name: "INDETERMINATE", number: 3 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "ReverseQuery",
+        field: [
+          {
+            name: "policy_sets",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.policy_set.PolicySetRQ",
+            jsonName: "policySets",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "IsAllowed",
+            inputType: ".io.restorecommerce.access_control.Request",
+            outputType: ".io.restorecommerce.access_control.Response",
+          },
+          {
+            name: "WhatIsAllowed",
+            inputType: ".io.restorecommerce.access_control.Request",
+            outputType: ".io.restorecommerce.access_control.ReverseQuery",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/access_control.proto",
+    package: "io.restorecommerce.access_control",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 2, 1],
+          span: [16, 2, 22],
+          leadingComments:
+            " generic data structure which can be provided\n to a contextQuery (see io/restorecommerce/rule.proto)\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.access_control.Request": Request,
+    ".io.restorecommerce.access_control.Context": Context,
+    ".io.restorecommerce.access_control.Response": Response,
+    ".io.restorecommerce.access_control.Response.Decision": Response_Decision,
+    ".io.restorecommerce.access_control.ReverseQuery": ReverseQuery,
+  },
+  dependencies: [
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_rule_protoMetadata,
+    io_restorecommerce_policy_set_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

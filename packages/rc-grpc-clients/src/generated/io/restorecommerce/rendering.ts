@@ -1,114 +1,32 @@
 /* eslint-disable */
-import { Any } from '../../google/protobuf/any';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "io.restorecommerce.rendering";
 
 export interface Payload {
   /**
-   *  json with <key, template> pairs
-   *  e.g. { 'subject': ..., 'message':....}
+   * json with <key, template> pairs
+   * e.g. { 'subject': ..., 'message':....}
    */
   templates?: Any;
-  /**
-   *  data to fill template with
-   */
+  /** data to fill template with */
   data?: Any;
-  /**
-   *  stylesheet URL
-   */
+  /** stylesheet URL */
   styleUrl: string;
-  /**
-   *  inlining, copying CSS into <style>, etc...
-   */
+  /** inlining, copying CSS into <style>, etc... */
   strategy: Payload_Strategy;
-  /**
-   *  rendering options JSON object
-   */
+  /** rendering options JSON object */
   options?: Any;
-  /**
-   *  content type for rendering such as 'application/html' or 'application/text'
-   */
+  /** content type for rendering such as 'application/html' or 'application/text' */
   contentType: string;
 }
 
-export interface RenderRequest {
-  /**
-   *  identifies the render request payload
-   */
-  id: string;
-  /**
-   *  List of templates with associated data and rendering options
-   */
-  payload: Payload[];
-}
-
-export interface RenderResponse {
-  id: string;
-  /**
-   *  error or HTML contents
-   */
-  response: Any[];
-}
-
-const basePayload: object = {
-  styleUrl: "",
-  strategy: 0,
-  contentType: "",
-};
-
-const baseRenderRequest: object = {
-  id: "",
-};
-
-const baseRenderResponse: object = {
-  id: "",
-};
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.rendering'
-
-/**  style-applying 'strategy'
- */
+/** style-applying 'strategy' */
 export enum Payload_Strategy {
   INLINE = 0,
   COPY = 1,
@@ -141,6 +59,21 @@ export function payload_StrategyToJSON(object: Payload_Strategy): string {
   }
 }
 
+export interface RenderRequest {
+  /** identifies the render request payload */
+  id: string;
+  /** List of templates with associated data and rendering options */
+  payload: Payload[];
+}
+
+export interface RenderResponse {
+  id: string;
+  /** error or HTML contents */
+  response: Any[];
+}
+
+const basePayload: object = { styleUrl: "", strategy: 0, contentType: "" };
+
 export const Payload = {
   encode(message: Payload, writer: Writer = Writer.create()): Writer {
     if (message.templates !== undefined && message.templates !== undefined) {
@@ -157,7 +90,8 @@ export const Payload = {
     writer.uint32(50).string(message.contentType);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Payload {
+
+  decode(input: Reader | Uint8Array, length?: number): Payload {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePayload } as Payload;
@@ -189,6 +123,7 @@ export const Payload = {
     }
     return message;
   },
+
   fromJSON(object: any): Payload {
     const message = { ...basePayload } as Payload;
     if (object.templates !== undefined && object.templates !== null) {
@@ -223,6 +158,7 @@ export const Payload = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Payload>): Payload {
     const message = { ...basePayload } as Payload;
     if (object.templates !== undefined && object.templates !== null) {
@@ -257,17 +193,27 @@ export const Payload = {
     }
     return message;
   },
+
   toJSON(message: Payload): unknown {
     const obj: any = {};
-    message.templates !== undefined && (obj.templates = message.templates ? Any.toJSON(message.templates) : undefined);
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.templates !== undefined &&
+      (obj.templates = message.templates
+        ? Any.toJSON(message.templates)
+        : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     message.styleUrl !== undefined && (obj.styleUrl = message.styleUrl);
-    message.strategy !== undefined && (obj.strategy = payload_StrategyToJSON(message.strategy));
-    message.options !== undefined && (obj.options = message.options ? Any.toJSON(message.options) : undefined);
-    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.strategy !== undefined &&
+      (obj.strategy = payload_StrategyToJSON(message.strategy));
+    message.options !== undefined &&
+      (obj.options = message.options ? Any.toJSON(message.options) : undefined);
+    message.contentType !== undefined &&
+      (obj.contentType = message.contentType);
     return obj;
   },
 };
+
+const baseRenderRequest: object = { id: "" };
 
 export const RenderRequest = {
   encode(message: RenderRequest, writer: Writer = Writer.create()): Writer {
@@ -277,7 +223,8 @@ export const RenderRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RenderRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): RenderRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRenderRequest } as RenderRequest;
@@ -298,6 +245,7 @@ export const RenderRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): RenderRequest {
     const message = { ...baseRenderRequest } as RenderRequest;
     message.payload = [];
@@ -313,6 +261,7 @@ export const RenderRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
     const message = { ...baseRenderRequest } as RenderRequest;
     message.payload = [];
@@ -328,17 +277,22 @@ export const RenderRequest = {
     }
     return message;
   },
+
   toJSON(message: RenderRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     if (message.payload) {
-      obj.payload = message.payload.map(e => e ? Payload.toJSON(e) : undefined);
+      obj.payload = message.payload.map((e) =>
+        e ? Payload.toJSON(e) : undefined
+      );
     } else {
       obj.payload = [];
     }
     return obj;
   },
 };
+
+const baseRenderResponse: object = { id: "" };
 
 export const RenderResponse = {
   encode(message: RenderResponse, writer: Writer = Writer.create()): Writer {
@@ -348,7 +302,8 @@ export const RenderResponse = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RenderResponse {
+
+  decode(input: Reader | Uint8Array, length?: number): RenderResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRenderResponse } as RenderResponse;
@@ -369,6 +324,7 @@ export const RenderResponse = {
     }
     return message;
   },
+
   fromJSON(object: any): RenderResponse {
     const message = { ...baseRenderResponse } as RenderResponse;
     message.response = [];
@@ -384,6 +340,7 @@ export const RenderResponse = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {
     const message = { ...baseRenderResponse } as RenderResponse;
     message.response = [];
@@ -399,11 +356,14 @@ export const RenderResponse = {
     }
     return message;
   },
+
   toJSON(message: RenderResponse): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     if (message.response) {
-      obj.response = message.response.map(e => e ? Any.toJSON(e) : undefined);
+      obj.response = message.response.map((e) =>
+        e ? Any.toJSON(e) : undefined
+      );
     } else {
       obj.response = [];
     }
@@ -411,30 +371,194 @@ export const RenderResponse = {
   },
 };
 
-export const metaPayload: { [key in keyof Required<Payload>]: MetaBase | string } = {
-  templates: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  styleUrl: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  strategy: {kind:'object', type:'.io.restorecommerce.rendering.Payload.Strategy', name:'Payload_Strategy'} as MetaMessage,
-  options: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaRenderRequest: { [key in keyof Required<RenderRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  payload: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rendering.Payload', name:'Payload'} as MetaMessage} as MetaArray,
-}
-export const metaRenderResponse: { [key in keyof Required<RenderResponse>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  response: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Payload: ['message', '.io.restorecommerce.rendering.Payload', Payload, metaPayload],
-  Payload_Strategy: ['enum', '.io.restorecommerce.rendering.Payload.Strategy', Payload_Strategy, undefined],
-  RenderRequest: ['message', '.io.restorecommerce.rendering.RenderRequest', RenderRequest, metaRenderRequest],
-  RenderResponse: ['message', '.io.restorecommerce.rendering.RenderResponse', RenderResponse, metaRenderResponse],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: ["google/protobuf/any.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Payload",
+        field: [
+          {
+            name: "templates",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "templates",
+          },
+          {
+            name: "data",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+          {
+            name: "style_url",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "styleUrl",
+          },
+          {
+            name: "strategy",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.rendering.Payload.Strategy",
+            jsonName: "strategy",
+          },
+          {
+            name: "options",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "options",
+          },
+          {
+            name: "content_type",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contentType",
+          },
+        ],
+        enumType: [
+          {
+            name: "Strategy",
+            value: [
+              { name: "INLINE", number: 0 },
+              { name: "COPY", number: 1 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "RenderRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "payload",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rendering.Payload",
+            jsonName: "payload",
+          },
+        ],
+      },
+      {
+        name: "RenderResponse",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "response",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "response",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    name: "io/restorecommerce/rendering.proto",
+    package: "io.restorecommerce.rendering",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 2, 0],
+          span: [9, 2, 36],
+          leadingComments:
+            " json with <key, template> pairs\n e.g. { 'subject': ..., 'message':....}\n",
+        },
+        {
+          path: [4, 0, 2, 1],
+          span: [10, 2, 31],
+          trailingComments: " data to fill template with\n",
+        },
+        {
+          path: [4, 0, 2, 2],
+          span: [11, 2, 23],
+          trailingComments: " stylesheet URL\n",
+        },
+        {
+          path: [4, 0, 4, 0],
+          span: [13, 2, 16, 3],
+          trailingComments: " style-applying 'strategy'\n",
+        },
+        {
+          path: [4, 0, 2, 3],
+          span: [17, 2, 24],
+          trailingComments: " inlining, copying CSS into <style>, etc...\n",
+        },
+        {
+          path: [4, 0, 2, 4],
+          span: [19, 2, 34],
+          leadingComments: " rendering options JSON object\n",
+        },
+        {
+          path: [4, 0, 2, 5],
+          span: [21, 2, 26],
+          leadingComments:
+            " content type for rendering such as 'application/html' or 'application/text'\n",
+        },
+        {
+          path: [4, 1, 2, 0],
+          span: [25, 2, 16],
+          trailingComments: " identifies the render request payload\n",
+        },
+        {
+          path: [4, 1, 2, 1],
+          span: [27, 2, 31],
+          leadingComments:
+            " List of templates with associated data and rendering options\n",
+        },
+        {
+          path: [4, 2, 2, 1],
+          span: [32, 2, 44],
+          trailingComments: " error or HTML contents\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.rendering.Payload": Payload,
+    ".io.restorecommerce.rendering.Payload.Strategy": Payload_Strategy,
+    ".io.restorecommerce.rendering.RenderRequest": RenderRequest,
+    ".io.restorecommerce.rendering.RenderResponse": RenderResponse,
+  },
+  dependencies: [google_protobuf_any_protoMetadata],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -10,7 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  MapScalar: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
   TodoScalar: any;
@@ -76,187 +75,206 @@ export type StatusType = {
 
 export type IoRestorecommerceUserUserList = {
   __typename?: 'IoRestorecommerceUserUserList';
-  items: Array<IoRestorecommerceUserUser>;
-  totalCount: Scalars['Int'];
-  subject: IoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IoRestorecommerceUserUser>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IoRestorecommerceAuthSubject>;
 };
 
 export type IoRestorecommerceUserUser = {
   __typename?: 'IoRestorecommerceUserUser';
-  id: Scalars['String'];
-  meta: IoRestorecommerceMetaMeta;
-  name: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  newEmail: Scalars['String'];
-  active: Scalars['Boolean'];
-  activationCode: Scalars['String'];
-  password: Scalars['String'];
-  passwordHash: Scalars['String'];
-  roleAssociations: Array<IoRestorecommerceAuthRoleAssociation>;
-  timezoneId: Scalars['String'];
-  localeId: Scalars['String'];
-  defaultScope: Scalars['String'];
-  unauthenticated: Scalars['Boolean'];
-  guest: Scalars['Boolean'];
-  image: IoRestorecommerceImageImage;
-  userType: IoRestorecommerceUserUserType;
-  invite: Scalars['Boolean'];
-  invitedByUserName: Scalars['String'];
-  invitedByUserFirstName: Scalars['String'];
-  invitedByUserLastName: Scalars['String'];
-  tokens: Array<IoRestorecommerceAuthTokens>;
-  lastLogin: Scalars['Float'];
-  lastAccess: Scalars['Float'];
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  newEmail?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  activationCode?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  passwordHash?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
+  timezoneId?: Maybe<Scalars['String']>;
+  localeId?: Maybe<Scalars['String']>;
+  defaultScope?: Maybe<Scalars['String']>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  guest?: Maybe<Scalars['Boolean']>;
+  image?: Maybe<IoRestorecommerceImageImage>;
+  userType?: Maybe<IoRestorecommerceUserUserType>;
+  invite?: Maybe<Scalars['Boolean']>;
+  invitedByUserName?: Maybe<Scalars['String']>;
+  invitedByUserFirstName?: Maybe<Scalars['String']>;
+  invitedByUserLastName?: Maybe<Scalars['String']>;
+  tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
+  lastLogin?: Maybe<Scalars['Float']>;
+  lastAccess?: Maybe<Scalars['Float']>;
 };
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
-  created: Scalars['Float'];
-  modified: Scalars['Float'];
-  modifiedBy: Scalars['String'];
-  owner: Array<IoRestorecommerceAttributeAttribute>;
+  created?: Maybe<Scalars['Float']>;
+  modified?: Maybe<Scalars['Float']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+  owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
-  id: Scalars['String'];
-  value: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceAuthRoleAssociation = {
   __typename?: 'IoRestorecommerceAuthRoleAssociation';
-  role: Scalars['String'];
-  attributes: Array<IoRestorecommerceAttributeAttribute>;
-  id: Scalars['String'];
+  role?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  id?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceImageImage = {
   __typename?: 'IoRestorecommerceImageImage';
-  id: Scalars['String'];
-  caption: Scalars['String'];
-  filename: Scalars['String'];
-  contentType: Scalars['String'];
-  url: Scalars['String'];
-  width: Scalars['Float'];
-  height: Scalars['Float'];
-  length: Scalars['Float'];
+  id?: Maybe<Scalars['String']>;
+  caption?: Maybe<Scalars['String']>;
+  filename?: Maybe<Scalars['String']>;
+  contentType?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  width?: Maybe<Scalars['Float']>;
+  height?: Maybe<Scalars['Float']>;
+  length?: Maybe<Scalars['Float']>;
 };
 
 export enum IoRestorecommerceUserUserType {
   OrgUser = 0,
   IndividualUser = 1,
   Guest = 2,
-  TechnicalUser = 3,
-  Unrecognized = -1
+  TechnicalUser = 3
 }
 
 export type IoRestorecommerceAuthTokens = {
   __typename?: 'IoRestorecommerceAuthTokens';
-  name: Scalars['String'];
-  expiresIn: Scalars['Float'];
-  token: Scalars['String'];
-  scopes: Array<Scalars['String']>;
-  type: Scalars['String'];
-  interactive: Scalars['Boolean'];
+  name?: Maybe<Scalars['String']>;
+  expiresIn?: Maybe<Scalars['Float']>;
+  token?: Maybe<Scalars['String']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  type?: Maybe<Scalars['String']>;
+  interactive?: Maybe<Scalars['Boolean']>;
 };
 
 export type IoRestorecommerceAuthSubject = {
   __typename?: 'IoRestorecommerceAuthSubject';
-  id: Scalars['String'];
-  scope: Scalars['String'];
-  roleAssociations: Array<IoRestorecommerceAuthRoleAssociation>;
-  hierarchicalScopes: Array<IoRestorecommerceAuthHierarchicalScope>;
-  unauthenticated: Scalars['Boolean'];
-  token: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
+  hierarchicalScopes?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceAuthHierarchicalScope = {
   __typename?: 'IoRestorecommerceAuthHierarchicalScope';
-  id: Scalars['String'];
-  children: Array<IoRestorecommerceAuthHierarchicalScope>;
-  role: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  children?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
+  role?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseReadRequest = {
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
-  sort: Array<IIoRestorecommerceResourcebaseSort>;
-  filter: IGoogleProtobufStruct;
-  field: Array<IIoRestorecommerceResourcebaseFieldFilter>;
-  search: Array<Scalars['String']>;
-  localesLimiter: Array<Scalars['String']>;
-  customQueries: Array<Scalars['String']>;
-  customArguments: IGoogleProtobufAny;
-  subject: IIoRestorecommerceAuthSubject;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Array<IIoRestorecommerceResourcebaseSort>>;
+  filter?: Maybe<IGoogleProtobufStruct>;
+  field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: Maybe<Array<Scalars['String']>>;
+  localesLimiter?: Maybe<Array<Scalars['String']>>;
+  customQueries?: Maybe<Array<Scalars['String']>>;
+  customArguments?: Maybe<IGoogleProtobufAny>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
-  field: Scalars['String'];
-  order: IoRestorecommerceResourcebaseSortSortOrder;
+  field?: Maybe<Scalars['String']>;
+  order?: Maybe<IoRestorecommerceResourcebaseSortSortOrder>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
   Unsorted = 0,
   Ascending = 1,
-  Descending = 2,
-  Unrecognized = -1
+  Descending = 2
 }
 
 export type IGoogleProtobufStruct = {
-  fields: Scalars['MapScalar'];
+  fields?: Maybe<Array<IGoogleProtobufStructFieldsEntry>>;
 };
 
+export type IGoogleProtobufStructFieldsEntry = {
+  key?: Maybe<Scalars['String']>;
+  value?: Maybe<IGoogleProtobufValue>;
+};
+
+export type IGoogleProtobufValue = {
+  nullValue?: Maybe<GoogleProtobufNullValue>;
+  numberValue?: Maybe<Scalars['Float']>;
+  stringValue?: Maybe<Scalars['String']>;
+  boolValue?: Maybe<Scalars['Boolean']>;
+  structValue?: Maybe<IGoogleProtobufStruct>;
+  listValue?: Maybe<IGoogleProtobufListValue>;
+};
+
+export enum GoogleProtobufNullValue {
+  NullValue = 0
+}
+
+export type IGoogleProtobufListValue = {
+  values?: Maybe<Array<IGoogleProtobufValue>>;
+};
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
-  name: Scalars['String'];
-  include: Scalars['Boolean'];
+  name?: Maybe<Scalars['String']>;
+  include?: Maybe<Scalars['Boolean']>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl: Scalars['String'];
-  value: Scalars['Upload'];
+  typeUrl?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Upload']>;
 };
 
 
 export type IIoRestorecommerceAuthSubject = {
-  id: Scalars['String'];
-  scope: Scalars['String'];
-  roleAssociations: Array<IIoRestorecommerceAuthRoleAssociation>;
-  hierarchicalScopes: Array<IIoRestorecommerceAuthHierarchicalScope>;
-  unauthenticated: Scalars['Boolean'];
-  token: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
+  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
-  role: Scalars['String'];
-  attributes: Array<IIoRestorecommerceAttributeAttribute>;
-  id: Scalars['String'];
+  role?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id: Scalars['String'];
-  value: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthHierarchicalScope = {
-  id: Scalars['String'];
-  children: Array<IIoRestorecommerceAuthHierarchicalScope>;
-  role: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
+  role?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserFindRequest = {
-  id: Scalars['String'];
-  name: Scalars['String'];
-  email: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserFindByRoleRequest = {
-  role: Scalars['String'];
-  attributes: Array<IIoRestorecommerceAttributeAttribute>;
-  subject: IIoRestorecommerceAuthSubject;
+  role?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type ProtoIoRestorecommerceUserUser = {
@@ -266,7 +284,7 @@ export type ProtoIoRestorecommerceUserUser = {
 };
 
 export type IIoRestorecommerceUserFindByTokenRequest = {
-  token: Scalars['String'];
+  token?: Maybe<Scalars['String']>;
 };
 
 export type IdentityRoleQuery = {
@@ -287,18 +305,18 @@ export type ProtoIoRestorecommerceRoleRoleList = {
 
 export type IoRestorecommerceRoleRoleList = {
   __typename?: 'IoRestorecommerceRoleRoleList';
-  items: Array<IoRestorecommerceRoleRole>;
-  totalCount: Scalars['Int'];
-  subject: IoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IoRestorecommerceRoleRole>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IoRestorecommerceAuthSubject>;
 };
 
 export type IoRestorecommerceRoleRole = {
   __typename?: 'IoRestorecommerceRoleRole';
-  id: Scalars['String'];
-  meta: IoRestorecommerceMetaMeta;
-  name: Scalars['String'];
-  description: Scalars['String'];
-  assignableByRoles: Array<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  assignableByRoles?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IdentityAuthenticationLogQuery = {
@@ -319,23 +337,23 @@ export type ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList = {
 
 export type IoRestorecommerceAuthenticationLogAuthenticationLogList = {
   __typename?: 'IoRestorecommerceAuthenticationLogAuthenticationLogList';
-  items: Array<IoRestorecommerceAuthenticationLogAuthenticationLog>;
-  totalCount: Scalars['Int'];
-  subject: IoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IoRestorecommerceAuthenticationLogAuthenticationLog>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IoRestorecommerceAuthSubject>;
 };
 
 export type IoRestorecommerceAuthenticationLogAuthenticationLog = {
   __typename?: 'IoRestorecommerceAuthenticationLogAuthenticationLog';
-  id: Scalars['String'];
-  ipv4Address: Scalars['String'];
-  ipv6Address: Scalars['String'];
-  operatingSystem: Scalars['String'];
-  userAgent: Scalars['String'];
-  date: Scalars['Float'];
-  activity: Scalars['String'];
-  meta: IoRestorecommerceMetaMeta;
-  subjectId: Scalars['String'];
-  tokenName: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  ipv4Address?: Maybe<Scalars['String']>;
+  ipv6Address?: Maybe<Scalars['String']>;
+  operatingSystem?: Maybe<Scalars['String']>;
+  userAgent?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['Float']>;
+  activity?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  subjectId?: Maybe<Scalars['String']>;
+  tokenName?: Maybe<Scalars['String']>;
 };
 
 export type IdentityTokenQuery = {
@@ -356,15 +374,15 @@ export type ProtoGoogleProtobufAny = {
 
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
-  typeUrl: Scalars['String'];
-  value: Scalars['TodoScalar'];
+  typeUrl?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['TodoScalar']>;
 };
 
 
 export type IIoRestorecommerceTokenIdentifier = {
-  id: Scalars['String'];
-  type: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type Mutation = {
@@ -481,65 +499,65 @@ export type IdentityUserMutationSendInvitationEmailArgs = {
 };
 
 export type IIoRestorecommerceUserUserList = {
-  items: Array<IIoRestorecommerceUserUser>;
-  totalCount: Scalars['Int'];
-  subject: IIoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IIoRestorecommerceUserUser>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserUser = {
-  id: Scalars['String'];
-  meta: IIoRestorecommerceMetaMeta;
-  name: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  newEmail: Scalars['String'];
-  active: Scalars['Boolean'];
-  activationCode: Scalars['String'];
-  password: Scalars['String'];
-  passwordHash: Scalars['String'];
-  roleAssociations: Array<IIoRestorecommerceAuthRoleAssociation>;
-  timezoneId: Scalars['String'];
-  localeId: Scalars['String'];
-  defaultScope: Scalars['String'];
-  unauthenticated: Scalars['Boolean'];
-  guest: Scalars['Boolean'];
-  image: IIoRestorecommerceImageImage;
-  userType: IoRestorecommerceUserUserType;
-  invite: Scalars['Boolean'];
-  invitedByUserName: Scalars['String'];
-  invitedByUserFirstName: Scalars['String'];
-  invitedByUserLastName: Scalars['String'];
-  tokens: Array<IIoRestorecommerceAuthTokens>;
-  lastLogin: Scalars['Float'];
-  lastAccess: Scalars['Float'];
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IIoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  newEmail?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  activationCode?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  passwordHash?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
+  timezoneId?: Maybe<Scalars['String']>;
+  localeId?: Maybe<Scalars['String']>;
+  defaultScope?: Maybe<Scalars['String']>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  guest?: Maybe<Scalars['Boolean']>;
+  image?: Maybe<IIoRestorecommerceImageImage>;
+  userType?: Maybe<IoRestorecommerceUserUserType>;
+  invite?: Maybe<Scalars['Boolean']>;
+  invitedByUserName?: Maybe<Scalars['String']>;
+  invitedByUserFirstName?: Maybe<Scalars['String']>;
+  invitedByUserLastName?: Maybe<Scalars['String']>;
+  tokens?: Maybe<Array<IIoRestorecommerceAuthTokens>>;
+  lastLogin?: Maybe<Scalars['Float']>;
+  lastAccess?: Maybe<Scalars['Float']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created: Scalars['Float'];
-  modified: Scalars['Float'];
-  modifiedBy: Scalars['String'];
-  owner: Array<IIoRestorecommerceAttributeAttribute>;
+  created?: Maybe<Scalars['Float']>;
+  modified?: Maybe<Scalars['Float']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceImageImage = {
-  id: Scalars['String'];
-  caption: Scalars['String'];
-  filename: Scalars['String'];
-  contentType: Scalars['String'];
-  url: Scalars['String'];
-  width: Scalars['Float'];
-  height: Scalars['Float'];
-  length: Scalars['Float'];
+  id?: Maybe<Scalars['String']>;
+  caption?: Maybe<Scalars['String']>;
+  filename?: Maybe<Scalars['String']>;
+  contentType?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']>;
+  width?: Maybe<Scalars['Float']>;
+  height?: Maybe<Scalars['Float']>;
+  length?: Maybe<Scalars['Float']>;
 };
 
 export type IIoRestorecommerceAuthTokens = {
-  name: Scalars['String'];
-  expiresIn: Scalars['Float'];
-  token: Scalars['String'];
-  scopes: Array<Scalars['String']>;
-  type: Scalars['String'];
-  interactive: Scalars['Boolean'];
+  name?: Maybe<Scalars['String']>;
+  expiresIn?: Maybe<Scalars['Float']>;
+  token?: Maybe<Scalars['String']>;
+  scopes?: Maybe<Array<Scalars['String']>>;
+  type?: Maybe<Scalars['String']>;
+  interactive?: Maybe<Scalars['Boolean']>;
 };
 
 export type ProtoGoogleProtobufEmpty = {
@@ -548,75 +566,75 @@ export type ProtoGoogleProtobufEmpty = {
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
-  collection: Scalars['Boolean'];
-  ids: Array<Scalars['String']>;
-  subject: IIoRestorecommerceAuthSubject;
+  collection?: Maybe<Scalars['Boolean']>;
+  ids?: Maybe<Array<Scalars['String']>>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserRegisterRequest = {
-  id: Scalars['String'];
-  guest: Scalars['Boolean'];
-  meta: IIoRestorecommerceMetaMeta;
-  name: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  timezoneId: Scalars['String'];
-  localeId: Scalars['String'];
-  roleAssociations: Array<IIoRestorecommerceAuthRoleAssociation>;
-  defaultScope: Scalars['String'];
-  userType: IoRestorecommerceUserUserType;
-  captchaCode: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  guest?: Maybe<Scalars['Boolean']>;
+  meta?: Maybe<IIoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  timezoneId?: Maybe<Scalars['String']>;
+  localeId?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
+  defaultScope?: Maybe<Scalars['String']>;
+  userType?: Maybe<IoRestorecommerceUserUserType>;
+  captchaCode?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserActivateRequest = {
-  name: Scalars['String'];
-  activationCode: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  name?: Maybe<Scalars['String']>;
+  activationCode?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserChangePasswordRequest = {
-  id: Scalars['String'];
-  password: Scalars['String'];
-  newPassword: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  newPassword?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserRequestPasswordChangeRequest = {
-  name: Scalars['TodoScalar'];
-  email: Scalars['TodoScalar'];
-  subject: IIoRestorecommerceAuthSubject;
+  name?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserChangeEmailRequest = {
-  id: Scalars['String'];
-  email: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmPasswordChangeRequest = {
-  name: Scalars['String'];
-  activationCode: Scalars['String'];
-  password: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  name?: Maybe<Scalars['String']>;
+  activationCode?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmEmailChangeRequest = {
-  name: Scalars['String'];
-  activationCode: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  name?: Maybe<Scalars['String']>;
+  activationCode?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserUnregisterRequest = {
-  id: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserLoginRequest = {
-  identifier: Scalars['String'];
-  password: Scalars['String'];
-  token: Scalars['String'];
+  identifier?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceUserUserIDs = {
@@ -627,25 +645,25 @@ export type ProtoIoRestorecommerceUserUserIDs = {
 
 export type IoRestorecommerceUserUserIDs = {
   __typename?: 'IoRestorecommerceUserUserIDs';
-  userIds: Array<Scalars['String']>;
+  userIds?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IIoRestorecommerceUserOrgIdRequest = {
-  orgIds: Array<Scalars['String']>;
-  subject: IIoRestorecommerceAuthSubject;
+  orgIds?: Maybe<Array<Scalars['String']>>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmUserInvitationRequest = {
-  name: Scalars['String'];
-  password: Scalars['String'];
-  activationCode: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  activationCode?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserSendInvitationEmailRequest = {
-  userId: Scalars['String'];
-  invitedByUserId: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  userId?: Maybe<Scalars['String']>;
+  invitedByUserId?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IdentityRoleMutation = {
@@ -677,17 +695,17 @@ export type IdentityRoleMutationUpsertArgs = {
 };
 
 export type IIoRestorecommerceRoleRoleList = {
-  items: Array<IIoRestorecommerceRoleRole>;
-  totalCount: Scalars['Int'];
-  subject: IIoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IIoRestorecommerceRoleRole>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceRoleRole = {
-  id: Scalars['String'];
-  meta: IIoRestorecommerceMetaMeta;
-  name: Scalars['String'];
-  description: Scalars['String'];
-  assignableByRoles: Array<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IIoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  assignableByRoles?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IdentityAuthenticationLogMutation = {
@@ -719,22 +737,22 @@ export type IdentityAuthenticationLogMutationUpsertArgs = {
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLogList = {
-  items: Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>;
-  totalCount: Scalars['Int'];
-  subject: IIoRestorecommerceAuthSubject;
+  items?: Maybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
-  id: Scalars['String'];
-  ipv4Address: Scalars['String'];
-  ipv6Address: Scalars['String'];
-  operatingSystem: Scalars['String'];
-  userAgent: Scalars['String'];
-  date: Scalars['Float'];
-  activity: Scalars['String'];
-  meta: IIoRestorecommerceMetaMeta;
-  subjectId: Scalars['String'];
-  tokenName: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  ipv4Address?: Maybe<Scalars['String']>;
+  ipv6Address?: Maybe<Scalars['String']>;
+  operatingSystem?: Maybe<Scalars['String']>;
+  userAgent?: Maybe<Scalars['String']>;
+  date?: Maybe<Scalars['Float']>;
+  activity?: Maybe<Scalars['String']>;
+  meta?: Maybe<IIoRestorecommerceMetaMeta>;
+  subjectId?: Maybe<Scalars['String']>;
+  tokenName?: Maybe<Scalars['String']>;
 };
 
 export type IdentityTokenMutation = {
@@ -766,16 +784,16 @@ export type IdentityTokenMutationConsumeArgs = {
 };
 
 export type IIoRestorecommerceTokenTokenData = {
-  id: Scalars['String'];
-  payload: IGoogleProtobufAny;
-  expiresIn: Scalars['Float'];
-  type: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  id?: Maybe<Scalars['String']>;
+  payload?: Maybe<IGoogleProtobufAny>;
+  expiresIn?: Maybe<Scalars['Float']>;
+  type?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceTokenGrantId = {
-  grantId: Scalars['String'];
-  subject: IIoRestorecommerceAuthSubject;
+  grantId?: Maybe<Scalars['String']>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -867,7 +885,10 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IoRestorecommerceResourcebaseSortSortOrder: IoRestorecommerceResourcebaseSortSortOrder;
   IGoogleProtobufStruct: IGoogleProtobufStruct;
-  MapScalar: ResolverTypeWrapper<Scalars['MapScalar']>;
+  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
+  IGoogleProtobufValue: IGoogleProtobufValue;
+  GoogleProtobufNullValue: GoogleProtobufNullValue;
+  IGoogleProtobufListValue: IGoogleProtobufListValue;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -950,7 +971,9 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IGoogleProtobufStruct: IGoogleProtobufStruct;
-  MapScalar: Scalars['MapScalar'];
+  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
+  IGoogleProtobufValue: IGoogleProtobufValue;
+  IGoogleProtobufListValue: IGoogleProtobufListValue;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
@@ -1044,109 +1067,105 @@ export type StatusTypeResolvers<ContextType = IdentityContext, ParentType extend
 }>;
 
 export type IoRestorecommerceUserUserListResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserList'] = ResolversParentTypes['IoRestorecommerceUserUserList']> = ResolversObject<{
-  items?: Resolver<Array<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
-  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes['IoRestorecommerceAuthSubject'], ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUserUser']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUser'] = ResolversParentTypes['IoRestorecommerceUserUser']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['IoRestorecommerceMetaMeta'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  newEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  activationCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  passwordHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  roleAssociations?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>, ParentType, ContextType>;
-  timezoneId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  localeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  defaultScope?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  unauthenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  guest?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes['IoRestorecommerceImageImage'], ParentType, ContextType>;
-  userType?: Resolver<ResolversTypes['IoRestorecommerceUserUserType'], ParentType, ContextType>;
-  invite?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  invitedByUserName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  invitedByUserFirstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  invitedByUserLastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tokens?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthTokens']>, ParentType, ContextType>;
-  lastLogin?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  lastAccess?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  newEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  activationCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  passwordHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
+  timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
+  userType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserType']>, ParentType, ContextType>;
+  invite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  invitedByUserName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invitedByUserFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
-  created?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  modified?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  modifiedBy?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  owner?: Resolver<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
+  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAuthRoleAssociationResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthRoleAssociation'] = ResolversParentTypes['IoRestorecommerceAuthRoleAssociation']> = ResolversObject<{
-  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  attributes?: Resolver<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceImageImageResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceImageImage'] = ResolversParentTypes['IoRestorecommerceImageImage']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  caption?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  contentType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  width?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  height?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  length?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  caption?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  filename?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contentType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  width?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  height?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  length?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 'undefined', INDIVIDUAL_USER: 1, GUEST: 2, TECHNICAL_USER: 3, UNRECOGNIZED: -1 };
+export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 'undefined', INDIVIDUAL_USER: 1, GUEST: 2, TECHNICAL_USER: 3 };
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  expiresIn?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  scopes?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  interactive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  scopes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAuthSubjectResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthSubject'] = ResolversParentTypes['IoRestorecommerceAuthSubject']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  scope?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  roleAssociations?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>, ParentType, ContextType>;
-  hierarchicalScopes?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>, ParentType, ContextType>;
-  unauthenticated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  scope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
+  hierarchicalScopes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
+  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope'] = ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  children?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>, ParentType, ContextType>;
-  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  children?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
+  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2, UNRECOGNIZED: -1 };
-
-export interface MapScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['MapScalar'], any> {
-  name: 'MapScalar';
-}
+export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
@@ -1170,18 +1189,18 @@ export type ProtoIoRestorecommerceRoleRoleListResolvers<ContextType = IdentityCo
 }>;
 
 export type IoRestorecommerceRoleRoleListResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceRoleRoleList'] = ResolversParentTypes['IoRestorecommerceRoleRoleList']> = ResolversObject<{
-  items?: Resolver<Array<ResolversTypes['IoRestorecommerceRoleRole']>, ParentType, ContextType>;
-  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes['IoRestorecommerceAuthSubject'], ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceRoleRoleResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceRoleRole'] = ResolversParentTypes['IoRestorecommerceRoleRole']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['IoRestorecommerceMetaMeta'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  assignableByRoles?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  assignableByRoles?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1197,23 +1216,23 @@ export type ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResolver
 }>;
 
 export type IoRestorecommerceAuthenticationLogAuthenticationLogListResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthenticationLogAuthenticationLogList'] = ResolversParentTypes['IoRestorecommerceAuthenticationLogAuthenticationLogList']> = ResolversObject<{
-  items?: Resolver<Array<ResolversTypes['IoRestorecommerceAuthenticationLogAuthenticationLog']>, ParentType, ContextType>;
-  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subject?: Resolver<ResolversTypes['IoRestorecommerceAuthSubject'], ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthenticationLogAuthenticationLog']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAuthenticationLogAuthenticationLogResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthenticationLogAuthenticationLog'] = ResolversParentTypes['IoRestorecommerceAuthenticationLogAuthenticationLog']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  ipv4Address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  ipv6Address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  operatingSystem?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  userAgent?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  date?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  activity?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  meta?: Resolver<ResolversTypes['IoRestorecommerceMetaMeta'], ParentType, ContextType>;
-  subjectId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  tokenName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ipv4Address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ipv6Address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  operatingSystem?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userAgent?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  activity?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  subjectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokenName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1229,8 +1248,8 @@ export type ProtoGoogleProtobufAnyResolvers<ContextType = IdentityContext, Paren
 }>;
 
 export type GoogleProtobufAnyResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
-  typeUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['TodoScalar'], ParentType, ContextType>;
+  typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1282,7 +1301,7 @@ export type ProtoIoRestorecommerceUserUserIDsResolvers<ContextType = IdentityCon
 }>;
 
 export type IoRestorecommerceUserUserIDsResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserIDs'] = ResolversParentTypes['IoRestorecommerceUserUserIDs']> = ResolversObject<{
-  userIds?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  userIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1327,7 +1346,6 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceAuthSubject?: IoRestorecommerceAuthSubjectResolvers<ContextType>;
   IoRestorecommerceAuthHierarchicalScope?: IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
-  MapScalar?: GraphQLScalarType;
   Upload?: GraphQLScalarType;
   ProtoIoRestorecommerceUserUser?: ProtoIoRestorecommerceUserUserResolvers<ContextType>;
   IdentityRoleQuery?: IdentityRoleQueryResolvers<ContextType>;

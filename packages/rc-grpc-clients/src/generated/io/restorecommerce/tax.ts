@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.tax";
 
 export interface Deleted {
   id: string;
@@ -25,89 +40,15 @@ export interface Tax {
   typeId: string;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseTaxList: object = {
-  totalCount: 0,
-};
-
-const baseTax: object = {
-  id: "",
-  countryId: "",
-  rate: 0,
-  variant: "",
-  typeId: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<TaxList>;
-
-  Create(request: TaxList): Promise<TaxList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: TaxList): Promise<TaxList>;
-
-  Upsert(request: TaxList): Promise<TaxList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.tax'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -124,6 +65,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -133,6 +75,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -142,12 +85,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseTaxList: object = { totalCount: 0 };
 
 export const TaxList = {
   encode(message: TaxList, writer: Writer = Writer.create()): Writer {
@@ -160,7 +106,8 @@ export const TaxList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): TaxList {
+
+  decode(input: Reader | Uint8Array, length?: number): TaxList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseTaxList } as TaxList;
@@ -184,6 +131,7 @@ export const TaxList = {
     }
     return message;
   },
+
   fromJSON(object: any): TaxList {
     const message = { ...baseTaxList } as TaxList;
     message.items = [];
@@ -204,6 +152,7 @@ export const TaxList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<TaxList>): TaxList {
     const message = { ...baseTaxList } as TaxList;
     message.items = [];
@@ -224,17 +173,29 @@ export const TaxList = {
     }
     return message;
   },
+
   toJSON(message: TaxList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Tax.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Tax.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseTax: object = {
+  id: "",
+  countryId: "",
+  rate: 0,
+  variant: "",
+  typeId: "",
 };
 
 export const Tax = {
@@ -249,7 +210,8 @@ export const Tax = {
     writer.uint32(50).string(message.typeId);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Tax {
+
+  decode(input: Reader | Uint8Array, length?: number): Tax {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseTax } as Tax;
@@ -281,6 +243,7 @@ export const Tax = {
     }
     return message;
   },
+
   fromJSON(object: any): Tax {
     const message = { ...baseTax } as Tax;
     if (object.id !== undefined && object.id !== null) {
@@ -315,6 +278,7 @@ export const Tax = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Tax>): Tax {
     const message = { ...baseTax } as Tax;
     if (object.id !== undefined && object.id !== null) {
@@ -349,10 +313,12 @@ export const Tax = {
     }
     return message;
   },
+
   toJSON(message: Tax): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.countryId !== undefined && (obj.countryId = message.countryId);
     message.rate !== undefined && (obj.rate = message.rate);
     message.variant !== undefined && (obj.variant = message.variant);
@@ -361,37 +327,183 @@ export const Tax = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<TaxList>;
+  Create(request: TaxList): Promise<TaxList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: TaxList): Promise<TaxList>;
+  Upsert(request: TaxList): Promise<TaxList>;
 }
-export const metaTaxList: { [key in keyof Required<TaxList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.tax.Tax', name:'Tax'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaTax: { [key in keyof Required<Tax>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  countryId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  rate: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  variant: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  typeId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: TaxList.decode} as MetaService<ReadRequest, TaxList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaService<TaxList, TaxList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaService<TaxList, TaxList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.tax.TaxList', name:'TaxList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: TaxList.encode, decodeResponse: TaxList.decode} as MetaService<TaxList, TaxList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.tax.Deleted', Deleted, metaDeleted],
-  TaxList: ['message', '.io.restorecommerce.tax.TaxList', TaxList, metaTaxList],
-  Tax: ['message', '.io.restorecommerce.tax.Tax', Tax, metaTax],
-  Service: ['service', '.io.restorecommerce.tax.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "TaxList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.tax.Tax",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Tax",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "country_id",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "countryId",
+          },
+          {
+            name: "rate",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "rate",
+          },
+          {
+            name: "variant",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "variant",
+          },
+          {
+            name: "type_id",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "typeId",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.tax.TaxList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.tax.TaxList",
+            outputType: ".io.restorecommerce.tax.TaxList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.tax.TaxList",
+            outputType: ".io.restorecommerce.tax.TaxList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.tax.TaxList",
+            outputType: ".io.restorecommerce.tax.TaxList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/tax.proto",
+    package: "io.restorecommerce.tax",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [12, 0, 18, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.tax.Deleted": Deleted,
+    ".io.restorecommerce.tax.TaxList": TaxList,
+    ".io.restorecommerce.tax.Tax": Tax,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

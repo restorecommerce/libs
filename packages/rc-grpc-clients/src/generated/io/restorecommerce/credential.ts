@@ -1,11 +1,29 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Any } from '../../google/protobuf/any';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.credential";
 
 export interface Deleted {
   id: string;
@@ -24,95 +42,19 @@ export interface Credential {
   description: string;
   user: string;
   pass: string;
-  /**
-   * / additional credentials as auth key or certificates etc
-   */
+  /** / additional credentials as auth key or certificates etc */
   credentials?: Any;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseCredentialList: object = {
-  totalCount: 0,
-};
-
-const baseCredential: object = {
-  id: "",
-  name: "",
-  description: "",
-  user: "",
-  pass: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<CredentialList>;
-
-  Create(request: CredentialList): Promise<CredentialList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: CredentialList): Promise<CredentialList>;
-
-  Upsert(request: CredentialList): Promise<CredentialList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.credential'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -129,6 +71,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -138,6 +81,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -147,12 +91,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseCredentialList: object = { totalCount: 0 };
 
 export const CredentialList = {
   encode(message: CredentialList, writer: Writer = Writer.create()): Writer {
@@ -165,7 +112,8 @@ export const CredentialList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CredentialList {
+
+  decode(input: Reader | Uint8Array, length?: number): CredentialList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCredentialList } as CredentialList;
@@ -189,6 +137,7 @@ export const CredentialList = {
     }
     return message;
   },
+
   fromJSON(object: any): CredentialList {
     const message = { ...baseCredentialList } as CredentialList;
     message.items = [];
@@ -209,6 +158,7 @@ export const CredentialList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CredentialList>): CredentialList {
     const message = { ...baseCredentialList } as CredentialList;
     message.items = [];
@@ -229,17 +179,31 @@ export const CredentialList = {
     }
     return message;
   },
+
   toJSON(message: CredentialList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Credential.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Credential.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseCredential: object = {
+  id: "",
+  name: "",
+  description: "",
+  user: "",
+  pass: "",
 };
 
 export const Credential = {
@@ -252,12 +216,16 @@ export const Credential = {
     writer.uint32(34).string(message.description);
     writer.uint32(42).string(message.user);
     writer.uint32(50).string(message.pass);
-    if (message.credentials !== undefined && message.credentials !== undefined) {
+    if (
+      message.credentials !== undefined &&
+      message.credentials !== undefined
+    ) {
       Any.encode(message.credentials, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Credential {
+
+  decode(input: Reader | Uint8Array, length?: number): Credential {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCredential } as Credential;
@@ -292,6 +260,7 @@ export const Credential = {
     }
     return message;
   },
+
   fromJSON(object: any): Credential {
     const message = { ...baseCredential } as Credential;
     if (object.id !== undefined && object.id !== null) {
@@ -331,6 +300,7 @@ export const Credential = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Credential>): Credential {
     const message = { ...baseCredential } as Credential;
     if (object.id !== undefined && object.id !== null) {
@@ -370,51 +340,218 @@ export const Credential = {
     }
     return message;
   },
+
   toJSON(message: Credential): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.user !== undefined && (obj.user = message.user);
     message.pass !== undefined && (obj.pass = message.pass);
-    message.credentials !== undefined && (obj.credentials = message.credentials ? Any.toJSON(message.credentials) : undefined);
+    message.credentials !== undefined &&
+      (obj.credentials = message.credentials
+        ? Any.toJSON(message.credentials)
+        : undefined);
     return obj;
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<CredentialList>;
+  Create(request: CredentialList): Promise<CredentialList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: CredentialList): Promise<CredentialList>;
+  Upsert(request: CredentialList): Promise<CredentialList>;
 }
-export const metaCredentialList: { [key in keyof Required<CredentialList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.credential.Credential', name:'Credential'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaCredential: { [key in keyof Required<Credential>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  user: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  pass: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  credentials: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CredentialList.decode} as MetaService<ReadRequest, CredentialList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaService<CredentialList, CredentialList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaService<CredentialList, CredentialList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.credential.CredentialList', name:'CredentialList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CredentialList.encode, decodeResponse: CredentialList.decode} as MetaService<CredentialList, CredentialList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.credential.Deleted', Deleted, metaDeleted],
-  CredentialList: ['message', '.io.restorecommerce.credential.CredentialList', CredentialList, metaCredentialList],
-  Credential: ['message', '.io.restorecommerce.credential.Credential', Credential, metaCredential],
-  Service: ['service', '.io.restorecommerce.credential.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "google/protobuf/empty.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "CredentialList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.credential.Credential",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Credential",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "user",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "user",
+          },
+          {
+            name: "pass",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "pass",
+          },
+          {
+            name: "credentials",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "credentials",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.credential.CredentialList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/credential.proto",
+    package: "io.restorecommerce.credential",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [13, 0, 19, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+        {
+          path: [4, 2, 2, 6],
+          span: [38, 2, 38],
+          trailingComments:
+            "/ additional credentials as auth key or certificates etc\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.credential.Deleted": Deleted,
+    ".io.restorecommerce.credential.CredentialList": CredentialList,
+    ".io.restorecommerce.credential.Credential": Credential,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

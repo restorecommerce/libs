@@ -47,47 +47,47 @@ export type StatusType = {
 
 export type IoRestorecommerceSearchSearchResponse = {
   __typename?: 'IoRestorecommerceSearchSearchResponse';
-  data: Array<GoogleProtobufAny>;
+  data?: Maybe<Array<GoogleProtobufAny>>;
 };
 
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
-  typeUrl: Scalars['String'];
-  value: Scalars['TodoScalar'];
+  typeUrl?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['TodoScalar']>;
 };
 
 
 export type IIoRestorecommerceSearchSearchRequest = {
-  collection: Scalars['String'];
-  text: Scalars['String'];
-  acl: Array<Scalars['String']>;
-  subject: IIoRestorecommerceAuthSubject;
+  collection?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  acl?: Maybe<Array<Scalars['String']>>;
+  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceAuthSubject = {
-  id: Scalars['String'];
-  scope: Scalars['String'];
-  roleAssociations: Array<IIoRestorecommerceAuthRoleAssociation>;
-  hierarchicalScopes: Array<IIoRestorecommerceAuthHierarchicalScope>;
-  unauthenticated: Scalars['Boolean'];
-  token: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  scope?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
+  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  token?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
-  role: Scalars['String'];
-  attributes: Array<IIoRestorecommerceAttributeAttribute>;
-  id: Scalars['String'];
+  role?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id: Scalars['String'];
-  value: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthHierarchicalScope = {
-  id: Scalars['String'];
-  children: Array<IIoRestorecommerceAuthHierarchicalScope>;
-  role: Scalars['String'];
+  id?: Maybe<Scalars['String']>;
+  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
+  role?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -215,13 +215,13 @@ export type StatusTypeResolvers<ContextType = IndexingContext, ParentType extend
 }>;
 
 export type IoRestorecommerceSearchSearchResponseResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IoRestorecommerceSearchSearchResponse'] = ResolversParentTypes['IoRestorecommerceSearchSearchResponse']> = ResolversObject<{
-  data?: Resolver<Array<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<Array<ResolversTypes['GoogleProtobufAny']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type GoogleProtobufAnyResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
-  typeUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['TodoScalar'], ParentType, ContextType>;
+  typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

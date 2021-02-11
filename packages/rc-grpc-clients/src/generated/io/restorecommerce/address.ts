@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.address";
 
 export interface Deleted {
   id: string;
@@ -40,102 +55,15 @@ export interface AddressAddition {
   field2: string;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseAddressList: object = {
-  totalCount: 0,
-};
-
-const baseAddress: object = {
-  id: "",
-  postcode: "",
-  countryId: "",
-  locality: "",
-  street: "",
-  region: "",
-  altitude: 0,
-  buildingNumber: "",
-};
-
-const baseAddress_GeoPoint: object = {
-  latitude: 0,
-  longitude: 0,
-};
-
-const baseAddressAddition: object = {
-  field1: "",
-  field2: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<AddressList>;
-
-  Create(request: AddressList): Promise<AddressList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: AddressList): Promise<AddressList>;
-
-  Upsert(request: AddressList): Promise<AddressList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.address'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -152,6 +80,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -161,6 +90,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -170,12 +100,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseAddressList: object = { totalCount: 0 };
 
 export const AddressList = {
   encode(message: AddressList, writer: Writer = Writer.create()): Writer {
@@ -188,7 +121,8 @@ export const AddressList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): AddressList {
+
+  decode(input: Reader | Uint8Array, length?: number): AddressList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAddressList } as AddressList;
@@ -212,6 +146,7 @@ export const AddressList = {
     }
     return message;
   },
+
   fromJSON(object: any): AddressList {
     const message = { ...baseAddressList } as AddressList;
     message.items = [];
@@ -232,6 +167,7 @@ export const AddressList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<AddressList>): AddressList {
     const message = { ...baseAddressList } as AddressList;
     message.items = [];
@@ -252,17 +188,32 @@ export const AddressList = {
     }
     return message;
   },
+
   toJSON(message: AddressList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Address.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Address.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseAddress: object = {
+  id: "",
+  postcode: "",
+  countryId: "",
+  locality: "",
+  street: "",
+  region: "",
+  altitude: 0,
+  buildingNumber: "",
 };
 
 export const Address = {
@@ -276,17 +227,30 @@ export const Address = {
     writer.uint32(42).string(message.locality);
     writer.uint32(50).string(message.street);
     writer.uint32(58).string(message.region);
-    if (message.geoCoordinates !== undefined && message.geoCoordinates !== undefined) {
-      Address_GeoPoint.encode(message.geoCoordinates, writer.uint32(66).fork()).ldelim();
+    if (
+      message.geoCoordinates !== undefined &&
+      message.geoCoordinates !== undefined
+    ) {
+      Address_GeoPoint.encode(
+        message.geoCoordinates,
+        writer.uint32(66).fork()
+      ).ldelim();
     }
     writer.uint32(73).double(message.altitude);
     writer.uint32(82).string(message.buildingNumber);
-    if (message.addressAddition !== undefined && message.addressAddition !== undefined) {
-      AddressAddition.encode(message.addressAddition, writer.uint32(90).fork()).ldelim();
+    if (
+      message.addressAddition !== undefined &&
+      message.addressAddition !== undefined
+    ) {
+      AddressAddition.encode(
+        message.addressAddition,
+        writer.uint32(90).fork()
+      ).ldelim();
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Address {
+
+  decode(input: Reader | Uint8Array, length?: number): Address {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAddress } as Address;
@@ -315,7 +279,10 @@ export const Address = {
           message.region = reader.string();
           break;
         case 8:
-          message.geoCoordinates = Address_GeoPoint.decode(reader, reader.uint32());
+          message.geoCoordinates = Address_GeoPoint.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 9:
           message.altitude = reader.double();
@@ -324,7 +291,10 @@ export const Address = {
           message.buildingNumber = reader.string();
           break;
         case 11:
-          message.addressAddition = AddressAddition.decode(reader, reader.uint32());
+          message.addressAddition = AddressAddition.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -333,6 +303,7 @@ export const Address = {
     }
     return message;
   },
+
   fromJSON(object: any): Address {
     const message = { ...baseAddress } as Address;
     if (object.id !== undefined && object.id !== null) {
@@ -385,13 +356,19 @@ export const Address = {
     } else {
       message.buildingNumber = "";
     }
-    if (object.addressAddition !== undefined && object.addressAddition !== null) {
-      message.addressAddition = AddressAddition.fromJSON(object.addressAddition);
+    if (
+      object.addressAddition !== undefined &&
+      object.addressAddition !== null
+    ) {
+      message.addressAddition = AddressAddition.fromJSON(
+        object.addressAddition
+      );
     } else {
       message.addressAddition = undefined;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Address>): Address {
     const message = { ...baseAddress } as Address;
     if (object.id !== undefined && object.id !== null) {
@@ -430,7 +407,9 @@ export const Address = {
       message.region = "";
     }
     if (object.geoCoordinates !== undefined && object.geoCoordinates !== null) {
-      message.geoCoordinates = Address_GeoPoint.fromPartial(object.geoCoordinates);
+      message.geoCoordinates = Address_GeoPoint.fromPartial(
+        object.geoCoordinates
+      );
     } else {
       message.geoCoordinates = undefined;
     }
@@ -444,29 +423,45 @@ export const Address = {
     } else {
       message.buildingNumber = "";
     }
-    if (object.addressAddition !== undefined && object.addressAddition !== null) {
-      message.addressAddition = AddressAddition.fromPartial(object.addressAddition);
+    if (
+      object.addressAddition !== undefined &&
+      object.addressAddition !== null
+    ) {
+      message.addressAddition = AddressAddition.fromPartial(
+        object.addressAddition
+      );
     } else {
       message.addressAddition = undefined;
     }
     return message;
   },
+
   toJSON(message: Address): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.postcode !== undefined && (obj.postcode = message.postcode);
     message.countryId !== undefined && (obj.countryId = message.countryId);
     message.locality !== undefined && (obj.locality = message.locality);
     message.street !== undefined && (obj.street = message.street);
     message.region !== undefined && (obj.region = message.region);
-    message.geoCoordinates !== undefined && (obj.geoCoordinates = message.geoCoordinates ? Address_GeoPoint.toJSON(message.geoCoordinates) : undefined);
+    message.geoCoordinates !== undefined &&
+      (obj.geoCoordinates = message.geoCoordinates
+        ? Address_GeoPoint.toJSON(message.geoCoordinates)
+        : undefined);
     message.altitude !== undefined && (obj.altitude = message.altitude);
-    message.buildingNumber !== undefined && (obj.buildingNumber = message.buildingNumber);
-    message.addressAddition !== undefined && (obj.addressAddition = message.addressAddition ? AddressAddition.toJSON(message.addressAddition) : undefined);
+    message.buildingNumber !== undefined &&
+      (obj.buildingNumber = message.buildingNumber);
+    message.addressAddition !== undefined &&
+      (obj.addressAddition = message.addressAddition
+        ? AddressAddition.toJSON(message.addressAddition)
+        : undefined);
     return obj;
   },
 };
+
+const baseAddress_GeoPoint: object = { latitude: 0, longitude: 0 };
 
 export const Address_GeoPoint = {
   encode(message: Address_GeoPoint, writer: Writer = Writer.create()): Writer {
@@ -474,7 +469,8 @@ export const Address_GeoPoint = {
     writer.uint32(17).double(message.longitude);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Address_GeoPoint {
+
+  decode(input: Reader | Uint8Array, length?: number): Address_GeoPoint {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAddress_GeoPoint } as Address_GeoPoint;
@@ -494,6 +490,7 @@ export const Address_GeoPoint = {
     }
     return message;
   },
+
   fromJSON(object: any): Address_GeoPoint {
     const message = { ...baseAddress_GeoPoint } as Address_GeoPoint;
     if (object.latitude !== undefined && object.latitude !== null) {
@@ -508,6 +505,7 @@ export const Address_GeoPoint = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Address_GeoPoint>): Address_GeoPoint {
     const message = { ...baseAddress_GeoPoint } as Address_GeoPoint;
     if (object.latitude !== undefined && object.latitude !== null) {
@@ -522,6 +520,7 @@ export const Address_GeoPoint = {
     }
     return message;
   },
+
   toJSON(message: Address_GeoPoint): unknown {
     const obj: any = {};
     message.latitude !== undefined && (obj.latitude = message.latitude);
@@ -530,13 +529,16 @@ export const Address_GeoPoint = {
   },
 };
 
+const baseAddressAddition: object = { field1: "", field2: "" };
+
 export const AddressAddition = {
   encode(message: AddressAddition, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.field1);
     writer.uint32(18).string(message.field2);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): AddressAddition {
+
+  decode(input: Reader | Uint8Array, length?: number): AddressAddition {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAddressAddition } as AddressAddition;
@@ -556,6 +558,7 @@ export const AddressAddition = {
     }
     return message;
   },
+
   fromJSON(object: any): AddressAddition {
     const message = { ...baseAddressAddition } as AddressAddition;
     if (object.field1 !== undefined && object.field1 !== null) {
@@ -570,6 +573,7 @@ export const AddressAddition = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<AddressAddition>): AddressAddition {
     const message = { ...baseAddressAddition } as AddressAddition;
     if (object.field1 !== undefined && object.field1 !== null) {
@@ -584,6 +588,7 @@ export const AddressAddition = {
     }
     return message;
   },
+
   toJSON(message: AddressAddition): unknown {
     const obj: any = {};
     message.field1 !== undefined && (obj.field1 = message.field1);
@@ -592,52 +597,262 @@ export const AddressAddition = {
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<AddressList>;
+  Create(request: AddressList): Promise<AddressList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: AddressList): Promise<AddressList>;
+  Upsert(request: AddressList): Promise<AddressList>;
 }
-export const metaAddressList: { [key in keyof Required<AddressList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.address.Address', name:'Address'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaAddress: { [key in keyof Required<Address>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  postcode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  countryId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  locality: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  street: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  region: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  geoCoordinates: {kind:'object', type:'.io.restorecommerce.address.Address.GeoPoint', name:'Address_GeoPoint'} as MetaMessage,
-  altitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  buildingNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  addressAddition: {kind:'object', type:'.io.restorecommerce.address.AddressAddition', name:'AddressAddition'} as MetaMessage,
-}
-export const metaAddress_GeoPoint: { [key in keyof Required<Address_GeoPoint>]: MetaBase | string } = {
-  latitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  longitude: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-}
-export const metaAddressAddition: { [key in keyof Required<AddressAddition>]: MetaBase | string } = {
-  field1: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  field2: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: AddressList.decode} as MetaService<ReadRequest, AddressList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.address.AddressList', name:'AddressList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: AddressList.encode, decodeResponse: AddressList.decode} as MetaService<AddressList, AddressList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.address.Deleted', Deleted, metaDeleted],
-  AddressList: ['message', '.io.restorecommerce.address.AddressList', AddressList, metaAddressList],
-  Address: ['message', '.io.restorecommerce.address.Address', Address, metaAddress],
-  Address_GeoPoint: ['message', '.io.restorecommerce.address.Address.GeoPoint', Address_GeoPoint, metaAddress_GeoPoint],
-  AddressAddition: ['message', '.io.restorecommerce.address.AddressAddition', AddressAddition, metaAddressAddition],
-  Service: ['service', '.io.restorecommerce.address.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "AddressList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.address.Address",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Address",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "postcode",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "postcode",
+          },
+          {
+            name: "country_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "countryId",
+          },
+          {
+            name: "locality",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "locality",
+          },
+          {
+            name: "street",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "street",
+          },
+          {
+            name: "region",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "region",
+          },
+          {
+            name: "geo_coordinates",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.address.Address.GeoPoint",
+            jsonName: "geoCoordinates",
+          },
+          {
+            name: "altitude",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "altitude",
+          },
+          {
+            name: "building_number",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "buildingNumber",
+          },
+          {
+            name: "address_addition",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.address.AddressAddition",
+            jsonName: "addressAddition",
+          },
+        ],
+        nestedType: [
+          {
+            name: "GeoPoint",
+            field: [
+              {
+                name: "latitude",
+                number: 1,
+                label: "LABEL_OPTIONAL",
+                type: "TYPE_DOUBLE",
+                jsonName: "latitude",
+              },
+              {
+                name: "longitude",
+                number: 2,
+                label: "LABEL_OPTIONAL",
+                type: "TYPE_DOUBLE",
+                jsonName: "longitude",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "AddressAddition",
+        field: [
+          {
+            name: "field1",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "field1",
+          },
+          {
+            name: "field2",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "field2",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.address.AddressList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.address.AddressList",
+            outputType: ".io.restorecommerce.address.AddressList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.address.AddressList",
+            outputType: ".io.restorecommerce.address.AddressList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.address.AddressList",
+            outputType: ".io.restorecommerce.address.AddressList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/address.proto",
+    package: "io.restorecommerce.address",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [12, 0, 18, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.address.Deleted": Deleted,
+    ".io.restorecommerce.address.AddressList": AddressList,
+    ".io.restorecommerce.address.Address": Address,
+    ".io.restorecommerce.address.Address.GeoPoint": Address_GeoPoint,
+    ".io.restorecommerce.address.AddressAddition": AddressAddition,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

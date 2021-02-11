@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.locale";
 
 export interface Deleted {
   id: string;
@@ -23,87 +38,15 @@ export interface Locale {
   description: string;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseLocaleList: object = {
-  totalCount: 0,
-};
-
-const baseLocale: object = {
-  id: "",
-  value: "",
-  description: "",
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<LocaleList>;
-
-  Create(request: LocaleList): Promise<LocaleList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: LocaleList): Promise<LocaleList>;
-
-  Upsert(request: LocaleList): Promise<LocaleList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.locale'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -120,6 +63,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -129,6 +73,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -138,12 +83,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseLocaleList: object = { totalCount: 0 };
 
 export const LocaleList = {
   encode(message: LocaleList, writer: Writer = Writer.create()): Writer {
@@ -156,7 +104,8 @@ export const LocaleList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): LocaleList {
+
+  decode(input: Reader | Uint8Array, length?: number): LocaleList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseLocaleList } as LocaleList;
@@ -180,6 +129,7 @@ export const LocaleList = {
     }
     return message;
   },
+
   fromJSON(object: any): LocaleList {
     const message = { ...baseLocaleList } as LocaleList;
     message.items = [];
@@ -200,6 +150,7 @@ export const LocaleList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<LocaleList>): LocaleList {
     const message = { ...baseLocaleList } as LocaleList;
     message.items = [];
@@ -220,18 +171,24 @@ export const LocaleList = {
     }
     return message;
   },
+
   toJSON(message: LocaleList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Locale.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseLocale: object = { id: "", value: "", description: "" };
 
 export const Locale = {
   encode(message: Locale, writer: Writer = Writer.create()): Writer {
@@ -243,7 +200,8 @@ export const Locale = {
     writer.uint32(34).string(message.description);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Locale {
+
+  decode(input: Reader | Uint8Array, length?: number): Locale {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseLocale } as Locale;
@@ -269,6 +227,7 @@ export const Locale = {
     }
     return message;
   },
+
   fromJSON(object: any): Locale {
     const message = { ...baseLocale } as Locale;
     if (object.id !== undefined && object.id !== null) {
@@ -293,6 +252,7 @@ export const Locale = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Locale>): Locale {
     const message = { ...baseLocale } as Locale;
     if (object.id !== undefined && object.id !== null) {
@@ -317,45 +277,182 @@ export const Locale = {
     }
     return message;
   },
+
   toJSON(message: Locale): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = message.value);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     return obj;
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<LocaleList>;
+  Create(request: LocaleList): Promise<LocaleList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: LocaleList): Promise<LocaleList>;
+  Upsert(request: LocaleList): Promise<LocaleList>;
 }
-export const metaLocaleList: { [key in keyof Required<LocaleList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.locale.Locale', name:'Locale'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaLocale: { [key in keyof Required<Locale>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  value: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: LocaleList.decode} as MetaService<ReadRequest, LocaleList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaService<LocaleList, LocaleList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaService<LocaleList, LocaleList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.locale.LocaleList', name:'LocaleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: LocaleList.encode, decodeResponse: LocaleList.decode} as MetaService<LocaleList, LocaleList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.locale.Deleted', Deleted, metaDeleted],
-  LocaleList: ['message', '.io.restorecommerce.locale.LocaleList', LocaleList, metaLocaleList],
-  Locale: ['message', '.io.restorecommerce.locale.Locale', Locale, metaLocale],
-  Service: ['service', '.io.restorecommerce.locale.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "LocaleList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.locale.Locale",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Locale",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "value",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "value",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.locale.LocaleList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/locale.proto",
+    package: "io.restorecommerce.locale",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [12, 0, 18, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.locale.Deleted": Deleted,
+    ".io.restorecommerce.locale.LocaleList": LocaleList,
+    ".io.restorecommerce.locale.Locale": Locale,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

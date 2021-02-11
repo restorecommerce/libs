@@ -1,15 +1,31 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Subject } from '../../io/restorecommerce/auth';
-import { Image } from '../../io/restorecommerce/image';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Image,
+  protoMetadata as io_restorecommerce_image_protoMetadata,
+} from "../../io/restorecommerce/image";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.product";
 
-/**
- *  Product resource
- */
+/** Product resource */
 export interface MainProduct {
   id: string;
   product?: Product | undefined;
@@ -77,117 +93,7 @@ export interface Deleted {
   id: string;
 }
 
-const baseMainProduct: object = {
-  id: "",
-  active: false,
-};
-
-const baseProduct: object = {
-  id: "",
-  name: "",
-  description: "",
-  manufacturerId: "",
-  taricCode: "",
-  taxTypeId: "",
-  gtin: "",
-};
-
-const baseIdentifier: object = {
-  id: "",
-};
-
-const baseProductList: object = {
-  totalCount: 0,
-};
-
-const baseVariant: object = {
-  id: "",
-  name: "",
-  description: "",
-  stockLevel: 0,
-  price: 0,
-  sale: false,
-  salePrice: 0,
-  stockKeepingUnit: "",
-};
-
-const baseVariantAttribute: object = {
-  key: "",
-  values: "",
-};
-
-const baseBundle: object = {
-  id: "",
-  name: "",
-  description: "",
-  price: 0,
-};
-
-const baseBundleProduct: object = {
-  productId: "",
-  quantity: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<ProductList>;
-
-  Create(request: ProductList): Promise<ProductList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: ProductList): Promise<ProductList>;
-
-  Upsert(request: ProductList): Promise<ProductList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.product'
+const baseMainProduct: object = { id: "", active: false };
 
 export const MainProduct = {
   encode(message: MainProduct, writer: Writer = Writer.create()): Writer {
@@ -204,7 +110,8 @@ export const MainProduct = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): MainProduct {
+
+  decode(input: Reader | Uint8Array, length?: number): MainProduct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMainProduct } as MainProduct;
@@ -233,6 +140,7 @@ export const MainProduct = {
     }
     return message;
   },
+
   fromJSON(object: any): MainProduct {
     const message = { ...baseMainProduct } as MainProduct;
     if (object.id !== undefined && object.id !== null) {
@@ -262,6 +170,7 @@ export const MainProduct = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<MainProduct>): MainProduct {
     const message = { ...baseMainProduct } as MainProduct;
     if (object.id !== undefined && object.id !== null) {
@@ -291,15 +200,31 @@ export const MainProduct = {
     }
     return message;
   },
+
   toJSON(message: MainProduct): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.product !== undefined && (obj.product = message.product ? Product.toJSON(message.product) : undefined);
-    message.bundle !== undefined && (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
+    message.product !== undefined &&
+      (obj.product = message.product
+        ? Product.toJSON(message.product)
+        : undefined);
+    message.bundle !== undefined &&
+      (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
     message.active !== undefined && (obj.active = message.active);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
   },
+};
+
+const baseProduct: object = {
+  id: "",
+  name: "",
+  description: "",
+  manufacturerId: "",
+  taricCode: "",
+  taxTypeId: "",
+  gtin: "",
 };
 
 export const Product = {
@@ -324,7 +249,8 @@ export const Product = {
     writer.uint32(82).string(message.gtin);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Product {
+
+  decode(input: Reader | Uint8Array, length?: number): Product {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseProduct } as Product;
@@ -370,6 +296,7 @@ export const Product = {
     }
     return message;
   },
+
   fromJSON(object: any): Product {
     const message = { ...baseProduct } as Product;
     message.taxTypeId = [];
@@ -426,6 +353,7 @@ export const Product = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Product>): Product {
     const message = { ...baseProduct } as Product;
     message.taxTypeId = [];
@@ -482,22 +410,33 @@ export const Product = {
     }
     return message;
   },
+
   toJSON(message: Product): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.manufacturerId !== undefined && (obj.manufacturerId = message.manufacturerId);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.manufacturerId !== undefined &&
+      (obj.manufacturerId = message.manufacturerId);
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
-    message.prototype !== undefined && (obj.prototype = message.prototype ? Identifier.toJSON(message.prototype) : undefined);
-    message.category !== undefined && (obj.category = message.category ? Identifier.toJSON(message.category) : undefined);
+    message.prototype !== undefined &&
+      (obj.prototype = message.prototype
+        ? Identifier.toJSON(message.prototype)
+        : undefined);
+    message.category !== undefined &&
+      (obj.category = message.category
+        ? Identifier.toJSON(message.category)
+        : undefined);
     if (message.taxTypeId) {
-      obj.taxTypeId = message.taxTypeId.map(e => e);
+      obj.taxTypeId = message.taxTypeId.map((e) => e);
     } else {
       obj.taxTypeId = [];
     }
     if (message.variants) {
-      obj.variants = message.variants.map(e => e ? Variant.toJSON(e) : undefined);
+      obj.variants = message.variants.map((e) =>
+        e ? Variant.toJSON(e) : undefined
+      );
     } else {
       obj.variants = [];
     }
@@ -506,12 +445,15 @@ export const Product = {
   },
 };
 
+const baseIdentifier: object = { id: "" };
+
 export const Identifier = {
   encode(message: Identifier, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Identifier {
+
+  decode(input: Reader | Uint8Array, length?: number): Identifier {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseIdentifier } as Identifier;
@@ -528,6 +470,7 @@ export const Identifier = {
     }
     return message;
   },
+
   fromJSON(object: any): Identifier {
     const message = { ...baseIdentifier } as Identifier;
     if (object.id !== undefined && object.id !== null) {
@@ -537,6 +480,7 @@ export const Identifier = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Identifier>): Identifier {
     const message = { ...baseIdentifier } as Identifier;
     if (object.id !== undefined && object.id !== null) {
@@ -546,12 +490,15 @@ export const Identifier = {
     }
     return message;
   },
+
   toJSON(message: Identifier): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseProductList: object = { totalCount: 0 };
 
 export const ProductList = {
   encode(message: ProductList, writer: Writer = Writer.create()): Writer {
@@ -564,7 +511,8 @@ export const ProductList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ProductList {
+
+  decode(input: Reader | Uint8Array, length?: number): ProductList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseProductList } as ProductList;
@@ -588,6 +536,7 @@ export const ProductList = {
     }
     return message;
   },
+
   fromJSON(object: any): ProductList {
     const message = { ...baseProductList } as ProductList;
     message.items = [];
@@ -608,6 +557,7 @@ export const ProductList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ProductList>): ProductList {
     const message = { ...baseProductList } as ProductList;
     message.items = [];
@@ -628,17 +578,34 @@ export const ProductList = {
     }
     return message;
   },
+
   toJSON(message: ProductList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? MainProduct.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? MainProduct.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseVariant: object = {
+  id: "",
+  name: "",
+  description: "",
+  stockLevel: 0,
+  price: 0,
+  sale: false,
+  salePrice: 0,
+  stockKeepingUnit: "",
 };
 
 export const Variant = {
@@ -659,7 +626,8 @@ export const Variant = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Variant {
+
+  decode(input: Reader | Uint8Array, length?: number): Variant {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseVariant } as Variant;
@@ -696,7 +664,9 @@ export const Variant = {
           message.stockKeepingUnit = reader.string();
           break;
         case 10:
-          message.attributes.push(VariantAttribute.decode(reader, reader.uint32()));
+          message.attributes.push(
+            VariantAttribute.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -705,6 +675,7 @@ export const Variant = {
     }
     return message;
   },
+
   fromJSON(object: any): Variant {
     const message = { ...baseVariant } as Variant;
     message.image = [];
@@ -749,7 +720,10 @@ export const Variant = {
         message.image.push(Image.fromJSON(e));
       }
     }
-    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+    if (
+      object.stockKeepingUnit !== undefined &&
+      object.stockKeepingUnit !== null
+    ) {
       message.stockKeepingUnit = String(object.stockKeepingUnit);
     } else {
       message.stockKeepingUnit = "";
@@ -761,6 +735,7 @@ export const Variant = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Variant>): Variant {
     const message = { ...baseVariant } as Variant;
     message.image = [];
@@ -805,7 +780,10 @@ export const Variant = {
         message.image.push(Image.fromPartial(e));
       }
     }
-    if (object.stockKeepingUnit !== undefined && object.stockKeepingUnit !== null) {
+    if (
+      object.stockKeepingUnit !== undefined &&
+      object.stockKeepingUnit !== null
+    ) {
       message.stockKeepingUnit = object.stockKeepingUnit;
     } else {
       message.stockKeepingUnit = "";
@@ -817,29 +795,36 @@ export const Variant = {
     }
     return message;
   },
+
   toJSON(message: Variant): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.stockLevel !== undefined && (obj.stockLevel = message.stockLevel);
     message.price !== undefined && (obj.price = message.price);
     message.sale !== undefined && (obj.sale = message.sale);
     message.salePrice !== undefined && (obj.salePrice = message.salePrice);
     if (message.image) {
-      obj.image = message.image.map(e => e ? Image.toJSON(e) : undefined);
+      obj.image = message.image.map((e) => (e ? Image.toJSON(e) : undefined));
     } else {
       obj.image = [];
     }
-    message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
+    message.stockKeepingUnit !== undefined &&
+      (obj.stockKeepingUnit = message.stockKeepingUnit);
     if (message.attributes) {
-      obj.attributes = message.attributes.map(e => e ? VariantAttribute.toJSON(e) : undefined);
+      obj.attributes = message.attributes.map((e) =>
+        e ? VariantAttribute.toJSON(e) : undefined
+      );
     } else {
       obj.attributes = [];
     }
     return obj;
   },
 };
+
+const baseVariantAttribute: object = { key: "", values: "" };
 
 export const VariantAttribute = {
   encode(message: VariantAttribute, writer: Writer = Writer.create()): Writer {
@@ -849,7 +834,8 @@ export const VariantAttribute = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): VariantAttribute {
+
+  decode(input: Reader | Uint8Array, length?: number): VariantAttribute {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseVariantAttribute } as VariantAttribute;
@@ -870,6 +856,7 @@ export const VariantAttribute = {
     }
     return message;
   },
+
   fromJSON(object: any): VariantAttribute {
     const message = { ...baseVariantAttribute } as VariantAttribute;
     message.values = [];
@@ -885,6 +872,7 @@ export const VariantAttribute = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<VariantAttribute>): VariantAttribute {
     const message = { ...baseVariantAttribute } as VariantAttribute;
     message.values = [];
@@ -900,17 +888,20 @@ export const VariantAttribute = {
     }
     return message;
   },
+
   toJSON(message: VariantAttribute): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     if (message.values) {
-      obj.values = message.values.map(e => e);
+      obj.values = message.values.map((e) => e);
     } else {
       obj.values = [];
     }
     return obj;
   },
 };
+
+const baseBundle: object = { id: "", name: "", description: "", price: 0 };
 
 export const Bundle = {
   encode(message: Bundle, writer: Writer = Writer.create()): Writer {
@@ -926,7 +917,8 @@ export const Bundle = {
     writer.uint32(57).double(message.price);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Bundle {
+
+  decode(input: Reader | Uint8Array, length?: number): Bundle {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBundle } as Bundle;
@@ -960,6 +952,7 @@ export const Bundle = {
     }
     return message;
   },
+
   fromJSON(object: any): Bundle {
     const message = { ...baseBundle } as Bundle;
     message.image = [];
@@ -996,6 +989,7 @@ export const Bundle = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Bundle>): Bundle {
     const message = { ...baseBundle } as Bundle;
     message.image = [];
@@ -1032,18 +1026,22 @@ export const Bundle = {
     }
     return message;
   },
+
   toJSON(message: Bundle): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.image) {
-      obj.image = message.image.map(e => e ? Image.toJSON(e) : undefined);
+      obj.image = message.image.map((e) => (e ? Image.toJSON(e) : undefined));
     } else {
       obj.image = [];
     }
     if (message.product) {
-      obj.product = message.product.map(e => e ? BundleProduct.toJSON(e) : undefined);
+      obj.product = message.product.map((e) =>
+        e ? BundleProduct.toJSON(e) : undefined
+      );
     } else {
       obj.product = [];
     }
@@ -1052,13 +1050,16 @@ export const Bundle = {
   },
 };
 
+const baseBundleProduct: object = { productId: "", quantity: 0 };
+
 export const BundleProduct = {
   encode(message: BundleProduct, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.productId);
     writer.uint32(16).uint32(message.quantity);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): BundleProduct {
+
+  decode(input: Reader | Uint8Array, length?: number): BundleProduct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseBundleProduct } as BundleProduct;
@@ -1078,6 +1079,7 @@ export const BundleProduct = {
     }
     return message;
   },
+
   fromJSON(object: any): BundleProduct {
     const message = { ...baseBundleProduct } as BundleProduct;
     if (object.productId !== undefined && object.productId !== null) {
@@ -1092,6 +1094,7 @@ export const BundleProduct = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<BundleProduct>): BundleProduct {
     const message = { ...baseBundleProduct } as BundleProduct;
     if (object.productId !== undefined && object.productId !== null) {
@@ -1106,6 +1109,7 @@ export const BundleProduct = {
     }
     return message;
   },
+
   toJSON(message: BundleProduct): unknown {
     const obj: any = {};
     message.productId !== undefined && (obj.productId = message.productId);
@@ -1114,12 +1118,15 @@ export const BundleProduct = {
   },
 };
 
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -1136,6 +1143,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -1145,6 +1153,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -1154,6 +1163,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -1161,85 +1171,445 @@ export const Deleted = {
   },
 };
 
-export const metaMainProduct: { [key in keyof Required<MainProduct>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  product: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.product.Product', name:'Product'} as MetaMessage]} as MetaUnion,
-  bundle: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.product.Bundle', name:'Bundle'} as MetaMessage]} as MetaUnion,
-  active: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
+export interface Service {
+  Read(request: ReadRequest): Promise<ProductList>;
+  Create(request: ProductList): Promise<ProductList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: ProductList): Promise<ProductList>;
+  Upsert(request: ProductList): Promise<ProductList>;
 }
-export const metaProduct: { [key in keyof Required<Product>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  manufacturerId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  taricCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  prototype: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaMessage]} as MetaUnion,
-  category: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.product.Identifier', name:'Identifier'} as MetaMessage]} as MetaUnion,
-  taxTypeId: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  variants: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.product.Variant', name:'Variant'} as MetaMessage} as MetaArray,
-  gtin: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaIdentifier: { [key in keyof Required<Identifier>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaProductList: { [key in keyof Required<ProductList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.product.MainProduct', name:'MainProduct'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaVariant: { [key in keyof Required<Variant>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  stockLevel: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  price: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  sale: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  salePrice: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  image: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage} as MetaArray,
-  stockKeepingUnit: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  attributes: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.product.VariantAttribute', name:'VariantAttribute'} as MetaMessage} as MetaArray,
-}
-export const metaVariantAttribute: { [key in keyof Required<VariantAttribute>]: MetaBase | string } = {
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  values: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaBundle: { [key in keyof Required<Bundle>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  image: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage} as MetaArray,
-  product: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.product.BundleProduct', name:'BundleProduct'} as MetaMessage} as MetaArray,
-  price: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-}
-export const metaBundleProduct: { [key in keyof Required<BundleProduct>]: MetaBase | string } = {
-  productId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  quantity: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ProductList.decode} as MetaService<ReadRequest, ProductList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaService<ProductList, ProductList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaService<ProductList, ProductList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product.ProductList', name:'ProductList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductList.encode, decodeResponse: ProductList.decode} as MetaService<ProductList, ProductList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  MainProduct: ['message', '.io.restorecommerce.product.MainProduct', MainProduct, metaMainProduct],
-  Product: ['message', '.io.restorecommerce.product.Product', Product, metaProduct],
-  Identifier: ['message', '.io.restorecommerce.product.Identifier', Identifier, metaIdentifier],
-  ProductList: ['message', '.io.restorecommerce.product.ProductList', ProductList, metaProductList],
-  Variant: ['message', '.io.restorecommerce.product.Variant', Variant, metaVariant],
-  VariantAttribute: ['message', '.io.restorecommerce.product.VariantAttribute', VariantAttribute, metaVariantAttribute],
-  Bundle: ['message', '.io.restorecommerce.product.Bundle', Bundle, metaBundle],
-  BundleProduct: ['message', '.io.restorecommerce.product.BundleProduct', BundleProduct, metaBundleProduct],
-  Deleted: ['message', '.io.restorecommerce.product.Deleted', Deleted, metaDeleted],
-  Service: ['service', '.io.restorecommerce.product.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/image.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "MainProduct",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "product",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.Product",
+            oneofIndex: 0,
+            jsonName: "product",
+          },
+          {
+            name: "bundle",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.Bundle",
+            oneofIndex: 0,
+            jsonName: "bundle",
+          },
+          {
+            name: "active",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "active",
+          },
+          {
+            name: "meta",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+        ],
+        oneofDecl: [{ name: "product_type" }],
+      },
+      {
+        name: "Product",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "name",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "manufacturer_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "manufacturerId",
+          },
+          {
+            name: "taric_code",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "taricCode",
+          },
+          {
+            name: "prototype",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.Identifier",
+            oneofIndex: 0,
+            jsonName: "prototype",
+          },
+          {
+            name: "category",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.Identifier",
+            oneofIndex: 0,
+            jsonName: "category",
+          },
+          {
+            name: "tax_type_id",
+            number: 8,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "taxTypeId",
+          },
+          {
+            name: "variants",
+            number: 9,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.Variant",
+            jsonName: "variants",
+          },
+          {
+            name: "gtin",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "gtin",
+          },
+        ],
+        oneofDecl: [{ name: "classification" }],
+      },
+      {
+        name: "Identifier",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "ProductList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.MainProduct",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Variant",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "name",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "stock_level",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "stockLevel",
+          },
+          {
+            name: "price",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "price",
+          },
+          {
+            name: "sale",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "sale",
+          },
+          {
+            name: "sale_price",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "salePrice",
+          },
+          {
+            name: "image",
+            number: 8,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "image",
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "stockKeepingUnit",
+          },
+          {
+            name: "attributes",
+            number: 10,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.VariantAttribute",
+            jsonName: "attributes",
+          },
+        ],
+      },
+      {
+        name: "VariantAttribute",
+        field: [
+          {
+            name: "key",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "values",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "values",
+          },
+        ],
+      },
+      {
+        name: "Bundle",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "image",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "image",
+          },
+          {
+            name: "product",
+            number: 6,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product.BundleProduct",
+            jsonName: "product",
+          },
+          {
+            name: "price",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "price",
+          },
+        ],
+      },
+      {
+        name: "BundleProduct",
+        field: [
+          {
+            name: "product_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "productId",
+          },
+          {
+            name: "quantity",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "quantity",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.product.ProductList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/product.proto",
+    package: "io.restorecommerce.product",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [19, 0, 27, 1],
+          leadingComments: " Product resource\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.product.MainProduct": MainProduct,
+    ".io.restorecommerce.product.Product": Product,
+    ".io.restorecommerce.product.Identifier": Identifier,
+    ".io.restorecommerce.product.ProductList": ProductList,
+    ".io.restorecommerce.product.Variant": Variant,
+    ".io.restorecommerce.product.VariantAttribute": VariantAttribute,
+    ".io.restorecommerce.product.Bundle": Bundle,
+    ".io.restorecommerce.product.BundleProduct": BundleProduct,
+    ".io.restorecommerce.product.Deleted": Deleted,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_image_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -1,543 +1,35 @@
 /* eslint-disable */
-import { Subject, RoleAssociation, Tokens } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Attribute } from '../../io/restorecommerce/attribute';
-import { Image } from '../../io/restorecommerce/image';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
-
-
-/**
- * *
- *  Request to verify password and retrieve the user's info.
- *  Either name or email can be provided.
- */
-export interface LoginRequest {
-  /**
-   *  User name or email
-   */
-  identifier: string;
-  /**
-   *  Raw password
-   */
-  password: string;
-  token: string;
-}
-
-export interface OrgIDRequest {
-  orgIds: string[];
-  subject?: Subject;
-}
-
-export interface UserIDs {
-  userIds: string[];
-}
-
-export interface FindRequest {
-  /**
-   * / User ID
-   */
-  id: string;
-  name: string;
-  email: string;
-  subject?: Subject;
-}
-
-export interface FindByTokenRequest {
-  token: string;
-}
-
-export interface RegisterRequest {
-  id: string;
-  guest: boolean;
-  meta?: Meta;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  timezoneId: string;
-  localeId: string;
-  roleAssociations: RoleAssociation[];
-  /**
-   *  default hierarchical scope
-   */
-  defaultScope: string;
-  userType: UserType;
-  captchaCode: string;
-}
-
-export interface ActivateRequest {
-  /**
-   * / User name (unique)
-   */
-  name: string;
-  activationCode: string;
-  subject?: Subject;
-}
-
-export interface ConfirmUserInvitationRequest {
-  name: string;
-  password: string;
-  activationCode: string;
-  subject?: Subject;
-}
-
-export interface SendInvitationEmailRequest {
-  userId: string;
-  invitedByUserId: string;
-  subject?: Subject;
-}
-
-export interface ChangePasswordRequest {
-  /**
-   * / User ID
-   */
-  id: string;
-  password: string;
-  newPassword: string;
-  subject?: Subject;
-}
-
-export interface RequestPasswordChangeRequest {
-  name: string | undefined;
-  email: string | undefined;
-  subject?: Subject;
-}
-
-export interface ConfirmPasswordChangeRequest {
-  name: string;
-  activationCode: string;
-  password: string;
-  subject?: Subject;
-}
-
-export interface ChangeEmailRequest {
-  /**
-   * / User ID
-   */
-  id: string;
-  email: string;
-  subject?: Subject;
-}
-
-export interface ConfirmEmailChangeRequest {
-  name: string;
-  activationCode: string;
-  subject?: Subject;
-}
-
-export interface UnregisterRequest {
-  /**
-   * / User ID
-   */
-  id: string;
-  subject?: Subject;
-}
-
-/**
- * *
- *  User deletion event.
- *  Send when a user was deleted or unregistered.
- *
- *  Events:
- *  usersDeleted,
- *  unregistered,
- */
-export interface Deleted {
-  id: string;
-}
-
-/**
- * *
- *  User password changed event.
- *
- *  Events:
- *  passwordChanged,
- */
-export interface PasswordChanged {
-  /**
-   * / User ID
-   */
-  id: string;
-  passwordHash: string;
-}
-
-export interface PasswordChangeRequested {
-  /**
-   *  User ID
-   */
-  id: string;
-}
-
-/**
- * *
- *  User email id changed event.
- */
-export interface EmailChangeRequested {
-  id: string;
-  activationCode: string;
-  newEmail: string;
-}
-
-export interface EmailChangeConfirmed {
-  /**
-   * / User ID
-   */
-  id: string;
-  email: string;
-}
-
-/**
- * *
- *  A list of User.
- */
-export interface UserList {
-  items: User[];
-  totalCount: number;
-  subject?: Subject;
-}
-
-/**
- * *
- *  User activation request.
- */
-export interface Activate {
-  /**
-   * / User ID
-   */
-  id: string;
-}
-
-export interface FindByRoleRequest {
-  role: string;
-  attributes: Attribute[];
-  subject?: Subject;
-}
-
-/**
- * *
- *  A User resource.
- */
-export interface User {
-  /**
-   * / User ID, unique, key
-   */
-  id: string;
-  meta?: Meta;
-  /**
-   *  The name of the user, can be used for login
-   */
-  name: string;
-  firstName: string;
-  lastName: string;
-  /**
-   * / Email address, can be used for login
-   */
-  email: string;
-  /**
-   * / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
-   */
-  newEmail: string;
-  /**
-   * / If the user was activated via the activation process
-   */
-  active: boolean;
-  /**
-   * / Activation code used in the activation process
-   */
-  activationCode: string;
-  /**
-   * / Raw password, not stored
-   */
-  password: string;
-  /**
-   * / Encrypted password, stored
-   */
-  passwordHash: string;
-  /**
-   *  A user can have multiple roles and different attributes coupled with each role
-   */
-  roleAssociations: RoleAssociation[];
-  /**
-   *  timezone_id specifications
-   */
-  timezoneId: string;
-  /**
-   *  locale specifications
-   */
-  localeId: string;
-  /**
-   *  default hierarchical scope
-   */
-  defaultScope: string;
-  /**
-   *  true in case in case of `register`; set to false after activation
-   */
-  unauthenticated: boolean;
-  /**
-   * / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
-   */
-  guest: boolean;
-  image?: Image;
-  userType: UserType;
-  /**
-   *  For user invitation
-   */
-  invite: boolean;
-  /**
-   *  user who is inviting
-   */
-  invitedByUserName: string;
-  /**
-   *  First name of user inviting
-   */
-  invitedByUserFirstName: string;
-  /**
-   *  Last name of user inviting
-   */
-  invitedByUserLastName: string;
-  tokens: Tokens[];
-  lastLogin: number;
-  lastAccess: number;
-}
-
-const baseLoginRequest: object = {
-  identifier: "",
-  password: "",
-  token: "",
-};
-
-const baseOrgIDRequest: object = {
-  orgIds: "",
-};
-
-const baseUserIDs: object = {
-  userIds: "",
-};
-
-const baseFindRequest: object = {
-  id: "",
-  name: "",
-  email: "",
-};
-
-const baseFindByTokenRequest: object = {
-  token: "",
-};
-
-const baseRegisterRequest: object = {
-  id: "",
-  guest: false,
-  name: "",
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  timezoneId: "",
-  localeId: "",
-  defaultScope: "",
-  userType: 0,
-  captchaCode: "",
-};
-
-const baseActivateRequest: object = {
-  name: "",
-  activationCode: "",
-};
-
-const baseConfirmUserInvitationRequest: object = {
-  name: "",
-  password: "",
-  activationCode: "",
-};
-
-const baseSendInvitationEmailRequest: object = {
-  userId: "",
-  invitedByUserId: "",
-};
-
-const baseChangePasswordRequest: object = {
-  id: "",
-  password: "",
-  newPassword: "",
-};
-
-const baseRequestPasswordChangeRequest: object = {
-};
-
-const baseConfirmPasswordChangeRequest: object = {
-  name: "",
-  activationCode: "",
-  password: "",
-};
-
-const baseChangeEmailRequest: object = {
-  id: "",
-  email: "",
-};
-
-const baseConfirmEmailChangeRequest: object = {
-  name: "",
-  activationCode: "",
-};
-
-const baseUnregisterRequest: object = {
-  id: "",
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-const basePasswordChanged: object = {
-  id: "",
-  passwordHash: "",
-};
-
-const basePasswordChangeRequested: object = {
-  id: "",
-};
-
-const baseEmailChangeRequested: object = {
-  id: "",
-  activationCode: "",
-  newEmail: "",
-};
-
-const baseEmailChangeConfirmed: object = {
-  id: "",
-  email: "",
-};
-
-const baseUserList: object = {
-  totalCount: 0,
-};
-
-const baseActivate: object = {
-  id: "",
-};
-
-const baseFindByRoleRequest: object = {
-  role: "",
-};
-
-const baseUser: object = {
-  id: "",
-  name: "",
-  firstName: "",
-  lastName: "",
-  email: "",
-  newEmail: "",
-  active: false,
-  activationCode: "",
-  password: "",
-  passwordHash: "",
-  timezoneId: "",
-  localeId: "",
-  defaultScope: "",
-  unauthenticated: false,
-  guest: false,
-  userType: 0,
-  invite: false,
-  invitedByUserName: "",
-  invitedByUserFirstName: "",
-  invitedByUserLastName: "",
-  lastLogin: 0,
-  lastAccess: 0,
-};
-
-/**
- * *
- *  The microservice for the user resource.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<UserList>;
-
-  Create(request: UserList): Promise<UserList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: UserList): Promise<UserList>;
-
-  Upsert(request: UserList): Promise<UserList>;
-
-  Find(request: FindRequest): Promise<UserList>;
-
-  Register(request: RegisterRequest): Promise<User>;
-
-  Activate(request: ActivateRequest): Promise<Empty>;
-
-  ChangePassword(request: ChangePasswordRequest): Promise<Empty>;
-
-  RequestPasswordChange(request: RequestPasswordChangeRequest): Promise<Empty>;
-
-  RequestEmailChange(request: ChangeEmailRequest): Promise<Empty>;
-
-  ConfirmPasswordChange(request: ConfirmPasswordChangeRequest): Promise<Empty>;
-
-  ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<Empty>;
-
-  Unregister(request: UnregisterRequest): Promise<Empty>;
-
-  Login(request: LoginRequest): Promise<User>;
-
-  FindByRole(request: FindByRoleRequest): Promise<UserList>;
-
-  DeleteUsersByOrg(request: OrgIDRequest): Promise<UserIDs>;
-
-  ConfirmUserInvitation(request: ConfirmUserInvitationRequest): Promise<Empty>;
-
-  SendInvitationEmail(request: SendInvitationEmailRequest): Promise<Empty>;
-
-  FindByToken(request: FindByTokenRequest): Promise<User>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.user'
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  RoleAssociation,
+  Tokens,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Image,
+  protoMetadata as io_restorecommerce_image_protoMetadata,
+} from "../../io/restorecommerce/image";
+import {
+  Attribute,
+  protoMetadata as io_restorecommerce_attribute_protoMetadata,
+} from "../../io/restorecommerce/attribute";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
+
+export const protobufPackage = "io.restorecommerce.user";
 
 export enum UserType {
   ORG_USER = 0,
@@ -583,6 +75,228 @@ export function userTypeToJSON(object: UserType): string {
   }
 }
 
+/**
+ * Request to verify password and retrieve the user's info.
+ * Either name or email can be provided.
+ */
+export interface LoginRequest {
+  /** User name or email */
+  identifier: string;
+  /** Raw password */
+  password: string;
+  token: string;
+}
+
+export interface OrgIDRequest {
+  orgIds: string[];
+  subject?: Subject;
+}
+
+export interface UserIDs {
+  userIds: string[];
+}
+
+export interface FindRequest {
+  /** / User ID */
+  id: string;
+  name: string;
+  email: string;
+  subject?: Subject;
+}
+
+export interface FindByTokenRequest {
+  token: string;
+}
+
+export interface RegisterRequest {
+  id: string;
+  guest: boolean;
+  meta?: Meta;
+  name: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  timezoneId: string;
+  localeId: string;
+  roleAssociations: RoleAssociation[];
+  /** default hierarchical scope */
+  defaultScope: string;
+  userType: UserType;
+  captchaCode: string;
+}
+
+export interface ActivateRequest {
+  /** / User name (unique) */
+  name: string;
+  activationCode: string;
+  subject?: Subject;
+}
+
+export interface ConfirmUserInvitationRequest {
+  name: string;
+  password: string;
+  activationCode: string;
+  subject?: Subject;
+}
+
+export interface SendInvitationEmailRequest {
+  userId: string;
+  invitedByUserId: string;
+  subject?: Subject;
+}
+
+export interface ChangePasswordRequest {
+  /** / User ID */
+  id: string;
+  password: string;
+  newPassword: string;
+  subject?: Subject;
+}
+
+export interface RequestPasswordChangeRequest {
+  name: string | undefined;
+  email: string | undefined;
+  subject?: Subject;
+}
+
+export interface ConfirmPasswordChangeRequest {
+  name: string;
+  activationCode: string;
+  password: string;
+  subject?: Subject;
+}
+
+export interface ChangeEmailRequest {
+  /** / User ID */
+  id: string;
+  email: string;
+  subject?: Subject;
+}
+
+export interface ConfirmEmailChangeRequest {
+  name: string;
+  activationCode: string;
+  subject?: Subject;
+}
+
+export interface UnregisterRequest {
+  /** / User ID */
+  id: string;
+  subject?: Subject;
+}
+
+/**
+ * User deletion event.
+ * Send when a user was deleted or unregistered.
+ *
+ * Events:
+ * usersDeleted,
+ * unregistered,
+ */
+export interface Deleted {
+  id: string;
+}
+
+/**
+ * User password changed event.
+ *
+ * Events:
+ * passwordChanged,
+ */
+export interface PasswordChanged {
+  /** / User ID */
+  id: string;
+  passwordHash: string;
+}
+
+export interface PasswordChangeRequested {
+  /** User ID */
+  id: string;
+}
+
+/** User email id changed event. */
+export interface EmailChangeRequested {
+  id: string;
+  activationCode: string;
+  newEmail: string;
+}
+
+export interface EmailChangeConfirmed {
+  /** / User ID */
+  id: string;
+  email: string;
+}
+
+/** A list of User. */
+export interface UserList {
+  items: User[];
+  totalCount: number;
+  subject?: Subject;
+}
+
+/** User activation request. */
+export interface Activate {
+  /** / User ID */
+  id: string;
+}
+
+export interface FindByRoleRequest {
+  role: string;
+  attributes: Attribute[];
+  subject?: Subject;
+}
+
+/** A User resource. */
+export interface User {
+  /** / User ID, unique, key */
+  id: string;
+  meta?: Meta;
+  /** The name of the user, can be used for login */
+  name: string;
+  firstName: string;
+  lastName: string;
+  /** / Email address, can be used for login */
+  email: string;
+  /** / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange` */
+  newEmail: string;
+  /** / If the user was activated via the activation process */
+  active: boolean;
+  /** / Activation code used in the activation process */
+  activationCode: string;
+  /** / Raw password, not stored */
+  password: string;
+  /** / Encrypted password, stored */
+  passwordHash: string;
+  /** A user can have multiple roles and different attributes coupled with each role */
+  roleAssociations: RoleAssociation[];
+  /** timezone_id specifications */
+  timezoneId: string;
+  /** locale specifications */
+  localeId: string;
+  /** default hierarchical scope */
+  defaultScope: string;
+  /** true in case in case of `register`; set to false after activation */
+  unauthenticated: boolean;
+  /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
+  guest: boolean;
+  image?: Image;
+  userType: UserType;
+  /** For user invitation */
+  invite: boolean;
+  /** user who is inviting */
+  invitedByUserName: string;
+  /** First name of user inviting */
+  invitedByUserFirstName: string;
+  /** Last name of user inviting */
+  invitedByUserLastName: string;
+  tokens: Tokens[];
+  lastLogin: number;
+  lastAccess: number;
+}
+
+const baseLoginRequest: object = { identifier: "", password: "", token: "" };
+
 export const LoginRequest = {
   encode(message: LoginRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.identifier);
@@ -590,7 +304,8 @@ export const LoginRequest = {
     writer.uint32(26).string(message.token);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): LoginRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): LoginRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseLoginRequest } as LoginRequest;
@@ -613,6 +328,7 @@ export const LoginRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): LoginRequest {
     const message = { ...baseLoginRequest } as LoginRequest;
     if (object.identifier !== undefined && object.identifier !== null) {
@@ -632,6 +348,7 @@ export const LoginRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<LoginRequest>): LoginRequest {
     const message = { ...baseLoginRequest } as LoginRequest;
     if (object.identifier !== undefined && object.identifier !== null) {
@@ -651,6 +368,7 @@ export const LoginRequest = {
     }
     return message;
   },
+
   toJSON(message: LoginRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
@@ -659,6 +377,8 @@ export const LoginRequest = {
     return obj;
   },
 };
+
+const baseOrgIDRequest: object = { orgIds: "" };
 
 export const OrgIDRequest = {
   encode(message: OrgIDRequest, writer: Writer = Writer.create()): Writer {
@@ -670,7 +390,8 @@ export const OrgIDRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrgIDRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): OrgIDRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrgIDRequest } as OrgIDRequest;
@@ -691,6 +412,7 @@ export const OrgIDRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): OrgIDRequest {
     const message = { ...baseOrgIDRequest } as OrgIDRequest;
     message.orgIds = [];
@@ -706,6 +428,7 @@ export const OrgIDRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrgIDRequest>): OrgIDRequest {
     const message = { ...baseOrgIDRequest } as OrgIDRequest;
     message.orgIds = [];
@@ -721,17 +444,23 @@ export const OrgIDRequest = {
     }
     return message;
   },
+
   toJSON(message: OrgIDRequest): unknown {
     const obj: any = {};
     if (message.orgIds) {
-      obj.orgIds = message.orgIds.map(e => e);
+      obj.orgIds = message.orgIds.map((e) => e);
     } else {
       obj.orgIds = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseUserIDs: object = { userIds: "" };
 
 export const UserIDs = {
   encode(message: UserIDs, writer: Writer = Writer.create()): Writer {
@@ -740,7 +469,8 @@ export const UserIDs = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): UserIDs {
+
+  decode(input: Reader | Uint8Array, length?: number): UserIDs {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUserIDs } as UserIDs;
@@ -758,6 +488,7 @@ export const UserIDs = {
     }
     return message;
   },
+
   fromJSON(object: any): UserIDs {
     const message = { ...baseUserIDs } as UserIDs;
     message.userIds = [];
@@ -768,6 +499,7 @@ export const UserIDs = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<UserIDs>): UserIDs {
     const message = { ...baseUserIDs } as UserIDs;
     message.userIds = [];
@@ -778,16 +510,19 @@ export const UserIDs = {
     }
     return message;
   },
+
   toJSON(message: UserIDs): unknown {
     const obj: any = {};
     if (message.userIds) {
-      obj.userIds = message.userIds.map(e => e);
+      obj.userIds = message.userIds.map((e) => e);
     } else {
       obj.userIds = [];
     }
     return obj;
   },
 };
+
+const baseFindRequest: object = { id: "", name: "", email: "" };
 
 export const FindRequest = {
   encode(message: FindRequest, writer: Writer = Writer.create()): Writer {
@@ -799,7 +534,8 @@ export const FindRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FindRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): FindRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFindRequest } as FindRequest;
@@ -825,6 +561,7 @@ export const FindRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): FindRequest {
     const message = { ...baseFindRequest } as FindRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -849,6 +586,7 @@ export const FindRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FindRequest>): FindRequest {
     const message = { ...baseFindRequest } as FindRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -873,22 +611,32 @@ export const FindRequest = {
     }
     return message;
   },
+
   toJSON(message: FindRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
     message.email !== undefined && (obj.email = message.email);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseFindByTokenRequest: object = { token: "" };
+
 export const FindByTokenRequest = {
-  encode(message: FindByTokenRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FindByTokenRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.token);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FindByTokenRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): FindByTokenRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
@@ -905,6 +653,7 @@ export const FindByTokenRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): FindByTokenRequest {
     const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
     if (object.token !== undefined && object.token !== null) {
@@ -914,6 +663,7 @@ export const FindByTokenRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FindByTokenRequest>): FindByTokenRequest {
     const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
     if (object.token !== undefined && object.token !== null) {
@@ -923,11 +673,27 @@ export const FindByTokenRequest = {
     }
     return message;
   },
+
   toJSON(message: FindByTokenRequest): unknown {
     const obj: any = {};
     message.token !== undefined && (obj.token = message.token);
     return obj;
   },
+};
+
+const baseRegisterRequest: object = {
+  id: "",
+  guest: false,
+  name: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  timezoneId: "",
+  localeId: "",
+  defaultScope: "",
+  userType: 0,
+  captchaCode: "",
 };
 
 export const RegisterRequest = {
@@ -952,7 +718,8 @@ export const RegisterRequest = {
     writer.uint32(114).string(message.captchaCode);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RegisterRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): RegisterRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRegisterRequest } as RegisterRequest;
@@ -991,7 +758,9 @@ export const RegisterRequest = {
           message.localeId = reader.string();
           break;
         case 11:
-          message.roleAssociations.push(RoleAssociation.decode(reader, reader.uint32()));
+          message.roleAssociations.push(
+            RoleAssociation.decode(reader, reader.uint32())
+          );
           break;
         case 12:
           message.defaultScope = reader.string();
@@ -1009,6 +778,7 @@ export const RegisterRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): RegisterRequest {
     const message = { ...baseRegisterRequest } as RegisterRequest;
     message.roleAssociations = [];
@@ -1062,7 +832,10 @@ export const RegisterRequest = {
     } else {
       message.localeId = "";
     }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
       for (const e of object.roleAssociations) {
         message.roleAssociations.push(RoleAssociation.fromJSON(e));
       }
@@ -1084,6 +857,7 @@ export const RegisterRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<RegisterRequest>): RegisterRequest {
     const message = { ...baseRegisterRequest } as RegisterRequest;
     message.roleAssociations = [];
@@ -1137,7 +911,10 @@ export const RegisterRequest = {
     } else {
       message.localeId = "";
     }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
       for (const e of object.roleAssociations) {
         message.roleAssociations.push(RoleAssociation.fromPartial(e));
       }
@@ -1159,11 +936,13 @@ export const RegisterRequest = {
     }
     return message;
   },
+
   toJSON(message: RegisterRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.guest !== undefined && (obj.guest = message.guest);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
     message.firstName !== undefined && (obj.firstName = message.firstName);
     message.lastName !== undefined && (obj.lastName = message.lastName);
@@ -1172,16 +951,23 @@ export const RegisterRequest = {
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
     if (message.roleAssociations) {
-      obj.roleAssociations = message.roleAssociations.map(e => e ? RoleAssociation.toJSON(e) : undefined);
+      obj.roleAssociations = message.roleAssociations.map((e) =>
+        e ? RoleAssociation.toJSON(e) : undefined
+      );
     } else {
       obj.roleAssociations = [];
     }
-    message.defaultScope !== undefined && (obj.defaultScope = message.defaultScope);
-    message.userType !== undefined && (obj.userType = userTypeToJSON(message.userType));
-    message.captchaCode !== undefined && (obj.captchaCode = message.captchaCode);
+    message.defaultScope !== undefined &&
+      (obj.defaultScope = message.defaultScope);
+    message.userType !== undefined &&
+      (obj.userType = userTypeToJSON(message.userType));
+    message.captchaCode !== undefined &&
+      (obj.captchaCode = message.captchaCode);
     return obj;
   },
 };
+
+const baseActivateRequest: object = { name: "", activationCode: "" };
 
 export const ActivateRequest = {
   encode(message: ActivateRequest, writer: Writer = Writer.create()): Writer {
@@ -1192,7 +978,8 @@ export const ActivateRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ActivateRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): ActivateRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseActivateRequest } as ActivateRequest;
@@ -1215,6 +1002,7 @@ export const ActivateRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ActivateRequest {
     const message = { ...baseActivateRequest } as ActivateRequest;
     if (object.name !== undefined && object.name !== null) {
@@ -1234,6 +1022,7 @@ export const ActivateRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ActivateRequest>): ActivateRequest {
     const message = { ...baseActivateRequest } as ActivateRequest;
     if (object.name !== undefined && object.name !== null) {
@@ -1253,17 +1042,31 @@ export const ActivateRequest = {
     }
     return message;
   },
+
   toJSON(message: ActivateRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseConfirmUserInvitationRequest: object = {
+  name: "",
+  password: "",
+  activationCode: "",
+};
+
 export const ConfirmUserInvitationRequest = {
-  encode(message: ConfirmUserInvitationRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ConfirmUserInvitationRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.password);
     writer.uint32(26).string(message.activationCode);
@@ -1272,10 +1075,16 @@ export const ConfirmUserInvitationRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ConfirmUserInvitationRequest {
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ConfirmUserInvitationRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseConfirmUserInvitationRequest } as ConfirmUserInvitationRequest;
+    const message = {
+      ...baseConfirmUserInvitationRequest,
+    } as ConfirmUserInvitationRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1298,8 +1107,11 @@ export const ConfirmUserInvitationRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ConfirmUserInvitationRequest {
-    const message = { ...baseConfirmUserInvitationRequest } as ConfirmUserInvitationRequest;
+    const message = {
+      ...baseConfirmUserInvitationRequest,
+    } as ConfirmUserInvitationRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1322,8 +1134,13 @@ export const ConfirmUserInvitationRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ConfirmUserInvitationRequest>): ConfirmUserInvitationRequest {
-    const message = { ...baseConfirmUserInvitationRequest } as ConfirmUserInvitationRequest;
+
+  fromPartial(
+    object: DeepPartial<ConfirmUserInvitationRequest>
+  ): ConfirmUserInvitationRequest {
+    const message = {
+      ...baseConfirmUserInvitationRequest,
+    } as ConfirmUserInvitationRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -1346,18 +1163,31 @@ export const ConfirmUserInvitationRequest = {
     }
     return message;
   },
+
   toJSON(message: ConfirmUserInvitationRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.password !== undefined && (obj.password = message.password);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseSendInvitationEmailRequest: object = {
+  userId: "",
+  invitedByUserId: "",
+};
+
 export const SendInvitationEmailRequest = {
-  encode(message: SendInvitationEmailRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SendInvitationEmailRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.userId);
     writer.uint32(18).string(message.invitedByUserId);
     if (message.subject !== undefined && message.subject !== undefined) {
@@ -1365,10 +1195,16 @@ export const SendInvitationEmailRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): SendInvitationEmailRequest {
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): SendInvitationEmailRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSendInvitationEmailRequest } as SendInvitationEmailRequest;
+    const message = {
+      ...baseSendInvitationEmailRequest,
+    } as SendInvitationEmailRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1388,14 +1224,20 @@ export const SendInvitationEmailRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): SendInvitationEmailRequest {
-    const message = { ...baseSendInvitationEmailRequest } as SendInvitationEmailRequest;
+    const message = {
+      ...baseSendInvitationEmailRequest,
+    } as SendInvitationEmailRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
     } else {
       message.userId = "";
     }
-    if (object.invitedByUserId !== undefined && object.invitedByUserId !== null) {
+    if (
+      object.invitedByUserId !== undefined &&
+      object.invitedByUserId !== null
+    ) {
       message.invitedByUserId = String(object.invitedByUserId);
     } else {
       message.invitedByUserId = "";
@@ -1407,14 +1249,22 @@ export const SendInvitationEmailRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<SendInvitationEmailRequest>): SendInvitationEmailRequest {
-    const message = { ...baseSendInvitationEmailRequest } as SendInvitationEmailRequest;
+
+  fromPartial(
+    object: DeepPartial<SendInvitationEmailRequest>
+  ): SendInvitationEmailRequest {
+    const message = {
+      ...baseSendInvitationEmailRequest,
+    } as SendInvitationEmailRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = object.userId;
     } else {
       message.userId = "";
     }
-    if (object.invitedByUserId !== undefined && object.invitedByUserId !== null) {
+    if (
+      object.invitedByUserId !== undefined &&
+      object.invitedByUserId !== null
+    ) {
       message.invitedByUserId = object.invitedByUserId;
     } else {
       message.invitedByUserId = "";
@@ -1426,17 +1276,31 @@ export const SendInvitationEmailRequest = {
     }
     return message;
   },
+
   toJSON(message: SendInvitationEmailRequest): unknown {
     const obj: any = {};
     message.userId !== undefined && (obj.userId = message.userId);
-    message.invitedByUserId !== undefined && (obj.invitedByUserId = message.invitedByUserId);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.invitedByUserId !== undefined &&
+      (obj.invitedByUserId = message.invitedByUserId);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseChangePasswordRequest: object = {
+  id: "",
+  password: "",
+  newPassword: "",
+};
+
 export const ChangePasswordRequest = {
-  encode(message: ChangePasswordRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ChangePasswordRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.password);
     writer.uint32(26).string(message.newPassword);
@@ -1445,7 +1309,8 @@ export const ChangePasswordRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ChangePasswordRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): ChangePasswordRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
@@ -1471,6 +1336,7 @@ export const ChangePasswordRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ChangePasswordRequest {
     const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -1495,7 +1361,10 @@ export const ChangePasswordRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ChangePasswordRequest>): ChangePasswordRequest {
+
+  fromPartial(
+    object: DeepPartial<ChangePasswordRequest>
+  ): ChangePasswordRequest {
     const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
@@ -1519,18 +1388,28 @@ export const ChangePasswordRequest = {
     }
     return message;
   },
+
   toJSON(message: ChangePasswordRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.password !== undefined && (obj.password = message.password);
-    message.newPassword !== undefined && (obj.newPassword = message.newPassword);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.newPassword !== undefined &&
+      (obj.newPassword = message.newPassword);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseRequestPasswordChangeRequest: object = {};
+
 export const RequestPasswordChangeRequest = {
-  encode(message: RequestPasswordChangeRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RequestPasswordChangeRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
@@ -1542,10 +1421,16 @@ export const RequestPasswordChangeRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RequestPasswordChangeRequest {
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): RequestPasswordChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRequestPasswordChangeRequest } as RequestPasswordChangeRequest;
+    const message = {
+      ...baseRequestPasswordChangeRequest,
+    } as RequestPasswordChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1565,8 +1450,11 @@ export const RequestPasswordChangeRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): RequestPasswordChangeRequest {
-    const message = { ...baseRequestPasswordChangeRequest } as RequestPasswordChangeRequest;
+    const message = {
+      ...baseRequestPasswordChangeRequest,
+    } as RequestPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1584,8 +1472,13 @@ export const RequestPasswordChangeRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<RequestPasswordChangeRequest>): RequestPasswordChangeRequest {
-    const message = { ...baseRequestPasswordChangeRequest } as RequestPasswordChangeRequest;
+
+  fromPartial(
+    object: DeepPartial<RequestPasswordChangeRequest>
+  ): RequestPasswordChangeRequest {
+    const message = {
+      ...baseRequestPasswordChangeRequest,
+    } as RequestPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -1603,17 +1496,30 @@ export const RequestPasswordChangeRequest = {
     }
     return message;
   },
+
   toJSON(message: RequestPasswordChangeRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.email !== undefined && (obj.email = message.email);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseConfirmPasswordChangeRequest: object = {
+  name: "",
+  activationCode: "",
+  password: "",
+};
+
 export const ConfirmPasswordChangeRequest = {
-  encode(message: ConfirmPasswordChangeRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ConfirmPasswordChangeRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.activationCode);
     writer.uint32(26).string(message.password);
@@ -1622,10 +1528,16 @@ export const ConfirmPasswordChangeRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ConfirmPasswordChangeRequest {
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ConfirmPasswordChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseConfirmPasswordChangeRequest } as ConfirmPasswordChangeRequest;
+    const message = {
+      ...baseConfirmPasswordChangeRequest,
+    } as ConfirmPasswordChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1648,8 +1560,11 @@ export const ConfirmPasswordChangeRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ConfirmPasswordChangeRequest {
-    const message = { ...baseConfirmPasswordChangeRequest } as ConfirmPasswordChangeRequest;
+    const message = {
+      ...baseConfirmPasswordChangeRequest,
+    } as ConfirmPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1672,8 +1587,13 @@ export const ConfirmPasswordChangeRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ConfirmPasswordChangeRequest>): ConfirmPasswordChangeRequest {
-    const message = { ...baseConfirmPasswordChangeRequest } as ConfirmPasswordChangeRequest;
+
+  fromPartial(
+    object: DeepPartial<ConfirmPasswordChangeRequest>
+  ): ConfirmPasswordChangeRequest {
+    const message = {
+      ...baseConfirmPasswordChangeRequest,
+    } as ConfirmPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -1696,18 +1616,28 @@ export const ConfirmPasswordChangeRequest = {
     }
     return message;
   },
+
   toJSON(message: ConfirmPasswordChangeRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseChangeEmailRequest: object = { id: "", email: "" };
+
 export const ChangeEmailRequest = {
-  encode(message: ChangeEmailRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ChangeEmailRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.email);
     if (message.subject !== undefined && message.subject !== undefined) {
@@ -1715,7 +1645,8 @@ export const ChangeEmailRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ChangeEmailRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): ChangeEmailRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
@@ -1738,6 +1669,7 @@ export const ChangeEmailRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ChangeEmailRequest {
     const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -1757,6 +1689,7 @@ export const ChangeEmailRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ChangeEmailRequest>): ChangeEmailRequest {
     const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -1776,17 +1709,26 @@ export const ChangeEmailRequest = {
     }
     return message;
   },
+
   toJSON(message: ChangeEmailRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.email !== undefined && (obj.email = message.email);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
+const baseConfirmEmailChangeRequest: object = { name: "", activationCode: "" };
+
 export const ConfirmEmailChangeRequest = {
-  encode(message: ConfirmEmailChangeRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ConfirmEmailChangeRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.name);
     writer.uint32(18).string(message.activationCode);
     if (message.subject !== undefined && message.subject !== undefined) {
@@ -1794,10 +1736,16 @@ export const ConfirmEmailChangeRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ConfirmEmailChangeRequest {
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ConfirmEmailChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseConfirmEmailChangeRequest } as ConfirmEmailChangeRequest;
+    const message = {
+      ...baseConfirmEmailChangeRequest,
+    } as ConfirmEmailChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1817,8 +1765,11 @@ export const ConfirmEmailChangeRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ConfirmEmailChangeRequest {
-    const message = { ...baseConfirmEmailChangeRequest } as ConfirmEmailChangeRequest;
+    const message = {
+      ...baseConfirmEmailChangeRequest,
+    } as ConfirmEmailChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1836,8 +1787,13 @@ export const ConfirmEmailChangeRequest = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<ConfirmEmailChangeRequest>): ConfirmEmailChangeRequest {
-    const message = { ...baseConfirmEmailChangeRequest } as ConfirmEmailChangeRequest;
+
+  fromPartial(
+    object: DeepPartial<ConfirmEmailChangeRequest>
+  ): ConfirmEmailChangeRequest {
+    const message = {
+      ...baseConfirmEmailChangeRequest,
+    } as ConfirmEmailChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
     } else {
@@ -1855,14 +1811,21 @@ export const ConfirmEmailChangeRequest = {
     }
     return message;
   },
+
   toJSON(message: ConfirmEmailChangeRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseUnregisterRequest: object = { id: "" };
 
 export const UnregisterRequest = {
   encode(message: UnregisterRequest, writer: Writer = Writer.create()): Writer {
@@ -1872,7 +1835,8 @@ export const UnregisterRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): UnregisterRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): UnregisterRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUnregisterRequest } as UnregisterRequest;
@@ -1892,6 +1856,7 @@ export const UnregisterRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): UnregisterRequest {
     const message = { ...baseUnregisterRequest } as UnregisterRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -1906,6 +1871,7 @@ export const UnregisterRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<UnregisterRequest>): UnregisterRequest {
     const message = { ...baseUnregisterRequest } as UnregisterRequest;
     if (object.id !== undefined && object.id !== null) {
@@ -1920,20 +1886,27 @@ export const UnregisterRequest = {
     }
     return message;
   },
+
   toJSON(message: UnregisterRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -1950,6 +1923,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -1959,6 +1933,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -1968,6 +1943,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -1975,13 +1951,16 @@ export const Deleted = {
   },
 };
 
+const basePasswordChanged: object = { id: "", passwordHash: "" };
+
 export const PasswordChanged = {
   encode(message: PasswordChanged, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.passwordHash);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PasswordChanged {
+
+  decode(input: Reader | Uint8Array, length?: number): PasswordChanged {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePasswordChanged } as PasswordChanged;
@@ -2001,6 +1980,7 @@ export const PasswordChanged = {
     }
     return message;
   },
+
   fromJSON(object: any): PasswordChanged {
     const message = { ...basePasswordChanged } as PasswordChanged;
     if (object.id !== undefined && object.id !== null) {
@@ -2015,6 +1995,7 @@ export const PasswordChanged = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PasswordChanged>): PasswordChanged {
     const message = { ...basePasswordChanged } as PasswordChanged;
     if (object.id !== undefined && object.id !== null) {
@@ -2029,23 +2010,33 @@ export const PasswordChanged = {
     }
     return message;
   },
+
   toJSON(message: PasswordChanged): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.passwordHash !== undefined && (obj.passwordHash = message.passwordHash);
+    message.passwordHash !== undefined &&
+      (obj.passwordHash = message.passwordHash);
     return obj;
   },
 };
 
+const basePasswordChangeRequested: object = { id: "" };
+
 export const PasswordChangeRequested = {
-  encode(message: PasswordChangeRequested, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: PasswordChangeRequested,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PasswordChangeRequested {
+
+  decode(input: Reader | Uint8Array, length?: number): PasswordChangeRequested {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePasswordChangeRequested } as PasswordChangeRequested;
+    const message = {
+      ...basePasswordChangeRequested,
+    } as PasswordChangeRequested;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2059,8 +2050,11 @@ export const PasswordChangeRequested = {
     }
     return message;
   },
+
   fromJSON(object: any): PasswordChangeRequested {
-    const message = { ...basePasswordChangeRequested } as PasswordChangeRequested;
+    const message = {
+      ...basePasswordChangeRequested,
+    } as PasswordChangeRequested;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2068,8 +2062,13 @@ export const PasswordChangeRequested = {
     }
     return message;
   },
-  fromPartial(object: DeepPartial<PasswordChangeRequested>): PasswordChangeRequested {
-    const message = { ...basePasswordChangeRequested } as PasswordChangeRequested;
+
+  fromPartial(
+    object: DeepPartial<PasswordChangeRequested>
+  ): PasswordChangeRequested {
+    const message = {
+      ...basePasswordChangeRequested,
+    } as PasswordChangeRequested;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -2077,6 +2076,7 @@ export const PasswordChangeRequested = {
     }
     return message;
   },
+
   toJSON(message: PasswordChangeRequested): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -2084,14 +2084,24 @@ export const PasswordChangeRequested = {
   },
 };
 
+const baseEmailChangeRequested: object = {
+  id: "",
+  activationCode: "",
+  newEmail: "",
+};
+
 export const EmailChangeRequested = {
-  encode(message: EmailChangeRequested, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: EmailChangeRequested,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.activationCode);
     writer.uint32(26).string(message.newEmail);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): EmailChangeRequested {
+
+  decode(input: Reader | Uint8Array, length?: number): EmailChangeRequested {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseEmailChangeRequested } as EmailChangeRequested;
@@ -2114,6 +2124,7 @@ export const EmailChangeRequested = {
     }
     return message;
   },
+
   fromJSON(object: any): EmailChangeRequested {
     const message = { ...baseEmailChangeRequested } as EmailChangeRequested;
     if (object.id !== undefined && object.id !== null) {
@@ -2133,6 +2144,7 @@ export const EmailChangeRequested = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<EmailChangeRequested>): EmailChangeRequested {
     const message = { ...baseEmailChangeRequested } as EmailChangeRequested;
     if (object.id !== undefined && object.id !== null) {
@@ -2152,22 +2164,30 @@ export const EmailChangeRequested = {
     }
     return message;
   },
+
   toJSON(message: EmailChangeRequested): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     return obj;
   },
 };
 
+const baseEmailChangeConfirmed: object = { id: "", email: "" };
+
 export const EmailChangeConfirmed = {
-  encode(message: EmailChangeConfirmed, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: EmailChangeConfirmed,
+    writer: Writer = Writer.create()
+  ): Writer {
     writer.uint32(10).string(message.id);
     writer.uint32(18).string(message.email);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): EmailChangeConfirmed {
+
+  decode(input: Reader | Uint8Array, length?: number): EmailChangeConfirmed {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseEmailChangeConfirmed } as EmailChangeConfirmed;
@@ -2187,6 +2207,7 @@ export const EmailChangeConfirmed = {
     }
     return message;
   },
+
   fromJSON(object: any): EmailChangeConfirmed {
     const message = { ...baseEmailChangeConfirmed } as EmailChangeConfirmed;
     if (object.id !== undefined && object.id !== null) {
@@ -2201,6 +2222,7 @@ export const EmailChangeConfirmed = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<EmailChangeConfirmed>): EmailChangeConfirmed {
     const message = { ...baseEmailChangeConfirmed } as EmailChangeConfirmed;
     if (object.id !== undefined && object.id !== null) {
@@ -2215,6 +2237,7 @@ export const EmailChangeConfirmed = {
     }
     return message;
   },
+
   toJSON(message: EmailChangeConfirmed): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -2222,6 +2245,8 @@ export const EmailChangeConfirmed = {
     return obj;
   },
 };
+
+const baseUserList: object = { totalCount: 0 };
 
 export const UserList = {
   encode(message: UserList, writer: Writer = Writer.create()): Writer {
@@ -2234,7 +2259,8 @@ export const UserList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): UserList {
+
+  decode(input: Reader | Uint8Array, length?: number): UserList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUserList } as UserList;
@@ -2258,6 +2284,7 @@ export const UserList = {
     }
     return message;
   },
+
   fromJSON(object: any): UserList {
     const message = { ...baseUserList } as UserList;
     message.items = [];
@@ -2278,6 +2305,7 @@ export const UserList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<UserList>): UserList {
     const message = { ...baseUserList } as UserList;
     message.items = [];
@@ -2298,25 +2326,32 @@ export const UserList = {
     }
     return message;
   },
+
   toJSON(message: UserList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? User.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? User.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseActivate: object = { id: "" };
 
 export const Activate = {
   encode(message: Activate, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Activate {
+
+  decode(input: Reader | Uint8Array, length?: number): Activate {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseActivate } as Activate;
@@ -2333,6 +2368,7 @@ export const Activate = {
     }
     return message;
   },
+
   fromJSON(object: any): Activate {
     const message = { ...baseActivate } as Activate;
     if (object.id !== undefined && object.id !== null) {
@@ -2342,6 +2378,7 @@ export const Activate = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Activate>): Activate {
     const message = { ...baseActivate } as Activate;
     if (object.id !== undefined && object.id !== null) {
@@ -2351,12 +2388,15 @@ export const Activate = {
     }
     return message;
   },
+
   toJSON(message: Activate): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseFindByRoleRequest: object = { role: "" };
 
 export const FindByRoleRequest = {
   encode(message: FindByRoleRequest, writer: Writer = Writer.create()): Writer {
@@ -2369,7 +2409,8 @@ export const FindByRoleRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): FindByRoleRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): FindByRoleRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseFindByRoleRequest } as FindByRoleRequest;
@@ -2393,6 +2434,7 @@ export const FindByRoleRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): FindByRoleRequest {
     const message = { ...baseFindByRoleRequest } as FindByRoleRequest;
     message.attributes = [];
@@ -2413,6 +2455,7 @@ export const FindByRoleRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<FindByRoleRequest>): FindByRoleRequest {
     const message = { ...baseFindByRoleRequest } as FindByRoleRequest;
     message.attributes = [];
@@ -2433,17 +2476,48 @@ export const FindByRoleRequest = {
     }
     return message;
   },
+
   toJSON(message: FindByRoleRequest): unknown {
     const obj: any = {};
     message.role !== undefined && (obj.role = message.role);
     if (message.attributes) {
-      obj.attributes = message.attributes.map(e => e ? Attribute.toJSON(e) : undefined);
+      obj.attributes = message.attributes.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.attributes = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseUser: object = {
+  id: "",
+  name: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  newEmail: "",
+  active: false,
+  activationCode: "",
+  password: "",
+  passwordHash: "",
+  timezoneId: "",
+  localeId: "",
+  defaultScope: "",
+  unauthenticated: false,
+  guest: false,
+  userType: 0,
+  invite: false,
+  invitedByUserName: "",
+  invitedByUserFirstName: "",
+  invitedByUserLastName: "",
+  lastLogin: 0,
+  lastAccess: 0,
 };
 
 export const User = {
@@ -2484,7 +2558,8 @@ export const User = {
     writer.uint32(209).double(message.lastAccess);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): User {
+
+  decode(input: Reader | Uint8Array, length?: number): User {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseUser } as User;
@@ -2527,7 +2602,9 @@ export const User = {
           message.passwordHash = reader.string();
           break;
         case 12:
-          message.roleAssociations.push(RoleAssociation.decode(reader, reader.uint32()));
+          message.roleAssociations.push(
+            RoleAssociation.decode(reader, reader.uint32())
+          );
           break;
         case 13:
           message.timezoneId = reader.string();
@@ -2578,6 +2655,7 @@ export const User = {
     }
     return message;
   },
+
   fromJSON(object: any): User {
     const message = { ...baseUser } as User;
     message.roleAssociations = [];
@@ -2637,7 +2715,10 @@ export const User = {
     } else {
       message.passwordHash = "";
     }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
       for (const e of object.roleAssociations) {
         message.roleAssociations.push(RoleAssociation.fromJSON(e));
       }
@@ -2657,7 +2738,10 @@ export const User = {
     } else {
       message.defaultScope = "";
     }
-    if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
+    if (
+      object.unauthenticated !== undefined &&
+      object.unauthenticated !== null
+    ) {
       message.unauthenticated = Boolean(object.unauthenticated);
     } else {
       message.unauthenticated = false;
@@ -2682,17 +2766,26 @@ export const User = {
     } else {
       message.invite = false;
     }
-    if (object.invitedByUserName !== undefined && object.invitedByUserName !== null) {
+    if (
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
+    ) {
       message.invitedByUserName = String(object.invitedByUserName);
     } else {
       message.invitedByUserName = "";
     }
-    if (object.invitedByUserFirstName !== undefined && object.invitedByUserFirstName !== null) {
+    if (
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
+    ) {
       message.invitedByUserFirstName = String(object.invitedByUserFirstName);
     } else {
       message.invitedByUserFirstName = "";
     }
-    if (object.invitedByUserLastName !== undefined && object.invitedByUserLastName !== null) {
+    if (
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
+    ) {
       message.invitedByUserLastName = String(object.invitedByUserLastName);
     } else {
       message.invitedByUserLastName = "";
@@ -2714,6 +2807,7 @@ export const User = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<User>): User {
     const message = { ...baseUser } as User;
     message.roleAssociations = [];
@@ -2773,7 +2867,10 @@ export const User = {
     } else {
       message.passwordHash = "";
     }
-    if (object.roleAssociations !== undefined && object.roleAssociations !== null) {
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
       for (const e of object.roleAssociations) {
         message.roleAssociations.push(RoleAssociation.fromPartial(e));
       }
@@ -2793,7 +2890,10 @@ export const User = {
     } else {
       message.defaultScope = "";
     }
-    if (object.unauthenticated !== undefined && object.unauthenticated !== null) {
+    if (
+      object.unauthenticated !== undefined &&
+      object.unauthenticated !== null
+    ) {
       message.unauthenticated = object.unauthenticated;
     } else {
       message.unauthenticated = false;
@@ -2818,17 +2918,26 @@ export const User = {
     } else {
       message.invite = false;
     }
-    if (object.invitedByUserName !== undefined && object.invitedByUserName !== null) {
+    if (
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
+    ) {
       message.invitedByUserName = object.invitedByUserName;
     } else {
       message.invitedByUserName = "";
     }
-    if (object.invitedByUserFirstName !== undefined && object.invitedByUserFirstName !== null) {
+    if (
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
+    ) {
       message.invitedByUserFirstName = object.invitedByUserFirstName;
     } else {
       message.invitedByUserFirstName = "";
     }
-    if (object.invitedByUserLastName !== undefined && object.invitedByUserLastName !== null) {
+    if (
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
+    ) {
       message.invitedByUserLastName = object.invitedByUserLastName;
     } else {
       message.invitedByUserLastName = "";
@@ -2850,37 +2959,52 @@ export const User = {
     }
     return message;
   },
+
   toJSON(message: User): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
     message.firstName !== undefined && (obj.firstName = message.firstName);
     message.lastName !== undefined && (obj.lastName = message.lastName);
     message.email !== undefined && (obj.email = message.email);
     message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     message.active !== undefined && (obj.active = message.active);
-    message.activationCode !== undefined && (obj.activationCode = message.activationCode);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
-    message.passwordHash !== undefined && (obj.passwordHash = message.passwordHash);
+    message.passwordHash !== undefined &&
+      (obj.passwordHash = message.passwordHash);
     if (message.roleAssociations) {
-      obj.roleAssociations = message.roleAssociations.map(e => e ? RoleAssociation.toJSON(e) : undefined);
+      obj.roleAssociations = message.roleAssociations.map((e) =>
+        e ? RoleAssociation.toJSON(e) : undefined
+      );
     } else {
       obj.roleAssociations = [];
     }
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
-    message.defaultScope !== undefined && (obj.defaultScope = message.defaultScope);
-    message.unauthenticated !== undefined && (obj.unauthenticated = message.unauthenticated);
+    message.defaultScope !== undefined &&
+      (obj.defaultScope = message.defaultScope);
+    message.unauthenticated !== undefined &&
+      (obj.unauthenticated = message.unauthenticated);
     message.guest !== undefined && (obj.guest = message.guest);
-    message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.userType !== undefined && (obj.userType = userTypeToJSON(message.userType));
+    message.image !== undefined &&
+      (obj.image = message.image ? Image.toJSON(message.image) : undefined);
+    message.userType !== undefined &&
+      (obj.userType = userTypeToJSON(message.userType));
     message.invite !== undefined && (obj.invite = message.invite);
-    message.invitedByUserName !== undefined && (obj.invitedByUserName = message.invitedByUserName);
-    message.invitedByUserFirstName !== undefined && (obj.invitedByUserFirstName = message.invitedByUserFirstName);
-    message.invitedByUserLastName !== undefined && (obj.invitedByUserLastName = message.invitedByUserLastName);
+    message.invitedByUserName !== undefined &&
+      (obj.invitedByUserName = message.invitedByUserName);
+    message.invitedByUserFirstName !== undefined &&
+      (obj.invitedByUserFirstName = message.invitedByUserFirstName);
+    message.invitedByUserLastName !== undefined &&
+      (obj.invitedByUserLastName = message.invitedByUserLastName);
     if (message.tokens) {
-      obj.tokens = message.tokens.map(e => e ? Tokens.toJSON(e) : undefined);
+      obj.tokens = message.tokens.map((e) =>
+        e ? Tokens.toJSON(e) : undefined
+      );
     } else {
       obj.tokens = [];
     }
@@ -2890,202 +3014,1233 @@ export const User = {
   },
 };
 
-export const metaLoginRequest: { [key in keyof Required<LoginRequest>]: MetaBase | string } = {
-  identifier: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** The microservice for the user resource. */
+export interface Service {
+  Read(request: ReadRequest): Promise<UserList>;
+  Create(request: UserList): Promise<UserList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: UserList): Promise<UserList>;
+  Upsert(request: UserList): Promise<UserList>;
+  Find(request: FindRequest): Promise<UserList>;
+  Register(request: RegisterRequest): Promise<User>;
+  Activate(request: ActivateRequest): Promise<Empty>;
+  ChangePassword(request: ChangePasswordRequest): Promise<Empty>;
+  RequestPasswordChange(request: RequestPasswordChangeRequest): Promise<Empty>;
+  RequestEmailChange(request: ChangeEmailRequest): Promise<Empty>;
+  ConfirmPasswordChange(request: ConfirmPasswordChangeRequest): Promise<Empty>;
+  ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<Empty>;
+  Unregister(request: UnregisterRequest): Promise<Empty>;
+  Login(request: LoginRequest): Promise<User>;
+  FindByRole(request: FindByRoleRequest): Promise<UserList>;
+  DeleteUsersByOrg(request: OrgIDRequest): Promise<UserIDs>;
+  ConfirmUserInvitation(request: ConfirmUserInvitationRequest): Promise<Empty>;
+  SendInvitationEmail(request: SendInvitationEmailRequest): Promise<Empty>;
+  FindByToken(request: FindByTokenRequest): Promise<User>;
 }
-export const metaOrgIDRequest: { [key in keyof Required<OrgIDRequest>]: MetaBase | string } = {
-  orgIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaUserIDs: { [key in keyof Required<UserIDs>]: MetaBase | string } = {
-  userIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaFindRequest: { [key in keyof Required<FindRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaFindByTokenRequest: { [key in keyof Required<FindByTokenRequest>]: MetaBase | string } = {
-  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaRegisterRequest: { [key in keyof Required<RegisterRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  guest: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  firstName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  lastName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  timezoneId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  localeId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  roleAssociations: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaMessage} as MetaArray,
-  defaultScope: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  userType: {kind:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaMessage,
-  captchaCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaActivateRequest: { [key in keyof Required<ActivateRequest>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaConfirmUserInvitationRequest: { [key in keyof Required<ConfirmUserInvitationRequest>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaSendInvitationEmailRequest: { [key in keyof Required<SendInvitationEmailRequest>]: MetaBase | string } = {
-  userId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invitedByUserId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaChangePasswordRequest: { [key in keyof Required<ChangePasswordRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  newPassword: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaRequestPasswordChangeRequest: { [key in keyof Required<RequestPasswordChangeRequest>]: MetaBase | string } = {
-  name: {kind:'union', choices: [undefined, {kind:'builtin', type:'string', original:'string'} as MetaPrimitive]} as MetaUnion,
-  email: {kind:'union', choices: [undefined, {kind:'builtin', type:'string', original:'string'} as MetaPrimitive]} as MetaUnion,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaConfirmPasswordChangeRequest: { [key in keyof Required<ConfirmPasswordChangeRequest>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaChangeEmailRequest: { [key in keyof Required<ChangeEmailRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaConfirmEmailChangeRequest: { [key in keyof Required<ConfirmEmailChangeRequest>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaUnregisterRequest: { [key in keyof Required<UnregisterRequest>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaPasswordChanged: { [key in keyof Required<PasswordChanged>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  passwordHash: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaPasswordChangeRequested: { [key in keyof Required<PasswordChangeRequested>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaEmailChangeRequested: { [key in keyof Required<EmailChangeRequested>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  newEmail: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaEmailChangeConfirmed: { [key in keyof Required<EmailChangeConfirmed>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaUserList: { [key in keyof Required<UserList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaActivate: { [key in keyof Required<Activate>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaFindByRoleRequest: { [key in keyof Required<FindByRoleRequest>]: MetaBase | string } = {
-  role: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  attributes: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaUser: { [key in keyof Required<User>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  firstName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  lastName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  newEmail: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  active: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  activationCode: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  password: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  passwordHash: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  roleAssociations: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.RoleAssociation', name:'RoleAssociation'} as MetaMessage} as MetaArray,
-  timezoneId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  localeId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  defaultScope: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  unauthenticated: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  guest: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  image: {kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage,
-  userType: {kind:'object', type:'.io.restorecommerce.user.UserType', name:'UserType'} as MetaMessage,
-  invite: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  invitedByUserName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invitedByUserFirstName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  invitedByUserLastName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  tokens: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.auth.Tokens', name:'Tokens'} as MetaMessage} as MetaArray,
-  lastLogin: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  lastAccess: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: UserList.decode} as MetaService<ReadRequest, UserList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaService<UserList, UserList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaService<UserList, UserList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: UserList.encode, decodeResponse: UserList.decode} as MetaService<UserList, UserList>,
-  Find: {request: {kind:'object', type:'.io.restorecommerce.user.FindRequest', name:'FindRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: FindRequest.encode, decodeResponse: UserList.decode} as MetaService<FindRequest, UserList>,
-  Register: {request: {kind:'object', type:'.io.restorecommerce.user.RegisterRequest', name:'RegisterRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RegisterRequest.encode, decodeResponse: User.decode} as MetaService<RegisterRequest, User>,
-  Activate: {request: {kind:'object', type:'.io.restorecommerce.user.ActivateRequest', name:'ActivateRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ActivateRequest.encode, decodeResponse: Empty.decode} as MetaService<ActivateRequest, Empty>,
-  ChangePassword: {request: {kind:'object', type:'.io.restorecommerce.user.ChangePasswordRequest', name:'ChangePasswordRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ChangePasswordRequest.encode, decodeResponse: Empty.decode} as MetaService<ChangePasswordRequest, Empty>,
-  RequestPasswordChange: {request: {kind:'object', type:'.io.restorecommerce.user.RequestPasswordChangeRequest', name:'RequestPasswordChangeRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RequestPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaService<RequestPasswordChangeRequest, Empty>,
-  RequestEmailChange: {request: {kind:'object', type:'.io.restorecommerce.user.ChangeEmailRequest', name:'ChangeEmailRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ChangeEmailRequest.encode, decodeResponse: Empty.decode} as MetaService<ChangeEmailRequest, Empty>,
-  ConfirmPasswordChange: {request: {kind:'object', type:'.io.restorecommerce.user.ConfirmPasswordChangeRequest', name:'ConfirmPasswordChangeRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmPasswordChangeRequest.encode, decodeResponse: Empty.decode} as MetaService<ConfirmPasswordChangeRequest, Empty>,
-  ConfirmEmailChange: {request: {kind:'object', type:'.io.restorecommerce.user.ConfirmEmailChangeRequest', name:'ConfirmEmailChangeRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmEmailChangeRequest.encode, decodeResponse: Empty.decode} as MetaService<ConfirmEmailChangeRequest, Empty>,
-  Unregister: {request: {kind:'object', type:'.io.restorecommerce.user.UnregisterRequest', name:'UnregisterRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: UnregisterRequest.encode, decodeResponse: Empty.decode} as MetaService<UnregisterRequest, Empty>,
-  Login: {request: {kind:'object', type:'.io.restorecommerce.user.LoginRequest', name:'LoginRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: LoginRequest.encode, decodeResponse: User.decode} as MetaService<LoginRequest, User>,
-  FindByRole: {request: {kind:'object', type:'.io.restorecommerce.user.FindByRoleRequest', name:'FindByRoleRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserList', name:'UserList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: FindByRoleRequest.encode, decodeResponse: UserList.decode} as MetaService<FindByRoleRequest, UserList>,
-  DeleteUsersByOrg: {request: {kind:'object', type:'.io.restorecommerce.user.OrgIDRequest', name:'OrgIDRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.UserIDs', name:'UserIDs'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrgIDRequest.encode, decodeResponse: UserIDs.decode} as MetaService<OrgIDRequest, UserIDs>,
-  ConfirmUserInvitation: {request: {kind:'object', type:'.io.restorecommerce.user.ConfirmUserInvitationRequest', name:'ConfirmUserInvitationRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ConfirmUserInvitationRequest.encode, decodeResponse: Empty.decode} as MetaService<ConfirmUserInvitationRequest, Empty>,
-  SendInvitationEmail: {request: {kind:'object', type:'.io.restorecommerce.user.SendInvitationEmailRequest', name:'SendInvitationEmailRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: SendInvitationEmailRequest.encode, decodeResponse: Empty.decode} as MetaService<SendInvitationEmailRequest, Empty>,
-  FindByToken: {request: {kind:'object', type:'.io.restorecommerce.user.FindByTokenRequest', name:'FindByTokenRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.user.User', name:'User'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: FindByTokenRequest.encode, decodeResponse: User.decode} as MetaService<FindByTokenRequest, User>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  UserType: ['enum', '.io.restorecommerce.user.UserType', UserType, undefined],
-  LoginRequest: ['message', '.io.restorecommerce.user.LoginRequest', LoginRequest, metaLoginRequest],
-  OrgIDRequest: ['message', '.io.restorecommerce.user.OrgIDRequest', OrgIDRequest, metaOrgIDRequest],
-  UserIDs: ['message', '.io.restorecommerce.user.UserIDs', UserIDs, metaUserIDs],
-  FindRequest: ['message', '.io.restorecommerce.user.FindRequest', FindRequest, metaFindRequest],
-  FindByTokenRequest: ['message', '.io.restorecommerce.user.FindByTokenRequest', FindByTokenRequest, metaFindByTokenRequest],
-  RegisterRequest: ['message', '.io.restorecommerce.user.RegisterRequest', RegisterRequest, metaRegisterRequest],
-  ActivateRequest: ['message', '.io.restorecommerce.user.ActivateRequest', ActivateRequest, metaActivateRequest],
-  ConfirmUserInvitationRequest: ['message', '.io.restorecommerce.user.ConfirmUserInvitationRequest', ConfirmUserInvitationRequest, metaConfirmUserInvitationRequest],
-  SendInvitationEmailRequest: ['message', '.io.restorecommerce.user.SendInvitationEmailRequest', SendInvitationEmailRequest, metaSendInvitationEmailRequest],
-  ChangePasswordRequest: ['message', '.io.restorecommerce.user.ChangePasswordRequest', ChangePasswordRequest, metaChangePasswordRequest],
-  RequestPasswordChangeRequest: ['message', '.io.restorecommerce.user.RequestPasswordChangeRequest', RequestPasswordChangeRequest, metaRequestPasswordChangeRequest],
-  ConfirmPasswordChangeRequest: ['message', '.io.restorecommerce.user.ConfirmPasswordChangeRequest', ConfirmPasswordChangeRequest, metaConfirmPasswordChangeRequest],
-  ChangeEmailRequest: ['message', '.io.restorecommerce.user.ChangeEmailRequest', ChangeEmailRequest, metaChangeEmailRequest],
-  ConfirmEmailChangeRequest: ['message', '.io.restorecommerce.user.ConfirmEmailChangeRequest', ConfirmEmailChangeRequest, metaConfirmEmailChangeRequest],
-  UnregisterRequest: ['message', '.io.restorecommerce.user.UnregisterRequest', UnregisterRequest, metaUnregisterRequest],
-  Deleted: ['message', '.io.restorecommerce.user.Deleted', Deleted, metaDeleted],
-  PasswordChanged: ['message', '.io.restorecommerce.user.PasswordChanged', PasswordChanged, metaPasswordChanged],
-  PasswordChangeRequested: ['message', '.io.restorecommerce.user.PasswordChangeRequested', PasswordChangeRequested, metaPasswordChangeRequested],
-  EmailChangeRequested: ['message', '.io.restorecommerce.user.EmailChangeRequested', EmailChangeRequested, metaEmailChangeRequested],
-  EmailChangeConfirmed: ['message', '.io.restorecommerce.user.EmailChangeConfirmed', EmailChangeConfirmed, metaEmailChangeConfirmed],
-  UserList: ['message', '.io.restorecommerce.user.UserList', UserList, metaUserList],
-  Activate: ['message', '.io.restorecommerce.user.Activate', Activate, metaActivate],
-  FindByRoleRequest: ['message', '.io.restorecommerce.user.FindByRoleRequest', FindByRoleRequest, metaFindByRoleRequest],
-  User: ['message', '.io.restorecommerce.user.User', User, metaUser],
-  Service: ['service', '.io.restorecommerce.user.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/attribute.proto",
+      "io/restorecommerce/image.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "LoginRequest",
+        field: [
+          {
+            name: "identifier",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "identifier",
+          },
+          {
+            name: "password",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "token",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "token",
+          },
+        ],
+      },
+      {
+        name: "OrgIDRequest",
+        field: [
+          {
+            name: "org_ids",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "orgIds",
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "UserIDs",
+        field: [
+          {
+            name: "user_ids",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "userIds",
+          },
+        ],
+      },
+      {
+        name: "FindRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "name",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "email",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "FindByTokenRequest",
+        field: [
+          {
+            name: "token",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "token",
+          },
+        ],
+      },
+      {
+        name: "RegisterRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "guest",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "guest",
+          },
+          {
+            name: "meta",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "first_name",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "firstName",
+          },
+          {
+            name: "last_name",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "lastName",
+          },
+          {
+            name: "email",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "password",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "timezone_id",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timezoneId",
+          },
+          {
+            name: "locale_id",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "localeId",
+          },
+          {
+            name: "role_associations",
+            number: 11,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.RoleAssociation",
+            jsonName: "roleAssociations",
+          },
+          {
+            name: "default_scope",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "defaultScope",
+          },
+          {
+            name: "user_type",
+            number: 13,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.user.UserType",
+            jsonName: "userType",
+          },
+          {
+            name: "captcha_code",
+            number: 14,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "captchaCode",
+          },
+        ],
+      },
+      {
+        name: "ActivateRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "activation_code",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ConfirmUserInvitationRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "password",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "activation_code",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "SendInvitationEmailRequest",
+        field: [
+          {
+            name: "user_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "userId",
+          },
+          {
+            name: "invited_by_user_id",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invitedByUserId",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ChangePasswordRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "password",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "new_password",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "newPassword",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "RequestPasswordChangeRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            oneofIndex: 0,
+            jsonName: "name",
+          },
+          {
+            name: "email",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            oneofIndex: 0,
+            jsonName: "email",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+        oneofDecl: [{ name: "input_field" }],
+      },
+      {
+        name: "ConfirmPasswordChangeRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "activation_code",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "password",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ChangeEmailRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "email",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ConfirmEmailChangeRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "activation_code",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "UnregisterRequest",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "PasswordChanged",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "password_hash",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "passwordHash",
+          },
+        ],
+      },
+      {
+        name: "PasswordChangeRequested",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "EmailChangeRequested",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "activation_code",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "new_email",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "newEmail",
+          },
+        ],
+      },
+      {
+        name: "EmailChangeConfirmed",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "email",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+        ],
+      },
+      {
+        name: "UserList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.user.User",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Activate",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "FindByRoleRequest",
+        field: [
+          {
+            name: "role",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "role",
+          },
+          {
+            name: "attributes",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            jsonName: "attributes",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "User",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "first_name",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "firstName",
+          },
+          {
+            name: "last_name",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "lastName",
+          },
+          {
+            name: "email",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "new_email",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "newEmail",
+          },
+          {
+            name: "active",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "active",
+          },
+          {
+            name: "activation_code",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "activationCode",
+          },
+          {
+            name: "password",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "password",
+          },
+          {
+            name: "password_hash",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "passwordHash",
+          },
+          {
+            name: "role_associations",
+            number: 12,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.RoleAssociation",
+            jsonName: "roleAssociations",
+          },
+          {
+            name: "timezone_id",
+            number: 13,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "timezoneId",
+          },
+          {
+            name: "locale_id",
+            number: 14,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "localeId",
+          },
+          {
+            name: "default_scope",
+            number: 15,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "defaultScope",
+          },
+          {
+            name: "unauthenticated",
+            number: 16,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "unauthenticated",
+          },
+          {
+            name: "guest",
+            number: 17,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "guest",
+          },
+          {
+            name: "image",
+            number: 18,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "image",
+          },
+          {
+            name: "user_type",
+            number: 19,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.user.UserType",
+            jsonName: "userType",
+          },
+          {
+            name: "invite",
+            number: 20,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "invite",
+          },
+          {
+            name: "invited_by_user_name",
+            number: 21,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invitedByUserName",
+          },
+          {
+            name: "invited_by_user_first_name",
+            number: 22,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invitedByUserFirstName",
+          },
+          {
+            name: "invited_by_user_last_name",
+            number: 23,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "invitedByUserLastName",
+          },
+          {
+            name: "tokens",
+            number: 24,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Tokens",
+            jsonName: "tokens",
+          },
+          {
+            name: "last_login",
+            number: 25,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "lastLogin",
+          },
+          {
+            name: "last_access",
+            number: 26,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "lastAccess",
+          },
+        ],
+      },
+    ],
+    enumType: [
+      {
+        name: "UserType",
+        value: [
+          { name: "ORG_USER", number: 0 },
+          { name: "INDIVIDUAL_USER", number: 1 },
+          { name: "GUEST", number: 2 },
+          { name: "TECHNICAL_USER", number: 3 },
+        ],
+      },
+    ],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "Find",
+            inputType: ".io.restorecommerce.user.FindRequest",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "Register",
+            inputType: ".io.restorecommerce.user.RegisterRequest",
+            outputType: ".io.restorecommerce.user.User",
+          },
+          {
+            name: "Activate",
+            inputType: ".io.restorecommerce.user.ActivateRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "ChangePassword",
+            inputType: ".io.restorecommerce.user.ChangePasswordRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "RequestPasswordChange",
+            inputType: ".io.restorecommerce.user.RequestPasswordChangeRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "RequestEmailChange",
+            inputType: ".io.restorecommerce.user.ChangeEmailRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "ConfirmPasswordChange",
+            inputType: ".io.restorecommerce.user.ConfirmPasswordChangeRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "ConfirmEmailChange",
+            inputType: ".io.restorecommerce.user.ConfirmEmailChangeRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Unregister",
+            inputType: ".io.restorecommerce.user.UnregisterRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Login",
+            inputType: ".io.restorecommerce.user.LoginRequest",
+            outputType: ".io.restorecommerce.user.User",
+          },
+          {
+            name: "FindByRole",
+            inputType: ".io.restorecommerce.user.FindByRoleRequest",
+            outputType: ".io.restorecommerce.user.UserList",
+          },
+          {
+            name: "DeleteUsersByOrg",
+            inputType: ".io.restorecommerce.user.OrgIDRequest",
+            outputType: ".io.restorecommerce.user.UserIDs",
+          },
+          {
+            name: "ConfirmUserInvitation",
+            inputType: ".io.restorecommerce.user.ConfirmUserInvitationRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "SendInvitationEmail",
+            inputType: ".io.restorecommerce.user.SendInvitationEmailRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "FindByToken",
+            inputType: ".io.restorecommerce.user.FindByTokenRequest",
+            outputType: ".io.restorecommerce.user.User",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/user.proto",
+    package: "io.restorecommerce.user",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [14, 0, 36, 1],
+          leadingComments: "*\n The microservice for the user resource.\n",
+        },
+        {
+          path: [4, 0],
+          span: [42, 0, 46, 1],
+          leadingComments:
+            "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
+        },
+        {
+          path: [4, 0, 2, 0],
+          span: [43, 2, 24],
+          trailingComments: " User name or email\n",
+        },
+        {
+          path: [4, 0, 2, 1],
+          span: [44, 2, 22],
+          trailingComments: " Raw password\n",
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [58, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 5, 2, 11],
+          span: [88, 2, 28],
+          trailingComments: " default hierarchical scope\n",
+        },
+        {
+          path: [4, 6, 2, 0],
+          span: [94, 2, 18],
+          trailingComments: "/ User name (unique)\n",
+        },
+        {
+          path: [4, 9, 2, 0],
+          span: [113, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 12, 2, 0],
+          span: [135, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 14, 2, 0],
+          span: [147, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 15],
+          span: [159, 0, 161, 1],
+          leadingComments:
+            "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
+        },
+        {
+          path: [4, 16],
+          span: [169, 0, 172, 1],
+          leadingComments:
+            "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
+        },
+        {
+          path: [4, 16, 2, 0],
+          span: [170, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 17, 2, 0],
+          span: [175, 2, 16],
+          trailingComments: " User ID\n",
+        },
+        {
+          path: [4, 18],
+          span: [181, 0, 185, 1],
+          leadingComments: "*\n User email id changed event.\n",
+        },
+        {
+          path: [4, 19, 2, 0],
+          span: [188, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 20],
+          span: [195, 0, 199, 1],
+          leadingComments: "*\n A list of User.\n",
+        },
+        {
+          path: [4, 21],
+          span: [204, 0, 206, 1],
+          leadingComments: "*\n User activation request.\n",
+        },
+        {
+          path: [4, 21, 2, 0],
+          span: [205, 2, 16],
+          trailingComments: "/ User ID\n",
+        },
+        {
+          path: [4, 23],
+          span: [217, 0, 244, 1],
+          leadingComments: "*\n A User resource.\n",
+        },
+        {
+          path: [4, 23, 2, 0],
+          span: [218, 2, 16],
+          trailingComments: "/ User ID, unique, key\n",
+        },
+        {
+          path: [4, 23, 2, 2],
+          span: [220, 2, 18],
+          trailingComments: " The name of the user, can be used for login\n",
+        },
+        {
+          path: [4, 23, 2, 5],
+          span: [223, 2, 19],
+          trailingComments: "/ Email address, can be used for login\n",
+        },
+        {
+          path: [4, 23, 2, 6],
+          span: [224, 2, 23],
+          trailingComments:
+            "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
+        },
+        {
+          path: [4, 23, 2, 7],
+          span: [225, 2, 18],
+          trailingComments:
+            "/ If the user was activated via the activation process\n",
+        },
+        {
+          path: [4, 23, 2, 8],
+          span: [226, 2, 29],
+          trailingComments:
+            "/ Activation code used in the activation process\n",
+        },
+        {
+          path: [4, 23, 2, 9],
+          span: [227, 2, 23],
+          trailingComments: "/ Raw password, not stored\n",
+        },
+        {
+          path: [4, 23, 2, 10],
+          span: [228, 2, 28],
+          trailingComments: "/ Encrypted password, stored\n",
+        },
+        {
+          path: [4, 23, 2, 11],
+          span: [229, 2, 74],
+          trailingComments:
+            " A user can have multiple roles and different attributes coupled with each role\n",
+        },
+        {
+          path: [4, 23, 2, 12],
+          span: [230, 2, 26],
+          trailingComments: " timezone_id specifications\n",
+        },
+        {
+          path: [4, 23, 2, 13],
+          span: [231, 2, 24],
+          trailingComments: " locale specifications\n",
+        },
+        {
+          path: [4, 23, 2, 14],
+          span: [232, 2, 28],
+          trailingComments: " default hierarchical scope\n",
+        },
+        {
+          path: [4, 23, 2, 15],
+          span: [233, 2, 28],
+          trailingComments:
+            " true in case in case of `register`; set to false after activation\n",
+        },
+        {
+          path: [4, 23, 2, 16],
+          span: [234, 2, 18],
+          trailingComments:
+            "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
+        },
+        {
+          path: [4, 23, 2, 19],
+          span: [237, 2, 19],
+          trailingComments: " For user invitation\n",
+        },
+        {
+          path: [4, 23, 2, 20],
+          span: [238, 2, 35],
+          trailingComments: " user who is inviting\n",
+        },
+        {
+          path: [4, 23, 2, 21],
+          span: [239, 2, 41],
+          trailingComments: " First name of user inviting\n",
+        },
+        {
+          path: [4, 23, 2, 22],
+          span: [240, 2, 40],
+          trailingComments: " Last name of user inviting\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.user.UserType": UserType,
+    ".io.restorecommerce.user.LoginRequest": LoginRequest,
+    ".io.restorecommerce.user.OrgIDRequest": OrgIDRequest,
+    ".io.restorecommerce.user.UserIDs": UserIDs,
+    ".io.restorecommerce.user.FindRequest": FindRequest,
+    ".io.restorecommerce.user.FindByTokenRequest": FindByTokenRequest,
+    ".io.restorecommerce.user.RegisterRequest": RegisterRequest,
+    ".io.restorecommerce.user.ActivateRequest": ActivateRequest,
+    ".io.restorecommerce.user.ConfirmUserInvitationRequest": ConfirmUserInvitationRequest,
+    ".io.restorecommerce.user.SendInvitationEmailRequest": SendInvitationEmailRequest,
+    ".io.restorecommerce.user.ChangePasswordRequest": ChangePasswordRequest,
+    ".io.restorecommerce.user.RequestPasswordChangeRequest": RequestPasswordChangeRequest,
+    ".io.restorecommerce.user.ConfirmPasswordChangeRequest": ConfirmPasswordChangeRequest,
+    ".io.restorecommerce.user.ChangeEmailRequest": ChangeEmailRequest,
+    ".io.restorecommerce.user.ConfirmEmailChangeRequest": ConfirmEmailChangeRequest,
+    ".io.restorecommerce.user.UnregisterRequest": UnregisterRequest,
+    ".io.restorecommerce.user.Deleted": Deleted,
+    ".io.restorecommerce.user.PasswordChanged": PasswordChanged,
+    ".io.restorecommerce.user.PasswordChangeRequested": PasswordChangeRequested,
+    ".io.restorecommerce.user.EmailChangeRequested": EmailChangeRequested,
+    ".io.restorecommerce.user.EmailChangeConfirmed": EmailChangeConfirmed,
+    ".io.restorecommerce.user.UserList": UserList,
+    ".io.restorecommerce.user.Activate": Activate,
+    ".io.restorecommerce.user.FindByRoleRequest": FindByRoleRequest,
+    ".io.restorecommerce.user.User": User,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+    io_restorecommerce_attribute_protoMetadata,
+    io_restorecommerce_image_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

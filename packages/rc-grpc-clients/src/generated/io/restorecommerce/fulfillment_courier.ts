@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.fulfillment_courier";
 
 export interface CourierList {
   items: Courier[];
@@ -19,72 +34,7 @@ export interface Courier {
   id: string;
 }
 
-const baseCourierList: object = {
-  totalCount: 0,
-};
-
-const baseCourier: object = {
-  name: "",
-  description: "",
-  id: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<CourierList>;
-
-  Create(request: CourierList): Promise<CourierList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: CourierList): Promise<CourierList>;
-
-  Upsert(request: CourierList): Promise<CourierList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.fulfillment_courier'
+const baseCourierList: object = { totalCount: 0 };
 
 export const CourierList = {
   encode(message: CourierList, writer: Writer = Writer.create()): Writer {
@@ -97,7 +47,8 @@ export const CourierList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CourierList {
+
+  decode(input: Reader | Uint8Array, length?: number): CourierList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCourierList } as CourierList;
@@ -121,6 +72,7 @@ export const CourierList = {
     }
     return message;
   },
+
   fromJSON(object: any): CourierList {
     const message = { ...baseCourierList } as CourierList;
     message.items = [];
@@ -141,6 +93,7 @@ export const CourierList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CourierList>): CourierList {
     const message = { ...baseCourierList } as CourierList;
     message.items = [];
@@ -161,18 +114,24 @@ export const CourierList = {
     }
     return message;
   },
+
   toJSON(message: CourierList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Courier.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Courier.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseCourier: object = { name: "", description: "", id: "" };
 
 export const Courier = {
   encode(message: Courier, writer: Writer = Writer.create()): Writer {
@@ -184,7 +143,8 @@ export const Courier = {
     writer.uint32(34).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Courier {
+
+  decode(input: Reader | Uint8Array, length?: number): Courier {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCourier } as Courier;
@@ -210,6 +170,7 @@ export const Courier = {
     }
     return message;
   },
+
   fromJSON(object: any): Courier {
     const message = { ...baseCourier } as Courier;
     if (object.name !== undefined && object.name !== null) {
@@ -234,6 +195,7 @@ export const Courier = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Courier>): Courier {
     const message = { ...baseCourier } as Courier;
     if (object.name !== undefined && object.name !== null) {
@@ -258,41 +220,160 @@ export const Courier = {
     }
     return message;
   },
+
   toJSON(message: Courier): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
 
-export const metaCourierList: { [key in keyof Required<CourierList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.fulfillment_courier.Courier', name:'Courier'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+export interface Service {
+  Read(request: ReadRequest): Promise<CourierList>;
+  Create(request: CourierList): Promise<CourierList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: CourierList): Promise<CourierList>;
+  Upsert(request: CourierList): Promise<CourierList>;
 }
-export const metaCourier: { [key in keyof Required<Courier>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CourierList.decode} as MetaService<ReadRequest, CourierList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.fulfillment_courier.CourierList', name:'CourierList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CourierList.encode, decodeResponse: CourierList.decode} as MetaService<CourierList, CourierList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  CourierList: ['message', '.io.restorecommerce.fulfillment_courier.CourierList', CourierList, metaCourierList],
-  Courier: ['message', '.io.restorecommerce.fulfillment_courier.Courier', Courier, metaCourier],
-  Service: ['service', '.io.restorecommerce.fulfillment_courier.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "CourierList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.fulfillment_courier.Courier",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Courier",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "meta",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+            outputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+            outputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+            outputType: ".io.restorecommerce.fulfillment_courier.CourierList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/fulfillment_courier.proto",
+    package: "io.restorecommerce.fulfillment_courier",
+    sourceCodeInfo: { location: [] },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.fulfillment_courier.CourierList": CourierList,
+    ".io.restorecommerce.fulfillment_courier.Courier": Courier,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

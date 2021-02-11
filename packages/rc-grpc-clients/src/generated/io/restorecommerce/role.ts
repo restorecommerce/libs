@@ -1,22 +1,33 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Subject } from '../../io/restorecommerce/auth';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.role";
 
 export interface Role {
   id: string;
   meta?: Meta;
-  /**
-   *  specifies the role of the user
-   */
+  /** specifies the role of the user */
   name: string;
   description: string;
-  /**
-   *  role id who can assign this role
-   */
+  /** role id who can assign this role */
   assignableByRoles: string[];
 }
 
@@ -37,71 +48,6 @@ const baseRole: object = {
   assignableByRoles: "",
 };
 
-const baseRoleList: object = {
-  totalCount: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<RoleList>;
-
-  Create(request: RoleList): Promise<RoleList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: RoleList): Promise<RoleList>;
-
-  Upsert(request: RoleList): Promise<RoleList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.role'
-
 export const Role = {
   encode(message: Role, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -115,7 +61,8 @@ export const Role = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Role {
+
+  decode(input: Reader | Uint8Array, length?: number): Role {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRole } as Role;
@@ -145,6 +92,7 @@ export const Role = {
     }
     return message;
   },
+
   fromJSON(object: any): Role {
     const message = { ...baseRole } as Role;
     message.assignableByRoles = [];
@@ -168,13 +116,17 @@ export const Role = {
     } else {
       message.description = "";
     }
-    if (object.assignableByRoles !== undefined && object.assignableByRoles !== null) {
+    if (
+      object.assignableByRoles !== undefined &&
+      object.assignableByRoles !== null
+    ) {
       for (const e of object.assignableByRoles) {
         message.assignableByRoles.push(String(e));
       }
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Role>): Role {
     const message = { ...baseRole } as Role;
     message.assignableByRoles = [];
@@ -198,27 +150,35 @@ export const Role = {
     } else {
       message.description = "";
     }
-    if (object.assignableByRoles !== undefined && object.assignableByRoles !== null) {
+    if (
+      object.assignableByRoles !== undefined &&
+      object.assignableByRoles !== null
+    ) {
       for (const e of object.assignableByRoles) {
         message.assignableByRoles.push(e);
       }
     }
     return message;
   },
+
   toJSON(message: Role): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.assignableByRoles) {
-      obj.assignableByRoles = message.assignableByRoles.map(e => e);
+      obj.assignableByRoles = message.assignableByRoles.map((e) => e);
     } else {
       obj.assignableByRoles = [];
     }
     return obj;
   },
 };
+
+const baseRoleList: object = { totalCount: 0 };
 
 export const RoleList = {
   encode(message: RoleList, writer: Writer = Writer.create()): Writer {
@@ -231,7 +191,8 @@ export const RoleList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): RoleList {
+
+  decode(input: Reader | Uint8Array, length?: number): RoleList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseRoleList } as RoleList;
@@ -255,6 +216,7 @@ export const RoleList = {
     }
     return message;
   },
+
   fromJSON(object: any): RoleList {
     const message = { ...baseRoleList } as RoleList;
     message.items = [];
@@ -275,6 +237,7 @@ export const RoleList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<RoleList>): RoleList {
     const message = { ...baseRoleList } as RoleList;
     message.items = [];
@@ -295,25 +258,32 @@ export const RoleList = {
     }
     return message;
   },
+
   toJSON(message: RoleList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Role.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Role.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -330,6 +300,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -339,6 +310,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -348,6 +320,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -355,36 +328,180 @@ export const Deleted = {
   },
 };
 
-export const metaRole: { [key in keyof Required<Role>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  assignableByRoles: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
+export interface Service {
+  Read(request: ReadRequest): Promise<RoleList>;
+  Create(request: RoleList): Promise<RoleList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: RoleList): Promise<RoleList>;
+  Upsert(request: RoleList): Promise<RoleList>;
 }
-export const metaRoleList: { [key in keyof Required<RoleList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.role.Role', name:'Role'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: RoleList.decode} as MetaService<ReadRequest, RoleList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RoleList.encode, decodeResponse: RoleList.decode} as MetaService<RoleList, RoleList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RoleList.encode, decodeResponse: RoleList.decode} as MetaService<RoleList, RoleList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.role.RoleList', name:'RoleList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: RoleList.encode, decodeResponse: RoleList.decode} as MetaService<RoleList, RoleList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Role: ['message', '.io.restorecommerce.role.Role', Role, metaRole],
-  RoleList: ['message', '.io.restorecommerce.role.RoleList', RoleList, metaRoleList],
-  Deleted: ['message', '.io.restorecommerce.role.Deleted', Deleted, metaDeleted],
-  Service: ['service', '.io.restorecommerce.role.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Role",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "assignable_by_roles",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "assignableByRoles",
+          },
+        ],
+      },
+      {
+        name: "RoleList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.role.Role",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.role.RoleList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/role.proto",
+    package: "io.restorecommerce.role",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 2, 2],
+          span: [20, 2, 18],
+          trailingComments: " specifies the role of the user\n",
+        },
+        {
+          path: [4, 0, 2, 4],
+          span: [22, 2, 42],
+          trailingComments: " role id who can assign this role\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.role.Role": Role,
+    ".io.restorecommerce.role.RoleList": RoleList,
+    ".io.restorecommerce.role.Deleted": Deleted,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

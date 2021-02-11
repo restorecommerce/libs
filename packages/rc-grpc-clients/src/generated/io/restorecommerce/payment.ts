@@ -1,243 +1,18 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Writer, Reader } from 'protobufjs/minimal';
-import { StringValue } from '../../google/protobuf/wrappers';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as google_protobuf_wrappers_protoMetadata,
+  StringValue,
+} from "../../google/protobuf/wrappers";
 
+export const protobufPackage = "io.restorecommerce.payment";
 
-/**
- *  Request object for setup calls
- */
-export interface SetupRequest {
-  ip: string;
-  items: Item[];
-  subtotal: number;
-  shipping: number;
-  handling: number;
-  tax: number;
-  currency: string;
-  returnUrl: string;
-  cancelReturnUrl: string;
-  allowGuestCheckout: boolean;
-  provider: Provider;
-  subject?: Subject;
-}
-
-/**
- *  Response object for setup calls.
- */
-export interface SetupResponse {
-  paymentErrors: PaymentError[];
-  token: string;
-  confirmInitiationUrl: string;
-  initiatedOn: string;
-}
-
-/**
- *  Request object for authorization or purchase call for cardless payment.
- */
-export interface PaymentRequest {
-  provider: Provider;
-  paymentSum: number;
-  currency: string;
-  paymentId: string;
-  payerId: string;
-  token: string;
-  subject?: Subject;
-}
-
-/**
- *  Request object for capture call for both standard and cardless payments.
- */
-export interface CaptureRequest {
-  provider: Provider;
-  paymentSum: number;
-  currency: string;
-  paymentId: string;
-  subject?: Subject;
-}
-
-/**
- *  Unified response object for authorization, purchase and capture calls
- *  for both standard and cardless payments.
- */
-export interface PaymentResponse {
-  paymentErrors: PaymentError[];
-  paymentId: string;
-  executedOn: string;
-}
-
-/**
- *  Used for building ActiveMerchant::Billing::CreditCard instance.
- */
-export interface PaymentCard {
-  primaryNumber: string;
-  firstName: string;
-  lastName: string;
-  month: string;
-  year: number;
-  verificationValue: string;
-}
-
-/**
- *  Represents purchased item. Not all providers support this.
- */
-export interface Item {
-  name: string;
-  description: string;
-  quantity: number;
-  amount: number;
-}
-
-/**
- *  Error details.
- */
-export interface PaymentError {
-  killed: boolean;
-  code: number;
-  signal?: string;
-  cmd: string;
-  stdout: string;
-  stderr: string;
-}
-
-const baseSetupRequest: object = {
-  ip: "",
-  subtotal: 0,
-  shipping: 0,
-  handling: 0,
-  tax: 0,
-  currency: "",
-  returnUrl: "",
-  cancelReturnUrl: "",
-  allowGuestCheckout: false,
-  provider: 0,
-};
-
-const baseSetupResponse: object = {
-  token: "",
-  confirmInitiationUrl: "",
-  initiatedOn: "",
-};
-
-const basePaymentRequest: object = {
-  provider: 0,
-  paymentSum: 0,
-  currency: "",
-  paymentId: "",
-  payerId: "",
-  token: "",
-};
-
-const baseCaptureRequest: object = {
-  provider: 0,
-  paymentSum: 0,
-  currency: "",
-  paymentId: "",
-};
-
-const basePaymentResponse: object = {
-  paymentId: "",
-  executedOn: "",
-};
-
-const basePaymentCard: object = {
-  primaryNumber: "",
-  firstName: "",
-  lastName: "",
-  month: "",
-  year: 0,
-  verificationValue: "",
-};
-
-const baseItem: object = {
-  name: "",
-  description: "",
-  quantity: 0,
-  amount: 0,
-};
-
-const basePaymentError: object = {
-  killed: false,
-  code: 0,
-  cmd: "",
-  stdout: "",
-  stderr: "",
-};
-
-export interface Service {
-
-  /**
-   *  Wrapper for setup_authorization in ActiveMerchant
-   */
-  SetupAuthorization(request: SetupRequest): Promise<SetupResponse>;
-
-  /**
-   *  Wrapper for setup_purchase in ActiveMerchant
-   */
-  SetupPurchase(request: SetupRequest): Promise<SetupResponse>;
-
-  /**
-   *  Gets payment details by token or transaction. Only supported by PayPal Express Checkout.
-   */
-  Authorize(request: PaymentRequest): Promise<PaymentResponse>;
-
-  /**
-   *  Gets payment details by token or transaction. Only supported by PayPal Express Checkout.
-   */
-  Purchase(request: PaymentRequest): Promise<PaymentResponse>;
-
-  /**
-   *  Can capture both cardless and standard authorization.
-   */
-  Capture(request: CaptureRequest): Promise<PaymentResponse>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.payment'
-
-/**  Possible service providers. Provider names must be exactly as in config.yml.
- */
+/** Possible service providers. Provider names must be exactly as in config.yml. */
 export enum Provider {
   NO_PROVIDER = 0,
   PaypalExpressGateway = 1,
@@ -276,8 +51,7 @@ export function providerToJSON(object: Provider): string {
   }
 }
 
-/**  Possible payment identifiers.
- */
+/** Possible payment identifiers. */
 export enum PaymentIdType {
   NO_IDENTIFIER_TYPE = 0,
   TOKEN = 1,
@@ -316,6 +90,101 @@ export function paymentIdTypeToJSON(object: PaymentIdType): string {
   }
 }
 
+/** Request object for setup calls */
+export interface SetupRequest {
+  ip: string;
+  items: Item[];
+  subtotal: number;
+  shipping: number;
+  handling: number;
+  tax: number;
+  currency: string;
+  returnUrl: string;
+  cancelReturnUrl: string;
+  allowGuestCheckout: boolean;
+  provider: Provider;
+  subject?: Subject;
+}
+
+/** Response object for setup calls. */
+export interface SetupResponse {
+  paymentErrors: PaymentError[];
+  token: string;
+  confirmInitiationUrl: string;
+  initiatedOn: string;
+}
+
+/** Request object for authorization or purchase call for cardless payment. */
+export interface PaymentRequest {
+  provider: Provider;
+  paymentSum: number;
+  currency: string;
+  paymentId: string;
+  payerId: string;
+  token: string;
+  subject?: Subject;
+}
+
+/** Request object for capture call for both standard and cardless payments. */
+export interface CaptureRequest {
+  provider: Provider;
+  paymentSum: number;
+  currency: string;
+  paymentId: string;
+  subject?: Subject;
+}
+
+/**
+ * Unified response object for authorization, purchase and capture calls
+ * for both standard and cardless payments.
+ */
+export interface PaymentResponse {
+  paymentErrors: PaymentError[];
+  paymentId: string;
+  executedOn: string;
+}
+
+/** Used for building ActiveMerchant::Billing::CreditCard instance. */
+export interface PaymentCard {
+  primaryNumber: string;
+  firstName: string;
+  lastName: string;
+  month: string;
+  year: number;
+  verificationValue: string;
+}
+
+/** Represents purchased item. Not all providers support this. */
+export interface Item {
+  name: string;
+  description: string;
+  quantity: number;
+  amount: number;
+}
+
+/** Error details. */
+export interface PaymentError {
+  killed: boolean;
+  code: number;
+  signal?: string;
+  cmd: string;
+  stdout: string;
+  stderr: string;
+}
+
+const baseSetupRequest: object = {
+  ip: "",
+  subtotal: 0,
+  shipping: 0,
+  handling: 0,
+  tax: 0,
+  currency: "",
+  returnUrl: "",
+  cancelReturnUrl: "",
+  allowGuestCheckout: false,
+  provider: 0,
+};
+
 export const SetupRequest = {
   encode(message: SetupRequest, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.ip);
@@ -336,7 +205,8 @@ export const SetupRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): SetupRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): SetupRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSetupRequest } as SetupRequest;
@@ -387,6 +257,7 @@ export const SetupRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): SetupRequest {
     const message = { ...baseSetupRequest } as SetupRequest;
     message.items = [];
@@ -430,12 +301,18 @@ export const SetupRequest = {
     } else {
       message.returnUrl = "";
     }
-    if (object.cancelReturnUrl !== undefined && object.cancelReturnUrl !== null) {
+    if (
+      object.cancelReturnUrl !== undefined &&
+      object.cancelReturnUrl !== null
+    ) {
       message.cancelReturnUrl = String(object.cancelReturnUrl);
     } else {
       message.cancelReturnUrl = "";
     }
-    if (object.allowGuestCheckout !== undefined && object.allowGuestCheckout !== null) {
+    if (
+      object.allowGuestCheckout !== undefined &&
+      object.allowGuestCheckout !== null
+    ) {
       message.allowGuestCheckout = Boolean(object.allowGuestCheckout);
     } else {
       message.allowGuestCheckout = false;
@@ -452,6 +329,7 @@ export const SetupRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<SetupRequest>): SetupRequest {
     const message = { ...baseSetupRequest } as SetupRequest;
     message.items = [];
@@ -495,12 +373,18 @@ export const SetupRequest = {
     } else {
       message.returnUrl = "";
     }
-    if (object.cancelReturnUrl !== undefined && object.cancelReturnUrl !== null) {
+    if (
+      object.cancelReturnUrl !== undefined &&
+      object.cancelReturnUrl !== null
+    ) {
       message.cancelReturnUrl = object.cancelReturnUrl;
     } else {
       message.cancelReturnUrl = "";
     }
-    if (object.allowGuestCheckout !== undefined && object.allowGuestCheckout !== null) {
+    if (
+      object.allowGuestCheckout !== undefined &&
+      object.allowGuestCheckout !== null
+    ) {
       message.allowGuestCheckout = object.allowGuestCheckout;
     } else {
       message.allowGuestCheckout = false;
@@ -517,11 +401,12 @@ export const SetupRequest = {
     }
     return message;
   },
+
   toJSON(message: SetupRequest): unknown {
     const obj: any = {};
     message.ip !== undefined && (obj.ip = message.ip);
     if (message.items) {
-      obj.items = message.items.map(e => e ? Item.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Item.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
@@ -531,12 +416,24 @@ export const SetupRequest = {
     message.tax !== undefined && (obj.tax = message.tax);
     message.currency !== undefined && (obj.currency = message.currency);
     message.returnUrl !== undefined && (obj.returnUrl = message.returnUrl);
-    message.cancelReturnUrl !== undefined && (obj.cancelReturnUrl = message.cancelReturnUrl);
-    message.allowGuestCheckout !== undefined && (obj.allowGuestCheckout = message.allowGuestCheckout);
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.cancelReturnUrl !== undefined &&
+      (obj.cancelReturnUrl = message.cancelReturnUrl);
+    message.allowGuestCheckout !== undefined &&
+      (obj.allowGuestCheckout = message.allowGuestCheckout);
+    message.provider !== undefined &&
+      (obj.provider = providerToJSON(message.provider));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseSetupResponse: object = {
+  token: "",
+  confirmInitiationUrl: "",
+  initiatedOn: "",
 };
 
 export const SetupResponse = {
@@ -549,7 +446,8 @@ export const SetupResponse = {
     writer.uint32(34).string(message.initiatedOn);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): SetupResponse {
+
+  decode(input: Reader | Uint8Array, length?: number): SetupResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSetupResponse } as SetupResponse;
@@ -558,7 +456,9 @@ export const SetupResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.paymentErrors.push(PaymentError.decode(reader, reader.uint32()));
+          message.paymentErrors.push(
+            PaymentError.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.token = reader.string();
@@ -576,6 +476,7 @@ export const SetupResponse = {
     }
     return message;
   },
+
   fromJSON(object: any): SetupResponse {
     const message = { ...baseSetupResponse } as SetupResponse;
     message.paymentErrors = [];
@@ -589,7 +490,10 @@ export const SetupResponse = {
     } else {
       message.token = "";
     }
-    if (object.confirmInitiationUrl !== undefined && object.confirmInitiationUrl !== null) {
+    if (
+      object.confirmInitiationUrl !== undefined &&
+      object.confirmInitiationUrl !== null
+    ) {
       message.confirmInitiationUrl = String(object.confirmInitiationUrl);
     } else {
       message.confirmInitiationUrl = "";
@@ -601,6 +505,7 @@ export const SetupResponse = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<SetupResponse>): SetupResponse {
     const message = { ...baseSetupResponse } as SetupResponse;
     message.paymentErrors = [];
@@ -614,7 +519,10 @@ export const SetupResponse = {
     } else {
       message.token = "";
     }
-    if (object.confirmInitiationUrl !== undefined && object.confirmInitiationUrl !== null) {
+    if (
+      object.confirmInitiationUrl !== undefined &&
+      object.confirmInitiationUrl !== null
+    ) {
       message.confirmInitiationUrl = object.confirmInitiationUrl;
     } else {
       message.confirmInitiationUrl = "";
@@ -626,18 +534,32 @@ export const SetupResponse = {
     }
     return message;
   },
+
   toJSON(message: SetupResponse): unknown {
     const obj: any = {};
     if (message.paymentErrors) {
-      obj.paymentErrors = message.paymentErrors.map(e => e ? PaymentError.toJSON(e) : undefined);
+      obj.paymentErrors = message.paymentErrors.map((e) =>
+        e ? PaymentError.toJSON(e) : undefined
+      );
     } else {
       obj.paymentErrors = [];
     }
     message.token !== undefined && (obj.token = message.token);
-    message.confirmInitiationUrl !== undefined && (obj.confirmInitiationUrl = message.confirmInitiationUrl);
-    message.initiatedOn !== undefined && (obj.initiatedOn = message.initiatedOn);
+    message.confirmInitiationUrl !== undefined &&
+      (obj.confirmInitiationUrl = message.confirmInitiationUrl);
+    message.initiatedOn !== undefined &&
+      (obj.initiatedOn = message.initiatedOn);
     return obj;
   },
+};
+
+const basePaymentRequest: object = {
+  provider: 0,
+  paymentSum: 0,
+  currency: "",
+  paymentId: "",
+  payerId: "",
+  token: "",
 };
 
 export const PaymentRequest = {
@@ -653,7 +575,8 @@ export const PaymentRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentRequest } as PaymentRequest;
@@ -688,6 +611,7 @@ export const PaymentRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentRequest {
     const message = { ...basePaymentRequest } as PaymentRequest;
     if (object.provider !== undefined && object.provider !== null) {
@@ -727,6 +651,7 @@ export const PaymentRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
     const message = { ...basePaymentRequest } as PaymentRequest;
     if (object.provider !== undefined && object.provider !== null) {
@@ -766,17 +691,29 @@ export const PaymentRequest = {
     }
     return message;
   },
+
   toJSON(message: PaymentRequest): unknown {
     const obj: any = {};
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.provider !== undefined &&
+      (obj.provider = providerToJSON(message.provider));
     message.paymentSum !== undefined && (obj.paymentSum = message.paymentSum);
     message.currency !== undefined && (obj.currency = message.currency);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
     message.payerId !== undefined && (obj.payerId = message.payerId);
     message.token !== undefined && (obj.token = message.token);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseCaptureRequest: object = {
+  provider: 0,
+  paymentSum: 0,
+  currency: "",
+  paymentId: "",
 };
 
 export const CaptureRequest = {
@@ -790,7 +727,8 @@ export const CaptureRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CaptureRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): CaptureRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCaptureRequest } as CaptureRequest;
@@ -819,6 +757,7 @@ export const CaptureRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): CaptureRequest {
     const message = { ...baseCaptureRequest } as CaptureRequest;
     if (object.provider !== undefined && object.provider !== null) {
@@ -848,6 +787,7 @@ export const CaptureRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
     const message = { ...baseCaptureRequest } as CaptureRequest;
     if (object.provider !== undefined && object.provider !== null) {
@@ -877,16 +817,23 @@ export const CaptureRequest = {
     }
     return message;
   },
+
   toJSON(message: CaptureRequest): unknown {
     const obj: any = {};
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.provider !== undefined &&
+      (obj.provider = providerToJSON(message.provider));
     message.paymentSum !== undefined && (obj.paymentSum = message.paymentSum);
     message.currency !== undefined && (obj.currency = message.currency);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const basePaymentResponse: object = { paymentId: "", executedOn: "" };
 
 export const PaymentResponse = {
   encode(message: PaymentResponse, writer: Writer = Writer.create()): Writer {
@@ -897,7 +844,8 @@ export const PaymentResponse = {
     writer.uint32(26).string(message.executedOn);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentResponse {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentResponse } as PaymentResponse;
@@ -906,7 +854,9 @@ export const PaymentResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.paymentErrors.push(PaymentError.decode(reader, reader.uint32()));
+          message.paymentErrors.push(
+            PaymentError.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.paymentId = reader.string();
@@ -921,6 +871,7 @@ export const PaymentResponse = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentResponse {
     const message = { ...basePaymentResponse } as PaymentResponse;
     message.paymentErrors = [];
@@ -941,6 +892,7 @@ export const PaymentResponse = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentResponse>): PaymentResponse {
     const message = { ...basePaymentResponse } as PaymentResponse;
     message.paymentErrors = [];
@@ -961,10 +913,13 @@ export const PaymentResponse = {
     }
     return message;
   },
+
   toJSON(message: PaymentResponse): unknown {
     const obj: any = {};
     if (message.paymentErrors) {
-      obj.paymentErrors = message.paymentErrors.map(e => e ? PaymentError.toJSON(e) : undefined);
+      obj.paymentErrors = message.paymentErrors.map((e) =>
+        e ? PaymentError.toJSON(e) : undefined
+      );
     } else {
       obj.paymentErrors = [];
     }
@@ -972,6 +927,15 @@ export const PaymentResponse = {
     message.executedOn !== undefined && (obj.executedOn = message.executedOn);
     return obj;
   },
+};
+
+const basePaymentCard: object = {
+  primaryNumber: "",
+  firstName: "",
+  lastName: "",
+  month: "",
+  year: 0,
+  verificationValue: "",
 };
 
 export const PaymentCard = {
@@ -984,7 +948,8 @@ export const PaymentCard = {
     writer.uint32(50).string(message.verificationValue);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentCard {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentCard {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentCard } as PaymentCard;
@@ -1016,6 +981,7 @@ export const PaymentCard = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentCard {
     const message = { ...basePaymentCard } as PaymentCard;
     if (object.primaryNumber !== undefined && object.primaryNumber !== null) {
@@ -1043,13 +1009,17 @@ export const PaymentCard = {
     } else {
       message.year = 0;
     }
-    if (object.verificationValue !== undefined && object.verificationValue !== null) {
+    if (
+      object.verificationValue !== undefined &&
+      object.verificationValue !== null
+    ) {
       message.verificationValue = String(object.verificationValue);
     } else {
       message.verificationValue = "";
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentCard>): PaymentCard {
     const message = { ...basePaymentCard } as PaymentCard;
     if (object.primaryNumber !== undefined && object.primaryNumber !== null) {
@@ -1077,24 +1047,32 @@ export const PaymentCard = {
     } else {
       message.year = 0;
     }
-    if (object.verificationValue !== undefined && object.verificationValue !== null) {
+    if (
+      object.verificationValue !== undefined &&
+      object.verificationValue !== null
+    ) {
       message.verificationValue = object.verificationValue;
     } else {
       message.verificationValue = "";
     }
     return message;
   },
+
   toJSON(message: PaymentCard): unknown {
     const obj: any = {};
-    message.primaryNumber !== undefined && (obj.primaryNumber = message.primaryNumber);
+    message.primaryNumber !== undefined &&
+      (obj.primaryNumber = message.primaryNumber);
     message.firstName !== undefined && (obj.firstName = message.firstName);
     message.lastName !== undefined && (obj.lastName = message.lastName);
     message.month !== undefined && (obj.month = message.month);
     message.year !== undefined && (obj.year = message.year);
-    message.verificationValue !== undefined && (obj.verificationValue = message.verificationValue);
+    message.verificationValue !== undefined &&
+      (obj.verificationValue = message.verificationValue);
     return obj;
   },
 };
+
+const baseItem: object = { name: "", description: "", quantity: 0, amount: 0 };
 
 export const Item = {
   encode(message: Item, writer: Writer = Writer.create()): Writer {
@@ -1104,7 +1082,8 @@ export const Item = {
     writer.uint32(32).int32(message.amount);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Item {
+
+  decode(input: Reader | Uint8Array, length?: number): Item {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseItem } as Item;
@@ -1130,6 +1109,7 @@ export const Item = {
     }
     return message;
   },
+
   fromJSON(object: any): Item {
     const message = { ...baseItem } as Item;
     if (object.name !== undefined && object.name !== null) {
@@ -1154,6 +1134,7 @@ export const Item = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Item>): Item {
     const message = { ...baseItem } as Item;
     if (object.name !== undefined && object.name !== null) {
@@ -1178,14 +1159,24 @@ export const Item = {
     }
     return message;
   },
+
   toJSON(message: Item): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     message.quantity !== undefined && (obj.quantity = message.quantity);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
+};
+
+const basePaymentError: object = {
+  killed: false,
+  code: 0,
+  cmd: "",
+  stdout: "",
+  stderr: "",
 };
 
 export const PaymentError = {
@@ -1193,14 +1184,18 @@ export const PaymentError = {
     writer.uint32(8).bool(message.killed);
     writer.uint32(16).int32(message.code);
     if (message.signal !== undefined && message.signal !== undefined) {
-      StringValue.encode({ value: message.signal! }, writer.uint32(26).fork()).ldelim();
+      StringValue.encode(
+        { value: message.signal! },
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     writer.uint32(34).string(message.cmd);
     writer.uint32(42).string(message.stdout);
     writer.uint32(50).string(message.stderr);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentError {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentError {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentError } as PaymentError;
@@ -1232,6 +1227,7 @@ export const PaymentError = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentError {
     const message = { ...basePaymentError } as PaymentError;
     if (object.killed !== undefined && object.killed !== null) {
@@ -1266,6 +1262,7 @@ export const PaymentError = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentError>): PaymentError {
     const message = { ...basePaymentError } as PaymentError;
     if (object.killed !== undefined && object.killed !== null) {
@@ -1300,6 +1297,7 @@ export const PaymentError = {
     }
     return message;
   },
+
   toJSON(message: PaymentError): unknown {
     const obj: any = {};
     message.killed !== undefined && (obj.killed = message.killed);
@@ -1312,91 +1310,578 @@ export const PaymentError = {
   },
 };
 
-export const metaSetupRequest: { [key in keyof Required<SetupRequest>]: MetaBase | string } = {
-  ip: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.payment.Item', name:'Item'} as MetaMessage} as MetaArray,
-  subtotal: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  shipping: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  handling: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  tax: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  currency: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  returnUrl: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  cancelReturnUrl: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  allowGuestCheckout: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  provider: {kind:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaMessage,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+export interface Service {
+  /** Wrapper for setup_authorization in ActiveMerchant */
+  SetupAuthorization(request: SetupRequest): Promise<SetupResponse>;
+  /** Wrapper for setup_purchase in ActiveMerchant */
+  SetupPurchase(request: SetupRequest): Promise<SetupResponse>;
+  /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+  Authorize(request: PaymentRequest): Promise<PaymentResponse>;
+  /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+  Purchase(request: PaymentRequest): Promise<PaymentResponse>;
+  /** Can capture both cardless and standard authorization. */
+  Capture(request: CaptureRequest): Promise<PaymentResponse>;
 }
-export const metaSetupResponse: { [key in keyof Required<SetupResponse>]: MetaBase | string } = {
-  paymentErrors: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaMessage} as MetaArray,
-  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  confirmInitiationUrl: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  initiatedOn: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaPaymentRequest: { [key in keyof Required<PaymentRequest>]: MetaBase | string } = {
-  provider: {kind:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaMessage,
-  paymentSum: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  currency: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  paymentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  payerId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  token: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaCaptureRequest: { [key in keyof Required<CaptureRequest>]: MetaBase | string } = {
-  provider: {kind:'object', type:'.io.restorecommerce.payment.Provider', name:'Provider'} as MetaMessage,
-  paymentSum: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  currency: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  paymentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaPaymentResponse: { [key in keyof Required<PaymentResponse>]: MetaBase | string } = {
-  paymentErrors: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.payment.PaymentError', name:'PaymentError'} as MetaMessage} as MetaArray,
-  paymentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  executedOn: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaPaymentCard: { [key in keyof Required<PaymentCard>]: MetaBase | string } = {
-  primaryNumber: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  firstName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  lastName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  month: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  year: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  verificationValue: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaItem: { [key in keyof Required<Item>]: MetaBase | string } = {
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  quantity: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  amount: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-}
-export const metaPaymentError: { [key in keyof Required<PaymentError>]: MetaBase | string } = {
-  killed: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  code: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  signal: {kind:'builtin', type:'string', original:'.google.protobuf.StringValue'} as MetaPrimitive,
-  cmd: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  stdout: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  stderr: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  SetupAuthorization: {request: {kind:'object', type:'.io.restorecommerce.payment.SetupRequest', name:'SetupRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment.SetupResponse', name:'SetupResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaService<SetupRequest, SetupResponse>,
-  SetupPurchase: {request: {kind:'object', type:'.io.restorecommerce.payment.SetupRequest', name:'SetupRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment.SetupResponse', name:'SetupResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: SetupRequest.encode, decodeResponse: SetupResponse.decode} as MetaService<SetupRequest, SetupResponse>,
-  Authorize: {request: {kind:'object', type:'.io.restorecommerce.payment.PaymentRequest', name:'PaymentRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaService<PaymentRequest, PaymentResponse>,
-  Purchase: {request: {kind:'object', type:'.io.restorecommerce.payment.PaymentRequest', name:'PaymentRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentRequest.encode, decodeResponse: PaymentResponse.decode} as MetaService<PaymentRequest, PaymentResponse>,
-  Capture: {request: {kind:'object', type:'.io.restorecommerce.payment.CaptureRequest', name:'CaptureRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment.PaymentResponse', name:'PaymentResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CaptureRequest.encode, decodeResponse: PaymentResponse.decode} as MetaService<CaptureRequest, PaymentResponse>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Provider: ['enum', '.io.restorecommerce.payment.Provider', Provider, undefined],
-  PaymentIdType: ['enum', '.io.restorecommerce.payment.PaymentIdType', PaymentIdType, undefined],
-  SetupRequest: ['message', '.io.restorecommerce.payment.SetupRequest', SetupRequest, metaSetupRequest],
-  SetupResponse: ['message', '.io.restorecommerce.payment.SetupResponse', SetupResponse, metaSetupResponse],
-  PaymentRequest: ['message', '.io.restorecommerce.payment.PaymentRequest', PaymentRequest, metaPaymentRequest],
-  CaptureRequest: ['message', '.io.restorecommerce.payment.CaptureRequest', CaptureRequest, metaCaptureRequest],
-  PaymentResponse: ['message', '.io.restorecommerce.payment.PaymentResponse', PaymentResponse, metaPaymentResponse],
-  PaymentCard: ['message', '.io.restorecommerce.payment.PaymentCard', PaymentCard, metaPaymentCard],
-  Item: ['message', '.io.restorecommerce.payment.Item', Item, metaItem],
-  PaymentError: ['message', '.io.restorecommerce.payment.PaymentError', PaymentError, metaPaymentError],
-  Service: ['service', '.io.restorecommerce.payment.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/wrappers.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "SetupRequest",
+        field: [
+          {
+            name: "ip",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "ip",
+          },
+          {
+            name: "items",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.payment.Item",
+            jsonName: "items",
+          },
+          {
+            name: "subtotal",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "subtotal",
+          },
+          {
+            name: "shipping",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "shipping",
+          },
+          {
+            name: "handling",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "handling",
+          },
+          {
+            name: "tax",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "tax",
+          },
+          {
+            name: "currency",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "currency",
+          },
+          {
+            name: "return_url",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "returnUrl",
+          },
+          {
+            name: "cancel_return_url",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "cancelReturnUrl",
+          },
+          {
+            name: "allow_guest_checkout",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "allowGuestCheckout",
+          },
+          {
+            name: "provider",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.payment.Provider",
+            jsonName: "provider",
+          },
+          {
+            name: "subject",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "SetupResponse",
+        field: [
+          {
+            name: "payment_errors",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.payment.PaymentError",
+            jsonName: "paymentErrors",
+          },
+          {
+            name: "token",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "token",
+          },
+          {
+            name: "confirm_initiation_url",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "confirmInitiationUrl",
+          },
+          {
+            name: "initiated_on",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "initiatedOn",
+          },
+        ],
+      },
+      {
+        name: "PaymentRequest",
+        field: [
+          {
+            name: "provider",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.payment.Provider",
+            jsonName: "provider",
+          },
+          {
+            name: "payment_sum",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "paymentSum",
+          },
+          {
+            name: "currency",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "currency",
+          },
+          {
+            name: "payment_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "paymentId",
+          },
+          {
+            name: "payer_id",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "payerId",
+          },
+          {
+            name: "token",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "token",
+          },
+          {
+            name: "subject",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "CaptureRequest",
+        field: [
+          {
+            name: "provider",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.payment.Provider",
+            jsonName: "provider",
+          },
+          {
+            name: "payment_sum",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "paymentSum",
+          },
+          {
+            name: "currency",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "currency",
+          },
+          {
+            name: "payment_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "paymentId",
+          },
+          {
+            name: "subject",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "PaymentResponse",
+        field: [
+          {
+            name: "payment_errors",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.payment.PaymentError",
+            jsonName: "paymentErrors",
+          },
+          {
+            name: "payment_id",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "paymentId",
+          },
+          {
+            name: "executed_on",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "executedOn",
+          },
+        ],
+      },
+      {
+        name: "PaymentCard",
+        field: [
+          {
+            name: "primary_number",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "primaryNumber",
+          },
+          {
+            name: "first_name",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "firstName",
+          },
+          {
+            name: "last_name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "lastName",
+          },
+          {
+            name: "month",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "month",
+          },
+          {
+            name: "year",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "year",
+          },
+          {
+            name: "verification_value",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "verificationValue",
+          },
+        ],
+      },
+      {
+        name: "Item",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "quantity",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "quantity",
+          },
+          {
+            name: "amount",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "amount",
+          },
+        ],
+      },
+      {
+        name: "PaymentError",
+        field: [
+          {
+            name: "killed",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "killed",
+          },
+          {
+            name: "code",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "code",
+          },
+          {
+            name: "signal",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.StringValue",
+            jsonName: "signal",
+          },
+          {
+            name: "cmd",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "cmd",
+          },
+          {
+            name: "stdout",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "stdout",
+          },
+          {
+            name: "stderr",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "stderr",
+          },
+        ],
+      },
+    ],
+    enumType: [
+      {
+        name: "Provider",
+        value: [
+          { name: "NO_PROVIDER", number: 0 },
+          { name: "PaypalExpressGateway", number: 1 },
+          { name: "AuthorizeNetGateway", number: 2 },
+        ],
+      },
+      {
+        name: "PaymentIdType",
+        value: [
+          { name: "NO_IDENTIFIER_TYPE", number: 0 },
+          { name: "TOKEN", number: 1 },
+          { name: "TRANSACTION_ID", number: 2 },
+        ],
+      },
+    ],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "SetupAuthorization",
+            inputType: ".io.restorecommerce.payment.SetupRequest",
+            outputType: ".io.restorecommerce.payment.SetupResponse",
+          },
+          {
+            name: "SetupPurchase",
+            inputType: ".io.restorecommerce.payment.SetupRequest",
+            outputType: ".io.restorecommerce.payment.SetupResponse",
+          },
+          {
+            name: "Authorize",
+            inputType: ".io.restorecommerce.payment.PaymentRequest",
+            outputType: ".io.restorecommerce.payment.PaymentResponse",
+          },
+          {
+            name: "Purchase",
+            inputType: ".io.restorecommerce.payment.PaymentRequest",
+            outputType: ".io.restorecommerce.payment.PaymentResponse",
+          },
+          {
+            name: "Capture",
+            inputType: ".io.restorecommerce.payment.CaptureRequest",
+            outputType: ".io.restorecommerce.payment.PaymentResponse",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/payment.proto",
+    package: "io.restorecommerce.payment",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0, 2, 0],
+          span: [7, 2, 64],
+          leadingComments:
+            " Wrapper for setup_authorization in ActiveMerchant\n",
+        },
+        {
+          path: [6, 0, 2, 1],
+          span: [10, 2, 59],
+          leadingComments: " Wrapper for setup_purchase in ActiveMerchant\n",
+        },
+        {
+          path: [6, 0, 2, 2],
+          span: [13, 2, 59],
+          leadingComments:
+            " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
+        },
+        {
+          path: [6, 0, 2, 3],
+          span: [16, 2, 58],
+          leadingComments:
+            " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
+        },
+        {
+          path: [6, 0, 2, 4],
+          span: [19, 2, 57],
+          leadingComments:
+            " Can capture both cardless and standard authorization.\n",
+        },
+        {
+          path: [4, 0],
+          span: [23, 0, 36, 1],
+          leadingComments: " Request object for setup calls\n",
+        },
+        {
+          path: [4, 1],
+          span: [39, 0, 44, 1],
+          leadingComments: " Response object for setup calls.\n",
+        },
+        {
+          path: [4, 2],
+          span: [47, 0, 55, 1],
+          leadingComments:
+            " Request object for authorization or purchase call for cardless payment.\n",
+        },
+        {
+          path: [4, 3],
+          span: [58, 0, 64, 1],
+          leadingComments:
+            " Request object for capture call for both standard and cardless payments.\n",
+        },
+        {
+          path: [4, 4],
+          span: [68, 0, 72, 1],
+          leadingComments:
+            " Unified response object for authorization, purchase and capture calls\n for both standard and cardless payments.\n",
+        },
+        {
+          path: [4, 5],
+          span: [75, 0, 82, 1],
+          leadingComments:
+            " Used for building ActiveMerchant::Billing::CreditCard instance.\n",
+        },
+        {
+          path: [4, 6],
+          span: [85, 0, 90, 1],
+          leadingComments:
+            " Represents purchased item. Not all providers support this.\n",
+        },
+        {
+          path: [4, 7],
+          span: [93, 0, 100, 1],
+          leadingComments: " Error details.\n",
+        },
+        {
+          path: [5, 0],
+          span: [103, 0, 107, 1],
+          leadingComments:
+            " Possible service providers. Provider names must be exactly as in config.yml.\n",
+        },
+        {
+          path: [5, 1],
+          span: [110, 0, 114, 1],
+          leadingComments: " Possible payment identifiers.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.payment.Provider": Provider,
+    ".io.restorecommerce.payment.PaymentIdType": PaymentIdType,
+    ".io.restorecommerce.payment.SetupRequest": SetupRequest,
+    ".io.restorecommerce.payment.SetupResponse": SetupResponse,
+    ".io.restorecommerce.payment.PaymentRequest": PaymentRequest,
+    ".io.restorecommerce.payment.CaptureRequest": CaptureRequest,
+    ".io.restorecommerce.payment.PaymentResponse": PaymentResponse,
+    ".io.restorecommerce.payment.PaymentCard": PaymentCard,
+    ".io.restorecommerce.payment.Item": Item,
+    ".io.restorecommerce.payment.PaymentError": PaymentError,
+  },
+  dependencies: [
+    google_protobuf_wrappers_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

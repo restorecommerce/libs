@@ -1,129 +1,48 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Subject } from '../../io/restorecommerce/auth';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.command";
 
-/**
- *  command resource
- */
+/** command resource */
 export interface Command {
   id: string;
   meta?: Meta;
-  /**
-   *  command name
-   */
+  /** command name */
   name: string;
-  /**
-   *  all possible parameters
-   */
+  /** all possible parameters */
   parameters: CommandParameter[];
-  /**
-   *  command description
-   */
+  /** command description */
   description: string;
 }
 
 export interface CommandParameter {
-  /**
-   *   field name
-   */
+  /** field name */
   field: string;
-  /**
-   *  field description
-   */
+  /** field description */
   description: string;
-  /**
-   *  field's type
-   */
+  /** field's type */
   type: CommandParameter_ParameterType;
-  /**
-   *  dump properties in case of `object_value``
-   */
+  /** dump properties in case of `object_value`` */
   properties: string;
 }
-
-export interface CommandList {
-  items: Command[];
-  totalCount: number;
-  subject?: Subject;
-}
-
-const baseCommand: object = {
-  id: "",
-  name: "",
-  description: "",
-};
-
-const baseCommandParameter: object = {
-  field: "",
-  description: "",
-  type: 0,
-  properties: "",
-};
-
-const baseCommandList: object = {
-  totalCount: 0,
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<CommandList>;
-
-  Create(request: CommandList): Promise<CommandList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: CommandList): Promise<CommandList>;
-
-  Upsert(request: CommandList): Promise<CommandList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.command'
 
 export enum CommandParameter_ParameterType {
   boolean_value = 0,
@@ -134,7 +53,9 @@ export enum CommandParameter_ParameterType {
   UNRECOGNIZED = -1,
 }
 
-export function commandParameter_ParameterTypeFromJSON(object: any): CommandParameter_ParameterType {
+export function commandParameter_ParameterTypeFromJSON(
+  object: any
+): CommandParameter_ParameterType {
   switch (object) {
     case 0:
     case "boolean_value":
@@ -158,7 +79,9 @@ export function commandParameter_ParameterTypeFromJSON(object: any): CommandPara
   }
 }
 
-export function commandParameter_ParameterTypeToJSON(object: CommandParameter_ParameterType): string {
+export function commandParameter_ParameterTypeToJSON(
+  object: CommandParameter_ParameterType
+): string {
   switch (object) {
     case CommandParameter_ParameterType.boolean_value:
       return "boolean_value";
@@ -175,6 +98,14 @@ export function commandParameter_ParameterTypeToJSON(object: CommandParameter_Pa
   }
 }
 
+export interface CommandList {
+  items: Command[];
+  totalCount: number;
+  subject?: Subject;
+}
+
+const baseCommand: object = { id: "", name: "", description: "" };
+
 export const Command = {
   encode(message: Command, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -188,7 +119,8 @@ export const Command = {
     writer.uint32(42).string(message.description);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Command {
+
+  decode(input: Reader | Uint8Array, length?: number): Command {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCommand } as Command;
@@ -206,7 +138,9 @@ export const Command = {
           message.name = reader.string();
           break;
         case 4:
-          message.parameters.push(CommandParameter.decode(reader, reader.uint32()));
+          message.parameters.push(
+            CommandParameter.decode(reader, reader.uint32())
+          );
           break;
         case 5:
           message.description = reader.string();
@@ -218,6 +152,7 @@ export const Command = {
     }
     return message;
   },
+
   fromJSON(object: any): Command {
     const message = { ...baseCommand } as Command;
     message.parameters = [];
@@ -248,6 +183,7 @@ export const Command = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Command>): Command {
     const message = { ...baseCommand } as Command;
     message.parameters = [];
@@ -278,19 +214,31 @@ export const Command = {
     }
     return message;
   },
+
   toJSON(message: Command): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
     if (message.parameters) {
-      obj.parameters = message.parameters.map(e => e ? CommandParameter.toJSON(e) : undefined);
+      obj.parameters = message.parameters.map((e) =>
+        e ? CommandParameter.toJSON(e) : undefined
+      );
     } else {
       obj.parameters = [];
     }
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     return obj;
   },
+};
+
+const baseCommandParameter: object = {
+  field: "",
+  description: "",
+  type: 0,
+  properties: "",
 };
 
 export const CommandParameter = {
@@ -301,7 +249,8 @@ export const CommandParameter = {
     writer.uint32(34).string(message.properties);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CommandParameter {
+
+  decode(input: Reader | Uint8Array, length?: number): CommandParameter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCommandParameter } as CommandParameter;
@@ -327,6 +276,7 @@ export const CommandParameter = {
     }
     return message;
   },
+
   fromJSON(object: any): CommandParameter {
     const message = { ...baseCommandParameter } as CommandParameter;
     if (object.field !== undefined && object.field !== null) {
@@ -351,6 +301,7 @@ export const CommandParameter = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
     const message = { ...baseCommandParameter } as CommandParameter;
     if (object.field !== undefined && object.field !== null) {
@@ -375,15 +326,20 @@ export const CommandParameter = {
     }
     return message;
   },
+
   toJSON(message: CommandParameter): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.description !== undefined && (obj.description = message.description);
-    message.type !== undefined && (obj.type = commandParameter_ParameterTypeToJSON(message.type));
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.type !== undefined &&
+      (obj.type = commandParameter_ParameterTypeToJSON(message.type));
     message.properties !== undefined && (obj.properties = message.properties);
     return obj;
   },
 };
+
+const baseCommandList: object = { totalCount: 0 };
 
 export const CommandList = {
   encode(message: CommandList, writer: Writer = Writer.create()): Writer {
@@ -396,7 +352,8 @@ export const CommandList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CommandList {
+
+  decode(input: Reader | Uint8Array, length?: number): CommandList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCommandList } as CommandList;
@@ -420,6 +377,7 @@ export const CommandList = {
     }
     return message;
   },
+
   fromJSON(object: any): CommandList {
     const message = { ...baseCommandList } as CommandList;
     message.items = [];
@@ -440,6 +398,7 @@ export const CommandList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CommandList>): CommandList {
     const message = { ...baseCommandList } as CommandList;
     message.items = [];
@@ -460,53 +419,264 @@ export const CommandList = {
     }
     return message;
   },
+
   toJSON(message: CommandList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Command.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Command.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
-export const metaCommand: { [key in keyof Required<Command>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  parameters: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.command.CommandParameter', name:'CommandParameter'} as MetaMessage} as MetaArray,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface Service {
+  Read(request: ReadRequest): Promise<CommandList>;
+  Create(request: CommandList): Promise<CommandList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: CommandList): Promise<CommandList>;
+  Upsert(request: CommandList): Promise<CommandList>;
 }
-export const metaCommandParameter: { [key in keyof Required<CommandParameter>]: MetaBase | string } = {
-  field: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  type: {kind:'object', type:'.io.restorecommerce.command.CommandParameter.ParameterType', name:'CommandParameter_ParameterType'} as MetaMessage,
-  properties: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaCommandList: { [key in keyof Required<CommandList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.command.Command', name:'Command'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CommandList.decode} as MetaService<ReadRequest, CommandList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaService<CommandList, CommandList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaService<CommandList, CommandList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.command.CommandList', name:'CommandList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CommandList.encode, decodeResponse: CommandList.decode} as MetaService<CommandList, CommandList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Command: ['message', '.io.restorecommerce.command.Command', Command, metaCommand],
-  CommandParameter: ['message', '.io.restorecommerce.command.CommandParameter', CommandParameter, metaCommandParameter],
-  CommandParameter_ParameterType: ['enum', '.io.restorecommerce.command.CommandParameter.ParameterType', CommandParameter_ParameterType, undefined],
-  CommandList: ['message', '.io.restorecommerce.command.CommandList', CommandList, metaCommandList],
-  Service: ['service', '.io.restorecommerce.command.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Command",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "parameters",
+            number: 4,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.command.CommandParameter",
+            jsonName: "parameters",
+          },
+          {
+            name: "description",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+        ],
+      },
+      {
+        name: "CommandParameter",
+        field: [
+          {
+            name: "field",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "field",
+          },
+          {
+            name: "description",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "type",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName:
+              ".io.restorecommerce.command.CommandParameter.ParameterType",
+            jsonName: "type",
+          },
+          {
+            name: "properties",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "properties",
+          },
+        ],
+        enumType: [
+          {
+            name: "ParameterType",
+            value: [
+              { name: "boolean_value", number: 0 },
+              { name: "object_value", number: 1 },
+              { name: "array_value", number: 2 },
+              { name: "number_value", number: 3 },
+              { name: "string_value", number: 4 },
+            ],
+          },
+        ],
+      },
+      {
+        name: "CommandList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.command.Command",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.command.CommandList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/command.proto",
+    package: "io.restorecommerce.command",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [10, 0, 16, 1],
+          leadingComments: " command resource\n",
+        },
+        {
+          path: [4, 0, 2, 2],
+          span: [13, 2, 18],
+          trailingComments: " command name\n",
+        },
+        {
+          path: [4, 0, 2, 3],
+          span: [14, 2, 43],
+          trailingComments: " all possible parameters\n",
+        },
+        {
+          path: [4, 0, 2, 4],
+          span: [15, 2, 25],
+          trailingComments: " command description\n",
+        },
+        {
+          path: [4, 1, 2, 0],
+          span: [27, 2, 19],
+          trailingComments: "  field name\n",
+        },
+        {
+          path: [4, 1, 2, 1],
+          span: [28, 2, 25],
+          trailingComments: " field description\n",
+        },
+        {
+          path: [4, 1, 2, 2],
+          span: [29, 2, 25],
+          trailingComments: " field's type\n",
+        },
+        {
+          path: [4, 1, 2, 3],
+          span: [30, 2, 24],
+          trailingComments: " dump properties in case of `object_value``\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.command.Command": Command,
+    ".io.restorecommerce.command.CommandParameter": CommandParameter,
+    ".io.restorecommerce.command.CommandParameter.ParameterType": CommandParameter_ParameterType,
+    ".io.restorecommerce.command.CommandList": CommandList,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

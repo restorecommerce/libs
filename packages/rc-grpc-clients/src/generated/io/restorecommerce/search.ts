@@ -1,8 +1,16 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Any } from '../../google/protobuf/any';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "io.restorecommerce.search";
 
 export interface SearchRequest {
   collection: string;
@@ -15,66 +23,7 @@ export interface SearchResponse {
   data: Any[];
 }
 
-const baseSearchRequest: object = {
-  collection: "",
-  text: "",
-  acl: "",
-};
-
-const baseSearchResponse: object = {
-};
-
-/**
- *  Service provides the CRUD operations
- */
-export interface Service {
-
-  Search(request: SearchRequest): Promise<SearchResponse>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.search'
+const baseSearchRequest: object = { collection: "", text: "", acl: "" };
 
 export const SearchRequest = {
   encode(message: SearchRequest, writer: Writer = Writer.create()): Writer {
@@ -88,7 +37,8 @@ export const SearchRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): SearchRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): SearchRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSearchRequest } as SearchRequest;
@@ -115,6 +65,7 @@ export const SearchRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): SearchRequest {
     const message = { ...baseSearchRequest } as SearchRequest;
     message.acl = [];
@@ -140,6 +91,7 @@ export const SearchRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
     const message = { ...baseSearchRequest } as SearchRequest;
     message.acl = [];
@@ -165,19 +117,25 @@ export const SearchRequest = {
     }
     return message;
   },
+
   toJSON(message: SearchRequest): unknown {
     const obj: any = {};
     message.collection !== undefined && (obj.collection = message.collection);
     message.text !== undefined && (obj.text = message.text);
     if (message.acl) {
-      obj.acl = message.acl.map(e => e);
+      obj.acl = message.acl.map((e) => e);
     } else {
       obj.acl = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseSearchResponse: object = {};
 
 export const SearchResponse = {
   encode(message: SearchResponse, writer: Writer = Writer.create()): Writer {
@@ -186,7 +144,8 @@ export const SearchResponse = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): SearchResponse {
+
+  decode(input: Reader | Uint8Array, length?: number): SearchResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSearchResponse } as SearchResponse;
@@ -204,6 +163,7 @@ export const SearchResponse = {
     }
     return message;
   },
+
   fromJSON(object: any): SearchResponse {
     const message = { ...baseSearchResponse } as SearchResponse;
     message.data = [];
@@ -214,6 +174,7 @@ export const SearchResponse = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<SearchResponse>): SearchResponse {
     const message = { ...baseSearchResponse } as SearchResponse;
     message.data = [];
@@ -224,10 +185,11 @@ export const SearchResponse = {
     }
     return message;
   },
+
   toJSON(message: SearchResponse): unknown {
     const obj: any = {};
     if (message.data) {
-      obj.data = message.data.map(e => e ? Any.toJSON(e) : undefined);
+      obj.data = message.data.map((e) => (e ? Any.toJSON(e) : undefined));
     } else {
       obj.data = [];
     }
@@ -235,25 +197,110 @@ export const SearchResponse = {
   },
 };
 
-export const metaSearchRequest: { [key in keyof Required<SearchRequest>]: MetaBase | string } = {
-  collection: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  text: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  acl: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+/** Service provides the CRUD operations */
+export interface Service {
+  Search(request: SearchRequest): Promise<SearchResponse>;
 }
-export const metaSearchResponse: { [key in keyof Required<SearchResponse>]: MetaBase | string } = {
-  data: {kind:'array', type:{kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage} as MetaArray,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Search: {request: {kind:'object', type:'.io.restorecommerce.search.SearchRequest', name:'SearchRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.search.SearchResponse', name:'SearchResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: SearchRequest.encode, decodeResponse: SearchResponse.decode} as MetaService<SearchRequest, SearchResponse>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  SearchRequest: ['message', '.io.restorecommerce.search.SearchRequest', SearchRequest, metaSearchRequest],
-  SearchResponse: ['message', '.io.restorecommerce.search.SearchResponse', SearchResponse, metaSearchResponse],
-  Service: ['service', '.io.restorecommerce.search.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "SearchRequest",
+        field: [
+          {
+            name: "collection",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "collection",
+          },
+          {
+            name: "text",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "text",
+          },
+          {
+            name: "acl",
+            number: 3,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "acl",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "SearchResponse",
+        field: [
+          {
+            name: "data",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Search",
+            inputType: ".io.restorecommerce.search.SearchRequest",
+            outputType: ".io.restorecommerce.search.SearchResponse",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/search.proto",
+    package: "io.restorecommerce.search",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [7, 0, 9, 1],
+          leadingComments: " Service provides the CRUD operations\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.search.SearchRequest": SearchRequest,
+    ".io.restorecommerce.search.SearchResponse": SearchResponse,
+  },
+  dependencies: [
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

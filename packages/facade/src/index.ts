@@ -207,7 +207,9 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const middleware = gqlServer.getMiddleware({
       path: '/graphql',
       cors: true,
-      bodyParserConfig: true,
+      bodyParserConfig: {
+        jsonLimit: '10mb'
+      },
     });
 
     this.koa.use(middleware);

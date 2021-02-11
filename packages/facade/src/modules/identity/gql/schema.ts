@@ -5,20 +5,20 @@ import {
   getWhitelistBlacklistConfig,
   registerResolverSchema
 } from "../../../gql/protos";
-import { metaService as userMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
-import { metaService as roleMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
-import { metaService as authentication_logMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
-import { metaService as tokenMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { protoMetadata as userMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+import { protoMetadata as roleMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
+import { protoMetadata as authentication_logMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
+import { protoMetadata as tokenMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
 import { namespace, IdentityServiceConfig } from "../interfaces";
 
 registerTypings();
 
 export const schema = (cfg: IdentityServiceConfig) => {
   const subServices = [
-    [userMetaService, 'user', ['Read', 'Find', 'FindByRole', 'FindByToken']],
-    [roleMetaService, 'role', ['Read']],
-    [authentication_logMetaService, 'authentication_log', ['Read']],
-    [tokenMetaService, 'token', ['find']],
+    [userMetaService.fileDescriptor.service![0], 'user', ['Read', 'Find', 'FindByRole', 'FindByToken']],
+    [roleMetaService.fileDescriptor.service![0], 'role', ['Read']],
+    [authentication_logMetaService.fileDescriptor.service![0], 'authentication_log', ['Read']],
+    [tokenMetaService.fileDescriptor.service![0], 'token', ['find']],
   ];
 
   subServices.forEach(([service, subspace, queryList]: any) => {

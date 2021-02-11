@@ -1,15 +1,31 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Image } from '../../io/restorecommerce/image';
-import { Subject } from '../../io/restorecommerce/auth';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Image,
+  protoMetadata as io_restorecommerce_image_protoMetadata,
+} from "../../io/restorecommerce/image";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.product_category";
 
-/**
- *  ProductCategory resource
- */
+/** ProductCategory resource */
 export interface ProductCategory {
   id: string;
   meta?: Meta;
@@ -41,75 +57,6 @@ const baseProductCategory: object = {
   priceGroupId: "",
 };
 
-const baseProductCategoryList: object = {
-  totalCount: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseParent: object = {
-  parentId: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<ProductCategoryList>;
-
-  Create(request: ProductCategoryList): Promise<ProductCategoryList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: ProductCategoryList): Promise<ProductCategoryList>;
-
-  Upsert(request: ProductCategoryList): Promise<ProductCategoryList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.product_category'
-
 export const ProductCategory = {
   encode(message: ProductCategory, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -127,7 +74,8 @@ export const ProductCategory = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ProductCategory {
+
+  decode(input: Reader | Uint8Array, length?: number): ProductCategory {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseProductCategory } as ProductCategory;
@@ -162,6 +110,7 @@ export const ProductCategory = {
     }
     return message;
   },
+
   fromJSON(object: any): ProductCategory {
     const message = { ...baseProductCategory } as ProductCategory;
     if (object.id !== undefined && object.id !== null) {
@@ -201,6 +150,7 @@ export const ProductCategory = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
     const message = { ...baseProductCategory } as ProductCategory;
     if (object.id !== undefined && object.id !== null) {
@@ -240,21 +190,32 @@ export const ProductCategory = {
     }
     return message;
   },
+
   toJSON(message: ProductCategory): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.priceGroupId !== undefined && (obj.priceGroupId = message.priceGroupId);
-    message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.parent !== undefined && (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.priceGroupId !== undefined &&
+      (obj.priceGroupId = message.priceGroupId);
+    message.image !== undefined &&
+      (obj.image = message.image ? Image.toJSON(message.image) : undefined);
+    message.parent !== undefined &&
+      (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
     return obj;
   },
 };
 
+const baseProductCategoryList: object = { totalCount: 0 };
+
 export const ProductCategoryList = {
-  encode(message: ProductCategoryList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ProductCategoryList,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -264,7 +225,8 @@ export const ProductCategoryList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ProductCategoryList {
+
+  decode(input: Reader | Uint8Array, length?: number): ProductCategoryList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseProductCategoryList } as ProductCategoryList;
@@ -288,6 +250,7 @@ export const ProductCategoryList = {
     }
     return message;
   },
+
   fromJSON(object: any): ProductCategoryList {
     const message = { ...baseProductCategoryList } as ProductCategoryList;
     message.items = [];
@@ -308,6 +271,7 @@ export const ProductCategoryList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
     const message = { ...baseProductCategoryList } as ProductCategoryList;
     message.items = [];
@@ -328,25 +292,34 @@ export const ProductCategoryList = {
     }
     return message;
   },
+
   toJSON(message: ProductCategoryList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? ProductCategory.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ProductCategory.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -363,6 +336,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -372,6 +346,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -381,6 +356,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -388,12 +364,15 @@ export const Deleted = {
   },
 };
 
+const baseParent: object = { parentId: "" };
+
 export const Parent = {
   encode(message: Parent, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.parentId);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Parent {
+
+  decode(input: Reader | Uint8Array, length?: number): Parent {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseParent } as Parent;
@@ -410,6 +389,7 @@ export const Parent = {
     }
     return message;
   },
+
   fromJSON(object: any): Parent {
     const message = { ...baseParent } as Parent;
     if (object.parentId !== undefined && object.parentId !== null) {
@@ -419,6 +399,7 @@ export const Parent = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Parent>): Parent {
     const message = { ...baseParent } as Parent;
     if (object.parentId !== undefined && object.parentId !== null) {
@@ -428,6 +409,7 @@ export const Parent = {
     }
     return message;
   },
+
   toJSON(message: Parent): unknown {
     const obj: any = {};
     message.parentId !== undefined && (obj.parentId = message.parentId);
@@ -435,42 +417,213 @@ export const Parent = {
   },
 };
 
-export const metaProductCategory: { [key in keyof Required<ProductCategory>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  priceGroupId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  image: {kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage,
-  parent: {kind:'object', type:'.io.restorecommerce.product_category.Parent', name:'Parent'} as MetaMessage,
+export interface Service {
+  Read(request: ReadRequest): Promise<ProductCategoryList>;
+  Create(request: ProductCategoryList): Promise<ProductCategoryList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: ProductCategoryList): Promise<ProductCategoryList>;
+  Upsert(request: ProductCategoryList): Promise<ProductCategoryList>;
 }
-export const metaProductCategoryList: { [key in keyof Required<ProductCategoryList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.product_category.ProductCategory', name:'ProductCategory'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaParent: { [key in keyof Required<Parent>]: MetaBase | string } = {
-  parentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: ProductCategoryList.decode} as MetaService<ReadRequest, ProductCategoryList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductCategoryList.encode, decodeResponse: ProductCategoryList.decode} as MetaService<ProductCategoryList, ProductCategoryList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductCategoryList.encode, decodeResponse: ProductCategoryList.decode} as MetaService<ProductCategoryList, ProductCategoryList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.product_category.ProductCategoryList', name:'ProductCategoryList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ProductCategoryList.encode, decodeResponse: ProductCategoryList.decode} as MetaService<ProductCategoryList, ProductCategoryList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  ProductCategory: ['message', '.io.restorecommerce.product_category.ProductCategory', ProductCategory, metaProductCategory],
-  ProductCategoryList: ['message', '.io.restorecommerce.product_category.ProductCategoryList', ProductCategoryList, metaProductCategoryList],
-  Deleted: ['message', '.io.restorecommerce.product_category.Deleted', Deleted, metaDeleted],
-  Parent: ['message', '.io.restorecommerce.product_category.Parent', Parent, metaParent],
-  Service: ['service', '.io.restorecommerce.product_category.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/image.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "ProductCategory",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "price_group_id",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "priceGroupId",
+          },
+          {
+            name: "image",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "image",
+          },
+          {
+            name: "parent",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product_category.Parent",
+            jsonName: "parent",
+          },
+        ],
+      },
+      {
+        name: "ProductCategoryList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.product_category.ProductCategory",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "Parent",
+        field: [
+          {
+            name: "parent_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "parentId",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+          },
+          {
+            name: "Create",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+          },
+          {
+            name: "Upsert",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/product_category.proto",
+    package: "io.restorecommerce.product_category",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [11, 0, 19, 1],
+          leadingComments: " ProductCategory resource\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.product_category.ProductCategory": ProductCategory,
+    ".io.restorecommerce.product_category.ProductCategoryList": ProductCategoryList,
+    ".io.restorecommerce.product_category.Deleted": Deleted,
+    ".io.restorecommerce.product_category.Parent": Parent,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_image_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

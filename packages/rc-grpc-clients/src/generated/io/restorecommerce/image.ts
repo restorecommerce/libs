@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { Writer, Reader } from "protobufjs/minimal";
 
+export const protobufPackage = "io.restorecommerce.image";
 
-/**
- *  ProductCategory resource
- */
+/** ProductCategory resource */
 export interface Image {
   id: string;
   caption: string;
@@ -36,57 +36,6 @@ const baseImage: object = {
   length: 0,
 };
 
-const baseImageList: object = {
-  totalCount: 0,
-};
-
-const baseDeleted: object = {
-  id: "",
-};
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.image'
-
 export const Image = {
   encode(message: Image, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -99,7 +48,8 @@ export const Image = {
     writer.uint32(65).double(message.length);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Image {
+
+  decode(input: Reader | Uint8Array, length?: number): Image {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseImage } as Image;
@@ -137,6 +87,7 @@ export const Image = {
     }
     return message;
   },
+
   fromJSON(object: any): Image {
     const message = { ...baseImage } as Image;
     if (object.id !== undefined && object.id !== null) {
@@ -181,6 +132,7 @@ export const Image = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Image>): Image {
     const message = { ...baseImage } as Image;
     if (object.id !== undefined && object.id !== null) {
@@ -225,12 +177,14 @@ export const Image = {
     }
     return message;
   },
+
   toJSON(message: Image): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.caption !== undefined && (obj.caption = message.caption);
     message.filename !== undefined && (obj.filename = message.filename);
-    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.contentType !== undefined &&
+      (obj.contentType = message.contentType);
     message.url !== undefined && (obj.url = message.url);
     message.width !== undefined && (obj.width = message.width);
     message.height !== undefined && (obj.height = message.height);
@@ -238,6 +192,8 @@ export const Image = {
     return obj;
   },
 };
+
+const baseImageList: object = { totalCount: 0 };
 
 export const ImageList = {
   encode(message: ImageList, writer: Writer = Writer.create()): Writer {
@@ -247,7 +203,8 @@ export const ImageList = {
     writer.uint32(16).uint32(message.totalCount);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ImageList {
+
+  decode(input: Reader | Uint8Array, length?: number): ImageList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseImageList } as ImageList;
@@ -268,6 +225,7 @@ export const ImageList = {
     }
     return message;
   },
+
   fromJSON(object: any): ImageList {
     const message = { ...baseImageList } as ImageList;
     message.items = [];
@@ -283,6 +241,7 @@ export const ImageList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ImageList>): ImageList {
     const message = { ...baseImageList } as ImageList;
     message.items = [];
@@ -298,10 +257,11 @@ export const ImageList = {
     }
     return message;
   },
+
   toJSON(message: ImageList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Image.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Image.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
@@ -310,12 +270,15 @@ export const ImageList = {
   },
 };
 
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -332,6 +295,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -341,6 +305,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -350,6 +315,7 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
@@ -357,30 +323,138 @@ export const Deleted = {
   },
 };
 
-export const metaImage: { [key in keyof Required<Image>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  caption: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  filename: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  width: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  height: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
-  length: {kind:'builtin', type:'number', original:'double'} as MetaPrimitive,
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaImageList: { [key in keyof Required<ImageList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.image.Image', name:'Image'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-}
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Image: ['message', '.io.restorecommerce.image.Image', Image, metaImage],
-  ImageList: ['message', '.io.restorecommerce.image.ImageList', ImageList, metaImageList],
-  Deleted: ['message', '.io.restorecommerce.image.Deleted', Deleted, metaDeleted],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Image",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "caption",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "caption",
+          },
+          {
+            name: "filename",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "filename",
+          },
+          {
+            name: "content_type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contentType",
+          },
+          {
+            name: "url",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "url",
+          },
+          {
+            name: "width",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "width",
+          },
+          {
+            name: "height",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "height",
+          },
+          {
+            name: "length",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_DOUBLE",
+            jsonName: "length",
+          },
+        ],
+      },
+      {
+        name: "ImageList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+        ],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    name: "io/restorecommerce/image.proto",
+    package: "io.restorecommerce.image",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [5, 0, 14, 1],
+          leadingComments: " ProductCategory resource\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.image.Image": Image,
+    ".io.restorecommerce.image.ImageList": ImageList,
+    ".io.restorecommerce.image.Deleted": Deleted,
+  },
+  dependencies: [],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -10,7 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  TodoScalar: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -47,25 +46,35 @@ export type StatusType = {
 };
 
 export type IIoRestorecommerceNotificationNotification = {
-  email: Scalars['TodoScalar'];
-  log: Scalars['TodoScalar'];
-  subject: Scalars['String'];
-  body: Scalars['String'];
-  transport: Scalars['String'];
-  provider: Scalars['String'];
-  attachments: Array<IIoRestorecommerceNotificationAttachment>;
+  email?: Maybe<IIoRestorecommerceNotificationEmail>;
+  log?: Maybe<IIoRestorecommerceNotificationLog>;
+  subject?: Maybe<Scalars['String']>;
+  body?: Maybe<Scalars['String']>;
+  transport?: Maybe<Scalars['String']>;
+  provider?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Array<IIoRestorecommerceNotificationAttachment>>;
 };
 
+export type IIoRestorecommerceNotificationEmail = {
+  to?: Maybe<Array<Scalars['String']>>;
+  cc?: Maybe<Array<Scalars['String']>>;
+  bcc?: Maybe<Array<Scalars['String']>>;
+  replyto?: Maybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceNotificationLog = {
+  level?: Maybe<Scalars['String']>;
+};
 
 export type IIoRestorecommerceNotificationAttachment = {
-  filename: Scalars['String'];
-  text: Scalars['String'];
-  buffer: Scalars['Upload'];
-  path: Scalars['String'];
-  contentType: Scalars['String'];
-  contentDisposition: Scalars['String'];
-  cid: Scalars['String'];
-  encoding: Scalars['String'];
+  filename?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  buffer?: Maybe<Scalars['Upload']>;
+  path?: Maybe<Scalars['String']>;
+  contentType?: Maybe<Scalars['String']>;
+  contentDisposition?: Maybe<Scalars['String']>;
+  cid?: Maybe<Scalars['String']>;
+  encoding?: Maybe<Scalars['String']>;
 };
 
 
@@ -142,7 +151,8 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  IIoRestorecommerceNotificationEmail: IIoRestorecommerceNotificationEmail;
+  IIoRestorecommerceNotificationLog: IIoRestorecommerceNotificationLog;
   IIoRestorecommerceNotificationAttachment: IIoRestorecommerceNotificationAttachment;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -157,7 +167,8 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   Int: Scalars['Int'];
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
-  TodoScalar: Scalars['TodoScalar'];
+  IIoRestorecommerceNotificationEmail: IIoRestorecommerceNotificationEmail;
+  IIoRestorecommerceNotificationLog: IIoRestorecommerceNotificationLog;
   IIoRestorecommerceNotificationAttachment: IIoRestorecommerceNotificationAttachment;
   Upload: Scalars['Upload'];
   Boolean: Scalars['Boolean'];
@@ -184,10 +195,6 @@ export type StatusTypeResolvers<ContextType = NotificationContext, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
-}
-
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
@@ -197,7 +204,6 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
   ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
-  TodoScalar?: GraphQLScalarType;
   Upload?: GraphQLScalarType;
 }>;
 

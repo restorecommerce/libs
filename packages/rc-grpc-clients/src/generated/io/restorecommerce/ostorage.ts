@@ -1,13 +1,33 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Attribute } from '../../io/restorecommerce/attribute';
-import { Any } from '../../google/protobuf/any';
-import { Struct } from '../../google/protobuf/struct';
-import { Observable } from 'rxjs';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import {
+  Struct,
+  protoMetadata as google_protobuf_struct_protoMetadata,
+} from "../../google/protobuf/struct";
+import { Observable } from "rxjs";
+import {
+  Attribute,
+  protoMetadata as io_restorecommerce_attribute_protoMetadata,
+} from "../../io/restorecommerce/attribute";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
 
+export const protobufPackage = "io.restorecommerce.ostorage";
 
 export interface CopyRequest {
   items: CopyRequestItem[];
@@ -43,9 +63,7 @@ export interface Options {
   version: string;
   md5: string;
   tags: Attribute[];
-  /**
-   *  optional meta data ex: from and to dates
-   */
+  /** optional meta data ex: from and to dates */
   data?: Any;
 }
 
@@ -88,141 +106,18 @@ export interface Response {
   key: string;
   meta?: Meta;
   tags: Attribute[];
-  /**
-   *  file size of uploaded object
-   */
+  /** file size of uploaded object */
   length: number;
 }
 
 export interface ListRequest {
   bucket: string;
-  /**
-   * / Filter based on fieldName|operation, value|list
-   */
+  /** / Filter based on fieldName|operation, value|list */
   filter?: Struct;
   subject?: Subject;
 }
 
-const baseCopyRequest: object = {
-};
-
-const baseCopyResponse: object = {
-};
-
-const baseCopyRequestItem: object = {
-  bucket: "",
-  copySource: "",
-  key: "",
-};
-
-const baseCopyResponseItem: object = {
-  bucket: "",
-  copySource: "",
-  key: "",
-};
-
-const baseOptions: object = {
-  encoding: "",
-  contentType: "",
-  contentLanguage: "",
-  contentDisposition: "",
-  length: 0,
-  version: "",
-  md5: "",
-};
-
-const baseObject: object = {
-  key: "",
-  bucket: "",
-  url: "",
-};
-
-const baseGetRequest: object = {
-  key: "",
-  bucket: "",
-  download: false,
-};
-
-const baseObjectsData: object = {
-};
-
-const baseObjectData: object = {
-  objectName: "",
-  url: "",
-};
-
-const baseDeleteRequest: object = {
-  key: "",
-  bucket: "",
-};
-
-const baseResponse: object = {
-  url: "",
-  bucket: "",
-  key: "",
-  length: 0,
-};
-
-const baseListRequest: object = {
-  bucket: "",
-};
-
-export interface Service {
-
-  Get(request: GetRequest): Observable<Object>;
-
-  Put(request: Observable<Object>): Promise<Response>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  List(request: ListRequest): Promise<ObjectsData>;
-
-  Copy(request: CopyRequest): Promise<CopyResponse>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.ostorage'
+const baseCopyRequest: object = {};
 
 export const CopyRequest = {
   encode(message: CopyRequest, writer: Writer = Writer.create()): Writer {
@@ -234,7 +129,8 @@ export const CopyRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CopyRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): CopyRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCopyRequest } as CopyRequest;
@@ -255,6 +151,7 @@ export const CopyRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): CopyRequest {
     const message = { ...baseCopyRequest } as CopyRequest;
     message.items = [];
@@ -270,6 +167,7 @@ export const CopyRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CopyRequest>): CopyRequest {
     const message = { ...baseCopyRequest } as CopyRequest;
     message.items = [];
@@ -285,17 +183,25 @@ export const CopyRequest = {
     }
     return message;
   },
+
   toJSON(message: CopyRequest): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? CopyRequestItem.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? CopyRequestItem.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseCopyResponse: object = {};
 
 export const CopyResponse = {
   encode(message: CopyResponse, writer: Writer = Writer.create()): Writer {
@@ -304,7 +210,8 @@ export const CopyResponse = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CopyResponse {
+
+  decode(input: Reader | Uint8Array, length?: number): CopyResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCopyResponse } as CopyResponse;
@@ -313,7 +220,9 @@ export const CopyResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.response.push(CopyResponseItem.decode(reader, reader.uint32()));
+          message.response.push(
+            CopyResponseItem.decode(reader, reader.uint32())
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -322,6 +231,7 @@ export const CopyResponse = {
     }
     return message;
   },
+
   fromJSON(object: any): CopyResponse {
     const message = { ...baseCopyResponse } as CopyResponse;
     message.response = [];
@@ -332,6 +242,7 @@ export const CopyResponse = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CopyResponse>): CopyResponse {
     const message = { ...baseCopyResponse } as CopyResponse;
     message.response = [];
@@ -342,16 +253,21 @@ export const CopyResponse = {
     }
     return message;
   },
+
   toJSON(message: CopyResponse): unknown {
     const obj: any = {};
     if (message.response) {
-      obj.response = message.response.map(e => e ? CopyResponseItem.toJSON(e) : undefined);
+      obj.response = message.response.map((e) =>
+        e ? CopyResponseItem.toJSON(e) : undefined
+      );
     } else {
       obj.response = [];
     }
     return obj;
   },
 };
+
+const baseCopyRequestItem: object = { bucket: "", copySource: "", key: "" };
 
 export const CopyRequestItem = {
   encode(message: CopyRequestItem, writer: Writer = Writer.create()): Writer {
@@ -366,7 +282,8 @@ export const CopyRequestItem = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CopyRequestItem {
+
+  decode(input: Reader | Uint8Array, length?: number): CopyRequestItem {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCopyRequestItem } as CopyRequestItem;
@@ -395,6 +312,7 @@ export const CopyRequestItem = {
     }
     return message;
   },
+
   fromJSON(object: any): CopyRequestItem {
     const message = { ...baseCopyRequestItem } as CopyRequestItem;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -424,6 +342,7 @@ export const CopyRequestItem = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CopyRequestItem>): CopyRequestItem {
     const message = { ...baseCopyRequestItem } as CopyRequestItem;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -453,16 +372,23 @@ export const CopyRequestItem = {
     }
     return message;
   },
+
   toJSON(message: CopyRequestItem): unknown {
     const obj: any = {};
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.copySource !== undefined && (obj.copySource = message.copySource);
     message.key !== undefined && (obj.key = message.key);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? Options.toJSON(message.options)
+        : undefined);
     return obj;
   },
 };
+
+const baseCopyResponseItem: object = { bucket: "", copySource: "", key: "" };
 
 export const CopyResponseItem = {
   encode(message: CopyResponseItem, writer: Writer = Writer.create()): Writer {
@@ -477,7 +403,8 @@ export const CopyResponseItem = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CopyResponseItem {
+
+  decode(input: Reader | Uint8Array, length?: number): CopyResponseItem {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCopyResponseItem } as CopyResponseItem;
@@ -506,6 +433,7 @@ export const CopyResponseItem = {
     }
     return message;
   },
+
   fromJSON(object: any): CopyResponseItem {
     const message = { ...baseCopyResponseItem } as CopyResponseItem;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -535,6 +463,7 @@ export const CopyResponseItem = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CopyResponseItem>): CopyResponseItem {
     const message = { ...baseCopyResponseItem } as CopyResponseItem;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -564,15 +493,30 @@ export const CopyResponseItem = {
     }
     return message;
   },
+
   toJSON(message: CopyResponseItem): unknown {
     const obj: any = {};
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.copySource !== undefined && (obj.copySource = message.copySource);
     message.key !== undefined && (obj.key = message.key);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? Options.toJSON(message.options)
+        : undefined);
     return obj;
   },
+};
+
+const baseOptions: object = {
+  encoding: "",
+  contentType: "",
+  contentLanguage: "",
+  contentDisposition: "",
+  length: 0,
+  version: "",
+  md5: "",
 };
 
 export const Options = {
@@ -592,7 +536,8 @@ export const Options = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Options {
+
+  decode(input: Reader | Uint8Array, length?: number): Options {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOptions } as Options;
@@ -634,6 +579,7 @@ export const Options = {
     }
     return message;
   },
+
   fromJSON(object: any): Options {
     const message = { ...baseOptions } as Options;
     message.tags = [];
@@ -647,12 +593,18 @@ export const Options = {
     } else {
       message.contentType = "";
     }
-    if (object.contentLanguage !== undefined && object.contentLanguage !== null) {
+    if (
+      object.contentLanguage !== undefined &&
+      object.contentLanguage !== null
+    ) {
       message.contentLanguage = String(object.contentLanguage);
     } else {
       message.contentLanguage = "";
     }
-    if (object.contentDisposition !== undefined && object.contentDisposition !== null) {
+    if (
+      object.contentDisposition !== undefined &&
+      object.contentDisposition !== null
+    ) {
       message.contentDisposition = String(object.contentDisposition);
     } else {
       message.contentDisposition = "";
@@ -684,6 +636,7 @@ export const Options = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Options>): Options {
     const message = { ...baseOptions } as Options;
     message.tags = [];
@@ -697,12 +650,18 @@ export const Options = {
     } else {
       message.contentType = "";
     }
-    if (object.contentLanguage !== undefined && object.contentLanguage !== null) {
+    if (
+      object.contentLanguage !== undefined &&
+      object.contentLanguage !== null
+    ) {
       message.contentLanguage = object.contentLanguage;
     } else {
       message.contentLanguage = "";
     }
-    if (object.contentDisposition !== undefined && object.contentDisposition !== null) {
+    if (
+      object.contentDisposition !== undefined &&
+      object.contentDisposition !== null
+    ) {
       message.contentDisposition = object.contentDisposition;
     } else {
       message.contentDisposition = "";
@@ -734,24 +693,31 @@ export const Options = {
     }
     return message;
   },
+
   toJSON(message: Options): unknown {
     const obj: any = {};
     message.encoding !== undefined && (obj.encoding = message.encoding);
-    message.contentType !== undefined && (obj.contentType = message.contentType);
-    message.contentLanguage !== undefined && (obj.contentLanguage = message.contentLanguage);
-    message.contentDisposition !== undefined && (obj.contentDisposition = message.contentDisposition);
+    message.contentType !== undefined &&
+      (obj.contentType = message.contentType);
+    message.contentLanguage !== undefined &&
+      (obj.contentLanguage = message.contentLanguage);
+    message.contentDisposition !== undefined &&
+      (obj.contentDisposition = message.contentDisposition);
     message.length !== undefined && (obj.length = message.length);
     message.version !== undefined && (obj.version = message.version);
     message.md5 !== undefined && (obj.md5 = message.md5);
     if (message.tags) {
-      obj.tags = message.tags.map(e => e ? Attribute.toJSON(e) : undefined);
+      obj.tags = message.tags.map((e) => (e ? Attribute.toJSON(e) : undefined));
     } else {
       obj.tags = [];
     }
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 };
+
+const baseObject: object = { key: "", bucket: "", url: "" };
 
 export const Object = {
   encode(message: Object, writer: Writer = Writer.create()): Writer {
@@ -770,7 +736,8 @@ export const Object = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Object {
+
+  decode(input: Reader | Uint8Array, length?: number): Object {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseObject } as Object;
@@ -805,6 +772,7 @@ export const Object = {
     }
     return message;
   },
+
   fromJSON(object: any): Object {
     const message = { ...baseObject } as Object;
     if (object.key !== undefined && object.key !== null) {
@@ -842,6 +810,7 @@ export const Object = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Object>): Object {
     const message = { ...baseObject } as Object;
     if (object.key !== undefined && object.key !== null) {
@@ -881,18 +850,31 @@ export const Object = {
     }
     return message;
   },
+
   toJSON(message: Object): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.bucket !== undefined && (obj.bucket = message.bucket);
-    message.object !== undefined && (obj.object = base64FromBytes(message.object !== undefined ? message.object : new Buffer(0)));
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.object !== undefined &&
+      (obj.object = base64FromBytes(
+        message.object !== undefined ? message.object : new Buffer(0)
+      ));
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.url !== undefined && (obj.url = message.url);
-    message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? Options.toJSON(message.options)
+        : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseGetRequest: object = { key: "", bucket: "", download: false };
 
 export const GetRequest = {
   encode(message: GetRequest, writer: Writer = Writer.create()): Writer {
@@ -904,7 +886,8 @@ export const GetRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): GetRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): GetRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGetRequest } as GetRequest;
@@ -930,6 +913,7 @@ export const GetRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): GetRequest {
     const message = { ...baseGetRequest } as GetRequest;
     if (object.key !== undefined && object.key !== null) {
@@ -954,6 +938,7 @@ export const GetRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<GetRequest>): GetRequest {
     const message = { ...baseGetRequest } as GetRequest;
     if (object.key !== undefined && object.key !== null) {
@@ -978,15 +963,21 @@ export const GetRequest = {
     }
     return message;
   },
+
   toJSON(message: GetRequest): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.download !== undefined && (obj.download = message.download);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseObjectsData: object = {};
 
 export const ObjectsData = {
   encode(message: ObjectsData, writer: Writer = Writer.create()): Writer {
@@ -995,7 +986,8 @@ export const ObjectsData = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ObjectsData {
+
+  decode(input: Reader | Uint8Array, length?: number): ObjectsData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseObjectsData } as ObjectsData;
@@ -1013,6 +1005,7 @@ export const ObjectsData = {
     }
     return message;
   },
+
   fromJSON(object: any): ObjectsData {
     const message = { ...baseObjectsData } as ObjectsData;
     message.objectData = [];
@@ -1023,6 +1016,7 @@ export const ObjectsData = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ObjectsData>): ObjectsData {
     const message = { ...baseObjectsData } as ObjectsData;
     message.objectData = [];
@@ -1033,16 +1027,21 @@ export const ObjectsData = {
     }
     return message;
   },
+
   toJSON(message: ObjectsData): unknown {
     const obj: any = {};
     if (message.objectData) {
-      obj.objectData = message.objectData.map(e => e ? ObjectData.toJSON(e) : undefined);
+      obj.objectData = message.objectData.map((e) =>
+        e ? ObjectData.toJSON(e) : undefined
+      );
     } else {
       obj.objectData = [];
     }
     return obj;
   },
 };
+
+const baseObjectData: object = { objectName: "", url: "" };
 
 export const ObjectData = {
   encode(message: ObjectData, writer: Writer = Writer.create()): Writer {
@@ -1053,7 +1052,8 @@ export const ObjectData = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ObjectData {
+
+  decode(input: Reader | Uint8Array, length?: number): ObjectData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseObjectData } as ObjectData;
@@ -1076,6 +1076,7 @@ export const ObjectData = {
     }
     return message;
   },
+
   fromJSON(object: any): ObjectData {
     const message = { ...baseObjectData } as ObjectData;
     if (object.objectName !== undefined && object.objectName !== null) {
@@ -1095,6 +1096,7 @@ export const ObjectData = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ObjectData>): ObjectData {
     const message = { ...baseObjectData } as ObjectData;
     if (object.objectName !== undefined && object.objectName !== null) {
@@ -1114,14 +1116,18 @@ export const ObjectData = {
     }
     return message;
   },
+
   toJSON(message: ObjectData): unknown {
     const obj: any = {};
     message.objectName !== undefined && (obj.objectName = message.objectName);
     message.url !== undefined && (obj.url = message.url);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
   },
 };
+
+const baseDeleteRequest: object = { key: "", bucket: "" };
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: Writer = Writer.create()): Writer {
@@ -1132,7 +1138,8 @@ export const DeleteRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): DeleteRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): DeleteRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleteRequest } as DeleteRequest;
@@ -1155,6 +1162,7 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): DeleteRequest {
     const message = { ...baseDeleteRequest } as DeleteRequest;
     if (object.key !== undefined && object.key !== null) {
@@ -1174,6 +1182,7 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = { ...baseDeleteRequest } as DeleteRequest;
     if (object.key !== undefined && object.key !== null) {
@@ -1193,14 +1202,20 @@ export const DeleteRequest = {
     }
     return message;
   },
+
   toJSON(message: DeleteRequest): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.bucket !== undefined && (obj.bucket = message.bucket);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseResponse: object = { url: "", bucket: "", key: "", length: 0 };
 
 export const Response = {
   encode(message: Response, writer: Writer = Writer.create()): Writer {
@@ -1216,7 +1231,8 @@ export const Response = {
     writer.uint32(48).int32(message.length);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Response {
+
+  decode(input: Reader | Uint8Array, length?: number): Response {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResponse } as Response;
@@ -1249,6 +1265,7 @@ export const Response = {
     }
     return message;
   },
+
   fromJSON(object: any): Response {
     const message = { ...baseResponse } as Response;
     message.tags = [];
@@ -1284,6 +1301,7 @@ export const Response = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Response>): Response {
     const message = { ...baseResponse } as Response;
     message.tags = [];
@@ -1319,14 +1337,16 @@ export const Response = {
     }
     return message;
   },
+
   toJSON(message: Response): unknown {
     const obj: any = {};
     message.url !== undefined && (obj.url = message.url);
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.key !== undefined && (obj.key = message.key);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     if (message.tags) {
-      obj.tags = message.tags.map(e => e ? Attribute.toJSON(e) : undefined);
+      obj.tags = message.tags.map((e) => (e ? Attribute.toJSON(e) : undefined));
     } else {
       obj.tags = [];
     }
@@ -1334,6 +1354,8 @@ export const Response = {
     return obj;
   },
 };
+
+const baseListRequest: object = { bucket: "" };
 
 export const ListRequest = {
   encode(message: ListRequest, writer: Writer = Writer.create()): Writer {
@@ -1346,7 +1368,8 @@ export const ListRequest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): ListRequest {
+
+  decode(input: Reader | Uint8Array, length?: number): ListRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseListRequest } as ListRequest;
@@ -1369,6 +1392,7 @@ export const ListRequest = {
     }
     return message;
   },
+
   fromJSON(object: any): ListRequest {
     const message = { ...baseListRequest } as ListRequest;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -1388,6 +1412,7 @@ export const ListRequest = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<ListRequest>): ListRequest {
     const message = { ...baseListRequest } as ListRequest;
     if (object.bucket !== undefined && object.bucket !== null) {
@@ -1407,137 +1432,590 @@ export const ListRequest = {
     }
     return message;
   },
+
   toJSON(message: ListRequest): unknown {
     const obj: any = {};
     message.bucket !== undefined && (obj.bucket = message.bucket);
-    message.filter !== undefined && (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.filter !== undefined &&
+      (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
-export const metaCopyRequest: { [key in keyof Required<CopyRequest>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.CopyRequestItem', name:'CopyRequestItem'} as MetaMessage} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaCopyResponse: { [key in keyof Required<CopyResponse>]: MetaBase | string } = {
-  response: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.CopyResponseItem', name:'CopyResponseItem'} as MetaMessage} as MetaArray,
-}
-export const metaCopyRequestItem: { [key in keyof Required<CopyRequestItem>]: MetaBase | string } = {
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  copySource: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
-}
-export const metaCopyResponseItem: { [key in keyof Required<CopyResponseItem>]: MetaBase | string } = {
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  copySource: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
-}
-export const metaOptions: { [key in keyof Required<Options>]: MetaBase | string } = {
-  encoding: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contentType: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contentLanguage: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contentDisposition: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  length: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-  version: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  md5: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  tags: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
-  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaObject: { [key in keyof Required<Object>]: MetaBase | string } = {
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  object: {kind:'builtin', type:'Buffer', original:'bytes'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  options: {kind:'object', type:'.io.restorecommerce.ostorage.Options', name:'Options'} as MetaMessage,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaGetRequest: { [key in keyof Required<GetRequest>]: MetaBase | string } = {
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  download: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaObjectsData: { [key in keyof Required<ObjectsData>]: MetaBase | string } = {
-  objectData: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.ostorage.ObjectData', name:'ObjectData'} as MetaMessage} as MetaArray,
-}
-export const metaObjectData: { [key in keyof Required<ObjectData>]: MetaBase | string } = {
-  objectName: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-}
-export const metaDeleteRequest: { [key in keyof Required<DeleteRequest>]: MetaBase | string } = {
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaResponse: { [key in keyof Required<Response>]: MetaBase | string } = {
-  url: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  key: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  tags: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.attribute.Attribute', name:'Attribute'} as MetaMessage} as MetaArray,
-  length: {kind:'builtin', type:'number', original:'int32'} as MetaPrimitive,
-}
-export const metaListRequest: { [key in keyof Required<ListRequest>]: MetaBase | string } = {
-  bucket: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  filter: {kind:'object', type:'.google.protobuf.Struct', name:'Struct'} as MetaMessage,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Get: {request: {kind:'object', type:'.io.restorecommerce.ostorage.GetRequest', name:'GetRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaMessage, clientStreaming: false, serverStreaming: true, encodeRequest: GetRequest.encode, decodeResponse: Object.decode} as MetaService<GetRequest, Object>,
-  Put: {request: {kind:'object', type:'.io.restorecommerce.ostorage.Object', name:'Object'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.Response', name:'Response'} as MetaMessage, clientStreaming: true, serverStreaming: false, encodeRequest: Object.encode, decodeResponse: Response.decode} as MetaService<Object, Response>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.ostorage.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  List: {request: {kind:'object', type:'.io.restorecommerce.ostorage.ListRequest', name:'ListRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.ObjectsData', name:'ObjectsData'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ListRequest.encode, decodeResponse: ObjectsData.decode} as MetaService<ListRequest, ObjectsData>,
-  Copy: {request: {kind:'object', type:'.io.restorecommerce.ostorage.CopyRequest', name:'CopyRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.ostorage.CopyResponse', name:'CopyResponse'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CopyRequest.encode, decodeResponse: CopyResponse.decode} as MetaService<CopyRequest, CopyResponse>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  CopyRequest: ['message', '.io.restorecommerce.ostorage.CopyRequest', CopyRequest, metaCopyRequest],
-  CopyResponse: ['message', '.io.restorecommerce.ostorage.CopyResponse', CopyResponse, metaCopyResponse],
-  CopyRequestItem: ['message', '.io.restorecommerce.ostorage.CopyRequestItem', CopyRequestItem, metaCopyRequestItem],
-  CopyResponseItem: ['message', '.io.restorecommerce.ostorage.CopyResponseItem', CopyResponseItem, metaCopyResponseItem],
-  Options: ['message', '.io.restorecommerce.ostorage.Options', Options, metaOptions],
-  Object: ['message', '.io.restorecommerce.ostorage.Object', Object, metaObject],
-  GetRequest: ['message', '.io.restorecommerce.ostorage.GetRequest', GetRequest, metaGetRequest],
-  ObjectsData: ['message', '.io.restorecommerce.ostorage.ObjectsData', ObjectsData, metaObjectsData],
-  ObjectData: ['message', '.io.restorecommerce.ostorage.ObjectData', ObjectData, metaObjectData],
-  DeleteRequest: ['message', '.io.restorecommerce.ostorage.DeleteRequest', DeleteRequest, metaDeleteRequest],
-  Response: ['message', '.io.restorecommerce.ostorage.Response', Response, metaResponse],
-  ListRequest: ['message', '.io.restorecommerce.ostorage.ListRequest', ListRequest, metaListRequest],
-  Service: ['service', '.io.restorecommerce.ostorage.Service', undefined, metaService],
-}
-interface WindowBase64 {
-  atob(b64: string): string;
-  btoa(bin: string): string;
+export interface Service {
+  Get(request: GetRequest): Observable<Object>;
+  Put(request: Observable<Object>): Promise<Response>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  List(request: ListRequest): Promise<ObjectsData>;
+  Copy(request: CopyRequest): Promise<CopyResponse>;
 }
 
-const windowBase64 = (globalThis as unknown as WindowBase64);
-const atob = windowBase64.atob || ((b64: string) => Buffer.from(b64, 'base64').toString('binary'));
-const btoa = windowBase64.btoa || ((bin: string) => Buffer.from(bin, 'binary').toString('base64'));
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
+}
 
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "google/protobuf/struct.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/attribute.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "CopyRequest",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.CopyRequestItem",
+            jsonName: "items",
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "CopyResponse",
+        field: [
+          {
+            name: "response",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.CopyResponseItem",
+            jsonName: "response",
+          },
+        ],
+      },
+      {
+        name: "CopyRequestItem",
+        field: [
+          {
+            name: "bucket",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "copySource",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "copySource",
+          },
+          {
+            name: "key",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "meta",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "options",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.Options",
+            jsonName: "options",
+          },
+        ],
+      },
+      {
+        name: "CopyResponseItem",
+        field: [
+          {
+            name: "bucket",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "copySource",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "copySource",
+          },
+          {
+            name: "key",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "meta",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "options",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.Options",
+            jsonName: "options",
+          },
+        ],
+      },
+      {
+        name: "Options",
+        field: [
+          {
+            name: "encoding",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "encoding",
+          },
+          {
+            name: "content_type",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contentType",
+          },
+          {
+            name: "content_language",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contentLanguage",
+          },
+          {
+            name: "content_disposition",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "contentDisposition",
+          },
+          {
+            name: "length",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "length",
+          },
+          {
+            name: "version",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "version",
+          },
+          {
+            name: "md5",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "md5",
+          },
+          {
+            name: "tags",
+            number: 8,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            jsonName: "tags",
+          },
+          {
+            name: "data",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+        ],
+      },
+      {
+        name: "Object",
+        field: [
+          {
+            name: "key",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "bucket",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "object",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BYTES",
+            jsonName: "object",
+          },
+          {
+            name: "meta",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "url",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "url",
+          },
+          {
+            name: "options",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.Options",
+            jsonName: "options",
+          },
+          {
+            name: "subject",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "GetRequest",
+        field: [
+          {
+            name: "key",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "bucket",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "download",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "download",
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "ObjectsData",
+        field: [
+          {
+            name: "object_data",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.ostorage.ObjectData",
+            jsonName: "objectData",
+          },
+        ],
+      },
+      {
+        name: "ObjectData",
+        field: [
+          {
+            name: "object_name",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "objectName",
+          },
+          {
+            name: "url",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "url",
+          },
+          {
+            name: "meta",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+        ],
+      },
+      {
+        name: "DeleteRequest",
+        field: [
+          {
+            name: "key",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "bucket",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Response",
+        field: [
+          {
+            name: "url",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "url",
+          },
+          {
+            name: "bucket",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "key",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "key",
+          },
+          {
+            name: "meta",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "tags",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            jsonName: "tags",
+          },
+          {
+            name: "length",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_INT32",
+            jsonName: "length",
+          },
+        ],
+      },
+      {
+        name: "ListRequest",
+        field: [
+          {
+            name: "bucket",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "bucket",
+          },
+          {
+            name: "filter",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Struct",
+            jsonName: "filter",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Get",
+            inputType: ".io.restorecommerce.ostorage.GetRequest",
+            outputType: ".io.restorecommerce.ostorage.Object",
+            serverStreaming: true,
+          },
+          {
+            name: "Put",
+            inputType: ".io.restorecommerce.ostorage.Object",
+            outputType: ".io.restorecommerce.ostorage.Response",
+            clientStreaming: true,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.ostorage.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "List",
+            inputType: ".io.restorecommerce.ostorage.ListRequest",
+            outputType: ".io.restorecommerce.ostorage.ObjectsData",
+          },
+          {
+            name: "Copy",
+            inputType: ".io.restorecommerce.ostorage.CopyRequest",
+            outputType: ".io.restorecommerce.ostorage.CopyResponse",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/ostorage.proto",
+    package: "io.restorecommerce.ostorage",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 4, 2, 8],
+          span: [53, 2, 31],
+          trailingComments: " optional meta data ex: from and to dates\n",
+        },
+        {
+          path: [4, 10, 2, 5],
+          span: [95, 2, 19],
+          trailingComments: " file size of uploaded object\n",
+        },
+        {
+          path: [4, 11, 2, 1],
+          span: [100, 2, 36],
+          trailingComments:
+            "/ Filter based on fieldName|operation, value|list\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.ostorage.CopyRequest": CopyRequest,
+    ".io.restorecommerce.ostorage.CopyResponse": CopyResponse,
+    ".io.restorecommerce.ostorage.CopyRequestItem": CopyRequestItem,
+    ".io.restorecommerce.ostorage.CopyResponseItem": CopyResponseItem,
+    ".io.restorecommerce.ostorage.Options": Options,
+    ".io.restorecommerce.ostorage.Object": Object,
+    ".io.restorecommerce.ostorage.GetRequest": GetRequest,
+    ".io.restorecommerce.ostorage.ObjectsData": ObjectsData,
+    ".io.restorecommerce.ostorage.ObjectData": ObjectData,
+    ".io.restorecommerce.ostorage.DeleteRequest": DeleteRequest,
+    ".io.restorecommerce.ostorage.Response": Response,
+    ".io.restorecommerce.ostorage.ListRequest": ListRequest,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    google_protobuf_struct_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+    io_restorecommerce_attribute_protoMetadata,
+  ],
+};
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw new Error("Unable to locate global object");
+})();
+
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const arr = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
+    arr[i] = bin.charCodeAt(i);
   }
   return arr;
 }
 
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
   for (let i = 0; i < arr.byteLength; ++i) {
     bin.push(String.fromCharCode(arr[i]));
   }
-  return btoa(bin.join(''));
+  return btoa(bin.join(""));
 }
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

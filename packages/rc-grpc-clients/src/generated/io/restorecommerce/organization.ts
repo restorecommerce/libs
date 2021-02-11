@@ -1,11 +1,29 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Any } from '../../google/protobuf/any';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.organization";
 
 export interface Deleted {
   id: string;
@@ -24,32 +42,20 @@ export interface OrganizationList {
 }
 
 export interface Organization {
-  /**
-   * / Organization ID, unique, key
-   */
+  /** / Organization ID, unique, key */
   id: string;
   meta?: Meta;
-  /**
-   * / Address for the organization
-   */
+  /** / Address for the organization */
   addressId: string;
-  /**
-   *   Hierarchically superior organization; may be null
-   */
+  /** Hierarchically superior organization; may be null */
   parentId: string;
-  /**
-   *  Hierarchically inferior organizations; may be null/empty
-   */
+  /** Hierarchically inferior organizations; may be null/empty */
   childrenIds: string[];
-  /**
-   *  list of possible legal addresses of different types
-   */
+  /** list of possible legal addresses of different types */
   contactPointIds: string[];
   website: string;
   email: string;
-  /**
-   *  base64; arangoDB does not support blob storage
-   */
+  /** base64; arangoDB does not support blob storage */
   logo: string;
   vatId: string;
   isicV4: string;
@@ -57,105 +63,19 @@ export interface Organization {
   registrationCourt: string;
   name: string;
   paymentMethodIds: string[];
-  /**
-   * / additional data
-   */
+  /** / additional data */
   data?: Any;
 }
 
-const baseDeleted: object = {
-  id: "",
-};
-
-const baseDeleteOrgData: object = {
-  orgIds: "",
-  userIds: "",
-};
-
-const baseOrganizationList: object = {
-  totalCount: 0,
-};
-
-const baseOrganization: object = {
-  id: "",
-  addressId: "",
-  parentId: "",
-  childrenIds: "",
-  contactPointIds: "",
-  website: "",
-  email: "",
-  logo: "",
-  vatId: "",
-  isicV4: "",
-  registration: "",
-  registrationCourt: "",
-  name: "",
-  paymentMethodIds: "",
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<OrganizationList>;
-
-  Create(request: OrganizationList): Promise<OrganizationList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: OrganizationList): Promise<OrganizationList>;
-
-  Upsert(request: OrganizationList): Promise<OrganizationList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.organization'
+const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -172,6 +92,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -181,6 +102,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -190,12 +112,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const baseDeleteOrgData: object = { orgIds: "", userIds: "" };
 
 export const DeleteOrgData = {
   encode(message: DeleteOrgData, writer: Writer = Writer.create()): Writer {
@@ -210,7 +135,8 @@ export const DeleteOrgData = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): DeleteOrgData {
+
+  decode(input: Reader | Uint8Array, length?: number): DeleteOrgData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleteOrgData } as DeleteOrgData;
@@ -235,6 +161,7 @@ export const DeleteOrgData = {
     }
     return message;
   },
+
   fromJSON(object: any): DeleteOrgData {
     const message = { ...baseDeleteOrgData } as DeleteOrgData;
     message.orgIds = [];
@@ -256,6 +183,7 @@ export const DeleteOrgData = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<DeleteOrgData>): DeleteOrgData {
     const message = { ...baseDeleteOrgData } as DeleteOrgData;
     message.orgIds = [];
@@ -277,22 +205,28 @@ export const DeleteOrgData = {
     }
     return message;
   },
+
   toJSON(message: DeleteOrgData): unknown {
     const obj: any = {};
     if (message.orgIds) {
-      obj.orgIds = message.orgIds.map(e => e);
+      obj.orgIds = message.orgIds.map((e) => e);
     } else {
       obj.orgIds = [];
     }
     if (message.userIds) {
-      obj.userIds = message.userIds.map(e => e);
+      obj.userIds = message.userIds.map((e) => e);
     } else {
       obj.userIds = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseOrganizationList: object = { totalCount: 0 };
 
 export const OrganizationList = {
   encode(message: OrganizationList, writer: Writer = Writer.create()): Writer {
@@ -305,7 +239,8 @@ export const OrganizationList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrganizationList {
+
+  decode(input: Reader | Uint8Array, length?: number): OrganizationList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrganizationList } as OrganizationList;
@@ -329,6 +264,7 @@ export const OrganizationList = {
     }
     return message;
   },
+
   fromJSON(object: any): OrganizationList {
     const message = { ...baseOrganizationList } as OrganizationList;
     message.items = [];
@@ -349,6 +285,7 @@ export const OrganizationList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrganizationList>): OrganizationList {
     const message = { ...baseOrganizationList } as OrganizationList;
     message.items = [];
@@ -369,17 +306,40 @@ export const OrganizationList = {
     }
     return message;
   },
+
   toJSON(message: OrganizationList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Organization.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Organization.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
+};
+
+const baseOrganization: object = {
+  id: "",
+  addressId: "",
+  parentId: "",
+  childrenIds: "",
+  contactPointIds: "",
+  website: "",
+  email: "",
+  logo: "",
+  vatId: "",
+  isicV4: "",
+  registration: "",
+  registrationCourt: "",
+  name: "",
+  paymentMethodIds: "",
 };
 
 export const Organization = {
@@ -412,7 +372,8 @@ export const Organization = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Organization {
+
+  decode(input: Reader | Uint8Array, length?: number): Organization {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrganization } as Organization;
@@ -477,6 +438,7 @@ export const Organization = {
     }
     return message;
   },
+
   fromJSON(object: any): Organization {
     const message = { ...baseOrganization } as Organization;
     message.childrenIds = [];
@@ -507,7 +469,10 @@ export const Organization = {
         message.childrenIds.push(String(e));
       }
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(String(e));
       }
@@ -542,7 +507,10 @@ export const Organization = {
     } else {
       message.registration = "";
     }
-    if (object.registrationCourt !== undefined && object.registrationCourt !== null) {
+    if (
+      object.registrationCourt !== undefined &&
+      object.registrationCourt !== null
+    ) {
       message.registrationCourt = String(object.registrationCourt);
     } else {
       message.registrationCourt = "";
@@ -552,7 +520,10 @@ export const Organization = {
     } else {
       message.name = "";
     }
-    if (object.paymentMethodIds !== undefined && object.paymentMethodIds !== null) {
+    if (
+      object.paymentMethodIds !== undefined &&
+      object.paymentMethodIds !== null
+    ) {
       for (const e of object.paymentMethodIds) {
         message.paymentMethodIds.push(String(e));
       }
@@ -564,6 +535,7 @@ export const Organization = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = { ...baseOrganization } as Organization;
     message.childrenIds = [];
@@ -594,7 +566,10 @@ export const Organization = {
         message.childrenIds.push(e);
       }
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(e);
       }
@@ -629,7 +604,10 @@ export const Organization = {
     } else {
       message.registration = "";
     }
-    if (object.registrationCourt !== undefined && object.registrationCourt !== null) {
+    if (
+      object.registrationCourt !== undefined &&
+      object.registrationCourt !== null
+    ) {
       message.registrationCourt = object.registrationCourt;
     } else {
       message.registrationCourt = "";
@@ -639,7 +617,10 @@ export const Organization = {
     } else {
       message.name = "";
     }
-    if (object.paymentMethodIds !== undefined && object.paymentMethodIds !== null) {
+    if (
+      object.paymentMethodIds !== undefined &&
+      object.paymentMethodIds !== null
+    ) {
       for (const e of object.paymentMethodIds) {
         message.paymentMethodIds.push(e);
       }
@@ -651,19 +632,21 @@ export const Organization = {
     }
     return message;
   },
+
   toJSON(message: Organization): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.addressId !== undefined && (obj.addressId = message.addressId);
     message.parentId !== undefined && (obj.parentId = message.parentId);
     if (message.childrenIds) {
-      obj.childrenIds = message.childrenIds.map(e => e);
+      obj.childrenIds = message.childrenIds.map((e) => e);
     } else {
       obj.childrenIds = [];
     }
     if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map(e => e);
+      obj.contactPointIds = message.contactPointIds.map((e) => e);
     } else {
       obj.contactPointIds = [];
     }
@@ -672,66 +655,332 @@ export const Organization = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.vatId !== undefined && (obj.vatId = message.vatId);
     message.isicV4 !== undefined && (obj.isicV4 = message.isicV4);
-    message.registration !== undefined && (obj.registration = message.registration);
-    message.registrationCourt !== undefined && (obj.registrationCourt = message.registrationCourt);
+    message.registration !== undefined &&
+      (obj.registration = message.registration);
+    message.registrationCourt !== undefined &&
+      (obj.registrationCourt = message.registrationCourt);
     message.name !== undefined && (obj.name = message.name);
     if (message.paymentMethodIds) {
-      obj.paymentMethodIds = message.paymentMethodIds.map(e => e);
+      obj.paymentMethodIds = message.paymentMethodIds.map((e) => e);
     } else {
       obj.paymentMethodIds = [];
     }
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+export interface Service {
+  Read(request: ReadRequest): Promise<OrganizationList>;
+  Create(request: OrganizationList): Promise<OrganizationList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: OrganizationList): Promise<OrganizationList>;
+  Upsert(request: OrganizationList): Promise<OrganizationList>;
 }
-export const metaDeleteOrgData: { [key in keyof Required<DeleteOrgData>]: MetaBase | string } = {
-  orgIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  userIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaOrganizationList: { [key in keyof Required<OrganizationList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.organization.Organization', name:'Organization'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaOrganization: { [key in keyof Required<Organization>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  addressId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  parentId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  childrenIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  contactPointIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  website: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  email: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  logo: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  vatId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  isicV4: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  registration: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  registrationCourt: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  paymentMethodIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: OrganizationList.decode} as MetaService<ReadRequest, OrganizationList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.organization.OrganizationList', name:'OrganizationList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: OrganizationList.encode, decodeResponse: OrganizationList.decode} as MetaService<OrganizationList, OrganizationList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Deleted: ['message', '.io.restorecommerce.organization.Deleted', Deleted, metaDeleted],
-  DeleteOrgData: ['message', '.io.restorecommerce.organization.DeleteOrgData', DeleteOrgData, metaDeleteOrgData],
-  OrganizationList: ['message', '.io.restorecommerce.organization.OrganizationList', OrganizationList, metaOrganizationList],
-  Organization: ['message', '.io.restorecommerce.organization.Organization', Organization, metaOrganization],
-  Service: ['service', '.io.restorecommerce.organization.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "DeleteOrgData",
+        field: [
+          {
+            name: "org_ids",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "orgIds",
+          },
+          {
+            name: "user_ids",
+            number: 2,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "userIds",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "OrganizationList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.organization.Organization",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Organization",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "address_id",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "addressId",
+          },
+          {
+            name: "parent_id",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "parentId",
+          },
+          {
+            name: "children_ids",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "childrenIds",
+          },
+          {
+            name: "contact_point_ids",
+            number: 6,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "contactPointIds",
+          },
+          {
+            name: "website",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "website",
+          },
+          {
+            name: "email",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "email",
+          },
+          {
+            name: "logo",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "logo",
+          },
+          {
+            name: "vat_id",
+            number: 10,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "vatId",
+          },
+          {
+            name: "isic_v4",
+            number: 11,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "isicV4",
+          },
+          {
+            name: "registration",
+            number: 12,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "registration",
+          },
+          {
+            name: "registration_court",
+            number: 13,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "registrationCourt",
+          },
+          {
+            name: "name",
+            number: 14,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "payment_method_ids",
+            number: 15,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "paymentMethodIds",
+          },
+          {
+            name: "data",
+            number: 16,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.organization.OrganizationList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.organization.OrganizationList",
+            outputType: ".io.restorecommerce.organization.OrganizationList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.organization.OrganizationList",
+            outputType: ".io.restorecommerce.organization.OrganizationList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.organization.OrganizationList",
+            outputType: ".io.restorecommerce.organization.OrganizationList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/organization.proto",
+    package: "io.restorecommerce.organization",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 3, 2, 0],
+          span: [35, 2, 16],
+          trailingComments: "/ Organization ID, unique, key\n",
+        },
+        {
+          path: [4, 3, 2, 2],
+          span: [37, 2, 24],
+          trailingComments: "/ Address for the organization\n",
+        },
+        {
+          path: [4, 3, 2, 3],
+          span: [38, 2, 23],
+          trailingComments:
+            "  Hierarchically superior organization; may be null\n",
+        },
+        {
+          path: [4, 3, 2, 4],
+          span: [39, 2, 35],
+          trailingComments:
+            " Hierarchically inferior organizations; may be null/empty\n",
+        },
+        {
+          path: [4, 3, 2, 5],
+          span: [40, 2, 40],
+          trailingComments:
+            " list of possible legal addresses of different types\n",
+        },
+        {
+          path: [4, 3, 2, 8],
+          span: [43, 2, 18],
+          trailingComments: " base64; arangoDB does not support blob storage\n",
+        },
+        {
+          path: [4, 3, 2, 15],
+          span: [50, 2, 32],
+          trailingComments: "/ additional data\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.organization.Deleted": Deleted,
+    ".io.restorecommerce.organization.DeleteOrgData": DeleteOrgData,
+    ".io.restorecommerce.organization.OrganizationList": OrganizationList,
+    ".io.restorecommerce.organization.Organization": Organization,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

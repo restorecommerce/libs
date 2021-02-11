@@ -1,104 +1,30 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { Any } from '../../google/protobuf/any';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Any,
+  protoMetadata as google_protobuf_any_protoMetadata,
+} from "../../google/protobuf/any";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
+import { protoMetadata as io_restorecommerce_user_protoMetadata } from "../../io/restorecommerce/user";
 
-
-export interface Deleted {
-  id: string;
-}
-
-export interface PaymentMethodList {
-  items: PaymentMethod[];
-  totalCount: number;
-  subject?: Subject;
-}
-
-export interface PaymentMethod {
-  id: string;
-  meta?: Meta;
-  paymentMethod: PaymentMethodEnum;
-  transferType: TransferTypeEnum;
-  data?: Any;
-}
-
-const baseDeleted: object = {
-  id: "",
-};
-
-const basePaymentMethodList: object = {
-  totalCount: 0,
-};
-
-const basePaymentMethod: object = {
-  id: "",
-  paymentMethod: 0,
-  transferType: 0,
-};
-
-/**
- *
- *  Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<PaymentMethodList>;
-
-  Create(request: PaymentMethodList): Promise<PaymentMethodList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: PaymentMethodList): Promise<PaymentMethodList>;
-
-  Upsert(request: PaymentMethodList): Promise<PaymentMethodList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.payment_method'
+export const protobufPackage = "io.restorecommerce.payment_method";
 
 export enum PaymentMethodEnum {
   WIRE_TRANSFER = 0,
@@ -176,12 +102,33 @@ export function transferTypeEnumToJSON(object: TransferTypeEnum): string {
   }
 }
 
+export interface Deleted {
+  id: string;
+}
+
+export interface PaymentMethodList {
+  items: PaymentMethod[];
+  totalCount: number;
+  subject?: Subject;
+}
+
+export interface PaymentMethod {
+  id: string;
+  meta?: Meta;
+  paymentMethod: PaymentMethodEnum;
+  transferType: TransferTypeEnum;
+  data?: Any;
+}
+
+const baseDeleted: object = { id: "" };
+
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Deleted {
+
+  decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeleted } as Deleted;
@@ -198,6 +145,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromJSON(object: any): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -207,6 +155,7 @@ export const Deleted = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = { ...baseDeleted } as Deleted;
     if (object.id !== undefined && object.id !== null) {
@@ -216,12 +165,15 @@ export const Deleted = {
     }
     return message;
   },
+
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
 };
+
+const basePaymentMethodList: object = { totalCount: 0 };
 
 export const PaymentMethodList = {
   encode(message: PaymentMethodList, writer: Writer = Writer.create()): Writer {
@@ -234,7 +186,8 @@ export const PaymentMethodList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentMethodList {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentMethodList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentMethodList } as PaymentMethodList;
@@ -258,6 +211,7 @@ export const PaymentMethodList = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentMethodList {
     const message = { ...basePaymentMethodList } as PaymentMethodList;
     message.items = [];
@@ -278,6 +232,7 @@ export const PaymentMethodList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
     const message = { ...basePaymentMethodList } as PaymentMethodList;
     message.items = [];
@@ -298,18 +253,26 @@ export const PaymentMethodList = {
     }
     return message;
   },
+
   toJSON(message: PaymentMethodList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? PaymentMethod.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? PaymentMethod.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const basePaymentMethod: object = { id: "", paymentMethod: 0, transferType: 0 };
 
 export const PaymentMethod = {
   encode(message: PaymentMethod, writer: Writer = Writer.create()): Writer {
@@ -324,7 +287,8 @@ export const PaymentMethod = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PaymentMethod {
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentMethod {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePaymentMethod } as PaymentMethod;
@@ -353,6 +317,7 @@ export const PaymentMethod = {
     }
     return message;
   },
+
   fromJSON(object: any): PaymentMethod {
     const message = { ...basePaymentMethod } as PaymentMethod;
     if (object.id !== undefined && object.id !== null) {
@@ -382,6 +347,7 @@ export const PaymentMethod = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PaymentMethod>): PaymentMethod {
     const message = { ...basePaymentMethod } as PaymentMethod;
     if (object.id !== undefined && object.id !== null) {
@@ -411,49 +377,218 @@ export const PaymentMethod = {
     }
     return message;
   },
+
   toJSON(message: PaymentMethod): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.paymentMethod !== undefined && (obj.paymentMethod = paymentMethodEnumToJSON(message.paymentMethod));
-    message.transferType !== undefined && (obj.transferType = transferTypeEnumToJSON(message.transferType));
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.paymentMethod !== undefined &&
+      (obj.paymentMethod = paymentMethodEnumToJSON(message.paymentMethod));
+    message.transferType !== undefined &&
+      (obj.transferType = transferTypeEnumToJSON(message.transferType));
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 };
 
-export const metaDeleted: { [key in keyof Required<Deleted>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<PaymentMethodList>;
+  Create(request: PaymentMethodList): Promise<PaymentMethodList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: PaymentMethodList): Promise<PaymentMethodList>;
+  Upsert(request: PaymentMethodList): Promise<PaymentMethodList>;
 }
-export const metaPaymentMethodList: { [key in keyof Required<PaymentMethodList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethod', name:'PaymentMethod'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaPaymentMethod: { [key in keyof Required<PaymentMethod>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  paymentMethod: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodEnum', name:'PaymentMethodEnum'} as MetaMessage,
-  transferType: {kind:'object', type:'.io.restorecommerce.payment_method.TransferTypeEnum', name:'TransferTypeEnum'} as MetaMessage,
-  data: {kind:'object', type:'.google.protobuf.Any', name:'Any'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PaymentMethodList.decode} as MetaService<ReadRequest, PaymentMethodList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaService<PaymentMethodList, PaymentMethodList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaService<PaymentMethodList, PaymentMethodList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.payment_method.PaymentMethodList', name:'PaymentMethodList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PaymentMethodList.encode, decodeResponse: PaymentMethodList.decode} as MetaService<PaymentMethodList, PaymentMethodList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  PaymentMethodEnum: ['enum', '.io.restorecommerce.payment_method.PaymentMethodEnum', PaymentMethodEnum, undefined],
-  TransferTypeEnum: ['enum', '.io.restorecommerce.payment_method.TransferTypeEnum', TransferTypeEnum, undefined],
-  Deleted: ['message', '.io.restorecommerce.payment_method.Deleted', Deleted, metaDeleted],
-  PaymentMethodList: ['message', '.io.restorecommerce.payment_method.PaymentMethodList', PaymentMethodList, metaPaymentMethodList],
-  PaymentMethod: ['message', '.io.restorecommerce.payment_method.PaymentMethod', PaymentMethod, metaPaymentMethod],
-  Service: ['service', '.io.restorecommerce.payment_method.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/user.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+        ],
+      },
+      {
+        name: "PaymentMethodList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.payment_method.PaymentMethod",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "PaymentMethod",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "payment_method",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.payment_method.PaymentMethodEnum",
+            jsonName: "paymentMethod",
+          },
+          {
+            name: "transfer_type",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.payment_method.TransferTypeEnum",
+            jsonName: "transferType",
+          },
+          {
+            name: "data",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+        ],
+      },
+    ],
+    enumType: [
+      {
+        name: "PaymentMethodEnum",
+        value: [
+          { name: "WIRE_TRANSFER", number: 0 },
+          { name: "DIRECT_DEBIT", number: 1 },
+          { name: "PAYPAL", number: 2 },
+        ],
+      },
+      {
+        name: "TransferTypeEnum",
+        value: [
+          { name: "RECEIVE", number: 0 },
+          { name: "SEND", number: 1 },
+          { name: "BOTH", number: 2 },
+        ],
+      },
+    ],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+            outputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+            outputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+            outputType: ".io.restorecommerce.payment_method.PaymentMethodList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/payment_method.proto",
+    package: "io.restorecommerce.payment_method",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [14, 0, 20, 1],
+          leadingComments: "\n Microservice definition.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.payment_method.PaymentMethodEnum": PaymentMethodEnum,
+    ".io.restorecommerce.payment_method.TransferTypeEnum": TransferTypeEnum,
+    ".io.restorecommerce.payment_method.Deleted": Deleted,
+    ".io.restorecommerce.payment_method.PaymentMethodList": PaymentMethodList,
+    ".io.restorecommerce.payment_method.PaymentMethod": PaymentMethod,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    google_protobuf_any_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_user_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

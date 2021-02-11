@@ -1,10 +1,10 @@
-import  { createFacade, reqResLogger, FacadeContext, identityModule } from '../src/index';
+import { createFacade, reqResLogger, FacadeContext, identityModule } from '../src/index';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
 import { timezonesModule } from './timezone';
 import { exampleModule } from './example';
-import { ResourcesSrvGrpcClient} from '@restorecommerce/rc-grpc-clients';
+import { ResourcesSrvGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import { TokenServiceStub } from './token-service-stub';
 
 const jwks = require('./jwks.json');
@@ -20,7 +20,7 @@ function createTestFacade() {
     facade: serviceConfig.get('facade'),
     resources: serviceConfig.get('resources'),
     identity: serviceConfig.get('identity'),
-    example: { message: 'foo' }
+    example: {message: 'foo'}
   };
 
   const logger = createLogger(cfg.logger);
@@ -31,8 +31,10 @@ function createTestFacade() {
 
     env: cfg.env,
     logger
-  }).useModule(identityModule({
+  })
+    .useModule(identityModule({
       identitySrvClientConfig: cfg.identity.client,
+      config: cfg.identity,
       oidc: {
         // remoteTokenService: new TokenServiceStub(),
         client_id: 'TEST_CLIENT_ID',
@@ -53,7 +55,7 @@ function createTestFacade() {
     }))
     .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))
     .useModule(exampleModule(cfg.example))
-    .useMiddleware(reqResLogger({ logger }));
+    .useMiddleware(reqResLogger({logger}));
 };
 
 export const facade = createTestFacade();

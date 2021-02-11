@@ -5,36 +5,36 @@ import {
   getWhitelistBlacklistConfig,
   registerResolverSchema
 } from "../../../gql/protos";
-import { metaService as addressMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address";
-import { metaService as countryMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country";
-import { metaService as timezoneMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone";
-import { metaService as contact_point_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type";
-import { metaService as customerMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer";
-import { metaService as contact_pointMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point";
-import { metaService as localeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale";
-import { metaService as locationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location";
-import { metaService as organizationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
-import { metaService as taxMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
-import { metaService as tax_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
-import { metaService as commandMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
+import { protoMetadata as addressMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address";
+import { protoMetadata as countryMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country";
+import { protoMetadata as timezoneMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone";
+import { protoMetadata as contact_point_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type";
+import { protoMetadata as customerMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer";
+import { protoMetadata as contact_pointMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point";
+import { protoMetadata as localeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale";
+import { protoMetadata as locationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location";
+import { protoMetadata as organizationMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
+import { protoMetadata as taxMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
+import { protoMetadata as tax_typeMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
+import { protoMetadata as commandMetaService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
 import { namespace, ResourceServiceConfig } from "../interfaces";
 
 registerTypings();
 
 export const schema = (cfg: ResourceServiceConfig) => {
   const subServices = [
-    [addressMetaService, 'address', ['Read']],
-    [countryMetaService, 'country', ['Read']],
-    [timezoneMetaService, 'timezone', ['Read']],
-    [contact_point_typeMetaService, 'contact_point_type', ['Read']],
-    [customerMetaService, 'customer', ['Read']],
-    [contact_pointMetaService, 'contact_point', ['Read']],
-    [localeMetaService, 'locale', ['Read']],
-    [locationMetaService, 'location', ['Read']],
-    [organizationMetaService, 'organization', ['Read']],
-    [taxMetaService, 'tax', ['Read']],
-    [tax_typeMetaService, 'tax_type', ['Read']],
-    [commandMetaService, 'command', ['Read']],
+    [addressMetaService.fileDescriptor.service![0], 'address', ['Read']],
+    [countryMetaService.fileDescriptor.service![0], 'country', ['Read']],
+    [timezoneMetaService.fileDescriptor.service![0], 'timezone', ['Read']],
+    [contact_point_typeMetaService.fileDescriptor.service![0], 'contact_point_type', ['Read']],
+    [customerMetaService.fileDescriptor.service![0], 'customer', ['Read']],
+    [contact_pointMetaService.fileDescriptor.service![0], 'contact_point', ['Read']],
+    [localeMetaService.fileDescriptor.service![0], 'locale', ['Read']],
+    [locationMetaService.fileDescriptor.service![0], 'location', ['Read']],
+    [organizationMetaService.fileDescriptor.service![0], 'organization', ['Read']],
+    [taxMetaService.fileDescriptor.service![0], 'tax', ['Read']],
+    [tax_typeMetaService.fileDescriptor.service![0], 'tax_type', ['Read']],
+    [commandMetaService.fileDescriptor.service![0], 'command', ['Read']],
   ];
 
   subServices.forEach(([service, subspace, queryList]: any) => {

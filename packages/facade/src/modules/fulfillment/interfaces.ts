@@ -2,12 +2,16 @@ import { FulfillmentSrvGrpcClient } from "./grpc";
 import { ServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
+export interface FulfillmentServiceConfig extends ServiceConfig {
+  root: boolean;
+}
+
 export interface FulfillmentConfig {
-  config: ServiceConfig;
+  config: FulfillmentServiceConfig;
 }
 
 export interface FulfillmentContext extends FacadeContext {
-  fulfillment: {
+  access_control: {
     client: FulfillmentSrvGrpcClient;
   }
 }

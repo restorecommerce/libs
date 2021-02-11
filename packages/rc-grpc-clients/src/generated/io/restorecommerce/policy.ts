@@ -1,28 +1,43 @@
 /* eslint-disable */
-import { Meta } from '../../io/restorecommerce/meta';
-import { Target, Effect, RuleRQ, effectFromJSON, effectToJSON } from '../../io/restorecommerce/rule';
-import { Subject } from '../../io/restorecommerce/auth';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import {
+  Target,
+  Effect,
+  RuleRQ,
+  effectFromJSON,
+  effectToJSON,
+  protoMetadata as io_restorecommerce_rule_protoMetadata,
+} from "../../io/restorecommerce/rule";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.policy";
 
-/**
- * *
- *  A Policy is defined by a set of Rules.
- */
+/** A Policy is defined by a set of Rules. */
 export interface Policy {
   id: string;
   meta?: Meta;
   name: string;
   description: string;
-  /**
-   *  rule IDs
-   */
+  /** rule IDs */
   rules: string[];
-  /**
-   *  general policy target
-   */
+  /** general policy target */
   target?: Target;
   effect: Effect;
   combiningAlgorithm: string;
@@ -55,75 +70,6 @@ const basePolicy: object = {
   evaluationCacheable: false,
 };
 
-const basePolicyRQ: object = {
-  id: "",
-  combiningAlgorithm: "",
-  effect: 0,
-  hasRules: false,
-  evaluationCacheable: false,
-};
-
-const basePolicyList: object = {
-  totalCount: 0,
-};
-
-export interface Service {
-
-  Read(request: ReadRequest): Promise<PolicyList>;
-
-  Create(request: PolicyList): Promise<PolicyList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: PolicyList): Promise<PolicyList>;
-
-  Upsert(request: PolicyList): Promise<PolicyList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.policy'
-
 export const Policy = {
   encode(message: Policy, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.id);
@@ -143,7 +89,8 @@ export const Policy = {
     writer.uint32(72).bool(message.evaluationCacheable);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Policy {
+
+  decode(input: Reader | Uint8Array, length?: number): Policy {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicy } as Policy;
@@ -185,6 +132,7 @@ export const Policy = {
     }
     return message;
   },
+
   fromJSON(object: any): Policy {
     const message = { ...basePolicy } as Policy;
     message.rules = [];
@@ -223,18 +171,25 @@ export const Policy = {
     } else {
       message.effect = 0;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
       message.combiningAlgorithm = "";
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Policy>): Policy {
     const message = { ...basePolicy } as Policy;
     message.rules = [];
@@ -273,35 +228,55 @@ export const Policy = {
     } else {
       message.effect = 0;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
       message.combiningAlgorithm = "";
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = object.evaluationCacheable;
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   toJSON(message: Policy): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.rules) {
-      obj.rules = message.rules.map(e => e);
+      obj.rules = message.rules.map((e) => e);
     } else {
       obj.rules = [];
     }
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
-    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
+};
+
+const basePolicyRQ: object = {
+  id: "",
+  combiningAlgorithm: "",
+  effect: 0,
+  hasRules: false,
+  evaluationCacheable: false,
 };
 
 export const PolicyRQ = {
@@ -319,7 +294,8 @@ export const PolicyRQ = {
     writer.uint32(56).bool(message.evaluationCacheable);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PolicyRQ {
+
+  decode(input: Reader | Uint8Array, length?: number): PolicyRQ {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicyRQ } as PolicyRQ;
@@ -355,6 +331,7 @@ export const PolicyRQ = {
     }
     return message;
   },
+
   fromJSON(object: any): PolicyRQ {
     const message = { ...basePolicyRQ } as PolicyRQ;
     message.rules = [];
@@ -368,7 +345,10 @@ export const PolicyRQ = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
       message.combiningAlgorithm = "";
@@ -388,13 +368,17 @@ export const PolicyRQ = {
     } else {
       message.hasRules = false;
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PolicyRQ>): PolicyRQ {
     const message = { ...basePolicyRQ } as PolicyRQ;
     message.rules = [];
@@ -408,7 +392,10 @@ export const PolicyRQ = {
     } else {
       message.target = undefined;
     }
-    if (object.combiningAlgorithm !== undefined && object.combiningAlgorithm !== null) {
+    if (
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
+    ) {
       message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
       message.combiningAlgorithm = "";
@@ -428,29 +415,38 @@ export const PolicyRQ = {
     } else {
       message.hasRules = false;
     }
-    if (object.evaluationCacheable !== undefined && object.evaluationCacheable !== null) {
+    if (
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
+    ) {
       message.evaluationCacheable = object.evaluationCacheable;
     } else {
       message.evaluationCacheable = false;
     }
     return message;
   },
+
   toJSON(message: PolicyRQ): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.rules) {
-      obj.rules = message.rules.map(e => e ? RuleRQ.toJSON(e) : undefined);
+      obj.rules = message.rules.map((e) => (e ? RuleRQ.toJSON(e) : undefined));
     } else {
       obj.rules = [];
     }
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
     message.hasRules !== undefined && (obj.hasRules = message.hasRules);
-    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
+
+const basePolicyList: object = { totalCount: 0 };
 
 export const PolicyList = {
   encode(message: PolicyList, writer: Writer = Writer.create()): Writer {
@@ -463,7 +459,8 @@ export const PolicyList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): PolicyList {
+
+  decode(input: Reader | Uint8Array, length?: number): PolicyList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePolicyList } as PolicyList;
@@ -487,6 +484,7 @@ export const PolicyList = {
     }
     return message;
   },
+
   fromJSON(object: any): PolicyList {
     const message = { ...basePolicyList } as PolicyList;
     message.items = [];
@@ -507,6 +505,7 @@ export const PolicyList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<PolicyList>): PolicyList {
     const message = { ...basePolicyList } as PolicyList;
     message.items = [];
@@ -527,59 +526,279 @@ export const PolicyList = {
     }
     return message;
   },
+
   toJSON(message: PolicyList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Policy.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Policy.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
 
-export const metaPolicy: { [key in keyof Required<Policy>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  name: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  description: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  rules: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
-  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
-  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+export interface Service {
+  Read(request: ReadRequest): Promise<PolicyList>;
+  Create(request: PolicyList): Promise<PolicyList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: PolicyList): Promise<PolicyList>;
+  Upsert(request: PolicyList): Promise<PolicyList>;
 }
-export const metaPolicyRQ: { [key in keyof Required<PolicyRQ>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  target: {kind:'object', type:'.io.restorecommerce.rule.Target', name:'Target'} as MetaMessage,
-  combiningAlgorithm: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  rules: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.rule.RuleRQ', name:'RuleRQ'} as MetaMessage} as MetaArray,
-  effect: {kind:'object', type:'.io.restorecommerce.rule.Effect', name:'Effect'} as MetaMessage,
-  hasRules: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  evaluationCacheable: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaPolicyList: { [key in keyof Required<PolicyList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.policy.Policy', name:'Policy'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: PolicyList.decode} as MetaService<ReadRequest, PolicyList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.policy.PolicyList', name:'PolicyList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: PolicyList.encode, decodeResponse: PolicyList.decode} as MetaService<PolicyList, PolicyList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  Policy: ['message', '.io.restorecommerce.policy.Policy', Policy, metaPolicy],
-  PolicyRQ: ['message', '.io.restorecommerce.policy.PolicyRQ', PolicyRQ, metaPolicyRQ],
-  PolicyList: ['message', '.io.restorecommerce.policy.PolicyList', PolicyList, metaPolicyList],
-  Service: ['service', '.io.restorecommerce.policy.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/resource_base.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/rule.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Policy",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "name",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "name",
+          },
+          {
+            name: "description",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "description",
+          },
+          {
+            name: "rules",
+            number: 5,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "rules",
+          },
+          {
+            name: "target",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.Target",
+            jsonName: "target",
+          },
+          {
+            name: "effect",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.rule.Effect",
+            jsonName: "effect",
+          },
+          {
+            name: "combining_algorithm",
+            number: 8,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "combiningAlgorithm",
+          },
+          {
+            name: "evaluation_cacheable",
+            number: 9,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "evaluationCacheable",
+          },
+        ],
+      },
+      {
+        name: "PolicyRQ",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "target",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.Target",
+            jsonName: "target",
+          },
+          {
+            name: "combining_algorithm",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "combiningAlgorithm",
+          },
+          {
+            name: "rules",
+            number: 4,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.rule.RuleRQ",
+            jsonName: "rules",
+          },
+          {
+            name: "effect",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_ENUM",
+            typeName: ".io.restorecommerce.rule.Effect",
+            jsonName: "effect",
+          },
+          {
+            name: "has_rules",
+            number: 6,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "hasRules",
+          },
+          {
+            name: "evaluation_cacheable",
+            number: 7,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "evaluationCacheable",
+          },
+        ],
+      },
+      {
+        name: "PolicyList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.policy.Policy",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.policy.PolicyList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/policy.proto",
+    package: "io.restorecommerce.policy",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [14, 0, 24, 1],
+          leadingComments: "*\n A Policy is defined by a set of Rules.\n",
+        },
+        {
+          path: [4, 0, 2, 4],
+          span: [19, 2, 28],
+          trailingComments: " rule IDs\n",
+        },
+        {
+          path: [4, 0, 2, 5],
+          span: [20, 2, 44],
+          trailingComments: " general policy target\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.policy.Policy": Policy,
+    ".io.restorecommerce.policy.PolicyRQ": PolicyRQ,
+    ".io.restorecommerce.policy.PolicyList": PolicyList,
+  },
+  dependencies: [
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_resource_base_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_rule_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

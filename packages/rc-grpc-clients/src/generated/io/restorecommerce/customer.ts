@@ -1,10 +1,25 @@
 /* eslint-disable */
-import { Subject } from '../../io/restorecommerce/auth';
-import { Meta } from '../../io/restorecommerce/meta';
-import { ReadRequest, DeleteRequest } from '../../io/restorecommerce/resource_base';
-import { Empty } from '../../google/protobuf/empty';
-import { Writer, Reader } from 'protobufjs/minimal';
+import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  Subject,
+  protoMetadata as io_restorecommerce_auth_protoMetadata,
+} from "../../io/restorecommerce/auth";
+import {
+  Meta,
+  protoMetadata as io_restorecommerce_meta_protoMetadata,
+} from "../../io/restorecommerce/meta";
+import { Writer, Reader } from "protobufjs/minimal";
+import {
+  Empty,
+  protoMetadata as google_protobuf_empty_protoMetadata,
+} from "../../google/protobuf/empty";
+import {
+  ReadRequest,
+  DeleteRequest,
+  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
+} from "../../io/restorecommerce/resource_base";
 
+export const protobufPackage = "io.restorecommerce.customer";
 
 export interface CustomerList {
   items: Customer[];
@@ -37,91 +52,7 @@ export interface Guest {
   contactPointIds: string[];
 }
 
-const baseCustomerList: object = {
-  totalCount: 0,
-};
-
-const baseCustomer: object = {
-  id: "",
-};
-
-const baseIndividualUser: object = {
-  userId: "",
-  addressId: "",
-  contactPointIds: "",
-};
-
-const baseOrgUser: object = {
-  userId: "",
-  organizationId: "",
-};
-
-const baseGuest: object = {
-  guest: false,
-  addressId: "",
-  contactPointIds: "",
-};
-
-/**
- *
- * Microservice definition.
- */
-export interface Service {
-
-  Read(request: ReadRequest): Promise<CustomerList>;
-
-  Create(request: CustomerList): Promise<CustomerList>;
-
-  Delete(request: DeleteRequest): Promise<Empty>;
-
-  Update(request: CustomerList): Promise<CustomerList>;
-
-  Upsert(request: CustomerList): Promise<CustomerList>;
-
-}
-
-export interface MetaBase {
-  readonly kind: 'object' | 'array' | 'map' | 'union' | 'builtin';
-}
-
-export interface MetaMessage extends MetaBase {
-  readonly kind: 'object';
-  readonly type: string;
-  readonly name: string;
-}
-
-export interface MetaArray extends MetaBase {
-  readonly kind: 'array';
-  readonly type: MetaBase | string;
-}
-
-export interface MetaMap extends MetaBase {
-  readonly kind: 'map';
-  readonly key: string;
-  readonly value: MetaBase | string;
-}
-
-export interface MetaUnion extends MetaBase {
-  readonly kind: 'union';
-  readonly choices: Array<MetaBase | string | undefined>;
-}
-
-export interface MetaService<T, R> {
-  readonly request: MetaMessage;
-  readonly response: MetaMessage;
-  readonly clientStreaming: boolean;
-  readonly serverStreaming: boolean;
-  readonly encodeRequest?: (message: T, writer: Writer) => Writer;
-  readonly decodeResponse?: (input: Uint8Array | Reader, length?: number) => R;
-}
-
-export interface MetaPrimitive extends MetaBase {
-  readonly kind: 'builtin';
-  readonly type: string;
-  readonly original: string;
-}
-
-export const protobufPackage = 'io.restorecommerce.customer'
+const baseCustomerList: object = { totalCount: 0 };
 
 export const CustomerList = {
   encode(message: CustomerList, writer: Writer = Writer.create()): Writer {
@@ -134,7 +65,8 @@ export const CustomerList = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): CustomerList {
+
+  decode(input: Reader | Uint8Array, length?: number): CustomerList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCustomerList } as CustomerList;
@@ -158,6 +90,7 @@ export const CustomerList = {
     }
     return message;
   },
+
   fromJSON(object: any): CustomerList {
     const message = { ...baseCustomerList } as CustomerList;
     message.items = [];
@@ -178,6 +111,7 @@ export const CustomerList = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<CustomerList>): CustomerList {
     const message = { ...baseCustomerList } as CustomerList;
     message.items = [];
@@ -198,18 +132,26 @@ export const CustomerList = {
     }
     return message;
   },
+
   toJSON(message: CustomerList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map(e => e ? Customer.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Customer.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 };
+
+const baseCustomer: object = { id: "" };
 
 export const Customer = {
   encode(message: Customer, writer: Writer = Writer.create()): Writer {
@@ -218,7 +160,10 @@ export const Customer = {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
     if (message.individualUser !== undefined) {
-      IndividualUser.encode(message.individualUser, writer.uint32(26).fork()).ldelim();
+      IndividualUser.encode(
+        message.individualUser,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     if (message.orgUser !== undefined) {
       OrgUser.encode(message.orgUser, writer.uint32(34).fork()).ldelim();
@@ -228,7 +173,8 @@ export const Customer = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Customer {
+
+  decode(input: Reader | Uint8Array, length?: number): Customer {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCustomer } as Customer;
@@ -242,7 +188,10 @@ export const Customer = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.individualUser = IndividualUser.decode(reader, reader.uint32());
+          message.individualUser = IndividualUser.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         case 4:
           message.orgUser = OrgUser.decode(reader, reader.uint32());
@@ -257,6 +206,7 @@ export const Customer = {
     }
     return message;
   },
+
   fromJSON(object: any): Customer {
     const message = { ...baseCustomer } as Customer;
     if (object.id !== undefined && object.id !== null) {
@@ -286,6 +236,7 @@ export const Customer = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Customer>): Customer {
     const message = { ...baseCustomer } as Customer;
     if (object.id !== undefined && object.id !== null) {
@@ -299,7 +250,9 @@ export const Customer = {
       message.meta = undefined;
     }
     if (object.individualUser !== undefined && object.individualUser !== null) {
-      message.individualUser = IndividualUser.fromPartial(object.individualUser);
+      message.individualUser = IndividualUser.fromPartial(
+        object.individualUser
+      );
     } else {
       message.individualUser = undefined;
     }
@@ -315,15 +268,30 @@ export const Customer = {
     }
     return message;
   },
+
   toJSON(message: Customer): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.individualUser !== undefined && (obj.individualUser = message.individualUser ? IndividualUser.toJSON(message.individualUser) : undefined);
-    message.orgUser !== undefined && (obj.orgUser = message.orgUser ? OrgUser.toJSON(message.orgUser) : undefined);
-    message.guest !== undefined && (obj.guest = message.guest ? Guest.toJSON(message.guest) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.individualUser !== undefined &&
+      (obj.individualUser = message.individualUser
+        ? IndividualUser.toJSON(message.individualUser)
+        : undefined);
+    message.orgUser !== undefined &&
+      (obj.orgUser = message.orgUser
+        ? OrgUser.toJSON(message.orgUser)
+        : undefined);
+    message.guest !== undefined &&
+      (obj.guest = message.guest ? Guest.toJSON(message.guest) : undefined);
     return obj;
   },
+};
+
+const baseIndividualUser: object = {
+  userId: "",
+  addressId: "",
+  contactPointIds: "",
 };
 
 export const IndividualUser = {
@@ -335,7 +303,8 @@ export const IndividualUser = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): IndividualUser {
+
+  decode(input: Reader | Uint8Array, length?: number): IndividualUser {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseIndividualUser } as IndividualUser;
@@ -359,6 +328,7 @@ export const IndividualUser = {
     }
     return message;
   },
+
   fromJSON(object: any): IndividualUser {
     const message = { ...baseIndividualUser } as IndividualUser;
     message.contactPointIds = [];
@@ -372,13 +342,17 @@ export const IndividualUser = {
     } else {
       message.addressId = "";
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(String(e));
       }
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
     const message = { ...baseIndividualUser } as IndividualUser;
     message.contactPointIds = [];
@@ -392,19 +366,23 @@ export const IndividualUser = {
     } else {
       message.addressId = "";
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(e);
       }
     }
     return message;
   },
+
   toJSON(message: IndividualUser): unknown {
     const obj: any = {};
     message.userId !== undefined && (obj.userId = message.userId);
     message.addressId !== undefined && (obj.addressId = message.addressId);
     if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map(e => e);
+      obj.contactPointIds = message.contactPointIds.map((e) => e);
     } else {
       obj.contactPointIds = [];
     }
@@ -412,13 +390,16 @@ export const IndividualUser = {
   },
 };
 
+const baseOrgUser: object = { userId: "", organizationId: "" };
+
 export const OrgUser = {
   encode(message: OrgUser, writer: Writer = Writer.create()): Writer {
     writer.uint32(10).string(message.userId);
     writer.uint32(18).string(message.organizationId);
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): OrgUser {
+
+  decode(input: Reader | Uint8Array, length?: number): OrgUser {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseOrgUser } as OrgUser;
@@ -438,6 +419,7 @@ export const OrgUser = {
     }
     return message;
   },
+
   fromJSON(object: any): OrgUser {
     const message = { ...baseOrgUser } as OrgUser;
     if (object.userId !== undefined && object.userId !== null) {
@@ -452,6 +434,7 @@ export const OrgUser = {
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<OrgUser>): OrgUser {
     const message = { ...baseOrgUser } as OrgUser;
     if (object.userId !== undefined && object.userId !== null) {
@@ -466,13 +449,17 @@ export const OrgUser = {
     }
     return message;
   },
+
   toJSON(message: OrgUser): unknown {
     const obj: any = {};
     message.userId !== undefined && (obj.userId = message.userId);
-    message.organizationId !== undefined && (obj.organizationId = message.organizationId);
+    message.organizationId !== undefined &&
+      (obj.organizationId = message.organizationId);
     return obj;
   },
 };
+
+const baseGuest: object = { guest: false, addressId: "", contactPointIds: "" };
 
 export const Guest = {
   encode(message: Guest, writer: Writer = Writer.create()): Writer {
@@ -483,7 +470,8 @@ export const Guest = {
     }
     return writer;
   },
-  decode(input: Uint8Array | Reader, length?: number): Guest {
+
+  decode(input: Reader | Uint8Array, length?: number): Guest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGuest } as Guest;
@@ -507,6 +495,7 @@ export const Guest = {
     }
     return message;
   },
+
   fromJSON(object: any): Guest {
     const message = { ...baseGuest } as Guest;
     message.contactPointIds = [];
@@ -520,13 +509,17 @@ export const Guest = {
     } else {
       message.addressId = "";
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(String(e));
       }
     }
     return message;
   },
+
   fromPartial(object: DeepPartial<Guest>): Guest {
     const message = { ...baseGuest } as Guest;
     message.contactPointIds = [];
@@ -540,19 +533,23 @@ export const Guest = {
     } else {
       message.addressId = "";
     }
-    if (object.contactPointIds !== undefined && object.contactPointIds !== null) {
+    if (
+      object.contactPointIds !== undefined &&
+      object.contactPointIds !== null
+    ) {
       for (const e of object.contactPointIds) {
         message.contactPointIds.push(e);
       }
     }
     return message;
   },
+
   toJSON(message: Guest): unknown {
     const obj: any = {};
     message.guest !== undefined && (obj.guest = message.guest);
     message.addressId !== undefined && (obj.addressId = message.addressId);
     if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map(e => e);
+      obj.contactPointIds = message.contactPointIds.map((e) => e);
     } else {
       obj.contactPointIds = [];
     }
@@ -560,49 +557,244 @@ export const Guest = {
   },
 };
 
-export const metaCustomerList: { [key in keyof Required<CustomerList>]: MetaBase | string } = {
-  items: {kind:'array', type:{kind:'object', type:'.io.restorecommerce.customer.Customer', name:'Customer'} as MetaMessage} as MetaArray,
-  totalCount: {kind:'builtin', type:'number', original:'uint32'} as MetaPrimitive,
-  subject: {kind:'object', type:'.io.restorecommerce.auth.Subject', name:'Subject'} as MetaMessage,
+/** Microservice definition. */
+export interface Service {
+  Read(request: ReadRequest): Promise<CustomerList>;
+  Create(request: CustomerList): Promise<CustomerList>;
+  Delete(request: DeleteRequest): Promise<Empty>;
+  Update(request: CustomerList): Promise<CustomerList>;
+  Upsert(request: CustomerList): Promise<CustomerList>;
 }
-export const metaCustomer: { [key in keyof Required<Customer>]: MetaBase | string } = {
-  id: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  meta: {kind:'object', type:'.io.restorecommerce.meta.Meta', name:'Meta'} as MetaMessage,
-  individualUser: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.customer.IndividualUser', name:'IndividualUser'} as MetaMessage]} as MetaUnion,
-  orgUser: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.customer.OrgUser', name:'OrgUser'} as MetaMessage]} as MetaUnion,
-  guest: {kind:'union', choices: [undefined, {kind:'object', type:'.io.restorecommerce.customer.Guest', name:'Guest'} as MetaMessage]} as MetaUnion,
+
+export interface ProtoMetadata {
+  fileDescriptor: IFileDescriptorProto;
+  references: { [key: string]: any };
+  dependencies?: ProtoMetadata[];
 }
-export const metaIndividualUser: { [key in keyof Required<IndividualUser>]: MetaBase | string } = {
-  userId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  addressId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contactPointIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaOrgUser: { [key in keyof Required<OrgUser>]: MetaBase | string } = {
-  userId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  organizationId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-}
-export const metaGuest: { [key in keyof Required<Guest>]: MetaBase | string } = {
-  guest: {kind:'builtin', type:'boolean', original:'bool'} as MetaPrimitive,
-  addressId: {kind:'builtin', type:'string', original:'string'} as MetaPrimitive,
-  contactPointIds: {kind:'array', type:{kind:'builtin', type:'string', original:'string'} as MetaPrimitive} as MetaArray,
-}
-export const metaService: { [key in keyof Service]: MetaService<any, any> } = {
-  Read: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.ReadRequest', name:'ReadRequest'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: ReadRequest.encode, decodeResponse: CustomerList.decode} as MetaService<ReadRequest, CustomerList>,
-  Create: {request: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaService<CustomerList, CustomerList>,
-  Delete: {request: {kind:'object', type:'.io.restorecommerce.resourcebase.DeleteRequest', name:'DeleteRequest'} as MetaMessage, response: {kind:'object', type:'.google.protobuf.Empty', name:'Empty'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: DeleteRequest.encode, decodeResponse: Empty.decode} as MetaService<DeleteRequest, Empty>,
-  Update: {request: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaService<CustomerList, CustomerList>,
-  Upsert: {request: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, response: {kind:'object', type:'.io.restorecommerce.customer.CustomerList', name:'CustomerList'} as MetaMessage, clientStreaming: false, serverStreaming: false, encodeRequest: CustomerList.encode, decodeResponse: CustomerList.decode} as MetaService<CustomerList, CustomerList>,
-}
-export const metadata: { [key: string]: ['service', string, any, { [key: string]: MetaService<any, any> }] | ['enum', string, any, any] | ['message', string, any, { [key: string]: MetaBase | string }] } = {
-  CustomerList: ['message', '.io.restorecommerce.customer.CustomerList', CustomerList, metaCustomerList],
-  Customer: ['message', '.io.restorecommerce.customer.Customer', Customer, metaCustomer],
-  IndividualUser: ['message', '.io.restorecommerce.customer.IndividualUser', IndividualUser, metaIndividualUser],
-  OrgUser: ['message', '.io.restorecommerce.customer.OrgUser', OrgUser, metaOrgUser],
-  Guest: ['message', '.io.restorecommerce.customer.Guest', Guest, metaGuest],
-  Service: ['service', '.io.restorecommerce.customer.Service', undefined, metaService],
-}
+
+export const protoMetadata: ProtoMetadata = {
+  fileDescriptor: {
+    dependency: [
+      "io/restorecommerce/resource_base.proto",
+      "google/protobuf/empty.proto",
+      "io/restorecommerce/meta.proto",
+      "io/restorecommerce/auth.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "CustomerList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: "LABEL_REPEATED",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.customer.Customer",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_UINT32",
+            jsonName: "totalCount",
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+      },
+      {
+        name: "Customer",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "id",
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "individual_user",
+            number: 3,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.customer.IndividualUser",
+            oneofIndex: 0,
+            jsonName: "individualUser",
+          },
+          {
+            name: "org_user",
+            number: 4,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.customer.OrgUser",
+            oneofIndex: 0,
+            jsonName: "orgUser",
+          },
+          {
+            name: "guest",
+            number: 5,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_MESSAGE",
+            typeName: ".io.restorecommerce.customer.Guest",
+            oneofIndex: 0,
+            jsonName: "guest",
+          },
+        ],
+        oneofDecl: [{ name: "customer" }],
+      },
+      {
+        name: "IndividualUser",
+        field: [
+          {
+            name: "user_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "userId",
+          },
+          {
+            name: "address_id",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "addressId",
+          },
+          {
+            name: "contact_point_ids",
+            number: 3,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "contactPointIds",
+          },
+        ],
+      },
+      {
+        name: "OrgUser",
+        field: [
+          {
+            name: "user_id",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "userId",
+          },
+          {
+            name: "organization_id",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "organizationId",
+          },
+        ],
+      },
+      {
+        name: "Guest",
+        field: [
+          {
+            name: "guest",
+            number: 1,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_BOOL",
+            jsonName: "guest",
+          },
+          {
+            name: "address_id",
+            number: 2,
+            label: "LABEL_OPTIONAL",
+            type: "TYPE_STRING",
+            jsonName: "addressId",
+          },
+          {
+            name: "contact_point_ids",
+            number: 3,
+            label: "LABEL_REPEATED",
+            type: "TYPE_STRING",
+            jsonName: "contactPointIds",
+          },
+        ],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.customer.CustomerList",
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.customer.CustomerList",
+            outputType: ".io.restorecommerce.customer.CustomerList",
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".google.protobuf.Empty",
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.customer.CustomerList",
+            outputType: ".io.restorecommerce.customer.CustomerList",
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.customer.CustomerList",
+            outputType: ".io.restorecommerce.customer.CustomerList",
+          },
+        ],
+      },
+    ],
+    extension: [],
+    name: "io/restorecommerce/customer.proto",
+    package: "io.restorecommerce.customer",
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [12, 0, 18, 1],
+          leadingComments: "\nMicroservice definition.\n",
+        },
+      ],
+    },
+    syntax: "proto3",
+  } as any,
+  references: {
+    ".io.restorecommerce.customer.CustomerList": CustomerList,
+    ".io.restorecommerce.customer.Customer": Customer,
+    ".io.restorecommerce.customer.IndividualUser": IndividualUser,
+    ".io.restorecommerce.customer.OrgUser": OrgUser,
+    ".io.restorecommerce.customer.Guest": Guest,
+  },
+  dependencies: [
+    io_restorecommerce_resource_base_protoMetadata,
+    google_protobuf_empty_protoMetadata,
+    io_restorecommerce_meta_protoMetadata,
+    io_restorecommerce_auth_protoMetadata,
+  ],
+};
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
-type DeepPartial<T> = T extends Builtin
+export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>

@@ -93,7 +93,7 @@ export class GrpcMockServer {
 
   public stop() {
     // log.debug("Stopping gRPC mock server ...");
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       this.server.tryShutdown((err) => {
         if (err) {
           this.server.forceShutdown();

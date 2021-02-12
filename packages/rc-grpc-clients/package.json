@@ -1,7 +1,7 @@
 {
   "name": "@restorecommerce/rc-grpc-clients",
   "version": "0.0.1",
-  "description": "",
+  "description": "Restorecommerce GRPC service implementations",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "author": "n-fuse GmbH",

@@ -10,7 +10,7 @@
     "test": "lerna run test",
     "build": "lerna run build",
     "install": "lerna bootstrap",
-    "install:ci": "lerna bootstrap --npm-ci-mode"
+    "install:ci": "lerna bootstrap --ci"
   },
   "repository": {
     "type": "git",

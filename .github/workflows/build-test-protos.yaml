@@ -1,15 +1,14 @@
 name: build-test-protos
 
-env:
-  PACKAGE: 'protos'
-
 on:
   push:
     paths:
       - 'packages/protos/**'
+      - '.github/workflows/build-test-protos.yaml'
   pull_request:
     paths:
       - 'packages/protos/**'
+      - '.github/workflows/build-test-protos.yaml'
 
 jobs:
   build:
@@ -49,4 +48,4 @@ jobs:
 
       - name: Test
         run: npm run test
-        working-directory: ./packages/$PACKAGE
+        working-directory: ./packages/protos

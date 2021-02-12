@@ -1,15 +1,14 @@
 name: build-test-logger
 
-env:
-  PACKAGE: 'logger'
-
 on:
   push:
     paths:
       - 'packages/logger/**'
+      - '.github/workflows/build-test-logger.yaml'
   pull_request:
     paths:
       - 'packages/logger/**'
+      - '.github/workflows/build-test-logger.yaml'
 
 jobs:
   build:
@@ -49,4 +48,4 @@ jobs:
 
       - name: Test
         run: npm run test
-        working-directory: ./packages/$PACKAGE
+        working-directory: ./packages/logger

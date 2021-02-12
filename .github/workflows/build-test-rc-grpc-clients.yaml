@@ -1,15 +1,14 @@
 name: build-test-rc-grpc-clients
 
-env:
-  PACKAGE: 'rc-grpc-clients'
-
 on:
   push:
     paths:
       - 'packages/rc-grpc-clients/**'
+      - '.github/workflows/build-test-rc-grpc-clients.yaml'
   pull_request:
     paths:
       - 'packages/rc-grpc-clients/**'
+      - '.github/workflows/build-test-rc-grpc-clients.yaml'
 
 jobs:
   build:
@@ -49,4 +48,4 @@ jobs:
 
       - name: Test
         run: npm run test
-        working-directory: ./packages/$PACKAGE
+        working-directory: ./packages/rc-grpc-clients

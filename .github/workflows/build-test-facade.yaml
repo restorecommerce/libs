@@ -1,15 +1,14 @@
 name: build-test-facade
 
-env:
-  PACKAGE: 'facade'
-
 on:
   push:
     paths:
       - 'packages/facade/**'
+      - '.github/workflows/build-test-facade.yaml'
   pull_request:
     paths:
       - 'packages/facade/**'
+      - '.github/workflows/build-test-facade.yaml'
 
 jobs:
   build:
@@ -49,4 +48,4 @@ jobs:
 
       - name: Test
         run: npm run test
-        working-directory: ./packages/$PACKAGE
+        working-directory: ./packages/facade

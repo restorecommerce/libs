@@ -9,7 +9,8 @@
     "changed": "lerna changed",
     "test": "lerna run test",
     "build": "lerna run build",
-    "postinstall": "lerna bootstrap"
+    "install": "lerna bootstrap",
+    "install:ci": "lerna bootstrap --npm-ci-mode"
   },
   "repository": {
     "type": "git",

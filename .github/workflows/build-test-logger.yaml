@@ -1,8 +1,15 @@
-name: build
+name: build-test-logger
+
+env:
+  PACKAGE: 'logger'
 
 on:
-  - push
-  - pull_request
+  push:
+    paths:
+      - 'packages/logger/**'
+  pull_request:
+    paths:
+      - 'packages/logger/**'
 
 jobs:
   build:
@@ -42,3 +49,4 @@ jobs:
 
       - name: Test
         run: npm run test
+        working-directory: ./packages/$PACKAGE

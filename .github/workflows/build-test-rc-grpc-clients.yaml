@@ -1,0 +1,52 @@
+name: build-test-rc-grpc-clients
+
+env:
+  PACKAGE: 'rc-grpc-clients'
+
+on:
+  push:
+    paths:
+      - 'packages/rc-grpc-clients/**'
+  pull_request:
+    paths:
+      - 'packages/rc-grpc-clients/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci
+
+      - name: Build
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Setup System
+        uses: restorecommerce/setup-system-action@v1
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci
+
+      - name: Test
+        run: npm run test
+        working-directory: ./packages/$PACKAGE

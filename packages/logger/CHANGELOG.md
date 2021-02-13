@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.3...@restorecommerce/logger@0.5.4) (2021-02-13)
+
+**Note:** Version bump only for package @restorecommerce/logger
+
+
+
+
+
 ## [0.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.1...@restorecommerce/logger@0.4.3) (2020-12-07)
 
 **Note:** Version bump only for package @restorecommerce/logger

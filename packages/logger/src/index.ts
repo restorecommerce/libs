@@ -31,6 +31,7 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
     transports.push(createFileTransport(opts.file));
   }
   if (opts.elasticsearch) {
+    opts.elasticsearch.dataStream = true;
     transports.push(createElasticSearchTransport(opts.elasticsearch));
   }
   if (transports.length === 0) {

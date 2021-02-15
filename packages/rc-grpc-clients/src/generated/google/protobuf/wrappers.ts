@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import * as Long from "long";
 import { util, configure, Writer, Reader } from "protobufjs/minimal";
 
@@ -99,14 +99,16 @@ const baseDoubleValue: object = { value: 0 };
 
 export const DoubleValue = {
   encode(message: DoubleValue, writer: Writer = Writer.create()): Writer {
-    writer.uint32(9).double(message.value);
+    if (message.value !== 0) {
+      writer.uint32(9).double(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): DoubleValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDoubleValue } as DoubleValue;
+    const message = globalThis.Object.create(baseDoubleValue) as DoubleValue;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -122,7 +124,7 @@ export const DoubleValue = {
   },
 
   fromJSON(object: any): DoubleValue {
-    const message = { ...baseDoubleValue } as DoubleValue;
+    const message = globalThis.Object.create(baseDoubleValue) as DoubleValue;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -152,14 +154,16 @@ const baseFloatValue: object = { value: 0 };
 
 export const FloatValue = {
   encode(message: FloatValue, writer: Writer = Writer.create()): Writer {
-    writer.uint32(13).float(message.value);
+    if (message.value !== 0) {
+      writer.uint32(13).float(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): FloatValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFloatValue } as FloatValue;
+    const message = globalThis.Object.create(baseFloatValue) as FloatValue;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,7 +179,7 @@ export const FloatValue = {
   },
 
   fromJSON(object: any): FloatValue {
-    const message = { ...baseFloatValue } as FloatValue;
+    const message = globalThis.Object.create(baseFloatValue) as FloatValue;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -205,14 +209,16 @@ const baseInt64Value: object = { value: 0 };
 
 export const Int64Value = {
   encode(message: Int64Value, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).int64(message.value);
+    if (message.value !== 0) {
+      writer.uint32(8).int64(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Int64Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseInt64Value } as Int64Value;
+    const message = globalThis.Object.create(baseInt64Value) as Int64Value;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -228,7 +234,7 @@ export const Int64Value = {
   },
 
   fromJSON(object: any): Int64Value {
-    const message = { ...baseInt64Value } as Int64Value;
+    const message = globalThis.Object.create(baseInt64Value) as Int64Value;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -258,14 +264,16 @@ const baseUInt64Value: object = { value: 0 };
 
 export const UInt64Value = {
   encode(message: UInt64Value, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).uint64(message.value);
+    if (message.value !== 0) {
+      writer.uint32(8).uint64(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): UInt64Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUInt64Value } as UInt64Value;
+    const message = globalThis.Object.create(baseUInt64Value) as UInt64Value;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -281,7 +289,7 @@ export const UInt64Value = {
   },
 
   fromJSON(object: any): UInt64Value {
-    const message = { ...baseUInt64Value } as UInt64Value;
+    const message = globalThis.Object.create(baseUInt64Value) as UInt64Value;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -311,14 +319,16 @@ const baseInt32Value: object = { value: 0 };
 
 export const Int32Value = {
   encode(message: Int32Value, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).int32(message.value);
+    if (message.value !== 0) {
+      writer.uint32(8).int32(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Int32Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseInt32Value } as Int32Value;
+    const message = globalThis.Object.create(baseInt32Value) as Int32Value;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -334,7 +344,7 @@ export const Int32Value = {
   },
 
   fromJSON(object: any): Int32Value {
-    const message = { ...baseInt32Value } as Int32Value;
+    const message = globalThis.Object.create(baseInt32Value) as Int32Value;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -364,14 +374,16 @@ const baseUInt32Value: object = { value: 0 };
 
 export const UInt32Value = {
   encode(message: UInt32Value, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).uint32(message.value);
+    if (message.value !== 0) {
+      writer.uint32(8).uint32(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): UInt32Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUInt32Value } as UInt32Value;
+    const message = globalThis.Object.create(baseUInt32Value) as UInt32Value;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -387,7 +399,7 @@ export const UInt32Value = {
   },
 
   fromJSON(object: any): UInt32Value {
-    const message = { ...baseUInt32Value } as UInt32Value;
+    const message = globalThis.Object.create(baseUInt32Value) as UInt32Value;
     if (object.value !== undefined && object.value !== null) {
       message.value = Number(object.value);
     } else {
@@ -417,14 +429,16 @@ const baseBoolValue: object = { value: false };
 
 export const BoolValue = {
   encode(message: BoolValue, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.value);
+    if (message.value === true) {
+      writer.uint32(8).bool(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): BoolValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBoolValue } as BoolValue;
+    const message = globalThis.Object.create(baseBoolValue) as BoolValue;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -440,7 +454,7 @@ export const BoolValue = {
   },
 
   fromJSON(object: any): BoolValue {
-    const message = { ...baseBoolValue } as BoolValue;
+    const message = globalThis.Object.create(baseBoolValue) as BoolValue;
     if (object.value !== undefined && object.value !== null) {
       message.value = Boolean(object.value);
     } else {
@@ -470,14 +484,16 @@ const baseStringValue: object = { value: "" };
 
 export const StringValue = {
   encode(message: StringValue, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.value);
+    if (message.value !== "") {
+      writer.uint32(10).string(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): StringValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseStringValue } as StringValue;
+    const message = globalThis.Object.create(baseStringValue) as StringValue;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -493,7 +509,7 @@ export const StringValue = {
   },
 
   fromJSON(object: any): StringValue {
-    const message = { ...baseStringValue } as StringValue;
+    const message = globalThis.Object.create(baseStringValue) as StringValue;
     if (object.value !== undefined && object.value !== null) {
       message.value = String(object.value);
     } else {
@@ -523,14 +539,16 @@ const baseBytesValue: object = {};
 
 export const BytesValue = {
   encode(message: BytesValue, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).bytes(message.value);
+    if (message.value.length !== 0) {
+      writer.uint32(10).bytes(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): BytesValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBytesValue } as BytesValue;
+    const message = globalThis.Object.create(baseBytesValue) as BytesValue;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -546,7 +564,7 @@ export const BytesValue = {
   },
 
   fromJSON(object: any): BytesValue {
-    const message = { ...baseBytesValue } as BytesValue;
+    const message = globalThis.Object.create(baseBytesValue) as BytesValue;
     if (object.value !== undefined && object.value !== null) {
       message.value = Buffer.from(bytesFromBase64(object.value));
     }
@@ -574,124 +592,133 @@ export const BytesValue = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 1, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "DoubleValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 2, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "FloatValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_FLOAT",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 3, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Int64Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT64",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 4, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "UInt64Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT64",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 5, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Int32Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 13, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "UInt32Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 8, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "BoolValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "value",
-          },
-        ],
       },
       {
+        field: [
+          { name: "value", number: 1, label: 1, type: 9, jsonName: "value" },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "StringValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "value",
-          },
-        ],
       },
       {
-        name: "BytesValue",
         field: [
-          {
-            name: "value",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BYTES",
-            jsonName: "value",
-          },
+          { name: "value", number: 1, label: 1, type: 12, jsonName: "value" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "BytesValue",
       },
     ],
     enumType: [],
@@ -700,6 +727,7 @@ export const protoMetadata: ProtoMetadata = {
     name: "google/protobuf/wrappers.proto",
     package: "google.protobuf",
     options: {
+      uninterpretedOption: [],
       javaPackage: "com.google.protobuf",
       javaOuterClassname: "WrappersProto",
       javaMultipleFiles: true,
@@ -713,106 +741,124 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [55, 0, 58, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `double`.\n\n The JSON representation for `DoubleValue` is JSON number.\n",
         },
         {
           path: [4, 0, 2, 0],
           span: [57, 2, 19],
+          leadingDetachedComments: [],
           leadingComments: " The double value.\n",
         },
         {
           path: [4, 1],
           span: [63, 0, 66, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `float`.\n\n The JSON representation for `FloatValue` is JSON number.\n",
         },
         {
           path: [4, 1, 2, 0],
           span: [65, 2, 18],
+          leadingDetachedComments: [],
           leadingComments: " The float value.\n",
         },
         {
           path: [4, 2],
           span: [71, 0, 74, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `int64`.\n\n The JSON representation for `Int64Value` is JSON string.\n",
         },
         {
           path: [4, 2, 2, 0],
           span: [73, 2, 18],
+          leadingDetachedComments: [],
           leadingComments: " The int64 value.\n",
         },
         {
           path: [4, 3],
           span: [79, 0, 82, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `uint64`.\n\n The JSON representation for `UInt64Value` is JSON string.\n",
         },
         {
           path: [4, 3, 2, 0],
           span: [81, 2, 19],
+          leadingDetachedComments: [],
           leadingComments: " The uint64 value.\n",
         },
         {
           path: [4, 4],
           span: [87, 0, 90, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `int32`.\n\n The JSON representation for `Int32Value` is JSON number.\n",
         },
         {
           path: [4, 4, 2, 0],
           span: [89, 2, 18],
+          leadingDetachedComments: [],
           leadingComments: " The int32 value.\n",
         },
         {
           path: [4, 5],
           span: [95, 0, 98, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `uint32`.\n\n The JSON representation for `UInt32Value` is JSON number.\n",
         },
         {
           path: [4, 5, 2, 0],
           span: [97, 2, 19],
+          leadingDetachedComments: [],
           leadingComments: " The uint32 value.\n",
         },
         {
           path: [4, 6],
           span: [103, 0, 106, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `bool`.\n\n The JSON representation for `BoolValue` is JSON `true` and `false`.\n",
         },
         {
           path: [4, 6, 2, 0],
           span: [105, 2, 17],
+          leadingDetachedComments: [],
           leadingComments: " The bool value.\n",
         },
         {
           path: [4, 7],
           span: [111, 0, 114, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `string`.\n\n The JSON representation for `StringValue` is JSON string.\n",
         },
         {
           path: [4, 7, 2, 0],
           span: [113, 2, 19],
+          leadingDetachedComments: [],
           leadingComments: " The string value.\n",
         },
         {
           path: [4, 8],
           span: [119, 0, 122, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper message for `bytes`.\n\n The JSON representation for `BytesValue` is JSON string.\n",
         },
         {
           path: [4, 8, 2, 0],
           span: [121, 2, 18],
+          leadingDetachedComments: [],
           leadingComments: " The bytes value.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".google.protobuf.DoubleValue": DoubleValue,
     ".google.protobuf.FloatValue": FloatValue,
@@ -834,7 +880,7 @@ var globalThis: any = (() => {
   if (typeof self !== "undefined") return self;
   if (typeof window !== "undefined") return window;
   if (typeof global !== "undefined") return global;
-  throw new Error("Unable to locate global object");
+  throw "Unable to locate global object";
 })();
 
 const atob: (b64: string) => string =

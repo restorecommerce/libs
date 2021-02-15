@@ -1,16 +1,16 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Target,
-  protoMetadata as io_restorecommerce_rule_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/rule";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
 import {
+  protoMetadata as protoMetadata3,
   PolicySetRQ,
-  protoMetadata as io_restorecommerce_policy_set_protoMetadata,
 } from "../../io/restorecommerce/policy_set";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -89,10 +89,10 @@ const baseRequest: object = {};
 
 export const Request = {
   encode(message: Request, writer: Writer = Writer.create()): Writer {
-    if (message.target !== undefined && message.target !== undefined) {
+    if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(10).fork()).ldelim();
     }
-    if (message.context !== undefined && message.context !== undefined) {
+    if (message.context !== undefined) {
       Context.encode(message.context, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -101,7 +101,7 @@ export const Request = {
   decode(input: Reader | Uint8Array, length?: number): Request {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRequest } as Request;
+    const message = globalThis.Object.create(baseRequest) as Request;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -120,7 +120,7 @@ export const Request = {
   },
 
   fromJSON(object: any): Request {
-    const message = { ...baseRequest } as Request;
+    const message = globalThis.Object.create(baseRequest) as Request;
     if (object.target !== undefined && object.target !== null) {
       message.target = Target.fromJSON(object.target);
     } else {
@@ -165,13 +165,13 @@ const baseContext: object = {};
 
 export const Context = {
   encode(message: Context, writer: Writer = Writer.create()): Writer {
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Any.encode(message.subject, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.resources) {
       Any.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.security !== undefined && message.security !== undefined) {
+    if (message.security !== undefined) {
       Any.encode(message.security, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -180,7 +180,7 @@ export const Context = {
   decode(input: Reader | Uint8Array, length?: number): Context {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseContext } as Context;
+    const message = globalThis.Object.create(baseContext) as Context;
     message.resources = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -203,7 +203,7 @@ export const Context = {
   },
 
   fromJSON(object: any): Context {
-    const message = { ...baseContext } as Context;
+    const message = globalThis.Object.create(baseContext) as Context;
     message.resources = [];
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Any.fromJSON(object.subject);
@@ -271,16 +271,22 @@ const baseResponse: object = {
 
 export const Response = {
   encode(message: Response, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).int32(message.decision);
-    writer.uint32(18).string(message.obligation);
-    writer.uint32(24).bool(message.evaluationCacheable);
+    if (message.decision !== 0) {
+      writer.uint32(8).int32(message.decision);
+    }
+    if (message.obligation !== "") {
+      writer.uint32(18).string(message.obligation);
+    }
+    if (message.evaluationCacheable === true) {
+      writer.uint32(24).bool(message.evaluationCacheable);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Response {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResponse } as Response;
+    const message = globalThis.Object.create(baseResponse) as Response;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -302,7 +308,7 @@ export const Response = {
   },
 
   fromJSON(object: any): Response {
-    const message = { ...baseResponse } as Response;
+    const message = globalThis.Object.create(baseResponse) as Response;
     if (object.decision !== undefined && object.decision !== null) {
       message.decision = response_DecisionFromJSON(object.decision);
     } else {
@@ -371,7 +377,7 @@ export const ReverseQuery = {
   decode(input: Reader | Uint8Array, length?: number): ReverseQuery {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseReverseQuery } as ReverseQuery;
+    const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
     message.policySets = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -388,7 +394,7 @@ export const ReverseQuery = {
   },
 
   fromJSON(object: any): ReverseQuery {
-    const message = { ...baseReverseQuery } as ReverseQuery;
+    const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
     message.policySets = [];
     if (object.policySets !== undefined && object.policySets !== null) {
       for (const e of object.policySets) {
@@ -428,13 +434,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/rule.proto",
@@ -444,111 +450,139 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "Request",
         field: [
           {
             name: "target",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Target",
             jsonName: "target",
           },
           {
             name: "context",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.access_control.Context",
             jsonName: "context",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Request",
       },
       {
-        name: "Context",
         field: [
           {
             name: "subject",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "subject",
           },
           {
             name: "resources",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "resources",
           },
           {
             name: "security",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "security",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Context",
       },
       {
-        name: "Response",
         field: [
           {
             name: "decision",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.access_control.Response.Decision",
             jsonName: "decision",
           },
           {
             name: "obligation",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "obligation",
           },
           {
             name: "evaluation_cacheable",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "evaluationCacheable",
           },
         ],
+        extension: [],
+        nestedType: [],
         enumType: [
           {
-            name: "Decision",
             value: [
               { name: "PERMIT", number: 0 },
               { name: "DENY", number: 1 },
               { name: "NOT_APPLICABLE", number: 2 },
               { name: "INDETERMINATE", number: 3 },
             ],
+            reservedRange: [],
+            reservedName: [],
+            name: "Decision",
           },
         ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Response",
       },
       {
-        name: "ReverseQuery",
         field: [
           {
             name: "policy_sets",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.policy_set.PolicySetRQ",
             jsonName: "policySets",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ReverseQuery",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "IsAllowed",
@@ -561,6 +595,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.access_control.ReverseQuery",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -571,13 +606,14 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0, 2, 1],
           span: [16, 2, 22],
+          leadingDetachedComments: [],
           leadingComments:
             " generic data structure which can be provided\n to a contextQuery (see io/restorecommerce/rule.proto)\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.access_control.Request": Request,
     ".io.restorecommerce.access_control.Context": Context,
@@ -585,12 +621,18 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.access_control.Response.Decision": Response_Decision,
     ".io.restorecommerce.access_control.ReverseQuery": ReverseQuery,
   },
-  dependencies: [
-    google_protobuf_any_protoMetadata,
-    io_restorecommerce_rule_protoMetadata,
-    io_restorecommerce_policy_set_protoMetadata,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

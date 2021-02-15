@@ -1,33 +1,33 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
+  protoMetadata as protoMetadata4,
   RoleAssociation,
   Tokens,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Image,
-  protoMetadata as io_restorecommerce_image_protoMetadata,
+  protoMetadata as protoMetadata6,
 } from "../../io/restorecommerce/image";
 import {
-  Attribute,
-  protoMetadata as io_restorecommerce_attribute_protoMetadata,
-} from "../../io/restorecommerce/attribute";
-import { Writer, Reader } from "protobufjs/minimal";
-import {
-  Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
-} from "../../google/protobuf/empty";
-import {
+  protoMetadata as protoMetadata1,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata2,
+  Empty,
+} from "../../google/protobuf/empty";
+import {
+  protoMetadata as protoMetadata5,
+  Attribute,
+} from "../../io/restorecommerce/attribute";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.user";
 
@@ -299,16 +299,22 @@ const baseLoginRequest: object = { identifier: "", password: "", token: "" };
 
 export const LoginRequest = {
   encode(message: LoginRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.identifier);
-    writer.uint32(18).string(message.password);
-    writer.uint32(26).string(message.token);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
+    }
+    if (message.password !== "") {
+      writer.uint32(18).string(message.password);
+    }
+    if (message.token !== "") {
+      writer.uint32(26).string(message.token);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): LoginRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLoginRequest } as LoginRequest;
+    const message = globalThis.Object.create(baseLoginRequest) as LoginRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -330,7 +336,7 @@ export const LoginRequest = {
   },
 
   fromJSON(object: any): LoginRequest {
-    const message = { ...baseLoginRequest } as LoginRequest;
+    const message = globalThis.Object.create(baseLoginRequest) as LoginRequest;
     if (object.identifier !== undefined && object.identifier !== null) {
       message.identifier = String(object.identifier);
     } else {
@@ -385,7 +391,7 @@ export const OrgIDRequest = {
     for (const v of message.orgIds) {
       writer.uint32(10).string(v!);
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -394,7 +400,7 @@ export const OrgIDRequest = {
   decode(input: Reader | Uint8Array, length?: number): OrgIDRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrgIDRequest } as OrgIDRequest;
+    const message = globalThis.Object.create(baseOrgIDRequest) as OrgIDRequest;
     message.orgIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -414,7 +420,7 @@ export const OrgIDRequest = {
   },
 
   fromJSON(object: any): OrgIDRequest {
-    const message = { ...baseOrgIDRequest } as OrgIDRequest;
+    const message = globalThis.Object.create(baseOrgIDRequest) as OrgIDRequest;
     message.orgIds = [];
     if (object.orgIds !== undefined && object.orgIds !== null) {
       for (const e of object.orgIds) {
@@ -473,7 +479,7 @@ export const UserIDs = {
   decode(input: Reader | Uint8Array, length?: number): UserIDs {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUserIDs } as UserIDs;
+    const message = globalThis.Object.create(baseUserIDs) as UserIDs;
     message.userIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -490,7 +496,7 @@ export const UserIDs = {
   },
 
   fromJSON(object: any): UserIDs {
-    const message = { ...baseUserIDs } as UserIDs;
+    const message = globalThis.Object.create(baseUserIDs) as UserIDs;
     message.userIds = [];
     if (object.userIds !== undefined && object.userIds !== null) {
       for (const e of object.userIds) {
@@ -526,10 +532,16 @@ const baseFindRequest: object = { id: "", name: "", email: "" };
 
 export const FindRequest = {
   encode(message: FindRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.name);
-    writer.uint32(26).string(message.email);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.email !== "") {
+      writer.uint32(26).string(message.email);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -538,7 +550,7 @@ export const FindRequest = {
   decode(input: Reader | Uint8Array, length?: number): FindRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFindRequest } as FindRequest;
+    const message = globalThis.Object.create(baseFindRequest) as FindRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -563,7 +575,7 @@ export const FindRequest = {
   },
 
   fromJSON(object: any): FindRequest {
-    const message = { ...baseFindRequest } as FindRequest;
+    const message = globalThis.Object.create(baseFindRequest) as FindRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -632,14 +644,18 @@ export const FindByTokenRequest = {
     message: FindByTokenRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.token);
+    if (message.token !== "") {
+      writer.uint32(10).string(message.token);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): FindByTokenRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
+    const message = globalThis.Object.create(
+      baseFindByTokenRequest
+    ) as FindByTokenRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -655,7 +671,9 @@ export const FindByTokenRequest = {
   },
 
   fromJSON(object: any): FindByTokenRequest {
-    const message = { ...baseFindByTokenRequest } as FindByTokenRequest;
+    const message = globalThis.Object.create(
+      baseFindByTokenRequest
+    ) as FindByTokenRequest;
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
     } else {
@@ -698,31 +716,57 @@ const baseRegisterRequest: object = {
 
 export const RegisterRequest = {
   encode(message: RegisterRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(16).bool(message.guest);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.guest === true) {
+      writer.uint32(16).bool(message.guest);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    writer.uint32(34).string(message.name);
-    writer.uint32(42).string(message.firstName);
-    writer.uint32(50).string(message.lastName);
-    writer.uint32(58).string(message.email);
-    writer.uint32(66).string(message.password);
-    writer.uint32(74).string(message.timezoneId);
-    writer.uint32(82).string(message.localeId);
+    if (message.name !== "") {
+      writer.uint32(34).string(message.name);
+    }
+    if (message.firstName !== "") {
+      writer.uint32(42).string(message.firstName);
+    }
+    if (message.lastName !== "") {
+      writer.uint32(50).string(message.lastName);
+    }
+    if (message.email !== "") {
+      writer.uint32(58).string(message.email);
+    }
+    if (message.password !== "") {
+      writer.uint32(66).string(message.password);
+    }
+    if (message.timezoneId !== "") {
+      writer.uint32(74).string(message.timezoneId);
+    }
+    if (message.localeId !== "") {
+      writer.uint32(82).string(message.localeId);
+    }
     for (const v of message.roleAssociations) {
       RoleAssociation.encode(v!, writer.uint32(90).fork()).ldelim();
     }
-    writer.uint32(98).string(message.defaultScope);
-    writer.uint32(104).int32(message.userType);
-    writer.uint32(114).string(message.captchaCode);
+    if (message.defaultScope !== "") {
+      writer.uint32(98).string(message.defaultScope);
+    }
+    if (message.userType !== 0) {
+      writer.uint32(104).int32(message.userType);
+    }
+    if (message.captchaCode !== "") {
+      writer.uint32(114).string(message.captchaCode);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): RegisterRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRegisterRequest } as RegisterRequest;
+    const message = globalThis.Object.create(
+      baseRegisterRequest
+    ) as RegisterRequest;
     message.roleAssociations = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -780,7 +824,9 @@ export const RegisterRequest = {
   },
 
   fromJSON(object: any): RegisterRequest {
-    const message = { ...baseRegisterRequest } as RegisterRequest;
+    const message = globalThis.Object.create(
+      baseRegisterRequest
+    ) as RegisterRequest;
     message.roleAssociations = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -971,9 +1017,13 @@ const baseActivateRequest: object = { name: "", activationCode: "" };
 
 export const ActivateRequest = {
   encode(message: ActivateRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.activationCode);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -982,7 +1032,9 @@ export const ActivateRequest = {
   decode(input: Reader | Uint8Array, length?: number): ActivateRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseActivateRequest } as ActivateRequest;
+    const message = globalThis.Object.create(
+      baseActivateRequest
+    ) as ActivateRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1004,7 +1056,9 @@ export const ActivateRequest = {
   },
 
   fromJSON(object: any): ActivateRequest {
-    const message = { ...baseActivateRequest } as ActivateRequest;
+    const message = globalThis.Object.create(
+      baseActivateRequest
+    ) as ActivateRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1067,10 +1121,16 @@ export const ConfirmUserInvitationRequest = {
     message: ConfirmUserInvitationRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.password);
-    writer.uint32(26).string(message.activationCode);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.password !== "") {
+      writer.uint32(18).string(message.password);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(26).string(message.activationCode);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -1082,9 +1142,9 @@ export const ConfirmUserInvitationRequest = {
   ): ConfirmUserInvitationRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseConfirmUserInvitationRequest,
-    } as ConfirmUserInvitationRequest;
+    const message = globalThis.Object.create(
+      baseConfirmUserInvitationRequest
+    ) as ConfirmUserInvitationRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1109,9 +1169,9 @@ export const ConfirmUserInvitationRequest = {
   },
 
   fromJSON(object: any): ConfirmUserInvitationRequest {
-    const message = {
-      ...baseConfirmUserInvitationRequest,
-    } as ConfirmUserInvitationRequest;
+    const message = globalThis.Object.create(
+      baseConfirmUserInvitationRequest
+    ) as ConfirmUserInvitationRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1188,9 +1248,13 @@ export const SendInvitationEmailRequest = {
     message: SendInvitationEmailRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.userId);
-    writer.uint32(18).string(message.invitedByUserId);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    if (message.invitedByUserId !== "") {
+      writer.uint32(18).string(message.invitedByUserId);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1202,9 +1266,9 @@ export const SendInvitationEmailRequest = {
   ): SendInvitationEmailRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseSendInvitationEmailRequest,
-    } as SendInvitationEmailRequest;
+    const message = globalThis.Object.create(
+      baseSendInvitationEmailRequest
+    ) as SendInvitationEmailRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1226,9 +1290,9 @@ export const SendInvitationEmailRequest = {
   },
 
   fromJSON(object: any): SendInvitationEmailRequest {
-    const message = {
-      ...baseSendInvitationEmailRequest,
-    } as SendInvitationEmailRequest;
+    const message = globalThis.Object.create(
+      baseSendInvitationEmailRequest
+    ) as SendInvitationEmailRequest;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
     } else {
@@ -1301,10 +1365,16 @@ export const ChangePasswordRequest = {
     message: ChangePasswordRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.password);
-    writer.uint32(26).string(message.newPassword);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.password !== "") {
+      writer.uint32(18).string(message.password);
+    }
+    if (message.newPassword !== "") {
+      writer.uint32(26).string(message.newPassword);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -1313,7 +1383,9 @@ export const ChangePasswordRequest = {
   decode(input: Reader | Uint8Array, length?: number): ChangePasswordRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
+    const message = globalThis.Object.create(
+      baseChangePasswordRequest
+    ) as ChangePasswordRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1338,7 +1410,9 @@ export const ChangePasswordRequest = {
   },
 
   fromJSON(object: any): ChangePasswordRequest {
-    const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
+    const message = globalThis.Object.create(
+      baseChangePasswordRequest
+    ) as ChangePasswordRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -1416,7 +1490,7 @@ export const RequestPasswordChangeRequest = {
     if (message.email !== undefined) {
       writer.uint32(18).string(message.email);
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1428,9 +1502,9 @@ export const RequestPasswordChangeRequest = {
   ): RequestPasswordChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseRequestPasswordChangeRequest,
-    } as RequestPasswordChangeRequest;
+    const message = globalThis.Object.create(
+      baseRequestPasswordChangeRequest
+    ) as RequestPasswordChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1452,9 +1526,9 @@ export const RequestPasswordChangeRequest = {
   },
 
   fromJSON(object: any): RequestPasswordChangeRequest {
-    const message = {
-      ...baseRequestPasswordChangeRequest,
-    } as RequestPasswordChangeRequest;
+    const message = globalThis.Object.create(
+      baseRequestPasswordChangeRequest
+    ) as RequestPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1520,10 +1594,16 @@ export const ConfirmPasswordChangeRequest = {
     message: ConfirmPasswordChangeRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.activationCode);
-    writer.uint32(26).string(message.password);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
+    }
+    if (message.password !== "") {
+      writer.uint32(26).string(message.password);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -1535,9 +1615,9 @@ export const ConfirmPasswordChangeRequest = {
   ): ConfirmPasswordChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseConfirmPasswordChangeRequest,
-    } as ConfirmPasswordChangeRequest;
+    const message = globalThis.Object.create(
+      baseConfirmPasswordChangeRequest
+    ) as ConfirmPasswordChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1562,9 +1642,9 @@ export const ConfirmPasswordChangeRequest = {
   },
 
   fromJSON(object: any): ConfirmPasswordChangeRequest {
-    const message = {
-      ...baseConfirmPasswordChangeRequest,
-    } as ConfirmPasswordChangeRequest;
+    const message = globalThis.Object.create(
+      baseConfirmPasswordChangeRequest
+    ) as ConfirmPasswordChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1638,9 +1718,13 @@ export const ChangeEmailRequest = {
     message: ChangeEmailRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.email);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1649,7 +1733,9 @@ export const ChangeEmailRequest = {
   decode(input: Reader | Uint8Array, length?: number): ChangeEmailRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
+    const message = globalThis.Object.create(
+      baseChangeEmailRequest
+    ) as ChangeEmailRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1671,7 +1757,9 @@ export const ChangeEmailRequest = {
   },
 
   fromJSON(object: any): ChangeEmailRequest {
-    const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
+    const message = globalThis.Object.create(
+      baseChangeEmailRequest
+    ) as ChangeEmailRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -1729,9 +1817,13 @@ export const ConfirmEmailChangeRequest = {
     message: ConfirmEmailChangeRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.activationCode);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1743,9 +1835,9 @@ export const ConfirmEmailChangeRequest = {
   ): ConfirmEmailChangeRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseConfirmEmailChangeRequest,
-    } as ConfirmEmailChangeRequest;
+    const message = globalThis.Object.create(
+      baseConfirmEmailChangeRequest
+    ) as ConfirmEmailChangeRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1767,9 +1859,9 @@ export const ConfirmEmailChangeRequest = {
   },
 
   fromJSON(object: any): ConfirmEmailChangeRequest {
-    const message = {
-      ...baseConfirmEmailChangeRequest,
-    } as ConfirmEmailChangeRequest;
+    const message = globalThis.Object.create(
+      baseConfirmEmailChangeRequest
+    ) as ConfirmEmailChangeRequest;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1829,8 +1921,10 @@ const baseUnregisterRequest: object = { id: "" };
 
 export const UnregisterRequest = {
   encode(message: UnregisterRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -1839,7 +1933,9 @@ export const UnregisterRequest = {
   decode(input: Reader | Uint8Array, length?: number): UnregisterRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUnregisterRequest } as UnregisterRequest;
+    const message = globalThis.Object.create(
+      baseUnregisterRequest
+    ) as UnregisterRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1858,7 +1954,9 @@ export const UnregisterRequest = {
   },
 
   fromJSON(object: any): UnregisterRequest {
-    const message = { ...baseUnregisterRequest } as UnregisterRequest;
+    const message = globalThis.Object.create(
+      baseUnregisterRequest
+    ) as UnregisterRequest;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -1902,14 +2000,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1925,7 +2025,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -1955,15 +2055,21 @@ const basePasswordChanged: object = { id: "", passwordHash: "" };
 
 export const PasswordChanged = {
   encode(message: PasswordChanged, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.passwordHash);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.passwordHash !== "") {
+      writer.uint32(18).string(message.passwordHash);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PasswordChanged {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePasswordChanged } as PasswordChanged;
+    const message = globalThis.Object.create(
+      basePasswordChanged
+    ) as PasswordChanged;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1982,7 +2088,9 @@ export const PasswordChanged = {
   },
 
   fromJSON(object: any): PasswordChanged {
-    const message = { ...basePasswordChanged } as PasswordChanged;
+    const message = globalThis.Object.create(
+      basePasswordChanged
+    ) as PasswordChanged;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2027,16 +2135,18 @@ export const PasswordChangeRequested = {
     message: PasswordChangeRequested,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PasswordChangeRequested {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...basePasswordChangeRequested,
-    } as PasswordChangeRequested;
+    const message = globalThis.Object.create(
+      basePasswordChangeRequested
+    ) as PasswordChangeRequested;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2052,9 +2162,9 @@ export const PasswordChangeRequested = {
   },
 
   fromJSON(object: any): PasswordChangeRequested {
-    const message = {
-      ...basePasswordChangeRequested,
-    } as PasswordChangeRequested;
+    const message = globalThis.Object.create(
+      basePasswordChangeRequested
+    ) as PasswordChangeRequested;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2095,16 +2205,24 @@ export const EmailChangeRequested = {
     message: EmailChangeRequested,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.activationCode);
-    writer.uint32(26).string(message.newEmail);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
+    }
+    if (message.newEmail !== "") {
+      writer.uint32(26).string(message.newEmail);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): EmailChangeRequested {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseEmailChangeRequested } as EmailChangeRequested;
+    const message = globalThis.Object.create(
+      baseEmailChangeRequested
+    ) as EmailChangeRequested;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2126,7 +2244,9 @@ export const EmailChangeRequested = {
   },
 
   fromJSON(object: any): EmailChangeRequested {
-    const message = { ...baseEmailChangeRequested } as EmailChangeRequested;
+    const message = globalThis.Object.create(
+      baseEmailChangeRequested
+    ) as EmailChangeRequested;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2182,15 +2302,21 @@ export const EmailChangeConfirmed = {
     message: EmailChangeConfirmed,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.email);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): EmailChangeConfirmed {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseEmailChangeConfirmed } as EmailChangeConfirmed;
+    const message = globalThis.Object.create(
+      baseEmailChangeConfirmed
+    ) as EmailChangeConfirmed;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2209,7 +2335,9 @@ export const EmailChangeConfirmed = {
   },
 
   fromJSON(object: any): EmailChangeConfirmed {
-    const message = { ...baseEmailChangeConfirmed } as EmailChangeConfirmed;
+    const message = globalThis.Object.create(
+      baseEmailChangeConfirmed
+    ) as EmailChangeConfirmed;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2253,8 +2381,10 @@ export const UserList = {
     for (const v of message.items) {
       User.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -2263,7 +2393,7 @@ export const UserList = {
   decode(input: Reader | Uint8Array, length?: number): UserList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUserList } as UserList;
+    const message = globalThis.Object.create(baseUserList) as UserList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2286,7 +2416,7 @@ export const UserList = {
   },
 
   fromJSON(object: any): UserList {
-    const message = { ...baseUserList } as UserList;
+    const message = globalThis.Object.create(baseUserList) as UserList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -2347,14 +2477,16 @@ const baseActivate: object = { id: "" };
 
 export const Activate = {
   encode(message: Activate, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Activate {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseActivate } as Activate;
+    const message = globalThis.Object.create(baseActivate) as Activate;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2370,7 +2502,7 @@ export const Activate = {
   },
 
   fromJSON(object: any): Activate {
-    const message = { ...baseActivate } as Activate;
+    const message = globalThis.Object.create(baseActivate) as Activate;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -2400,11 +2532,13 @@ const baseFindByRoleRequest: object = { role: "" };
 
 export const FindByRoleRequest = {
   encode(message: FindByRoleRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.role);
+    if (message.role !== "") {
+      writer.uint32(10).string(message.role);
+    }
     for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -2413,7 +2547,9 @@ export const FindByRoleRequest = {
   decode(input: Reader | Uint8Array, length?: number): FindByRoleRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFindByRoleRequest } as FindByRoleRequest;
+    const message = globalThis.Object.create(
+      baseFindByRoleRequest
+    ) as FindByRoleRequest;
     message.attributes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2436,7 +2572,9 @@ export const FindByRoleRequest = {
   },
 
   fromJSON(object: any): FindByRoleRequest {
-    const message = { ...baseFindByRoleRequest } as FindByRoleRequest;
+    const message = globalThis.Object.create(
+      baseFindByRoleRequest
+    ) as FindByRoleRequest;
     message.attributes = [];
     if (object.role !== undefined && object.role !== null) {
       message.role = String(object.role);
@@ -2522,47 +2660,91 @@ const baseUser: object = {
 
 export const User = {
   encode(message: User, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.firstName);
-    writer.uint32(42).string(message.lastName);
-    writer.uint32(50).string(message.email);
-    writer.uint32(58).string(message.newEmail);
-    writer.uint32(64).bool(message.active);
-    writer.uint32(74).string(message.activationCode);
-    writer.uint32(82).string(message.password);
-    writer.uint32(90).string(message.passwordHash);
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.firstName !== "") {
+      writer.uint32(34).string(message.firstName);
+    }
+    if (message.lastName !== "") {
+      writer.uint32(42).string(message.lastName);
+    }
+    if (message.email !== "") {
+      writer.uint32(50).string(message.email);
+    }
+    if (message.newEmail !== "") {
+      writer.uint32(58).string(message.newEmail);
+    }
+    if (message.active === true) {
+      writer.uint32(64).bool(message.active);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(74).string(message.activationCode);
+    }
+    if (message.password !== "") {
+      writer.uint32(82).string(message.password);
+    }
+    if (message.passwordHash !== "") {
+      writer.uint32(90).string(message.passwordHash);
+    }
     for (const v of message.roleAssociations) {
       RoleAssociation.encode(v!, writer.uint32(98).fork()).ldelim();
     }
-    writer.uint32(106).string(message.timezoneId);
-    writer.uint32(114).string(message.localeId);
-    writer.uint32(122).string(message.defaultScope);
-    writer.uint32(128).bool(message.unauthenticated);
-    writer.uint32(136).bool(message.guest);
-    if (message.image !== undefined && message.image !== undefined) {
+    if (message.timezoneId !== "") {
+      writer.uint32(106).string(message.timezoneId);
+    }
+    if (message.localeId !== "") {
+      writer.uint32(114).string(message.localeId);
+    }
+    if (message.defaultScope !== "") {
+      writer.uint32(122).string(message.defaultScope);
+    }
+    if (message.unauthenticated === true) {
+      writer.uint32(128).bool(message.unauthenticated);
+    }
+    if (message.guest === true) {
+      writer.uint32(136).bool(message.guest);
+    }
+    if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    writer.uint32(152).int32(message.userType);
-    writer.uint32(160).bool(message.invite);
-    writer.uint32(170).string(message.invitedByUserName);
-    writer.uint32(178).string(message.invitedByUserFirstName);
-    writer.uint32(186).string(message.invitedByUserLastName);
+    if (message.userType !== 0) {
+      writer.uint32(152).int32(message.userType);
+    }
+    if (message.invite === true) {
+      writer.uint32(160).bool(message.invite);
+    }
+    if (message.invitedByUserName !== "") {
+      writer.uint32(170).string(message.invitedByUserName);
+    }
+    if (message.invitedByUserFirstName !== "") {
+      writer.uint32(178).string(message.invitedByUserFirstName);
+    }
+    if (message.invitedByUserLastName !== "") {
+      writer.uint32(186).string(message.invitedByUserLastName);
+    }
     for (const v of message.tokens) {
       Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
     }
-    writer.uint32(201).double(message.lastLogin);
-    writer.uint32(209).double(message.lastAccess);
+    if (message.lastLogin !== 0) {
+      writer.uint32(201).double(message.lastLogin);
+    }
+    if (message.lastAccess !== 0) {
+      writer.uint32(209).double(message.lastAccess);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): User {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUser } as User;
+    const message = globalThis.Object.create(baseUser) as User;
     message.roleAssociations = [];
     message.tokens = [];
     while (reader.pos < end) {
@@ -2657,7 +2839,7 @@ export const User = {
   },
 
   fromJSON(object: any): User {
-    const message = { ...baseUser } as User;
+    const message = globalThis.Object.create(baseUser) as User;
     message.roleAssociations = [];
     message.tokens = [];
     if (object.id !== undefined && object.id !== null) {
@@ -3039,13 +3221,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/empty.proto",
@@ -3058,838 +3240,802 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "LoginRequest",
         field: [
           {
             name: "identifier",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "identifier",
           },
           {
             name: "password",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
-          {
-            name: "token",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 3, label: 1, type: 9, jsonName: "token" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "LoginRequest",
       },
       {
-        name: "OrgIDRequest",
         field: [
-          {
-            name: "org_ids",
-            number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "orgIds",
-          },
+          { name: "org_ids", number: 1, label: 3, type: 9, jsonName: "orgIds" },
           {
             name: "subject",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrgIDRequest",
       },
       {
-        name: "UserIDs",
         field: [
           {
             name: "user_ids",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "userIds",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserIDs",
       },
       {
-        name: "FindRequest",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "name",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
-          {
-            name: "email",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "name", number: 2, label: 1, type: 9, jsonName: "name" },
+          { name: "email", number: 3, label: 1, type: 9, jsonName: "email" },
           {
             name: "subject",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FindRequest",
       },
       {
-        name: "FindByTokenRequest",
         field: [
-          {
-            name: "token",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 1, label: 1, type: 9, jsonName: "token" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FindByTokenRequest",
       },
       {
-        name: "RegisterRequest",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "guest",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "guest",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "guest", number: 2, label: 1, type: 8, jsonName: "guest" },
           {
             name: "meta",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 4, label: 1, type: 9, jsonName: "name" },
           {
             name: "first_name",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "firstName",
           },
           {
             name: "last_name",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "lastName",
           },
-          {
-            name: "email",
-            number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "email", number: 7, label: 1, type: 9, jsonName: "email" },
           {
             name: "password",
             number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
           {
             name: "timezone_id",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "timezoneId",
           },
           {
             name: "locale_id",
             number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "localeId",
           },
           {
             name: "role_associations",
             number: 11,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.RoleAssociation",
             jsonName: "roleAssociations",
           },
           {
             name: "default_scope",
             number: 12,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "defaultScope",
           },
           {
             name: "user_type",
             number: 13,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.user.UserType",
             jsonName: "userType",
           },
           {
             name: "captcha_code",
             number: 14,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "captchaCode",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RegisterRequest",
       },
       {
-        name: "ActivateRequest",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "activation_code",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ActivateRequest",
       },
       {
-        name: "ConfirmUserInvitationRequest",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "password",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
           {
             name: "activation_code",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "subject",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ConfirmUserInvitationRequest",
       },
       {
-        name: "SendInvitationEmailRequest",
         field: [
-          {
-            name: "user_id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "userId",
-          },
+          { name: "user_id", number: 1, label: 1, type: 9, jsonName: "userId" },
           {
             name: "invited_by_user_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "invitedByUserId",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SendInvitationEmailRequest",
       },
       {
-        name: "ChangePasswordRequest",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "password",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
           {
             name: "new_password",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "newPassword",
           },
           {
             name: "subject",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ChangePasswordRequest",
       },
       {
-        name: "RequestPasswordChangeRequest",
         field: [
           {
             name: "name",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             oneofIndex: 0,
             jsonName: "name",
           },
           {
             name: "email",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             oneofIndex: 0,
             jsonName: "email",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "input_field" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "RequestPasswordChangeRequest",
       },
       {
-        name: "ConfirmPasswordChangeRequest",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "activation_code",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "password",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
           {
             name: "subject",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ConfirmPasswordChangeRequest",
       },
       {
-        name: "ChangeEmailRequest",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "email",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ChangeEmailRequest",
       },
       {
-        name: "ConfirmEmailChangeRequest",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "activation_code",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ConfirmEmailChangeRequest",
       },
       {
-        name: "UnregisterRequest",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "subject",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UnregisterRequest",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "PasswordChanged",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "password_hash",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "passwordHash",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PasswordChanged",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "PasswordChangeRequested",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "EmailChangeRequested",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "activation_code",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "new_email",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "newEmail",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "EmailChangeRequested",
       },
       {
-        name: "EmailChangeConfirmed",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "email",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "EmailChangeConfirmed",
       },
       {
-        name: "UserList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.user.User",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserList",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Activate",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "FindByRoleRequest",
         field: [
-          {
-            name: "role",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "role",
-          },
+          { name: "role", number: 1, label: 1, type: 9, jsonName: "role" },
           {
             name: "attributes",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "attributes",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FindByRoleRequest",
       },
       {
-        name: "User",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "first_name",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "firstName",
           },
           {
             name: "last_name",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "lastName",
           },
-          {
-            name: "email",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "email", number: 6, label: 1, type: 9, jsonName: "email" },
           {
             name: "new_email",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "newEmail",
           },
-          {
-            name: "active",
-            number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "active",
-          },
+          { name: "active", number: 8, label: 1, type: 8, jsonName: "active" },
           {
             name: "activation_code",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "activationCode",
           },
           {
             name: "password",
             number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "password",
           },
           {
             name: "password_hash",
             number: 11,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "passwordHash",
           },
           {
             name: "role_associations",
             number: 12,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.RoleAssociation",
             jsonName: "roleAssociations",
           },
           {
             name: "timezone_id",
             number: 13,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "timezoneId",
           },
           {
             name: "locale_id",
             number: 14,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "localeId",
           },
           {
             name: "default_scope",
             number: 15,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "defaultScope",
           },
           {
             name: "unauthenticated",
             number: 16,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "unauthenticated",
           },
-          {
-            name: "guest",
-            number: 17,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "guest",
-          },
+          { name: "guest", number: 17, label: 1, type: 8, jsonName: "guest" },
           {
             name: "image",
             number: 18,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.image.Image",
             jsonName: "image",
           },
           {
             name: "user_type",
             number: 19,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.user.UserType",
             jsonName: "userType",
           },
-          {
-            name: "invite",
-            number: 20,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "invite",
-          },
+          { name: "invite", number: 20, label: 1, type: 8, jsonName: "invite" },
           {
             name: "invited_by_user_name",
             number: 21,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "invitedByUserName",
           },
           {
             name: "invited_by_user_first_name",
             number: 22,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "invitedByUserFirstName",
           },
           {
             name: "invited_by_user_last_name",
             number: 23,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "invitedByUserLastName",
           },
           {
             name: "tokens",
             number: 24,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Tokens",
             jsonName: "tokens",
           },
           {
             name: "last_login",
             number: 25,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "lastLogin",
           },
           {
             name: "last_access",
             number: 26,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "lastAccess",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "User",
       },
     ],
     enumType: [
       {
-        name: "UserType",
         value: [
           { name: "ORG_USER", number: 0 },
           { name: "INDIVIDUAL_USER", number: 1 },
           { name: "GUEST", number: 2 },
           { name: "TECHNICAL_USER", number: 3 },
         ],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserType",
       },
     ],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -3992,6 +4138,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.user.User",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -4002,206 +4149,244 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [14, 0, 36, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n The microservice for the user resource.\n",
         },
         {
           path: [4, 0],
           span: [42, 0, 46, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         },
         {
           path: [4, 0, 2, 0],
           span: [43, 2, 24],
+          leadingDetachedComments: [],
           trailingComments: " User name or email\n",
         },
         {
           path: [4, 0, 2, 1],
           span: [44, 2, 22],
+          leadingDetachedComments: [],
           trailingComments: " Raw password\n",
         },
         {
           path: [4, 3, 2, 0],
           span: [58, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 5, 2, 11],
           span: [88, 2, 28],
+          leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 6, 2, 0],
           span: [94, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: "/ User name (unique)\n",
         },
         {
           path: [4, 9, 2, 0],
           span: [113, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 12, 2, 0],
           span: [135, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 14, 2, 0],
           span: [147, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 15],
           span: [159, 0, 161, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
         },
         {
           path: [4, 16],
           span: [169, 0, 172, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
         },
         {
           path: [4, 16, 2, 0],
           span: [170, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 17, 2, 0],
           span: [175, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: " User ID\n",
         },
         {
           path: [4, 18],
           span: [181, 0, 185, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n User email id changed event.\n",
         },
         {
           path: [4, 19, 2, 0],
           span: [188, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 20],
           span: [195, 0, 199, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n A list of User.\n",
         },
         {
           path: [4, 21],
           span: [204, 0, 206, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n User activation request.\n",
         },
         {
           path: [4, 21, 2, 0],
           span: [205, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 23],
           span: [217, 0, 244, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n A User resource.\n",
         },
         {
           path: [4, 23, 2, 0],
           span: [218, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ User ID, unique, key\n",
         },
         {
           path: [4, 23, 2, 2],
           span: [220, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " The name of the user, can be used for login\n",
         },
         {
           path: [4, 23, 2, 5],
           span: [223, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: "/ Email address, can be used for login\n",
         },
         {
           path: [4, 23, 2, 6],
           span: [224, 2, 23],
+          leadingDetachedComments: [],
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         },
         {
           path: [4, 23, 2, 7],
           span: [225, 2, 18],
+          leadingDetachedComments: [],
           trailingComments:
             "/ If the user was activated via the activation process\n",
         },
         {
           path: [4, 23, 2, 8],
           span: [226, 2, 29],
+          leadingDetachedComments: [],
           trailingComments:
             "/ Activation code used in the activation process\n",
         },
         {
           path: [4, 23, 2, 9],
           span: [227, 2, 23],
+          leadingDetachedComments: [],
           trailingComments: "/ Raw password, not stored\n",
         },
         {
           path: [4, 23, 2, 10],
           span: [228, 2, 28],
+          leadingDetachedComments: [],
           trailingComments: "/ Encrypted password, stored\n",
         },
         {
           path: [4, 23, 2, 11],
           span: [229, 2, 74],
+          leadingDetachedComments: [],
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
         },
         {
           path: [4, 23, 2, 12],
           span: [230, 2, 26],
+          leadingDetachedComments: [],
           trailingComments: " timezone_id specifications\n",
         },
         {
           path: [4, 23, 2, 13],
           span: [231, 2, 24],
+          leadingDetachedComments: [],
           trailingComments: " locale specifications\n",
         },
         {
           path: [4, 23, 2, 14],
           span: [232, 2, 28],
+          leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 23, 2, 15],
           span: [233, 2, 28],
+          leadingDetachedComments: [],
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
         },
         {
           path: [4, 23, 2, 16],
           span: [234, 2, 18],
+          leadingDetachedComments: [],
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         },
         {
           path: [4, 23, 2, 19],
           span: [237, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: " For user invitation\n",
         },
         {
           path: [4, 23, 2, 20],
           span: [238, 2, 35],
+          leadingDetachedComments: [],
           trailingComments: " user who is inviting\n",
         },
         {
           path: [4, 23, 2, 21],
           span: [239, 2, 41],
+          leadingDetachedComments: [],
           trailingComments: " First name of user inviting\n",
         },
         {
           path: [4, 23, 2, 22],
           span: [240, 2, 40],
+          leadingDetachedComments: [],
           trailingComments: " Last name of user inviting\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.user.UserType": UserType,
     ".io.restorecommerce.user.LoginRequest": LoginRequest,
@@ -4230,14 +4415,24 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.user.User": User,
   },
   dependencies: [
-    io_restorecommerce_resource_base_protoMetadata,
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-    io_restorecommerce_attribute_protoMetadata,
-    io_restorecommerce_image_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+    protoMetadata6,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

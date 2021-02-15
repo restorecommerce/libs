@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
+  protoMetadata as protoMetadata1,
   Attribute,
-  protoMetadata as io_restorecommerce_attribute_protoMetadata,
 } from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -22,9 +22,15 @@ const baseMeta: object = { created: 0, modified: 0, modifiedBy: "" };
 
 export const Meta = {
   encode(message: Meta, writer: Writer = Writer.create()): Writer {
-    writer.uint32(9).double(message.created);
-    writer.uint32(17).double(message.modified);
-    writer.uint32(26).string(message.modifiedBy);
+    if (message.created !== 0) {
+      writer.uint32(9).double(message.created);
+    }
+    if (message.modified !== 0) {
+      writer.uint32(17).double(message.modified);
+    }
+    if (message.modifiedBy !== "") {
+      writer.uint32(26).string(message.modifiedBy);
+    }
     for (const v of message.owner) {
       Attribute.encode(v!, writer.uint32(34).fork()).ldelim();
     }
@@ -34,7 +40,7 @@ export const Meta = {
   decode(input: Reader | Uint8Array, length?: number): Meta {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMeta } as Meta;
+    const message = globalThis.Object.create(baseMeta) as Meta;
     message.owner = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -60,7 +66,7 @@ export const Meta = {
   },
 
   fromJSON(object: any): Meta {
-    const message = { ...baseMeta } as Meta;
+    const message = globalThis.Object.create(baseMeta) as Meta;
     message.owner = [];
     if (object.created !== undefined && object.created !== null) {
       message.created = Number(object.created);
@@ -128,50 +134,57 @@ export const Meta = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: ["io/restorecommerce/attribute.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Meta",
         field: [
           {
             name: "created",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "created",
           },
           {
             name: "modified",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "modified",
           },
           {
             name: "modified_by",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "modifiedBy",
           },
           {
             name: "owner",
             number: 4,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "owner",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Meta",
       },
     ],
     enumType: [],
@@ -184,25 +197,38 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0, 2, 0],
           span: [9, 4, 23],
+          leadingDetachedComments: [],
           trailingComments: " timestamp\n",
         },
         {
           path: [4, 0, 2, 1],
           span: [10, 4, 24],
+          leadingDetachedComments: [],
           trailingComments: " timestamp\n",
         },
         {
           path: [4, 0, 2, 2],
           span: [11, 4, 27],
+          leadingDetachedComments: [],
           trailingComments: " ID from last User who modified it\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: { ".io.restorecommerce.meta.Meta": Meta },
-  dependencies: [io_restorecommerce_attribute_protoMetadata],
+  dependencies: [protoMetadata1],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

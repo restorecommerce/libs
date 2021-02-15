@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "google.protobuf";
@@ -27,7 +27,7 @@ export const Empty = {
   decode(input: Reader | Uint8Array, length?: number): Empty {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseEmpty } as Empty;
+    const message = globalThis.Object.create(baseEmpty) as Empty;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -40,7 +40,7 @@ export const Empty = {
   },
 
   fromJSON(_: any): Empty {
-    const message = { ...baseEmpty } as Empty;
+    const message = globalThis.Object.create(baseEmpty) as Empty;
     return message;
   },
 
@@ -56,23 +56,36 @@ export const Empty = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [],
     publicDependency: [],
     weakDependency: [],
-    messageType: [{ name: "Empty" }],
+    messageType: [
+      {
+        field: [],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Empty",
+      },
+    ],
     enumType: [],
     service: [],
     extension: [],
     name: "google/protobuf/empty.proto",
     package: "google.protobuf",
     options: {
+      uninterpretedOption: [],
       javaPackage: "com.google.protobuf",
       javaOuterClassname: "EmptyProto",
       javaMultipleFiles: true,
@@ -87,16 +100,27 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [52, 0, 16],
+          leadingDetachedComments: [],
           leadingComments:
             "/ A generic empty message that you can re-use to avoid defining duplicated\n/ empty messages in your APIs. A typical example is to use it as the request\n/ or the response type of an API method. For instance:\n/\n/     service Foo {\n/       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n/     }\n/\n/ The JSON representation for `Empty` is empty JSON object `{}`.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: { ".google.protobuf.Empty": Empty },
   dependencies: [],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

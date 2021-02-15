@@ -1,8 +1,8 @@
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { IFileDescriptorProto, IServiceDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto, ServiceDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
@@ -22,7 +22,7 @@ export interface SubSpaceServiceConfig extends ServiceConfig {
 }
 
 export interface SubService {
-  service: IServiceDescriptorProto;
+  service: ServiceDescriptorProto;
   name: string;
   queries: string[]
 }

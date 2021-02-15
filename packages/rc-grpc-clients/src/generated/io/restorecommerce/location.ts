@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../google/protobuf/any";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
-  Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
-} from "../../google/protobuf/empty";
-import {
+  protoMetadata as protoMetadata1,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata2,
+  Empty,
+} from "../../google/protobuf/empty";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.location";
 
@@ -57,14 +57,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -80,7 +82,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -113,8 +115,10 @@ export const LocationList = {
     for (const v of message.items) {
       Location.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -123,7 +127,7 @@ export const LocationList = {
   decode(input: Reader | Uint8Array, length?: number): LocationList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLocationList } as LocationList;
+    const message = globalThis.Object.create(baseLocationList) as LocationList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -146,7 +150,7 @@ export const LocationList = {
   },
 
   fromJSON(object: any): LocationList {
-    const message = { ...baseLocationList } as LocationList;
+    const message = globalThis.Object.create(baseLocationList) as LocationList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -217,19 +221,31 @@ const baseLocation: object = {
 
 export const Location = {
   encode(message: Location, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.description);
-    writer.uint32(42).string(message.organizationId);
-    writer.uint32(50).string(message.parentId);
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
+    if (message.organizationId !== "") {
+      writer.uint32(42).string(message.organizationId);
+    }
+    if (message.parentId !== "") {
+      writer.uint32(50).string(message.parentId);
+    }
     for (const v of message.childrenIds) {
       writer.uint32(58).string(v!);
     }
-    writer.uint32(66).string(message.addressId);
-    if (message.data !== undefined && message.data !== undefined) {
+    if (message.addressId !== "") {
+      writer.uint32(66).string(message.addressId);
+    }
+    if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(74).fork()).ldelim();
     }
     return writer;
@@ -238,7 +254,7 @@ export const Location = {
   decode(input: Reader | Uint8Array, length?: number): Location {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLocation } as Location;
+    const message = globalThis.Object.create(baseLocation) as Location;
     message.childrenIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -279,7 +295,7 @@ export const Location = {
   },
 
   fromJSON(object: any): Location {
-    const message = { ...baseLocation } as Location;
+    const message = globalThis.Object.create(baseLocation) as Location;
     message.childrenIds = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -413,13 +429,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/empty.proto",
@@ -431,120 +447,120 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "LocationList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.location.Location",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "LocationList",
       },
       {
-        name: "Location",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "organization_id",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "organizationId",
           },
           {
             name: "parent_id",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "parentId",
           },
           {
             name: "children_ids",
             number: 7,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "childrenIds",
           },
           {
             name: "address_id",
             number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "addressId",
           },
           {
             name: "data",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "data",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Location",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -572,6 +588,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.location.LocationList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -582,56 +599,73 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [13, 0, 19, 1],
+          leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
           path: [4, 2, 2, 0],
           span: [32, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: " Location ID, unique, key\n",
         },
         {
           path: [4, 2, 2, 2],
           span: [34, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " Location name\n",
         },
         {
           path: [4, 2, 2, 4],
           span: [36, 2, 29],
+          leadingDetachedComments: [],
           trailingComments: " Organization to which this location is linked\n",
         },
         {
           path: [4, 2, 2, 5],
           span: [37, 2, 23],
+          leadingDetachedComments: [],
           trailingComments:
             "  Location which may contain this location; may be null\n",
         },
         {
           path: [4, 2, 2, 6],
           span: [38, 2, 35],
+          leadingDetachedComments: [],
           trailingComments: " Locations contained in this location\n",
         },
         {
           path: [4, 2, 2, 8],
           span: [40, 2, 31],
+          leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.location.Deleted": Deleted,
     ".io.restorecommerce.location.LocationList": LocationList,
     ".io.restorecommerce.location.Location": Location,
   },
   dependencies: [
-    io_restorecommerce_resource_base_protoMetadata,
-    google_protobuf_empty_protoMetadata,
-    google_protobuf_any_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

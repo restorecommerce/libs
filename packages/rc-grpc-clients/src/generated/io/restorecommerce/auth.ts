@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
+  protoMetadata as protoMetadata1,
   Attribute,
-  protoMetadata as io_restorecommerce_attribute_protoMetadata,
 } from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -74,23 +74,31 @@ const baseSubject: object = {
 
 export const Subject = {
   encode(message: Subject, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.scope);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.scope !== "") {
+      writer.uint32(18).string(message.scope);
+    }
     for (const v of message.roleAssociations) {
       RoleAssociation.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.hierarchicalScopes) {
       HierarchicalScope.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    writer.uint32(40).bool(message.unauthenticated);
-    writer.uint32(50).string(message.token);
+    if (message.unauthenticated === true) {
+      writer.uint32(40).bool(message.unauthenticated);
+    }
+    if (message.token !== "") {
+      writer.uint32(50).string(message.token);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Subject {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSubject } as Subject;
+    const message = globalThis.Object.create(baseSubject) as Subject;
     message.roleAssociations = [];
     message.hierarchicalScopes = [];
     while (reader.pos < end) {
@@ -127,7 +135,7 @@ export const Subject = {
   },
 
   fromJSON(object: any): Subject {
-    const message = { ...baseSubject } as Subject;
+    const message = globalThis.Object.create(baseSubject) as Subject;
     message.roleAssociations = [];
     message.hierarchicalScopes = [];
     if (object.id !== undefined && object.id !== null) {
@@ -254,21 +262,31 @@ const baseTokens: object = {
 
 export const Tokens = {
   encode(message: Tokens, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(17).double(message.expiresIn);
-    writer.uint32(26).string(message.token);
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.expiresIn !== 0) {
+      writer.uint32(17).double(message.expiresIn);
+    }
+    if (message.token !== "") {
+      writer.uint32(26).string(message.token);
+    }
     for (const v of message.scopes) {
       writer.uint32(34).string(v!);
     }
-    writer.uint32(42).string(message.type);
-    writer.uint32(48).bool(message.interactive);
+    if (message.type !== "") {
+      writer.uint32(42).string(message.type);
+    }
+    if (message.interactive === true) {
+      writer.uint32(48).bool(message.interactive);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Tokens {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTokens } as Tokens;
+    const message = globalThis.Object.create(baseTokens) as Tokens;
     message.scopes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -300,7 +318,7 @@ export const Tokens = {
   },
 
   fromJSON(object: any): Tokens {
-    const message = { ...baseTokens } as Tokens;
+    const message = globalThis.Object.create(baseTokens) as Tokens;
     message.scopes = [];
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
@@ -392,18 +410,24 @@ const baseHierarchicalScope: object = { id: "", role: "" };
 
 export const HierarchicalScope = {
   encode(message: HierarchicalScope, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     for (const v of message.children) {
       HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.role);
+    if (message.role !== "") {
+      writer.uint32(26).string(message.role);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): HierarchicalScope {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseHierarchicalScope } as HierarchicalScope;
+    const message = globalThis.Object.create(
+      baseHierarchicalScope
+    ) as HierarchicalScope;
     message.children = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -428,7 +452,9 @@ export const HierarchicalScope = {
   },
 
   fromJSON(object: any): HierarchicalScope {
-    const message = { ...baseHierarchicalScope } as HierarchicalScope;
+    const message = globalThis.Object.create(
+      baseHierarchicalScope
+    ) as HierarchicalScope;
     message.children = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -488,18 +514,24 @@ const baseRoleAssociation: object = { role: "", id: "" };
 
 export const RoleAssociation = {
   encode(message: RoleAssociation, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.role);
+    if (message.role !== "") {
+      writer.uint32(10).string(message.role);
+    }
     for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(26).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): RoleAssociation {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRoleAssociation } as RoleAssociation;
+    const message = globalThis.Object.create(
+      baseRoleAssociation
+    ) as RoleAssociation;
     message.attributes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -522,7 +554,9 @@ export const RoleAssociation = {
   },
 
   fromJSON(object: any): RoleAssociation {
-    const message = { ...baseRoleAssociation } as RoleAssociation;
+    const message = globalThis.Object.create(
+      baseRoleAssociation
+    ) as RoleAssociation;
     message.attributes = [];
     if (object.role !== undefined && object.role !== null) {
       message.role = String(object.role);
@@ -585,7 +619,9 @@ export const HierarchicalScopesRequest = {
     message: HierarchicalScopesRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.token);
+    if (message.token !== "") {
+      writer.uint32(10).string(message.token);
+    }
     return writer;
   },
 
@@ -595,9 +631,9 @@ export const HierarchicalScopesRequest = {
   ): HierarchicalScopesRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseHierarchicalScopesRequest,
-    } as HierarchicalScopesRequest;
+    const message = globalThis.Object.create(
+      baseHierarchicalScopesRequest
+    ) as HierarchicalScopesRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -613,9 +649,9 @@ export const HierarchicalScopesRequest = {
   },
 
   fromJSON(object: any): HierarchicalScopesRequest {
-    const message = {
-      ...baseHierarchicalScopesRequest,
-    } as HierarchicalScopesRequest;
+    const message = globalThis.Object.create(
+      baseHierarchicalScopesRequest
+    ) as HierarchicalScopesRequest;
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
     } else {
@@ -652,11 +688,15 @@ export const HierarchicalScopesResponse = {
     message: HierarchicalScopesResponse,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.subjectId);
+    if (message.subjectId !== "") {
+      writer.uint32(10).string(message.subjectId);
+    }
     for (const v of message.hierarchicalScopes) {
       HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.token);
+    if (message.token !== "") {
+      writer.uint32(26).string(message.token);
+    }
     return writer;
   },
 
@@ -666,9 +706,9 @@ export const HierarchicalScopesResponse = {
   ): HierarchicalScopesResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseHierarchicalScopesResponse,
-    } as HierarchicalScopesResponse;
+    const message = globalThis.Object.create(
+      baseHierarchicalScopesResponse
+    ) as HierarchicalScopesResponse;
     message.hierarchicalScopes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -693,9 +733,9 @@ export const HierarchicalScopesResponse = {
   },
 
   fromJSON(object: any): HierarchicalScopesResponse {
-    const message = {
-      ...baseHierarchicalScopesResponse,
-    } as HierarchicalScopesResponse;
+    const message = globalThis.Object.create(
+      baseHierarchicalScopesResponse
+    ) as HierarchicalScopesResponse;
     message.hierarchicalScopes = [];
     if (object.subjectId !== undefined && object.subjectId !== null) {
       message.subjectId = String(object.subjectId);
@@ -762,205 +802,169 @@ export const HierarchicalScopesResponse = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: ["io/restorecommerce/attribute.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Subject",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "scope",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "scope",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "scope", number: 2, label: 1, type: 9, jsonName: "scope" },
           {
             name: "role_associations",
             number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.RoleAssociation",
             jsonName: "roleAssociations",
           },
           {
             name: "hierarchical_scopes",
             number: 4,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
             jsonName: "hierarchicalScopes",
           },
           {
             name: "unauthenticated",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "unauthenticated",
           },
-          {
-            name: "token",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 6, label: 1, type: 9, jsonName: "token" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Subject",
       },
       {
-        name: "Tokens",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "expires_in",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "expiresIn",
           },
-          {
-            name: "token",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
-          {
-            name: "scopes",
-            number: 4,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "scopes",
-          },
-          {
-            name: "type",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "type",
-          },
+          { name: "token", number: 3, label: 1, type: 9, jsonName: "token" },
+          { name: "scopes", number: 4, label: 3, type: 9, jsonName: "scopes" },
+          { name: "type", number: 5, label: 1, type: 9, jsonName: "type" },
           {
             name: "interactive",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "interactive",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Tokens",
       },
       {
-        name: "HierarchicalScope",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "children",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
             jsonName: "children",
           },
-          {
-            name: "role",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "role",
-          },
+          { name: "role", number: 3, label: 1, type: 9, jsonName: "role" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "HierarchicalScope",
       },
       {
-        name: "RoleAssociation",
         field: [
-          {
-            name: "role",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "role",
-          },
+          { name: "role", number: 1, label: 1, type: 9, jsonName: "role" },
           {
             name: "attributes",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "attributes",
           },
-          {
-            name: "id",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 3, label: 1, type: 9, jsonName: "id" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RoleAssociation",
       },
       {
-        name: "HierarchicalScopesRequest",
         field: [
-          {
-            name: "token",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 1, label: 1, type: 9, jsonName: "token" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "HierarchicalScopesRequest",
       },
       {
-        name: "HierarchicalScopesResponse",
         field: [
           {
             name: "subject_id",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "subjectId",
           },
           {
             name: "hierarchical_scopes",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
             jsonName: "hierarchicalScopes",
           },
-          {
-            name: "token",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 3, label: 1, type: 9, jsonName: "token" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "HierarchicalScopesResponse",
       },
     ],
     enumType: [],
@@ -973,90 +977,111 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [8, 0, 15, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n Subject of creating User\n",
         },
         {
           path: [4, 0, 2, 0],
           span: [9, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: " user id\n",
         },
         {
           path: [4, 0, 2, 1],
           span: [10, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: " target scope\n",
         },
         {
           path: [4, 0, 2, 2],
           span: [11, 2, 49],
+          leadingDetachedComments: [],
           trailingComments: "  role_associations of user creating the user\n",
         },
         {
           path: [4, 0, 2, 3],
           span: [12, 2, 53],
+          leadingDetachedComments: [],
           trailingComments: " HR scope of user creating the User\n",
         },
         {
           path: [4, 0, 2, 4],
           span: [13, 2, 27],
+          leadingDetachedComments: [],
           trailingComments: " for unauthenticated context\n",
         },
         {
           path: [4, 1, 2, 0],
           span: [18, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " token name\n",
         },
         {
           path: [4, 1, 2, 1],
           span: [19, 2, 24],
+          leadingDetachedComments: [],
           trailingComments: " expiration date for token\n",
         },
-        { path: [4, 1, 2, 2], span: [20, 2, 19], trailingComments: " token\n" },
+        {
+          path: [4, 1, 2, 2],
+          span: [20, 2, 19],
+          leadingDetachedComments: [],
+          trailingComments: " token\n",
+        },
         {
           path: [4, 1, 2, 3],
           span: [21, 2, 29],
+          leadingDetachedComments: [],
           trailingComments: " identifier for role_association\n",
         },
         {
           path: [4, 1, 2, 4],
           span: [22, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " type of token eg: access_token, refresh_token\n",
         },
         {
           path: [4, 2, 2, 0],
           span: [27, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: " root node\n",
         },
         {
           path: [4, 2, 2, 1],
           span: [28, 2, 42],
+          leadingDetachedComments: [],
           trailingComments: " children nodes\n",
         },
         {
           path: [4, 2, 2, 2],
           span: [29, 2, 18],
+          leadingDetachedComments: [],
           trailingComments:
             " role identifier associated with root node scope\n",
         },
         {
           path: [4, 3, 2, 0],
           span: [33, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " role ID\n",
         },
         {
           path: [4, 3, 2, 1],
           span: [34, 2, 65],
+          leadingDetachedComments: [],
           trailingComments:
             " useful attributes for RBAC/ABAC like organizational scope\n",
         },
         {
           path: [4, 3, 2, 2],
           span: [35, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: " identifier for role_association\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.auth.Subject": Subject,
     ".io.restorecommerce.auth.Tokens": Tokens,
@@ -1065,8 +1090,18 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.auth.HierarchicalScopesRequest": HierarchicalScopesRequest,
     ".io.restorecommerce.auth.HierarchicalScopesResponse": HierarchicalScopesResponse,
   },
-  dependencies: [io_restorecommerce_attribute_protoMetadata],
+  dependencies: [protoMetadata1],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

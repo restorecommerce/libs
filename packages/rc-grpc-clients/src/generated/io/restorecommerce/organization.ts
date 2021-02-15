@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../google/protobuf/any";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
-  Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
-} from "../../google/protobuf/empty";
-import {
+  protoMetadata as protoMetadata1,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata2,
+  Empty,
+} from "../../google/protobuf/empty";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.organization";
 
@@ -71,14 +71,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -94,7 +96,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -130,7 +132,7 @@ export const DeleteOrgData = {
     for (const v of message.userIds) {
       writer.uint32(18).string(v!);
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -139,7 +141,9 @@ export const DeleteOrgData = {
   decode(input: Reader | Uint8Array, length?: number): DeleteOrgData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleteOrgData } as DeleteOrgData;
+    const message = globalThis.Object.create(
+      baseDeleteOrgData
+    ) as DeleteOrgData;
     message.orgIds = [];
     message.userIds = [];
     while (reader.pos < end) {
@@ -163,7 +167,9 @@ export const DeleteOrgData = {
   },
 
   fromJSON(object: any): DeleteOrgData {
-    const message = { ...baseDeleteOrgData } as DeleteOrgData;
+    const message = globalThis.Object.create(
+      baseDeleteOrgData
+    ) as DeleteOrgData;
     message.orgIds = [];
     message.userIds = [];
     if (object.orgIds !== undefined && object.orgIds !== null) {
@@ -233,8 +239,10 @@ export const OrganizationList = {
     for (const v of message.items) {
       Organization.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -243,7 +251,9 @@ export const OrganizationList = {
   decode(input: Reader | Uint8Array, length?: number): OrganizationList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrganizationList } as OrganizationList;
+    const message = globalThis.Object.create(
+      baseOrganizationList
+    ) as OrganizationList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -266,7 +276,9 @@ export const OrganizationList = {
   },
 
   fromJSON(object: any): OrganizationList {
-    const message = { ...baseOrganizationList } as OrganizationList;
+    const message = globalThis.Object.create(
+      baseOrganizationList
+    ) as OrganizationList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -344,30 +356,52 @@ const baseOrganization: object = {
 
 export const Organization = {
   encode(message: Organization, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.addressId);
-    writer.uint32(34).string(message.parentId);
+    if (message.addressId !== "") {
+      writer.uint32(26).string(message.addressId);
+    }
+    if (message.parentId !== "") {
+      writer.uint32(34).string(message.parentId);
+    }
     for (const v of message.childrenIds) {
       writer.uint32(42).string(v!);
     }
     for (const v of message.contactPointIds) {
       writer.uint32(50).string(v!);
     }
-    writer.uint32(58).string(message.website);
-    writer.uint32(66).string(message.email);
-    writer.uint32(74).string(message.logo);
-    writer.uint32(82).string(message.vatId);
-    writer.uint32(90).string(message.isicV4);
-    writer.uint32(98).string(message.registration);
-    writer.uint32(106).string(message.registrationCourt);
-    writer.uint32(114).string(message.name);
+    if (message.website !== "") {
+      writer.uint32(58).string(message.website);
+    }
+    if (message.email !== "") {
+      writer.uint32(66).string(message.email);
+    }
+    if (message.logo !== "") {
+      writer.uint32(74).string(message.logo);
+    }
+    if (message.vatId !== "") {
+      writer.uint32(82).string(message.vatId);
+    }
+    if (message.isicV4 !== "") {
+      writer.uint32(90).string(message.isicV4);
+    }
+    if (message.registration !== "") {
+      writer.uint32(98).string(message.registration);
+    }
+    if (message.registrationCourt !== "") {
+      writer.uint32(106).string(message.registrationCourt);
+    }
+    if (message.name !== "") {
+      writer.uint32(114).string(message.name);
+    }
     for (const v of message.paymentMethodIds) {
       writer.uint32(122).string(v!);
     }
-    if (message.data !== undefined && message.data !== undefined) {
+    if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(130).fork()).ldelim();
     }
     return writer;
@@ -376,7 +410,7 @@ export const Organization = {
   decode(input: Reader | Uint8Array, length?: number): Organization {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrganization } as Organization;
+    const message = globalThis.Object.create(baseOrganization) as Organization;
     message.childrenIds = [];
     message.contactPointIds = [];
     message.paymentMethodIds = [];
@@ -440,7 +474,7 @@ export const Organization = {
   },
 
   fromJSON(object: any): Organization {
-    const message = { ...baseOrganization } as Organization;
+    const message = globalThis.Object.create(baseOrganization) as Organization;
     message.childrenIds = [];
     message.contactPointIds = [];
     message.paymentMethodIds = [];
@@ -680,13 +714,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/empty.proto",
@@ -698,196 +732,179 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "DeleteOrgData",
         field: [
-          {
-            name: "org_ids",
-            number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "orgIds",
-          },
+          { name: "org_ids", number: 1, label: 3, type: 9, jsonName: "orgIds" },
           {
             name: "user_ids",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "userIds",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "DeleteOrgData",
       },
       {
-        name: "OrganizationList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.organization.Organization",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrganizationList",
       },
       {
-        name: "Organization",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
           {
             name: "address_id",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "addressId",
           },
           {
             name: "parent_id",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "parentId",
           },
           {
             name: "children_ids",
             number: 5,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "childrenIds",
           },
           {
             name: "contact_point_ids",
             number: 6,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "contactPointIds",
           },
           {
             name: "website",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "website",
           },
-          {
-            name: "email",
-            number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
-          {
-            name: "logo",
-            number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "logo",
-          },
-          {
-            name: "vat_id",
-            number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "vatId",
-          },
+          { name: "email", number: 8, label: 1, type: 9, jsonName: "email" },
+          { name: "logo", number: 9, label: 1, type: 9, jsonName: "logo" },
+          { name: "vat_id", number: 10, label: 1, type: 9, jsonName: "vatId" },
           {
             name: "isic_v4",
             number: 11,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "isicV4",
           },
           {
             name: "registration",
             number: 12,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "registration",
           },
           {
             name: "registration_court",
             number: 13,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "registrationCourt",
           },
-          {
-            name: "name",
-            number: 14,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 14, label: 1, type: 9, jsonName: "name" },
           {
             name: "payment_method_ids",
             number: 15,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "paymentMethodIds",
           },
           {
             name: "data",
             number: 16,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "data",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Organization",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -915,6 +932,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.organization.OrganizationList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -925,45 +943,52 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 3, 2, 0],
           span: [35, 2, 16],
+          leadingDetachedComments: [],
           trailingComments: "/ Organization ID, unique, key\n",
         },
         {
           path: [4, 3, 2, 2],
           span: [37, 2, 24],
+          leadingDetachedComments: [],
           trailingComments: "/ Address for the organization\n",
         },
         {
           path: [4, 3, 2, 3],
           span: [38, 2, 23],
+          leadingDetachedComments: [],
           trailingComments:
             "  Hierarchically superior organization; may be null\n",
         },
         {
           path: [4, 3, 2, 4],
           span: [39, 2, 35],
+          leadingDetachedComments: [],
           trailingComments:
             " Hierarchically inferior organizations; may be null/empty\n",
         },
         {
           path: [4, 3, 2, 5],
           span: [40, 2, 40],
+          leadingDetachedComments: [],
           trailingComments:
             " list of possible legal addresses of different types\n",
         },
         {
           path: [4, 3, 2, 8],
           span: [43, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " base64; arangoDB does not support blob storage\n",
         },
         {
           path: [4, 3, 2, 15],
           span: [50, 2, 32],
+          leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.organization.Deleted": Deleted,
     ".io.restorecommerce.organization.DeleteOrgData": DeleteOrgData,
@@ -971,13 +996,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.organization.Organization": Organization,
   },
   dependencies: [
-    io_restorecommerce_resource_base_protoMetadata,
-    google_protobuf_empty_protoMetadata,
-    google_protobuf_any_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

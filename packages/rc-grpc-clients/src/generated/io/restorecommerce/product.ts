@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
-  Image,
-  protoMetadata as io_restorecommerce_image_protoMetadata,
-} from "../../io/restorecommerce/image";
-import { Writer, Reader } from "protobufjs/minimal";
-import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata4,
+  Image,
+} from "../../io/restorecommerce/image";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product";
 
@@ -97,15 +97,19 @@ const baseMainProduct: object = { id: "", active: false };
 
 export const MainProduct = {
   encode(message: MainProduct, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     if (message.product !== undefined) {
       Product.encode(message.product, writer.uint32(18).fork()).ldelim();
     }
     if (message.bundle !== undefined) {
       Bundle.encode(message.bundle, writer.uint32(26).fork()).ldelim();
     }
-    writer.uint32(32).bool(message.active);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.active === true) {
+      writer.uint32(32).bool(message.active);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(42).fork()).ldelim();
     }
     return writer;
@@ -114,7 +118,7 @@ export const MainProduct = {
   decode(input: Reader | Uint8Array, length?: number): MainProduct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMainProduct } as MainProduct;
+    const message = globalThis.Object.create(baseMainProduct) as MainProduct;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -142,7 +146,7 @@ export const MainProduct = {
   },
 
   fromJSON(object: any): MainProduct {
-    const message = { ...baseMainProduct } as MainProduct;
+    const message = globalThis.Object.create(baseMainProduct) as MainProduct;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -229,11 +233,21 @@ const baseProduct: object = {
 
 export const Product = {
   encode(message: Product, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.name);
-    writer.uint32(26).string(message.description);
-    writer.uint32(34).string(message.manufacturerId);
-    writer.uint32(42).string(message.taricCode);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(26).string(message.description);
+    }
+    if (message.manufacturerId !== "") {
+      writer.uint32(34).string(message.manufacturerId);
+    }
+    if (message.taricCode !== "") {
+      writer.uint32(42).string(message.taricCode);
+    }
     if (message.prototype !== undefined) {
       Identifier.encode(message.prototype, writer.uint32(50).fork()).ldelim();
     }
@@ -246,14 +260,16 @@ export const Product = {
     for (const v of message.variants) {
       Variant.encode(v!, writer.uint32(74).fork()).ldelim();
     }
-    writer.uint32(82).string(message.gtin);
+    if (message.gtin !== "") {
+      writer.uint32(82).string(message.gtin);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Product {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProduct } as Product;
+    const message = globalThis.Object.create(baseProduct) as Product;
     message.taxTypeId = [];
     message.variants = [];
     while (reader.pos < end) {
@@ -298,7 +314,7 @@ export const Product = {
   },
 
   fromJSON(object: any): Product {
-    const message = { ...baseProduct } as Product;
+    const message = globalThis.Object.create(baseProduct) as Product;
     message.taxTypeId = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
@@ -449,14 +465,16 @@ const baseIdentifier: object = { id: "" };
 
 export const Identifier = {
   encode(message: Identifier, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Identifier {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseIdentifier } as Identifier;
+    const message = globalThis.Object.create(baseIdentifier) as Identifier;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -472,7 +490,7 @@ export const Identifier = {
   },
 
   fromJSON(object: any): Identifier {
-    const message = { ...baseIdentifier } as Identifier;
+    const message = globalThis.Object.create(baseIdentifier) as Identifier;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -505,8 +523,10 @@ export const ProductList = {
     for (const v of message.items) {
       MainProduct.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -515,7 +535,7 @@ export const ProductList = {
   decode(input: Reader | Uint8Array, length?: number): ProductList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProductList } as ProductList;
+    const message = globalThis.Object.create(baseProductList) as ProductList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -538,7 +558,7 @@ export const ProductList = {
   },
 
   fromJSON(object: any): ProductList {
-    const message = { ...baseProductList } as ProductList;
+    const message = globalThis.Object.create(baseProductList) as ProductList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -610,17 +630,33 @@ const baseVariant: object = {
 
 export const Variant = {
   encode(message: Variant, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.name);
-    writer.uint32(26).string(message.description);
-    writer.uint32(32).int32(message.stockLevel);
-    writer.uint32(41).double(message.price);
-    writer.uint32(48).bool(message.sale);
-    writer.uint32(57).double(message.salePrice);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(26).string(message.description);
+    }
+    if (message.stockLevel !== 0) {
+      writer.uint32(32).int32(message.stockLevel);
+    }
+    if (message.price !== 0) {
+      writer.uint32(41).double(message.price);
+    }
+    if (message.sale === true) {
+      writer.uint32(48).bool(message.sale);
+    }
+    if (message.salePrice !== 0) {
+      writer.uint32(57).double(message.salePrice);
+    }
     for (const v of message.image) {
       Image.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    writer.uint32(74).string(message.stockKeepingUnit);
+    if (message.stockKeepingUnit !== "") {
+      writer.uint32(74).string(message.stockKeepingUnit);
+    }
     for (const v of message.attributes) {
       VariantAttribute.encode(v!, writer.uint32(82).fork()).ldelim();
     }
@@ -630,7 +666,7 @@ export const Variant = {
   decode(input: Reader | Uint8Array, length?: number): Variant {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseVariant } as Variant;
+    const message = globalThis.Object.create(baseVariant) as Variant;
     message.image = [];
     message.attributes = [];
     while (reader.pos < end) {
@@ -677,7 +713,7 @@ export const Variant = {
   },
 
   fromJSON(object: any): Variant {
-    const message = { ...baseVariant } as Variant;
+    const message = globalThis.Object.create(baseVariant) as Variant;
     message.image = [];
     message.attributes = [];
     if (object.id !== undefined && object.id !== null) {
@@ -828,7 +864,9 @@ const baseVariantAttribute: object = { key: "", values: "" };
 
 export const VariantAttribute = {
   encode(message: VariantAttribute, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.key);
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
     for (const v of message.values) {
       writer.uint32(18).string(v!);
     }
@@ -838,7 +876,9 @@ export const VariantAttribute = {
   decode(input: Reader | Uint8Array, length?: number): VariantAttribute {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseVariantAttribute } as VariantAttribute;
+    const message = globalThis.Object.create(
+      baseVariantAttribute
+    ) as VariantAttribute;
     message.values = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -858,7 +898,9 @@ export const VariantAttribute = {
   },
 
   fromJSON(object: any): VariantAttribute {
-    const message = { ...baseVariantAttribute } as VariantAttribute;
+    const message = globalThis.Object.create(
+      baseVariantAttribute
+    ) as VariantAttribute;
     message.values = [];
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
@@ -905,23 +947,31 @@ const baseBundle: object = { id: "", name: "", description: "", price: 0 };
 
 export const Bundle = {
   encode(message: Bundle, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.description);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
     for (const v of message.image) {
       Image.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.product) {
       BundleProduct.encode(v!, writer.uint32(50).fork()).ldelim();
     }
-    writer.uint32(57).double(message.price);
+    if (message.price !== 0) {
+      writer.uint32(57).double(message.price);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Bundle {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBundle } as Bundle;
+    const message = globalThis.Object.create(baseBundle) as Bundle;
     message.image = [];
     message.product = [];
     while (reader.pos < end) {
@@ -954,7 +1004,7 @@ export const Bundle = {
   },
 
   fromJSON(object: any): Bundle {
-    const message = { ...baseBundle } as Bundle;
+    const message = globalThis.Object.create(baseBundle) as Bundle;
     message.image = [];
     message.product = [];
     if (object.id !== undefined && object.id !== null) {
@@ -1054,15 +1104,21 @@ const baseBundleProduct: object = { productId: "", quantity: 0 };
 
 export const BundleProduct = {
   encode(message: BundleProduct, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.productId);
-    writer.uint32(16).uint32(message.quantity);
+    if (message.productId !== "") {
+      writer.uint32(10).string(message.productId);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(16).uint32(message.quantity);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): BundleProduct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseBundleProduct } as BundleProduct;
+    const message = globalThis.Object.create(
+      baseBundleProduct
+    ) as BundleProduct;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1081,7 +1137,9 @@ export const BundleProduct = {
   },
 
   fromJSON(object: any): BundleProduct {
-    const message = { ...baseBundleProduct } as BundleProduct;
+    const message = globalThis.Object.create(
+      baseBundleProduct
+    ) as BundleProduct;
     if (object.productId !== undefined && object.productId !== null) {
       message.productId = String(object.productId);
     } else {
@@ -1122,14 +1180,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1145,7 +1205,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -1180,13 +1240,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -1198,20 +1258,13 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "MainProduct",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "product",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.product.Product",
             oneofIndex: 0,
             jsonName: "product",
@@ -1219,73 +1272,61 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "bundle",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.product.Bundle",
             oneofIndex: 0,
             jsonName: "bundle",
           },
-          {
-            name: "active",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "active",
-          },
+          { name: "active", number: 4, label: 1, type: 8, jsonName: "active" },
           {
             name: "meta",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "product_type" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "MainProduct",
       },
       {
-        name: "Product",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "name",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "name", number: 2, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "manufacturer_id",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "manufacturerId",
           },
           {
             name: "taric_code",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "taricCode",
           },
           {
             name: "prototype",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.product.Identifier",
             oneofIndex: 0,
             jsonName: "prototype",
@@ -1293,8 +1334,8 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "category",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.product.Identifier",
             oneofIndex: 0,
             jsonName: "category",
@@ -1302,249 +1343,228 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "tax_type_id",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "taxTypeId",
           },
           {
             name: "variants",
             number: 9,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product.Variant",
             jsonName: "variants",
           },
-          {
-            name: "gtin",
-            number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "gtin",
-          },
+          { name: "gtin", number: 10, label: 1, type: 9, jsonName: "gtin" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "classification" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "Product",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Identifier",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "ProductList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product.MainProduct",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductList",
       },
       {
-        name: "Variant",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "name",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "name", number: 2, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "stock_level",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "stockLevel",
           },
-          {
-            name: "price",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
-            jsonName: "price",
-          },
-          {
-            name: "sale",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "sale",
-          },
+          { name: "price", number: 5, label: 1, type: 1, jsonName: "price" },
+          { name: "sale", number: 6, label: 1, type: 8, jsonName: "sale" },
           {
             name: "sale_price",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "salePrice",
           },
           {
             name: "image",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.image.Image",
             jsonName: "image",
           },
           {
             name: "stock_keeping_unit",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "stockKeepingUnit",
           },
           {
             name: "attributes",
             number: 10,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product.VariantAttribute",
             jsonName: "attributes",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Variant",
       },
       {
-        name: "VariantAttribute",
         field: [
-          {
-            name: "key",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "values",
-            number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "values",
-          },
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "values", number: 2, label: 3, type: 9, jsonName: "values" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "VariantAttribute",
       },
       {
-        name: "Bundle",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "image",
             number: 5,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.image.Image",
             jsonName: "image",
           },
           {
             name: "product",
             number: 6,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product.BundleProduct",
             jsonName: "product",
           },
-          {
-            name: "price",
-            number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
-            jsonName: "price",
-          },
+          { name: "price", number: 7, label: 1, type: 1, jsonName: "price" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Bundle",
       },
       {
-        name: "BundleProduct",
         field: [
           {
             name: "product_id",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "productId",
           },
           {
             name: "quantity",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "quantity",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "BundleProduct",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -1572,6 +1592,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.product.ProductList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1582,12 +1603,13 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [19, 0, 27, 1],
+          leadingDetachedComments: [],
           leadingComments: " Product resource\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.product.MainProduct": MainProduct,
     ".io.restorecommerce.product.Product": Product,
@@ -1600,13 +1622,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product.Deleted": Deleted,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_image_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

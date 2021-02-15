@@ -1,31 +1,31 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../google/protobuf/any";
 import {
   Struct,
-  protoMetadata as google_protobuf_struct_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../google/protobuf/struct";
 import { Observable } from "rxjs";
 import {
+  protoMetadata as protoMetadata1,
+  Empty,
+} from "../../google/protobuf/empty";
+import {
+  protoMetadata as protoMetadata6,
   Attribute,
-  protoMetadata as io_restorecommerce_attribute_protoMetadata,
 } from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
-import {
-  Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
-} from "../../google/protobuf/empty";
 
 export const protobufPackage = "io.restorecommerce.ostorage";
 
@@ -124,7 +124,7 @@ export const CopyRequest = {
     for (const v of message.items) {
       CopyRequestItem.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -133,7 +133,7 @@ export const CopyRequest = {
   decode(input: Reader | Uint8Array, length?: number): CopyRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCopyRequest } as CopyRequest;
+    const message = globalThis.Object.create(baseCopyRequest) as CopyRequest;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -153,7 +153,7 @@ export const CopyRequest = {
   },
 
   fromJSON(object: any): CopyRequest {
-    const message = { ...baseCopyRequest } as CopyRequest;
+    const message = globalThis.Object.create(baseCopyRequest) as CopyRequest;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -214,7 +214,7 @@ export const CopyResponse = {
   decode(input: Reader | Uint8Array, length?: number): CopyResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCopyResponse } as CopyResponse;
+    const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -233,7 +233,7 @@ export const CopyResponse = {
   },
 
   fromJSON(object: any): CopyResponse {
-    const message = { ...baseCopyResponse } as CopyResponse;
+    const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
     if (object.response !== undefined && object.response !== null) {
       for (const e of object.response) {
@@ -271,13 +271,19 @@ const baseCopyRequestItem: object = { bucket: "", copySource: "", key: "" };
 
 export const CopyRequestItem = {
   encode(message: CopyRequestItem, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.bucket);
-    writer.uint32(18).string(message.copySource);
-    writer.uint32(26).string(message.key);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.bucket !== "") {
+      writer.uint32(10).string(message.bucket);
+    }
+    if (message.copySource !== "") {
+      writer.uint32(18).string(message.copySource);
+    }
+    if (message.key !== "") {
+      writer.uint32(26).string(message.key);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
     }
-    if (message.options !== undefined && message.options !== undefined) {
+    if (message.options !== undefined) {
       Options.encode(message.options, writer.uint32(42).fork()).ldelim();
     }
     return writer;
@@ -286,7 +292,9 @@ export const CopyRequestItem = {
   decode(input: Reader | Uint8Array, length?: number): CopyRequestItem {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCopyRequestItem } as CopyRequestItem;
+    const message = globalThis.Object.create(
+      baseCopyRequestItem
+    ) as CopyRequestItem;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -314,7 +322,9 @@ export const CopyRequestItem = {
   },
 
   fromJSON(object: any): CopyRequestItem {
-    const message = { ...baseCopyRequestItem } as CopyRequestItem;
+    const message = globalThis.Object.create(
+      baseCopyRequestItem
+    ) as CopyRequestItem;
     if (object.bucket !== undefined && object.bucket !== null) {
       message.bucket = String(object.bucket);
     } else {
@@ -392,13 +402,19 @@ const baseCopyResponseItem: object = { bucket: "", copySource: "", key: "" };
 
 export const CopyResponseItem = {
   encode(message: CopyResponseItem, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.bucket);
-    writer.uint32(18).string(message.copySource);
-    writer.uint32(26).string(message.key);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.bucket !== "") {
+      writer.uint32(10).string(message.bucket);
+    }
+    if (message.copySource !== "") {
+      writer.uint32(18).string(message.copySource);
+    }
+    if (message.key !== "") {
+      writer.uint32(26).string(message.key);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
     }
-    if (message.options !== undefined && message.options !== undefined) {
+    if (message.options !== undefined) {
       Options.encode(message.options, writer.uint32(42).fork()).ldelim();
     }
     return writer;
@@ -407,7 +423,9 @@ export const CopyResponseItem = {
   decode(input: Reader | Uint8Array, length?: number): CopyResponseItem {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCopyResponseItem } as CopyResponseItem;
+    const message = globalThis.Object.create(
+      baseCopyResponseItem
+    ) as CopyResponseItem;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -435,7 +453,9 @@ export const CopyResponseItem = {
   },
 
   fromJSON(object: any): CopyResponseItem {
-    const message = { ...baseCopyResponseItem } as CopyResponseItem;
+    const message = globalThis.Object.create(
+      baseCopyResponseItem
+    ) as CopyResponseItem;
     if (object.bucket !== undefined && object.bucket !== null) {
       message.bucket = String(object.bucket);
     } else {
@@ -521,17 +541,31 @@ const baseOptions: object = {
 
 export const Options = {
   encode(message: Options, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.encoding);
-    writer.uint32(18).string(message.contentType);
-    writer.uint32(26).string(message.contentLanguage);
-    writer.uint32(34).string(message.contentDisposition);
-    writer.uint32(40).int32(message.length);
-    writer.uint32(50).string(message.version);
-    writer.uint32(58).string(message.md5);
+    if (message.encoding !== "") {
+      writer.uint32(10).string(message.encoding);
+    }
+    if (message.contentType !== "") {
+      writer.uint32(18).string(message.contentType);
+    }
+    if (message.contentLanguage !== "") {
+      writer.uint32(26).string(message.contentLanguage);
+    }
+    if (message.contentDisposition !== "") {
+      writer.uint32(34).string(message.contentDisposition);
+    }
+    if (message.length !== 0) {
+      writer.uint32(40).int32(message.length);
+    }
+    if (message.version !== "") {
+      writer.uint32(50).string(message.version);
+    }
+    if (message.md5 !== "") {
+      writer.uint32(58).string(message.md5);
+    }
     for (const v of message.tags) {
       Attribute.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    if (message.data !== undefined && message.data !== undefined) {
+    if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(74).fork()).ldelim();
     }
     return writer;
@@ -540,7 +574,7 @@ export const Options = {
   decode(input: Reader | Uint8Array, length?: number): Options {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOptions } as Options;
+    const message = globalThis.Object.create(baseOptions) as Options;
     message.tags = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -581,7 +615,7 @@ export const Options = {
   },
 
   fromJSON(object: any): Options {
-    const message = { ...baseOptions } as Options;
+    const message = globalThis.Object.create(baseOptions) as Options;
     message.tags = [];
     if (object.encoding !== undefined && object.encoding !== null) {
       message.encoding = String(object.encoding);
@@ -721,17 +755,25 @@ const baseObject: object = { key: "", bucket: "", url: "" };
 
 export const Object = {
   encode(message: Object, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.key);
-    writer.uint32(18).string(message.bucket);
-    writer.uint32(26).bytes(message.object);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.object.length !== 0) {
+      writer.uint32(26).bytes(message.object);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
     }
-    writer.uint32(42).string(message.url);
-    if (message.options !== undefined && message.options !== undefined) {
+    if (message.url !== "") {
+      writer.uint32(42).string(message.url);
+    }
+    if (message.options !== undefined) {
       Options.encode(message.options, writer.uint32(50).fork()).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(58).fork()).ldelim();
     }
     return writer;
@@ -740,7 +782,7 @@ export const Object = {
   decode(input: Reader | Uint8Array, length?: number): Object {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseObject } as Object;
+    const message = globalThis.Object.create(baseObject) as Object;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -774,7 +816,7 @@ export const Object = {
   },
 
   fromJSON(object: any): Object {
-    const message = { ...baseObject } as Object;
+    const message = globalThis.Object.create(baseObject) as Object;
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
     } else {
@@ -878,10 +920,16 @@ const baseGetRequest: object = { key: "", bucket: "", download: false };
 
 export const GetRequest = {
   encode(message: GetRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.key);
-    writer.uint32(18).string(message.bucket);
-    writer.uint32(24).bool(message.download);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.download === true) {
+      writer.uint32(24).bool(message.download);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -890,7 +938,7 @@ export const GetRequest = {
   decode(input: Reader | Uint8Array, length?: number): GetRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGetRequest } as GetRequest;
+    const message = globalThis.Object.create(baseGetRequest) as GetRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -915,7 +963,7 @@ export const GetRequest = {
   },
 
   fromJSON(object: any): GetRequest {
-    const message = { ...baseGetRequest } as GetRequest;
+    const message = globalThis.Object.create(baseGetRequest) as GetRequest;
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
     } else {
@@ -990,7 +1038,7 @@ export const ObjectsData = {
   decode(input: Reader | Uint8Array, length?: number): ObjectsData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseObjectsData } as ObjectsData;
+    const message = globalThis.Object.create(baseObjectsData) as ObjectsData;
     message.objectData = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1007,7 +1055,7 @@ export const ObjectsData = {
   },
 
   fromJSON(object: any): ObjectsData {
-    const message = { ...baseObjectsData } as ObjectsData;
+    const message = globalThis.Object.create(baseObjectsData) as ObjectsData;
     message.objectData = [];
     if (object.objectData !== undefined && object.objectData !== null) {
       for (const e of object.objectData) {
@@ -1045,9 +1093,13 @@ const baseObjectData: object = { objectName: "", url: "" };
 
 export const ObjectData = {
   encode(message: ObjectData, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.objectName);
-    writer.uint32(18).string(message.url);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.objectName !== "") {
+      writer.uint32(10).string(message.objectName);
+    }
+    if (message.url !== "") {
+      writer.uint32(18).string(message.url);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1056,7 +1108,7 @@ export const ObjectData = {
   decode(input: Reader | Uint8Array, length?: number): ObjectData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseObjectData } as ObjectData;
+    const message = globalThis.Object.create(baseObjectData) as ObjectData;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1078,7 +1130,7 @@ export const ObjectData = {
   },
 
   fromJSON(object: any): ObjectData {
-    const message = { ...baseObjectData } as ObjectData;
+    const message = globalThis.Object.create(baseObjectData) as ObjectData;
     if (object.objectName !== undefined && object.objectName !== null) {
       message.objectName = String(object.objectName);
     } else {
@@ -1131,9 +1183,13 @@ const baseDeleteRequest: object = { key: "", bucket: "" };
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.key);
-    writer.uint32(18).string(message.bucket);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1142,7 +1198,9 @@ export const DeleteRequest = {
   decode(input: Reader | Uint8Array, length?: number): DeleteRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleteRequest } as DeleteRequest;
+    const message = globalThis.Object.create(
+      baseDeleteRequest
+    ) as DeleteRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1164,7 +1222,9 @@ export const DeleteRequest = {
   },
 
   fromJSON(object: any): DeleteRequest {
-    const message = { ...baseDeleteRequest } as DeleteRequest;
+    const message = globalThis.Object.create(
+      baseDeleteRequest
+    ) as DeleteRequest;
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
     } else {
@@ -1219,23 +1279,31 @@ const baseResponse: object = { url: "", bucket: "", key: "", length: 0 };
 
 export const Response = {
   encode(message: Response, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.url);
-    writer.uint32(18).string(message.bucket);
-    writer.uint32(26).string(message.key);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.url !== "") {
+      writer.uint32(10).string(message.url);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.key !== "") {
+      writer.uint32(26).string(message.key);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.tags) {
       Attribute.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    writer.uint32(48).int32(message.length);
+    if (message.length !== 0) {
+      writer.uint32(48).int32(message.length);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Response {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResponse } as Response;
+    const message = globalThis.Object.create(baseResponse) as Response;
     message.tags = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1267,7 +1335,7 @@ export const Response = {
   },
 
   fromJSON(object: any): Response {
-    const message = { ...baseResponse } as Response;
+    const message = globalThis.Object.create(baseResponse) as Response;
     message.tags = [];
     if (object.url !== undefined && object.url !== null) {
       message.url = String(object.url);
@@ -1359,11 +1427,13 @@ const baseListRequest: object = { bucket: "" };
 
 export const ListRequest = {
   encode(message: ListRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.bucket);
-    if (message.filter !== undefined && message.filter !== undefined) {
+    if (message.bucket !== "") {
+      writer.uint32(10).string(message.bucket);
+    }
+    if (message.filter !== undefined) {
       Struct.encode(message.filter, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1372,7 +1442,7 @@ export const ListRequest = {
   decode(input: Reader | Uint8Array, length?: number): ListRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseListRequest } as ListRequest;
+    const message = globalThis.Object.create(baseListRequest) as ListRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1394,7 +1464,7 @@ export const ListRequest = {
   },
 
   fromJSON(object: any): ListRequest {
-    const message = { ...baseListRequest } as ListRequest;
+    const message = globalThis.Object.create(baseListRequest) as ListRequest;
     if (object.bucket !== undefined && object.bucket !== null) {
       message.bucket = String(object.bucket);
     } else {
@@ -1455,13 +1525,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "google/protobuf/struct.proto",
@@ -1474,433 +1544,396 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "CopyRequest",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.ostorage.CopyRequestItem",
             jsonName: "items",
           },
           {
             name: "subject",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CopyRequest",
       },
       {
-        name: "CopyResponse",
         field: [
           {
             name: "response",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.ostorage.CopyResponseItem",
             jsonName: "response",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CopyResponse",
       },
       {
+        field: [
+          { name: "bucket", number: 1, label: 1, type: 9, jsonName: "bucket" },
+          {
+            name: "copySource",
+            number: 2,
+            label: 1,
+            type: 9,
+            jsonName: "copySource",
+          },
+          { name: "key", number: 3, label: 1, type: 9, jsonName: "key" },
+          {
+            name: "meta",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          {
+            name: "options",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.ostorage.Options",
+            jsonName: "options",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "CopyRequestItem",
+      },
+      {
         field: [
-          {
-            name: "bucket",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
+          { name: "bucket", number: 1, label: 1, type: 9, jsonName: "bucket" },
           {
             name: "copySource",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "copySource",
           },
-          {
-            name: "key",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
+          { name: "key", number: 3, label: 1, type: 9, jsonName: "key" },
           {
             name: "meta",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
           {
             name: "options",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.ostorage.Options",
             jsonName: "options",
           },
         ],
-      },
-      {
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "CopyResponseItem",
-        field: [
-          {
-            name: "bucket",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
-          {
-            name: "copySource",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "copySource",
-          },
-          {
-            name: "key",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "meta",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
-            typeName: ".io.restorecommerce.meta.Meta",
-            jsonName: "meta",
-          },
-          {
-            name: "options",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
-            typeName: ".io.restorecommerce.ostorage.Options",
-            jsonName: "options",
-          },
-        ],
       },
       {
-        name: "Options",
         field: [
           {
             name: "encoding",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "encoding",
           },
           {
             name: "content_type",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "contentType",
           },
           {
             name: "content_language",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "contentLanguage",
           },
           {
             name: "content_disposition",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "contentDisposition",
           },
-          {
-            name: "length",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "length",
-          },
+          { name: "length", number: 5, label: 1, type: 5, jsonName: "length" },
           {
             name: "version",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "version",
           },
-          {
-            name: "md5",
-            number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "md5",
-          },
+          { name: "md5", number: 7, label: 1, type: 9, jsonName: "md5" },
           {
             name: "tags",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "tags",
           },
           {
             name: "data",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "data",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Options",
       },
       {
-        name: "Object",
         field: [
-          {
-            name: "key",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "bucket",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
-          {
-            name: "object",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BYTES",
-            jsonName: "object",
-          },
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
+          { name: "object", number: 3, label: 1, type: 12, jsonName: "object" },
           {
             name: "meta",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "url",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "url",
-          },
+          { name: "url", number: 5, label: 1, type: 9, jsonName: "url" },
           {
             name: "options",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.ostorage.Options",
             jsonName: "options",
           },
           {
             name: "subject",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Object",
       },
       {
-        name: "GetRequest",
         field: [
-          {
-            name: "key",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "bucket",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
           {
             name: "download",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "download",
           },
           {
             name: "subject",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "GetRequest",
       },
       {
-        name: "ObjectsData",
         field: [
           {
             name: "object_data",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.ostorage.ObjectData",
             jsonName: "objectData",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ObjectsData",
       },
       {
-        name: "ObjectData",
         field: [
           {
             name: "object_name",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "objectName",
           },
-          {
-            name: "url",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "url",
-          },
+          { name: "url", number: 2, label: 1, type: 9, jsonName: "url" },
           {
             name: "meta",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ObjectData",
       },
       {
-        name: "DeleteRequest",
         field: [
-          {
-            name: "key",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "bucket",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "DeleteRequest",
       },
       {
-        name: "Response",
         field: [
-          {
-            name: "url",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "url",
-          },
-          {
-            name: "bucket",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
-          {
-            name: "key",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
+          { name: "url", number: 1, label: 1, type: 9, jsonName: "url" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
+          { name: "key", number: 3, label: 1, type: 9, jsonName: "key" },
           {
             name: "meta",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
           {
             name: "tags",
             number: 5,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "tags",
           },
-          {
-            name: "length",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "length",
-          },
+          { name: "length", number: 6, label: 1, type: 5, jsonName: "length" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Response",
       },
       {
-        name: "ListRequest",
         field: [
-          {
-            name: "bucket",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "bucket",
-          },
+          { name: "bucket", number: 1, label: 1, type: 9, jsonName: "bucket" },
           {
             name: "filter",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Struct",
             jsonName: "filter",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ListRequest",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Get",
@@ -1930,6 +1963,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.ostorage.CopyResponse",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1940,23 +1974,26 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 4, 2, 8],
           span: [53, 2, 31],
+          leadingDetachedComments: [],
           trailingComments: " optional meta data ex: from and to dates\n",
         },
         {
           path: [4, 10, 2, 5],
           span: [95, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: " file size of uploaded object\n",
         },
         {
           path: [4, 11, 2, 1],
           span: [100, 2, 36],
+          leadingDetachedComments: [],
           trailingComments:
             "/ Filter based on fieldName|operation, value|list\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.ostorage.CopyRequest": CopyRequest,
     ".io.restorecommerce.ostorage.CopyResponse": CopyResponse,
@@ -1972,12 +2009,12 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.ostorage.ListRequest": ListRequest,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    google_protobuf_struct_protoMetadata,
-    google_protobuf_any_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-    io_restorecommerce_attribute_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+    protoMetadata6,
   ],
 };
 
@@ -1988,7 +2025,7 @@ var globalThis: any = (() => {
   if (typeof self !== "undefined") return self;
   if (typeof window !== "undefined") return window;
   if (typeof global !== "undefined") return global;
-  throw new Error("Unable to locate global object");
+  throw "Unable to locate global object";
 })();
 
 const atob: (b64: string) => string =

@@ -1,12 +1,12 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata1,
 } from "../../io/restorecommerce/meta";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -204,8 +204,10 @@ const baseOrderId: object = { orderId: "" };
 
 export const OrderId = {
   encode(message: OrderId, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.orderId);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.orderId !== "") {
+      writer.uint32(10).string(message.orderId);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -214,7 +216,7 @@ export const OrderId = {
   decode(input: Reader | Uint8Array, length?: number): OrderId {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrderId } as OrderId;
+    const message = globalThis.Object.create(baseOrderId) as OrderId;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -233,7 +235,7 @@ export const OrderId = {
   },
 
   fromJSON(object: any): OrderId {
-    const message = { ...baseOrderId } as OrderId;
+    const message = globalThis.Object.create(baseOrderId) as OrderId;
     if (object.orderId !== undefined && object.orderId !== null) {
       message.orderId = String(object.orderId);
     } else {
@@ -277,9 +279,13 @@ const baseTrackingNumber: object = { orderId: "", shipmentType: "" };
 
 export const TrackingNumber = {
   encode(message: TrackingNumber, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.orderId);
-    writer.uint32(18).string(message.shipmentType);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.orderId !== "") {
+      writer.uint32(10).string(message.orderId);
+    }
+    if (message.shipmentType !== "") {
+      writer.uint32(18).string(message.shipmentType);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -288,7 +294,9 @@ export const TrackingNumber = {
   decode(input: Reader | Uint8Array, length?: number): TrackingNumber {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTrackingNumber } as TrackingNumber;
+    const message = globalThis.Object.create(
+      baseTrackingNumber
+    ) as TrackingNumber;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -310,7 +318,9 @@ export const TrackingNumber = {
   },
 
   fromJSON(object: any): TrackingNumber {
-    const message = { ...baseTrackingNumber } as TrackingNumber;
+    const message = globalThis.Object.create(
+      baseTrackingNumber
+    ) as TrackingNumber;
     if (object.orderId !== undefined && object.orderId !== null) {
       message.orderId = String(object.orderId);
     } else {
@@ -366,18 +376,22 @@ const baseStatus: object = { Status: "", OrderId: "" };
 
 export const Status = {
   encode(message: Status, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.Status);
+    if (message.Status !== "") {
+      writer.uint32(10).string(message.Status);
+    }
     for (const v of message.shipmentStatus) {
       shipmentStatus.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.OrderId);
+    if (message.OrderId !== "") {
+      writer.uint32(26).string(message.OrderId);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Status {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseStatus } as Status;
+    const message = globalThis.Object.create(baseStatus) as Status;
     message.shipmentStatus = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -402,7 +416,7 @@ export const Status = {
   },
 
   fromJSON(object: any): Status {
-    const message = { ...baseStatus } as Status;
+    const message = globalThis.Object.create(baseStatus) as Status;
     message.shipmentStatus = [];
     if (object.Status !== undefined && object.Status !== null) {
       message.Status = String(object.Status);
@@ -471,7 +485,9 @@ export const AllFulfillments = {
   decode(input: Reader | Uint8Array, length?: number): AllFulfillments {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAllFulfillments } as AllFulfillments;
+    const message = globalThis.Object.create(
+      baseAllFulfillments
+    ) as AllFulfillments;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -488,7 +504,9 @@ export const AllFulfillments = {
   },
 
   fromJSON(object: any): AllFulfillments {
-    const message = { ...baseAllFulfillments } as AllFulfillments;
+    const message = globalThis.Object.create(
+      baseAllFulfillments
+    ) as AllFulfillments;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -529,9 +547,15 @@ const baseItems: object = {
 
 export const Items = {
   encode(message: Items, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.fulfillmentStatus);
-    writer.uint32(18).string(message.orderId);
-    writer.uint32(26).string(message.serviceType);
+    if (message.fulfillmentStatus !== "") {
+      writer.uint32(10).string(message.fulfillmentStatus);
+    }
+    if (message.orderId !== "") {
+      writer.uint32(18).string(message.orderId);
+    }
+    if (message.serviceType !== "") {
+      writer.uint32(26).string(message.serviceType);
+    }
     for (const v of message.shipmentNumber) {
       writer.uint32(34).string(v!);
     }
@@ -541,7 +565,7 @@ export const Items = {
   decode(input: Reader | Uint8Array, length?: number): Items {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseItems } as Items;
+    const message = globalThis.Object.create(baseItems) as Items;
     message.shipmentNumber = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -567,7 +591,7 @@ export const Items = {
   },
 
   fromJSON(object: any): Items {
-    const message = { ...baseItems } as Items;
+    const message = globalThis.Object.create(baseItems) as Items;
     message.shipmentNumber = [];
     if (
       object.fulfillmentStatus !== undefined &&
@@ -644,8 +668,10 @@ const baseDeleteStatus: object = { deleteStatus: "" };
 
 export const DeleteStatus = {
   encode(message: DeleteStatus, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.deleteStatus);
-    if (message.error !== undefined && message.error !== undefined) {
+    if (message.deleteStatus !== "") {
+      writer.uint32(10).string(message.deleteStatus);
+    }
+    if (message.error !== undefined) {
       Error.encode(message.error, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -654,7 +680,7 @@ export const DeleteStatus = {
   decode(input: Reader | Uint8Array, length?: number): DeleteStatus {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleteStatus } as DeleteStatus;
+    const message = globalThis.Object.create(baseDeleteStatus) as DeleteStatus;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -673,7 +699,7 @@ export const DeleteStatus = {
   },
 
   fromJSON(object: any): DeleteStatus {
-    const message = { ...baseDeleteStatus } as DeleteStatus;
+    const message = globalThis.Object.create(baseDeleteStatus) as DeleteStatus;
     if (object.deleteStatus !== undefined && object.deleteStatus !== null) {
       message.deleteStatus = String(object.deleteStatus);
     } else {
@@ -725,7 +751,9 @@ export const shipmentStatus = {
   decode(input: Reader | Uint8Array, length?: number): shipmentStatus {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseshipmentStatus } as shipmentStatus;
+    const message = globalThis.Object.create(
+      baseshipmentStatus
+    ) as shipmentStatus;
     message.ShipmentData = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -744,7 +772,9 @@ export const shipmentStatus = {
   },
 
   fromJSON(object: any): shipmentStatus {
-    const message = { ...baseshipmentStatus } as shipmentStatus;
+    const message = globalThis.Object.create(
+      baseshipmentStatus
+    ) as shipmentStatus;
     message.ShipmentData = [];
     if (object.ShipmentData !== undefined && object.ShipmentData !== null) {
       for (const e of object.ShipmentData) {
@@ -791,24 +821,40 @@ const baseShipmentData: object = {
 
 export const ShipmentData = {
   encode(message: ShipmentData, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.ShipmentNumber);
-    writer.uint32(18).string(message.Status);
-    writer.uint32(26).string(message.ShortStatus);
-    writer.uint32(34).string(message.TimeStamp);
-    writer.uint32(42).string(message.Receiver);
-    writer.uint32(50).string(message.ReceipientName);
-    writer.uint32(58).string(message.Recepientemail);
+    if (message.ShipmentNumber !== "") {
+      writer.uint32(10).string(message.ShipmentNumber);
+    }
+    if (message.Status !== "") {
+      writer.uint32(18).string(message.Status);
+    }
+    if (message.ShortStatus !== "") {
+      writer.uint32(26).string(message.ShortStatus);
+    }
+    if (message.TimeStamp !== "") {
+      writer.uint32(34).string(message.TimeStamp);
+    }
+    if (message.Receiver !== "") {
+      writer.uint32(42).string(message.Receiver);
+    }
+    if (message.ReceipientName !== "") {
+      writer.uint32(50).string(message.ReceipientName);
+    }
+    if (message.Recepientemail !== "") {
+      writer.uint32(58).string(message.Recepientemail);
+    }
     for (const v of message.EventDetails) {
       EventDetails.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    writer.uint32(74).string(message.CustomerReference);
+    if (message.CustomerReference !== "") {
+      writer.uint32(74).string(message.CustomerReference);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ShipmentData {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipmentData } as ShipmentData;
+    const message = globalThis.Object.create(baseShipmentData) as ShipmentData;
     message.EventDetails = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -851,7 +897,7 @@ export const ShipmentData = {
   },
 
   fromJSON(object: any): ShipmentData {
-    const message = { ...baseShipmentData } as ShipmentData;
+    const message = globalThis.Object.create(baseShipmentData) as ShipmentData;
     message.EventDetails = [];
     if (object.ShipmentNumber !== undefined && object.ShipmentNumber !== null) {
       message.ShipmentNumber = String(object.ShipmentNumber);
@@ -993,17 +1039,25 @@ const baseEventDetails: object = {
 
 export const EventDetails = {
   encode(message: EventDetails, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.Status);
-    writer.uint32(18).string(message.Location);
-    writer.uint32(26).string(message.Time);
-    writer.uint32(34).string(message.Coutnry);
+    if (message.Status !== "") {
+      writer.uint32(10).string(message.Status);
+    }
+    if (message.Location !== "") {
+      writer.uint32(18).string(message.Location);
+    }
+    if (message.Time !== "") {
+      writer.uint32(26).string(message.Time);
+    }
+    if (message.Coutnry !== "") {
+      writer.uint32(34).string(message.Coutnry);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): EventDetails {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseEventDetails } as EventDetails;
+    const message = globalThis.Object.create(baseEventDetails) as EventDetails;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1028,7 +1082,7 @@ export const EventDetails = {
   },
 
   fromJSON(object: any): EventDetails {
-    const message = { ...baseEventDetails } as EventDetails;
+    const message = globalThis.Object.create(baseEventDetails) as EventDetails;
     if (object.Status !== undefined && object.Status !== null) {
       message.Status = String(object.Status);
     } else {
@@ -1094,7 +1148,7 @@ export const LabelResult = {
     for (const v of message.labels) {
       Labels.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.error !== undefined && message.error !== undefined) {
+    if (message.error !== undefined) {
       Error.encode(message.error, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -1103,7 +1157,7 @@ export const LabelResult = {
   decode(input: Reader | Uint8Array, length?: number): LabelResult {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLabelResult } as LabelResult;
+    const message = globalThis.Object.create(baseLabelResult) as LabelResult;
     message.labels = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1123,7 +1177,7 @@ export const LabelResult = {
   },
 
   fromJSON(object: any): LabelResult {
-    const message = { ...baseLabelResult } as LabelResult;
+    const message = globalThis.Object.create(baseLabelResult) as LabelResult;
     message.labels = [];
     if (object.labels !== undefined && object.labels !== null) {
       for (const e of object.labels) {
@@ -1177,16 +1231,22 @@ const baseLabels: object = {
 
 export const Labels = {
   encode(message: Labels, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.labelUrl);
-    writer.uint32(18).string(message.shipmentNumber);
-    writer.uint32(26).string(message.exportLabelUrl);
+    if (message.labelUrl !== "") {
+      writer.uint32(10).string(message.labelUrl);
+    }
+    if (message.shipmentNumber !== "") {
+      writer.uint32(18).string(message.shipmentNumber);
+    }
+    if (message.exportLabelUrl !== "") {
+      writer.uint32(26).string(message.exportLabelUrl);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Labels {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLabels } as Labels;
+    const message = globalThis.Object.create(baseLabels) as Labels;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1208,7 +1268,7 @@ export const Labels = {
   },
 
   fromJSON(object: any): Labels {
-    const message = { ...baseLabels } as Labels;
+    const message = globalThis.Object.create(baseLabels) as Labels;
     if (object.labelUrl !== undefined && object.labelUrl !== null) {
       message.labelUrl = String(object.labelUrl);
     } else {
@@ -1265,16 +1325,13 @@ export const shipmentOrderLists = {
     message: shipmentOrderLists,
     writer: Writer = Writer.create()
   ): Writer {
-    if (
-      message.ShipmentOrder !== undefined &&
-      message.ShipmentOrder !== undefined
-    ) {
+    if (message.ShipmentOrder !== undefined) {
       ShipmentOrder.encode(
         message.ShipmentOrder,
         writer.uint32(10).fork()
       ).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -1283,7 +1340,9 @@ export const shipmentOrderLists = {
   decode(input: Reader | Uint8Array, length?: number): shipmentOrderLists {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseshipmentOrderLists } as shipmentOrderLists;
+    const message = globalThis.Object.create(
+      baseshipmentOrderLists
+    ) as shipmentOrderLists;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1302,7 +1361,9 @@ export const shipmentOrderLists = {
   },
 
   fromJSON(object: any): shipmentOrderLists {
-    const message = { ...baseshipmentOrderLists } as shipmentOrderLists;
+    const message = globalThis.Object.create(
+      baseshipmentOrderLists
+    ) as shipmentOrderLists;
     if (object.ShipmentOrder !== undefined && object.ShipmentOrder !== null) {
       message.ShipmentOrder = ShipmentOrder.fromJSON(object.ShipmentOrder);
     } else {
@@ -1352,7 +1413,7 @@ export const ShipmentOrder = {
     for (const v of message.fulfillmentList) {
       FulfillmentList.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -1361,7 +1422,9 @@ export const ShipmentOrder = {
   decode(input: Reader | Uint8Array, length?: number): ShipmentOrder {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipmentOrder } as ShipmentOrder;
+    const message = globalThis.Object.create(
+      baseShipmentOrder
+    ) as ShipmentOrder;
     message.fulfillmentList = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1383,7 +1446,9 @@ export const ShipmentOrder = {
   },
 
   fromJSON(object: any): ShipmentOrder {
-    const message = { ...baseShipmentOrder } as ShipmentOrder;
+    const message = globalThis.Object.create(
+      baseShipmentOrder
+    ) as ShipmentOrder;
     message.fulfillmentList = [];
     if (
       object.fulfillmentList !== undefined &&
@@ -1439,18 +1504,24 @@ const baseFulfillmentList: object = { OrderId: "", fulFillmentService: "" };
 
 export const FulfillmentList = {
   encode(message: FulfillmentList, writer: Writer = Writer.create()): Writer {
-    if (message.Shipment !== undefined && message.Shipment !== undefined) {
+    if (message.Shipment !== undefined) {
       Shipment.encode(message.Shipment, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(18).string(message.OrderId);
-    writer.uint32(34).string(message.fulFillmentService);
+    if (message.OrderId !== "") {
+      writer.uint32(18).string(message.OrderId);
+    }
+    if (message.fulFillmentService !== "") {
+      writer.uint32(34).string(message.fulFillmentService);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): FulfillmentList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFulfillmentList } as FulfillmentList;
+    const message = globalThis.Object.create(
+      baseFulfillmentList
+    ) as FulfillmentList;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1472,7 +1543,9 @@ export const FulfillmentList = {
   },
 
   fromJSON(object: any): FulfillmentList {
-    const message = { ...baseFulfillmentList } as FulfillmentList;
+    const message = globalThis.Object.create(
+      baseFulfillmentList
+    ) as FulfillmentList;
     if (object.Shipment !== undefined && object.Shipment !== null) {
       message.Shipment = Shipment.fromJSON(object.Shipment);
     } else {
@@ -1541,19 +1614,22 @@ export const Shipment = {
     for (const v of message.ShipmentDetails) {
       ShipmentDetails.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(18).string(message.customerReference);
-    if (message.Receiver !== undefined && message.Receiver !== undefined) {
+    if (message.customerReference !== "") {
+      writer.uint32(18).string(message.customerReference);
+    }
+    if (message.Receiver !== undefined) {
       Receiver.encode(message.Receiver, writer.uint32(26).fork()).ldelim();
     }
-    if (message.Shipper !== undefined && message.Shipper !== undefined) {
+    if (message.Shipper !== undefined) {
       Shipper.encode(message.Shipper, writer.uint32(34).fork()).ldelim();
     }
-    writer.uint32(42).string(message.returnShipmentAccountNumber);
-    writer.uint32(50).string(message.returnShipmentReference);
-    if (
-      message.Notification !== undefined &&
-      message.Notification !== undefined
-    ) {
+    if (message.returnShipmentAccountNumber !== "") {
+      writer.uint32(42).string(message.returnShipmentAccountNumber);
+    }
+    if (message.returnShipmentReference !== "") {
+      writer.uint32(50).string(message.returnShipmentReference);
+    }
+    if (message.Notification !== undefined) {
       Notification.encode(
         message.Notification,
         writer.uint32(58).fork()
@@ -1565,7 +1641,7 @@ export const Shipment = {
   decode(input: Reader | Uint8Array, length?: number): Shipment {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipment } as Shipment;
+    const message = globalThis.Object.create(baseShipment) as Shipment;
     message.ShipmentDetails = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -1602,7 +1678,7 @@ export const Shipment = {
   },
 
   fromJSON(object: any): Shipment {
-    const message = { ...baseShipment } as Shipment;
+    const message = globalThis.Object.create(baseShipment) as Shipment;
     message.ShipmentDetails = [];
     if (
       object.ShipmentDetails !== undefined &&
@@ -1744,10 +1820,7 @@ const baseShipmentDetails: object = {};
 
 export const ShipmentDetails = {
   encode(message: ShipmentDetails, writer: Writer = Writer.create()): Writer {
-    if (
-      message.ShipmentItem !== undefined &&
-      message.ShipmentItem !== undefined
-    ) {
+    if (message.ShipmentItem !== undefined) {
       ShipmentItem.encode(
         message.ShipmentItem,
         writer.uint32(10).fork()
@@ -1759,7 +1832,9 @@ export const ShipmentDetails = {
   decode(input: Reader | Uint8Array, length?: number): ShipmentDetails {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipmentDetails } as ShipmentDetails;
+    const message = globalThis.Object.create(
+      baseShipmentDetails
+    ) as ShipmentDetails;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1775,7 +1850,9 @@ export const ShipmentDetails = {
   },
 
   fromJSON(object: any): ShipmentDetails {
-    const message = { ...baseShipmentDetails } as ShipmentDetails;
+    const message = globalThis.Object.create(
+      baseShipmentDetails
+    ) as ShipmentDetails;
     if (object.ShipmentItem !== undefined && object.ShipmentItem !== null) {
       message.ShipmentItem = ShipmentItem.fromJSON(object.ShipmentItem);
     } else {
@@ -1813,14 +1890,19 @@ const baseShipmentItem: object = {
 
 export const ShipmentItem = {
   encode(message: ShipmentItem, writer: Writer = Writer.create()): Writer {
-    writer.uint32(9).double(message.weightInKG);
-    writer.uint32(18).string(message.lengthInCM);
-    writer.uint32(26).string(message.widthInCM);
-    writer.uint32(34).string(message.heightInCM);
-    if (
-      message.ExportDocument !== undefined &&
-      message.ExportDocument !== undefined
-    ) {
+    if (message.weightInKG !== 0) {
+      writer.uint32(9).double(message.weightInKG);
+    }
+    if (message.lengthInCM !== "") {
+      writer.uint32(18).string(message.lengthInCM);
+    }
+    if (message.widthInCM !== "") {
+      writer.uint32(26).string(message.widthInCM);
+    }
+    if (message.heightInCM !== "") {
+      writer.uint32(34).string(message.heightInCM);
+    }
+    if (message.ExportDocument !== undefined) {
       ExportDocument.encode(
         message.ExportDocument,
         writer.uint32(42).fork()
@@ -1832,7 +1914,7 @@ export const ShipmentItem = {
   decode(input: Reader | Uint8Array, length?: number): ShipmentItem {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipmentItem } as ShipmentItem;
+    const message = globalThis.Object.create(baseShipmentItem) as ShipmentItem;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1863,7 +1945,7 @@ export const ShipmentItem = {
   },
 
   fromJSON(object: any): ShipmentItem {
-    const message = { ...baseShipmentItem } as ShipmentItem;
+    const message = globalThis.Object.create(baseShipmentItem) as ShipmentItem;
     if (object.weightInKG !== undefined && object.weightInKG !== null) {
       message.weightInKG = Number(object.weightInKG);
     } else {
@@ -1942,14 +2024,16 @@ const baseNotification: object = { recipientEmailAddress: "" };
 
 export const Notification = {
   encode(message: Notification, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.recipientEmailAddress);
+    if (message.recipientEmailAddress !== "") {
+      writer.uint32(10).string(message.recipientEmailAddress);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Notification {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseNotification } as Notification;
+    const message = globalThis.Object.create(baseNotification) as Notification;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1965,7 +2049,7 @@ export const Notification = {
   },
 
   fromJSON(object: any): Notification {
-    const message = { ...baseNotification } as Notification;
+    const message = globalThis.Object.create(baseNotification) as Notification;
     if (
       object.recipientEmailAddress !== undefined &&
       object.recipientEmailAddress !== null
@@ -2008,12 +2092,22 @@ const baseAddress: object = {
 
 export const Address = {
   encode(message: Address, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.streetName);
-    writer.uint32(18).string(message.streetNumber);
-    writer.uint32(26).string(message.addressAddition);
-    writer.uint32(34).string(message.zip);
-    writer.uint32(42).string(message.city);
-    if (message.Origin !== undefined && message.Origin !== undefined) {
+    if (message.streetName !== "") {
+      writer.uint32(10).string(message.streetName);
+    }
+    if (message.streetNumber !== "") {
+      writer.uint32(18).string(message.streetNumber);
+    }
+    if (message.addressAddition !== "") {
+      writer.uint32(26).string(message.addressAddition);
+    }
+    if (message.zip !== "") {
+      writer.uint32(34).string(message.zip);
+    }
+    if (message.city !== "") {
+      writer.uint32(42).string(message.city);
+    }
+    if (message.Origin !== undefined) {
       Origin.encode(message.Origin, writer.uint32(50).fork()).ldelim();
     }
     return writer;
@@ -2022,7 +2116,7 @@ export const Address = {
   decode(input: Reader | Uint8Array, length?: number): Address {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAddress } as Address;
+    const message = globalThis.Object.create(baseAddress) as Address;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2053,7 +2147,7 @@ export const Address = {
   },
 
   fromJSON(object: any): Address {
-    const message = { ...baseAddress } as Address;
+    const message = globalThis.Object.create(baseAddress) as Address;
     if (object.streetName !== undefined && object.streetName !== null) {
       message.streetName = String(object.streetName);
     } else {
@@ -2147,15 +2241,19 @@ const baseOrigin: object = { country: "", countryISOCode: "" };
 
 export const Origin = {
   encode(message: Origin, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.country);
-    writer.uint32(18).string(message.countryISOCode);
+    if (message.country !== "") {
+      writer.uint32(10).string(message.country);
+    }
+    if (message.countryISOCode !== "") {
+      writer.uint32(18).string(message.countryISOCode);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Origin {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrigin } as Origin;
+    const message = globalThis.Object.create(baseOrigin) as Origin;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2174,7 +2272,7 @@ export const Origin = {
   },
 
   fromJSON(object: any): Origin {
-    const message = { ...baseOrigin } as Origin;
+    const message = globalThis.Object.create(baseOrigin) as Origin;
     if (object.country !== undefined && object.country !== null) {
       message.country = String(object.country);
     } else {
@@ -2216,16 +2314,13 @@ const baseShipper: object = {};
 
 export const Shipper = {
   encode(message: Shipper, writer: Writer = Writer.create()): Writer {
-    if (message.Name !== undefined && message.Name !== undefined) {
+    if (message.Name !== undefined) {
       Name.encode(message.Name, writer.uint32(10).fork()).ldelim();
     }
-    if (message.Address !== undefined && message.Address !== undefined) {
+    if (message.Address !== undefined) {
       Address.encode(message.Address, writer.uint32(18).fork()).ldelim();
     }
-    if (
-      message.Communication !== undefined &&
-      message.Communication !== undefined
-    ) {
+    if (message.Communication !== undefined) {
       Communication.encode(
         message.Communication,
         writer.uint32(26).fork()
@@ -2237,7 +2332,7 @@ export const Shipper = {
   decode(input: Reader | Uint8Array, length?: number): Shipper {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseShipper } as Shipper;
+    const message = globalThis.Object.create(baseShipper) as Shipper;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2259,7 +2354,7 @@ export const Shipper = {
   },
 
   fromJSON(object: any): Shipper {
-    const message = { ...baseShipper } as Shipper;
+    const message = globalThis.Object.create(baseShipper) as Shipper;
     if (object.Name !== undefined && object.Name !== null) {
       message.Name = Name.fromJSON(object.Name);
     } else {
@@ -2318,14 +2413,16 @@ const baseName: object = { name1: "" };
 
 export const Name = {
   encode(message: Name, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name1);
+    if (message.name1 !== "") {
+      writer.uint32(10).string(message.name1);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Name {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseName } as Name;
+    const message = globalThis.Object.create(baseName) as Name;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2341,7 +2438,7 @@ export const Name = {
   },
 
   fromJSON(object: any): Name {
-    const message = { ...baseName } as Name;
+    const message = globalThis.Object.create(baseName) as Name;
     if (object.name1 !== undefined && object.name1 !== null) {
       message.name1 = String(object.name1);
     } else {
@@ -2371,14 +2468,13 @@ const baseReceiver: object = { name1: "" };
 
 export const Receiver = {
   encode(message: Receiver, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name1);
-    if (message.Address !== undefined && message.Address !== undefined) {
+    if (message.name1 !== "") {
+      writer.uint32(10).string(message.name1);
+    }
+    if (message.Address !== undefined) {
       Address.encode(message.Address, writer.uint32(18).fork()).ldelim();
     }
-    if (
-      message.Communication !== undefined &&
-      message.Communication !== undefined
-    ) {
+    if (message.Communication !== undefined) {
       Communication.encode(
         message.Communication,
         writer.uint32(26).fork()
@@ -2390,7 +2486,7 @@ export const Receiver = {
   decode(input: Reader | Uint8Array, length?: number): Receiver {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseReceiver } as Receiver;
+    const message = globalThis.Object.create(baseReceiver) as Receiver;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2412,7 +2508,7 @@ export const Receiver = {
   },
 
   fromJSON(object: any): Receiver {
-    const message = { ...baseReceiver } as Receiver;
+    const message = globalThis.Object.create(baseReceiver) as Receiver;
     if (object.name1 !== undefined && object.name1 !== null) {
       message.name1 = String(object.name1);
     } else {
@@ -2470,15 +2566,21 @@ const baseCommunication: object = { phone: "", email: "" };
 
 export const Communication = {
   encode(message: Communication, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.phone);
-    writer.uint32(18).string(message.email);
+    if (message.phone !== "") {
+      writer.uint32(10).string(message.phone);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Communication {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCommunication } as Communication;
+    const message = globalThis.Object.create(
+      baseCommunication
+    ) as Communication;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2497,7 +2599,9 @@ export const Communication = {
   },
 
   fromJSON(object: any): Communication {
-    const message = { ...baseCommunication } as Communication;
+    const message = globalThis.Object.create(
+      baseCommunication
+    ) as Communication;
     if (object.phone !== undefined && object.phone !== null) {
       message.phone = String(object.phone);
     } else {
@@ -2545,16 +2649,25 @@ const baseExportDocument: object = {
 
 export const ExportDocument = {
   encode(message: ExportDocument, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.invoiceNumber);
-    writer.uint32(18).string(message.exportType);
-    writer.uint32(26).string(message.exportTypeDescription);
-    writer.uint32(34).string(message.termsOfTrade);
-    writer.uint32(42).string(message.placeOfCommital);
-    writer.uint32(49).double(message.additionalFee);
-    if (
-      message.ExportDocPosition !== undefined &&
-      message.ExportDocPosition !== undefined
-    ) {
+    if (message.invoiceNumber !== "") {
+      writer.uint32(10).string(message.invoiceNumber);
+    }
+    if (message.exportType !== "") {
+      writer.uint32(18).string(message.exportType);
+    }
+    if (message.exportTypeDescription !== "") {
+      writer.uint32(26).string(message.exportTypeDescription);
+    }
+    if (message.termsOfTrade !== "") {
+      writer.uint32(34).string(message.termsOfTrade);
+    }
+    if (message.placeOfCommital !== "") {
+      writer.uint32(42).string(message.placeOfCommital);
+    }
+    if (message.additionalFee !== 0) {
+      writer.uint32(49).double(message.additionalFee);
+    }
+    if (message.ExportDocPosition !== undefined) {
       ExportDocPosition.encode(
         message.ExportDocPosition,
         writer.uint32(58).fork()
@@ -2566,7 +2679,9 @@ export const ExportDocument = {
   decode(input: Reader | Uint8Array, length?: number): ExportDocument {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseExportDocument } as ExportDocument;
+    const message = globalThis.Object.create(
+      baseExportDocument
+    ) as ExportDocument;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2603,7 +2718,9 @@ export const ExportDocument = {
   },
 
   fromJSON(object: any): ExportDocument {
-    const message = { ...baseExportDocument } as ExportDocument;
+    const message = globalThis.Object.create(
+      baseExportDocument
+    ) as ExportDocument;
     if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
       message.invoiceNumber = String(object.invoiceNumber);
     } else {
@@ -2736,19 +2853,33 @@ const baseExportDocPosition: object = {
 
 export const ExportDocPosition = {
   encode(message: ExportDocPosition, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.description);
-    writer.uint32(18).string(message.countryCodeOrigin);
-    writer.uint32(26).string(message.customsTariffNumber);
-    writer.uint32(32).uint32(message.amount);
-    writer.uint32(40).uint32(message.netWeightInKG);
-    writer.uint32(49).double(message.customsValue);
+    if (message.description !== "") {
+      writer.uint32(10).string(message.description);
+    }
+    if (message.countryCodeOrigin !== "") {
+      writer.uint32(18).string(message.countryCodeOrigin);
+    }
+    if (message.customsTariffNumber !== "") {
+      writer.uint32(26).string(message.customsTariffNumber);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(32).uint32(message.amount);
+    }
+    if (message.netWeightInKG !== 0) {
+      writer.uint32(40).uint32(message.netWeightInKG);
+    }
+    if (message.customsValue !== 0) {
+      writer.uint32(49).double(message.customsValue);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ExportDocPosition {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseExportDocPosition } as ExportDocPosition;
+    const message = globalThis.Object.create(
+      baseExportDocPosition
+    ) as ExportDocPosition;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2779,7 +2910,9 @@ export const ExportDocPosition = {
   },
 
   fromJSON(object: any): ExportDocPosition {
-    const message = { ...baseExportDocPosition } as ExportDocPosition;
+    const message = globalThis.Object.create(
+      baseExportDocPosition
+    ) as ExportDocPosition;
     if (object.description !== undefined && object.description !== null) {
       message.description = String(object.description);
     } else {
@@ -2893,7 +3026,9 @@ export const FulfillmentResults = {
   decode(input: Reader | Uint8Array, length?: number): FulfillmentResults {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFulfillmentResults } as FulfillmentResults;
+    const message = globalThis.Object.create(
+      baseFulfillmentResults
+    ) as FulfillmentResults;
     message.fulfillmentResults = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -2912,7 +3047,9 @@ export const FulfillmentResults = {
   },
 
   fromJSON(object: any): FulfillmentResults {
-    const message = { ...baseFulfillmentResults } as FulfillmentResults;
+    const message = globalThis.Object.create(
+      baseFulfillmentResults
+    ) as FulfillmentResults;
     message.fulfillmentResults = [];
     if (
       object.fulfillmentResults !== undefined &&
@@ -2959,13 +3096,13 @@ export const ResponseDetailsList = {
     message: ResponseDetailsList,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.Status !== undefined && message.Status !== undefined) {
+    if (message.Status !== undefined) {
       FulfillmentStatus.encode(
         message.Status,
         writer.uint32(10).fork()
       ).ldelim();
     }
-    if (message.error !== undefined && message.error !== undefined) {
+    if (message.error !== undefined) {
       ErrorList.encode(message.error, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -2974,7 +3111,9 @@ export const ResponseDetailsList = {
   decode(input: Reader | Uint8Array, length?: number): ResponseDetailsList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResponseDetailsList } as ResponseDetailsList;
+    const message = globalThis.Object.create(
+      baseResponseDetailsList
+    ) as ResponseDetailsList;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2993,7 +3132,9 @@ export const ResponseDetailsList = {
   },
 
   fromJSON(object: any): ResponseDetailsList {
-    const message = { ...baseResponseDetailsList } as ResponseDetailsList;
+    const message = globalThis.Object.create(
+      baseResponseDetailsList
+    ) as ResponseDetailsList;
     if (object.Status !== undefined && object.Status !== null) {
       message.Status = FulfillmentStatus.fromJSON(object.Status);
     } else {
@@ -3038,9 +3179,13 @@ const baseFulfillmentStatus: object = { OrderId: "", OrderStatus: "" };
 
 export const FulfillmentStatus = {
   encode(message: FulfillmentStatus, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.OrderId);
-    writer.uint32(18).string(message.OrderStatus);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.OrderId !== "") {
+      writer.uint32(10).string(message.OrderId);
+    }
+    if (message.OrderStatus !== "") {
+      writer.uint32(18).string(message.OrderStatus);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -3049,7 +3194,9 @@ export const FulfillmentStatus = {
   decode(input: Reader | Uint8Array, length?: number): FulfillmentStatus {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFulfillmentStatus } as FulfillmentStatus;
+    const message = globalThis.Object.create(
+      baseFulfillmentStatus
+    ) as FulfillmentStatus;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3071,7 +3218,9 @@ export const FulfillmentStatus = {
   },
 
   fromJSON(object: any): FulfillmentStatus {
-    const message = { ...baseFulfillmentStatus } as FulfillmentStatus;
+    const message = globalThis.Object.create(
+      baseFulfillmentStatus
+    ) as FulfillmentStatus;
     if (object.OrderId !== undefined && object.OrderId !== null) {
       message.OrderId = String(object.OrderId);
     } else {
@@ -3127,15 +3276,19 @@ const baseError: object = { code: "", message: "" };
 
 export const Error = {
   encode(message: Error, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.code);
-    writer.uint32(18).string(message.message);
+    if (message.code !== "") {
+      writer.uint32(10).string(message.code);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Error {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseError } as Error;
+    const message = globalThis.Object.create(baseError) as Error;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -3154,7 +3307,7 @@ export const Error = {
   },
 
   fromJSON(object: any): Error {
-    const message = { ...baseError } as Error;
+    const message = globalThis.Object.create(baseError) as Error;
     if (object.code !== undefined && object.code !== null) {
       message.code = String(object.code);
     } else {
@@ -3207,7 +3360,7 @@ export const ErrorList = {
   decode(input: Reader | Uint8Array, length?: number): ErrorList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseErrorList } as ErrorList;
+    const message = globalThis.Object.create(baseErrorList) as ErrorList;
     message.code = [];
     message.message = [];
     while (reader.pos < end) {
@@ -3228,7 +3381,7 @@ export const ErrorList = {
   },
 
   fromJSON(object: any): ErrorList {
-    const message = { ...baseErrorList } as ErrorList;
+    const message = globalThis.Object.create(baseErrorList) as ErrorList;
     message.code = [];
     message.message = [];
     if (object.code !== undefined && object.code !== null) {
@@ -3287,13 +3440,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -3302,861 +3455,999 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "OrderId",
         field: [
           {
             name: "orderId",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "orderId",
           },
           {
             name: "subject",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrderId",
       },
       {
-        name: "TrackingNumber",
         field: [
           {
             name: "orderId",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "orderId",
           },
           {
             name: "shipmentType",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "shipmentType",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "TrackingNumber",
       },
       {
-        name: "Status",
         field: [
-          {
-            name: "Status",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "Status",
-          },
+          { name: "Status", number: 1, label: 1, type: 9, jsonName: "Status" },
           {
             name: "shipmentStatus",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.shipmentStatus",
             jsonName: "shipmentStatus",
           },
           {
             name: "OrderId",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "OrderId",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Status",
       },
       {
-        name: "AllFulfillments",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Items",
             jsonName: "items",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "AllFulfillments",
       },
       {
-        name: "Items",
         field: [
           {
             name: "fulfillment_status",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "fulfillmentStatus",
           },
           {
             name: "order_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "orderId",
           },
           {
             name: "serviceType",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "serviceType",
           },
           {
             name: "shipment_number",
             number: 4,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "shipmentNumber",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Items",
       },
       {
-        name: "DeleteStatus",
         field: [
           {
             name: "deleteStatus",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "deleteStatus",
           },
           {
             name: "error",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Error",
             jsonName: "error",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "DeleteStatus",
       },
       {
-        name: "shipmentStatus",
         field: [
           {
             name: "ShipmentData",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ShipmentData",
             jsonName: "ShipmentData",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "shipmentStatus",
       },
       {
-        name: "ShipmentData",
         field: [
           {
             name: "ShipmentNumber",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "ShipmentNumber",
           },
-          {
-            name: "Status",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "Status",
-          },
+          { name: "Status", number: 2, label: 1, type: 9, jsonName: "Status" },
           {
             name: "ShortStatus",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "ShortStatus",
           },
           {
             name: "TimeStamp",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "TimeStamp",
           },
           {
             name: "Receiver",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "Receiver",
           },
           {
             name: "ReceipientName",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "ReceipientName",
           },
           {
             name: "Recepientemail",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "Recepientemail",
           },
           {
             name: "EventDetails",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.EventDetails",
             jsonName: "EventDetails",
           },
           {
             name: "Customer_Reference",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "CustomerReference",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ShipmentData",
       },
       {
-        name: "EventDetails",
         field: [
-          {
-            name: "Status",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "Status",
-          },
+          { name: "Status", number: 1, label: 1, type: 9, jsonName: "Status" },
           {
             name: "Location",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "Location",
           },
-          {
-            name: "Time",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "Time",
-          },
+          { name: "Time", number: 3, label: 1, type: 9, jsonName: "Time" },
           {
             name: "Coutnry",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "Coutnry",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "EventDetails",
       },
       {
-        name: "LabelResult",
         field: [
           {
             name: "labels",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Labels",
             jsonName: "labels",
           },
           {
             name: "error",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Error",
             jsonName: "error",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "LabelResult",
       },
       {
-        name: "Labels",
         field: [
           {
             name: "labelUrl",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "labelUrl",
           },
           {
             name: "shipmentNumber",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "shipmentNumber",
           },
           {
             name: "exportLabelUrl",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "exportLabelUrl",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Labels",
       },
       {
-        name: "shipmentOrderLists",
         field: [
           {
             name: "ShipmentOrder",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ShipmentOrder",
             jsonName: "ShipmentOrder",
           },
           {
             name: "subject",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "shipmentOrderLists",
       },
       {
-        name: "ShipmentOrder",
         field: [
           {
             name: "fulfillmentList",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.FulfillmentList",
             jsonName: "fulfillmentList",
           },
           {
             name: "meta",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ShipmentOrder",
       },
       {
-        name: "FulfillmentList",
         field: [
           {
             name: "Shipment",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Shipment",
             jsonName: "Shipment",
           },
           {
             name: "OrderId",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "OrderId",
           },
           {
             name: "fulFillmentService",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "fulFillmentService",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FulfillmentList",
       },
       {
-        name: "Shipment",
         field: [
           {
             name: "ShipmentDetails",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ShipmentDetails",
             jsonName: "ShipmentDetails",
           },
           {
             name: "customerReference",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "customerReference",
           },
           {
             name: "Receiver",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Receiver",
             jsonName: "Receiver",
           },
           {
             name: "Shipper",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Shipper",
             jsonName: "Shipper",
           },
           {
             name: "returnShipmentAccountNumber",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "returnShipmentAccountNumber",
           },
           {
             name: "returnShipmentReference",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "returnShipmentReference",
           },
           {
             name: "Notification",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Notification",
             jsonName: "Notification",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Shipment",
       },
       {
-        name: "ShipmentDetails",
         field: [
           {
             name: "ShipmentItem",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ShipmentItem",
             jsonName: "ShipmentItem",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ShipmentDetails",
       },
       {
-        name: "ShipmentItem",
         field: [
           {
             name: "weightInKG",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "weightInKG",
           },
           {
             name: "lengthInCM",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "lengthInCM",
           },
           {
             name: "widthInCM",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "widthInCM",
           },
           {
             name: "heightInCM",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "heightInCM",
           },
           {
             name: "ExportDocument",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ExportDocument",
             jsonName: "ExportDocument",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ShipmentItem",
       },
       {
-        name: "Notification",
         field: [
           {
             name: "recipientEmailAddress",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "recipientEmailAddress",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Notification",
       },
       {
-        name: "Address",
         field: [
           {
             name: "streetName",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "streetName",
           },
           {
             name: "streetNumber",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "streetNumber",
           },
           {
             name: "addressAddition",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "addressAddition",
           },
-          {
-            name: "zip",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "zip",
-          },
-          {
-            name: "city",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "city",
-          },
+          { name: "zip", number: 4, label: 1, type: 9, jsonName: "zip" },
+          { name: "city", number: 5, label: 1, type: 9, jsonName: "city" },
           {
             name: "Origin",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Origin",
             jsonName: "Origin",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Address",
       },
       {
-        name: "Origin",
         field: [
           {
             name: "country",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "country",
           },
           {
             name: "countryISOCode",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "countryISOCode",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Origin",
       },
       {
-        name: "Shipper",
         field: [
           {
             name: "Name",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Name",
             jsonName: "Name",
           },
           {
             name: "Address",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Address",
             jsonName: "Address",
           },
           {
             name: "Communication",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Communication",
             jsonName: "Communication",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Shipper",
       },
       {
-        name: "Name",
         field: [
-          {
-            name: "name1",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name1",
-          },
+          { name: "name1", number: 1, label: 1, type: 9, jsonName: "name1" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Name",
       },
       {
-        name: "Receiver",
         field: [
-          {
-            name: "name1",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name1",
-          },
+          { name: "name1", number: 1, label: 1, type: 9, jsonName: "name1" },
           {
             name: "Address",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Address",
             jsonName: "Address",
           },
           {
             name: "Communication",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.Communication",
             jsonName: "Communication",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Receiver",
       },
       {
-        name: "Communication",
         field: [
-          {
-            name: "phone",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "phone",
-          },
-          {
-            name: "email",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "email",
-          },
+          { name: "phone", number: 1, label: 1, type: 9, jsonName: "phone" },
+          { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Communication",
       },
       {
-        name: "ExportDocument",
         field: [
           {
             name: "invoiceNumber",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "invoiceNumber",
           },
           {
             name: "exportType",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "exportType",
           },
           {
             name: "exportTypeDescription",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "exportTypeDescription",
           },
           {
             name: "termsOfTrade",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "termsOfTrade",
           },
           {
             name: "placeOfCommital",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "placeOfCommital",
           },
           {
             name: "additionalFee",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "additionalFee",
           },
           {
             name: "ExportDocPosition",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ExportDocPosition",
             jsonName: "ExportDocPosition",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ExportDocument",
       },
       {
-        name: "ExportDocPosition",
         field: [
           {
             name: "description",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "countryCodeOrigin",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "countryCodeOrigin",
           },
           {
             name: "customsTariffNumber",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "customsTariffNumber",
           },
-          {
-            name: "amount",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
-            jsonName: "amount",
-          },
+          { name: "amount", number: 4, label: 1, type: 13, jsonName: "amount" },
           {
             name: "netWeightInKG",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "netWeightInKG",
           },
           {
             name: "customsValue",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             jsonName: "customsValue",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ExportDocPosition",
       },
       {
-        name: "FulfillmentResults",
         field: [
           {
             name: "fulfillmentResults",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ResponseDetailsList",
             jsonName: "fulfillmentResults",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FulfillmentResults",
       },
       {
-        name: "ResponseDetailsList",
         field: [
           {
             name: "Status",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.FulfillmentStatus",
             jsonName: "Status",
           },
           {
             name: "error",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment.ErrorList",
             jsonName: "error",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ResponseDetailsList",
       },
       {
-        name: "FulfillmentStatus",
         field: [
           {
             name: "OrderId",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "OrderId",
           },
           {
             name: "OrderStatus",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "OrderStatus",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FulfillmentStatus",
       },
       {
+        field: [
+          { name: "code", number: 1, label: 1, type: 9, jsonName: "code" },
+          {
+            name: "message",
+            number: 2,
+            label: 1,
+            type: 9,
+            jsonName: "message",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Error",
-        field: [
-          {
-            name: "code",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "code",
-          },
-          {
-            name: "message",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "message",
-          },
-        ],
       },
       {
-        name: "ErrorList",
         field: [
-          {
-            name: "code",
-            number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "code",
-          },
+          { name: "code", number: 1, label: 3, type: 9, jsonName: "code" },
           {
             name: "message",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "message",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ErrorList",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "CreateFulfillment",
@@ -4184,6 +4475,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.fulfillment.AllFulfillments",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -4194,12 +4486,13 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [10, 0, 16, 1],
+          leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.fulfillment.OrderId": OrderId,
     ".io.restorecommerce.fulfillment.TrackingNumber": TrackingNumber,
@@ -4233,11 +4526,18 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.fulfillment.Error": Error,
     ".io.restorecommerce.fulfillment.ErrorList": ErrorList,
   },
-  dependencies: [
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

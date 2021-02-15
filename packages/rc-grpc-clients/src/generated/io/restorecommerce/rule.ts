@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
-  Attribute,
-  protoMetadata as io_restorecommerce_attribute_protoMetadata,
-} from "../../io/restorecommerce/attribute";
-import { Writer, Reader } from "protobufjs/minimal";
-import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata5,
+  Attribute,
+} from "../../io/restorecommerce/attribute";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.rule";
 
@@ -129,7 +129,7 @@ export const Target = {
   decode(input: Reader | Uint8Array, length?: number): Target {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTarget } as Target;
+    const message = globalThis.Object.create(baseTarget) as Target;
     message.subject = [];
     message.resources = [];
     message.action = [];
@@ -154,7 +154,7 @@ export const Target = {
   },
 
   fromJSON(object: any): Target {
-    const message = { ...baseTarget } as Target;
+    const message = globalThis.Object.create(baseTarget) as Target;
     message.subject = [];
     message.resources = [];
     message.action = [];
@@ -237,34 +237,43 @@ const baseRule: object = {
 
 export const Rule = {
   encode(message: Rule, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.description);
-    if (message.target !== undefined && message.target !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
+    if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
-    if (
-      message.contextQuery !== undefined &&
-      message.contextQuery !== undefined
-    ) {
+    if (message.contextQuery !== undefined) {
       ContextQuery.encode(
         message.contextQuery,
         writer.uint32(50).fork()
       ).ldelim();
     }
-    writer.uint32(58).string(message.condition);
-    writer.uint32(64).int32(message.effect);
-    writer.uint32(72).bool(message.evaluationCacheable);
+    if (message.condition !== "") {
+      writer.uint32(58).string(message.condition);
+    }
+    if (message.effect !== 0) {
+      writer.uint32(64).int32(message.effect);
+    }
+    if (message.evaluationCacheable === true) {
+      writer.uint32(72).bool(message.evaluationCacheable);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Rule {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRule } as Rule;
+    const message = globalThis.Object.create(baseRule) as Rule;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -304,7 +313,7 @@ export const Rule = {
   },
 
   fromJSON(object: any): Rule {
-    const message = { ...baseRule } as Rule;
+    const message = globalThis.Object.create(baseRule) as Rule;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -440,29 +449,34 @@ const baseRuleRQ: object = {
 
 export const RuleRQ = {
   encode(message: RuleRQ, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.target !== undefined && message.target !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(24).int32(message.effect);
-    writer.uint32(34).string(message.condition);
-    if (
-      message.contextQuery !== undefined &&
-      message.contextQuery !== undefined
-    ) {
+    if (message.effect !== 0) {
+      writer.uint32(24).int32(message.effect);
+    }
+    if (message.condition !== "") {
+      writer.uint32(34).string(message.condition);
+    }
+    if (message.contextQuery !== undefined) {
       ContextQuery.encode(
         message.contextQuery,
         writer.uint32(42).fork()
       ).ldelim();
     }
-    writer.uint32(48).bool(message.evaluationCacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(48).bool(message.evaluationCacheable);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): RuleRQ {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRuleRQ } as RuleRQ;
+    const message = globalThis.Object.create(baseRuleRQ) as RuleRQ;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -493,7 +507,7 @@ export const RuleRQ = {
   },
 
   fromJSON(object: any): RuleRQ {
-    const message = { ...baseRuleRQ } as RuleRQ;
+    const message = globalThis.Object.create(baseRuleRQ) as RuleRQ;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -592,8 +606,10 @@ export const RuleList = {
     for (const v of message.items) {
       Rule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -602,7 +618,7 @@ export const RuleList = {
   decode(input: Reader | Uint8Array, length?: number): RuleList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseRuleList } as RuleList;
+    const message = globalThis.Object.create(baseRuleList) as RuleList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -625,7 +641,7 @@ export const RuleList = {
   },
 
   fromJSON(object: any): RuleList {
-    const message = { ...baseRuleList } as RuleList;
+    const message = globalThis.Object.create(baseRuleList) as RuleList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -689,14 +705,16 @@ export const ContextQuery = {
     for (const v of message.filters) {
       ContextQuery_Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(18).string(message.query);
+    if (message.query !== "") {
+      writer.uint32(18).string(message.query);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ContextQuery {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseContextQuery } as ContextQuery;
+    const message = globalThis.Object.create(baseContextQuery) as ContextQuery;
     message.filters = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -718,7 +736,7 @@ export const ContextQuery = {
   },
 
   fromJSON(object: any): ContextQuery {
-    const message = { ...baseContextQuery } as ContextQuery;
+    const message = globalThis.Object.create(baseContextQuery) as ContextQuery;
     message.filters = [];
     if (object.filters !== undefined && object.filters !== null) {
       for (const e of object.filters) {
@@ -770,16 +788,24 @@ export const ContextQuery_Filter = {
     message: ContextQuery_Filter,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.field);
-    writer.uint32(18).string(message.operation);
-    writer.uint32(26).string(message.value);
+    if (message.field !== "") {
+      writer.uint32(10).string(message.field);
+    }
+    if (message.operation !== "") {
+      writer.uint32(18).string(message.operation);
+    }
+    if (message.value !== "") {
+      writer.uint32(26).string(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ContextQuery_Filter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseContextQuery_Filter } as ContextQuery_Filter;
+    const message = globalThis.Object.create(
+      baseContextQuery_Filter
+    ) as ContextQuery_Filter;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -801,7 +827,9 @@ export const ContextQuery_Filter = {
   },
 
   fromJSON(object: any): ContextQuery_Filter {
-    const message = { ...baseContextQuery_Filter } as ContextQuery_Filter;
+    const message = globalThis.Object.create(
+      baseContextQuery_Filter
+    ) as ContextQuery_Filter;
     if (object.field !== undefined && object.field !== null) {
       message.field = String(object.field);
     } else {
@@ -858,13 +886,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -876,245 +904,263 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "Target",
         field: [
           {
             name: "subject",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "subject",
           },
           {
             name: "resources",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "resources",
           },
           {
             name: "action",
             number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "action",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Target",
       },
       {
-        name: "Rule",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "target",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Target",
             jsonName: "target",
           },
           {
             name: "context_query",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.ContextQuery",
             jsonName: "contextQuery",
           },
           {
             name: "condition",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "condition",
           },
           {
             name: "effect",
             number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.rule.Effect",
             jsonName: "effect",
           },
           {
             name: "evaluation_cacheable",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "evaluationCacheable",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Rule",
       },
       {
-        name: "RuleRQ",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "target",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Target",
             jsonName: "target",
           },
           {
             name: "effect",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.rule.Effect",
             jsonName: "effect",
           },
           {
             name: "condition",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "condition",
           },
           {
             name: "context_query",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.ContextQuery",
             jsonName: "contextQuery",
           },
           {
             name: "evaluation_cacheable",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "evaluationCacheable",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RuleRQ",
       },
       {
-        name: "RuleList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Rule",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RuleList",
       },
       {
-        name: "ContextQuery",
         field: [
           {
             name: "filters",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.rule.ContextQuery.Filter",
             jsonName: "filters",
           },
-          {
-            name: "query",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "query",
-          },
+          { name: "query", number: 2, label: 1, type: 9, jsonName: "query" },
         ],
+        extension: [],
         nestedType: [
           {
-            name: "Filter",
             field: [
               {
                 name: "field",
                 number: 1,
-                label: "LABEL_OPTIONAL",
-                type: "TYPE_STRING",
+                label: 1,
+                type: 9,
                 jsonName: "field",
               },
               {
                 name: "operation",
                 number: 2,
-                label: "LABEL_OPTIONAL",
-                type: "TYPE_STRING",
+                label: 1,
+                type: 9,
                 jsonName: "operation",
               },
               {
                 name: "value",
                 number: 3,
-                label: "LABEL_OPTIONAL",
-                type: "TYPE_STRING",
+                label: 1,
+                type: 9,
                 jsonName: "value",
               },
             ],
+            extension: [],
+            nestedType: [],
+            enumType: [],
+            extensionRange: [],
+            oneofDecl: [],
+            reservedRange: [],
+            reservedName: [],
+            name: "Filter",
           },
         ],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ContextQuery",
       },
     ],
     enumType: [
       {
-        name: "Effect",
         value: [
           { name: "PERMIT", number: 0 },
           { name: "DENY", number: 1 },
         ],
+        reservedRange: [],
+        reservedName: [],
+        name: "Effect",
       },
     ],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -1142,6 +1188,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.rule.RuleList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1152,33 +1199,38 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [15, 0, 19, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n Target specified by a Rule or a Request.\n",
         },
         {
           path: [5, 0],
           span: [24, 0, 27, 1],
+          leadingDetachedComments: [],
           leadingComments: "*\n Resulting effect from a Policy or Rule.\n",
         },
         {
           path: [4, 1, 2, 6],
           span: [36, 2, 23],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 2],
           span: [41, 0, 48, 1],
+          leadingDetachedComments: [],
           trailingComments: " used for `whatIsAllowed` / reverse queries\n",
         },
         {
           path: [4, 4],
           span: [59, 0, 67, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.rule.Effect": Effect,
     ".io.restorecommerce.rule.Target": Target,
@@ -1189,13 +1241,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.rule.ContextQuery.Filter": ContextQuery_Filter,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-    io_restorecommerce_attribute_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

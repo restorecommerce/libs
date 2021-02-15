@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.attribute";
@@ -13,15 +13,19 @@ const baseAttribute: object = { id: "", value: "" };
 
 export const Attribute = {
   encode(message: Attribute, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.value);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.value !== "") {
+      writer.uint32(18).string(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Attribute {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAttribute } as Attribute;
+    const message = globalThis.Object.create(baseAttribute) as Attribute;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -40,7 +44,7 @@ export const Attribute = {
   },
 
   fromJSON(object: any): Attribute {
-    const message = { ...baseAttribute } as Attribute;
+    const message = globalThis.Object.create(baseAttribute) as Attribute;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -78,35 +82,30 @@ export const Attribute = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Attribute",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "value",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "value",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "value", number: 2, label: 1, type: 9, jsonName: "value" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Attribute",
       },
     ],
     enumType: [],
@@ -116,10 +115,20 @@ export const protoMetadata: ProtoMetadata = {
     package: "io.restorecommerce.attribute",
     sourceCodeInfo: { location: [] },
     syntax: "proto3",
-  } as any,
+  }),
   references: { ".io.restorecommerce.attribute.Attribute": Attribute },
   dependencies: [],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

@@ -1,26 +1,26 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Struct,
-  protoMetadata as google_protobuf_struct_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../google/protobuf/struct";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.resourcebase";
 
@@ -122,15 +122,19 @@ const baseFieldFilter: object = { name: "", include: false };
 
 export const FieldFilter = {
   encode(message: FieldFilter, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(16).bool(message.include);
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.include === true) {
+      writer.uint32(16).bool(message.include);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): FieldFilter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFieldFilter } as FieldFilter;
+    const message = globalThis.Object.create(baseFieldFilter) as FieldFilter;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -149,7 +153,7 @@ export const FieldFilter = {
   },
 
   fromJSON(object: any): FieldFilter {
-    const message = { ...baseFieldFilter } as FieldFilter;
+    const message = globalThis.Object.create(baseFieldFilter) as FieldFilter;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -190,15 +194,19 @@ const baseSort: object = { field: "", order: 0 };
 
 export const Sort = {
   encode(message: Sort, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.field);
-    writer.uint32(16).int32(message.order);
+    if (message.field !== "") {
+      writer.uint32(10).string(message.field);
+    }
+    if (message.order !== 0) {
+      writer.uint32(16).int32(message.order);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Sort {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSort } as Sort;
+    const message = globalThis.Object.create(baseSort) as Sort;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -217,7 +225,7 @@ export const Sort = {
   },
 
   fromJSON(object: any): Sort {
-    const message = { ...baseSort } as Sort;
+    const message = globalThis.Object.create(baseSort) as Sort;
     if (object.field !== undefined && object.field !== null) {
       message.field = String(object.field);
     } else {
@@ -265,12 +273,16 @@ const baseReadRequest: object = {
 
 export const ReadRequest = {
   encode(message: ReadRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).uint32(message.offset);
-    writer.uint32(16).uint32(message.limit);
+    if (message.offset !== 0) {
+      writer.uint32(8).uint32(message.offset);
+    }
+    if (message.limit !== 0) {
+      writer.uint32(16).uint32(message.limit);
+    }
     for (const v of message.sort) {
       Sort.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.filter !== undefined && message.filter !== undefined) {
+    if (message.filter !== undefined) {
       Struct.encode(message.filter, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.field) {
@@ -285,13 +297,10 @@ export const ReadRequest = {
     for (const v of message.customQueries) {
       writer.uint32(66).string(v!);
     }
-    if (
-      message.customArguments !== undefined &&
-      message.customArguments !== undefined
-    ) {
+    if (message.customArguments !== undefined) {
       Any.encode(message.customArguments, writer.uint32(74).fork()).ldelim();
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(82).fork()).ldelim();
     }
     return writer;
@@ -300,7 +309,7 @@ export const ReadRequest = {
   decode(input: Reader | Uint8Array, length?: number): ReadRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseReadRequest } as ReadRequest;
+    const message = globalThis.Object.create(baseReadRequest) as ReadRequest;
     message.sort = [];
     message.field = [];
     message.search = [];
@@ -348,7 +357,7 @@ export const ReadRequest = {
   },
 
   fromJSON(object: any): ReadRequest {
-    const message = { ...baseReadRequest } as ReadRequest;
+    const message = globalThis.Object.create(baseReadRequest) as ReadRequest;
     message.sort = [];
     message.field = [];
     message.search = [];
@@ -522,11 +531,13 @@ const baseDeleteRequest: object = { collection: false, ids: "" };
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.collection);
+    if (message.collection === true) {
+      writer.uint32(8).bool(message.collection);
+    }
     for (const v of message.ids) {
       writer.uint32(18).string(v!);
     }
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -535,7 +546,9 @@ export const DeleteRequest = {
   decode(input: Reader | Uint8Array, length?: number): DeleteRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleteRequest } as DeleteRequest;
+    const message = globalThis.Object.create(
+      baseDeleteRequest
+    ) as DeleteRequest;
     message.ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -558,7 +571,9 @@ export const DeleteRequest = {
   },
 
   fromJSON(object: any): DeleteRequest {
-    const message = { ...baseDeleteRequest } as DeleteRequest;
+    const message = globalThis.Object.create(
+      baseDeleteRequest
+    ) as DeleteRequest;
     message.ids = [];
     if (object.collection !== undefined && object.collection !== null) {
       message.collection = Boolean(object.collection);
@@ -622,8 +637,10 @@ export const ResourceList = {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -632,7 +649,7 @@ export const ResourceList = {
   decode(input: Reader | Uint8Array, length?: number): ResourceList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResourceList } as ResourceList;
+    const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -655,7 +672,7 @@ export const ResourceList = {
   },
 
   fromJSON(object: any): ResourceList {
-    const message = { ...baseResourceList } as ResourceList;
+    const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -718,19 +735,25 @@ const baseResource: object = { id: "", value: 0, text: "" };
 
 export const Resource = {
   encode(message: Resource, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(24).int32(message.value);
-    writer.uint32(34).string(message.text);
+    if (message.value !== 0) {
+      writer.uint32(24).int32(message.value);
+    }
+    if (message.text !== "") {
+      writer.uint32(34).string(message.text);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Resource {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResource } as Resource;
+    const message = globalThis.Object.create(baseResource) as Resource;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -755,7 +778,7 @@ export const Resource = {
   },
 
   fromJSON(object: any): Resource {
-    const message = { ...baseResource } as Resource;
+    const message = globalThis.Object.create(baseResource) as Resource;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -825,13 +848,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "google/protobuf/any.proto",
@@ -843,228 +866,216 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "FieldFilter",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "include",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "include",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FieldFilter",
       },
       {
-        name: "Sort",
         field: [
-          {
-            name: "field",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "field",
-          },
+          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
           {
             name: "order",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.resourcebase.Sort.SortOrder",
             jsonName: "order",
           },
         ],
+        extension: [],
+        nestedType: [],
         enumType: [
           {
-            name: "SortOrder",
             value: [
               { name: "UNSORTED", number: 0 },
               { name: "ASCENDING", number: 1 },
               { name: "DESCENDING", number: 2 },
             ],
+            reservedRange: [],
+            reservedName: [],
+            name: "SortOrder",
           },
         ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Sort",
       },
       {
-        name: "ReadRequest",
         field: [
-          {
-            name: "offset",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
-            jsonName: "offset",
-          },
-          {
-            name: "limit",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
-            jsonName: "limit",
-          },
+          { name: "offset", number: 1, label: 1, type: 13, jsonName: "offset" },
+          { name: "limit", number: 2, label: 1, type: 13, jsonName: "limit" },
           {
             name: "sort",
             number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.resourcebase.Sort",
             jsonName: "sort",
           },
           {
             name: "filter",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Struct",
             jsonName: "filter",
           },
           {
             name: "field",
             number: 5,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.resourcebase.FieldFilter",
             jsonName: "field",
           },
-          {
-            name: "search",
-            number: 6,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "search",
-          },
+          { name: "search", number: 6, label: 3, type: 9, jsonName: "search" },
           {
             name: "locales_limiter",
             number: 7,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "localesLimiter",
           },
           {
             name: "custom_queries",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "customQueries",
           },
           {
             name: "custom_arguments",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "customArguments",
           },
           {
             name: "subject",
             number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ReadRequest",
       },
       {
-        name: "DeleteRequest",
         field: [
           {
             name: "collection",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "collection",
           },
-          {
-            name: "ids",
-            number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "ids",
-          },
+          { name: "ids", number: 2, label: 3, type: 9, jsonName: "ids" },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "DeleteRequest",
       },
       {
-        name: "ResourceList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.resourcebase.Resource",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ResourceList",
       },
       {
-        name: "Resource",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "value",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "value",
-          },
-          {
-            name: "text",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "text",
-          },
+          { name: "value", number: 3, label: 1, type: 5, jsonName: "value" },
+          { name: "text", number: 4, label: 1, type: 9, jsonName: "text" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Resource",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -1092,6 +1103,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.resourcebase.ResourceList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1102,49 +1114,57 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [10, 0, 16, 1],
+          leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
           path: [4, 2, 2, 3],
           span: [39, 2, 36],
+          leadingDetachedComments: [],
           leadingComments:
             "/ Filter based on fieldName|operation, value|list\n",
         },
         {
           path: [4, 2, 2, 4],
           span: [42, 2, 33],
+          leadingDetachedComments: [],
           leadingComments: "/ Fields selector\n",
         },
         {
           path: [4, 2, 2, 6],
           span: [52, 2, 38],
+          leadingDetachedComments: [],
           leadingComments:
             "* Check the query parameters of HTTP request.\n If query parameter `locales` is given,\n return all corresponding localized values.\n Otherwise, return always the localized value\n with highest priority.\n Can be empty, single locale or multiple locales.\n",
         },
         {
           path: [4, 3, 2, 0],
           span: [61, 2, 22],
+          leadingDetachedComments: [],
           leadingComments: "/ Request to purge the whole collection\n",
         },
         {
           path: [4, 3, 2, 1],
           span: [63, 2, 26],
+          leadingDetachedComments: [],
           leadingComments: "/ Delete specified documents\n",
         },
         {
           path: [4, 4],
           span: [68, 0, 72, 1],
+          leadingDetachedComments: [],
           leadingComments: "/ List of resources\n",
         },
         {
           path: [4, 5],
           span: [75, 0, 80, 1],
+          leadingDetachedComments: [],
           leadingComments: "/ Example resource\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.resourcebase.FieldFilter": FieldFilter,
     ".io.restorecommerce.resourcebase.Sort": Sort,
@@ -1155,13 +1175,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.Resource": Resource,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    google_protobuf_any_protoMetadata,
-    google_protobuf_struct_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

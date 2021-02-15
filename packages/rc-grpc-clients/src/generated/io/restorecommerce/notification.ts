@@ -1,10 +1,10 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
-import { Writer, Reader } from "protobufjs/minimal";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.notification";
 
@@ -63,21 +63,37 @@ const baseAttachment: object = {
 
 export const Attachment = {
   encode(message: Attachment, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.filename);
-    writer.uint32(18).string(message.text);
-    writer.uint32(26).bytes(message.buffer);
-    writer.uint32(34).string(message.path);
-    writer.uint32(42).string(message.contentType);
-    writer.uint32(50).string(message.contentDisposition);
-    writer.uint32(58).string(message.cid);
-    writer.uint32(66).string(message.encoding);
+    if (message.filename !== "") {
+      writer.uint32(10).string(message.filename);
+    }
+    if (message.text !== "") {
+      writer.uint32(18).string(message.text);
+    }
+    if (message.buffer.length !== 0) {
+      writer.uint32(26).bytes(message.buffer);
+    }
+    if (message.path !== "") {
+      writer.uint32(34).string(message.path);
+    }
+    if (message.contentType !== "") {
+      writer.uint32(42).string(message.contentType);
+    }
+    if (message.contentDisposition !== "") {
+      writer.uint32(50).string(message.contentDisposition);
+    }
+    if (message.cid !== "") {
+      writer.uint32(58).string(message.cid);
+    }
+    if (message.encoding !== "") {
+      writer.uint32(66).string(message.encoding);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Attachment {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAttachment } as Attachment;
+    const message = globalThis.Object.create(baseAttachment) as Attachment;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -114,7 +130,7 @@ export const Attachment = {
   },
 
   fromJSON(object: any): Attachment {
-    const message = { ...baseAttachment } as Attachment;
+    const message = globalThis.Object.create(baseAttachment) as Attachment;
     if (object.filename !== undefined && object.filename !== null) {
       message.filename = String(object.filename);
     } else {
@@ -241,10 +257,18 @@ export const Notification = {
     if (message.log !== undefined) {
       Log.encode(message.log, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.subject);
-    writer.uint32(34).string(message.body);
-    writer.uint32(42).string(message.transport);
-    writer.uint32(50).string(message.provider);
+    if (message.subject !== "") {
+      writer.uint32(26).string(message.subject);
+    }
+    if (message.body !== "") {
+      writer.uint32(34).string(message.body);
+    }
+    if (message.transport !== "") {
+      writer.uint32(42).string(message.transport);
+    }
+    if (message.provider !== "") {
+      writer.uint32(50).string(message.provider);
+    }
     for (const v of message.attachments) {
       Attachment.encode(v!, writer.uint32(58).fork()).ldelim();
     }
@@ -254,7 +278,7 @@ export const Notification = {
   decode(input: Reader | Uint8Array, length?: number): Notification {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseNotification } as Notification;
+    const message = globalThis.Object.create(baseNotification) as Notification;
     message.attachments = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -289,7 +313,7 @@ export const Notification = {
   },
 
   fromJSON(object: any): Notification {
-    const message = { ...baseNotification } as Notification;
+    const message = globalThis.Object.create(baseNotification) as Notification;
     message.attachments = [];
     if (object.email !== undefined && object.email !== null) {
       message.email = Email.fromJSON(object.email);
@@ -404,14 +428,16 @@ export const Email = {
     for (const v of message.bcc) {
       writer.uint32(26).string(v!);
     }
-    writer.uint32(34).string(message.replyto);
+    if (message.replyto !== "") {
+      writer.uint32(34).string(message.replyto);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Email {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseEmail } as Email;
+    const message = globalThis.Object.create(baseEmail) as Email;
     message.to = [];
     message.cc = [];
     message.bcc = [];
@@ -439,7 +465,7 @@ export const Email = {
   },
 
   fromJSON(object: any): Email {
-    const message = { ...baseEmail } as Email;
+    const message = globalThis.Object.create(baseEmail) as Email;
     message.to = [];
     message.cc = [];
     message.bcc = [];
@@ -520,14 +546,16 @@ const baseLog: object = { level: "" };
 
 export const Log = {
   encode(message: Log, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.level);
+    if (message.level !== "") {
+      writer.uint32(10).string(message.level);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Log {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLog } as Log;
+    const message = globalThis.Object.create(baseLog) as Log;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -543,7 +571,7 @@ export const Log = {
   },
 
   fromJSON(object: any): Log {
-    const message = { ...baseLog } as Log;
+    const message = globalThis.Object.create(baseLog) as Log;
     if (object.level !== undefined && object.level !== null) {
       message.level = String(object.level);
     } else {
@@ -575,86 +603,68 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: ["google/protobuf/empty.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Attachment",
         field: [
           {
             name: "filename",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "filename",
           },
-          {
-            name: "text",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "text",
-          },
-          {
-            name: "buffer",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BYTES",
-            jsonName: "buffer",
-          },
-          {
-            name: "path",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "path",
-          },
+          { name: "text", number: 2, label: 1, type: 9, jsonName: "text" },
+          { name: "buffer", number: 3, label: 1, type: 12, jsonName: "buffer" },
+          { name: "path", number: 4, label: 1, type: 9, jsonName: "path" },
           {
             name: "content_type",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "contentType",
           },
           {
             name: "content_disposition",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "contentDisposition",
           },
-          {
-            name: "cid",
-            number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "cid",
-          },
+          { name: "cid", number: 7, label: 1, type: 9, jsonName: "cid" },
           {
             name: "encoding",
             number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "encoding",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Attachment",
       },
       {
-        name: "Notification",
         field: [
           {
             name: "email",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.notification.Email",
             oneofIndex: 0,
             jsonName: "email",
@@ -662,8 +672,8 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "log",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.notification.Log",
             oneofIndex: 0,
             jsonName: "log",
@@ -671,92 +681,82 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "subject",
           },
-          {
-            name: "body",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "body",
-          },
+          { name: "body", number: 4, label: 1, type: 9, jsonName: "body" },
           {
             name: "transport",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "transport",
           },
           {
             name: "provider",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "provider",
           },
           {
             name: "attachments",
             number: 7,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.notification.Attachment",
             jsonName: "attachments",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "channel" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "Notification",
       },
       {
-        name: "Email",
         field: [
-          {
-            name: "to",
-            number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "to",
-          },
-          {
-            name: "cc",
-            number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "cc",
-          },
-          {
-            name: "bcc",
-            number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
-            jsonName: "bcc",
-          },
+          { name: "to", number: 1, label: 3, type: 9, jsonName: "to" },
+          { name: "cc", number: 2, label: 3, type: 9, jsonName: "cc" },
+          { name: "bcc", number: 3, label: 3, type: 9, jsonName: "bcc" },
           {
             name: "replyto",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "replyto",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Email",
       },
       {
-        name: "Log",
         field: [
-          {
-            name: "level",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "level",
-          },
+          { name: "level", number: 1, label: 1, type: 9, jsonName: "level" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Log",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Send",
@@ -764,6 +764,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".google.protobuf.Empty",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -774,79 +775,91 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0, 2, 0],
           span: [8, 2, 58],
+          leadingDetachedComments: [],
           leadingComments: " direct notifications\n",
           trailingComments: "/ generic fallback\n",
         },
         {
           path: [4, 0],
           span: [12, 0, 24, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " mimics nodemailer properties for easy configuration\n",
         },
         {
           path: [4, 0, 2, 1],
           span: [16, 2, 18],
+          leadingDetachedComments: [],
           leadingComments: ' the "content" may be on of the following:\n',
           trailingComments: " for textual data\n",
         },
         {
           path: [4, 0, 2, 2],
           span: [17, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: " for binary data, eg.: images\n",
         },
         {
           path: [4, 1],
           span: [27, 0, 37, 1],
+          leadingDetachedComments: [],
           leadingComments: " sendEmail Notification event\n",
         },
         {
           path: [4, 1, 2, 3],
           span: [33, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " text/HTML content\n",
         },
         {
           path: [4, 1, 2, 4],
           span: [34, 2, 23],
+          leadingDetachedComments: [],
           trailingComments: "/ 'email', 'log', ... default == 'log'\n",
         },
         {
           path: [4, 1, 2, 5],
           span: [35, 2, 22],
+          leadingDetachedComments: [],
           trailingComments:
             "/ specific transport provider, eg: 'console' for transport == 'log'\n",
         },
         {
           path: [4, 2, 2, 0],
           span: [40, 2, 25],
+          leadingDetachedComments: [],
           trailingComments: " array of to email list\n",
         },
         {
           path: [4, 2, 2, 1],
           span: [41, 2, 26],
+          leadingDetachedComments: [],
           trailingComments: " array of cc email list\n",
         },
         {
           path: [4, 2, 2, 2],
           span: [42, 2, 26],
+          leadingDetachedComments: [],
           trailingComments: " array of bcc email list\n",
         },
         {
           path: [4, 2, 2, 3],
           span: [43, 2, 21],
+          leadingDetachedComments: [],
           trailingComments:
             " if set, the outgoing mail will have this replyTo header set\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.notification.Attachment": Attachment,
     ".io.restorecommerce.notification.Notification": Notification,
     ".io.restorecommerce.notification.Email": Email,
     ".io.restorecommerce.notification.Log": Log,
   },
-  dependencies: [google_protobuf_empty_protoMetadata],
+  dependencies: [protoMetadata1],
 };
 
 declare var self: any | undefined;
@@ -856,7 +869,7 @@ var globalThis: any = (() => {
   if (typeof self !== "undefined") return self;
   if (typeof window !== "undefined") return window;
   if (typeof global !== "undefined") return global;
-  throw new Error("Unable to locate global object");
+  throw "Unable to locate global object";
 })();
 
 const atob: (b64: string) => string =

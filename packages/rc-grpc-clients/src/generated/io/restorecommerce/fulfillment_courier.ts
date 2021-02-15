@@ -1,23 +1,23 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_courier";
 
@@ -41,8 +41,10 @@ export const CourierList = {
     for (const v of message.items) {
       Courier.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -51,7 +53,7 @@ export const CourierList = {
   decode(input: Reader | Uint8Array, length?: number): CourierList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCourierList } as CourierList;
+    const message = globalThis.Object.create(baseCourierList) as CourierList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -74,7 +76,7 @@ export const CourierList = {
   },
 
   fromJSON(object: any): CourierList {
-    const message = { ...baseCourierList } as CourierList;
+    const message = globalThis.Object.create(baseCourierList) as CourierList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -135,19 +137,25 @@ const baseCourier: object = { name: "", description: "", id: "" };
 
 export const Courier = {
   encode(message: Courier, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.description);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    writer.uint32(34).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(34).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Courier {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCourier } as Courier;
+    const message = globalThis.Object.create(baseCourier) as Courier;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -172,7 +180,7 @@ export const Courier = {
   },
 
   fromJSON(object: any): Courier {
-    const message = { ...baseCourier } as Courier;
+    const message = globalThis.Object.create(baseCourier) as Courier;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -242,13 +250,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -259,72 +267,73 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "CourierList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.fulfillment_courier.Courier",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CourierList",
       },
       {
-        name: "Courier",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "meta",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "id",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 4, label: 1, type: 9, jsonName: "id" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Courier",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -352,6 +361,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.fulfillment_courier.CourierList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -359,18 +369,28 @@ export const protoMetadata: ProtoMetadata = {
     package: "io.restorecommerce.fulfillment_courier",
     sourceCodeInfo: { location: [] },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.fulfillment_courier.CourierList": CourierList,
     ".io.restorecommerce.fulfillment_courier.Courier": Courier,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

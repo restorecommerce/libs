@@ -1,12 +1,12 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/auth";
 import {
   Any,
-  protoMetadata as google_protobuf_any_protoMetadata,
+  protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
 import { Observable } from "rxjs";
 import { Writer, Reader } from "protobufjs/minimal";
@@ -115,15 +115,25 @@ export const TraversalRequest = {
         writer.uint32(18).fork()
       ).ldelim();
     }
-    if (message.opts !== undefined && message.opts !== undefined) {
+    if (message.opts !== undefined) {
       Options.encode(message.opts, writer.uint32(26).fork()).ldelim();
     }
-    writer.uint32(34).string(message.collectionName);
-    writer.uint32(42).string(message.edgeName);
-    writer.uint32(48).bool(message.data);
-    writer.uint32(56).bool(message.path);
-    writer.uint32(64).bool(message.aql);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.collectionName !== "") {
+      writer.uint32(34).string(message.collectionName);
+    }
+    if (message.edgeName !== "") {
+      writer.uint32(42).string(message.edgeName);
+    }
+    if (message.data === true) {
+      writer.uint32(48).bool(message.data);
+    }
+    if (message.path === true) {
+      writer.uint32(56).bool(message.path);
+    }
+    if (message.aql === true) {
+      writer.uint32(64).bool(message.aql);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(74).fork()).ldelim();
     }
     return writer;
@@ -132,7 +142,9 @@ export const TraversalRequest = {
   decode(input: Reader | Uint8Array, length?: number): TraversalRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTraversalRequest } as TraversalRequest;
+    const message = globalThis.Object.create(
+      baseTraversalRequest
+    ) as TraversalRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,7 +187,9 @@ export const TraversalRequest = {
   },
 
   fromJSON(object: any): TraversalRequest {
-    const message = { ...baseTraversalRequest } as TraversalRequest;
+    const message = globalThis.Object.create(
+      baseTraversalRequest
+    ) as TraversalRequest;
     if (object.startVertex !== undefined && object.startVertex !== null) {
       message.startVertex = String(object.startVertex);
     } else {
@@ -321,9 +335,9 @@ export const TraversalRequest_StartVertices = {
   ): TraversalRequest_StartVertices {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseTraversalRequest_StartVertices,
-    } as TraversalRequest_StartVertices;
+    const message = globalThis.Object.create(
+      baseTraversalRequest_StartVertices
+    ) as TraversalRequest_StartVertices;
     message.vertices = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -340,9 +354,9 @@ export const TraversalRequest_StartVertices = {
   },
 
   fromJSON(object: any): TraversalRequest_StartVertices {
-    const message = {
-      ...baseTraversalRequest_StartVertices,
-    } as TraversalRequest_StartVertices;
+    const message = globalThis.Object.create(
+      baseTraversalRequest_StartVertices
+    ) as TraversalRequest_StartVertices;
     message.vertices = [];
     if (object.vertices !== undefined && object.vertices !== null) {
       for (const e of object.vertices) {
@@ -385,10 +399,10 @@ export const TraversalResponse = {
     for (const v of message.vertexFields) {
       VertexFields.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.paths !== undefined && message.paths !== undefined) {
+    if (message.paths !== undefined) {
       Any.encode(message.paths, writer.uint32(18).fork()).ldelim();
     }
-    if (message.data !== undefined && message.data !== undefined) {
+    if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -397,7 +411,9 @@ export const TraversalResponse = {
   decode(input: Reader | Uint8Array, length?: number): TraversalResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseTraversalResponse } as TraversalResponse;
+    const message = globalThis.Object.create(
+      baseTraversalResponse
+    ) as TraversalResponse;
     message.vertexFields = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -422,7 +438,9 @@ export const TraversalResponse = {
   },
 
   fromJSON(object: any): TraversalResponse {
-    const message = { ...baseTraversalResponse } as TraversalResponse;
+    const message = globalThis.Object.create(
+      baseTraversalResponse
+    ) as TraversalResponse;
     message.vertexFields = [];
     if (object.vertexFields !== undefined && object.vertexFields !== null) {
       for (const e of object.vertexFields) {
@@ -484,16 +502,22 @@ const baseVertexFields: object = { id: "", key: "", rev: "" };
 
 export const VertexFields = {
   encode(message: VertexFields, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    writer.uint32(18).string(message.key);
-    writer.uint32(26).string(message.rev);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.key !== "") {
+      writer.uint32(18).string(message.key);
+    }
+    if (message.rev !== "") {
+      writer.uint32(26).string(message.rev);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): VertexFields {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseVertexFields } as VertexFields;
+    const message = globalThis.Object.create(baseVertexFields) as VertexFields;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -515,7 +539,7 @@ export const VertexFields = {
   },
 
   fromJSON(object: any): VertexFields {
-    const message = { ...baseVertexFields } as VertexFields;
+    const message = globalThis.Object.create(baseVertexFields) as VertexFields;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -582,36 +606,64 @@ const baseOptions: object = {
 
 export const Options = {
   encode(message: Options, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.sort);
-    writer.uint32(18).string(message.direction);
-    writer.uint32(24).uint32(message.minDepth);
-    writer.uint32(34).string(message.startVertex);
-    writer.uint32(42).string(message.visitor);
-    writer.uint32(50).string(message.itemOrder);
-    writer.uint32(58).string(message.strategy);
+    if (message.sort !== "") {
+      writer.uint32(10).string(message.sort);
+    }
+    if (message.direction !== "") {
+      writer.uint32(18).string(message.direction);
+    }
+    if (message.minDepth !== 0) {
+      writer.uint32(24).uint32(message.minDepth);
+    }
+    if (message.startVertex !== "") {
+      writer.uint32(34).string(message.startVertex);
+    }
+    if (message.visitor !== "") {
+      writer.uint32(42).string(message.visitor);
+    }
+    if (message.itemOrder !== "") {
+      writer.uint32(50).string(message.itemOrder);
+    }
+    if (message.strategy !== "") {
+      writer.uint32(58).string(message.strategy);
+    }
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(66).fork()).ldelim();
     }
-    writer.uint32(74).string(message.init);
-    writer.uint32(80).uint32(message.maxIterations);
-    writer.uint32(88).uint32(message.maxDepth);
-    if (message.uniqueness !== undefined && message.uniqueness !== undefined) {
+    if (message.init !== "") {
+      writer.uint32(74).string(message.init);
+    }
+    if (message.maxIterations !== 0) {
+      writer.uint32(80).uint32(message.maxIterations);
+    }
+    if (message.maxDepth !== 0) {
+      writer.uint32(88).uint32(message.maxDepth);
+    }
+    if (message.uniqueness !== undefined) {
       Uniqueness.encode(message.uniqueness, writer.uint32(98).fork()).ldelim();
     }
-    writer.uint32(106).string(message.order);
-    writer.uint32(114).string(message.graphName);
+    if (message.order !== "") {
+      writer.uint32(106).string(message.order);
+    }
+    if (message.graphName !== "") {
+      writer.uint32(114).string(message.graphName);
+    }
     for (const v of message.expander) {
       Expander.encode(v!, writer.uint32(122).fork()).ldelim();
     }
-    writer.uint32(130).string(message.edgeCollection);
-    writer.uint32(136).bool(message.lowestCommonAncestor);
+    if (message.edgeCollection !== "") {
+      writer.uint32(130).string(message.edgeCollection);
+    }
+    if (message.lowestCommonAncestor === true) {
+      writer.uint32(136).bool(message.lowestCommonAncestor);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Options {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOptions } as Options;
+    const message = globalThis.Object.create(baseOptions) as Options;
     message.filter = [];
     message.expander = [];
     while (reader.pos < end) {
@@ -677,7 +729,7 @@ export const Options = {
   },
 
   fromJSON(object: any): Options {
-    const message = { ...baseOptions } as Options;
+    const message = globalThis.Object.create(baseOptions) as Options;
     message.filter = [];
     message.expander = [];
     if (object.sort !== undefined && object.sort !== null) {
@@ -912,14 +964,16 @@ const baseFilter: object = { vertex: "" };
 
 export const Filter = {
   encode(message: Filter, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.vertex);
+    if (message.vertex !== "") {
+      writer.uint32(10).string(message.vertex);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Filter {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseFilter } as Filter;
+    const message = globalThis.Object.create(baseFilter) as Filter;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -935,7 +989,7 @@ export const Filter = {
   },
 
   fromJSON(object: any): Filter {
-    const message = { ...baseFilter } as Filter;
+    const message = globalThis.Object.create(baseFilter) as Filter;
     if (object.vertex !== undefined && object.vertex !== null) {
       message.vertex = String(object.vertex);
     } else {
@@ -965,15 +1019,19 @@ const baseExpander: object = { edge: "", direction: "" };
 
 export const Expander = {
   encode(message: Expander, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.edge);
-    writer.uint32(18).string(message.direction);
+    if (message.edge !== "") {
+      writer.uint32(10).string(message.edge);
+    }
+    if (message.direction !== "") {
+      writer.uint32(18).string(message.direction);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Expander {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseExpander } as Expander;
+    const message = globalThis.Object.create(baseExpander) as Expander;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -992,7 +1050,7 @@ export const Expander = {
   },
 
   fromJSON(object: any): Expander {
-    const message = { ...baseExpander } as Expander;
+    const message = globalThis.Object.create(baseExpander) as Expander;
     if (object.edge !== undefined && object.edge !== null) {
       message.edge = String(object.edge);
     } else {
@@ -1033,15 +1091,19 @@ const baseUniqueness: object = { vertices: "", edges: "" };
 
 export const Uniqueness = {
   encode(message: Uniqueness, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.vertices);
-    writer.uint32(18).string(message.edges);
+    if (message.vertices !== "") {
+      writer.uint32(10).string(message.vertices);
+    }
+    if (message.edges !== "") {
+      writer.uint32(18).string(message.edges);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Uniqueness {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseUniqueness } as Uniqueness;
+    const message = globalThis.Object.create(baseUniqueness) as Uniqueness;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1060,7 +1122,7 @@ export const Uniqueness = {
   },
 
   fromJSON(object: any): Uniqueness {
-    const message = { ...baseUniqueness } as Uniqueness;
+    const message = globalThis.Object.create(baseUniqueness) as Uniqueness;
     if (object.vertices !== undefined && object.vertices !== null) {
       message.vertices = String(object.vertices);
     } else {
@@ -1103,33 +1165,32 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "TraversalRequest",
         field: [
           {
             name: "start_vertex",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             oneofIndex: 0,
             jsonName: "startVertex",
           },
           {
             name: "start_vertices",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName:
               ".io.restorecommerce.graph.TraversalRequest.StartVertices",
             oneofIndex: 0,
@@ -1138,308 +1199,290 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "opts",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.graph.Options",
             jsonName: "opts",
           },
           {
             name: "collection_name",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "collectionName",
           },
           {
             name: "edge_name",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "edgeName",
           },
-          {
-            name: "data",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "data",
-          },
-          {
-            name: "path",
-            number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "path",
-          },
-          {
-            name: "aql",
-            number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "aql",
-          },
+          { name: "data", number: 6, label: 1, type: 8, jsonName: "data" },
+          { name: "path", number: 7, label: 1, type: 8, jsonName: "path" },
+          { name: "aql", number: 8, label: 1, type: 8, jsonName: "aql" },
           {
             name: "subject",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
         nestedType: [
           {
-            name: "StartVertices",
             field: [
               {
                 name: "vertices",
                 number: 1,
-                label: "LABEL_REPEATED",
-                type: "TYPE_STRING",
+                label: 3,
+                type: 9,
                 jsonName: "vertices",
               },
             ],
+            extension: [],
+            nestedType: [],
+            enumType: [],
+            extensionRange: [],
+            oneofDecl: [],
+            reservedRange: [],
+            reservedName: [],
+            name: "StartVertices",
           },
         ],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "vertex" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "TraversalRequest",
       },
       {
-        name: "TraversalResponse",
         field: [
           {
             name: "vertex_fields",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.graph.VertexFields",
             jsonName: "vertexFields",
           },
           {
             name: "paths",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "paths",
           },
           {
             name: "data",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "data",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "TraversalResponse",
       },
       {
-        name: "VertexFields",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-          {
-            name: "key",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "key",
-          },
-          {
-            name: "rev",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "rev",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          { name: "key", number: 2, label: 1, type: 9, jsonName: "key" },
+          { name: "rev", number: 3, label: 1, type: 9, jsonName: "rev" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "VertexFields",
       },
       {
-        name: "Options",
         field: [
-          {
-            name: "sort",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "sort",
-          },
+          { name: "sort", number: 1, label: 1, type: 9, jsonName: "sort" },
           {
             name: "direction",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "direction",
           },
           {
             name: "min_depth",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "minDepth",
           },
           {
             name: "start_vertex",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "startVertex",
           },
           {
             name: "visitor",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "visitor",
           },
           {
             name: "item_order",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "itemOrder",
           },
           {
             name: "strategy",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "strategy",
           },
           {
             name: "filter",
             number: 8,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.graph.Filter",
             jsonName: "filter",
           },
-          {
-            name: "init",
-            number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "init",
-          },
+          { name: "init", number: 9, label: 1, type: 9, jsonName: "init" },
           {
             name: "max_iterations",
             number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "maxIterations",
           },
           {
             name: "max_depth",
             number: 11,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "maxDepth",
           },
           {
             name: "uniqueness",
             number: 12,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.graph.Uniqueness",
             jsonName: "uniqueness",
           },
-          {
-            name: "order",
-            number: 13,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "order",
-          },
+          { name: "order", number: 13, label: 1, type: 9, jsonName: "order" },
           {
             name: "graph_name",
             number: 14,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "graphName",
           },
           {
             name: "expander",
             number: 15,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.graph.Expander",
             jsonName: "expander",
           },
           {
             name: "edge_collection",
             number: 16,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "edgeCollection",
           },
           {
             name: "lowest_common_ancestor",
             number: 17,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "lowestCommonAncestor",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Options",
       },
       {
-        name: "Filter",
         field: [
-          {
-            name: "vertex",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "vertex",
-          },
+          { name: "vertex", number: 1, label: 1, type: 9, jsonName: "vertex" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Filter",
       },
       {
-        name: "Expander",
         field: [
-          {
-            name: "edge",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "edge",
-          },
+          { name: "edge", number: 1, label: 1, type: 9, jsonName: "edge" },
           {
             name: "direction",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "direction",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Expander",
       },
       {
-        name: "Uniqueness",
         field: [
           {
             name: "vertices",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "vertices",
           },
-          {
-            name: "edges",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "edges",
-          },
+          { name: "edges", number: 2, label: 1, type: 9, jsonName: "edges" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Uniqueness",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Traversal",
@@ -1448,6 +1491,7 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: true,
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1458,128 +1502,151 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [6, 0, 8, 1],
+          leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
           path: [4, 0, 8, 0],
           span: [16, 2, 19, 3],
+          leadingDetachedComments: [],
           leadingComments: " Document handle either _id or _key value\n",
         },
         {
           path: [4, 0, 2, 2],
           span: [22, 2, 19],
+          leadingDetachedComments: [],
           leadingComments: " Filter based on fieldName|operation, value|list\n",
         },
         {
           path: [4, 3, 2, 0],
           span: [44, 1, 17],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 1],
           span: [45, 1, 22],
+          leadingDetachedComments: [],
           trailingComments: " either inbound or outbound\n",
         },
         {
           path: [4, 3, 2, 2],
           span: [46, 1, 22],
+          leadingDetachedComments: [],
           trailingComments:
             " ANDed with any existing filters): visits only nodes in at least the given depth\n",
         },
         {
           path: [4, 3, 2, 3],
           span: [47, 1, 25],
+          leadingDetachedComments: [],
           trailingComments: " id of the startVertex\n",
         },
         {
           path: [4, 3, 2, 4],
           span: [48, 1, 20],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 5],
           span: [49, 1, 23],
+          leadingDetachedComments: [],
           trailingComments:
             ' item iteration order can be "forward" or "backward"\n',
         },
         {
           path: [4, 3, 2, 6],
           span: [50, 1, 21],
+          leadingDetachedComments: [],
           trailingComments:
             ' traversal strategy can be "depthfirst" or "breadthfirst"\n',
         },
         {
           path: [4, 3, 2, 7],
           span: [51, 1, 28],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 8],
           span: [52, 1, 17],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 9],
           span: [53, 1, 28],
+          leadingDetachedComments: [],
           trailingComments: " maximum number of iterations in each traversal\n",
         },
         {
           path: [4, 3, 2, 10],
           span: [54, 1, 23],
+          leadingDetachedComments: [],
           trailingComments:
             " ANDed with any existing filters visits only nodes in at most the given depth\n",
         },
         {
           path: [4, 3, 2, 11],
           span: [55, 1, 28],
+          leadingDetachedComments: [],
           trailingComments:
             " specifies uniqueness for vertices and edges visited\n",
         },
         {
           path: [4, 3, 2, 12],
           span: [56, 1, 19],
+          leadingDetachedComments: [],
           trailingComments:
             '  "preorder", "postorder" or "preorder-expander"\n',
         },
         {
           path: [4, 3, 2, 13],
           span: [57, 1, 24],
+          leadingDetachedComments: [],
           trailingComments: " name of graph that contains the edges\n",
         },
         {
           path: [4, 3, 2, 14],
           span: [58, 1, 33],
+          leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 15],
           span: [59, 1, 29],
+          leadingDetachedComments: [],
           trailingComments: " name of the collection that contains the edges\n",
         },
         {
           path: [4, 4, 2, 0],
           span: [64, 2, 20],
+          leadingDetachedComments: [],
           trailingComments: " exclude these vertices\n",
         },
         {
           path: [4, 5, 2, 0],
           span: [68, 2, 18],
+          leadingDetachedComments: [],
           trailingComments: " expand these edges\n",
         },
         {
           path: [4, 6, 2, 0],
           span: [73, 2, 22],
+          leadingDetachedComments: [],
           trailingComments: ' "none"|"global"|"path" for unique vertices\n',
         },
         {
           path: [4, 6, 2, 1],
           span: [74, 2, 19],
+          leadingDetachedComments: [],
           trailingComments: ' "none"|"global"|"path" for unique edges\n',
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.graph.TraversalRequest": TraversalRequest,
     ".io.restorecommerce.graph.TraversalRequest.StartVertices": TraversalRequest_StartVertices,
@@ -1590,11 +1657,18 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.graph.Expander": Expander,
     ".io.restorecommerce.graph.Uniqueness": Uniqueness,
   },
-  dependencies: [
-    google_protobuf_any_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

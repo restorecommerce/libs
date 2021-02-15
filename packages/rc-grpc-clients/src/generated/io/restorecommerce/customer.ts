@@ -1,23 +1,23 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
-  Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
-} from "../../google/protobuf/empty";
-import {
+  protoMetadata as protoMetadata1,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata2,
+  Empty,
+} from "../../google/protobuf/empty";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.customer";
 
@@ -59,8 +59,10 @@ export const CustomerList = {
     for (const v of message.items) {
       Customer.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -69,7 +71,7 @@ export const CustomerList = {
   decode(input: Reader | Uint8Array, length?: number): CustomerList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCustomerList } as CustomerList;
+    const message = globalThis.Object.create(baseCustomerList) as CustomerList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -92,7 +94,7 @@ export const CustomerList = {
   },
 
   fromJSON(object: any): CustomerList {
-    const message = { ...baseCustomerList } as CustomerList;
+    const message = globalThis.Object.create(baseCustomerList) as CustomerList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -155,8 +157,10 @@ const baseCustomer: object = { id: "" };
 
 export const Customer = {
   encode(message: Customer, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
     if (message.individualUser !== undefined) {
@@ -177,7 +181,7 @@ export const Customer = {
   decode(input: Reader | Uint8Array, length?: number): Customer {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCustomer } as Customer;
+    const message = globalThis.Object.create(baseCustomer) as Customer;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -208,7 +212,7 @@ export const Customer = {
   },
 
   fromJSON(object: any): Customer {
-    const message = { ...baseCustomer } as Customer;
+    const message = globalThis.Object.create(baseCustomer) as Customer;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -296,8 +300,12 @@ const baseIndividualUser: object = {
 
 export const IndividualUser = {
   encode(message: IndividualUser, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.userId);
-    writer.uint32(18).string(message.addressId);
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    if (message.addressId !== "") {
+      writer.uint32(18).string(message.addressId);
+    }
     for (const v of message.contactPointIds) {
       writer.uint32(26).string(v!);
     }
@@ -307,7 +315,9 @@ export const IndividualUser = {
   decode(input: Reader | Uint8Array, length?: number): IndividualUser {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseIndividualUser } as IndividualUser;
+    const message = globalThis.Object.create(
+      baseIndividualUser
+    ) as IndividualUser;
     message.contactPointIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -330,7 +340,9 @@ export const IndividualUser = {
   },
 
   fromJSON(object: any): IndividualUser {
-    const message = { ...baseIndividualUser } as IndividualUser;
+    const message = globalThis.Object.create(
+      baseIndividualUser
+    ) as IndividualUser;
     message.contactPointIds = [];
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
@@ -394,15 +406,19 @@ const baseOrgUser: object = { userId: "", organizationId: "" };
 
 export const OrgUser = {
   encode(message: OrgUser, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.userId);
-    writer.uint32(18).string(message.organizationId);
+    if (message.userId !== "") {
+      writer.uint32(10).string(message.userId);
+    }
+    if (message.organizationId !== "") {
+      writer.uint32(18).string(message.organizationId);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): OrgUser {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrgUser } as OrgUser;
+    const message = globalThis.Object.create(baseOrgUser) as OrgUser;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -421,7 +437,7 @@ export const OrgUser = {
   },
 
   fromJSON(object: any): OrgUser {
-    const message = { ...baseOrgUser } as OrgUser;
+    const message = globalThis.Object.create(baseOrgUser) as OrgUser;
     if (object.userId !== undefined && object.userId !== null) {
       message.userId = String(object.userId);
     } else {
@@ -463,8 +479,12 @@ const baseGuest: object = { guest: false, addressId: "", contactPointIds: "" };
 
 export const Guest = {
   encode(message: Guest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.guest);
-    writer.uint32(18).string(message.addressId);
+    if (message.guest === true) {
+      writer.uint32(8).bool(message.guest);
+    }
+    if (message.addressId !== "") {
+      writer.uint32(18).string(message.addressId);
+    }
     for (const v of message.contactPointIds) {
       writer.uint32(26).string(v!);
     }
@@ -474,7 +494,7 @@ export const Guest = {
   decode(input: Reader | Uint8Array, length?: number): Guest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGuest } as Guest;
+    const message = globalThis.Object.create(baseGuest) as Guest;
     message.contactPointIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -497,7 +517,7 @@ export const Guest = {
   },
 
   fromJSON(object: any): Guest {
-    const message = { ...baseGuest } as Guest;
+    const message = globalThis.Object.create(baseGuest) as Guest;
     message.contactPointIds = [];
     if (object.guest !== undefined && object.guest !== null) {
       message.guest = Boolean(object.guest);
@@ -567,13 +587,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/empty.proto",
@@ -584,56 +604,56 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "CustomerList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.customer.Customer",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CustomerList",
       },
       {
-        name: "Customer",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
           {
             name: "individual_user",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.customer.IndividualUser",
             oneofIndex: 0,
             jsonName: "individualUser",
@@ -641,8 +661,8 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "org_user",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.customer.OrgUser",
             oneofIndex: 0,
             jsonName: "orgUser",
@@ -650,91 +670,100 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "guest",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.customer.Guest",
             oneofIndex: 0,
             jsonName: "guest",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "customer" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "Customer",
       },
       {
-        name: "IndividualUser",
         field: [
-          {
-            name: "user_id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "userId",
-          },
+          { name: "user_id", number: 1, label: 1, type: 9, jsonName: "userId" },
           {
             name: "address_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "addressId",
           },
           {
             name: "contact_point_ids",
             number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "contactPointIds",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "IndividualUser",
       },
       {
-        name: "OrgUser",
         field: [
-          {
-            name: "user_id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "userId",
-          },
+          { name: "user_id", number: 1, label: 1, type: 9, jsonName: "userId" },
           {
             name: "organization_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "organizationId",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrgUser",
       },
       {
-        name: "Guest",
         field: [
-          {
-            name: "guest",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "guest",
-          },
+          { name: "guest", number: 1, label: 1, type: 8, jsonName: "guest" },
           {
             name: "address_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "addressId",
           },
           {
             name: "contact_point_ids",
             number: 3,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "contactPointIds",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Guest",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -762,6 +791,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.customer.CustomerList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -772,12 +802,13 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0],
           span: [12, 0, 18, 1],
+          leadingDetachedComments: [],
           leadingComments: "\nMicroservice definition.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.customer.CustomerList": CustomerList,
     ".io.restorecommerce.customer.Customer": Customer,
@@ -786,12 +817,22 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.customer.Guest": Guest,
   },
   dependencies: [
-    io_restorecommerce_resource_base_protoMetadata,
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

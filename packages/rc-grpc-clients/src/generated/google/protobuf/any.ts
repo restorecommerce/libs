@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "google.protobuf";
@@ -98,15 +98,19 @@ const baseAny: object = { typeUrl: "" };
 
 export const Any = {
   encode(message: Any, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.typeUrl);
-    writer.uint32(18).bytes(message.value);
+    if (message.typeUrl !== "") {
+      writer.uint32(10).string(message.typeUrl);
+    }
+    if (message.value.length !== 0) {
+      writer.uint32(18).bytes(message.value);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Any {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAny } as Any;
+    const message = globalThis.Object.create(baseAny) as Any;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -125,7 +129,7 @@ export const Any = {
   },
 
   fromJSON(object: any): Any {
-    const message = { ...baseAny } as Any;
+    const message = globalThis.Object.create(baseAny) as Any;
     if (object.typeUrl !== undefined && object.typeUrl !== null) {
       message.typeUrl = String(object.typeUrl);
     } else {
@@ -164,35 +168,36 @@ export const Any = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Any",
         field: [
           {
             name: "type_url",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "typeUrl",
           },
-          {
-            name: "value",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BYTES",
-            jsonName: "value",
-          },
+          { name: "value", number: 2, label: 1, type: 12, jsonName: "value" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Any",
       },
     ],
     enumType: [],
@@ -201,6 +206,7 @@ export const protoMetadata: ProtoMetadata = {
     name: "google/protobuf/any.proto",
     package: "google.protobuf",
     options: {
+      uninterpretedOption: [],
       javaPackage: "com.google.protobuf",
       javaOuterClassname: "AnyProto",
       javaMultipleFiles: true,
@@ -214,25 +220,28 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [102, 0, 132, 1],
+          leadingDetachedComments: [],
           leadingComments:
             '* `Any` contains an arbitrary serialized protocol buffer message along with a\n URL that describes the type of the serialized message.\n\n Protobuf library provides support to pack/unpack Any values in the form\n of utility functions or additional generated methods of the Any type.\n\n Example 1: Pack and unpack a message in C++.\n\n     Foo foo = ...;\n     Any any;\n     any.PackFrom(foo);\n     ...\n     if (any.UnpackTo(&foo)) {\n       ...\n     }\n\n Example 2: Pack and unpack a message in Java.\n\n     Foo foo = ...;\n     Any any = Any.pack(foo);\n     ...\n     if (any.is(Foo.class)) {\n       foo = any.unpack(Foo.class);\n     }\n\n The pack methods provided by protobuf library will by default use\n \'type.googleapis.com/full.type.name\' as the type URL and the unpack\n methods only use the fully qualified type name after the last \'/\'\n in the type URL, for example "foo.bar.com/x/y.z" will yield type\n name "y.z".\n\n\n JSON\n ====\n The JSON representation of an `Any` value uses the regular\n representation of the deserialized, embedded message, with an\n additional field `@type` which contains the type URL. Example:\n\n     package google.profile;\n     message Person {\n       string first_name = 1;\n       string last_name = 2;\n     }\n\n     {\n       "@type": "type.googleapis.com/google.profile.Person",\n       "firstName": <string>,\n       "lastName": <string>\n     }\n\n If the embedded message type is well-known and has a custom JSON\n representation, that representation will be embedded adding a field\n `value` which holds the custom JSON in addition to the `@type`\n field. Example (for message [google.protobuf.Duration][]):\n\n     {\n       "@type": "type.googleapis.com/google.protobuf.Duration",\n       "value": "1.212s"\n     }\n',
         },
         {
           path: [4, 0, 2, 0],
           span: [126, 2, 22],
+          leadingDetachedComments: [],
           leadingComments:
             '*\n A URL/resource name whose content describes the type of the\n serialized protocol buffer message.\n\n For URLs which use the schema `http`, `https`, or no schema, the\n following restrictions and interpretations apply:\n\n * If no schema is provided, `https` is assumed.\n * The last segment of the URL\'s path must represent the fully\n   qualified name of the type (as in `path/google.protobuf.Duration`).\n   The name should be in a canonical form (e.g., leading "." is\n   not accepted).\n * An HTTP GET on the URL must yield a [google.protobuf.Type][]\n   value in binary format, or produce an error.\n * Applications are allowed to cache lookup results based on the\n   URL, or have them precompiled into a binary to avoid any\n   lookup. Therefore, binary compatibility needs to be preserved\n   on changes to types. (Use versioned type names to manage\n   breaking changes.)\n\n Schemas other than `http`, `https` (or the empty schema) might be\n used with implementation specific semantics.\n',
         },
         {
           path: [4, 0, 2, 1],
           span: [131, 2, 18],
+          leadingDetachedComments: [],
           leadingComments:
             "*\n Must be a valid serialized protocol buffer of the above specified type.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: { ".google.protobuf.Any": Any },
   dependencies: [],
 };
@@ -244,7 +253,7 @@ var globalThis: any = (() => {
   if (typeof self !== "undefined") return self;
   if (typeof window !== "undefined") return window;
   if (typeof global !== "undefined") return global;
-  throw new Error("Unable to locate global object");
+  throw "Unable to locate global object";
 })();
 
 const atob: (b64: string) => string =

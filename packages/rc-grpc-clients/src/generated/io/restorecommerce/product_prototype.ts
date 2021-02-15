@@ -1,23 +1,23 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product_prototype";
 
@@ -51,21 +51,33 @@ const baseProductPrototype: object = {
 
 export const ProductPrototype = {
   encode(message: ProductPrototype, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.version);
-    writer.uint32(42).string(message.description);
-    writer.uint32(50).string(message.categoryId);
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.version !== "") {
+      writer.uint32(34).string(message.version);
+    }
+    if (message.description !== "") {
+      writer.uint32(42).string(message.description);
+    }
+    if (message.categoryId !== "") {
+      writer.uint32(50).string(message.categoryId);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): ProductPrototype {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProductPrototype } as ProductPrototype;
+    const message = globalThis.Object.create(
+      baseProductPrototype
+    ) as ProductPrototype;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -96,7 +108,9 @@ export const ProductPrototype = {
   },
 
   fromJSON(object: any): ProductPrototype {
-    const message = { ...baseProductPrototype } as ProductPrototype;
+    const message = globalThis.Object.create(
+      baseProductPrototype
+    ) as ProductPrototype;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -189,8 +203,10 @@ export const ProductPrototypeList = {
     for (const v of message.items) {
       ProductPrototype.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -199,7 +215,9 @@ export const ProductPrototypeList = {
   decode(input: Reader | Uint8Array, length?: number): ProductPrototypeList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProductPrototypeList } as ProductPrototypeList;
+    const message = globalThis.Object.create(
+      baseProductPrototypeList
+    ) as ProductPrototypeList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -222,7 +240,9 @@ export const ProductPrototypeList = {
   },
 
   fromJSON(object: any): ProductPrototypeList {
-    const message = { ...baseProductPrototypeList } as ProductPrototypeList;
+    const message = globalThis.Object.create(
+      baseProductPrototypeList
+    ) as ProductPrototypeList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -285,14 +305,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -308,7 +330,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -343,13 +365,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -360,98 +382,98 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "ProductPrototype",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "version",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "version",
           },
           {
             name: "description",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "category_id",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "categoryId",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductPrototype",
       },
       {
-        name: "ProductPrototypeList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product_prototype.ProductPrototype",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductPrototypeList",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -486,6 +508,7 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.product_prototype.ProductPrototypeList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -496,24 +519,35 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [10, 0, 17, 1],
+          leadingDetachedComments: [],
           leadingComments: " ProductPrototype resource\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.product_prototype.ProductPrototype": ProductPrototype,
     ".io.restorecommerce.product_prototype.ProductPrototypeList": ProductPrototypeList,
     ".io.restorecommerce.product_prototype.Deleted": Deleted,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

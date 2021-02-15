@@ -1,34 +1,34 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Target,
   Effect,
+  protoMetadata as protoMetadata6,
   effectFromJSON,
   effectToJSON,
-  protoMetadata as io_restorecommerce_rule_protoMetadata,
 } from "../../io/restorecommerce/rule";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
-  PolicyRQ,
-  protoMetadata as io_restorecommerce_policy_protoMetadata,
-} from "../../io/restorecommerce/policy";
-import { Writer, Reader } from "protobufjs/minimal";
-import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import {
+  protoMetadata as protoMetadata4,
+  PolicyRQ,
+} from "../../io/restorecommerce/policy";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.policy_set";
 
@@ -67,16 +67,24 @@ const basePolicySet: object = {
 
 export const PolicySet = {
   encode(message: PolicySet, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.description);
-    if (message.target !== undefined && message.target !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
+    if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
-    writer.uint32(50).string(message.combiningAlgorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(50).string(message.combiningAlgorithm);
+    }
     for (const v of message.policies) {
       writer.uint32(58).string(v!);
     }
@@ -86,7 +94,7 @@ export const PolicySet = {
   decode(input: Reader | Uint8Array, length?: number): PolicySet {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePolicySet } as PolicySet;
+    const message = globalThis.Object.create(basePolicySet) as PolicySet;
     message.policies = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -121,7 +129,7 @@ export const PolicySet = {
   },
 
   fromJSON(object: any): PolicySet {
-    const message = { ...basePolicySet } as PolicySet;
+    const message = globalThis.Object.create(basePolicySet) as PolicySet;
     message.policies = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -236,8 +244,10 @@ export const PolicySetList = {
     for (const v of message.items) {
       PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -246,7 +256,9 @@ export const PolicySetList = {
   decode(input: Reader | Uint8Array, length?: number): PolicySetList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePolicySetList } as PolicySetList;
+    const message = globalThis.Object.create(
+      basePolicySetList
+    ) as PolicySetList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -269,7 +281,9 @@ export const PolicySetList = {
   },
 
   fromJSON(object: any): PolicySetList {
-    const message = { ...basePolicySetList } as PolicySetList;
+    const message = globalThis.Object.create(
+      basePolicySetList
+    ) as PolicySetList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -332,22 +346,28 @@ const basePolicySetRQ: object = { id: "", combiningAlgorithm: "", effect: 0 };
 
 export const PolicySetRQ = {
   encode(message: PolicySetRQ, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.target !== undefined && message.target !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.combiningAlgorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(26).string(message.combiningAlgorithm);
+    }
     for (const v of message.policies) {
       PolicyRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    writer.uint32(40).int32(message.effect);
+    if (message.effect !== 0) {
+      writer.uint32(40).int32(message.effect);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PolicySetRQ {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePolicySetRQ } as PolicySetRQ;
+    const message = globalThis.Object.create(basePolicySetRQ) as PolicySetRQ;
     message.policies = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -376,7 +396,7 @@ export const PolicySetRQ = {
   },
 
   fromJSON(object: any): PolicySetRQ {
-    const message = { ...basePolicySetRQ } as PolicySetRQ;
+    const message = globalThis.Object.create(basePolicySetRQ) as PolicySetRQ;
     message.policies = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -471,13 +491,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -490,137 +510,139 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "PolicySet",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "target",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Target",
             jsonName: "target",
           },
           {
             name: "combining_algorithm",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "combiningAlgorithm",
           },
           {
             name: "policies",
             number: 7,
-            label: "LABEL_REPEATED",
-            type: "TYPE_STRING",
+            label: 3,
+            type: 9,
             jsonName: "policies",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PolicySet",
       },
       {
-        name: "PolicySetList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.policy_set.PolicySet",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PolicySetList",
       },
       {
-        name: "PolicySetRQ",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "target",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.rule.Target",
             jsonName: "target",
           },
           {
             name: "combining_algorithm",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "combiningAlgorithm",
           },
           {
             name: "policies",
             number: 4,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.policy.PolicyRQ",
             jsonName: "policies",
           },
           {
             name: "effect",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.rule.Effect",
             jsonName: "effect",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PolicySetRQ",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -648,6 +670,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.policy_set.PolicySetList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -658,26 +681,37 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0, 2, 6],
           span: [19, 2, 31],
+          leadingDetachedComments: [],
           trailingComments: " policy IDs\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.policy_set.PolicySet": PolicySet,
     ".io.restorecommerce.policy_set.PolicySetList": PolicySetList,
     ".io.restorecommerce.policy_set.PolicySetRQ": PolicySetRQ,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_policy_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-    io_restorecommerce_rule_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+    protoMetadata6,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

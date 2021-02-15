@@ -1,14 +1,14 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/auth";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
-  protoMetadata as google_protobuf_wrappers_protoMetadata,
+  protoMetadata as protoMetadata1,
   StringValue,
 } from "../../google/protobuf/wrappers";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment";
 
@@ -187,20 +187,40 @@ const baseSetupRequest: object = {
 
 export const SetupRequest = {
   encode(message: SetupRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.ip);
+    if (message.ip !== "") {
+      writer.uint32(10).string(message.ip);
+    }
     for (const v of message.items) {
       Item.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(24).int32(message.subtotal);
-    writer.uint32(32).int32(message.shipping);
-    writer.uint32(40).int32(message.handling);
-    writer.uint32(48).int32(message.tax);
-    writer.uint32(58).string(message.currency);
-    writer.uint32(66).string(message.returnUrl);
-    writer.uint32(74).string(message.cancelReturnUrl);
-    writer.uint32(80).bool(message.allowGuestCheckout);
-    writer.uint32(88).int32(message.provider);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.subtotal !== 0) {
+      writer.uint32(24).int32(message.subtotal);
+    }
+    if (message.shipping !== 0) {
+      writer.uint32(32).int32(message.shipping);
+    }
+    if (message.handling !== 0) {
+      writer.uint32(40).int32(message.handling);
+    }
+    if (message.tax !== 0) {
+      writer.uint32(48).int32(message.tax);
+    }
+    if (message.currency !== "") {
+      writer.uint32(58).string(message.currency);
+    }
+    if (message.returnUrl !== "") {
+      writer.uint32(66).string(message.returnUrl);
+    }
+    if (message.cancelReturnUrl !== "") {
+      writer.uint32(74).string(message.cancelReturnUrl);
+    }
+    if (message.allowGuestCheckout === true) {
+      writer.uint32(80).bool(message.allowGuestCheckout);
+    }
+    if (message.provider !== 0) {
+      writer.uint32(88).int32(message.provider);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(98).fork()).ldelim();
     }
     return writer;
@@ -209,7 +229,7 @@ export const SetupRequest = {
   decode(input: Reader | Uint8Array, length?: number): SetupRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSetupRequest } as SetupRequest;
+    const message = globalThis.Object.create(baseSetupRequest) as SetupRequest;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -259,7 +279,7 @@ export const SetupRequest = {
   },
 
   fromJSON(object: any): SetupRequest {
-    const message = { ...baseSetupRequest } as SetupRequest;
+    const message = globalThis.Object.create(baseSetupRequest) as SetupRequest;
     message.items = [];
     if (object.ip !== undefined && object.ip !== null) {
       message.ip = String(object.ip);
@@ -441,16 +461,24 @@ export const SetupResponse = {
     for (const v of message.paymentErrors) {
       PaymentError.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(18).string(message.token);
-    writer.uint32(26).string(message.confirmInitiationUrl);
-    writer.uint32(34).string(message.initiatedOn);
+    if (message.token !== "") {
+      writer.uint32(18).string(message.token);
+    }
+    if (message.confirmInitiationUrl !== "") {
+      writer.uint32(26).string(message.confirmInitiationUrl);
+    }
+    if (message.initiatedOn !== "") {
+      writer.uint32(34).string(message.initiatedOn);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): SetupResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSetupResponse } as SetupResponse;
+    const message = globalThis.Object.create(
+      baseSetupResponse
+    ) as SetupResponse;
     message.paymentErrors = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -478,7 +506,9 @@ export const SetupResponse = {
   },
 
   fromJSON(object: any): SetupResponse {
-    const message = { ...baseSetupResponse } as SetupResponse;
+    const message = globalThis.Object.create(
+      baseSetupResponse
+    ) as SetupResponse;
     message.paymentErrors = [];
     if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
       for (const e of object.paymentErrors) {
@@ -564,13 +594,25 @@ const basePaymentRequest: object = {
 
 export const PaymentRequest = {
   encode(message: PaymentRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).int32(message.provider);
-    writer.uint32(16).int32(message.paymentSum);
-    writer.uint32(26).string(message.currency);
-    writer.uint32(34).string(message.paymentId);
-    writer.uint32(42).string(message.payerId);
-    writer.uint32(50).string(message.token);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.provider !== 0) {
+      writer.uint32(8).int32(message.provider);
+    }
+    if (message.paymentSum !== 0) {
+      writer.uint32(16).int32(message.paymentSum);
+    }
+    if (message.currency !== "") {
+      writer.uint32(26).string(message.currency);
+    }
+    if (message.paymentId !== "") {
+      writer.uint32(34).string(message.paymentId);
+    }
+    if (message.payerId !== "") {
+      writer.uint32(42).string(message.payerId);
+    }
+    if (message.token !== "") {
+      writer.uint32(50).string(message.token);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(58).fork()).ldelim();
     }
     return writer;
@@ -579,7 +621,9 @@ export const PaymentRequest = {
   decode(input: Reader | Uint8Array, length?: number): PaymentRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePaymentRequest } as PaymentRequest;
+    const message = globalThis.Object.create(
+      basePaymentRequest
+    ) as PaymentRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -613,7 +657,9 @@ export const PaymentRequest = {
   },
 
   fromJSON(object: any): PaymentRequest {
-    const message = { ...basePaymentRequest } as PaymentRequest;
+    const message = globalThis.Object.create(
+      basePaymentRequest
+    ) as PaymentRequest;
     if (object.provider !== undefined && object.provider !== null) {
       message.provider = providerFromJSON(object.provider);
     } else {
@@ -718,11 +764,19 @@ const baseCaptureRequest: object = {
 
 export const CaptureRequest = {
   encode(message: CaptureRequest, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).int32(message.provider);
-    writer.uint32(16).int32(message.paymentSum);
-    writer.uint32(26).string(message.currency);
-    writer.uint32(34).string(message.paymentId);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.provider !== 0) {
+      writer.uint32(8).int32(message.provider);
+    }
+    if (message.paymentSum !== 0) {
+      writer.uint32(16).int32(message.paymentSum);
+    }
+    if (message.currency !== "") {
+      writer.uint32(26).string(message.currency);
+    }
+    if (message.paymentId !== "") {
+      writer.uint32(34).string(message.paymentId);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
     }
     return writer;
@@ -731,7 +785,9 @@ export const CaptureRequest = {
   decode(input: Reader | Uint8Array, length?: number): CaptureRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCaptureRequest } as CaptureRequest;
+    const message = globalThis.Object.create(
+      baseCaptureRequest
+    ) as CaptureRequest;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -759,7 +815,9 @@ export const CaptureRequest = {
   },
 
   fromJSON(object: any): CaptureRequest {
-    const message = { ...baseCaptureRequest } as CaptureRequest;
+    const message = globalThis.Object.create(
+      baseCaptureRequest
+    ) as CaptureRequest;
     if (object.provider !== undefined && object.provider !== null) {
       message.provider = providerFromJSON(object.provider);
     } else {
@@ -840,15 +898,21 @@ export const PaymentResponse = {
     for (const v of message.paymentErrors) {
       PaymentError.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(18).string(message.paymentId);
-    writer.uint32(26).string(message.executedOn);
+    if (message.paymentId !== "") {
+      writer.uint32(18).string(message.paymentId);
+    }
+    if (message.executedOn !== "") {
+      writer.uint32(26).string(message.executedOn);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PaymentResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePaymentResponse } as PaymentResponse;
+    const message = globalThis.Object.create(
+      basePaymentResponse
+    ) as PaymentResponse;
     message.paymentErrors = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -873,7 +937,9 @@ export const PaymentResponse = {
   },
 
   fromJSON(object: any): PaymentResponse {
-    const message = { ...basePaymentResponse } as PaymentResponse;
+    const message = globalThis.Object.create(
+      basePaymentResponse
+    ) as PaymentResponse;
     message.paymentErrors = [];
     if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
       for (const e of object.paymentErrors) {
@@ -940,19 +1006,31 @@ const basePaymentCard: object = {
 
 export const PaymentCard = {
   encode(message: PaymentCard, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.primaryNumber);
-    writer.uint32(18).string(message.firstName);
-    writer.uint32(26).string(message.lastName);
-    writer.uint32(34).string(message.month);
-    writer.uint32(40).int32(message.year);
-    writer.uint32(50).string(message.verificationValue);
+    if (message.primaryNumber !== "") {
+      writer.uint32(10).string(message.primaryNumber);
+    }
+    if (message.firstName !== "") {
+      writer.uint32(18).string(message.firstName);
+    }
+    if (message.lastName !== "") {
+      writer.uint32(26).string(message.lastName);
+    }
+    if (message.month !== "") {
+      writer.uint32(34).string(message.month);
+    }
+    if (message.year !== 0) {
+      writer.uint32(40).int32(message.year);
+    }
+    if (message.verificationValue !== "") {
+      writer.uint32(50).string(message.verificationValue);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PaymentCard {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePaymentCard } as PaymentCard;
+    const message = globalThis.Object.create(basePaymentCard) as PaymentCard;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -983,7 +1061,7 @@ export const PaymentCard = {
   },
 
   fromJSON(object: any): PaymentCard {
-    const message = { ...basePaymentCard } as PaymentCard;
+    const message = globalThis.Object.create(basePaymentCard) as PaymentCard;
     if (object.primaryNumber !== undefined && object.primaryNumber !== null) {
       message.primaryNumber = String(object.primaryNumber);
     } else {
@@ -1076,17 +1154,25 @@ const baseItem: object = { name: "", description: "", quantity: 0, amount: 0 };
 
 export const Item = {
   encode(message: Item, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.name);
-    writer.uint32(18).string(message.description);
-    writer.uint32(24).int32(message.quantity);
-    writer.uint32(32).int32(message.amount);
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(18).string(message.description);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(24).int32(message.quantity);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(32).int32(message.amount);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Item {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseItem } as Item;
+    const message = globalThis.Object.create(baseItem) as Item;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1111,7 +1197,7 @@ export const Item = {
   },
 
   fromJSON(object: any): Item {
-    const message = { ...baseItem } as Item;
+    const message = globalThis.Object.create(baseItem) as Item;
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
     } else {
@@ -1181,24 +1267,34 @@ const basePaymentError: object = {
 
 export const PaymentError = {
   encode(message: PaymentError, writer: Writer = Writer.create()): Writer {
-    writer.uint32(8).bool(message.killed);
-    writer.uint32(16).int32(message.code);
-    if (message.signal !== undefined && message.signal !== undefined) {
+    if (message.killed === true) {
+      writer.uint32(8).bool(message.killed);
+    }
+    if (message.code !== 0) {
+      writer.uint32(16).int32(message.code);
+    }
+    if (message.signal !== undefined) {
       StringValue.encode(
         { value: message.signal! },
         writer.uint32(26).fork()
       ).ldelim();
     }
-    writer.uint32(34).string(message.cmd);
-    writer.uint32(42).string(message.stdout);
-    writer.uint32(50).string(message.stderr);
+    if (message.cmd !== "") {
+      writer.uint32(34).string(message.cmd);
+    }
+    if (message.stdout !== "") {
+      writer.uint32(42).string(message.stdout);
+    }
+    if (message.stderr !== "") {
+      writer.uint32(50).string(message.stderr);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): PaymentError {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePaymentError } as PaymentError;
+    const message = globalThis.Object.create(basePaymentError) as PaymentError;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1229,7 +1325,7 @@ export const PaymentError = {
   },
 
   fromJSON(object: any): PaymentError {
-    const message = { ...basePaymentError } as PaymentError;
+    const message = globalThis.Object.create(basePaymentError) as PaymentError;
     if (object.killed !== undefined && object.killed !== null) {
       message.killed = Boolean(object.killed);
     } else {
@@ -1324,13 +1420,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/wrappers.proto",
       "io/restorecommerce/auth.proto",
@@ -1339,406 +1435,387 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "SetupRequest",
         field: [
-          {
-            name: "ip",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "ip",
-          },
+          { name: "ip", number: 1, label: 1, type: 9, jsonName: "ip" },
           {
             name: "items",
             number: 2,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.payment.Item",
             jsonName: "items",
           },
           {
             name: "subtotal",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "subtotal",
           },
           {
             name: "shipping",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "shipping",
           },
           {
             name: "handling",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "handling",
           },
-          {
-            name: "tax",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "tax",
-          },
+          { name: "tax", number: 6, label: 1, type: 5, jsonName: "tax" },
           {
             name: "currency",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "currency",
           },
           {
             name: "return_url",
             number: 8,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "returnUrl",
           },
           {
             name: "cancel_return_url",
             number: 9,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "cancelReturnUrl",
           },
           {
             name: "allow_guest_checkout",
             number: 10,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             jsonName: "allowGuestCheckout",
           },
           {
             name: "provider",
             number: 11,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.payment.Provider",
             jsonName: "provider",
           },
           {
             name: "subject",
             number: 12,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SetupRequest",
       },
       {
-        name: "SetupResponse",
         field: [
           {
             name: "payment_errors",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.payment.PaymentError",
             jsonName: "paymentErrors",
           },
-          {
-            name: "token",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 2, label: 1, type: 9, jsonName: "token" },
           {
             name: "confirm_initiation_url",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "confirmInitiationUrl",
           },
           {
             name: "initiated_on",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "initiatedOn",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SetupResponse",
       },
       {
-        name: "PaymentRequest",
         field: [
           {
             name: "provider",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.payment.Provider",
             jsonName: "provider",
           },
           {
             name: "payment_sum",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "paymentSum",
           },
           {
             name: "currency",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "currency",
           },
           {
             name: "payment_id",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "paymentId",
           },
           {
             name: "payer_id",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "payerId",
           },
-          {
-            name: "token",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "token",
-          },
+          { name: "token", number: 6, label: 1, type: 9, jsonName: "token" },
           {
             name: "subject",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentRequest",
       },
       {
-        name: "CaptureRequest",
         field: [
           {
             name: "provider",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".io.restorecommerce.payment.Provider",
             jsonName: "provider",
           },
           {
             name: "payment_sum",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "paymentSum",
           },
           {
             name: "currency",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "currency",
           },
           {
             name: "payment_id",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "paymentId",
           },
           {
             name: "subject",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CaptureRequest",
       },
       {
-        name: "PaymentResponse",
         field: [
           {
             name: "payment_errors",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.payment.PaymentError",
             jsonName: "paymentErrors",
           },
           {
             name: "payment_id",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "paymentId",
           },
           {
             name: "executed_on",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "executedOn",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentResponse",
       },
       {
-        name: "PaymentCard",
         field: [
           {
             name: "primary_number",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "primaryNumber",
           },
           {
             name: "first_name",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "firstName",
           },
           {
             name: "last_name",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "lastName",
           },
-          {
-            name: "month",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "month",
-          },
-          {
-            name: "year",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "year",
-          },
+          { name: "month", number: 4, label: 1, type: 9, jsonName: "month" },
+          { name: "year", number: 5, label: 1, type: 5, jsonName: "year" },
           {
             name: "verification_value",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "verificationValue",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentCard",
       },
       {
-        name: "Item",
         field: [
-          {
-            name: "name",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "quantity",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
+            label: 1,
+            type: 5,
             jsonName: "quantity",
           },
-          {
-            name: "amount",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "amount",
-          },
+          { name: "amount", number: 4, label: 1, type: 5, jsonName: "amount" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Item",
       },
       {
-        name: "PaymentError",
         field: [
-          {
-            name: "killed",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
-            jsonName: "killed",
-          },
-          {
-            name: "code",
-            number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_INT32",
-            jsonName: "code",
-          },
+          { name: "killed", number: 1, label: 1, type: 8, jsonName: "killed" },
+          { name: "code", number: 2, label: 1, type: 5, jsonName: "code" },
           {
             name: "signal",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.StringValue",
             jsonName: "signal",
           },
-          {
-            name: "cmd",
-            number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "cmd",
-          },
-          {
-            name: "stdout",
-            number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "stdout",
-          },
-          {
-            name: "stderr",
-            number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "stderr",
-          },
+          { name: "cmd", number: 4, label: 1, type: 9, jsonName: "cmd" },
+          { name: "stdout", number: 5, label: 1, type: 9, jsonName: "stdout" },
+          { name: "stderr", number: 6, label: 1, type: 9, jsonName: "stderr" },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentError",
       },
     ],
     enumType: [
       {
-        name: "Provider",
         value: [
           { name: "NO_PROVIDER", number: 0 },
           { name: "PaypalExpressGateway", number: 1 },
           { name: "AuthorizeNetGateway", number: 2 },
         ],
+        reservedRange: [],
+        reservedName: [],
+        name: "Provider",
       },
       {
-        name: "PaymentIdType",
         value: [
           { name: "NO_IDENTIFIER_TYPE", number: 0 },
           { name: "TOKEN", number: 1 },
           { name: "TRANSACTION_ID", number: 2 },
         ],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentIdType",
       },
     ],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "SetupAuthorization",
@@ -1766,6 +1843,7 @@ export const protoMetadata: ProtoMetadata = {
             outputType: ".io.restorecommerce.payment.PaymentResponse",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -1776,92 +1854,107 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [6, 0, 2, 0],
           span: [7, 2, 64],
+          leadingDetachedComments: [],
           leadingComments:
             " Wrapper for setup_authorization in ActiveMerchant\n",
         },
         {
           path: [6, 0, 2, 1],
           span: [10, 2, 59],
+          leadingDetachedComments: [],
           leadingComments: " Wrapper for setup_purchase in ActiveMerchant\n",
         },
         {
           path: [6, 0, 2, 2],
           span: [13, 2, 59],
+          leadingDetachedComments: [],
           leadingComments:
             " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
         },
         {
           path: [6, 0, 2, 3],
           span: [16, 2, 58],
+          leadingDetachedComments: [],
           leadingComments:
             " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
         },
         {
           path: [6, 0, 2, 4],
           span: [19, 2, 57],
+          leadingDetachedComments: [],
           leadingComments:
             " Can capture both cardless and standard authorization.\n",
         },
         {
           path: [4, 0],
           span: [23, 0, 36, 1],
+          leadingDetachedComments: [],
           leadingComments: " Request object for setup calls\n",
         },
         {
           path: [4, 1],
           span: [39, 0, 44, 1],
+          leadingDetachedComments: [],
           leadingComments: " Response object for setup calls.\n",
         },
         {
           path: [4, 2],
           span: [47, 0, 55, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Request object for authorization or purchase call for cardless payment.\n",
         },
         {
           path: [4, 3],
           span: [58, 0, 64, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Request object for capture call for both standard and cardless payments.\n",
         },
         {
           path: [4, 4],
           span: [68, 0, 72, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Unified response object for authorization, purchase and capture calls\n for both standard and cardless payments.\n",
         },
         {
           path: [4, 5],
           span: [75, 0, 82, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Used for building ActiveMerchant::Billing::CreditCard instance.\n",
         },
         {
           path: [4, 6],
           span: [85, 0, 90, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Represents purchased item. Not all providers support this.\n",
         },
         {
           path: [4, 7],
           span: [93, 0, 100, 1],
+          leadingDetachedComments: [],
           leadingComments: " Error details.\n",
         },
         {
           path: [5, 0],
           span: [103, 0, 107, 1],
+          leadingDetachedComments: [],
           leadingComments:
             " Possible service providers. Provider names must be exactly as in config.yml.\n",
         },
         {
           path: [5, 1],
           span: [110, 0, 114, 1],
+          leadingDetachedComments: [],
           leadingComments: " Possible payment identifiers.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.payment.Provider": Provider,
     ".io.restorecommerce.payment.PaymentIdType": PaymentIdType,
@@ -1874,11 +1967,18 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.payment.Item": Item,
     ".io.restorecommerce.payment.PaymentError": PaymentError,
   },
-  dependencies: [
-    google_protobuf_wrappers_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

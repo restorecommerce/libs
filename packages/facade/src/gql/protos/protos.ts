@@ -1,9 +1,9 @@
 import { GrpcClientRpcMethodDefinition, GrpcService, GrpcServiceMethods } from "@restorecommerce/grpc-client";
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
-import { IServiceDescriptorProto, IMethodDescriptorProto } from "protobufjs/ext/descriptor";
+import { ServiceDescriptorProto, MethodDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import { getTyping } from "./registry";
 
-export const getProtoFunction = (method: IMethodDescriptorProto): GrpcClientRpcMethodDefinition<any, any> => {
+export const getProtoFunction = (method: MethodDescriptorProto): GrpcClientRpcMethodDefinition<any, any> => {
   const inputMessage = getTyping(method.inputType!);
   const outputMessage = getTyping(method.outputType!);
 
@@ -43,14 +43,14 @@ export const getProtoFunction = (method: IMethodDescriptorProto): GrpcClientRpcM
   };
 }
 
-export const getProtoFunctions = <M extends GrpcService = any>(service: IServiceDescriptorProto): GrpcServiceMethods<M> => {
+export const getProtoFunctions = <M extends GrpcService = any>(service: ServiceDescriptorProto): GrpcServiceMethods<M> => {
   return service.method?.reduce((obj, method) => {
     obj[method.name!] = getProtoFunction(method);
     return obj;
   }, {} as any);
 }
 
-export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, service: IServiceDescriptorProto): T => {
+export const getGRPCService = <T extends Record<string, any>>(self: RestoreCommerceGrpcClient, packageName: string, service: ServiceDescriptorProto): T => {
   return self['createService']<T>({
     packageName,
     serviceName: service.name!,

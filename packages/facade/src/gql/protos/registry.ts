@@ -10,12 +10,17 @@ import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "grap
 import { GraphQLUpload } from 'graphql-upload';
 import { capitalizeProtoName } from "./utils";
 import { ProtoMetadata } from "./types";
-import { IDescriptorProto, IEnumDescriptorProto, IFieldDescriptorProto } from "protobufjs/ext/descriptor";
+import {
+  DescriptorProto,
+  EnumDescriptorProto,
+  FieldDescriptorProto, FieldDescriptorProto_Label,
+  FieldDescriptorProto_Type
+} from "ts-proto-descriptors/google/protobuf/descriptor";
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType;
   input: GraphQLInputObjectType | GraphQLEnumType;
-  meta: IDescriptorProto | IEnumDescriptorProto;
+  meta: DescriptorProto | EnumDescriptorProto;
   processor?: any;
 }
 
@@ -55,7 +60,7 @@ export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => 
   });
 }
 
-const registerMessageTypesRecursive = (packageName: string, ...types: IDescriptorProto[]) => {
+const registerMessageTypesRecursive = (packageName: string, ...types: DescriptorProto[]) => {
   types.forEach(m => {
     registerTyping(packageName, m);
 
@@ -73,7 +78,7 @@ const registerMessageTypesRecursive = (packageName: string, ...types: IDescripto
 
 export const registerTyping = (
   protoPackage: string,
-  message: IDescriptorProto,
+  message: DescriptorProto,
   opts?: Omit<Readonly<GraphQLObjectTypeConfig<any, any>>, 'fields'>,
   inputOpts?: Omit<Readonly<GraphQLInputObjectTypeConfig>, 'fields'>,
 ) => {
@@ -131,7 +136,7 @@ export const registerTyping = (
 
 export const registerEnumTyping = <T = { [key: string]: any }>(
   protoPackage: string,
-  message: IEnumDescriptorProto,
+  message: EnumDescriptorProto,
   opts?: Omit<Readonly<GraphQLEnumTypeConfig>, 'values'>
 ) => {
   const type = (protoPackage.startsWith('.') ? '' : '.') + protoPackage + '.' + message.name!;
@@ -166,18 +171,18 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = (key: string, field: IFieldDescriptorProto, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType => {
+const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType => {
   let result;
 
-  switch (field.type! as unknown as string) {
-    case 'TYPE_BOOL':
+  switch (field.type) {
+    case FieldDescriptorProto_Type.TYPE_BOOL:
       result = GraphQLBoolean;
       break;
-    case 'TYPE_STRING':
+    case FieldDescriptorProto_Type.TYPE_STRING:
       result = GraphQLString;
       break;
-    case 'TYPE_ENUM':
-    case 'TYPE_MESSAGE':
+    case FieldDescriptorProto_Type.TYPE_ENUM:
+    case FieldDescriptorProto_Type.TYPE_MESSAGE:
       const objType = field.typeName!;
       if (!registeredTypings.has(objType)) {
         throw new Error("Typing '" + objType + "' not registered for key '" + key + "' in object: " + objName);
@@ -190,7 +195,7 @@ const resolveMeta = (key: string, field: IFieldDescriptorProto, rootObjType: str
 
       result = registeredTypings.get(objType)!.input;
       break;
-    case 'TYPE_BYTES':
+    case FieldDescriptorProto_Type.TYPE_BYTES:
       if (input) {
         result = GraphQLUpload;
         break;
@@ -198,32 +203,31 @@ const resolveMeta = (key: string, field: IFieldDescriptorProto, rootObjType: str
       // TODO Output Buffer
       result = TodoScalar;
       break;
-    case 'TYPE_INT32':
-    case 'TYPE_UINT32':
-    case 'TYPE_INT64':
-    case 'TYPE_UINT64':
-    case 'TYPE_SINT32':
-    case 'TYPE_SINT64':
+    case FieldDescriptorProto_Type.TYPE_INT32:
+    case FieldDescriptorProto_Type.TYPE_UINT32:
+    case FieldDescriptorProto_Type.TYPE_INT64:
+    case FieldDescriptorProto_Type.TYPE_UINT64:
+    case FieldDescriptorProto_Type.TYPE_SINT32:
+    case FieldDescriptorProto_Type.TYPE_SINT64:
       result = GraphQLInt;
       break;
-    case 'TYPE_DOUBLE':
-    case 'TYPE_FLOAT':
-    case 'TYPE_FIXED64':
-    case 'TYPE_FIXED32':
-    case 'TYPE_SFIXED32':
-    case 'TYPE_SFIXED64':
+    case FieldDescriptorProto_Type.TYPE_DOUBLE:
+    case FieldDescriptorProto_Type.TYPE_FLOAT:
+    case FieldDescriptorProto_Type.TYPE_FIXED64:
+    case FieldDescriptorProto_Type.TYPE_FIXED32:
+    case FieldDescriptorProto_Type.TYPE_SFIXED32:
+    case FieldDescriptorProto_Type.TYPE_SFIXED64:
       result = GraphQLFloat;
       break;
     default:
       throw new Error("unknown typing type '" + field.type! + "' for key '" + key + "' in: " + objName)
   }
 
-  const label = field.label as unknown as (string | undefined);
-  if (label === "LABEL_REPEATED") {
+  if (field.label === FieldDescriptorProto_Label.LABEL_REPEATED) {
     result = GraphQLList(GraphQLNonNull(result));
   }
 
-  if (label === "LABEL_REQUIRED") {
+  if (field.label === FieldDescriptorProto_Label.LABEL_REQUIRED) {
     result = GraphQLNonNull(result);
   }
 

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "google.protobuf";
@@ -106,7 +106,7 @@ export const Struct = {
   decode(input: Reader | Uint8Array, length?: number): Struct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseStruct } as Struct;
+    const message = globalThis.Object.create(baseStruct) as Struct;
     message.fields = {};
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -126,7 +126,7 @@ export const Struct = {
   },
 
   fromJSON(object: any): Struct {
-    const message = { ...baseStruct } as Struct;
+    const message = globalThis.Object.create(baseStruct) as Struct;
     message.fields = {};
     if (object.fields !== undefined && object.fields !== null) {
       Object.entries(object.fields).forEach(([key, value]) => {
@@ -168,8 +168,10 @@ export const Struct_FieldsEntry = {
     message: Struct_FieldsEntry,
     writer: Writer = Writer.create()
   ): Writer {
-    writer.uint32(10).string(message.key);
-    if (message.value !== undefined && message.value !== undefined) {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
       Value.encode(message.value, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -178,7 +180,9 @@ export const Struct_FieldsEntry = {
   decode(input: Reader | Uint8Array, length?: number): Struct_FieldsEntry {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseStruct_FieldsEntry } as Struct_FieldsEntry;
+    const message = globalThis.Object.create(
+      baseStruct_FieldsEntry
+    ) as Struct_FieldsEntry;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -197,7 +201,9 @@ export const Struct_FieldsEntry = {
   },
 
   fromJSON(object: any): Struct_FieldsEntry {
-    const message = { ...baseStruct_FieldsEntry } as Struct_FieldsEntry;
+    const message = globalThis.Object.create(
+      baseStruct_FieldsEntry
+    ) as Struct_FieldsEntry;
     if (object.key !== undefined && object.key !== null) {
       message.key = String(object.key);
     } else {
@@ -263,7 +269,7 @@ export const Value = {
   decode(input: Reader | Uint8Array, length?: number): Value {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseValue } as Value;
+    const message = globalThis.Object.create(baseValue) as Value;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -294,7 +300,7 @@ export const Value = {
   },
 
   fromJSON(object: any): Value {
-    const message = { ...baseValue } as Value;
+    const message = globalThis.Object.create(baseValue) as Value;
     if (object.nullValue !== undefined && object.nullValue !== null) {
       message.nullValue = nullValueFromJSON(object.nullValue);
     } else {
@@ -400,7 +406,7 @@ export const ListValue = {
   decode(input: Reader | Uint8Array, length?: number): ListValue {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseListValue } as ListValue;
+    const message = globalThis.Object.create(baseListValue) as ListValue;
     message.values = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -417,7 +423,7 @@ export const ListValue = {
   },
 
   fromJSON(object: any): ListValue {
-    const message = { ...baseListValue } as ListValue;
+    const message = globalThis.Object.create(baseListValue) as ListValue;
     message.values = [];
     if (object.values !== undefined && object.values !== null) {
       for (const e of object.values) {
@@ -450,61 +456,67 @@ export const ListValue = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        name: "Struct",
         field: [
           {
             name: "fields",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".google.protobuf.Struct.FieldsEntry",
             jsonName: "fields",
           },
         ],
+        extension: [],
         nestedType: [
           {
-            name: "FieldsEntry",
             field: [
-              {
-                name: "key",
-                number: 1,
-                label: "LABEL_OPTIONAL",
-                type: "TYPE_STRING",
-                jsonName: "key",
-              },
+              { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
               {
                 name: "value",
                 number: 2,
-                label: "LABEL_OPTIONAL",
-                type: "TYPE_MESSAGE",
+                label: 1,
+                type: 11,
                 typeName: ".google.protobuf.Value",
                 jsonName: "value",
               },
             ],
-            options: { mapEntry: true },
+            extension: [],
+            nestedType: [],
+            enumType: [],
+            extensionRange: [],
+            oneofDecl: [],
+            reservedRange: [],
+            reservedName: [],
+            name: "FieldsEntry",
+            options: { uninterpretedOption: [], mapEntry: true },
           },
         ],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Struct",
       },
       {
-        name: "Value",
         field: [
           {
             name: "null_value",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_ENUM",
+            label: 1,
+            type: 14,
             typeName: ".google.protobuf.NullValue",
             oneofIndex: 0,
             jsonName: "nullValue",
@@ -512,32 +524,32 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "number_value",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_DOUBLE",
+            label: 1,
+            type: 1,
             oneofIndex: 0,
             jsonName: "numberValue",
           },
           {
             name: "string_value",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             oneofIndex: 0,
             jsonName: "stringValue",
           },
           {
             name: "bool_value",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_BOOL",
+            label: 1,
+            type: 8,
             oneofIndex: 0,
             jsonName: "boolValue",
           },
           {
             name: "struct_value",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.Struct",
             oneofIndex: 0,
             jsonName: "structValue",
@@ -545,37 +557,57 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "list_value",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".google.protobuf.ListValue",
             oneofIndex: 0,
             jsonName: "listValue",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
         oneofDecl: [{ name: "kind" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "Value",
       },
       {
-        name: "ListValue",
         field: [
           {
             name: "values",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".google.protobuf.Value",
             jsonName: "values",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ListValue",
       },
     ],
     enumType: [
-      { name: "NullValue", value: [{ name: "NULL_VALUE", number: 0 }] },
+      {
+        value: [{ name: "NULL_VALUE", number: 0 }],
+        reservedRange: [],
+        reservedName: [],
+        name: "NullValue",
+      },
     ],
     service: [],
     extension: [],
     name: "google/protobuf/struct.proto",
     package: "google.protobuf",
     options: {
+      uninterpretedOption: [],
       javaPackage: "com.google.protobuf",
       javaOuterClassname: "StructProto",
       javaMultipleFiles: true,
@@ -589,81 +621,95 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [51, 0, 54, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "/ `Struct` represents a structured data value, consisting of fields\n/ which map to dynamically typed values. In some languages, `Struct`\n/ might be supported by a native representation. For example, in\n/ scripting languages like JS a struct is represented as an\n/ object. The details of that representation are described together\n/ with the proto support for the language.\n/\n/ The JSON representation for `Struct` is JSON object.\n",
         },
         {
           path: [4, 0, 2, 0],
           span: [53, 2, 32],
+          leadingDetachedComments: [],
           leadingComments: "/ Unordered map of dynamically typed values.\n",
         },
         {
           path: [4, 1],
           span: [62, 0, 78, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "/ `Value` represents a dynamically typed value which can be either\n/ null, a number, a string, a boolean, a recursive struct value, or a\n/ list of values. A producer of value is expected to set one of that\n/ variants, absence of any variant indicates an error.\n/\n/ The JSON representation for `Value` is JSON value.\n",
         },
         {
           path: [4, 1, 8, 0],
           span: [64, 2, 77, 3],
+          leadingDetachedComments: [],
           leadingComments: "/ The kind of value.\n",
         },
         {
           path: [4, 1, 2, 0],
           span: [66, 4, 29],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a null value.\n",
         },
         {
           path: [4, 1, 2, 1],
           span: [68, 4, 28],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a double value.\n",
         },
         {
           path: [4, 1, 2, 2],
           span: [70, 4, 28],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a string value.\n",
         },
         {
           path: [4, 1, 2, 3],
           span: [72, 4, 24],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a boolean value.\n",
         },
         {
           path: [4, 1, 2, 4],
           span: [74, 4, 28],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a structured value.\n",
         },
         {
           path: [4, 1, 2, 5],
           span: [76, 4, 29],
+          leadingDetachedComments: [],
           leadingComments: "/ Represents a repeated `Value`.\n",
         },
         {
           path: [5, 0],
           span: [84, 0, 87, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "/ `NullValue` is a singleton enumeration to represent the null value for the\n/ `Value` type union.\n/\n/  The JSON representation for `NullValue` is JSON `null`.\n",
         },
         {
           path: [5, 0, 2, 0],
           span: [86, 2, 17],
+          leadingDetachedComments: [],
           leadingComments: "/ Null value.\n",
         },
         {
           path: [4, 2],
           span: [92, 0, 95, 1],
+          leadingDetachedComments: [],
           leadingComments:
             "/ `ListValue` is a wrapper around a repeated field of values.\n/\n/ The JSON representation for `ListValue` is JSON array.\n",
         },
         {
           path: [4, 2, 2, 0],
           span: [94, 2, 28],
+          leadingDetachedComments: [],
           leadingComments: "/ Repeated field of dynamically typed values.\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".google.protobuf.NullValue": NullValue,
     ".google.protobuf.Struct": Struct,
@@ -673,6 +719,16 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

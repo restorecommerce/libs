@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { IFileDescriptorProto } from "protobufjs/ext/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as io_restorecommerce_meta_protoMetadata,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Image,
-  protoMetadata as io_restorecommerce_image_protoMetadata,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/image";
 import {
   Subject,
-  protoMetadata as io_restorecommerce_auth_protoMetadata,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
-import { Writer, Reader } from "protobufjs/minimal";
 import {
+  protoMetadata as protoMetadata1,
   Empty,
-  protoMetadata as google_protobuf_empty_protoMetadata,
 } from "../../google/protobuf/empty";
 import {
+  protoMetadata as protoMetadata2,
   ReadRequest,
   DeleteRequest,
-  protoMetadata as io_restorecommerce_resource_base_protoMetadata,
 } from "../../io/restorecommerce/resource_base";
+import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product_category";
 
@@ -59,17 +59,25 @@ const baseProductCategory: object = {
 
 export const ProductCategory = {
   encode(message: ProductCategory, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
-    if (message.meta !== undefined && message.meta !== undefined) {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    writer.uint32(26).string(message.name);
-    writer.uint32(34).string(message.description);
-    writer.uint32(42).string(message.priceGroupId);
-    if (message.image !== undefined && message.image !== undefined) {
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.description !== "") {
+      writer.uint32(34).string(message.description);
+    }
+    if (message.priceGroupId !== "") {
+      writer.uint32(42).string(message.priceGroupId);
+    }
+    if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(50).fork()).ldelim();
     }
-    if (message.parent !== undefined && message.parent !== undefined) {
+    if (message.parent !== undefined) {
       Parent.encode(message.parent, writer.uint32(58).fork()).ldelim();
     }
     return writer;
@@ -78,7 +86,9 @@ export const ProductCategory = {
   decode(input: Reader | Uint8Array, length?: number): ProductCategory {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProductCategory } as ProductCategory;
+    const message = globalThis.Object.create(
+      baseProductCategory
+    ) as ProductCategory;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -112,7 +122,9 @@ export const ProductCategory = {
   },
 
   fromJSON(object: any): ProductCategory {
-    const message = { ...baseProductCategory } as ProductCategory;
+    const message = globalThis.Object.create(
+      baseProductCategory
+    ) as ProductCategory;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -219,8 +231,10 @@ export const ProductCategoryList = {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    writer.uint32(16).uint32(message.totalCount);
-    if (message.subject !== undefined && message.subject !== undefined) {
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -229,7 +243,9 @@ export const ProductCategoryList = {
   decode(input: Reader | Uint8Array, length?: number): ProductCategoryList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProductCategoryList } as ProductCategoryList;
+    const message = globalThis.Object.create(
+      baseProductCategoryList
+    ) as ProductCategoryList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -252,7 +268,9 @@ export const ProductCategoryList = {
   },
 
   fromJSON(object: any): ProductCategoryList {
-    const message = { ...baseProductCategoryList } as ProductCategoryList;
+    const message = globalThis.Object.create(
+      baseProductCategoryList
+    ) as ProductCategoryList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -315,14 +333,16 @@ const baseDeleted: object = { id: "" };
 
 export const Deleted = {
   encode(message: Deleted, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.id);
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -338,7 +358,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = { ...baseDeleted } as Deleted;
+    const message = globalThis.Object.create(baseDeleted) as Deleted;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -368,14 +388,16 @@ const baseParent: object = { parentId: "" };
 
 export const Parent = {
   encode(message: Parent, writer: Writer = Writer.create()): Writer {
-    writer.uint32(10).string(message.parentId);
+    if (message.parentId !== "") {
+      writer.uint32(10).string(message.parentId);
+    }
     return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): Parent {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseParent } as Parent;
+    const message = globalThis.Object.create(baseParent) as Parent;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -391,7 +413,7 @@ export const Parent = {
   },
 
   fromJSON(object: any): Parent {
-    const message = { ...baseParent } as Parent;
+    const message = globalThis.Object.create(baseParent) as Parent;
     if (object.parentId !== undefined && object.parentId !== null) {
       message.parentId = String(object.parentId);
     } else {
@@ -426,13 +448,13 @@ export interface Service {
 }
 
 export interface ProtoMetadata {
-  fileDescriptor: IFileDescriptorProto;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: {
+  fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
@@ -444,119 +466,126 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "ProductCategory",
         field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          {
-            name: "name",
-            number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "name",
-          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "description",
           },
           {
             name: "price_group_id",
             number: 5,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "priceGroupId",
           },
           {
             name: "image",
             number: 6,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.image.Image",
             jsonName: "image",
           },
           {
             name: "parent",
             number: 7,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.product_category.Parent",
             jsonName: "parent",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductCategory",
       },
       {
-        name: "ProductCategoryList",
         field: [
           {
             name: "items",
             number: 1,
-            label: "LABEL_REPEATED",
-            type: "TYPE_MESSAGE",
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.product_category.ProductCategory",
             jsonName: "items",
           },
           {
             name: "total_count",
             number: 2,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_UINT32",
+            label: 1,
+            type: 13,
             jsonName: "totalCount",
           },
           {
             name: "subject",
             number: 3,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_MESSAGE",
+            label: 1,
+            type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductCategoryList",
       },
       {
+        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
         name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
-            jsonName: "id",
-          },
-        ],
       },
       {
-        name: "Parent",
         field: [
           {
             name: "parent_id",
             number: 1,
-            label: "LABEL_OPTIONAL",
-            type: "TYPE_STRING",
+            label: 1,
+            type: 9,
             jsonName: "parentId",
           },
         ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Parent",
       },
     ],
     enumType: [],
     service: [
       {
-        name: "Service",
         method: [
           {
             name: "Read",
@@ -591,6 +620,7 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.product_category.ProductCategoryList",
           },
         ],
+        name: "Service",
       },
     ],
     extension: [],
@@ -601,12 +631,13 @@ export const protoMetadata: ProtoMetadata = {
         {
           path: [4, 0],
           span: [11, 0, 19, 1],
+          leadingDetachedComments: [],
           leadingComments: " ProductCategory resource\n",
         },
       ],
     },
     syntax: "proto3",
-  } as any,
+  }),
   references: {
     ".io.restorecommerce.product_category.ProductCategory": ProductCategory,
     ".io.restorecommerce.product_category.ProductCategoryList": ProductCategoryList,
@@ -614,13 +645,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product_category.Parent": Parent,
   },
   dependencies: [
-    google_protobuf_empty_protoMetadata,
-    io_restorecommerce_resource_base_protoMetadata,
-    io_restorecommerce_meta_protoMetadata,
-    io_restorecommerce_image_protoMetadata,
-    io_restorecommerce_auth_protoMetadata,
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
   ],
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin

@@ -1,5 +1,5 @@
 import { Provider } from 'oidc-provider';
-import helmet from 'koa-helmet';
+// import helmet from 'koa-helmet';
 import { IdentitySrvGrpcClient, TokenService } from '@restorecommerce/rc-grpc-clients';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
@@ -120,7 +120,8 @@ export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, 
     },
   });
 
-  provider.use(helmet());
+  // TODO Fix and enable
+  // provider.use(helmet());
 
   const router = createOIDCRouter({
     loginFn: loginFn ?? loginUser,

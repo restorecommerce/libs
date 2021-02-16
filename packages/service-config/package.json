@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/service-config",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "An opinionated wrapper of nconf optimized for microservices",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -16,19 +16,19 @@
     "configuration"
   ],
   "dependencies": {
-    "@restorecommerce/logger": "^0.4.0",
-    "nconf": "^0.10.0"
+    "@restorecommerce/logger": "^0.4.3",
+    "nconf": "^0.11.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",
     "@types/nconf": "^0.10.0",
-    "@types/node": "^14.14.6",
+    "@types/node": "^14.14.10",
     "cross-env": "^7.0.2",
     "jest": "^26.6.3",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "ts-jest": "^26.4.4",
-    "typescript": "^4.0.5"
+    "typescript": "^4.1.2"
   },
   "scripts": {
     "build": "npm-run-all build:clean build:compile",

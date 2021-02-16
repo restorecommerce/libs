@@ -1,9 +1,10 @@
 # @restorecommerce
 
-Library monorepo for Restorecommerce
+Library monorepo for Restorecommerce.
 
 ## Packages
 
+- [@restorecommerce/cart](packages/cart)
 - [@restorecommerce/facade](packages/facade)
 - [@restorecommerce/grpc-client](packages/grpc-client)
 - [@restorecommerce/logger](packages/logger)

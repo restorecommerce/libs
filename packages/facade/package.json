@@ -40,7 +40,8 @@
     "oidc-provider": "^6.31.0",
     "querystring": "^0.2.1",
     "rxjs": "^6.6.3",
-    "ts-proto-descriptors": "^1.2.0"
+    "ts-proto-descriptors": "^1.2.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@graphql-codegen/core": "^1.17.9",

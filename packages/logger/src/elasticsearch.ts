@@ -2,7 +2,7 @@ import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } fr
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
 
-export const mappingTemplate = require('../elasticsearch-template-mapping.json');
+export const indexTemplate = require('../elasticsearch-index-template.json');
 
 /**
  Transformer function to transform logged data into a
@@ -40,7 +40,7 @@ export interface RestoreLoggerElasticsearchTransportOptions extends Elasticsearc
 export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
   (transformer as any)['source'] = opts.source;
   return new ElasticsearchTransport({
-    mappingTemplate,
+    indexTemplate,
     transformer,
     ...opts
   });

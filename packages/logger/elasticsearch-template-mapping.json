@@ -51,7 +51,8 @@
     }
   },
   "index_patterns": [
-    "logs-app-default",
-    "logs-*"
-  ]
+    "logs-app-default"
+  ],
+  "data_stream": {},
+  "composed_of": []
 }

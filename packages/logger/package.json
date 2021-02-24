@@ -37,7 +37,7 @@
   "scripts": {
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
-    "build:compile": "tsc -p src/tsconfig.json",
+    "build:compile": "tsc -p ./tsconfig.lib.json",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },

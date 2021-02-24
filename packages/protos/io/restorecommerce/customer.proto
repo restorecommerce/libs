@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package io.restorecommerce.customer;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerList);
+  rpc Create (CustomerList) returns (CustomerList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (CustomerList) returns (CustomerList);
+  rpc Upsert (CustomerList) returns (CustomerList);
+}
+
+message CustomerList {
+  repeated Customer items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Customer {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  oneof customer {
+    IndividualUser individual_user = 3;
+    OrgUser org_user = 4;
+    Guest guest = 5;
+  }
+}
+
+message IndividualUser {
+  string user_id = 1;
+  string address_id = 2;
+  repeated string contact_point_ids = 3;
+}
+
+message OrgUser {
+  string user_id = 1;
+  string organization_id = 2;
+}
+
+message Guest {
+  bool guest = 1;
+  string address_id = 2;
+  repeated string contact_point_ids = 3;
+}

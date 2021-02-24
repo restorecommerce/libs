@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package io.restorecommerce.job;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/**
+ * The microservice for scheduling jobs.
+ * Provides CRUD operations.
+ */
+service Service {
+  rpc Read (JobReadRequest) returns (JobList);
+  rpc Create (JobList) returns (JobList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (JobList) returns (JobList);
+  rpc Upsert (JobList) returns (JobList);
+}
+
+/**
+ * A Kafka event.
+ * Send when a job resource got deleted.
+ */
+message Deleted {
+  string id = 1;
+}
+
+/**
+ * A list of jobs.
+ */
+message JobList {
+  repeated Job items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+/**
+ * A Job resource
+ */
+message Job {
+  string id = 1; // Job ID
+
+  string type = 11; // Job type
+  Data data = 12; // Job-specific data with variable payload
+
+  string when = 21; // Used to specify the time at which the job is run
+
+  JobOptions options = 30; // The job options
+}
+
+/**
+ * Job Options
+ */
+message JobOptions {
+  enum Priority {
+    NORMAL = 0;
+    LOW = 10;
+    MEDIUM = -5;
+    HIGH = -10;
+    CRITICAL = -15;
+  }
+
+  Priority priority = 13; // Job priority
+  uint32 attempts = 14; // Amount of possible failing runs until job fails
+  Backoff backoff = 15; // Delay settings between failed job runs
+  uint32 timeout = 16; // The timeout of the job
+
+  Repeat repeat = 20; // Used for periodic jobs
+}
+
+message Repeat {
+  uint32 every = 1;
+  string cron = 2;
+  string startDate = 3;
+  string endDate = 4;
+  uint32 count = 5;
+}
+
+// Data which is stored within a job instance
+message Data {
+  string timezone = 1;
+  google.protobuf.Any payload = 2; // optional variable payload
+  io.restorecommerce.meta.Meta meta = 3;
+  string subject_id = 4; // id of job creator
+}
+
+/**
+ * A scheduled Job.
+ * Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.
+ */
+message ScheduledJob {
+  string id = 1; // Job instance ID
+  string type = 2;
+  Data data = 3; // Job-specific data with variable payload
+  string schedule_type = 4; // Type of schedule (ONCE, RECURR, etc)
+}
+
+/**
+ * A finished scheduled Job.
+ * Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.
+ */
+message JobDone {
+  string id = 1; // Job instance ID
+  string schedule_type = 2; // Type of schedule (ONCE, RECURR, etc)
+  bool delete_scheduled = 3; // Whether to delete scheduled job
+  string type = 4; // Job type
+  google.protobuf.Any result = 5;
+}
+
+/**
+ * A failed scheduled Job event from the Job Service.
+ * Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.
+ */
+message JobFailed {
+  string id = 1; // Job instance ID
+  string error = 2; // Error message
+  string schedule_type = 3; // Type of job ex: ONCE, RECURR etc.
+  string type = 4; // Job type
+}
+
+/**
+ * Delay between retries.
+ */
+message Backoff {
+  enum Type {
+    FIXED = 0; // Retry with the same delay
+    EXPONENTIAL = 1; // Exponential delay increase between retries
+  }
+  double delay = 1; // Time until retry in milliseconds
+  Type type = 2; // Calculation of the delay
+}
+
+// Job-specific read request
+message JobReadRequest {
+  uint32 limit = 1;
+  // only possible to sort jobs by creation date
+  enum SortOrder {
+    UNSORTED = 0;
+    ASCENDING = 1;
+    DESCENDING = 2;
+  }
+  SortOrder sort = 2;
+
+  // Filter based on fieldName|operation, value|list
+  JobFilter filter = 4;
+
+  // Fields selector
+  repeated io.restorecommerce.resourcebase.FieldFilter field = 3;
+  io.restorecommerce.auth.Subject subject = 5;
+}
+
+// filter
+message JobFilter {
+  repeated string job_ids = 1;
+  string type = 2;
+}

@@ -1,4 +1,3 @@
-import * as should from 'should';
 import { createLogger, RestoreLoggerOptions } from '../src/index';
 
 const opts: RestoreLoggerOptions = {
@@ -17,7 +16,7 @@ describe('a logger', () => {
       let logger = createLogger(opts);
       done();
     } catch (err) {
-      should.not.exist(err);
+      throw 'Nope';
     }
   });
 

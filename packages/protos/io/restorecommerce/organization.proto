@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package io.restorecommerce.organization;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrganizationList);
+  rpc Create (OrganizationList) returns (OrganizationList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (OrganizationList) returns (OrganizationList);
+  rpc Upsert (OrganizationList) returns (OrganizationList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message DeleteOrgData {
+  repeated string org_ids = 1;
+  repeated string user_ids = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message OrganizationList {
+  repeated Organization items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Organization {
+  string id = 1; /// Organization ID, unique, key
+  io.restorecommerce.meta.Meta meta = 2;
+  string address_id = 3; /// Address for the organization
+  string parent_id = 4; //  Hierarchically superior organization; may be null
+  repeated string children_ids = 5; // Hierarchically inferior organizations; may be null/empty
+  repeated string contact_point_ids = 6; // list of possible legal addresses of different types
+  string website = 7;
+  string email = 8;
+  string logo = 9; // base64; arangoDB does not support blob storage
+  string vat_id = 10;
+  string isic_v4 = 11;
+  string registration = 12;
+  string registration_court = 13;
+  string name = 14;
+  repeated string payment_method_ids = 15;
+  google.protobuf.Any data = 16; /// additional data
+}

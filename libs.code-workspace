@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "packages/facade"
+		},
+		{
+			"path": "packages/grpc-client"
+		},
+		{
+      "path": "packages/logger"
+		},
+		{
+      "path": "packages/protos"
+		},
+    {
+      "path": "packages/rc-grpc-clients"
+    },
+    {
+      "path": "packages/service-config"
+    },
+	]
+}

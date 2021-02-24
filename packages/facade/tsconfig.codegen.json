@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./codegen"
+  },
+  "files": [
+    "./src_codegen/index.ts"
+  ]
+}

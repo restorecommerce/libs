@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package io.restorecommerce.access_control;
+
+import "google/protobuf/any.proto";
+import "io/restorecommerce/rule.proto";
+import "io/restorecommerce/policy_set.proto";
+
+/**
+* Access control service interface.
+*/
+
+message Request {
+  io.restorecommerce.rule.Target target = 1;
+  // generic data structure which can be provided
+  // to a contextQuery (see io/restorecommerce/rule.proto)
+  Context context = 2;
+}
+
+message Context {
+  google.protobuf.Any subject = 1;
+  repeated google.protobuf.Any resources = 2;
+  google.protobuf.Any security = 3;
+}
+
+message Response {
+  enum Decision {
+    PERMIT = 0;
+    DENY = 1;
+    NOT_APPLICABLE = 2;
+    INDETERMINATE = 3;
+  }
+  Decision decision = 1;
+  string obligation = 2;
+  bool evaluation_cacheable = 3;
+}
+
+
+
+
+
+message ReverseQuery {
+  repeated io.restorecommerce.policy_set.PolicySetRQ policy_sets = 1;
+}
+
+service Service {
+  rpc IsAllowed (Request) returns (Response);
+  rpc WhatIsAllowed(Request) returns (ReverseQuery);
+}

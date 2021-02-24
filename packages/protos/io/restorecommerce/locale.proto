@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.restorecommerce.locale;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (LocaleList);
+  rpc Create (LocaleList) returns (LocaleList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (LocaleList) returns (LocaleList);
+  rpc Upsert (LocaleList) returns (LocaleList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message LocaleList {
+  repeated Locale items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Locale {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string value = 3;
+  string description = 4;
+}

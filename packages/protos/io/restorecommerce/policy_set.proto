@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package io.restorecommerce.policy_set;
+
+import "google/protobuf/empty.proto";
+ 
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/policy.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/rule.proto";
+
+message PolicySet {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string description = 4;
+  io.restorecommerce.rule.Target target = 5;
+  string combining_algorithm = 6;
+  repeated string policies = 7; // policy IDs
+}
+
+message PolicySetList {
+  repeated PolicySet items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message PolicySetRQ {
+  string id = 1;
+  io.restorecommerce.rule.Target target = 2;
+  string combining_algorithm = 3;
+  repeated io.restorecommerce.policy.PolicyRQ policies = 4;
+  io.restorecommerce.rule.Effect effect = 5;
+}
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetList);
+  rpc Create (PolicySetList) returns (PolicySetList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (PolicySetList) returns (PolicySetList);
+  rpc Upsert (PolicySetList) returns (PolicySetList);
+}

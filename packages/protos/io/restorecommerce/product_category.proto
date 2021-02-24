@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package io.restorecommerce.product_category;
+
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/image.proto";
+import "io/restorecommerce/auth.proto";
+
+// ProductCategory resource
+message ProductCategory {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string description = 4;
+  string price_group_id = 5;
+  io.restorecommerce.image.Image image = 6;
+  Parent parent = 7;
+}
+
+message ProductCategoryList {
+  repeated ProductCategory items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message Parent {
+  string parent_id = 1;
+}
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryList);
+  rpc Create (ProductCategoryList) returns (ProductCategoryList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ProductCategoryList) returns (ProductCategoryList);
+  rpc Upsert (ProductCategoryList) returns (ProductCategoryList);
+}

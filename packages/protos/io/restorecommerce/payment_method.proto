@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package io.restorecommerce.payment_method;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/user.proto";
+import "io/restorecommerce/auth.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodList);
+  rpc Create (PaymentMethodList) returns (PaymentMethodList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (PaymentMethodList) returns (PaymentMethodList);
+  rpc Upsert (PaymentMethodList) returns (PaymentMethodList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message PaymentMethodList {
+  repeated PaymentMethod items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+enum PaymentMethodEnum {
+  WIRE_TRANSFER = 0;
+  DIRECT_DEBIT = 1;
+  PAYPAL = 2;
+}
+enum TransferTypeEnum {
+  RECEIVE = 0;
+  SEND = 1;
+  BOTH = 2;
+}
+
+message PaymentMethod {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  PaymentMethodEnum payment_method = 3;
+  TransferTypeEnum transfer_type = 4;
+  google.protobuf.Any data = 5;
+}

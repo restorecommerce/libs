@@ -1,0 +1,245 @@
+syntax = "proto3";
+
+package io.restorecommerce.user;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/image.proto";
+
+/**
+ * The microservice for the user resource.
+ */
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserList);
+  rpc Create (UserList) returns (UserList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (UserList) returns (UserList);
+  rpc Upsert (UserList) returns (UserList);
+
+  rpc Find (FindRequest) returns (UserList);
+  rpc Register (RegisterRequest) returns (User);
+  rpc Activate (ActivateRequest) returns (google.protobuf.Empty);
+  rpc ChangePassword (ChangePasswordRequest) returns (google.protobuf.Empty);
+  rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (google.protobuf.Empty);
+  rpc RequestEmailChange (ChangeEmailRequest) returns (google.protobuf.Empty);
+  rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (google.protobuf.Empty);
+  rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (google.protobuf.Empty);
+  rpc Unregister (UnregisterRequest) returns (google.protobuf.Empty);
+  rpc Login (LoginRequest) returns (User);
+  rpc FindByRole (FindByRoleRequest) returns (UserList);
+  rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
+  rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
+  rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
+  rpc FindByToken (FindByTokenRequest) returns (User);
+}
+
+/**
+* Request to verify password and retrieve the user's info.
+* Either name or email can be provided.
+*/
+message LoginRequest {
+  string identifier = 1; // User name or email
+  string password = 2; // Raw password
+  string token = 3;
+}
+
+message OrgIDRequest {
+  repeated string org_ids = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+message UserIDs {
+  repeated string user_ids = 1;
+}
+
+message FindRequest {
+  string id = 1; /// User ID
+  string name = 2;
+  string email = 3;
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message FindByTokenRequest {
+  string token = 1;
+}
+
+enum UserType {
+  ORG_USER = 0;
+  INDIVIDUAL_USER = 1;
+  GUEST = 2;
+  TECHNICAL_USER = 3;
+}
+
+message RegisterRequest {
+  string id = 1;
+  bool guest = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+  string name = 4;
+  string first_name = 5;
+  string last_name = 6;
+  string email = 7;
+  string password = 8;
+  string timezone_id = 9;
+  string locale_id = 10;
+
+  repeated io.restorecommerce.auth.RoleAssociation role_associations = 11;
+  string default_scope = 12; // default hierarchical scope
+  UserType user_type = 13;
+  string captcha_code = 14;
+}
+
+message ActivateRequest {
+  string name = 1; /// User name (unique)
+  string activation_code = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ConfirmUserInvitationRequest {
+  string name = 1;
+  string password = 2;
+  string activation_code = 3;
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message SendInvitationEmailRequest {
+  string user_id = 1;
+  string invited_by_user_id = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ChangePasswordRequest {
+  string id = 1; /// User ID
+  string password = 2;
+  string new_password = 3;
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message RequestPasswordChangeRequest {
+  oneof input_field {
+    string name = 1;
+    string email = 2;
+  }
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ConfirmPasswordChangeRequest {
+  string name = 1;
+  string activation_code = 2;
+  string password = 3;
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message ChangeEmailRequest {
+  string id = 1; /// User ID
+  string email = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ConfirmEmailChangeRequest {
+  string name = 1;
+  string activation_code = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message UnregisterRequest {
+  string id = 1; /// User ID
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+/**
+ * User deletion event.
+ * Send when a user was deleted or unregistered.
+ *
+ * Events:
+ * usersDeleted,
+ * unregistered,
+ */
+message Deleted {
+  string id = 1;
+}
+
+/**
+ * User password changed event.
+ *
+ * Events:
+ * passwordChanged,
+ */
+message PasswordChanged {
+  string id = 1; /// User ID
+  string password_hash = 2;
+}
+
+message PasswordChangeRequested {
+  string id = 1; // User ID
+}
+
+/**
+ * User email id changed event.
+ */
+message EmailChangeRequested {
+  string id = 1;
+  string activation_code = 2;
+  string new_email = 3;
+}
+
+message EmailChangeConfirmed {
+  string id = 1; /// User ID
+  string email = 2;
+}
+
+/**
+ * A list of User.
+ */
+message UserList {
+  repeated User items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+/**
+ * User activation request.
+ */
+message Activate {
+  string id = 1; /// User ID
+}
+
+message FindByRoleRequest {
+  string role = 1;
+  repeated io.restorecommerce.attribute.Attribute attributes = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+/**
+ * A User resource.
+ */
+message User {
+  string id = 1; /// User ID, unique, key
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3; // The name of the user, can be used for login
+  string first_name = 4;
+  string last_name = 5;
+  string email = 6; /// Email address, can be used for login
+  string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  bool active = 8; /// If the user was activated via the activation process
+  string activation_code = 9; /// Activation code used in the activation process
+  string password = 10; /// Raw password, not stored
+  string password_hash = 11; /// Encrypted password, stored
+  repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
+  string timezone_id = 13;	// timezone_id specifications
+  string locale_id = 14;	// locale specifications
+  string default_scope = 15; // default hierarchical scope
+  bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
+  bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  io.restorecommerce.image.Image image = 18;
+  UserType user_type = 19;
+  bool invite = 20; // For user invitation
+  string invited_by_user_name = 21; // user who is inviting
+  string invited_by_user_first_name = 22; // First name of user inviting
+  string invited_by_user_last_name = 23; // Last name of user inviting
+  repeated io.restorecommerce.auth.Tokens tokens = 24;
+  double last_login = 25;
+  double last_access = 26;
+}

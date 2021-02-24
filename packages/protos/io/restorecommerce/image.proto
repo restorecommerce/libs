@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package io.restorecommerce.image;
+
+// ProductCategory resource
+message Image {
+    string id = 1;
+    string caption = 2;
+    string filename = 3;
+    string content_type = 4;
+    string url = 5;
+    double width = 6;
+    double height = 7;
+    double length = 8;
+}
+
+message ImageList {
+    repeated Image items = 1;
+    uint32 total_count = 2;
+}
+
+message Deleted {
+    string id = 1;
+}

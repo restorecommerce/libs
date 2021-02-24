@@ -1,0 +1,62 @@
+<style>
+.rc-login {
+  height: 100%;
+  background-color: #00adef;
+}
+
+.rc-login-form {
+  width: 815px;
+  box-sizing: border-box;
+  border-radius: .3rem;
+  background: #fff;
+  padding: 1rem;
+}
+</style>
+
+<div class="rc-login flex col justify-center">
+  <div class="self-center justify-center rc-login-form scale110p">
+    <h2>{{title}}</h2>
+    <div class="row rc-login-form-inner">
+      <div class="w-45p gutter-margin-t-b">
+        <form class="form m-0 ng-pristine ng-invalid ng-touched" autocomplete="off" action="/interaction/{{ uid}}/login" method="post">
+          <div class="form-control-group embedded-input-field-label">
+            <label for="identifier" class="form-control-label">
+              E-Mail or Username
+            </label>
+            <div class="input-field {{#if error}}error{{/if}}">
+              <input value="testuser"  id="identifier" name="identifier" type="text">
+            </div>
+          </div>
+          <div class="form-control-group embedded-input-field-label">
+            <label for="password" class="form-control-label">
+              Password
+            </label>
+            <div class="input-field {{#if error}}error{{/if}}">
+              <input value="testpassword" name="password" name="password" type="text">
+            </div>
+            {{#if error}}
+              <div class="form-control-hint error">{{error.message}}</div>
+            {{/if}}
+          </div>
+          <div class="row justify-between">
+            <button type="button" class="button half-transparent"> Forgot your password? </button>
+            <button type="submit" class="button emphasized"> Log in </button>
+          </div>
+        </form>
+      </div>
+      <div class="w-10p divider divider-vertical row center justify-center rc-login-form-divider-v">
+        <div class="divider-rule"></div>
+        <div class="icogram divider-element">
+          <div class="text">or</div>
+        </div>
+      </div>
+      <div class="w-45p col justify-center gutter-margin-t-b">
+        <a href="https://todo" class="col justify-center">
+          <button type="button" class="button emphasized">
+            Create an Account
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

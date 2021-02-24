@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package io.restorecommerce.role;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RoleList);
+  rpc Create (RoleList) returns (RoleList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (RoleList) returns (RoleList);
+  rpc Upsert (RoleList) returns (RoleList);
+}
+
+message Role {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3; // specifies the role of the user
+  string description = 4;
+  repeated string assignable_by_roles = 5; // role id who can assign this role
+}
+
+message RoleList {
+  repeated Role items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Deleted {
+  string id = 1;
+}

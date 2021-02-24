@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package io.restorecommerce.rule;
+
+import "google/protobuf/empty.proto";
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
+
+
+/**
+* Target specified by a Rule or a Request.
+*/
+message Target {
+  repeated io.restorecommerce.attribute.Attribute subject = 1;
+  repeated io.restorecommerce.attribute.Attribute resources = 2;
+  repeated io.restorecommerce.attribute.Attribute action = 3;
+}
+
+/**
+* Resulting effect from a Policy or Rule.
+*/
+enum Effect {
+  PERMIT = 0;
+  DENY = 1;
+}
+
+message Rule {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string description = 4;
+  Target target = 5;
+  ContextQuery context_query = 6;
+  string condition = 7; // JS code
+  Effect effect = 8;
+  bool evaluation_cacheable = 9;
+}
+
+message RuleRQ { // used for `whatIsAllowed` / reverse queries
+  string id = 1;
+  Target target = 2;
+  Effect effect = 3;
+  string condition = 4;
+  ContextQuery context_query = 5; 
+  bool evaluation_cacheable = 6;
+}
+
+message RuleList {
+  repeated Rule items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+// Query to pull resources from an external service
+//  and append them to the request's context.
+// The retrieved data can then be passed onto the request's context
+message ContextQuery {
+  message Filter {
+    string field = 1;
+    string operation = 2;
+    string value = 3;
+  }
+  repeated Filter filters = 1;
+  string query = 2;
+}
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleList);
+  rpc Create (RuleList) returns (RuleList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (RuleList) returns (RuleList);
+  rpc Upsert (RuleList) returns (RuleList);
+}

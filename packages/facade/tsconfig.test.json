@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@modules": ["src/modules/index"],
+      "@modules/*": ["src/modules/*"],
+      "@gql": ["src/gql/index"],
+      "@gql/*": ["src/gql/*"]
+    },
+    "esModuleInterop": true
+  },
+  "include": [
+    "./tests/**/*.ts", "tests/generate-keysjts"
+  ]
+}

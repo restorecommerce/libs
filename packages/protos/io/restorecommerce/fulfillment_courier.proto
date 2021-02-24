@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package io.restorecommerce.fulfillment_courier;
+ 
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+/**
+Microservice defination   
+*/
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierList);
+  rpc Create (CourierList) returns (CourierList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (CourierList) returns (CourierList);
+  rpc Upsert (CourierList) returns (CourierList);
+}
+
+message CourierList  {
+  repeated Courier items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Courier {
+  string name = 1;
+  string description = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+  string id = 4;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package io.restorecommerce.contact_point_type;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/meta.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointTypeList);
+  rpc Create (ContactPointTypeList) returns (ContactPointTypeList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ContactPointTypeList) returns (ContactPointTypeList);
+  rpc Upsert (ContactPointTypeList) returns (ContactPointTypeList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message ContactPointTypeList {
+  repeated ContactPointType items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ContactPointType {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string type = 3;
+}

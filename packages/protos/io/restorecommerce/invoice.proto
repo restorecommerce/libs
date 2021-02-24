@@ -1,0 +1,110 @@
+syntax = "proto3";
+
+package io.restorecommerce.invoice;
+
+import "io/restorecommerce/resource_base.proto";
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/organization.proto";
+import "io/restorecommerce/auth.proto";
+import "google/protobuf/any.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (InvoiceList);
+  rpc Create (InvoiceList) returns (InvoiceList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (InvoiceList) returns (InvoiceList);
+  rpc Upsert (InvoiceList) returns (InvoiceList);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+/*
+* For multiple invoices
+*/
+message InvoiceList {
+  repeated Invoice items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+/*
+* A simple invoice.
+*/
+message Invoice {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string timestamp = 4;
+  string customer_id = 5;
+  string payment_status = 6;
+  double total_amount = 7;
+  double net_amount = 8;
+  double vat_amount = 9; // difference between net and total
+  string document = 10;
+  string invoice_number = 11;
+  string customer_remark = 12;
+}
+
+/**
+* List of Invoice Positions data
+*/
+message InvoicesPositionsData {
+  repeated InvoicePositions invoices_positions_data = 1;
+}
+
+message InvoicePositions {
+  string id = 1; // contract or customer identifier
+  repeated InvoicePosition invoice_positions = 2;
+  RecipientCustomer recipient_customer = 3;
+  BillingAddress recipient_billing_address = 4;
+  BillingAddress sender_billing_address = 5;
+  io.restorecommerce.organization.Organization recipient_organization = 6;
+  io.restorecommerce.organization.Organization sender_organization = 7;
+  google.protobuf.Any payment_method_details = 8;
+}
+
+message RecipientCustomer {
+  string id = 1; // customer id - used to store the resource in DB
+  string customer_number = 2; // displayed in invoice - auto generated per customer
+}
+
+message BillingAddress {
+  string email = 1;
+  string website = 2;
+  string street = 3;
+  string building_number = 4;
+  string postcode = 5;
+  string region = 6;
+  string country_name = 7;
+  string telephone = 9;
+  string timezone = 10;
+  string economic_area = 11;
+}
+
+message InvoicePosition {
+  string currency = 1;
+  repeated InvoiceRow tableList = 2;
+  InvoicePrice totalPrice = 3;
+}
+
+message InvoiceRow {
+  string product = 1;
+  uint32 pricePerUnit = 2;
+  uint32 quantity = 3;
+  string vat = 4;
+  uint32 amount = 5;
+}
+
+message InvoicePrice {
+  uint32 gross = 1;
+  uint32 net = 2;
+}
+
+message TriggerInvoices {
+  repeated string ids = 1; // list of id referring to contract_ids or customer_ids
+}

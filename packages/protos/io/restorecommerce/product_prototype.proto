@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.restorecommerce.product_prototype;
+
+import "google/protobuf/empty.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+
+// ProductPrototype resource
+message ProductPrototype {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3; 
+  string version = 4;
+  string description = 5;
+  string category_id = 6;
+}
+
+message ProductPrototypeList {
+  repeated ProductPrototype items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message Deleted {
+  string id = 1;
+}
+
+service Service {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeList);
+  rpc Create (ProductPrototypeList) returns (ProductPrototypeList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (ProductPrototypeList) returns (ProductPrototypeList);
+  rpc Upsert (ProductPrototypeList) returns (ProductPrototypeList);
+}

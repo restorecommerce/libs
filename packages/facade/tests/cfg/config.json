@@ -1,0 +1,84 @@
+{
+  "logger": {
+    "console": {
+      "handleExceptions": false,
+      "level": "debug",
+      "colorize": true,
+      "prettyPrint": true
+    }
+  },
+  "facade": {
+    "keys": [
+      "secret"
+    ],
+    "port": 5000
+  },
+  "resources": {
+    "client": {
+      "address": "127.0.0.1:50053"
+    }
+  },
+  "identity": {
+    "client": {
+      "address": "127.0.0.1:50051"
+    }
+  },
+  "ordering": {
+    "client": {
+      "address": "127.0.0.1:50065"
+    }
+  },
+  "payment": {
+    "client": {
+      "address": "127.0.0.1:50078"
+    }
+  },
+  "resource": {
+    "client": {
+      "address": "127.0.0.1:50053"
+    },
+    "root": false
+  },
+  "catalog": {
+    "client": {
+      "address": "127.0.0.1:50068"
+    },
+    "root": false
+  },
+  "invoicing": {
+    "client": {
+      "address": "127.0.0.1:50058"
+    }
+  },
+  "fulfillment": {
+    "client": {
+      "address": "127.0.0.1:50067"
+    }
+  },
+  "indexing": {
+    "client": {
+      "address": "127.0.0.1:50064"
+    }
+  },
+  "scheduling": {
+    "client": {
+      "address": "127.0.0.1:50054"
+    }
+  },
+  "notification": {
+    "client": {
+      "address": "127.0.0.1:50052"
+    }
+  },
+  "access_control": {
+    "client": {
+      "address": "127.0.0.1:50061"
+    },
+    "root": false
+  },
+  "ostorage": {
+    "client": {
+      "address": "127.0.0.1:50066"
+    }
+  }
+}

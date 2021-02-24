@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.restorecommerce.token;
+
+import "io/restorecommerce/auth.proto";
+import "google/protobuf/any.proto";
+
+/*
+* Microservice definition.
+*/
+service Service {
+  rpc upsert (TokenData) returns (google.protobuf.Any); // creates or upserts ID_token to `Redis` and returns sucess or failure message
+  rpc find (Identifier) returns (google.protobuf.Any); // find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)  
+  rpc destroy (Identifier) returns (google.protobuf.Any); // removes the id_token from redis
+  rpc revokeByGrantId (GrantId) returns (google.protobuf.Any); // Destroy/Drop/Remove a stored id_token by its grantId property reference.
+  rpc consume (Identifier) returns (google.protobuf.Any);  // Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).
+}
+
+message TokenData {
+  string id = 1;
+  google.protobuf.Any payload = 2;
+  double expires_in = 3;
+  string type = 4;
+  io.restorecommerce.auth.Subject subject = 5;
+}
+
+message Identifier {
+  string id = 1;
+  string type = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message GrantId {
+  string grant_id = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}

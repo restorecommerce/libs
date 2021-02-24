@@ -1,0 +1,115 @@
+syntax = "proto3";
+package io.restorecommerce.payment;
+import "google/protobuf/wrappers.proto";
+import "io/restorecommerce/auth.proto";
+ 
+service Service {
+  // Wrapper for setup_authorization in ActiveMerchant
+  rpc SetupAuthorization (SetupRequest) returns (SetupResponse);
+
+  // Wrapper for setup_purchase in ActiveMerchant
+  rpc SetupPurchase (SetupRequest) returns (SetupResponse);
+
+  // Gets payment details by token or transaction. Only supported by PayPal Express Checkout.
+  rpc Authorize (PaymentRequest) returns (PaymentResponse);
+
+  // Gets payment details by token or transaction. Only supported by PayPal Express Checkout.
+  rpc Purchase (PaymentRequest) returns (PaymentResponse);
+
+  // Can capture both cardless and standard authorization.
+  rpc Capture (CaptureRequest) returns (PaymentResponse);
+}
+
+// Request object for setup calls
+message SetupRequest {
+  string ip = 1;
+  repeated Item items = 2;
+  int32 subtotal = 3;
+  int32 shipping = 4;
+  int32 handling = 5;
+  int32 tax = 6;
+  string currency = 7;
+  string return_url = 8;
+  string cancel_return_url = 9;
+  bool allow_guest_checkout = 10;
+  Provider provider = 11;
+  io.restorecommerce.auth.Subject subject = 12;
+}
+
+// Response object for setup calls.
+message SetupResponse {
+  repeated PaymentError payment_errors = 1;
+  string token = 2;
+  string confirm_initiation_url = 3;
+  string initiated_on = 4;
+}
+
+// Request object for authorization or purchase call for cardless payment.
+message PaymentRequest {
+  Provider provider = 1;
+  int32 payment_sum = 2;
+  string currency = 3;
+  string payment_id = 4;
+  string payer_id = 5;
+  string token = 6;
+  io.restorecommerce.auth.Subject subject = 7;
+}
+
+// Request object for capture call for both standard and cardless payments.
+message CaptureRequest {
+  Provider provider = 1;
+  int32 payment_sum = 2;
+  string currency = 3;
+  string payment_id = 4;
+  io.restorecommerce.auth.Subject subject = 5;
+}
+
+// Unified response object for authorization, purchase and capture calls
+// for both standard and cardless payments.
+message PaymentResponse {
+  repeated PaymentError payment_errors = 1;
+  string payment_id = 2;
+  string executed_on = 3;
+}
+
+// Used for building ActiveMerchant::Billing::CreditCard instance.
+message PaymentCard {
+  string primary_number = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string month = 4;
+  int32 year = 5;
+  string verification_value = 6;
+}
+
+// Represents purchased item. Not all providers support this.
+message Item {
+  string name = 1;
+  string description = 2;
+  int32 quantity = 3;
+  int32 amount = 4;
+}
+
+// Error details.
+message PaymentError {
+  bool killed = 1;
+  int32 code = 2;
+  google.protobuf.StringValue signal = 3;
+  string cmd = 4;
+  string stdout = 5;
+  string stderr = 6;
+}
+
+// Possible service providers. Provider names must be exactly as in config.yml.
+enum Provider {
+  NO_PROVIDER = 0;
+  PaypalExpressGateway = 1;
+  AuthorizeNetGateway = 2;
+}
+
+// Possible payment identifiers.
+enum PaymentIdType {
+  NO_IDENTIFIER_TYPE = 0;
+  TOKEN = 1;
+  TRANSACTION_ID = 2;
+}

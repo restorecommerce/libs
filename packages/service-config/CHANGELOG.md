@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.3.4...@restorecommerce/service-config@0.4.0) (2021-02-24)
+
+
+### Features
+
+* introduce facade/grpc-client/rc-grpc-clients/gen-gql-schema + migrate logger/service-config ([99a5375](https://github.com/restorecommerce/libs/commit/99a53754c7a4b27c77f81c6560a3c2aa26a03b2e))
+
+
+
+
+
 ## [0.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.3.3...@restorecommerce/service-config@0.3.4) (2020-12-07)
 
 **Note:** Version bump only for package @restorecommerce/service-config

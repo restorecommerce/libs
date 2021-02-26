@@ -1,4 +1,5 @@
 {
+  "priority" : 200,
   "template": {
     "settings": {
       "index": {
@@ -23,17 +24,23 @@
         "@version": {
           "type": "keyword"
         },
-        "severity": {
+        "level": {
+          "type": "text",
           "index": true,
-          "type": "keyword"
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         },
         "message": {
-          "index": true,
-          "type": "text"
+          "type": "text",
+          "index": true
         },
         "fields": {
-          "dynamic": true,
-          "type": "object"
+          "type": "object",
+          "dynamic": true
         },
         "subject": {
           "type": "keyword",
@@ -46,6 +53,16 @@
         "proc_time": {
           "type": "text",
           "index": true
+        },
+        "source_host": {
+          "type": "text",
+          "index": true,
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
         }
       }
     }

@@ -1,5 +1,5 @@
 {
-  "priority" : 200,
+  "priority": 200,
   "template": {
     "settings": {
       "index": {
@@ -33,6 +33,10 @@
               "ignore_above": 256
             }
           }
+        },
+        "source": {
+          "index": true,
+          "type": "keyword"
         },
         "message": {
           "type": "text",
@@ -68,7 +72,7 @@
     }
   },
   "index_patterns": [
-    "logs-app-default"
+    "logs-app-default*"
   ],
   "data_stream": {},
   "composed_of": []

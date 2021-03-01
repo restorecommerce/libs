@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.1...@restorecommerce/logger@0.6.3) (2021-03-01)
+
+
+### Bug Fixes
+
+* rename level to severity in maping ([660071e](https://github.com/restorecommerce/libs/commit/660071e7a2f2b6030e0732bf282fc906071622fd))
+
+
+
+
+
 ## [0.6.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.0...@restorecommerce/logger@0.6.1) (2021-02-24)
 
 **Note:** Version bump only for package @restorecommerce/logger

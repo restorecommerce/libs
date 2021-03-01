@@ -7,7 +7,7 @@ const opts: RestoreLoggerOptions = {
     level: 'silly',
     colorize: true,
     prettyPrint: true
-  }
+  },
 };
 
 describe('a logger', () => {

@@ -24,7 +24,7 @@
         "@version": {
           "type": "keyword"
         },
-        "level": {
+        "severity": {
           "type": "text",
           "index": true,
           "fields": {

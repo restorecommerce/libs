@@ -26,7 +26,7 @@ const transformer: Transformer = (logData) => {
   if (typeof transformed.message === 'object') {
     transformed.message = JSON.stringify(transformed.message);
   }
-  transformed.level = logData.level;
+  transformed.severity = logData.level;
   transformed.fields = logData.meta;
   if (typeof transformed.fields !== 'object') {
     transformed.fields = { 0: transformed.fields };

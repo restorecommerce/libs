@@ -424,9 +424,9 @@ npm test
 
 Courier Plans:
 
-- [DHL premium business](/src/resources/dhl-premium-business.ts) based on contract based pricing not publicly available.
-- [DHL private customers](/src/resources/dhl-private.ts) based on private customer pricing info [pdf](https://www.dhl.de/content/dam/images/pdf/dhl-paket-pk-preisuebersicht-012020.pdf) | [de](https://www.dhl.de/de/privatkunden/pakete-versenden/deutschlandweit-versenden/paket.html) | [intl](https://www.dhl.de/en/privatkunden/preise/preise-international.html) | [web](https://www.dhl.de/popweb/gw2/nepal/ProductOrder.action)
-- [DHL express](/src/resources/dhl-express.ts) based on contract based pricing not publicly available.
+- [DHL premium business](src/resources/dhl-premium-business.ts) based on contract based pricing not publicly available.
+- [DHL private customers](src/resources/dhl-private.ts) based on private customer pricing info [pdf](https://www.dhl.de/content/dam/images/pdf/dhl-paket-pk-preisuebersicht-012020.pdf) | [de](https://www.dhl.de/de/privatkunden/pakete-versenden/deutschlandweit-versenden/paket.html) | [intl](https://www.dhl.de/en/privatkunden/preise/preise-international.html) | [web](https://www.dhl.de/popweb/gw2/nepal/ProductOrder.action)
+- [DHL express](src/resources/dhl-express.ts) based on contract based pricing not publicly available.
 
 ## Calculation Logic
 

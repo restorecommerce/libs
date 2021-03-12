@@ -36,30 +36,31 @@ export class GraphResourcesServiceBase {
   * traversed pahts and materialized data
   */
   async traversal(call: any, context?: any): Promise<any> {
-    const collection_name = call.request.collection_name;
-    let start_vertex = call.request.start_vertex;
+    const request = call.request?.request;
+    const collection_name = request.collection_name;
+    let start_vertex = request.start_vertex;
     if (_.isEmpty(start_vertex)) {
-      start_vertex = call.request.start_vertices;
+      start_vertex = request?.start_vertices;
       if (!_.isEmpty(start_vertex)) {
         start_vertex = start_vertex.vertices;
       }
     }
-    const opts = call.request.opts;
+    const opts = request?.opts;
     if (_.isEmpty(start_vertex)) {
       throw new Error('missing start vertex');
     }
-    const edge_name = call.request.edge_name;
+    const edge_name = request?.edge_name;
     let data;
     let path;
     let aql;
-    if (call.request.data) {
-      data = call.request.data;
+    if (request?.data) {
+      data = request?.data;
     }
-    if (call.request.path) {
-      path = call.request.path;
+    if (request?.path) {
+      path = request?.path;
     }
-    if (call.request.aql) {
-      aql = call.request.aql;
+    if (request?.aql) {
+      aql = request?.aql;
     }
     const queryResult = await this.db.traversal(start_vertex, opts,
       collection_name, edge_name, data, path, aql);

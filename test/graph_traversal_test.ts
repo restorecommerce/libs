@@ -128,32 +128,27 @@ function testProvider(providerCfg) {
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' },
           { org: 'Bayern', id: 'e' }];
-          let result = await testService.traversal(traversalRequest);
+          let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
-          while (result.read) {
-            const resp = await result.read();
-            // Promisify the callback containing result
-            const partResp: any = await new Promise((resolve, reject) => {
-              resp((err, response) => {
-                if (err) {
-                  if (err.message === 'stream end') {
-                    resolve(null);
-                  }
-                  reject(err);
-                }
-                resolve(response);
-              });
-            });
-            if (!partResp) {
-              break;
-            }
+          let traversalResponseStream = call.getResponseStream();
+          traversalResponseStream.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
               Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
               Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
             }
-          }
+          });
+          traversalResponseStream.on('errorResolved', (err) => {
+            server.logger.error('Error received:', err);
+          });
+          // wait till stream ends
+          await new Promise((resolve: any, reject) => {
+            traversalResponseStream.on('end', () => {
+              resolve();
+            });
+          });
+
           // compare data
           should.exist(traversalResponse.paths);
           should.exist(traversalResponse.data);
@@ -181,31 +176,26 @@ function testProvider(providerCfg) {
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { org: 'Bayern', id: 'e' }];
-          let result = await testService.traversal(traversalRequest);
+          let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
-          while (result.read) {
-            const resp = await result.read();
-            let partResp: any = await new Promise((resolve, reject) => {
-              resp((err, response) => {
-                if (err) {
-                  if (err.message === 'stream end') {
-                    resolve(null);
-                  }
-                  reject(err);
-                }
-                resolve(response);
-              });
-            });
-            if (!partResp) {
-              break;
-            }
+          let traversalResponseStream = await call.getResponseStream();
+          traversalResponseStream.on('data', (partResp) => {
             if (partResp && partResp.data && partResp.data.value) {
               traversalResponse.data = JSON.parse(partResp.data.value.toString());
             }
             if (partResp && partResp.paths && partResp.paths.value) {
               traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
             }
-          }
+          });
+          traversalResponseStream.on('errorResolved', (err) => {
+            server.logger.error('Error received:', err);
+          });
+          // wait till stream ends
+          await new Promise((resolve: any, reject) => {
+            traversalResponseStream.on('end', () => {
+              resolve();
+            });
+          });
           // compare data
           traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(2);
@@ -231,31 +221,25 @@ function testProvider(providerCfg) {
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
           { car: 'bmw', id: 'c', org_id: 'e' }];
           let traversalResponse = { data: [], paths: [] };
-          let result = await testService.traversal(traversalRequest);
-
-          while (result.read) {
-            let resp = await result.read();
-            let partResp: any = await new Promise((resolve, reject) => {
-              resp((err, response) => {
-                if (err) {
-                  if (err.message === 'stream end') {
-                    resolve(null);
-                  }
-                  reject(err);
-                }
-                resolve(response);
-              });
-            });
-            if (!partResp) {
-              break;
-            }
+          let call = await testService.traversal(traversalRequest);
+          let traversalResponseStream = call.getResponseStream();
+          traversalResponseStream.on('data', (partResp) => {
             if (partResp && partResp.data && partResp.data.value) {
               traversalResponse.data = JSON.parse(partResp.data.value.toString());
             }
             if (partResp && partResp.paths && partResp.paths.value) {
               traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
             }
-          }
+          });
+          traversalResponseStream.on('errorResolved', (err) => {
+            server.logger.error('Error received:', err);
+          });
+          // wait till stream ends
+          await new Promise((resolve: any, reject) => {
+            traversalResponseStream.on('end', () => {
+              resolve();
+            });
+          });
           // compare data
           traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(2);

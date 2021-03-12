@@ -1,3 +1,7 @@
+### 0.0.8 (March 12th, 2021)
+
+- changes to the graph traversal streaming API
+
 ### 0.0.7 (February 11th, 2021)
 
 - updated dependencies

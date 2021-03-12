@@ -138,7 +138,7 @@ export class ServiceBase {
         await dispatch;
       }
 
-      return { items: call.request.items };
+      return { items: call.request.items, total_count: call.request.items.length, };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing create request', { code, message });
@@ -208,7 +208,7 @@ export class ServiceBase {
         });
         await dispatch;
       }
-      return { items: updateResult };
+      return { items: updateResult, total_count: updateResult.length };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing update request', { code, message });
@@ -231,7 +231,7 @@ export class ServiceBase {
       const result = await this.resourceapi.upsert(call.request.items,
         this.events.entity, this.name);
       this.logger.info(`${this.name} upserted`, { items: result });
-      return { items: result };
+      return { items: result, total_count: result.length };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing upsert request', { code, message });

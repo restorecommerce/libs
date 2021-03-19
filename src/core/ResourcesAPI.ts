@@ -260,8 +260,14 @@ export class ResourcesAPIBase {
             const from_id = document[fromIDkey];
             const toIDkey = eachEdgeCfg.to;
             const to_id = document[toIDkey];
-            const fromVerticeName = collection;
-            const toVerticeName = eachEdgeCfg.toVerticeName;
+            // edges are created outbound, if it is inbound - check for direction
+            const direction = eachEdgeCfg.direction;
+            let fromVerticeName = collection;
+            let toVerticeName = eachEdgeCfg.toVerticeName;
+            if (direction === 'inbound') {
+              fromVerticeName = eachEdgeCfg.fromVerticeName;
+              toVerticeName = collection;
+            }
             if (fromVerticeName && toVerticeName) {
               await this.db.addEdgeDefinition(eachEdgeCfg.edgeName, [fromVerticeName],
                 [toVerticeName]);
@@ -472,13 +478,22 @@ export class ResourcesAPIBase {
               // TODO delete and recreate the edge (since there is no way to update the edge as we dont add id to the edge as for doc)
               const fromIDkey = eachEdgeCfg.from;
               const from_id = doc[fromIDkey];
-              const fromVerticeName = collectionName;
-              const toVerticeName = eachEdgeCfg.toVerticeName;
+              let fromVerticeName = collectionName;
+              let toVerticeName = eachEdgeCfg.toVerticeName;
+              const direction = eachEdgeCfg.direction;
+              if (direction === 'inbound') {
+                fromVerticeName = eachEdgeCfg.fromVerticeName;
+                toVerticeName = collectionName;
+              }
 
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               for (let outgoingEdge of outgoingEdges) {
                 await db.removeEdge(edgeCollectionName, outgoingEdge._id);
+              }
+              let incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
+              for (let incomingEdge of incomingEdges) {
+                await db.removeEdge(edgeCollectionName, incomingEdge._id);
               }
               // Create new edges
               if (from_id && modified_to_idValues) {

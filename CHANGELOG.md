@@ -1,3 +1,8 @@
+### 0.0.9 (March 19th, 2021)
+
+- fix create and update to support inbound edges
+- updated depencies
+
 ### 0.0.8 (March 12th, 2021)
 
 - changes to the graph traversal streaming API

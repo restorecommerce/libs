@@ -1,5 +1,5 @@
-import {  timezonesModule } from "../timezone/index";
-import {  createFacadeModuleFactory } from "../../src/index";
+import { timezonesModule } from "../timezone/index";
+import { createFacadeModuleFactory } from "../../src/index";
 
 import { ExampleConfig, ExampleModule } from "./interfaces";
 import { FederatedExampleSchema } from "./gql/index";

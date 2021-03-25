@@ -1,4 +1,4 @@
-# logger
+# @restorecommerce/logger
 
 [![Version][version]](https://www.npmjs.com/package/@restorecommerce/logger)[![Build Status][build]](https://travis-ci.org/restorecommerce/logger?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/logger)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/logger?branch=master)
 

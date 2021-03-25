@@ -1,4 +1,4 @@
-# Cart
+# @restorecommerce/cart
 
 <img src="http://img.shields.io/npm/v/@restorecommerce/cart.svg?style=flat-square" alt="">[![Build Status][build]](https://travis-ci.org/restorecommerce/cart?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/cart)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/cart?branch=master)
 

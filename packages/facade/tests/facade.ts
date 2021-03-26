@@ -2,10 +2,7 @@ import { createFacade, reqResLogger, FacadeContext, identityModule } from '../sr
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
-import { timezonesModule } from './timezone';
-import { exampleModule } from './example';
-import { ResourcesSrvGrpcClient } from '@restorecommerce/rc-grpc-clients';
-import { TokenServiceStub } from './token-service-stub';
+import { ResourceSrvGrpcClient } from "../src/modules/resource/grpc";
 
 const jwks = require('./jwks.json');
 
@@ -24,7 +21,7 @@ function createTestFacade() {
   };
 
   const logger = createLogger(cfg.logger);
-  const resourcesClient = new ResourcesSrvGrpcClient(cfg.resources.client);
+  const resourcesClient = new ResourceSrvGrpcClient(cfg.resources.client);
 
   return createFacade({
     // ...cfg.facade,
@@ -53,8 +50,6 @@ function createTestFacade() {
         jwks,
       }
     }))
-    .useModule(timezonesModule({timezoneService: resourcesClient.timezone}))
-    .useModule(exampleModule(cfg.example))
     .useMiddleware(reqResLogger({logger}));
 };
 

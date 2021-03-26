@@ -253,7 +253,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -296,27 +295,6 @@ export type IGoogleProtobufListValue = {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: Maybe<Scalars['String']>;
   include?: Maybe<Scalars['Boolean']>;
-};
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
 };
 
 export type AccessControlRuleQuery = {
@@ -432,7 +410,6 @@ export type AccessControlPolicyMutationUpsertArgs = {
 export type IIoRestorecommercePolicyPolicyList = {
   items?: Maybe<Array<IIoRestorecommercePolicyPolicy>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommercePolicyPolicy = {
@@ -462,7 +439,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type AccessControlRuleMutation = {
@@ -496,7 +472,6 @@ export type AccessControlRuleMutationUpsertArgs = {
 export type IIoRestorecommerceRuleRuleList = {
   items?: Maybe<Array<IIoRestorecommerceRuleRule>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceRuleRule = {
@@ -553,7 +528,6 @@ export type AccessControlPolicySetMutationUpsertArgs = {
 export type IIoRestorecommercePolicySetPolicySetList = {
   items?: Maybe<Array<IIoRestorecommercePolicySetPolicySet>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommercePolicySetPolicySet = {
@@ -676,9 +650,6 @@ export type ResolversTypes = ResolversObject<{
   GoogleProtobufNullValue: GoogleProtobufNullValue;
   IGoogleProtobufListValue: IGoogleProtobufListValue;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   AccessControlRuleQuery: ResolverTypeWrapper<AccessControlRuleQuery>;
   ProtoIoRestorecommerceRuleRuleList: ResolverTypeWrapper<ProtoIoRestorecommerceRuleRuleList>;
   IoRestorecommerceRuleRuleList: ResolverTypeWrapper<IoRestorecommerceRuleRuleList>;
@@ -747,9 +718,6 @@ export type ResolversParentTypes = ResolversObject<{
   IGoogleProtobufValue: IGoogleProtobufValue;
   IGoogleProtobufListValue: IGoogleProtobufListValue;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   AccessControlRuleQuery: AccessControlRuleQuery;
   ProtoIoRestorecommerceRuleRuleList: ProtoIoRestorecommerceRuleRuleList;
   IoRestorecommerceRuleRuleList: IoRestorecommerceRuleRuleList;

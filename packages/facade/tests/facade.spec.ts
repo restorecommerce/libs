@@ -1,8 +1,4 @@
-import { FindRequest, IdentitySrvGrpcClient, LoginRequest, RegisterRequest, ResourcesSrvGrpcClient, User } from '@restorecommerce/rc-grpc-clients';
-import { createServiceConfig } from '@restorecommerce/service-config';
-import { isType } from 'graphql';
 import { AddressInfo } from 'net';
-import  { Facade } from '../src/index';
 import { facade } from './facade';
 
 let url

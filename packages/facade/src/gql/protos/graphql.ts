@@ -14,11 +14,15 @@ import {
   Thunk
 } from "graphql/type/definition";
 import { StatusType } from "../";
-import { ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
+import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping } from "./registry";
 import { capitalizeProtoName } from "./utils";
 import { Readable } from "stream";
-import { MethodDescriptorProto, ServiceDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import {
+  DescriptorProto,
+  MethodDescriptorProto,
+  ServiceDescriptorProto
+} from "ts-proto-descriptors/google/protobuf/descriptor";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
@@ -82,7 +86,9 @@ export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObje
   if (model instanceof GraphQLInputObjectType) {
     const fields = model.getFields();
     for (let key of Object.keys(fields)) {
-      data[key] = await recursiveUploadToBuffer(data[key], fields[key].type);
+      if (key in data) {
+        data[key] = await recursiveUploadToBuffer(data[key], fields[key].type);
+      }
     }
   }
 
@@ -153,6 +159,17 @@ export const getGQLResolverFunctions =
 
       const defaults = typing.processor.fromPartial({});
 
+      let subjectField: null | string = null;
+      const inputTyping = getTyping(method.inputType);
+      if (inputTyping) {
+        for (let field of (inputTyping.meta as DescriptorProto).field) {
+          if (field.typeName === authSubjectType) {
+            subjectField = field.name;
+            break;
+          }
+        }
+      }
+
       (obj as any)[method.name!] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
@@ -164,6 +181,15 @@ export const getGQLResolverFunctions =
             ...defaults,
             ...converted
           };
+
+          if (subjectField !== null) {
+            req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
+
+            const authToken = (context as any).request!.req.headers['authorization'];
+            if (authToken && authToken.startsWith('Bearer ')) {
+              req.subject.token = authToken.split(' ')[1];
+            }
+          }
 
           // TODO Handle client-stream methods
           const result = await service[method.name!](req);

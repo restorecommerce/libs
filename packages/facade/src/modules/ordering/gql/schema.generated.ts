@@ -143,7 +143,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -194,32 +193,6 @@ export type IGoogleProtobufAny = {
 };
 
 
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   ordering: OrderingMutation;
@@ -262,7 +235,6 @@ export type OrderingMutationTriggerFulfillmentArgs = {
 export type IIoRestorecommerceOrderOrderList = {
   items?: Maybe<Array<IIoRestorecommerceOrderOrder>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceOrderOrder = {
@@ -283,6 +255,11 @@ export type IIoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+};
+
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceOrderItems = {
@@ -318,7 +295,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type ProtoIoRestorecommerceOrderFulfillmentResults = {
@@ -465,15 +441,12 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: ResolverTypeWrapper<{}>;
   OrderingMutation: ResolverTypeWrapper<OrderingMutation>;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceOrderItems: IIoRestorecommerceOrderItems;
   IIoRestorecommerceOrderItem: IIoRestorecommerceOrderItem;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
@@ -516,15 +489,12 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: {};
   OrderingMutation: OrderingMutation;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceOrderItems: IIoRestorecommerceOrderItems;
   IIoRestorecommerceOrderItem: IIoRestorecommerceOrderItem;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;

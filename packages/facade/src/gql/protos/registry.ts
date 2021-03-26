@@ -9,7 +9,7 @@ import {
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
 import { GraphQLUpload } from 'graphql-upload';
 import { capitalizeProtoName } from "./utils";
-import { ProtoMetadata } from "./types";
+import { authSubjectType, ProtoMetadata } from "./types";
 import {
   DescriptorProto,
   EnumDescriptorProto,
@@ -95,10 +95,14 @@ export const registerTyping = (
     const result: GraphQLFieldConfigMap<any, any> = {};
 
     message.field?.forEach(field => {
-      result[field.jsonName!] = {
-        // TODO Union types
-        type: resolveMeta(field.jsonName!, field, type, name, false) as GraphQLOutputType
-      };
+      // TODO Union types
+      const resolvedMeta = resolveMeta(field.jsonName!, field, type, name, false);
+
+      if (resolvedMeta !== null) {
+        result[field.jsonName!] = {
+          type: resolvedMeta as GraphQLOutputType
+        };
+      }
     });
 
     return result;
@@ -108,10 +112,14 @@ export const registerTyping = (
     const result: GraphQLInputFieldConfigMap = {};
 
     message.field?.forEach(field => {
-      result[field.jsonName!] = {
-        // TODO Union types
-        type: resolveMeta(field.jsonName!, field, type, name, true) as GraphQLInputType
-      };
+      // TODO Union types
+      const resolvedMeta = resolveMeta(field.jsonName!, field, type, name, true);
+
+      if (resolvedMeta !== null) {
+        result[field.jsonName!] = {
+          type: resolvedMeta as GraphQLInputType
+        };
+      }
     });
 
     return result;
@@ -171,7 +179,7 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType => {
+const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType | null => {
   let result;
 
   switch (field.type) {
@@ -191,6 +199,10 @@ const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: stri
       if (!input) {
         result = registeredTypings.get(objType)!.output;
         break;
+      }
+
+      if (objType === authSubjectType) {
+        return null;
       }
 
       result = registeredTypings.get(objType)!.input;

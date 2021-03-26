@@ -5,7 +5,8 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from "graphql";
 import { getProtoFunction, getProtoFunctions, getTyping, registerPackagesRecursive } from "../src/gql/protos";
-import { DeleteRequest, Empty, ReadRequest } from "@restorecommerce/rc-grpc-clients";
+import { DeleteRequest, ReadRequest } from "@restorecommerce/rc-grpc-clients";
+import { Empty } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/empty";
 
 describe("proto-meta", () => {
   it('should register typings', () => {

@@ -103,14 +103,6 @@ describe('ordering', () => {
             billingContactPointId: "billingContactPointId"
           }
         ]
-        subject: {
-          id: "N/A"
-          scope: "N/A"
-          unauthenticated: false
-          token: "N/A",
-          hierarchicalScopes: [],
-          roleAssociations: []
-        }
       }
     ) {
       status {
@@ -150,14 +142,6 @@ describe('ordering', () => {
       input: {
         ids: ["TEST"]
         collection: false
-        subject: {
-          id: "N/A"
-          scope: "N/A"
-          unauthenticated: false
-          token: "N/A"
-          hierarchicalScopes: []
-          roleAssociations: []
-        }
       }
     ) {
       status {

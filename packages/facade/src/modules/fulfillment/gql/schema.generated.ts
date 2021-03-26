@@ -86,33 +86,6 @@ export type IoRestorecommerceFulfillmentError = {
 
 export type IIoRestorecommerceFulfillmentOrderId = {
   orderId?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
-};
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceFulfillmentStatus = {
@@ -157,7 +130,6 @@ export type IoRestorecommerceFulfillmentEventDetails = {
 export type IIoRestorecommerceFulfillmentTrackingNumber = {
   orderId?: Maybe<Scalars['String']>;
   shipmentType?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type ProtoIoRestorecommerceFulfillmentAllFulfillments = {
@@ -182,7 +154,6 @@ export type IoRestorecommerceFulfillmentItems = {
 export type IIoRestorecommerceFulfillmentFulfillmentStatus = {
   OrderId?: Maybe<Scalars['String']>;
   OrderStatus?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type FulfillmentFulfillmentCourierQuery = {
@@ -264,7 +235,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -374,7 +344,6 @@ export type IoRestorecommerceFulfillmentErrorList = {
 
 export type IIoRestorecommerceFulfillmentShipmentOrderLists = {
   ShipmentOrder?: Maybe<IIoRestorecommerceFulfillmentShipmentOrder>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceFulfillmentShipmentOrder = {
@@ -475,6 +444,11 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type ProtoIoRestorecommerceFulfillmentDeleteStatus = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentDeleteStatus';
   status: StatusType;
@@ -518,7 +492,6 @@ export type FulfillmentFulfillmentCourierMutationUpsertArgs = {
 export type IIoRestorecommerceFulfillmentCourierCourierList = {
   items?: Maybe<Array<IIoRestorecommerceFulfillmentCourierCourier>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceFulfillmentCourierCourier = {
@@ -536,7 +509,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -616,11 +588,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceFulfillmentLabels: ResolverTypeWrapper<IoRestorecommerceFulfillmentLabels>;
   IoRestorecommerceFulfillmentError: ResolverTypeWrapper<IoRestorecommerceFulfillmentError>;
   IIoRestorecommerceFulfillmentOrderId: IIoRestorecommerceFulfillmentOrderId;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ProtoIoRestorecommerceFulfillmentStatus: ResolverTypeWrapper<ProtoIoRestorecommerceFulfillmentStatus>;
   IoRestorecommerceFulfillmentStatus: ResolverTypeWrapper<IoRestorecommerceFulfillmentStatus>;
   IoRestorecommerceFulfillmentShipmentStatus: ResolverTypeWrapper<IoRestorecommerceFulfillmentShipmentStatus>;
@@ -641,6 +608,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAuthSubject: ResolverTypeWrapper<IoRestorecommerceAuthSubject>;
   IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
   IoRestorecommerceAuthHierarchicalScope: ResolverTypeWrapper<IoRestorecommerceAuthHierarchicalScope>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IoRestorecommerceResourcebaseSortSortOrder: IoRestorecommerceResourcebaseSortSortOrder;
@@ -676,6 +644,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentName: IIoRestorecommerceFulfillmentName;
   IIoRestorecommerceFulfillmentNotification: IIoRestorecommerceFulfillmentNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoIoRestorecommerceFulfillmentDeleteStatus: ResolverTypeWrapper<ProtoIoRestorecommerceFulfillmentDeleteStatus>;
   IoRestorecommerceFulfillmentDeleteStatus: ResolverTypeWrapper<IoRestorecommerceFulfillmentDeleteStatus>;
   FulfillmentFulfillmentCourierMutation: ResolverTypeWrapper<FulfillmentFulfillmentCourierMutation>;
@@ -698,11 +667,6 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceFulfillmentLabels: IoRestorecommerceFulfillmentLabels;
   IoRestorecommerceFulfillmentError: IoRestorecommerceFulfillmentError;
   IIoRestorecommerceFulfillmentOrderId: IIoRestorecommerceFulfillmentOrderId;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
-  Boolean: Scalars['Boolean'];
   ProtoIoRestorecommerceFulfillmentStatus: ProtoIoRestorecommerceFulfillmentStatus;
   IoRestorecommerceFulfillmentStatus: IoRestorecommerceFulfillmentStatus;
   IoRestorecommerceFulfillmentShipmentStatus: IoRestorecommerceFulfillmentShipmentStatus;
@@ -723,6 +687,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAuthSubject: IoRestorecommerceAuthSubject;
   IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
   IoRestorecommerceAuthHierarchicalScope: IoRestorecommerceAuthHierarchicalScope;
+  Boolean: Scalars['Boolean'];
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IGoogleProtobufStruct: IGoogleProtobufStruct;
@@ -756,6 +721,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentName: IIoRestorecommerceFulfillmentName;
   IIoRestorecommerceFulfillmentNotification: IIoRestorecommerceFulfillmentNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoIoRestorecommerceFulfillmentDeleteStatus: ProtoIoRestorecommerceFulfillmentDeleteStatus;
   IoRestorecommerceFulfillmentDeleteStatus: IoRestorecommerceFulfillmentDeleteStatus;
   FulfillmentFulfillmentCourierMutation: FulfillmentFulfillmentCourierMutation;

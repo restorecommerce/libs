@@ -1,7 +1,9 @@
-import { TokenService, User } from '@restorecommerce/rc-grpc-clients';
 import { JSONWebKeySet, } from 'jose';
-import { Adapter } from 'oidc-provider';
+import Provider, { Adapter, errors } from 'oidc-provider';
 import { IdentityContext } from '../interfaces';
+import { Service as authLogService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
+import { Service as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { User } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
 
 export interface OIDCHbsTemplates {
   login?: string;
@@ -9,11 +11,10 @@ export interface OIDCHbsTemplates {
   consent?: string;
 }
 
-
 export interface OIDCConfig {
-  remoteTokenService?: TokenService;
+  remoteTokenService?: tokenService;
   localTokenServiceFactory?: (type: string) => Adapter;
-  loginFn?: OIDCLoginFn;
+  loginFn?: OIDCBodyLoginFn;
   issuer: string;
   jwks: JSONWebKeySet;
   client_id: string;
@@ -31,6 +32,8 @@ export interface OIDCError {
   message?: string;
 }
 
+export type UserKey = keyof User;
+
 export type AuthUserKeyWhitelist =
   'id' |
   'name' |
@@ -41,15 +44,59 @@ export type AuthUserKeyWhitelist =
   'firstName' |
   'lastName' |
   'defaultScope' |
-  'tokens';
+  'tokens' |
+  'lastAccess';
 
 export type AuthUser = Pick<User, AuthUserKeyWhitelist>;
 
-export interface OIDCLoginFn {
-  (ctx: IdentityContext, body: any): Promise<{
-    user?: AuthUser;
-    error?: OIDCError;
-    identifier?: string;
-    remember?: boolean;
-  }>;
+export interface LoginFnResponse {
+  user?: AuthUser;
+  error?: OIDCError;
+  identifier?: string;
+  remember?: boolean;
+}
+
+export type OIDCBodyLoginFn = (ctx: IdentityContext, body: any) => Promise<LoginFnResponse>;
+
+export type OIDCBodyLoginCredentials = (ctx: IdentityContext, credentials: UserCredentials) => Promise<LoginFnResponse>;
+
+export type OIDCLoginFn = (ctx: IdentityContext, identifier?: string, password?: string, remember?: boolean) => Promise<LoginFnResponse>;
+
+export interface UserCredentials {
+  identifier: string;
+  password?: string;
+  token?: string;
+}
+
+export interface OIDCPasswordGrantTypeConfig {
+  provider: Provider;
+  authenticate: OIDCBodyLoginCredentials;
+  tokenExpiration?: number;
+  authLogService: authLogService;
+}
+
+export interface TokenResponseBody {
+  access_token?: string;
+  id_token?: string;
+  expires_in?: number;
+  last_login?: number;
+  token_type?: string;
+  scope?: string;
+  subject_id?: string;
+  token_name?: string;
+  default_scope?: string;
+  last_access?: number;
+}
+
+export class InvalidPasswordGrant extends errors.InvalidGrant {
+  constructor(detail: string) {
+    super('invalid_password_grant');
+    Object.assign(this, {error_description: detail, error_detail: detail});
+  }
+}
+
+export interface Claims {
+  sub: string;
+  data: AuthUser;
+  [key: string]: any;
 }

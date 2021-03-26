@@ -187,7 +187,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -237,32 +236,6 @@ export type IGoogleProtobufAny = {
   value?: Maybe<Scalars['Upload']>;
 };
 
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
 
 export type CatalogProductPrototypeQuery = {
   __typename?: 'CatalogProductPrototypeQuery';
@@ -443,7 +416,6 @@ export type CatalogProductMutationUpsertArgs = {
 export type IIoRestorecommerceProductProductList = {
   items?: Maybe<Array<IIoRestorecommerceProductMainProduct>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceProductMainProduct = {
@@ -521,6 +493,11 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
@@ -529,7 +506,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type CatalogProductPrototypeMutation = {
@@ -563,7 +539,6 @@ export type CatalogProductPrototypeMutationUpsertArgs = {
 export type IIoRestorecommerceProductPrototypeProductPrototypeList = {
   items?: Maybe<Array<IIoRestorecommerceProductPrototypeProductPrototype>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceProductPrototypeProductPrototype = {
@@ -606,7 +581,6 @@ export type CatalogProductCategoryMutationUpsertArgs = {
 export type IIoRestorecommerceProductCategoryProductCategoryList = {
   items?: Maybe<Array<IIoRestorecommerceProductCategoryProductCategory>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceProductCategoryProductCategory = {
@@ -654,7 +628,6 @@ export type CatalogPriceGroupMutationUpsertArgs = {
 export type IIoRestorecommercePriceGroupPriceGroupList = {
   items?: Maybe<Array<IIoRestorecommercePriceGroupPriceGroup>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommercePriceGroupPriceGroup = {
@@ -695,7 +668,6 @@ export type CatalogManufacturerMutationUpsertArgs = {
 export type IIoRestorecommerceManufacturerManufacturerList = {
   items?: Maybe<Array<IIoRestorecommerceManufacturerManufacturer>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceManufacturerManufacturer = {
@@ -805,10 +777,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   CatalogProductPrototypeQuery: ResolverTypeWrapper<CatalogProductPrototypeQuery>;
   ProtoIoRestorecommerceProductPrototypeProductPrototypeList: ResolverTypeWrapper<ProtoIoRestorecommerceProductPrototypeProductPrototypeList>;
   IoRestorecommerceProductPrototypeProductPrototypeList: ResolverTypeWrapper<IoRestorecommerceProductPrototypeProductPrototypeList>;
@@ -839,6 +807,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceProductBundle: IIoRestorecommerceProductBundle;
   IIoRestorecommerceProductBundleProduct: IIoRestorecommerceProductBundleProduct;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   CatalogProductPrototypeMutation: ResolverTypeWrapper<CatalogProductPrototypeMutation>;
@@ -890,10 +859,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   CatalogProductPrototypeQuery: CatalogProductPrototypeQuery;
   ProtoIoRestorecommerceProductPrototypeProductPrototypeList: ProtoIoRestorecommerceProductPrototypeProductPrototypeList;
   IoRestorecommerceProductPrototypeProductPrototypeList: IoRestorecommerceProductPrototypeProductPrototypeList;
@@ -924,6 +889,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceProductBundle: IIoRestorecommerceProductBundle;
   IIoRestorecommerceProductBundleProduct: IIoRestorecommerceProductBundleProduct;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   CatalogProductPrototypeMutation: CatalogProductPrototypeMutation;

@@ -5,16 +5,14 @@ import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
 // import { AuthUser, loginUser } from './user';
-import { OIDCError, OIDCHbsTemplates, OIDCLoginFn } from './interfaces';
-import { ParameterizedContext } from 'koa';
-
+import { OIDCError, OIDCHbsTemplates, OIDCBodyLoginFn } from './interfaces';
 
 export interface CreateOIDCRouterArgs {
   logger: Logger;
   provider: Provider;
   env?: string;
   templates?: OIDCHbsTemplates;
-  loginFn: OIDCLoginFn;
+  loginFn: OIDCBodyLoginFn;
 }
 
 export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): Router<{}, IdentityContext> {

@@ -1,14 +1,14 @@
 import { Logger } from 'winston';
-import { TokenService } from '@restorecommerce/rc-grpc-clients';
 import { Adapter, AdapterConstructor, AdapterPayload } from 'oidc-provider';
-import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils';
+import { marshallProtobufAny, unmarshallProtobufAny } from './utils';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth';
 import { InMemoryAdapter } from './in-memory-adapter';
+import { Service as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
 
 const delegateToRemoteService = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 
 
-export function createIdentityServiceAdapterClass(remoteTokenService: TokenService, logger: Logger, localTokenServiceFactory?: (type: string) => Adapter): AdapterConstructor {
+export function createIdentityServiceAdapterClass(remoteTokenService: tokenService, logger: Logger, localTokenServiceFactory?: (type: string) => Adapter): AdapterConstructor {
   return class IdentityServiceAdapter implements Adapter {
 
     private localTokenService: Adapter;
@@ -41,7 +41,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: TokenServi
           await remoteTokenService.destroy({
             id,
             type: this.type,
-            subject: Subject.fromPartial({  token: id })
+            subject: Subject.fromPartial({token: id})
           });
         } catch (error) {
           logger.error(`Error destroying ${this.type} token ${id}`, error);
@@ -58,7 +58,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: TokenServi
           let result = await remoteTokenService.find({
             id,
             type: this.type,
-            subject: Subject.fromPartial({  token: id })
+            subject: Subject.fromPartial({token: id})
           });
           return result ? unmarshallProtobufAny(result) : undefined;
         } catch (error) {
@@ -109,7 +109,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: TokenServi
         try {
           await remoteTokenService.revokeByGrantId({
             grantId,
-            subject: Subject.fromPartial({  token: grantId })
+            subject: Subject.fromPartial({token: grantId})
           });
         } catch (error) {
           logger.error(`Error revoking grant id ${grantId}`, error);

@@ -117,7 +117,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -168,32 +167,6 @@ export type IGoogleProtobufAny = {
 };
 
 
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   invoicing: InvoicingMutation;
@@ -230,7 +203,6 @@ export type InvoicingMutationUpsertArgs = {
 export type IIoRestorecommerceInvoiceInvoiceList = {
   items?: Maybe<Array<IIoRestorecommerceInvoiceInvoice>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceInvoiceInvoice = {
@@ -254,6 +226,11 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
@@ -262,7 +239,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -357,15 +333,12 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: ResolverTypeWrapper<{}>;
   InvoicingMutation: ResolverTypeWrapper<InvoicingMutation>;
   IIoRestorecommerceInvoiceInvoiceList: IIoRestorecommerceInvoiceInvoiceList;
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
@@ -396,15 +369,12 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: {};
   InvoicingMutation: InvoicingMutation;
   IIoRestorecommerceInvoiceInvoiceList: IIoRestorecommerceInvoiceInvoiceList;
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;

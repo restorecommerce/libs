@@ -63,33 +63,6 @@ export type IIoRestorecommerceSearchSearchRequest = {
   collection?: Maybe<Scalars['String']>;
   text?: Maybe<Scalars['String']>;
   acl?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
-};
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -168,10 +141,6 @@ export type ResolversTypes = ResolversObject<{
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
@@ -187,10 +156,6 @@ export type ResolversParentTypes = ResolversObject<{
   GoogleProtobufAny: GoogleProtobufAny;
   TodoScalar: Scalars['TodoScalar'];
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Boolean: Scalars['Boolean'];
 }>;
 

@@ -188,7 +188,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -239,43 +238,20 @@ export type IGoogleProtobufAny = {
 };
 
 
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
-
 export type IIoRestorecommerceUserFindRequest = {
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserFindByRoleRequest = {
   role?: Maybe<Scalars['String']>;
   attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
+};
+
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceUserUser = {
@@ -383,7 +359,6 @@ export type GoogleProtobufAny = {
 export type IIoRestorecommerceTokenIdentifier = {
   id?: Maybe<Scalars['String']>;
   type?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type Mutation = {
@@ -502,7 +477,6 @@ export type IdentityUserMutationSendInvitationEmailArgs = {
 export type IIoRestorecommerceUserUserList = {
   items?: Maybe<Array<IIoRestorecommerceUserUser>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserUser = {
@@ -541,6 +515,12 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export type IIoRestorecommerceAuthRoleAssociation = {
+  role?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: Maybe<Scalars['String']>;
+};
+
 export type IIoRestorecommerceImageImage = {
   id?: Maybe<Scalars['String']>;
   caption?: Maybe<Scalars['String']>;
@@ -569,7 +549,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserRegisterRequest = {
@@ -592,44 +571,37 @@ export type IIoRestorecommerceUserRegisterRequest = {
 export type IIoRestorecommerceUserActivateRequest = {
   name?: Maybe<Scalars['String']>;
   activationCode?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserChangePasswordRequest = {
   id?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   newPassword?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserRequestPasswordChangeRequest = {
   name?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserChangeEmailRequest = {
   id?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmPasswordChangeRequest = {
   name?: Maybe<Scalars['String']>;
   activationCode?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmEmailChangeRequest = {
   name?: Maybe<Scalars['String']>;
   activationCode?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserUnregisterRequest = {
   id?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserLoginRequest = {
@@ -651,20 +623,17 @@ export type IoRestorecommerceUserUserIDs = {
 
 export type IIoRestorecommerceUserOrgIdRequest = {
   orgIds?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserConfirmUserInvitationRequest = {
   name?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   activationCode?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceUserSendInvitationEmailRequest = {
   userId?: Maybe<Scalars['String']>;
   invitedByUserId?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IdentityRoleMutation = {
@@ -698,7 +667,6 @@ export type IdentityRoleMutationUpsertArgs = {
 export type IIoRestorecommerceRoleRoleList = {
   items?: Maybe<Array<IIoRestorecommerceRoleRole>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceRoleRole = {
@@ -740,7 +708,6 @@ export type IdentityAuthenticationLogMutationUpsertArgs = {
 export type IIoRestorecommerceAuthenticationLogAuthenticationLogList = {
   items?: Maybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
@@ -789,12 +756,10 @@ export type IIoRestorecommerceTokenTokenData = {
   payload?: Maybe<IGoogleProtobufAny>;
   expiresIn?: Maybe<Scalars['Float']>;
   type?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceTokenGrantId = {
   grantId?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -893,12 +858,9 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoIoRestorecommerceUserUser: ResolverTypeWrapper<ProtoIoRestorecommerceUserUser>;
   IIoRestorecommerceUserFindByTokenRequest: IIoRestorecommerceUserFindByTokenRequest;
   IdentityRoleQuery: ResolverTypeWrapper<IdentityRoleQuery>;
@@ -920,6 +882,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceUserUserList: IIoRestorecommerceUserUserList;
   IIoRestorecommerceUserUser: IIoRestorecommerceUserUser;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   IIoRestorecommerceAuthTokens: IIoRestorecommerceAuthTokens;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
@@ -978,12 +941,9 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ProtoIoRestorecommerceUserUser: ProtoIoRestorecommerceUserUser;
   IIoRestorecommerceUserFindByTokenRequest: IIoRestorecommerceUserFindByTokenRequest;
   IdentityRoleQuery: IdentityRoleQuery;
@@ -1005,6 +965,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceUserUserList: IIoRestorecommerceUserUserList;
   IIoRestorecommerceUserUser: IIoRestorecommerceUserUser;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   IIoRestorecommerceAuthTokens: IIoRestorecommerceAuthTokens;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;

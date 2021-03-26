@@ -1,12 +1,13 @@
 import { Provider } from 'oidc-provider';
 import helmet from 'koa-helmet';
-import { IdentitySrvGrpcClient, TokenService } from '@restorecommerce/rc-grpc-clients';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCConfig } from './interfaces';
 import { createOIDCRouter } from './router';
 import { createIdentityServiceAdapterClass } from './adapter';
-import { findUserById, loginUser } from './user';
+import { findUserById, loginUserBody, loginUserCredentials } from './user';
+import { IdentitySrvGrpcClient } from "../grpc";
+import { registerPasswordGrantType } from "./password-grant";
 
 export { OIDCConfig };
 export { createOIDCRouter, CreateOIDCRouterArgs } from './router';
@@ -18,8 +19,25 @@ export interface CreateOIDCArgs {
   env: string;
 }
 
-export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, post_logout_redirect_uris, localTokenServiceFactory, remoteTokenService, cookies, redirect_uris, client_id, client_secret, issuer, jwks, templates } }: CreateOIDCArgs) {
-  const adapterClass = createIdentityServiceAdapterClass(remoteTokenService ?? identitySrvClient.token, logger, localTokenServiceFactory );
+export function createOIDC({
+                             identitySrvClient,
+                             env,
+                             logger,
+                             config: {
+                               loginFn,
+                               post_logout_redirect_uris,
+                               localTokenServiceFactory,
+                               remoteTokenService,
+                               cookies,
+                               redirect_uris,
+                               client_id,
+                               client_secret,
+                               issuer,
+                               jwks,
+                               templates
+                             }
+                           }: CreateOIDCArgs) {
+  const adapterClass = createIdentityServiceAdapterClass(remoteTokenService ?? identitySrvClient.token, logger, localTokenServiceFactory);
   const provider = new Provider(issuer, {
     adapter: adapterClass,
     clients: [{
@@ -27,7 +45,7 @@ export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, 
       client_id,
       client_secret,
       id_token_signed_response_alg: 'HS256',
-      grant_types: ['refresh_token', 'authorization_code'],
+      grant_types: ['refresh_token', 'authorization_code', 'password'],
       redirect_uris,
       scopes: ['openid', 'offline_access'],
       response_types: [
@@ -44,8 +62,8 @@ export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, 
       AccessToken: 'jwt',
     },
     cookies: {
-      long: { signed: false, maxAge: (1 * 24 * 60 * 60) * 1000 }, // 1 day in ms
-      short: { signed: false },
+      long: {signed: false, maxAge: (1 * 24 * 60 * 60) * 1000}, // 1 day in ms
+      short: {signed: false},
       keys: cookies.keys,
     },
     // oidc-provider only looks up the accounts by their ID when it has to read the claims,
@@ -120,21 +138,28 @@ export function createOIDC({ identitySrvClient, env, logger, config: { loginFn, 
     },
   });
 
-  provider.use(helmet());
+  // Disabled due to playground being disabled
+  // provider.use(helmet());
 
   const router = createOIDCRouter({
-    loginFn: loginFn ?? loginUser,
+    loginFn: loginFn ?? loginUserBody,
     templates,
     logger,
     provider,
     env,
   });
 
+  registerPasswordGrantType({
+    authLogService: identitySrvClient.authentication_log,
+    authenticate: loginUserCredentials,
+    provider
+  })
+
   // Disable forbidding redirect to http/localhost in dev mode
-  if(env === 'development') {
+  if (env === 'development') {
     const proto = (provider.Client as any)?.Schema?.prototype;
     if (proto) {
-      const { invalidate: orig } = proto;
+      const {invalidate: orig} = proto;
       proto.invalidate = function invalidate(message: string, code: string) {
         if (code === 'implicit-force-https' || code === 'implicit-forbid-localhost') {
           return;

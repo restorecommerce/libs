@@ -159,7 +159,6 @@ export type IIoRestorecommerceJobJobReadRequest = {
   sort?: Maybe<IoRestorecommerceJobJobReadRequestSortOrder>;
   filter?: Maybe<IIoRestorecommerceJobJobFilter>;
   field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export enum IoRestorecommerceJobJobReadRequestSortOrder {
@@ -176,32 +175,6 @@ export type IIoRestorecommerceJobJobFilter = {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: Maybe<Scalars['String']>;
   include?: Maybe<Scalars['Boolean']>;
-};
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -240,7 +213,6 @@ export type SchedulingMutationUpsertArgs = {
 export type IIoRestorecommerceJobJobList = {
   items?: Maybe<Array<IIoRestorecommerceJobJob>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceJobJob = {
@@ -269,6 +241,11 @@ export type IIoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+};
+
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobJobOptions = {
@@ -300,7 +277,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -396,10 +372,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceJobJobReadRequestSortOrder: IoRestorecommerceJobJobReadRequestSortOrder;
   IIoRestorecommerceJobJobFilter: IIoRestorecommerceJobJobFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: ResolverTypeWrapper<{}>;
   SchedulingMutation: ResolverTypeWrapper<SchedulingMutation>;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
@@ -408,6 +380,7 @@ export type ResolversTypes = ResolversObject<{
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
   IIoRestorecommerceJobBackoff: IIoRestorecommerceJobBackoff;
   IIoRestorecommerceJobRepeat: IIoRestorecommerceJobRepeat;
@@ -441,10 +414,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceJobJobReadRequest: IIoRestorecommerceJobJobReadRequest;
   IIoRestorecommerceJobJobFilter: IIoRestorecommerceJobJobFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   Mutation: {};
   SchedulingMutation: SchedulingMutation;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
@@ -453,6 +422,7 @@ export type ResolversParentTypes = ResolversObject<{
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
   IIoRestorecommerceJobBackoff: IIoRestorecommerceJobBackoff;
   IIoRestorecommerceJobRepeat: IIoRestorecommerceJobRepeat;

@@ -1,5 +1,10 @@
-import { FindRequest, UserService, User, LoginRequest } from '@restorecommerce/rc-grpc-clients';
-import { OIDCLoginFn, AuthUserKeyWhitelist, AuthUser } from './interfaces';
+import { OIDCBodyLoginFn, AuthUserKeyWhitelist, AuthUser, OIDCLoginFn, OIDCBodyLoginCredentials } from './interfaces';
+import {
+  Service as userService,
+  LoginRequest,
+  FindRequest,
+  User
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
 
 const KEY_WHITELIST: Array<AuthUserKeyWhitelist> = [
   'id',
@@ -14,11 +19,18 @@ const KEY_WHITELIST: Array<AuthUserKeyWhitelist> = [
   'tokens'
 ];
 
-export const loginUser: OIDCLoginFn = async (ctx, body) => {
+export const loginUserBody: OIDCBodyLoginFn = async (ctx, body) => {
   const identifier = typeof body?.identifier === 'string' ? body.identifier : undefined;
   const password = typeof body?.password === 'string' ? body.password : undefined;
   const remember = !!(body?.remember);
+  return loginUser(ctx, identifier, password, remember);
+}
 
+export const loginUserCredentials: OIDCBodyLoginCredentials = async (ctx, credentials) => {
+  return loginUser(ctx, credentials.identifier, credentials.password || credentials.token);
+}
+
+export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember) => {
   if (!identifier || !password) {
     return {
       identifier,
@@ -59,7 +71,7 @@ export const loginUser: OIDCLoginFn = async (ctx, body) => {
   }
 }
 
-export async function findUserById(service: UserService, id: string): Promise<AuthUser> {
+export async function findUserById(service: userService, id: string): Promise<AuthUser> {
   const result = await service.Find(FindRequest.fromPartial({
     id,
   }));

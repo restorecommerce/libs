@@ -1,6 +1,8 @@
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 import { FileDescriptorProto, ServiceDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 
+export const authSubjectType = '.io.restorecommerce.auth.Subject';
+
 export interface ProtoMetadata {
   fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };

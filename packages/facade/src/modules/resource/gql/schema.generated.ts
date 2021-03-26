@@ -146,7 +146,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: Maybe<Array<Scalars['String']>>;
   customQueries?: Maybe<Array<Scalars['String']>>;
   customArguments?: Maybe<IGoogleProtobufAny>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
@@ -196,32 +195,6 @@ export type IGoogleProtobufAny = {
   value?: Maybe<Scalars['Upload']>;
 };
 
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
 
 export type ResourceCountryQuery = {
   __typename?: 'ResourceCountryQuery';
@@ -686,7 +659,6 @@ export type ResourceAddressMutationUpsertArgs = {
 export type IIoRestorecommerceAddressAddressList = {
   items?: Maybe<Array<IIoRestorecommerceAddressAddress>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceAddressAddress = {
@@ -710,6 +682,11 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
 export type IIoRestorecommerceAddressAddressGeoPoint = {
   latitude?: Maybe<Scalars['Float']>;
   longitude?: Maybe<Scalars['Float']>;
@@ -728,7 +705,6 @@ export type ProtoGoogleProtobufEmpty = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: Maybe<Scalars['Boolean']>;
   ids?: Maybe<Array<Scalars['String']>>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type ResourceCountryMutation = {
@@ -762,7 +738,6 @@ export type ResourceCountryMutationUpsertArgs = {
 export type IIoRestorecommerceCountryCountryList = {
   items?: Maybe<Array<IIoRestorecommerceCountryCountry>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceCountryCountry = {
@@ -805,7 +780,6 @@ export type ResourceTimezoneMutationUpsertArgs = {
 export type IIoRestorecommerceTimezoneTimezoneList = {
   items?: Maybe<Array<IIoRestorecommerceTimezoneTimezone>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceTimezoneTimezone = {
@@ -846,7 +820,6 @@ export type ResourceContactPointTypeMutationUpsertArgs = {
 export type IIoRestorecommerceContactPointTypeContactPointTypeList = {
   items?: Maybe<Array<IIoRestorecommerceContactPointTypeContactPointType>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceContactPointTypeContactPointType = {
@@ -886,7 +859,6 @@ export type ResourceCustomerMutationUpsertArgs = {
 export type IIoRestorecommerceCustomerCustomerList = {
   items?: Maybe<Array<IIoRestorecommerceCustomerCustomer>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceCustomerCustomer = {
@@ -945,7 +917,6 @@ export type ResourceContactPointMutationUpsertArgs = {
 export type IIoRestorecommerceContactPointContactPointList = {
   items?: Maybe<Array<IIoRestorecommerceContactPointContactPoint>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceContactPointContactPoint = {
@@ -991,7 +962,6 @@ export type ResourceLocaleMutationUpsertArgs = {
 export type IIoRestorecommerceLocaleLocaleList = {
   items?: Maybe<Array<IIoRestorecommerceLocaleLocale>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceLocaleLocale = {
@@ -1032,7 +1002,6 @@ export type ResourceLocationMutationUpsertArgs = {
 export type IIoRestorecommerceLocationLocationList = {
   items?: Maybe<Array<IIoRestorecommerceLocationLocation>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceLocationLocation = {
@@ -1078,7 +1047,6 @@ export type ResourceOrganizationMutationUpsertArgs = {
 export type IIoRestorecommerceOrganizationOrganizationList = {
   items?: Maybe<Array<IIoRestorecommerceOrganizationOrganization>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceOrganizationOrganization = {
@@ -1131,7 +1099,6 @@ export type ResourceTaxMutationUpsertArgs = {
 export type IIoRestorecommerceTaxTaxList = {
   items?: Maybe<Array<IIoRestorecommerceTaxTax>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceTaxTax = {
@@ -1174,7 +1141,6 @@ export type ResourceTaxTypeMutationUpsertArgs = {
 export type IIoRestorecommerceTaxTypeTaxTypeList = {
   items?: Maybe<Array<IIoRestorecommerceTaxTypeTaxType>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceTaxTypeTaxType = {
@@ -1215,7 +1181,6 @@ export type ResourceCommandMutationUpsertArgs = {
 export type IIoRestorecommerceCommandCommandList = {
   items?: Maybe<Array<IIoRestorecommerceCommandCommand>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommerceCommandCommand = {
@@ -1328,10 +1293,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ResourceCountryQuery: ResolverTypeWrapper<ResourceCountryQuery>;
   ProtoIoRestorecommerceCountryCountryList: ResolverTypeWrapper<ProtoIoRestorecommerceCountryCountryList>;
   IoRestorecommerceCountryCountryList: ResolverTypeWrapper<IoRestorecommerceCountryCountryList>;
@@ -1389,6 +1350,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceAddressAddressList: IIoRestorecommerceAddressAddressList;
   IIoRestorecommerceAddressAddress: IIoRestorecommerceAddressAddress;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
@@ -1461,10 +1423,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ResourceCountryQuery: ResourceCountryQuery;
   ProtoIoRestorecommerceCountryCountryList: ProtoIoRestorecommerceCountryCountryList;
   IoRestorecommerceCountryCountryList: IoRestorecommerceCountryCountryList;
@@ -1521,6 +1479,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceAddressAddressList: IIoRestorecommerceAddressAddressList;
   IIoRestorecommerceAddressAddress: IIoRestorecommerceAddressAddress;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;

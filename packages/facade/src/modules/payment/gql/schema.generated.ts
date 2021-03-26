@@ -105,7 +105,6 @@ export type IIoRestorecommercePaymentSetupRequest = {
   cancelReturnUrl?: Maybe<Scalars['String']>;
   allowGuestCheckout?: Maybe<Scalars['Boolean']>;
   provider?: Maybe<IoRestorecommercePaymentProvider>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommercePaymentItem = {
@@ -120,32 +119,6 @@ export enum IoRestorecommercePaymentProvider {
   PaypalExpressGateway = 1,
   AuthorizeNetGateway = 2
 }
-
-export type IIoRestorecommerceAuthSubject = {
-  id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-};
-
-export type IIoRestorecommerceAuthHierarchicalScope = {
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IIoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
-};
 
 export type ProtoIoRestorecommercePaymentPaymentResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentPaymentResponse';
@@ -167,7 +140,6 @@ export type IIoRestorecommercePaymentPaymentRequest = {
   paymentId?: Maybe<Scalars['String']>;
   payerId?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type IIoRestorecommercePaymentCaptureRequest = {
@@ -175,7 +147,6 @@ export type IIoRestorecommercePaymentCaptureRequest = {
   paymentSum?: Maybe<Scalars['Int']>;
   currency?: Maybe<Scalars['String']>;
   paymentId?: Maybe<Scalars['String']>;
-  subject?: Maybe<IIoRestorecommerceAuthSubject>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -257,10 +228,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
   IoRestorecommercePaymentProvider: IoRestorecommercePaymentProvider;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ProtoIoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentPaymentResponse>;
   IoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<IoRestorecommercePaymentPaymentResponse>;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
@@ -281,10 +248,6 @@ export type ResolversParentTypes = ResolversObject<{
   GoogleProtobufStringValue: GoogleProtobufStringValue;
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
-  IIoRestorecommerceAuthSubject: IIoRestorecommerceAuthSubject;
-  IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAuthHierarchicalScope: IIoRestorecommerceAuthHierarchicalScope;
   ProtoIoRestorecommercePaymentPaymentResponse: ProtoIoRestorecommercePaymentPaymentResponse;
   IoRestorecommercePaymentPaymentResponse: IoRestorecommercePaymentPaymentResponse;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;

@@ -1,5 +1,4 @@
-import { JSONWebKeySet, } from 'jose';
-import Provider, { Adapter, errors } from 'oidc-provider';
+import { Adapter, errors, Provider } from 'oidc-provider';
 import { IdentityContext } from '../interfaces';
 import { Service as authLogService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
 import { Service as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
@@ -16,7 +15,7 @@ export interface OIDCConfig {
   localTokenServiceFactory?: (type: string) => Adapter;
   loginFn?: OIDCBodyLoginFn;
   issuer: string;
-  jwks: JSONWebKeySet;
+  jwks: any;
   client_id: string;
   client_secret: string;
   cookies: {

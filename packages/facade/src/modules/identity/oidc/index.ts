@@ -58,11 +58,11 @@ export function createOIDC({
     //   return client.grantTypeAllowed('refresh_token');
     // },
     jwks,
-    formats: {
-      AccessToken: 'jwt',
+    ttl: {
+       Session: (1 * 24 * 60 * 60) * 1000
     },
     cookies: {
-      long: {signed: false, maxAge: (1 * 24 * 60 * 60) * 1000}, // 1 day in ms
+      long: {signed: false}, // 1 day in ms
       short: {signed: false},
       keys: cookies.keys,
     },
@@ -118,7 +118,7 @@ export function createOIDC({
     // at a time.
     interactions: {
       url(ctx) {
-        return `/interaction/${ctx.oidc.uid}`;
+        return `/interaction/${(ctx.oidc as any).uid}`;
       },
     },
     features: {
@@ -130,9 +130,6 @@ export function createOIDC({
       },
       devInteractions: {
         // enabled: dev ?? false
-        enabled: false
-      },
-      sessionManagement: {
         enabled: false
       },
     },

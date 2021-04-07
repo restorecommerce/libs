@@ -7,5 +7,8 @@ module.exports = {
     'ts-jest': {
       tsconfig: 'tsconfig.test.json'
     }
+  },
+  moduleNameMapper: {
+    "^jose/(.*)$": "<rootDir>/node_modules/jose/dist/node/cjs/$1"
   }
 };

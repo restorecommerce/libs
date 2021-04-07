@@ -27,7 +27,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
     const {
       uid, prompt, params, session,
     } = await provider.interactionDetails(ctx.req, ctx.res);
-    const client = await provider.Client.find(params.client_id);
+    const client = await provider.Client.find((params as any).client_id);
 
     switch (prompt.name) {
       case 'login': {
@@ -157,13 +157,9 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
 
     const result: InteractionResults = {
       select_account: {}, // make sure its skipped by the interaction policy since we just logged in
-      consent: {  // no need for consent atm
-        rejectedScopes: [],
-        rejectedClaims: [],
-      },
       login: {
         remember,
-        account: user.id,
+        accountId: user.id,
       },
       meta: {}
     };

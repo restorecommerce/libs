@@ -272,9 +272,9 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     return {
       payload: result,
       status: {
-        code: 200,
+        code: 1,
         key: '',
-        message: 'success'
+        message: 'Success'
       }
     };
   } catch (error) {

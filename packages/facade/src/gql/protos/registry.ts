@@ -14,7 +14,7 @@ import {
   DescriptorProto,
   EnumDescriptorProto,
   FieldDescriptorProto, FieldDescriptorProto_Label,
-  FieldDescriptorProto_Type
+  FieldDescriptorProto_Type, MethodDescriptorProto
 } from "ts-proto-descriptors/google/protobuf/descriptor";
 
 export interface TypingData {
@@ -29,6 +29,8 @@ const registeredTypings = new Map<string, TypingData>();
 const MapScalar = new GraphQLScalarType({
   name: 'MapScalar',
 });
+
+const Mutate = ['Create', 'Update', 'Upsert'];
 
 const TodoScalar = new GraphQLScalarType({
   name: 'TodoScalar',
@@ -48,7 +50,8 @@ export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => 
   protoMetadata.forEach(meta => {
     meta.dependencies && registerPackagesRecursive(...meta.dependencies);
 
-    meta.fileDescriptor.messageType && registerMessageTypesRecursive(meta.fileDescriptor.package!, ...meta.fileDescriptor.messageType);
+    meta.fileDescriptor.messageType && registerMessageTypesRecursive(meta.fileDescriptor.package!,
+      meta.fileDescriptor.service[0]?.method, ...meta.fileDescriptor.messageType);
 
     meta.fileDescriptor.enumType?.forEach((m) => {
       registerEnumTyping(meta.fileDescriptor.package!, m);
@@ -60,9 +63,10 @@ export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => 
   });
 }
 
-const registerMessageTypesRecursive = (packageName: string, ...types: DescriptorProto[]) => {
+const registerMessageTypesRecursive = (packageName: string, methodDef: MethodDescriptorProto[],
+  ...types: DescriptorProto[]) => {
   types.forEach(m => {
-    registerTyping(packageName, m);
+    registerTyping(packageName, m, methodDef);
 
     if (m.enumType) {
       m.enumType.forEach((enumType) => {
@@ -71,18 +75,44 @@ const registerMessageTypesRecursive = (packageName: string, ...types: Descriptor
     }
 
     if (m.nestedType) {
-      registerMessageTypesRecursive(packageName + '.' + m.name, ...m.nestedType);
+      registerMessageTypesRecursive(packageName + '.' + m.name, methodDef, ...m.nestedType);
     }
   });
 }
 
+const ModeType = new GraphQLEnumType({
+  name: 'ModeType',
+  values: {
+    CREATE: {
+      value: 'CREATE'
+    },
+    UPDATE: {
+      value: 'UPDATE'
+    },
+    UPSERT: {
+      value: 'UPSERT'
+    },
+  }
+});
+
 export const registerTyping = (
   protoPackage: string,
   message: DescriptorProto,
+  methodDef: MethodDescriptorProto[],
   opts?: Omit<Readonly<GraphQLObjectTypeConfig<any, any>>, 'fields'>,
   inputOpts?: Omit<Readonly<GraphQLInputObjectTypeConfig>, 'fields'>,
 ) => {
+  let insertMode = false;
   const type = (protoPackage.startsWith('.') ? '' : '.') + protoPackage + '.' + message.name!;
+  if (methodDef && methodDef.length > 0) {
+    for (let method of methodDef) {
+      // if method def is Create, Read / Upsert and input types of method and message type are equal
+      // then update input type to include `mode` parameter
+      if ((Mutate.indexOf(method.name) > -1) && type === method.inputType) {
+        insertMode = true;
+      }
+    }
+  }
   if (registeredTypings.has(type)) {
     // TODO Log debug "Typings for object are already registered"
     return;
@@ -122,16 +152,21 @@ export const registerTyping = (
       }
     });
 
+    if (insertMode) {
+      result['mode'] = {
+        type: ModeType
+      };
+    }
     return result;
   };
 
   const resultObj = new GraphQLObjectType({
-    ...(opts || {name}),
+    ...(opts || { name }),
     fields,
   });
 
   const resultInputObj = new GraphQLInputObjectType({
-    ...(inputOpts || {name: inputName}),
+    ...(inputOpts || { name: inputName }),
     fields: inputFields,
   });
 
@@ -164,7 +199,7 @@ export const registerEnumTyping = <T = { [key: string]: any }>(
   const name = opts?.name || capitalizeProtoName(type);
 
   const result = new GraphQLEnumType({
-    ...(opts || {name}),
+    ...(opts || { name }),
     values
   });
 

@@ -200,31 +200,19 @@ export type Mutation = {
 
 export type OrderingMutation = {
   __typename?: 'OrderingMutation';
-  Create?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceOrderOrderList>;
   TriggerFulfillment?: Maybe<ProtoIoRestorecommerceOrderFulfillmentResults>;
 };
 
 
-export type OrderingMutationCreateArgs = {
+export type OrderingMutationMutateArgs = {
   input: IIoRestorecommerceOrderOrderList;
 };
 
 
 export type OrderingMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
-};
-
-
-export type OrderingMutationUpdateArgs = {
-  input: IIoRestorecommerceOrderOrderList;
-};
-
-
-export type OrderingMutationUpsertArgs = {
-  input: IIoRestorecommerceOrderOrderList;
 };
 
 
@@ -235,6 +223,7 @@ export type OrderingMutationTriggerFulfillmentArgs = {
 export type IIoRestorecommerceOrderOrderList = {
   items?: Maybe<Array<IIoRestorecommerceOrderOrder>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceOrderOrder = {
@@ -286,6 +275,12 @@ export type IIoRestorecommerceOrderItem = {
   widthInCm?: Maybe<Scalars['Int']>;
   heightInCm?: Maybe<Scalars['Int']>;
 };
+
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
 
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
@@ -449,6 +444,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceOrderItems: IIoRestorecommerceOrderItems;
   IIoRestorecommerceOrderItem: IIoRestorecommerceOrderItem;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   ProtoIoRestorecommerceOrderFulfillmentResults: ResolverTypeWrapper<ProtoIoRestorecommerceOrderFulfillmentResults>;
@@ -628,10 +624,8 @@ export type MutationResolvers<ContextType = OrderingContext, ParentType extends 
 }>;
 
 export type OrderingMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingMutation'] = ResolversParentTypes['OrderingMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OrderingMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderList']>, ParentType, ContextType, RequireFields<OrderingMutationUpsertArgs, 'input'>>;
   TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderFulfillmentResults']>, ParentType, ContextType, RequireFields<OrderingMutationTriggerFulfillmentArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

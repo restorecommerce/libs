@@ -376,10 +376,8 @@ export type IdentityMutation = {
 
 export type IdentityUserMutation = {
   __typename?: 'IdentityUserMutation';
-  Create?: Maybe<ProtoIoRestorecommerceUserUserList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceUserUserList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceUserUserList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceUserUserList>;
   Register?: Maybe<ProtoIoRestorecommerceUserUser>;
   Activate?: Maybe<ProtoGoogleProtobufEmpty>;
   ChangePassword?: Maybe<ProtoGoogleProtobufEmpty>;
@@ -395,23 +393,13 @@ export type IdentityUserMutation = {
 };
 
 
-export type IdentityUserMutationCreateArgs = {
+export type IdentityUserMutationMutateArgs = {
   input: IIoRestorecommerceUserUserList;
 };
 
 
 export type IdentityUserMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
-};
-
-
-export type IdentityUserMutationUpdateArgs = {
-  input: IIoRestorecommerceUserUserList;
-};
-
-
-export type IdentityUserMutationUpsertArgs = {
-  input: IIoRestorecommerceUserUserList;
 };
 
 
@@ -477,6 +465,7 @@ export type IdentityUserMutationSendInvitationEmailArgs = {
 export type IIoRestorecommerceUserUserList = {
   items?: Maybe<Array<IIoRestorecommerceUserUser>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceUserUser = {
@@ -540,6 +529,12 @@ export type IIoRestorecommerceAuthTokens = {
   type?: Maybe<Scalars['String']>;
   interactive?: Maybe<Scalars['Boolean']>;
 };
+
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
 
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
@@ -638,14 +633,12 @@ export type IIoRestorecommerceUserSendInvitationEmailRequest = {
 
 export type IdentityRoleMutation = {
   __typename?: 'IdentityRoleMutation';
-  Create?: Maybe<ProtoIoRestorecommerceRoleRoleList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceRoleRoleList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceRoleRoleList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceRoleRoleList>;
 };
 
 
-export type IdentityRoleMutationCreateArgs = {
+export type IdentityRoleMutationMutateArgs = {
   input: IIoRestorecommerceRoleRoleList;
 };
 
@@ -654,19 +647,10 @@ export type IdentityRoleMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type IdentityRoleMutationUpdateArgs = {
-  input: IIoRestorecommerceRoleRoleList;
-};
-
-
-export type IdentityRoleMutationUpsertArgs = {
-  input: IIoRestorecommerceRoleRoleList;
-};
-
 export type IIoRestorecommerceRoleRoleList = {
   items?: Maybe<Array<IIoRestorecommerceRoleRole>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceRoleRole = {
@@ -679,14 +663,12 @@ export type IIoRestorecommerceRoleRole = {
 
 export type IdentityAuthenticationLogMutation = {
   __typename?: 'IdentityAuthenticationLogMutation';
-  Create?: Maybe<ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList>;
 };
 
 
-export type IdentityAuthenticationLogMutationCreateArgs = {
+export type IdentityAuthenticationLogMutationMutateArgs = {
   input: IIoRestorecommerceAuthenticationLogAuthenticationLogList;
 };
 
@@ -695,19 +677,10 @@ export type IdentityAuthenticationLogMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type IdentityAuthenticationLogMutationUpdateArgs = {
-  input: IIoRestorecommerceAuthenticationLogAuthenticationLogList;
-};
-
-
-export type IdentityAuthenticationLogMutationUpsertArgs = {
-  input: IIoRestorecommerceAuthenticationLogAuthenticationLogList;
-};
-
 export type IIoRestorecommerceAuthenticationLogAuthenticationLogList = {
   items?: Maybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
@@ -885,6 +858,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   IIoRestorecommerceAuthTokens: IIoRestorecommerceAuthTokens;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   IIoRestorecommerceUserRegisterRequest: IIoRestorecommerceUserRegisterRequest;
@@ -1232,10 +1206,8 @@ export type IdentityMutationResolvers<ContextType = IdentityContext, ParentType 
 }>;
 
 export type IdentityUserMutationResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IdentityUserMutation'] = ResolversParentTypes['IdentityUserMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserList']>, ParentType, ContextType, RequireFields<IdentityUserMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserList']>, ParentType, ContextType, RequireFields<IdentityUserMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<IdentityUserMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserList']>, ParentType, ContextType, RequireFields<IdentityUserMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserList']>, ParentType, ContextType, RequireFields<IdentityUserMutationUpsertArgs, 'input'>>;
   Register?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUser']>, ParentType, ContextType, RequireFields<IdentityUserMutationRegisterArgs, 'input'>>;
   Activate?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<IdentityUserMutationActivateArgs, 'input'>>;
   ChangePassword?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<IdentityUserMutationChangePasswordArgs, 'input'>>;
@@ -1268,18 +1240,14 @@ export type IoRestorecommerceUserUserIDsResolvers<ContextType = IdentityContext,
 }>;
 
 export type IdentityRoleMutationResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IdentityRoleMutation'] = ResolversParentTypes['IdentityRoleMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRoleRoleList']>, ParentType, ContextType, RequireFields<IdentityRoleMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRoleRoleList']>, ParentType, ContextType, RequireFields<IdentityRoleMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<IdentityRoleMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRoleRoleList']>, ParentType, ContextType, RequireFields<IdentityRoleMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRoleRoleList']>, ParentType, ContextType, RequireFields<IdentityRoleMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IdentityAuthenticationLogMutationResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IdentityAuthenticationLogMutation'] = ResolversParentTypes['IdentityAuthenticationLogMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList']>, ParentType, ContextType, RequireFields<IdentityAuthenticationLogMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList']>, ParentType, ContextType, RequireFields<IdentityAuthenticationLogMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<IdentityAuthenticationLogMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList']>, ParentType, ContextType, RequireFields<IdentityAuthenticationLogMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAuthenticationLogAuthenticationLogList']>, ParentType, ContextType, RequireFields<IdentityAuthenticationLogMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

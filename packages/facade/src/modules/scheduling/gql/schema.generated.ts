@@ -184,14 +184,12 @@ export type Mutation = {
 
 export type SchedulingMutation = {
   __typename?: 'SchedulingMutation';
-  Create?: Maybe<ProtoIoRestorecommerceJobJobList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceJobJobList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceJobJobList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceJobJobList>;
 };
 
 
-export type SchedulingMutationCreateArgs = {
+export type SchedulingMutationMutateArgs = {
   input: IIoRestorecommerceJobJobList;
 };
 
@@ -200,19 +198,10 @@ export type SchedulingMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type SchedulingMutationUpdateArgs = {
-  input: IIoRestorecommerceJobJobList;
-};
-
-
-export type SchedulingMutationUpsertArgs = {
-  input: IIoRestorecommerceJobJobList;
-};
-
 export type IIoRestorecommerceJobJobList = {
   items?: Maybe<Array<IIoRestorecommerceJobJob>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceJobJob = {
@@ -268,6 +257,12 @@ export type IIoRestorecommerceJobRepeat = {
   endDate?: Maybe<Scalars['String']>;
   count?: Maybe<Scalars['Int']>;
 };
+
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
 
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
@@ -384,6 +379,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
   IIoRestorecommerceJobBackoff: IIoRestorecommerceJobBackoff;
   IIoRestorecommerceJobRepeat: IIoRestorecommerceJobRepeat;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
@@ -559,10 +555,8 @@ export type MutationResolvers<ContextType = SchedulingContext, ParentType extend
 }>;
 
 export type SchedulingMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingMutation'] = ResolversParentTypes['SchedulingMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<SchedulingMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

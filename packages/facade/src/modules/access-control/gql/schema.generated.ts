@@ -381,14 +381,12 @@ export type AccessControlMutation = {
 
 export type AccessControlPolicyMutation = {
   __typename?: 'AccessControlPolicyMutation';
-  Create?: Maybe<ProtoIoRestorecommercePolicyPolicyList>;
+  Mutate?: Maybe<ProtoIoRestorecommercePolicyPolicyList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommercePolicyPolicyList>;
-  Upsert?: Maybe<ProtoIoRestorecommercePolicyPolicyList>;
 };
 
 
-export type AccessControlPolicyMutationCreateArgs = {
+export type AccessControlPolicyMutationMutateArgs = {
   input: IIoRestorecommercePolicyPolicyList;
 };
 
@@ -397,19 +395,10 @@ export type AccessControlPolicyMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type AccessControlPolicyMutationUpdateArgs = {
-  input: IIoRestorecommercePolicyPolicyList;
-};
-
-
-export type AccessControlPolicyMutationUpsertArgs = {
-  input: IIoRestorecommercePolicyPolicyList;
-};
-
 export type IIoRestorecommercePolicyPolicyList = {
   items?: Maybe<Array<IIoRestorecommercePolicyPolicy>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommercePolicyPolicy = {
@@ -431,6 +420,12 @@ export type IIoRestorecommerceMetaMeta = {
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
+
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
@@ -443,14 +438,12 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 
 export type AccessControlRuleMutation = {
   __typename?: 'AccessControlRuleMutation';
-  Create?: Maybe<ProtoIoRestorecommerceRuleRuleList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceRuleRuleList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceRuleRuleList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceRuleRuleList>;
 };
 
 
-export type AccessControlRuleMutationCreateArgs = {
+export type AccessControlRuleMutationMutateArgs = {
   input: IIoRestorecommerceRuleRuleList;
 };
 
@@ -459,19 +452,10 @@ export type AccessControlRuleMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type AccessControlRuleMutationUpdateArgs = {
-  input: IIoRestorecommerceRuleRuleList;
-};
-
-
-export type AccessControlRuleMutationUpsertArgs = {
-  input: IIoRestorecommerceRuleRuleList;
-};
-
 export type IIoRestorecommerceRuleRuleList = {
   items?: Maybe<Array<IIoRestorecommerceRuleRule>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceRuleRule = {
@@ -499,14 +483,12 @@ export type IIoRestorecommerceRuleContextQueryFilter = {
 
 export type AccessControlPolicySetMutation = {
   __typename?: 'AccessControlPolicySetMutation';
-  Create?: Maybe<ProtoIoRestorecommercePolicySetPolicySetList>;
+  Mutate?: Maybe<ProtoIoRestorecommercePolicySetPolicySetList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommercePolicySetPolicySetList>;
-  Upsert?: Maybe<ProtoIoRestorecommercePolicySetPolicySetList>;
 };
 
 
-export type AccessControlPolicySetMutationCreateArgs = {
+export type AccessControlPolicySetMutationMutateArgs = {
   input: IIoRestorecommercePolicySetPolicySetList;
 };
 
@@ -515,19 +497,10 @@ export type AccessControlPolicySetMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type AccessControlPolicySetMutationUpdateArgs = {
-  input: IIoRestorecommercePolicySetPolicySetList;
-};
-
-
-export type AccessControlPolicySetMutationUpsertArgs = {
-  input: IIoRestorecommercePolicySetPolicySetList;
-};
-
 export type IIoRestorecommercePolicySetPolicySetList = {
   items?: Maybe<Array<IIoRestorecommercePolicySetPolicySet>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommercePolicySetPolicySet = {
@@ -664,6 +637,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommercePolicyPolicyList: IIoRestorecommercePolicyPolicyList;
   IIoRestorecommercePolicyPolicy: IIoRestorecommercePolicyPolicy;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   AccessControlRuleMutation: ResolverTypeWrapper<AccessControlRuleMutation>;
@@ -994,10 +968,8 @@ export type AccessControlMutationResolvers<ContextType = AccessControlContext, P
 }>;
 
 export type AccessControlPolicyMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyMutation'] = ResolversParentTypes['AccessControlPolicyMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyList']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyList']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyList']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyList']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1007,18 +979,14 @@ export type ProtoGoogleProtobufEmptyResolvers<ContextType = AccessControlContext
 }>;
 
 export type AccessControlRuleMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleMutation'] = ResolversParentTypes['AccessControlRuleMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleList']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleList']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleList']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleList']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type AccessControlPolicySetMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicySetMutation'] = ResolversParentTypes['AccessControlPolicySetMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetList']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetList']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetList']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetList']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

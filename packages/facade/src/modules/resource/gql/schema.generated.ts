@@ -630,14 +630,12 @@ export type ResourceMutation = {
 
 export type ResourceAddressMutation = {
   __typename?: 'ResourceAddressMutation';
-  Create?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
 };
 
 
-export type ResourceAddressMutationCreateArgs = {
+export type ResourceAddressMutationMutateArgs = {
   input: IIoRestorecommerceAddressAddressList;
 };
 
@@ -646,19 +644,10 @@ export type ResourceAddressMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceAddressMutationUpdateArgs = {
-  input: IIoRestorecommerceAddressAddressList;
-};
-
-
-export type ResourceAddressMutationUpsertArgs = {
-  input: IIoRestorecommerceAddressAddressList;
-};
-
 export type IIoRestorecommerceAddressAddressList = {
   items?: Maybe<Array<IIoRestorecommerceAddressAddress>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceAddressAddress = {
@@ -697,6 +686,12 @@ export type IIoRestorecommerceAddressAddressAddition = {
   field2?: Maybe<Scalars['String']>;
 };
 
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
+
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
@@ -709,14 +704,12 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 
 export type ResourceCountryMutation = {
   __typename?: 'ResourceCountryMutation';
-  Create?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
 };
 
 
-export type ResourceCountryMutationCreateArgs = {
+export type ResourceCountryMutationMutateArgs = {
   input: IIoRestorecommerceCountryCountryList;
 };
 
@@ -725,19 +718,10 @@ export type ResourceCountryMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceCountryMutationUpdateArgs = {
-  input: IIoRestorecommerceCountryCountryList;
-};
-
-
-export type ResourceCountryMutationUpsertArgs = {
-  input: IIoRestorecommerceCountryCountryList;
-};
-
 export type IIoRestorecommerceCountryCountryList = {
   items?: Maybe<Array<IIoRestorecommerceCountryCountry>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceCountryCountry = {
@@ -751,14 +735,12 @@ export type IIoRestorecommerceCountryCountry = {
 
 export type ResourceTimezoneMutation = {
   __typename?: 'ResourceTimezoneMutation';
-  Create?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
 };
 
 
-export type ResourceTimezoneMutationCreateArgs = {
+export type ResourceTimezoneMutationMutateArgs = {
   input: IIoRestorecommerceTimezoneTimezoneList;
 };
 
@@ -767,19 +749,10 @@ export type ResourceTimezoneMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceTimezoneMutationUpdateArgs = {
-  input: IIoRestorecommerceTimezoneTimezoneList;
-};
-
-
-export type ResourceTimezoneMutationUpsertArgs = {
-  input: IIoRestorecommerceTimezoneTimezoneList;
-};
-
 export type IIoRestorecommerceTimezoneTimezoneList = {
   items?: Maybe<Array<IIoRestorecommerceTimezoneTimezone>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceTimezoneTimezone = {
@@ -791,14 +764,12 @@ export type IIoRestorecommerceTimezoneTimezone = {
 
 export type ResourceContactPointTypeMutation = {
   __typename?: 'ResourceContactPointTypeMutation';
-  Create?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
 };
 
 
-export type ResourceContactPointTypeMutationCreateArgs = {
+export type ResourceContactPointTypeMutationMutateArgs = {
   input: IIoRestorecommerceContactPointTypeContactPointTypeList;
 };
 
@@ -807,19 +778,10 @@ export type ResourceContactPointTypeMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceContactPointTypeMutationUpdateArgs = {
-  input: IIoRestorecommerceContactPointTypeContactPointTypeList;
-};
-
-
-export type ResourceContactPointTypeMutationUpsertArgs = {
-  input: IIoRestorecommerceContactPointTypeContactPointTypeList;
-};
-
 export type IIoRestorecommerceContactPointTypeContactPointTypeList = {
   items?: Maybe<Array<IIoRestorecommerceContactPointTypeContactPointType>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceContactPointTypeContactPointType = {
@@ -830,14 +792,12 @@ export type IIoRestorecommerceContactPointTypeContactPointType = {
 
 export type ResourceCustomerMutation = {
   __typename?: 'ResourceCustomerMutation';
-  Create?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
 };
 
 
-export type ResourceCustomerMutationCreateArgs = {
+export type ResourceCustomerMutationMutateArgs = {
   input: IIoRestorecommerceCustomerCustomerList;
 };
 
@@ -846,19 +806,10 @@ export type ResourceCustomerMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceCustomerMutationUpdateArgs = {
-  input: IIoRestorecommerceCustomerCustomerList;
-};
-
-
-export type ResourceCustomerMutationUpsertArgs = {
-  input: IIoRestorecommerceCustomerCustomerList;
-};
-
 export type IIoRestorecommerceCustomerCustomerList = {
   items?: Maybe<Array<IIoRestorecommerceCustomerCustomer>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceCustomerCustomer = {
@@ -888,14 +839,12 @@ export type IIoRestorecommerceCustomerGuest = {
 
 export type ResourceContactPointMutation = {
   __typename?: 'ResourceContactPointMutation';
-  Create?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
 };
 
 
-export type ResourceContactPointMutationCreateArgs = {
+export type ResourceContactPointMutationMutateArgs = {
   input: IIoRestorecommerceContactPointContactPointList;
 };
 
@@ -904,19 +853,10 @@ export type ResourceContactPointMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceContactPointMutationUpdateArgs = {
-  input: IIoRestorecommerceContactPointContactPointList;
-};
-
-
-export type ResourceContactPointMutationUpsertArgs = {
-  input: IIoRestorecommerceContactPointContactPointList;
-};
-
 export type IIoRestorecommerceContactPointContactPointList = {
   items?: Maybe<Array<IIoRestorecommerceContactPointContactPoint>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceContactPointContactPoint = {
@@ -933,14 +873,12 @@ export type IIoRestorecommerceContactPointContactPoint = {
 
 export type ResourceLocaleMutation = {
   __typename?: 'ResourceLocaleMutation';
-  Create?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
 };
 
 
-export type ResourceLocaleMutationCreateArgs = {
+export type ResourceLocaleMutationMutateArgs = {
   input: IIoRestorecommerceLocaleLocaleList;
 };
 
@@ -949,19 +887,10 @@ export type ResourceLocaleMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceLocaleMutationUpdateArgs = {
-  input: IIoRestorecommerceLocaleLocaleList;
-};
-
-
-export type ResourceLocaleMutationUpsertArgs = {
-  input: IIoRestorecommerceLocaleLocaleList;
-};
-
 export type IIoRestorecommerceLocaleLocaleList = {
   items?: Maybe<Array<IIoRestorecommerceLocaleLocale>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceLocaleLocale = {
@@ -973,14 +902,12 @@ export type IIoRestorecommerceLocaleLocale = {
 
 export type ResourceLocationMutation = {
   __typename?: 'ResourceLocationMutation';
-  Create?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
 };
 
 
-export type ResourceLocationMutationCreateArgs = {
+export type ResourceLocationMutationMutateArgs = {
   input: IIoRestorecommerceLocationLocationList;
 };
 
@@ -989,19 +916,10 @@ export type ResourceLocationMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceLocationMutationUpdateArgs = {
-  input: IIoRestorecommerceLocationLocationList;
-};
-
-
-export type ResourceLocationMutationUpsertArgs = {
-  input: IIoRestorecommerceLocationLocationList;
-};
-
 export type IIoRestorecommerceLocationLocationList = {
   items?: Maybe<Array<IIoRestorecommerceLocationLocation>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceLocationLocation = {
@@ -1018,14 +936,12 @@ export type IIoRestorecommerceLocationLocation = {
 
 export type ResourceOrganizationMutation = {
   __typename?: 'ResourceOrganizationMutation';
-  Create?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
 };
 
 
-export type ResourceOrganizationMutationCreateArgs = {
+export type ResourceOrganizationMutationMutateArgs = {
   input: IIoRestorecommerceOrganizationOrganizationList;
 };
 
@@ -1034,19 +950,10 @@ export type ResourceOrganizationMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceOrganizationMutationUpdateArgs = {
-  input: IIoRestorecommerceOrganizationOrganizationList;
-};
-
-
-export type ResourceOrganizationMutationUpsertArgs = {
-  input: IIoRestorecommerceOrganizationOrganizationList;
-};
-
 export type IIoRestorecommerceOrganizationOrganizationList = {
   items?: Maybe<Array<IIoRestorecommerceOrganizationOrganization>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceOrganizationOrganization = {
@@ -1070,14 +977,12 @@ export type IIoRestorecommerceOrganizationOrganization = {
 
 export type ResourceTaxMutation = {
   __typename?: 'ResourceTaxMutation';
-  Create?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
 };
 
 
-export type ResourceTaxMutationCreateArgs = {
+export type ResourceTaxMutationMutateArgs = {
   input: IIoRestorecommerceTaxTaxList;
 };
 
@@ -1086,19 +991,10 @@ export type ResourceTaxMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceTaxMutationUpdateArgs = {
-  input: IIoRestorecommerceTaxTaxList;
-};
-
-
-export type ResourceTaxMutationUpsertArgs = {
-  input: IIoRestorecommerceTaxTaxList;
-};
-
 export type IIoRestorecommerceTaxTaxList = {
   items?: Maybe<Array<IIoRestorecommerceTaxTax>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceTaxTax = {
@@ -1112,14 +1008,12 @@ export type IIoRestorecommerceTaxTax = {
 
 export type ResourceTaxTypeMutation = {
   __typename?: 'ResourceTaxTypeMutation';
-  Create?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
 };
 
 
-export type ResourceTaxTypeMutationCreateArgs = {
+export type ResourceTaxTypeMutationMutateArgs = {
   input: IIoRestorecommerceTaxTypeTaxTypeList;
 };
 
@@ -1128,19 +1022,10 @@ export type ResourceTaxTypeMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceTaxTypeMutationUpdateArgs = {
-  input: IIoRestorecommerceTaxTypeTaxTypeList;
-};
-
-
-export type ResourceTaxTypeMutationUpsertArgs = {
-  input: IIoRestorecommerceTaxTypeTaxTypeList;
-};
-
 export type IIoRestorecommerceTaxTypeTaxTypeList = {
   items?: Maybe<Array<IIoRestorecommerceTaxTypeTaxType>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceTaxTypeTaxType = {
@@ -1152,14 +1037,12 @@ export type IIoRestorecommerceTaxTypeTaxType = {
 
 export type ResourceCommandMutation = {
   __typename?: 'ResourceCommandMutation';
-  Create?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
 };
 
 
-export type ResourceCommandMutationCreateArgs = {
+export type ResourceCommandMutationMutateArgs = {
   input: IIoRestorecommerceCommandCommandList;
 };
 
@@ -1168,19 +1051,10 @@ export type ResourceCommandMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type ResourceCommandMutationUpdateArgs = {
-  input: IIoRestorecommerceCommandCommandList;
-};
-
-
-export type ResourceCommandMutationUpsertArgs = {
-  input: IIoRestorecommerceCommandCommandList;
-};
-
 export type IIoRestorecommerceCommandCommandList = {
   items?: Maybe<Array<IIoRestorecommerceCommandCommand>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceCommandCommand = {
@@ -1353,6 +1227,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   ResourceCountryMutation: ResolverTypeWrapper<ResourceCountryMutation>;
@@ -2013,10 +1888,8 @@ export type ResourceMutationResolvers<ContextType = ResourceContext, ParentType 
 }>;
 
 export type ResourceAddressMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceAddressMutation'] = ResolversParentTypes['ResourceAddressMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceAddressMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2026,90 +1899,68 @@ export type ProtoGoogleProtobufEmptyResolvers<ContextType = ResourceContext, Par
 }>;
 
 export type ResourceCountryMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCountryMutation'] = ResolversParentTypes['ResourceCountryMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCountryMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTimezoneMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTimezoneMutation'] = ResolversParentTypes['ResourceTimezoneMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceContactPointTypeMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointTypeMutation'] = ResolversParentTypes['ResourceContactPointTypeMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceCustomerMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCustomerMutation'] = ResolversParentTypes['ResourceCustomerMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceContactPointMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointMutation'] = ResolversParentTypes['ResourceContactPointMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceLocaleMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocaleMutation'] = ResolversParentTypes['ResourceLocaleMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceLocationMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocationMutation'] = ResolversParentTypes['ResourceLocationMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceLocationMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceOrganizationMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceOrganizationMutation'] = ResolversParentTypes['ResourceOrganizationMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTaxMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxMutation'] = ResolversParentTypes['ResourceTaxMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTaxMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTaxTypeMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxTypeMutation'] = ResolversParentTypes['ResourceTaxTypeMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceCommandMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCommandMutation'] = ResolversParentTypes['ResourceCommandMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCommandMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

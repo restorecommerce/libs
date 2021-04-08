@@ -387,14 +387,12 @@ export type CatalogMutation = {
 
 export type CatalogProductMutation = {
   __typename?: 'CatalogProductMutation';
-  Create?: Maybe<ProtoIoRestorecommerceProductProductList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceProductProductList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceProductProductList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceProductProductList>;
 };
 
 
-export type CatalogProductMutationCreateArgs = {
+export type CatalogProductMutationMutateArgs = {
   input: IIoRestorecommerceProductProductList;
 };
 
@@ -403,19 +401,10 @@ export type CatalogProductMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type CatalogProductMutationUpdateArgs = {
-  input: IIoRestorecommerceProductProductList;
-};
-
-
-export type CatalogProductMutationUpsertArgs = {
-  input: IIoRestorecommerceProductProductList;
-};
-
 export type IIoRestorecommerceProductProductList = {
   items?: Maybe<Array<IIoRestorecommerceProductMainProduct>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceProductMainProduct = {
@@ -498,6 +487,12 @@ export type IIoRestorecommerceAttributeAttribute = {
   value?: Maybe<Scalars['String']>;
 };
 
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
+
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
   status: StatusType;
@@ -510,14 +505,12 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 
 export type CatalogProductPrototypeMutation = {
   __typename?: 'CatalogProductPrototypeMutation';
-  Create?: Maybe<ProtoIoRestorecommerceProductPrototypeProductPrototypeList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceProductPrototypeProductPrototypeList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceProductPrototypeProductPrototypeList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceProductPrototypeProductPrototypeList>;
 };
 
 
-export type CatalogProductPrototypeMutationCreateArgs = {
+export type CatalogProductPrototypeMutationMutateArgs = {
   input: IIoRestorecommerceProductPrototypeProductPrototypeList;
 };
 
@@ -526,19 +519,10 @@ export type CatalogProductPrototypeMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type CatalogProductPrototypeMutationUpdateArgs = {
-  input: IIoRestorecommerceProductPrototypeProductPrototypeList;
-};
-
-
-export type CatalogProductPrototypeMutationUpsertArgs = {
-  input: IIoRestorecommerceProductPrototypeProductPrototypeList;
-};
-
 export type IIoRestorecommerceProductPrototypeProductPrototypeList = {
   items?: Maybe<Array<IIoRestorecommerceProductPrototypeProductPrototype>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceProductPrototypeProductPrototype = {
@@ -552,14 +536,12 @@ export type IIoRestorecommerceProductPrototypeProductPrototype = {
 
 export type CatalogProductCategoryMutation = {
   __typename?: 'CatalogProductCategoryMutation';
-  Create?: Maybe<ProtoIoRestorecommerceProductCategoryProductCategoryList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceProductCategoryProductCategoryList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceProductCategoryProductCategoryList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceProductCategoryProductCategoryList>;
 };
 
 
-export type CatalogProductCategoryMutationCreateArgs = {
+export type CatalogProductCategoryMutationMutateArgs = {
   input: IIoRestorecommerceProductCategoryProductCategoryList;
 };
 
@@ -568,19 +550,10 @@ export type CatalogProductCategoryMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type CatalogProductCategoryMutationUpdateArgs = {
-  input: IIoRestorecommerceProductCategoryProductCategoryList;
-};
-
-
-export type CatalogProductCategoryMutationUpsertArgs = {
-  input: IIoRestorecommerceProductCategoryProductCategoryList;
-};
-
 export type IIoRestorecommerceProductCategoryProductCategoryList = {
   items?: Maybe<Array<IIoRestorecommerceProductCategoryProductCategory>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceProductCategoryProductCategory = {
@@ -599,14 +572,12 @@ export type IIoRestorecommerceProductCategoryParent = {
 
 export type CatalogPriceGroupMutation = {
   __typename?: 'CatalogPriceGroupMutation';
-  Create?: Maybe<ProtoIoRestorecommercePriceGroupPriceGroupList>;
+  Mutate?: Maybe<ProtoIoRestorecommercePriceGroupPriceGroupList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommercePriceGroupPriceGroupList>;
-  Upsert?: Maybe<ProtoIoRestorecommercePriceGroupPriceGroupList>;
 };
 
 
-export type CatalogPriceGroupMutationCreateArgs = {
+export type CatalogPriceGroupMutationMutateArgs = {
   input: IIoRestorecommercePriceGroupPriceGroupList;
 };
 
@@ -615,19 +586,10 @@ export type CatalogPriceGroupMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type CatalogPriceGroupMutationUpdateArgs = {
-  input: IIoRestorecommercePriceGroupPriceGroupList;
-};
-
-
-export type CatalogPriceGroupMutationUpsertArgs = {
-  input: IIoRestorecommercePriceGroupPriceGroupList;
-};
-
 export type IIoRestorecommercePriceGroupPriceGroupList = {
   items?: Maybe<Array<IIoRestorecommercePriceGroupPriceGroup>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommercePriceGroupPriceGroup = {
@@ -639,14 +601,12 @@ export type IIoRestorecommercePriceGroupPriceGroup = {
 
 export type CatalogManufacturerMutation = {
   __typename?: 'CatalogManufacturerMutation';
-  Create?: Maybe<ProtoIoRestorecommerceManufacturerManufacturerList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceManufacturerManufacturerList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceManufacturerManufacturerList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceManufacturerManufacturerList>;
 };
 
 
-export type CatalogManufacturerMutationCreateArgs = {
+export type CatalogManufacturerMutationMutateArgs = {
   input: IIoRestorecommerceManufacturerManufacturerList;
 };
 
@@ -655,19 +615,10 @@ export type CatalogManufacturerMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type CatalogManufacturerMutationUpdateArgs = {
-  input: IIoRestorecommerceManufacturerManufacturerList;
-};
-
-
-export type CatalogManufacturerMutationUpsertArgs = {
-  input: IIoRestorecommerceManufacturerManufacturerList;
-};
-
 export type IIoRestorecommerceManufacturerManufacturerList = {
   items?: Maybe<Array<IIoRestorecommerceManufacturerManufacturer>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceManufacturerManufacturer = {
@@ -808,6 +759,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceProductBundleProduct: IIoRestorecommerceProductBundleProduct;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   CatalogProductPrototypeMutation: ResolverTypeWrapper<CatalogProductPrototypeMutation>;
@@ -1193,10 +1145,8 @@ export type CatalogMutationResolvers<ContextType = CatalogContext, ParentType ex
 }>;
 
 export type CatalogProductMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogProductMutation'] = ResolversParentTypes['CatalogProductMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductProductList']>, ParentType, ContextType, RequireFields<CatalogProductMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductProductList']>, ParentType, ContextType, RequireFields<CatalogProductMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<CatalogProductMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductProductList']>, ParentType, ContextType, RequireFields<CatalogProductMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductProductList']>, ParentType, ContextType, RequireFields<CatalogProductMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1206,34 +1156,26 @@ export type ProtoGoogleProtobufEmptyResolvers<ContextType = CatalogContext, Pare
 }>;
 
 export type CatalogProductPrototypeMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogProductPrototypeMutation'] = ResolversParentTypes['CatalogProductPrototypeMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductPrototypeProductPrototypeList']>, ParentType, ContextType, RequireFields<CatalogProductPrototypeMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductPrototypeProductPrototypeList']>, ParentType, ContextType, RequireFields<CatalogProductPrototypeMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<CatalogProductPrototypeMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductPrototypeProductPrototypeList']>, ParentType, ContextType, RequireFields<CatalogProductPrototypeMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductPrototypeProductPrototypeList']>, ParentType, ContextType, RequireFields<CatalogProductPrototypeMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CatalogProductCategoryMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogProductCategoryMutation'] = ResolversParentTypes['CatalogProductCategoryMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductCategoryProductCategoryList']>, ParentType, ContextType, RequireFields<CatalogProductCategoryMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductCategoryProductCategoryList']>, ParentType, ContextType, RequireFields<CatalogProductCategoryMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<CatalogProductCategoryMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductCategoryProductCategoryList']>, ParentType, ContextType, RequireFields<CatalogProductCategoryMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceProductCategoryProductCategoryList']>, ParentType, ContextType, RequireFields<CatalogProductCategoryMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CatalogPriceGroupMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogPriceGroupMutation'] = ResolversParentTypes['CatalogPriceGroupMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePriceGroupPriceGroupList']>, ParentType, ContextType, RequireFields<CatalogPriceGroupMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePriceGroupPriceGroupList']>, ParentType, ContextType, RequireFields<CatalogPriceGroupMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<CatalogPriceGroupMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePriceGroupPriceGroupList']>, ParentType, ContextType, RequireFields<CatalogPriceGroupMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePriceGroupPriceGroupList']>, ParentType, ContextType, RequireFields<CatalogPriceGroupMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CatalogManufacturerMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogManufacturerMutation'] = ResolversParentTypes['CatalogManufacturerMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceManufacturerManufacturerList']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceManufacturerManufacturerList']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceManufacturerManufacturerList']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceManufacturerManufacturerList']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

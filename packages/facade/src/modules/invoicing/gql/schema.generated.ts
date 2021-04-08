@@ -174,14 +174,12 @@ export type Mutation = {
 
 export type InvoicingMutation = {
   __typename?: 'InvoicingMutation';
-  Create?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
 };
 
 
-export type InvoicingMutationCreateArgs = {
+export type InvoicingMutationMutateArgs = {
   input: IIoRestorecommerceInvoiceInvoiceList;
 };
 
@@ -190,19 +188,10 @@ export type InvoicingMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type InvoicingMutationUpdateArgs = {
-  input: IIoRestorecommerceInvoiceInvoiceList;
-};
-
-
-export type InvoicingMutationUpsertArgs = {
-  input: IIoRestorecommerceInvoiceInvoiceList;
-};
-
 export type IIoRestorecommerceInvoiceInvoiceList = {
   items?: Maybe<Array<IIoRestorecommerceInvoiceInvoice>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceInvoiceInvoice = {
@@ -230,6 +219,12 @@ export type IIoRestorecommerceAttributeAttribute = {
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
 };
+
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
 
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
@@ -339,6 +334,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
@@ -472,10 +468,8 @@ export type MutationResolvers<ContextType = InvoicingContext, ParentType extends
 }>;
 
 export type InvoicingMutationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingMutation'] = ResolversParentTypes['InvoicingMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<InvoicingMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

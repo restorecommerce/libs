@@ -463,14 +463,12 @@ export type IoRestorecommerceFulfillmentDeleteStatus = {
 
 export type FulfillmentFulfillmentCourierMutation = {
   __typename?: 'FulfillmentFulfillmentCourierMutation';
-  Create?: Maybe<ProtoIoRestorecommerceFulfillmentCourierCourierList>;
+  Mutate?: Maybe<ProtoIoRestorecommerceFulfillmentCourierCourierList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
-  Update?: Maybe<ProtoIoRestorecommerceFulfillmentCourierCourierList>;
-  Upsert?: Maybe<ProtoIoRestorecommerceFulfillmentCourierCourierList>;
 };
 
 
-export type FulfillmentFulfillmentCourierMutationCreateArgs = {
+export type FulfillmentFulfillmentCourierMutationMutateArgs = {
   input: IIoRestorecommerceFulfillmentCourierCourierList;
 };
 
@@ -479,19 +477,10 @@ export type FulfillmentFulfillmentCourierMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
-
-export type FulfillmentFulfillmentCourierMutationUpdateArgs = {
-  input: IIoRestorecommerceFulfillmentCourierCourierList;
-};
-
-
-export type FulfillmentFulfillmentCourierMutationUpsertArgs = {
-  input: IIoRestorecommerceFulfillmentCourierCourierList;
-};
-
 export type IIoRestorecommerceFulfillmentCourierCourierList = {
   items?: Maybe<Array<IIoRestorecommerceFulfillmentCourierCourier>>;
   totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
 };
 
 export type IIoRestorecommerceFulfillmentCourierCourier = {
@@ -500,6 +489,12 @@ export type IIoRestorecommerceFulfillmentCourierCourier = {
   meta?: Maybe<IIoRestorecommerceMetaMeta>;
   id?: Maybe<Scalars['String']>;
 };
+
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
 
 export type ProtoGoogleProtobufEmpty = {
   __typename?: 'ProtoGoogleProtobufEmpty';
@@ -650,6 +645,7 @@ export type ResolversTypes = ResolversObject<{
   FulfillmentFulfillmentCourierMutation: ResolverTypeWrapper<FulfillmentFulfillmentCourierMutation>;
   IIoRestorecommerceFulfillmentCourierCourierList: IIoRestorecommerceFulfillmentCourierCourierList;
   IIoRestorecommerceFulfillmentCourierCourier: IIoRestorecommerceFulfillmentCourierCourier;
+  ModeType: ModeType;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
@@ -967,10 +963,8 @@ export type IoRestorecommerceFulfillmentDeleteStatusResolvers<ContextType = Fulf
 }>;
 
 export type FulfillmentFulfillmentCourierMutationResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['FulfillmentFulfillmentCourierMutation'] = ResolversParentTypes['FulfillmentFulfillmentCourierMutation']> = ResolversObject<{
-  Create?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentCourierCourierList']>, ParentType, ContextType, RequireFields<FulfillmentFulfillmentCourierMutationCreateArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentCourierCourierList']>, ParentType, ContextType, RequireFields<FulfillmentFulfillmentCourierMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<FulfillmentFulfillmentCourierMutationDeleteArgs, 'input'>>;
-  Update?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentCourierCourierList']>, ParentType, ContextType, RequireFields<FulfillmentFulfillmentCourierMutationUpdateArgs, 'input'>>;
-  Upsert?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentCourierCourierList']>, ParentType, ContextType, RequireFields<FulfillmentFulfillmentCourierMutationUpsertArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -16,7 +16,7 @@ import {
 import { StatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping } from "./registry";
-import { capitalizeProtoName } from "./utils";
+import { capitalizeProtoName, convertyCamelToSnakeCase } from "./utils";
 import { Readable } from "stream";
 import {
   DescriptorProto,
@@ -25,9 +25,10 @@ import {
 } from "ts-proto-descriptors/google/protobuf/descriptor";
 
 const typeCache = new Map<string, GraphQLObjectType>();
+const Mutate = ['Create', 'Update', 'Upsert'];
 
 export const getGQLSchema = <TSource, TContext>
-(method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
+  (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
   const fields: any = {
     status: {
       type: new GraphQLNonNull(StatusType),
@@ -141,7 +142,7 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (service: ServiceDescriptorProto, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
+    (service: ServiceDescriptorProto, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -222,8 +223,74 @@ type ResolverBaseOrSub =
   | Map<string, ResolverFn<any, any, ServiceClient<any, any, any>, any>>;
 const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverBaseOrSub>>>();
 
+const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => {
+  let module_name, key, service;
+  if (schema?.path?.prev?.key) {
+    key = schema.path.prev.key;
+  }
+  if (schema?.path?.prev?.typename) {
+    let typeName = schema.path.prev.typename;
+    if (typeName.endsWith('Mutation')) {
+      module_name = typeName.split('Mutation')[0];
+    }
+  }
+
+  // for services which don't have sub-services
+  if (key == 'scheduling') {
+    module_name = 'scheduling';
+    key = 'job';
+  } else if (key == 'invoicing') {
+    module_name = 'invoicing';
+    key = 'invoice';
+  } else if (key == 'ordering') {
+    module_name = 'ordering';
+    key = 'ordering';
+  }
+  if (key && module_name) {
+    module_name = convertyCamelToSnakeCase(module_name);
+    key = convertyCamelToSnakeCase(key);
+    service = ctx[module_name]?.client[key];
+  }
+
+  try {
+    let method = '';
+    let input = req.input;
+    const mode = req?.input?.mode;
+    if (!mode) {
+      throw new Error('Please specify mode');
+    }
+    if (mode === 'CREATE') {
+      method = 'Create';
+    } else if (mode === 'UPDATE') {
+      method = 'Update';
+    } else if (mode === 'UPSERT') {
+      method = 'Upsert';
+    }
+    const result = await service[method]({
+      items: input?.items
+    });
+    return {
+      payload: result,
+      status: {
+        code: 200,
+        key: '',
+        message: 'success'
+      }
+    };
+  } catch (error) {
+    return {
+      payload: undefined,
+      status: {
+        code: 99,
+        key: '',
+        message: error?.message
+      }
+    }
+  }
+};
+
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, mutation: boolean = false, subspace: string | undefined = undefined) => {
+  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, mutation: boolean = false, subspace: string | undefined = undefined) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -248,6 +315,11 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
     }
   }
 
+  // custom mutation resolver for create, update and upsert - Mutate
+  if (Mutate.indexOf(name) > -1) {
+    name = 'Mutate';
+    func = MutateResolver;
+  }
   space.set(name, func);
 }
 
@@ -330,6 +402,10 @@ export const registerResolverSchema = (namespace: string, name: string, schema: 
     }
   }
 
+  // register create, update and upsert with Mutate
+  if (Mutate.indexOf(name) > -1) {
+    name = 'Mutate';
+  }
   space.set(name, schema);
 }
 
@@ -469,8 +545,8 @@ export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto,
 }
 
 export const getAndGenerateSchema = <TSource, TContext>
-(service: ServiceDescriptorProto, namespace: string, prefix: string, cfg: ServiceConfig, queryList: string[]) => {
-  const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg)
+  (service: ServiceDescriptorProto, namespace: string, prefix: string, cfg: ServiceConfig, queryList: string[]) => {
+  const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg)
 
   const schemas = getGQLSchemas(service);
 
@@ -478,13 +554,13 @@ export const getAndGenerateSchema = <TSource, TContext>
     registerResolverSchema(namespace, key, schemas[key], !queries.has(key) && mutations.has(key))
   })
 
-  return generateSchema([{prefix, namespace}]);
+  return generateSchema([{ prefix, namespace }]);
 }
 
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, NS extends keyof CTX = any>
-  (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(service, queryList, cfg);
+    (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
+    const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg);
 
     const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace);
 
@@ -497,7 +573,7 @@ export const getAndGenerateResolvers =
 
 export const generateSubServiceSchemas = (subServices: SubService[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
   subServices.forEach((sub) => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
+    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
 
     const schemas = getGQLSchemas(sub.service);
 
@@ -508,18 +584,18 @@ export const generateSubServiceSchemas = (subServices: SubService[], config: Sub
 
   if (config.root) {
     return generateSchema(subServices.map(srv => ({
-        prefix: prefix + srv.name.substr(0, 1).toUpperCase() + srv.name.substr(1).toLowerCase(),
-        namespace: srv.name
-      } as any)
+      prefix: prefix + srv.name.substr(0, 1).toUpperCase() + srv.name.substr(1).toLowerCase(),
+      namespace: srv.name
+    } as any)
     ));
   }
 
-  return generateSchema([{prefix, namespace}]);
+  return generateSchema([{ prefix, namespace }]);
 }
 
 export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: SubService[], config: SubSpaceServiceConfig, namespace: string): T => {
   subServices.forEach((sub) => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
+    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config);
 
     const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace);
 

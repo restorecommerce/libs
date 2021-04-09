@@ -235,17 +235,6 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     }
   }
 
-  // for services which don't have sub-services
-  if (key == 'scheduling') {
-    module_name = 'scheduling';
-    key = 'job';
-  } else if (key == 'invoicing') {
-    module_name = 'invoicing';
-    key = 'invoice';
-  } else if (key == 'ordering') {
-    module_name = 'ordering';
-    key = 'ordering';
-  }
   if (key && module_name) {
     module_name = convertyCamelToSnakeCase(module_name);
     key = convertyCamelToSnakeCase(key);

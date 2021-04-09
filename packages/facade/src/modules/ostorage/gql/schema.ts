@@ -1,8 +1,7 @@
-import { registerTypings } from "./types";
-import { getAndGenerateSchema, ServiceConfig } from "../../../gql/protos";
-import { protoMetadata } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/ostorage";
-import { namespace } from "../interfaces";
+import { registerTypings, subServices } from "./types";
+import { generateSubServiceSchemas,  } from "../../../gql/protos";
+import { namespace, OstorageServiceConfig } from "../interfaces";
 
 registerTypings();
 
-export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Ostorage', cfg, ['Get', 'List']);
+export const schema = (cfg: OstorageServiceConfig) => generateSubServiceSchemas(subServices, cfg, namespace, 'Ostorage');

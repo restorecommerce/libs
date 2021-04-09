@@ -1,9 +1,13 @@
 import { OstorageSrvGrpcClient } from "./grpc";
-import { ServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
+import { ServiceConfig } from "../../gql/protos";
+
+export interface OstorageServiceConfig extends ServiceConfig {
+  root: boolean;
+}
 
 export interface OstorageConfig {
-  config: ServiceConfig;
+  config: OstorageServiceConfig;
 }
 
 export interface OstorageContext extends FacadeContext {

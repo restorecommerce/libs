@@ -22,11 +22,16 @@ export type Query = {
 
 export type InvoicingQuery = {
   __typename?: 'InvoicingQuery';
+  invoice: InvoicingInvoiceQuery;
+};
+
+export type InvoicingInvoiceQuery = {
+  __typename?: 'InvoicingInvoiceQuery';
   Read?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
 };
 
 
-export type InvoicingQueryReadArgs = {
+export type InvoicingInvoiceQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -174,17 +179,22 @@ export type Mutation = {
 
 export type InvoicingMutation = {
   __typename?: 'InvoicingMutation';
+  invoice: InvoicingInvoiceMutation;
+};
+
+export type InvoicingInvoiceMutation = {
+  __typename?: 'InvoicingInvoiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
 };
 
 
-export type InvoicingMutationMutateArgs = {
+export type InvoicingInvoiceMutationMutateArgs = {
   input: IIoRestorecommerceInvoiceInvoiceList;
 };
 
 
-export type InvoicingMutationDeleteArgs = {
+export type InvoicingInvoiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -304,6 +314,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   InvoicingQuery: ResolverTypeWrapper<InvoicingQuery>;
+  InvoicingInvoiceQuery: ResolverTypeWrapper<InvoicingInvoiceQuery>;
   ProtoIoRestorecommerceInvoiceInvoiceList: ResolverTypeWrapper<ProtoIoRestorecommerceInvoiceInvoiceList>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -330,6 +341,7 @@ export type ResolversTypes = ResolversObject<{
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   Mutation: ResolverTypeWrapper<{}>;
   InvoicingMutation: ResolverTypeWrapper<InvoicingMutation>;
+  InvoicingInvoiceMutation: ResolverTypeWrapper<InvoicingInvoiceMutation>;
   IIoRestorecommerceInvoiceInvoiceList: IIoRestorecommerceInvoiceInvoiceList;
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -343,6 +355,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   InvoicingQuery: InvoicingQuery;
+  InvoicingInvoiceQuery: InvoicingInvoiceQuery;
   ProtoIoRestorecommerceInvoiceInvoiceList: ProtoIoRestorecommerceInvoiceInvoiceList;
   StatusType: StatusType;
   String: Scalars['String'];
@@ -367,6 +380,7 @@ export type ResolversParentTypes = ResolversObject<{
   Upload: Scalars['Upload'];
   Mutation: {};
   InvoicingMutation: InvoicingMutation;
+  InvoicingInvoiceMutation: InvoicingInvoiceMutation;
   IIoRestorecommerceInvoiceInvoiceList: IIoRestorecommerceInvoiceInvoiceList;
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -380,7 +394,12 @@ export type QueryResolvers<ContextType = InvoicingContext, ParentType extends Re
 }>;
 
 export type InvoicingQueryResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingQuery'] = ResolversParentTypes['InvoicingQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingQueryReadArgs, 'input'>>;
+  invoice?: Resolver<ResolversTypes['InvoicingInvoiceQuery'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InvoicingInvoiceQueryResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingInvoiceQuery'] = ResolversParentTypes['InvoicingInvoiceQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingInvoiceQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -468,8 +487,13 @@ export type MutationResolvers<ContextType = InvoicingContext, ParentType extends
 }>;
 
 export type InvoicingMutationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingMutation'] = ResolversParentTypes['InvoicingMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<InvoicingMutationDeleteArgs, 'input'>>;
+  invoice?: Resolver<ResolversTypes['InvoicingInvoiceMutation'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type InvoicingInvoiceMutationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingInvoiceMutation'] = ResolversParentTypes['InvoicingInvoiceMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceList']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -481,6 +505,7 @@ export type ProtoGoogleProtobufEmptyResolvers<ContextType = InvoicingContext, Pa
 export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   InvoicingQuery?: InvoicingQueryResolvers<ContextType>;
+  InvoicingInvoiceQuery?: InvoicingInvoiceQueryResolvers<ContextType>;
   ProtoIoRestorecommerceInvoiceInvoiceList?: ProtoIoRestorecommerceInvoiceInvoiceListResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceInvoiceInvoiceList?: IoRestorecommerceInvoiceInvoiceListResolvers<ContextType>;
@@ -494,6 +519,7 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   Upload?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   InvoicingMutation?: InvoicingMutationResolvers<ContextType>;
+  InvoicingInvoiceMutation?: InvoicingInvoiceMutationResolvers<ContextType>;
   ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
 }>;
 

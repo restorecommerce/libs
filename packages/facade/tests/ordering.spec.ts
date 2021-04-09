@@ -36,19 +36,20 @@ function expectSuccess(done, payloadValidator: (payload) => void = () => {}) {
     expect(res.body).toBeInstanceOf(Object);
     expect(res.body.data).toBeInstanceOf(Object);
     expect(res.body.data.ordering).toBeInstanceOf(Object);
+    expect(res.body.data.ordering.order).toBeInstanceOf(Object);
 
-    const key = Object.keys(res.body.data.ordering)[0];
-    expect(res.body.data.ordering[key]).toBeInstanceOf(Object);
-    expect(res.body.data.ordering[key].status).toBeInstanceOf(Object);
+    const key = Object.keys(res.body.data.ordering.order)[0];
+    expect(res.body.data.ordering.order[key]).toBeInstanceOf(Object);
+    expect(res.body.data.ordering.order[key].status).toBeInstanceOf(Object);
 
-    const status = res.body.data.ordering[key].status;
+    const status = res.body.data.ordering.order[key].status;
     expect(status.key).toEqual('');
     expect(status.code).toEqual(1);
     expect(status.message).toEqual('Success');
 
-    if ('payload' in res.body.data.ordering[key]) {
-      expect(res.body.data.ordering[key].payload).toBeInstanceOf(Object);
-      payloadValidator(res.body.data.ordering[key].payload)
+    if ('payload' in res.body.data.ordering.order[key]) {
+      expect(res.body.data.ordering.order[key].payload).toBeInstanceOf(Object);
+      payloadValidator(res.body.data.ordering.order[key].payload)
     }
 
     done();
@@ -80,47 +81,36 @@ describe('ordering', () => {
       .post("/graphql")
       .send({
         query: `mutation {
-  ordering {
-    Mutate(
-      input: {
-        mode: CREATE
-        totalCount: 1
-        items: [
-          {
-            id: "TEST"
-            meta: {
-              created: 0
-              modified: 0
-              modifiedBy: "modifiedBy"
-              owner: []
+          ordering {
+            order {
+              Mutate(input:{
+                mode:CREATE,
+                items: [
+                  {
+                    id: "TEST"
+                    meta: {
+                      created: 0
+                      modified: 0
+                      modifiedBy: "modifiedBy"
+                      owner: []
+                    }
+                    name: "name"
+                    description: "description"
+                    status: "status"
+                    items: []
+                    totalPrice: 10
+                    totalWeightInKg: 1
+                    shippingContactPointId: "shippingContactPointId"
+                    billingContactPointId: "billingContactPointId"
+                  }
+                ]
+              }) {
+                status {key, code, message}
+                payload {items {id,name}, totalCount}
+              }
             }
-            name: "name"
-            description: "description"
-            status: "status"
-            items: []
-            totalPrice: 10
-            totalWeightInKg: 1
-            shippingContactPointId: "shippingContactPointId"
-            billingContactPointId: "billingContactPointId"
           }
-        ]
-      }
-    ) {
-      status {
-        key
-        code
-        message
-      }
-      payload {
-        items {
-          id
-          name
-        }
-        totalCount
-      }
-    }
-  }
-}`,
+        }`,
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)
@@ -138,21 +128,17 @@ describe('ordering', () => {
       .post("/graphql")
       .send({
         query: `mutation {
-  ordering {
-    Delete(
-      input: {
-        ids: ["TEST"]
-        collection: false
-      }
-    ) {
-      status {
-        key
-        code
-        message
-      }
-    }
-  }
-}`,
+          ordering {
+            order {
+              Delete(input:{
+                ids: ["TEST"]
+                collection: false
+              }) {
+                status {key, code, message}
+              }
+            }
+          }
+        }`,
       })
       .set("Accept", "application/json")
       .expect("Content-Type", /json/)

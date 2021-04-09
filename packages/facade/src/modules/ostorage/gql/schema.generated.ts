@@ -23,17 +23,22 @@ export type Query = {
 
 export type OstorageQuery = {
   __typename?: 'OstorageQuery';
+  object: OstorageObjectQuery;
+};
+
+export type OstorageObjectQuery = {
+  __typename?: 'OstorageObjectQuery';
   Get?: Maybe<ProtoIoRestorecommerceOstorageObject>;
   List?: Maybe<ProtoIoRestorecommerceOstorageObjectsData>;
 };
 
 
-export type OstorageQueryGetArgs = {
+export type OstorageObjectQueryGetArgs = {
   input: IIoRestorecommerceOstorageGetRequest;
 };
 
 
-export type OstorageQueryListArgs = {
+export type OstorageObjectQueryListArgs = {
   input: IIoRestorecommerceOstorageListRequest;
 };
 
@@ -185,23 +190,28 @@ export type Mutation = {
 
 export type OstorageMutation = {
   __typename?: 'OstorageMutation';
+  object: OstorageObjectMutation;
+};
+
+export type OstorageObjectMutation = {
+  __typename?: 'OstorageObjectMutation';
   Put?: Maybe<ProtoIoRestorecommerceOstorageResponse>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
   Copy?: Maybe<ProtoIoRestorecommerceOstorageCopyResponse>;
 };
 
 
-export type OstorageMutationPutArgs = {
+export type OstorageObjectMutationPutArgs = {
   input: IIoRestorecommerceOstorageObject;
 };
 
 
-export type OstorageMutationDeleteArgs = {
+export type OstorageObjectMutationDeleteArgs = {
   input: IIoRestorecommerceOstorageDeleteRequest;
 };
 
 
-export type OstorageMutationCopyArgs = {
+export type OstorageObjectMutationCopyArgs = {
   input: IIoRestorecommerceOstorageCopyRequest;
 };
 
@@ -370,6 +380,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   OstorageQuery: ResolverTypeWrapper<OstorageQuery>;
+  OstorageObjectQuery: ResolverTypeWrapper<OstorageObjectQuery>;
   ProtoIoRestorecommerceOstorageObject: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageObject>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -397,6 +408,7 @@ export type ResolversTypes = ResolversObject<{
   IGoogleProtobufListValue: IGoogleProtobufListValue;
   Mutation: ResolverTypeWrapper<{}>;
   OstorageMutation: ResolverTypeWrapper<OstorageMutation>;
+  OstorageObjectMutation: ResolverTypeWrapper<OstorageObjectMutation>;
   ProtoIoRestorecommerceOstorageResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageResponse>;
   IoRestorecommerceOstorageResponse: ResolverTypeWrapper<IoRestorecommerceOstorageResponse>;
   IIoRestorecommerceOstorageObject: IIoRestorecommerceOstorageObject;
@@ -418,6 +430,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   OstorageQuery: OstorageQuery;
+  OstorageObjectQuery: OstorageObjectQuery;
   ProtoIoRestorecommerceOstorageObject: ProtoIoRestorecommerceOstorageObject;
   StatusType: StatusType;
   String: Scalars['String'];
@@ -444,6 +457,7 @@ export type ResolversParentTypes = ResolversObject<{
   IGoogleProtobufListValue: IGoogleProtobufListValue;
   Mutation: {};
   OstorageMutation: OstorageMutation;
+  OstorageObjectMutation: OstorageObjectMutation;
   ProtoIoRestorecommerceOstorageResponse: ProtoIoRestorecommerceOstorageResponse;
   IoRestorecommerceOstorageResponse: IoRestorecommerceOstorageResponse;
   IIoRestorecommerceOstorageObject: IIoRestorecommerceOstorageObject;
@@ -466,8 +480,13 @@ export type QueryResolvers<ContextType = OstorageContext, ParentType extends Res
 }>;
 
 export type OstorageQueryResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['OstorageQuery'] = ResolversParentTypes['OstorageQuery']> = ResolversObject<{
-  Get?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageObject']>, ParentType, ContextType, RequireFields<OstorageQueryGetArgs, 'input'>>;
-  List?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageObjectsData']>, ParentType, ContextType, RequireFields<OstorageQueryListArgs, 'input'>>;
+  object?: Resolver<ResolversTypes['OstorageObjectQuery'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type OstorageObjectQueryResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['OstorageObjectQuery'] = ResolversParentTypes['OstorageObjectQuery']> = ResolversObject<{
+  Get?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageObject']>, ParentType, ContextType, RequireFields<OstorageObjectQueryGetArgs, 'input'>>;
+  List?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageObjectsData']>, ParentType, ContextType, RequireFields<OstorageObjectQueryListArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -579,9 +598,14 @@ export type MutationResolvers<ContextType = OstorageContext, ParentType extends 
 }>;
 
 export type OstorageMutationResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['OstorageMutation'] = ResolversParentTypes['OstorageMutation']> = ResolversObject<{
-  Put?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageResponse']>, ParentType, ContextType, RequireFields<OstorageMutationPutArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OstorageMutationDeleteArgs, 'input'>>;
-  Copy?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageCopyResponse']>, ParentType, ContextType, RequireFields<OstorageMutationCopyArgs, 'input'>>;
+  object?: Resolver<ResolversTypes['OstorageObjectMutation'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type OstorageObjectMutationResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['OstorageObjectMutation'] = ResolversParentTypes['OstorageObjectMutation']> = ResolversObject<{
+  Put?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageResponse']>, ParentType, ContextType, RequireFields<OstorageObjectMutationPutArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<OstorageObjectMutationDeleteArgs, 'input'>>;
+  Copy?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOstorageCopyResponse']>, ParentType, ContextType, RequireFields<OstorageObjectMutationCopyArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -633,6 +657,7 @@ export type IoRestorecommerceOstorageCopyResponseItemResolvers<ContextType = Ost
 export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   OstorageQuery?: OstorageQueryResolvers<ContextType>;
+  OstorageObjectQuery?: OstorageObjectQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageObject?: ProtoIoRestorecommerceOstorageObjectResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceOstorageObject?: IoRestorecommerceOstorageObjectResolvers<ContextType>;
@@ -649,6 +674,7 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   IoRestorecommerceOstorageObjectData?: IoRestorecommerceOstorageObjectDataResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   OstorageMutation?: OstorageMutationResolvers<ContextType>;
+  OstorageObjectMutation?: OstorageObjectMutationResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageResponse?: ProtoIoRestorecommerceOstorageResponseResolvers<ContextType>;
   IoRestorecommerceOstorageResponse?: IoRestorecommerceOstorageResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;

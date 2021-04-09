@@ -1,8 +1,7 @@
-import { registerTypings } from "./types";
-import { getAndGenerateSchema, ServiceConfig } from "../../../gql/protos";
-import { protoMetadata } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
-import { namespace } from "../interfaces";
+import { registerTypings, subServices } from "./types";
+import { generateSubServiceSchemas } from "../../../gql/protos";
+import { namespace, OrderingServiceConfig } from "../interfaces";
 
 registerTypings();
 
-export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Ordering', cfg, ['Read']);
+export const schema = (cfg: OrderingServiceConfig) => generateSubServiceSchemas(subServices, cfg, namespace, 'Ordering');

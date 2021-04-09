@@ -23,11 +23,16 @@ export type Query = {
 
 export type SchedulingQuery = {
   __typename?: 'SchedulingQuery';
+  job: SchedulingJobQuery;
+};
+
+export type SchedulingJobQuery = {
+  __typename?: 'SchedulingJobQuery';
   Read?: Maybe<ProtoIoRestorecommerceJobJobList>;
 };
 
 
-export type SchedulingQueryReadArgs = {
+export type SchedulingJobQueryReadArgs = {
   input: IIoRestorecommerceJobJobReadRequest;
 };
 
@@ -184,17 +189,22 @@ export type Mutation = {
 
 export type SchedulingMutation = {
   __typename?: 'SchedulingMutation';
+  job: SchedulingJobMutation;
+};
+
+export type SchedulingJobMutation = {
+  __typename?: 'SchedulingJobMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceJobJobList>;
   Delete?: Maybe<ProtoGoogleProtobufEmpty>;
 };
 
 
-export type SchedulingMutationMutateArgs = {
+export type SchedulingJobMutationMutateArgs = {
   input: IIoRestorecommerceJobJobList;
 };
 
 
-export type SchedulingMutationDeleteArgs = {
+export type SchedulingJobMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -342,6 +352,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   SchedulingQuery: ResolverTypeWrapper<SchedulingQuery>;
+  SchedulingJobQuery: ResolverTypeWrapper<SchedulingJobQuery>;
   ProtoIoRestorecommerceJobJobList: ResolverTypeWrapper<ProtoIoRestorecommerceJobJobList>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -369,6 +380,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Mutation: ResolverTypeWrapper<{}>;
   SchedulingMutation: ResolverTypeWrapper<SchedulingMutation>;
+  SchedulingJobMutation: ResolverTypeWrapper<SchedulingJobMutation>;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
@@ -388,6 +400,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   SchedulingQuery: SchedulingQuery;
+  SchedulingJobQuery: SchedulingJobQuery;
   ProtoIoRestorecommerceJobJobList: ProtoIoRestorecommerceJobJobList;
   StatusType: StatusType;
   String: Scalars['String'];
@@ -412,6 +425,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Mutation: {};
   SchedulingMutation: SchedulingMutation;
+  SchedulingJobMutation: SchedulingJobMutation;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
@@ -431,7 +445,12 @@ export type QueryResolvers<ContextType = SchedulingContext, ParentType extends R
 }>;
 
 export type SchedulingQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingQuery'] = ResolversParentTypes['SchedulingQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingQueryReadArgs, 'input'>>;
+  job?: Resolver<ResolversTypes['SchedulingJobQuery'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SchedulingJobQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobQuery'] = ResolversParentTypes['SchedulingJobQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingJobQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -555,8 +574,13 @@ export type MutationResolvers<ContextType = SchedulingContext, ParentType extend
 }>;
 
 export type SchedulingMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingMutation'] = ResolversParentTypes['SchedulingMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<SchedulingMutationDeleteArgs, 'input'>>;
+  job?: Resolver<ResolversTypes['SchedulingJobMutation'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SchedulingJobMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobMutation'] = ResolversParentTypes['SchedulingJobMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingJobMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<SchedulingJobMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -572,6 +596,7 @@ export type ProtoGoogleProtobufEmptyResolvers<ContextType = SchedulingContext, P
 export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   SchedulingQuery?: SchedulingQueryResolvers<ContextType>;
+  SchedulingJobQuery?: SchedulingJobQueryResolvers<ContextType>;
   ProtoIoRestorecommerceJobJobList?: ProtoIoRestorecommerceJobJobListResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceJobJobList?: IoRestorecommerceJobJobListResolvers<ContextType>;
@@ -592,6 +617,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   IoRestorecommerceJobJobReadRequestSortOrder?: IoRestorecommerceJobJobReadRequestSortOrderResolvers;
   Mutation?: MutationResolvers<ContextType>;
   SchedulingMutation?: SchedulingMutationResolvers<ContextType>;
+  SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
 }>;

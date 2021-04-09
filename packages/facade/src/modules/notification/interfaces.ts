@@ -2,8 +2,12 @@ import { NotificationSrvGrpcClient } from "./grpc";
 import { ServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
+export interface NotificationServiceConfig extends ServiceConfig {
+  root: boolean;
+}
+
 export interface NotificationConfig {
-  config: ServiceConfig;
+  config: NotificationServiceConfig;
 }
 
 export interface NotificationContext extends FacadeContext {

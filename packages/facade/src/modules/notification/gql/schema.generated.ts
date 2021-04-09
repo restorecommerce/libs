@@ -22,11 +22,16 @@ export type Mutation = {
 
 export type NotificationMutation = {
   __typename?: 'NotificationMutation';
+  service: NotificationServiceMutation;
+};
+
+export type NotificationServiceMutation = {
+  __typename?: 'NotificationServiceMutation';
   Send?: Maybe<ProtoGoogleProtobufEmpty>;
 };
 
 
-export type NotificationMutationSendArgs = {
+export type NotificationServiceMutationSendArgs = {
   input: IIoRestorecommerceNotificationNotification;
 };
 
@@ -147,6 +152,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   NotificationMutation: ResolverTypeWrapper<NotificationMutation>;
+  NotificationServiceMutation: ResolverTypeWrapper<NotificationServiceMutation>;
   ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
@@ -163,6 +169,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   NotificationMutation: NotificationMutation;
+  NotificationServiceMutation: NotificationServiceMutation;
   ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
   StatusType: StatusType;
   String: Scalars['String'];
@@ -180,7 +187,12 @@ export type MutationResolvers<ContextType = NotificationContext, ParentType exte
 }>;
 
 export type NotificationMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationMutation'] = ResolversParentTypes['NotificationMutation']> = ResolversObject<{
-  Send?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<NotificationMutationSendArgs, 'input'>>;
+  service?: Resolver<ResolversTypes['NotificationServiceMutation'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type NotificationServiceMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationServiceMutation'] = ResolversParentTypes['NotificationServiceMutation']> = ResolversObject<{
+  Send?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<NotificationServiceMutationSendArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -203,6 +215,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
+  NotificationServiceMutation?: NotificationServiceMutationResolvers<ContextType>;
   ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
   Upload?: GraphQLScalarType;

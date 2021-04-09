@@ -1,8 +1,7 @@
-import { registerTypings } from "./types";
-import { getAndGenerateSchema, ServiceConfig } from "../../../gql/protos";
-import { protoMetadata } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job";
-import { namespace } from "../interfaces";
+import { registerTypings, subServices } from "./types";
+import { generateSubServiceSchemas,  } from "../../../gql/protos";
+import { namespace, SchedulingServiceConfig } from "../interfaces";
 
 registerTypings();
 
-export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Scheduling', cfg, ['Read']);
+export const schema = (cfg: SchedulingServiceConfig) => generateSubServiceSchemas(subServices, cfg, namespace, 'Scheduling');

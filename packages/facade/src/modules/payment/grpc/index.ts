@@ -11,5 +11,5 @@ export class PaymentSrvGrpcClient extends RestoreCommerceGrpcClient {
   constructor(cfg: GrpcClientConfig) {
     super(cfg);
   }
-  payment = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+  service = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
 }

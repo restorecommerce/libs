@@ -11,5 +11,5 @@ export class NotificationSrvGrpcClient extends RestoreCommerceGrpcClient {
   constructor(cfg: GrpcClientConfig) {
     super(cfg);
   }
-  notification = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+  service = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
 }

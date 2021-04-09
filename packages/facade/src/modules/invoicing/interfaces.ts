@@ -2,8 +2,12 @@ import { InvoicingSrvGrpcClient } from "./grpc";
 import { ServiceConfig } from "../../gql/protos";
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
+export interface InvoicingServiceConfig extends ServiceConfig {
+  root: boolean;
+}
+
 export interface InvoicingConfig {
-  config: ServiceConfig;
+  config: InvoicingServiceConfig;
 }
 
 export interface InvoicingContext extends FacadeContext {

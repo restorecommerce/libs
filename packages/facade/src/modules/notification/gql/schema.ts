@@ -1,8 +1,7 @@
-import { registerTypings } from "./types";
-import { getAndGenerateSchema, ServiceConfig } from "../../../gql/protos";
-import { protoMetadata } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/notification";
-import { namespace } from "../interfaces";
+import { registerTypings, subServices } from "./types";
+import { generateSubServiceSchemas } from "../../../gql/protos";
+import { namespace, NotificationServiceConfig } from "../interfaces";
 
 registerTypings();
 
-export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Notification', cfg, []);
+export const schema = (cfg: NotificationServiceConfig) => generateSubServiceSchemas(subServices, cfg, namespace, 'Notification');

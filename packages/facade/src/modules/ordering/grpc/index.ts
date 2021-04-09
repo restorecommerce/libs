@@ -11,5 +11,5 @@ export class OrderingSrvGrpcClient extends RestoreCommerceGrpcClient {
   constructor(cfg: GrpcClientConfig) {
     super(cfg);
   }
-  ordering = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+  order = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
 }

@@ -255,8 +255,27 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     } else if (mode === 'UPSERT') {
       method = 'Upsert';
     }
+
+    // check service object contains requested mode's method def
+    if (!service[method]) {
+      throw new Error(`Method ${method} not defined on ${module_name}`);
+    }
+    // update subject token from authorizatin header
+    let subject = {
+      id: '',
+      scope: '',
+      roleAssociations: [],
+      hierarchicalScopes: [],
+      token: '',
+      unauthenticated: false
+    };
+    const authToken = (ctx as any).request!.req.headers['authorization'];
+    if (authToken && authToken.startsWith('Bearer ')) {
+      subject.token = authToken.split(' ')[1];
+    }
     const result = await service[method]({
-      items: input?.items
+      items: input?.items,
+      subject
     });
     return {
       payload: result,

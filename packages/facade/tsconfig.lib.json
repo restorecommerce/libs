@@ -5,6 +5,7 @@
     "declaration": true,
     "baseUrl": ".",
     "strict": true,
+    "skipLibCheck": true // temp work around for kafka-client typings
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }

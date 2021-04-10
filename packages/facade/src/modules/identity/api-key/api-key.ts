@@ -1,7 +1,9 @@
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
-import Router from "koa-router";
+import * as Router from "koa-router";
 import Application from "koa";
+import { Events } from '@restorecommerce/kafka-client';
+import { createServiceConfig } from '@restorecommerce/service-config';
 
 export interface APIParams {
   apiKey?: boolean | string;
@@ -9,6 +11,69 @@ export interface APIParams {
 }
 
 export let bootstrapApiKey: string | undefined;
+const API_KEY_COMMAND_NAME = 'set_api_key';
+const API_KEY_COMMAND_EVENT = 'setApiKeyCommand';
+const API_KEY_COMMAND_RESPONSE = 'setApiKeyResponse';
+const COMMAND_TOPIC_NAME = 'io.restorecommerce.command';
+
+const exectueSetAPIKeyCommand = async (apiKey: string, logger: Logger): Promise<any> => {
+  const cfg = createServiceConfig(process.cwd());
+  if (apiKey && cfg.get('events:kafka')) {
+    let payload = JSON.stringify({ authentication: { apiKey } });
+    const eventObject = {
+      name: API_KEY_COMMAND_NAME,
+      payload: {}
+    };
+    let eventPayload = Buffer.from(payload).toString('base64');
+    eventObject.payload = {
+      type_url: 'payload',
+      value: eventPayload
+    };
+
+    const events = new Events(cfg.get('events:kafka'), logger);
+    await events.start();
+    const commandResponses: any = [];
+    // preparing event listener for system commands' responses
+    const responseListener = async (msg: any, context: any,
+      config: any, eventName: string) => {
+      const payload = msg.payload;
+      let decodedMsg = {};
+      try {
+        if (payload && payload.value) {
+          decodedMsg = JSON.parse(Buffer.from(payload.value, 'base64').toString()); // google.protobuf.Any
+        }
+        logger.info('Received command response from services',
+          JSON.stringify(msg.services), JSON.stringify(decodedMsg));
+        commandResponses.push({
+          services: msg.services,
+          response: decodedMsg
+        });
+      } catch (err) {
+        // some response-handling logic
+        logger.error('Invalid message format in event:', eventName);
+        throw err;
+      }
+    };
+
+    const commandTopic = events.topic(COMMAND_TOPIC_NAME);
+    await commandTopic.on(API_KEY_COMMAND_RESPONSE, responseListener);
+    await commandTopic.emit(API_KEY_COMMAND_EVENT, eventObject);
+    let resp = await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        commandTopic.removeAllListeners(API_KEY_COMMAND_RESPONSE);
+        resolve({
+          responses: commandResponses
+        });
+      }, 3000);
+    });
+    return resp;
+  } else {
+    logger.info('Kafka configuration missing for sync ApiKey');
+    return {
+      responses: [{ response: 'Api Key not synced' }]
+    }
+  }
+};
 
 const initApiKey = (logger: Logger, apiKey: boolean | string) => {
   if (apiKey === true) {
@@ -16,10 +81,15 @@ const initApiKey = (logger: Logger, apiKey: boolean | string) => {
   } else {
     bootstrapApiKey = apiKey as string;
   }
-  logger.info(`Bootstrap API Key is: ${bootstrapApiKey}`);
+  exectueSetAPIKeyCommand(bootstrapApiKey, logger).then((resp) => {
+    logger.info('SetApiKey command response', resp);
+    logger.info(`Bootstrap API Key is: ${bootstrapApiKey}`);
+  }).catch(err => {
+    logger.error('Error executing setApiKey command', err);
+  });
 };
 
-export const setupApiKey = ({apiKey, logger}: APIParams): {
+export const setupApiKey = ({ apiKey, logger }: APIParams): {
   router: Router<{}, any>,
   app: Application.Middleware<any>
 } | undefined => {

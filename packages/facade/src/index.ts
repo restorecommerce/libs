@@ -190,8 +190,8 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     const gqlServer = new ApolloServer({
       gateway,
-      introspection: this.koa.env === 'development',
-      playground: this.koa.env === 'development',
+      introspection: true,
+      playground: true,
       subscriptions: false, // not supported when using federation - but not used anyway
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });

@@ -8,7 +8,7 @@
       "@gql": ["src/gql/index"],
       "@gql/*": ["src/gql/*"]
     },
-    "esModuleInterop": false
+    "esModuleInterop": true
   },
   "include": [
     "./tests/**/*.ts", "tests/generate-keysjts"

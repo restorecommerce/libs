@@ -1,6 +1,6 @@
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
-import * as Router from "koa-router";
+import Router from "koa-router";
 import Application from "koa";
 import { Events } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';

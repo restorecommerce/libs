@@ -1,9 +1,10 @@
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
-import Router from "koa-router";
 import Application from "koa";
 import { Events } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
+
+const Router = require('koa-router');
 
 export interface APIParams {
   apiKey?: boolean | string;
@@ -90,10 +91,10 @@ const initApiKey = (logger: Logger, apiKey: boolean | string) => {
 };
 
 export const setupApiKey = ({ apiKey, logger }: APIParams): {
-  router: Router<{}, any>,
+  router: any,
   app: Application.Middleware<any>
 } | undefined => {
-  const router = new Router<{}, any>();
+  const router = new Router();
 
   try {
     if (!!apiKey) {

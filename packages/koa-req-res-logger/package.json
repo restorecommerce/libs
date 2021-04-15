@@ -20,7 +20,7 @@
   "scripts": {
     "test": "npm run lint && npm run mocha",
     "lint": "eslint *.json *.js",
-    "mocha": "mocha ./test/* --exit",
+    "mocha": "nyc mocha ./test/* --exit",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc --reporter text --reporter lcov npm test"
   },

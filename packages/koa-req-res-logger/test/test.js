@@ -49,6 +49,7 @@ function setupServer(bodyParsing = false, bodyBeforeLogging = true) {
   }
 
   server = app.listen();
+  console.log('started');
 }
 
 describe('GraphQL Request and Response logging', () => {
@@ -61,11 +62,10 @@ describe('GraphQL Request and Response logging', () => {
     loggedLines = [];
   });
 
-  it('should log a simple request', (done) => {
-    fetch('http://localhost:' + server.address().port)
+  it('should log a simple request', () => {
+    return fetch('http://localhost:' + server.address().port)
     .then(() => {
       assertLogBase(loggedLines, 'GET')
-      done();
     });
   });
 
@@ -81,8 +81,8 @@ describe('simple Request and Response logging', () => {
       setupServer(true, true);
     })
 
-    it('should log a GraphQL request', (done) => {
-      fetch('http://localhost:' + server.address().port, {
+    it('should log a GraphQL request', () => {
+      return fetch('http://localhost:' + server.address().port, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -93,7 +93,6 @@ describe('simple Request and Response logging', () => {
         assertLogBase(loggedLines, 'POST')
         assert('graphql' in loggedLines[0].line[1]);
         assert.deepStrictEqual(loggedLines[0].line[1].graphql, sampleGraphQLBody)
-        done();
       });
     });
   })
@@ -103,8 +102,8 @@ describe('simple Request and Response logging', () => {
       setupServer(true, false);
     })
 
-    it('should log a GraphQL request', (done) => {
-      fetch('http://localhost:' + server.address().port, {
+    it('should log a GraphQL request', () => {
+      return fetch('http://localhost:' + server.address().port, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -115,7 +114,6 @@ describe('simple Request and Response logging', () => {
         assertLogBase(loggedLines, 'POST')
         assert('graphql' in loggedLines[1].line[1]);
         assert.deepStrictEqual(loggedLines[1].line[1].graphql, sampleGraphQLBody)
-        done();
       });
     });
   })
@@ -137,7 +135,7 @@ function assertLogBase(loggedLines, method) {
   assert.equal(requestLine[1].url, '/');
 
   assert.equal(responseLine[0], 'Response');
-  assert('procTime' in responseLine[1]);
+  assert('proc_time' in responseLine[1]);
   assert(typeof(responseLine[1].procTime), 'number');
   assert('header' in responseLine[1]);
   assert(typeof(responseLine[1].header), 'object');

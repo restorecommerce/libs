@@ -63,4 +63,4 @@ jobs:
 
       - name: Coverage
         run: npm run coveralls
-        working-directory: ./packages/cluster-service
+        working-directory: ./packages/acs-client

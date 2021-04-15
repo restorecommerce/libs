@@ -49,7 +49,7 @@ describe('Kafka provider test', () => {
     await client.stop();
   });
   describe('topic.wait', function testWait(): void {
-    this.timeout(15000);
+    this.timeout(60000);
     it('should wait until the event message is processed',
       async function waitUntil(): Promise<void> {
         // create the proto buffer message

@@ -81,7 +81,7 @@ class ClusterService {
   }
 
   writePid() {
-    fs.writeFileSync(`${this.pidDir}/cluster-serverice-master-${this.serviceName}.pid`, process.pid, 'utf8');
+    fs.writeFileSync(`${this.pidDir}/cluster-serverice-master-${this.serviceName}.pid`, process.pid.toString(10), 'utf8');
   }
 }
 

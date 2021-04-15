@@ -22,6 +22,9 @@ jobs:
         with:
           node-version: '14.15'
 
+      - name: Upgrade npm
+        run: npm i -g npm
+
       - name: Install Dependencies
         run: npm ci && npm run install:ci -- --scope="@restorecommerce/cluster-service" --include-filtered-dependencies
 

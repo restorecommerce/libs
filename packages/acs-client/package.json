@@ -64,6 +64,7 @@
     "mocha": "cross-env NODE_ENV=test mocha -R spec ./test/*.js --full-trace --exit",
     "mocha:cache": "cross-env NODE_ENV=test CACHE_ENABLED=true mocha -R spec ./test/*.js --full-trace --exit",
     "test-debug": "cross-env NODE_ENV=test mocha -R spec ./test/*.js --inspect-brk",
+    "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "createtopics": "node setupTopics.js io.restorecommerce.rules.resource io.restorecommerce.policies.resource io.restorecommerce.policy_sets.resource"
   }

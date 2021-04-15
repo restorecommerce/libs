@@ -58,6 +58,7 @@
     "postinstall": "tsc -d",
     "mocha": "mocha --timeout 5000 ./test/*.js --trace-warnings",
     "mocha-debug": "mocha -R spec test/*.js --full-trace --inspect-brk",
+    "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "engines": {

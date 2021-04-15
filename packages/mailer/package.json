@@ -35,6 +35,7 @@
     "test": "nyc mocha",
     "lint": "eslint *.json *.js",
     "mocha": "mocha ./test/*",
+    "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "engines": {

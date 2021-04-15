@@ -4,11 +4,11 @@ on:
   push:
     paths:
       - 'packages/oidc-id-srv-integration/**'
-      - '.github/workflows/build-test-oidc-id-srv-integration.yaml'
+      - '.github/workflows/build-test-oidc-srv-integration.yaml'
   pull_request:
     paths:
       - 'packages/oidc-id-srv-integration/**'
-      - '.github/workflows/build-test-oidc-id-srv-integration.yaml'
+      - '.github/workflows/build-test-oidc-srv-integration.yaml'
 
 jobs:
   build:

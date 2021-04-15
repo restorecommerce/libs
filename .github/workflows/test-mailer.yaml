@@ -29,9 +29,10 @@ jobs:
         run: npm ci && npm run install:ci -- --scope="@restorecommerce/mailer" --include-filtered-dependencies
 
       - name: Test
-        run: npm run test
+        run: npm run test && npm run lcov-report
         working-directory: ./packages/mailer
 
-      - name: Coverage
-        run: npm run coveralls
-        working-directory: ./packages/mailer
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

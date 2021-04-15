@@ -1,0 +1,66 @@
+{
+  "name": "@restorecommerce/gql-bot",
+  "description": "GraphQL Client automated tasks processor",
+  "main": "lib/index",
+  "version": "0.1.6",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/restorecommerce/gql-bot.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "graphQL",
+    "client",
+    "automated",
+    "tasks",
+    "processor"
+  ],
+  "dependencies": {
+    "apollo-cache-inmemory": "^1.6.5",
+    "apollo-client": "^2.6.8",
+    "apollo-link-http": "^1.5.17",
+    "form-data": "^3.0.0",
+    "graphql": "^14.6.0",
+    "graphql-tag": "^2.10.3",
+    "js-yaml": "^3.13.1",
+    "lodash": "^4.17.15",
+    "memorystream": "^0.3.1",
+    "node-fetch": "^2.6.0",
+    "promise-streams": "^2.1.1",
+    "query-string": "^6.12.1",
+    "readdirp": "^3.4.0",
+    "through2": "^3.0.1",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.11.1",
+    "@types/should": "^13.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.28.0",
+    "@typescript-eslint/parser": "^2.28.0",
+    "coveralls": "^3.0.11",
+    "eslint": "^6.7.0",
+    "mocha": "^7.1.1",
+    "nock": "^12.0.3",
+    "npm-run-all": "^4.1.5",
+    "nyc": "^15.0.1",
+    "should": "^13.2.3",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "tsctests": "tsc test/*.ts --module commonjs -target ES6",
+    "pretest": "npm run tsctests && npm run lint",
+    "test": "nyc mocha",
+    "lint": "eslint './src/**/*.ts'",
+    "build:tsc": "tsc -d",
+    "build:clean": "rimraf lib",
+    "build": "npm-run-all lint build:clean build:tsc",
+    "postinstall": "tsc -d",
+    "mocha": "mocha --timeout 5000 ./test/*.js --trace-warnings",
+    "mocha-debug": "mocha -R spec test/*.js --full-trace --inspect-brk",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "engines": {
+    "node": ">= 12.0.0"
+  }
+}

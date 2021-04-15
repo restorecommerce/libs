@@ -1,0 +1,16 @@
+*~
+*.bk
+*.d.ts
+*.js
+*.log
+
+lib
+node_modules
+npm-debug.log
+
+# Editors
+.idea
+*.iml
+.vscode
+
+!.eslintrc.js

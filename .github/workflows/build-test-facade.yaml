@@ -23,10 +23,10 @@ jobs:
           node-version: '14.15'
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
 
   test:
     runs-on: ubuntu-20.04
@@ -47,10 +47,10 @@ jobs:
           shutdown: facade-srv
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
 
       - name: Build
-        run: npm run build
+        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
 
       - name: Test
         run: npm run test

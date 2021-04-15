@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package io.restorecommerce.access_control;
+
+/**
+* Access control service interface.
+*/
+
+service Service {
+  rpc IsAllowed (Request) returns (Response);
+  rpc WhatIsAllowed(Request) returns (ReverseQuery);
+}
+
+message Request {
+  Target target = 1;
+  // generic data structure which can be provided
+  // to a contextQuery (see io/restorecommerce/rule.proto)
+  Context context = 2;
+}
+
+message Context {
+  Any subject = 1;
+  repeated Any resources = 2;
+  Any security = 3;
+}
+
+message Any {
+  string type_url = 1;
+  bytes value = 2;
+}
+
+message Response {
+  enum Decision {
+    PERMIT = 0;
+    DENY = 1;
+    NOT_APPLICABLE = 2;
+    INDETERMINATE = 3;
+  }
+  Decision decision = 1;
+  string obligation = 2;
+}
+
+/**
+* Target specified by a Rule or a Request.
+*/
+message Target {
+  repeated Attribute subject = 1;
+  repeated Attribute resources = 2;
+  repeated Attribute action = 3;
+}
+
+/**
+* Key-value pair.
+*/
+message Attribute {
+  string id = 1;
+  string value = 2;
+}
+
+/**
+* Resulting effect from a Policy or Rule.
+*/
+enum Effect {
+  PERMIT = 0;
+  DENY = 1;
+}
+
+message ReverseQuery {
+ repeated PolicySetRQ policy_sets = 1;
+}
+
+message PolicySetRQ {
+  string id = 1;
+  Target target = 2;
+  string combining_algorithm = 3;
+  repeated PolicyRQ policies = 4;
+  Effect effect = 5;
+}
+
+message PolicyRQ {
+  string id = 1;
+  Target target = 2;
+  string combining_algorithm = 3;
+  repeated RuleRQ rules = 4;
+  Effect effect = 5;
+  bool has_rules = 6;
+}
+
+message RuleRQ { // used for `whatIsAllowed` / reverse queries
+  string id = 1;
+  Target target = 2;
+  Effect effect = 3;
+  string condition = 4;
+  ContextQuery context_query = 5; 
+}
+
+message ContextQuery {
+  message Filter {
+    string field = 1;
+    string operation = 2;
+    string value = 3;
+  }
+  repeated Filter filters = 1;
+  string query = 2;
+}

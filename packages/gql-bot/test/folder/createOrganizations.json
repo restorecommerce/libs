@@ -1,0 +1,18 @@
+{
+  "resource_list": [
+    {
+      "id" : "1"
+    },
+    {
+      "id" : "2"
+    },
+    {
+      "id" : "3"
+    },
+    {
+      "id" : "4"
+    }
+
+  ],
+  "mutation": "mutation{createOrganizations(input: {listOfOrganizations: ${resource_list}, apiKey: ${apiKey} }) { regStatus, error{code,message}} }"
+}

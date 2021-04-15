@@ -1,0 +1,7 @@
+{
+  "yaml_file_paths":[
+    "./test/folder/createUsers.yml"
+  ],
+  "mutation": "mutation createRules($var: createRulesInput!){ createRules(input : $var){ regStatus, error{code, message} } }",
+  "queryVariables": "listOfRules"
+}

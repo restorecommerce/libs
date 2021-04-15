@@ -1,0 +1,64 @@
+{
+  "name": "@restorecommerce/oidc-id-srv-integration",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/restorecommerce/oidc-id-srv-integration.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/restorecommerce/oidc-id-srv-integration/issues"
+  },
+  "homepage": "https://github.com/restorecommerce/oidc-id-srv-integration#readme",
+  "dependencies": {
+    "@restorecommerce/grpc-client": "^0.0.8",
+    "@restorecommerce/logger": "^0.4.3",
+    "@restorecommerce/service-config": "^0.3.4",
+    "ioredis": "^4.19.4",
+    "lodash": "^4.17.19",
+    "oidc-provider": "6.13.0",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "@types/ioredis": "4.0.15",
+    "@types/koa": "^2.0.51",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-ejs": "^4.2.0",
+    "@types/koa-mount": "^4.0.0",
+    "@types/koa-router": "^7.0.42",
+    "@types/lodash": "^4.14.138",
+    "@types/nanoid": "^2.0.0",
+    "@types/nconf": "^0.10.0",
+    "eslint": "^6.7.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.0",
+    "tslint": "^5.19.0",
+    "typescript": "^3.6.4"
+  },
+  "peerDependencies": {
+    "ioredis": "^4.*",
+    "koa": "^2.*",
+    "koa-ejs": "^4.*",
+    "koa-mount": "^4.*",
+    "koa-router": "^7.*",
+    "koa-websocket": "^6.*",
+    "koa-bodyparser": "^4.*"
+  },
+  "scripts": {
+    "lint": "eslint src --ext .ts ",
+    "pretest": "npm run build",
+    "test": "npm run lint",
+    "build:tsc": "tsc --strict",
+    "build:clean": "rimraf lib",
+    "build": "npm-run-all lint build:clean build:tsc",
+    "postinstall": "tsc && cp -r ./src/views ./lib/views"
+  }
+}

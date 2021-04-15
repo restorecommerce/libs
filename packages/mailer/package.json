@@ -1,0 +1,43 @@
+{
+  "name": "@restorecommerce/mailer",
+  "version": "0.1.10",
+  "description": "Multi transport mailer based on nodemailer",
+  "main": "index",
+  "author": "Invend GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/mailer.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce"
+  ],
+  "dependencies": {
+    "nodemailer": "^6.5.0",
+    "nodemailer-html-to-text": "^3.1.0",
+    "nodemailer-mandrill-transport": "^1.2.0",
+    "nodemailer-stub-transport": "^1.1.0",
+    "nodemailer-wellknown": "^0.2.3",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@restorecommerce/eslint-config-restorecommerce": "^0.1.5",
+    "assert": "^2.0.0",
+    "co-mocha": "^1.2.2",
+    "coveralls": "^3.1.0",
+    "is-generator": "^1.0.3",
+    "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
+    "should": "^13.2.1"
+  },
+  "scripts": {
+    "test": "nyc mocha",
+    "lint": "eslint *.json *.js",
+    "mocha": "mocha ./test/*",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "engines": {
+    "node": ">= 10.0.0"
+  }
+}

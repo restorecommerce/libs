@@ -1,0 +1,12 @@
+node_modules/
+npm-debug.log
+
+.project
+.settings
+.directory
+
+*.js
+*.d.ts
+
+*.log
+*~

@@ -1,0 +1,9 @@
+users:
+  - id: 123456
+    name: "Test User 1"
+    email: "not@secure.com"
+    password: "notsecure"
+  - id: 789101
+    name: "Test User 2"
+    email: "not2@secure.com"
+    password: "notsecure"

@@ -1,0 +1,51 @@
+name: build-test-oidc-id-srv-integration
+
+on:
+  push:
+    paths:
+      - 'packages/oidc-id-srv-integration/**'
+      - '.github/workflows/build-test-oidc-id-srv-integration.yaml'
+  pull_request:
+    paths:
+      - 'packages/oidc-id-srv-integration/**'
+      - '.github/workflows/build-test-oidc-id-srv-integration.yaml'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+
+      - name: Build
+        run: npm run build -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+
+  test:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+
+      - name: Build
+        run: npm run build -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+
+      - name: Test
+        run: npm run test
+        working-directory: ./packages/oidc-id-srv-integration

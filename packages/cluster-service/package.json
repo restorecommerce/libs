@@ -1,0 +1,38 @@
+{
+  "name": "@restorecommerce/cluster-service",
+  "version": "0.1.4",
+  "description": "Launch clustered services using node clustering and monitor them",
+  "main": "index",
+  "author": "Invend GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/cluster-service.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "cluster",
+    "service"
+  ],
+  "dependencies": {
+    "forever-monitor": "^1.7.1",
+    "recluster": "^0.4.5"
+  },
+  "devDependencies": {
+    "@restorecommerce/eslint-config-restorecommerce": "^0.1.4",
+    "is-generator": "^1.0.3",
+    "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "should": "^13.2.3"
+  },
+  "scripts": {
+    "test": "nyc mocha --full-trace --exit",
+    "lint": "eslint *.json *.js",
+    "mocha": "mocha ./test/*",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+  },
+  "engines": {
+    "node": ">= 10.0.0"
+  }
+}

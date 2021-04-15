@@ -1,0 +1,7 @@
+{
+  "resource_list": [
+    { "name": "test1" },
+    { "name": "test2" }
+  ],
+  "mutation": "mutation{deleteUsers(input:{listOfUsers: ${resource_list}, apiKey: ${apiKey} }) {deleteStatus, error{code, message} }}"
+}

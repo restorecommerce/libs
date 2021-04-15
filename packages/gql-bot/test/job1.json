@@ -1,0 +1,19 @@
+{
+  "options": {
+    "base": "./test/",
+    "concurrency": 2
+  },
+  "tasks": [
+    {
+      "name": "job1",
+      "operation": "sync",
+      "src": "./test/folder/",
+      "filter": "createUsers.json",
+      "depth": 0,
+      "prefix": "graphql",
+      "metaData": {
+        "cacheControl": "private, max-age=0, no-cache, must-revalidate, proxy-revalidate"
+      }
+    }
+  ]
+}

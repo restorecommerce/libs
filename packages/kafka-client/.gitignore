@@ -1,0 +1,20 @@
+*.log
+*~
+# generated JS files & type descriptors
+*.js
+*.d.ts
+
+node_modules/
+npm-debug.log
+
+.directory
+.nyc_output
+.project
+.settings
+.vscode
+
+lib/
+coverage/
+
+!.eslintrc.js
+!setupTopics.js

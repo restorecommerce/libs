@@ -1,0 +1,55 @@
+name: build-test-gql-bot
+
+on:
+  push:
+    paths:
+      - 'packages/gql-bot/**'
+      - '.github/workflows/build-test-gql-bot.yaml'
+  pull_request:
+    paths:
+      - 'packages/gql-bot/**'
+      - '.github/workflows/build-test-gql-bot.yaml'
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/gql-bot" --include-filtered-dependencies
+
+      - name: Build
+        run: npm run build -- --scope="@restorecommerce/gql-bot" --include-filtered-dependencies
+
+  test:
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.15'
+
+      - name: Install Dependencies
+        run: npm ci && npm run install:ci -- --scope="@restorecommerce/gql-bot" --include-filtered-dependencies
+
+      - name: Build
+        run: npm run build -- --scope="@restorecommerce/gql-bot" --include-filtered-dependencies
+
+      - name: Test
+        run: npm run test
+        working-directory: ./packages/gql-bot
+
+      - name: Coverage
+        run: npm run coveralls
+        working-directory: ./packages/cluster-service

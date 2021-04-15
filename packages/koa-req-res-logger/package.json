@@ -1,0 +1,45 @@
+{
+  "name": "@restorecommerce/koa-req-res-logger",
+  "version": "0.1.8",
+  "description": "Koa 2 middleware which logs incoming requests and outgoing responses",
+  "main": "index",
+  "author": "Invend GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/koa-req-res-logger.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "koa",
+    "request",
+    "logger",
+    "middleware"
+  ],
+  "scripts": {
+    "test": "npm run lint && npm run mocha",
+    "lint": "eslint *.json *.js",
+    "mocha": "mocha ./test/* --exit",
+    "coveralls": "nyc --reporter text --reporter lcov npm test"
+  },
+  "dependencies": {
+    "debug": "^4.3.1",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@restorecommerce/eslint-config-restorecommerce": "^0.1.5",
+    "@types/mocha": "^8.2.1",
+    "coveralls": "^3.1.0",
+    "is-generator": "^1.0.3",
+    "isomorphic-fetch": "^3.0.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "mocha": "^8.3.0",
+    "nyc": "^15.1.0",
+    "should": "^13.2.3"
+  },
+  "engines": {
+    "node": ">= 8.0.0"
+  }
+}

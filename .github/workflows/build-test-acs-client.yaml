@@ -66,3 +66,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: packages/acs-client
+          path-to-lcov: ./packages/acs-client/coverage/lcov.info

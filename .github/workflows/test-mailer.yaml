@@ -37,3 +37,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: packages/mailer
+          path-to-lcov: ./packages/mailer/coverage/lcov.info

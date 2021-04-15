@@ -37,3 +37,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: packages/cluster-service
+          path-to-lcov: ./packages/cluster-service/coverage/lcov.info

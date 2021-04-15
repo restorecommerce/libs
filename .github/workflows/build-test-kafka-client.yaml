@@ -66,3 +66,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: packages/kafka-client
+          path-to-lcov: ./packages/kafka-client/coverage/lcov.info

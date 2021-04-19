@@ -1,18 +1,15 @@
-import { toArray } from "rxjs/operators";
 import { GrpcClient } from "../src/index";
 import { createMockServer } from './mock/index'
-// import { EchoClient } from "./clients/echo";
-// import { EchoRequest } from "./generated/echo";
+import { randomBytes } from 'crypto';
+import { Observable } from "rxjs";
 
-const ADDRESS = '127.0.0.1:50001';;
+const ADDRESS = '127.0.0.1:50001';
 const mockServer = createMockServer(ADDRESS)
-
-let port = 0;
 
 beforeAll(async () => {
   try {
-    port = await mockServer.start();
-  } catch(ex) {
+    await mockServer.start();
+  } catch (ex) {
     console.log(ex);
   }
 });
@@ -21,11 +18,20 @@ afterAll(() => {
   return mockServer.stop();
 });
 
-test('grpc server port', async () => {
-  expect(1).toBeGreaterThan(0);
-});
+const chunkSize = 1 << 10;
 
-test('grpc client', async () => {
+function bufferToObservable(buffer: Buffer): Observable<any> {
+  return new Observable<any>((subscriber) => {
+    for (let i = 0; i < Math.ceil(buffer.length / chunkSize); i++) {
+      subscriber.next({
+        message: buffer.slice(i * chunkSize, (i + 1) * chunkSize)
+      })
+    }
+    subscriber.complete();
+  });
+}
+
+describe('grpc client', () => {
   const grpcClient = new GrpcClient({
     address: ADDRESS,
     proto: {
@@ -40,48 +46,55 @@ test('grpc client', async () => {
     }
   });
 
-  const result = await grpcClient.echo.echoUnary({
-    message: 'foo'
+  it('should send and receive a unary request', async () => {
+    const data = randomBytes(1 << 16).toString('hex');
+
+    const result = await grpcClient.echo.echoUnary({
+      message: data
+    });
+
+    expect(result).toHaveProperty('message');
+    expect(result.message).toEqual(data);
   });
-  expect(result).toEqual({
-    message: 'foo'
+
+  it('should send and receive a server-stream request', async (done) => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+
+    const result = await grpcClient.echo.echoServerStream({
+      message: buffer
+    });
+
+    let response = '';
+    result.subscribe(data => {
+      expect(data).toHaveProperty('message');
+      response += data.message;
+    }, undefined, () => {
+      expect(response).toEqual(buffer.toString('utf-8'));
+      done();
+    })
+  });
+
+  it('should send and receive a client-stream request', async () => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+
+    const result = await grpcClient.echo.echoClientStream(bufferToObservable(buffer));
+
+    expect(result).toHaveProperty('message');
+    expect(result.message).toEqual(buffer.toString('utf-8'));
+  });
+
+  it('should send and receive a bidi-stream request', async (done) => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+
+    const result = await grpcClient.echo.echoBidiStream(bufferToObservable(buffer));
+
+    let response = '';
+    result.subscribe(data => {
+      expect(data).toHaveProperty('message');
+      response += data.message;
+    }, undefined, () => {
+      expect(response).toEqual(buffer.toString('utf-8'));
+      done();
+    })
   });
 });
-
-// const echoClient = new EchoClient({
-//   address: ADDRESS,
-// });
-
-// describe('typed grpc client', () => {
-
-//   echoClient.echo.echoUnary(EchoRequest.fromPartial({
-//     message: 'foo'
-//   }));
-
-//   test('unary call', async () => {
-//     const result = await echoClient.echo.echoUnary({});
-//     expect(result).toEqual({
-//       message: 'bar',
-//     });
-//   });
-
-
-//   test('server stream', (done) => {
-
-//     echoClient.echo.echoServerStream({message: 'bar'}).pipe(toArray()).subscribe((result) => {
-//       expect(result).toEqual([
-//         {
-//           message: 'bar',
-//         },
-//         {
-//           message: 'bar',
-//         }
-//       ]);
-//     }, () => {
-//       throw 'err';
-//     } , () => done());
-//   }, 100);
-
-// });
-
-

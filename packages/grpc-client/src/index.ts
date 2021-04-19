@@ -142,7 +142,7 @@ export class GrpcClient {
         );
         const sub = data?.subscribe(_data => {
           clientStream.write(_data);
-        });
+        }, undefined, () => clientStream.end());
 
         clientStream.on('close', () => sub?.unsubscribe());
         clientStream.on('end', () => sub?.unsubscribe());
@@ -166,12 +166,13 @@ export class GrpcClient {
 
       const sub = data?.subscribe(_data => {
         bidiStream.write(_data);
-      });
+      }, undefined, () => bidiStream.end());
 
       bidiStream.on('data', value => subscriber.next(value))
       bidiStream.on('error', err => subscriber.error(err))
       bidiStream.on('end', () => subscriber.complete())
       return () => {
+        sub?.unsubscribe();
         bidiStream.cancel();
       }
     });

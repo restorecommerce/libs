@@ -27,7 +27,7 @@ const isEmptyObject = (obj: any): any => {
   return !Object.keys(obj).length;
 };
 
-const setDefaults = async (obj: { meta?: DocumentMetadata; [key: string]: any }, collectionName: string): Promise<any> => {
+const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, collectionName: string): Promise<any> => {
   const o = obj;
 
   if (_.isEmpty(o.meta)) {
@@ -119,6 +119,7 @@ export class ResourcesAPIBase {
   bufferField: string;
   requiredFields: any;
   resourceName: string;
+  logger: any;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
@@ -126,7 +127,7 @@ export class ResourcesAPIBase {
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
   constructor(private db: DatabaseProvider, private collectionName: string, fieldHandlerConf?: any,
-    private edgeCfg?: any, private graphName?: string) {
+    private edgeCfg?: any, private graphName?: string, logger?: any) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
 
     if (!fieldHandlerConf) {
@@ -255,33 +256,31 @@ export class ResourcesAPIBase {
         await this.db.addVertexCollection(collection);
         result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
         for (let document of documents) {
-          for (let eachEdgeCfg of this.edgeCfg) {
-            const fromIDkey = eachEdgeCfg.from;
-            const from_id = document[fromIDkey];
-            const toIDkey = eachEdgeCfg.to;
-            const to_id = document[toIDkey];
-            // edges are created outbound, if it is inbound - check for direction
-            const direction = eachEdgeCfg.direction;
-            let fromVerticeName = collection;
-            let toVerticeName = eachEdgeCfg.toVerticeName;
-            if (direction === 'inbound') {
-              fromVerticeName = eachEdgeCfg.fromVerticeName;
-              toVerticeName = collection;
-            }
-            if (fromVerticeName && toVerticeName) {
-              await this.db.addEdgeDefinition(eachEdgeCfg.edgeName, [fromVerticeName],
-                [toVerticeName]);
-            }
-            if (from_id && to_id) {
-              if (_.isArray(to_id)) {
-                for (let toID of to_id) {
-                  await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
-                }
-                continue;
+          if (this.edgeCfg && _.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
+            for (let eachEdgeCfg of this.edgeCfg) {
+              const fromIDkey = eachEdgeCfg.from;
+              const from_id = document[fromIDkey];
+              const toIDkey = eachEdgeCfg.to;
+              const to_id = document[toIDkey];
+              // edges are created outbound, if it is inbound - check for direction
+              const direction = eachEdgeCfg.direction;
+              let fromVerticeName = collection;
+              let toVerticeName = eachEdgeCfg.toVerticeName;
+              if (direction === 'inbound') {
+                fromVerticeName = eachEdgeCfg.fromVerticeName;
+                toVerticeName = collection;
               }
-              await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
+              if (from_id && to_id) {
+                if (_.isArray(to_id)) {
+                  for (let toID of to_id) {
+                    await this.db.createEdge(eachEdgeCfg.edgeName, null,
+                      `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
+                  }
+                  continue;
+                }
+                await this.db.createEdge(eachEdgeCfg.edgeName, null,
+                  `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
+              }
             }
           }
         }
@@ -289,13 +288,10 @@ export class ResourcesAPIBase {
         return result;
       }
       else {
-        await this.db.insert(collection, this.bufferField ? toInsert : documents);
+        result = await this.db.insert(collection, this.bufferField ? toInsert : documents);
       }
     } catch (e) {
-      if (e.code === 409 || (e.message &&
-        e.message.includes('unique constraint violated'))) {
-        throw new errors.AlreadyExists('Item Already exists.');
-      }
+      this.logger.error('Error creating documents', { error: e.message });
       throw { code: e.code, message: e.message, details: e.details };
     }
   }
@@ -332,13 +328,10 @@ export class ResourcesAPIBase {
    * @param [array.string] ids List of document IDs.
    */
   async delete(ids: string[]): Promise<any> {
-    const filter = {
-      id: {
-        $in: ids
-      }
-    };
-
     try {
+      if (!_.isArray(ids)) {
+        ids = [ids];
+      }
       if (this.isGraphDB(this.db)) {
         // Modify the Ids to include documentHandle
         if (ids.length > 0) {
@@ -348,9 +341,10 @@ export class ResourcesAPIBase {
           return await this.db.removeVertex(this.collectionName, ids);
         }
       }
-      await this.db.delete(this.collectionName, filter);
+      await this.db.delete(this.collectionName, ids);
     }
     catch (err) {
+      this.logger.error('Error deleting documents', { error: err.message });
       if (err.code === 404 || (err.message &&
         err.message.includes('collection not found'))) {
         throw new errors.NotFound('Collection or one or more items with the given IDs not found.');
@@ -425,6 +419,7 @@ export class ResourcesAPIBase {
 
       return result;
     } catch (error) {
+      this.logger.error('Error upserting documents', { error: error.message });
       if (error.code === 404) {
         throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }
@@ -441,7 +436,8 @@ export class ResourcesAPIBase {
   async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
     try {
       const collectionName = this.collectionName;
-      let patches = [];
+      let updateResponse = [];
+      let docsWithUpMetadata = [];
       for (let i = 0; i < documents.length; i += 1) {
         let doc = documents[i];
         if (this.bufferField) {
@@ -511,16 +507,17 @@ export class ResourcesAPIBase {
           }
         }
 
-        patches.push(await this.db.update(collectionName,
-          { id: doc.id }, _.omitBy(doc, _.isNil)));
+        docsWithUpMetadata.push(doc);
       }
 
-      patches = _.flatten(patches);
+      updateResponse = await this.db.update(collectionName, docsWithUpMetadata);
+
       if (this.bufferField) {
-        patches = _.map(patches, patch => encodeMsgObj(patch, this.bufferField));
+        updateResponse = _.map(updateResponse, patch => encodeMsgObj(patch, this.bufferField));
       }
-      return patches;
+      return updateResponse;
     } catch (e) {
+      this.logger.error('Error updating documents', { error: e.message });
       if (e.code === 404) {
         throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
       }

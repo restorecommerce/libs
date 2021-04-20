@@ -33,6 +33,7 @@ export class ServiceBase {
       entity: entityEvents
     };
     this.resourceapi = resourceapi;
+    this.resourceapi.logger = logger;
     this.isEventsEnabled = isEventsEnabled;
   }
 

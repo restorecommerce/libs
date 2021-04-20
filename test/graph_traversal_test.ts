@@ -30,7 +30,8 @@ const providers = [
       const dbName: string = cfg.get('database:testdb:database');
       const db = new Database('http://' + dbHost + ':' + dbPort);
       await db.dropDatabase(dbName);
-      return database.get(cfg.get('database:testdb'), server.logger, 'testGraph');
+      return database.get(cfg.get('database:testdb'), server.logger, 'testGraph',
+        cfg.get('graph:edgeDefinitions'));
     }
   }
 ];
@@ -99,7 +100,7 @@ function testProvider(providerCfg) {
         const orgCollection = 'organizations';
 
         const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
-          orgCollection, null, orgCollection, graphName);
+          orgCollection, null, graphCfg.vertices[orgCollection], graphName);
         service_3 = new ServiceBase('organizations', null,
           server.logger, resourceAPI1, false);
         result_3 = await service_3.create({ request: { items: orgVertices } });

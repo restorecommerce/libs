@@ -449,8 +449,8 @@ describe('ServiceBase', () => {
           should.exist(result[0].data);
           should.exist(result[0].data.testkey);
           result[0].data.testkey.should.equal('testValue');
-          // delete the data
-          await db.delete('testBufferedDatas');
+          // delete the collection
+          await db.truncate('testBufferedDatas');
         });
     });
   });

@@ -32,7 +32,19 @@
           "toVerticeName": "organizations"
         }
       ]
-    }
+    },
+    "edgeDefinitions": [
+      {
+        "collection": "person_has_car",
+        "from": "persons",
+        "to": "cars"
+      },
+      {
+        "collection": "car_has_org",
+        "from": "cars",
+        "to": "organizations"
+      }
+    ]
   },
   "client": {
     "test": {

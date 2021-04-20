@@ -236,6 +236,7 @@ export class ResourcesAPIBase {
   async create(documents: BaseDocument[]): Promise<any> {
     const collection = this.collectionName;
     const toInsert = [];
+    let result = [];
     try {
       for (let i = 0; i < documents.length; i += 1) {
         documents[i] = await setDefaults(documents[i], collection);
@@ -293,7 +294,12 @@ export class ResourcesAPIBase {
       }
     } catch (e) {
       this.logger.error('Error creating documents', { error: e.message });
-      throw { code: e.code, message: e.message, details: e.details };
+      result.push({
+        error: true,
+        errorNum: e.code,
+        errorMessage: e.details ? e.details: e.message
+      });
+      return result;
     }
   }
 
@@ -329,6 +335,7 @@ export class ResourcesAPIBase {
    * @param [array.string] ids List of document IDs.
    */
   async delete(ids: string[]): Promise<any> {
+    let deleteResponse = [];
     try {
       if (!_.isArray(ids)) {
         ids = [ids];
@@ -342,14 +349,16 @@ export class ResourcesAPIBase {
           return await this.db.removeVertex(this.collectionName, ids);
         }
       }
-      await this.db.delete(this.collectionName, ids);
+      deleteResponse = await this.db.delete(this.collectionName, ids);
     }
     catch (err) {
       this.logger.error('Error deleting documents', { error: err.message });
-      if (err.code === 404 || (err.message &&
-        err.message.includes('collection not found'))) {
-        throw new errors.NotFound('Collection or one or more items with the given IDs not found.');
-      }
+      deleteResponse.push({
+        error: true,
+        errorNum: err.code,
+        errorMessage: err.details ? err.details: err.message
+      });
+      return deleteResponse;
     }
   }
 
@@ -384,6 +393,7 @@ export class ResourcesAPIBase {
    */
   async upsert(documents: BaseDocument[],
     events: Topic, resourceName: string): Promise<BaseDocument[]> {
+    let result = [];
     try {
       const dispatch = []; // CRUD events to be dispatched
       for (let i = 0; i < documents.length; i += 1) {
@@ -411,7 +421,7 @@ export class ResourcesAPIBase {
         dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
       }
 
-      const result = await this.db.upsert(this.collectionName, documents);
+      result = await this.db.upsert(this.collectionName, documents);
       await dispatch;
 
       if (this.bufferField) {
@@ -421,10 +431,12 @@ export class ResourcesAPIBase {
       return result;
     } catch (error) {
       this.logger.error('Error upserting documents', { error: error.message });
-      if (error.code === 404) {
-        throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
-      }
-      throw { code: error.code, message: error.message, details: error.details };
+      result.push({
+        error: true,
+        errorNum: error.code,
+        errorMessage: error.details ? error.details: error.message
+      });
+      return result;
     }
   }
 
@@ -435,9 +447,9 @@ export class ResourcesAPIBase {
    * A list of documents or partial documents. Each document must contain an id field.
    */
   async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
+    let updateResponse = [];
     try {
       const collectionName = this.collectionName;
-      let updateResponse = [];
       let docsWithUpMetadata = [];
       for (let i = 0; i < documents.length; i += 1) {
         let doc = documents[i];
@@ -521,10 +533,12 @@ export class ResourcesAPIBase {
       return updateResponse;
     } catch (e) {
       this.logger.error('Error updating documents', { error: e.message });
-      if (e.code === 404) {
-        throw new errors.NotFound('Can\'t find one or more items with the given IDs.');
-      }
-      throw { code: e.code, message: e.message, details: e.details };
+      updateResponse.push({
+        error: true,
+        errorNum: e.code,
+        errorMessage: e.message
+      });
+      return updateResponse;
     }
   }
 }

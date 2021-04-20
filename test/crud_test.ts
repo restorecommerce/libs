@@ -394,7 +394,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('upsert', () => {
-      it('should create or updae specified documents', async function
+      it('should create or update specified documents', async function
         checkUpsert() {
         const now = Date.now();
         const replace = [{
@@ -421,6 +421,9 @@ describe('ServiceBase', () => {
           return e.value === 0;
         });
 
+        result.data.status.should.matchEach((status) => {
+          return status.code = 200 && status.message === 'success';
+        });
         const allTestData = await testService.read();
         should.exist(allTestData);
         should.not.exist(allTestData.error);
@@ -438,7 +441,7 @@ describe('ServiceBase', () => {
     });
     // Test to check required field
     describe('check required fileds', () => {
-      it('should throw an error when trying to add ', async function checkGet() {
+      it('should return an error when trying to insert with missing requried fields', async function checkGet() {
         let result = await testService.delete({ collection: true });
         should.exist(result);
         should.not.exist(result.error);
@@ -449,10 +452,9 @@ describe('ServiceBase', () => {
           { id: '/test/zy', value: 12, meta }];
         result = await testService.create({ items: objectMissingField });
         should.exist(result);
-        should.exist(result);
-        should.exist(result.error);
-        should.exist(result.error.details);
-        result.error.details.should.containEql('invalid argument');
+        should.exist(result.data);
+        result.data.items.should.length(0);
+        result.data.status[0].message.should.equal('Field text is necessary\n            for resource');
       });
     });
     // Test to check buffered fields

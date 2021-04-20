@@ -285,10 +285,14 @@ export class ServiceBase {
    */
   async upsert(call: ServiceCall<UpsertRequest>, context?: any): Promise<any> {
     try {
-      const result = await this.resourceapi.upsert(call.request.items,
+      let upsertDocs = _.cloneDeep(call.request.items);
+      let upsertResponse = await this.resourceapi.upsert(upsertDocs,
         this.events.entity, this.name);
-      this.logger.info(`${this.name} upserted`, { items: result });
-      return { items: result, total_count: result.length };
+      this.logger.info(`${this.name} upserted`, { items: upsertResponse });
+      let statusArray = this.generateStatusResponse(upsertResponse, upsertDocs);
+      // remove error items from updateResponse
+      upsertResponse = upsertResponse.filter(item => !item.error);
+      return { items: upsertResponse, total_count: upsertResponse.length, status: statusArray };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing upsert request', { code, message });

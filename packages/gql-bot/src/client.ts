@@ -1,11 +1,9 @@
 import * as _ from 'lodash';
 import * as url from 'url';
 import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 import gql from 'graphql-tag';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import * as FormData from 'form-data';
 import fetch from 'node-fetch'; // required for apollo-link-http
 import { createHttpLink } from 'apollo-link-http';
 
@@ -104,60 +102,18 @@ export class Client {
 
   async post(source: any, job?: any, accessControl?: any,
     formOptions?: any): Promise<any> {
-    let parsed;
-    try {
-      parsed = JSON.parse(source);
-    } catch (e) {
-      parsed = yaml.load(source);
-    }
-    const normalUrl = this._normalizeUrl();
 
-    let caseExpression;
-    if (parsed.resource_list) {
-      caseExpression = 'json';
-    } else if (parsed.yaml_file_paths) {
-      caseExpression = 'yaml';
-    } else if (parsed.upload_file_paths) {
-      caseExpression = 'blob';
-    }
+    const normalUrl = this._normalizeUrl();
 
     let mutation;
     if (job && job.mutation) {
       mutation = JSON.stringify(job.mutation);
-    } else if (parsed && parsed.mutation) {
-      mutation = JSON.stringify(parsed.mutation);
     } else {
       throw new Error('mutation not present in job config');
     }
 
     const apiKey = JSON.stringify(this.opts.apiKey);
-    let resource_list: any = [];
-    let fileStreams;
-    switch (caseExpression) {
-      case 'json':
-        resource_list = JSON.stringify(parsed.resource_list);
-        break;
-
-      case 'yaml':
-        _.forEach(parsed.yaml_file_paths, (ymlFilePath) => {
-          const doc = yaml.safeLoad(fs.readFileSync(ymlFilePath,
-            'utf8'));
-          const rootKey = Object.keys(doc)[0];
-          resource_list = doc[rootKey];
-          resource_list = JSON.stringify(resource_list);
-        });
-        break;
-
-      case 'blob':
-        fileStreams = [];
-        _.forEach(parsed.upload_file_paths, (uploadFilePath) => {
-          fileStreams.push(fs.createReadStream(uploadFilePath));
-        });
-        break;
-
-      default:
-        console.log('File format not recognizable');
-    }
+    let resource_list = JSON.stringify(source);
 
     if (mutation) {
       // don't replace quoted strings inside outer quotes
@@ -170,16 +126,14 @@ export class Client {
     }
 
     let variables;
-    if (!fileStreams) {
-      if (_checkVariableMutation(mutation)) {
-        const queryVarKey = job.queryVariables || parsed.queryVariables;
-        const inputVarName = mutation.slice(mutation.indexOf('$') + 1, mutation.indexOf(':'));
-        variables = _createQueryVariables(inputVarName, queryVarKey, resource_list);
-      } else {
-        // To remove double quotes from the keys in JSON data
-        resource_list = resource_list.replace(/\"([^(\")"]+)\":/g, '$1:');
-        mutation = _replaceInlineVars(mutation, { resource_list, apiKey });
-      }
+    if (_checkVariableMutation(mutation)) {
+      const queryVarKey = job.queryVariables;
+      const inputVarName = mutation.slice(mutation.indexOf('$') + 1, mutation.indexOf(':'));
+      variables = _createQueryVariables(inputVarName, queryVarKey, resource_list);
+    } else {
+      // To remove double quotes from the keys in JSON data
+      resource_list = resource_list.replace(/\"([^(\")"]+)\":/g, '$1:');
+      mutation = _replaceInlineVars(mutation, { resource_list, apiKey });
     }
 
     const apolloLinkOpts = {
@@ -191,46 +145,18 @@ export class Client {
       apolloLinkOpts['headers'] = this.opts.headers;
     }
 
-    if (fileStreams) {
-      // It is currently assumed that the provided mutation only allows for uploading a single file,
-      // and hence that uploads need to be run one by one.
-      const uploads = [];
-      for (let stream of fileStreams) {
-        const form = new FormData();
-        form.append(
-          'operations',
-          JSON.stringify({
-            query: `${mutation}`,
-            variables: { file: null }
-          })
-        );
-        form.append('map', JSON.stringify({ 1: ['variables.file'] }));
-        form.append('1', stream);
+    let apolloLink = createHttpLink(apolloLinkOpts);
 
-        let headers = _.assign({}, this.opts.headers);
-        // need to assign the form headers too here to send the request properly
-        uploads.push(
-          fetch(normalUrl, { method: 'POST', headers: _.assign(headers, form.getHeaders()), body: form })
-        );
-      }
-      return Promise.all(uploads);
+    const apolloCache = new InMemoryCache();
+    const apolloClient = new ApolloClient({
+      cache: apolloCache,
+      link: apolloLink
+    });
 
-    } else {
-      let apolloLink = createHttpLink(apolloLinkOpts);
+    return apolloClient.mutate({
+      mutation: gql`${mutation}`,
+      variables
+    });
 
-      // now what exactly is/was "...others"?
-      // const gqlClient = new GraphQLClient(normalUrl, _.pick(this.opts, ['headers', '...others']));
-
-      const apolloCache = new InMemoryCache();
-      const apolloClient = new ApolloClient({
-        cache: apolloCache,
-        link: apolloLink
-      });
-
-      return apolloClient.mutate({
-        mutation: gql`${mutation}`,
-        variables
-      });
-    }
   }
 }

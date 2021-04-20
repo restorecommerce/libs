@@ -1,8 +1,7 @@
 import * as _ from 'lodash';
 import * as fs from 'fs';
-
-import * as MemoryStream from 'memorystream';
 import { Client } from './index';
+const {YamlStreamReadTransformer} = require('yaml-document-stream');
 
 /**
  * GraphQL-specific job processor.
@@ -23,19 +22,56 @@ export class GraphQLProcessor {
   }
 
   async process(job: any): Promise<any> {
-    const memoryStream = new MemoryStream(null, { readable: false });
+    let yamlStream = new YamlStreamReadTransformer();
     switch (job.operation) {
       case 'sync': {  //  synchronous operation
         const fileStream = fs.createReadStream(job.fullPath);
-        fileStream.pipe(memoryStream);
+        fileStream.pipe(yamlStream);
+        let batchsize;
+        if (job.batchSize) {
+          batchsize = job.batchSize;
+        }
 
-        const payload = await new Promise((resolve, reject) => {
-          fileStream.on('end', async () => {
-            const buf = memoryStream.toBuffer().toString();
-            resolve(buf);
+        let promiseArray: any;
+        let counter = 0;
+        let batchCounter = 0;
+        let docArr: any[] = [];
+
+        console.log('Batch size=', batchsize);
+        const myPromise = await new Promise<void>((resolve, reject) => {
+          yamlStream.on('data', (doc) => {
+            if (batchsize && batchsize != undefined) {
+              docArr.push(doc);
+              counter++;
+
+              if (counter === batchsize) {
+                yamlStream.cork();
+
+                counter = 0;
+                batchCounter++;
+                console.log('Processing batch number:', batchCounter);
+
+                this.client.post(docArr, job);
+                docArr = [];
+
+                yamlStream.uncork();
+              }
+            } else {
+              docArr.push(doc);
+            }
+          });
+
+          yamlStream.on('end', async () => {
+            let result;
+            if (docArr && !_.isEmpty(docArr)) {
+              result = await this.client.post(docArr, job);
+              docArr = [];
+            }
+            resolve(result);
           });
         });
-        return this.client.post(payload, job);
+
+        return myPromise;
       }
       default: {
         throw new Error('Unsupported job operation');

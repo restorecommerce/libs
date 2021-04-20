@@ -265,7 +265,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('create', () => {
-      it('should create new documents', async function checkCreate() {
+      it('should create new documents and validate duplicate element error', async function checkCreate() {
         const meta = {
           modified_by: 'Admin',
           owner: [{
@@ -289,7 +289,13 @@ describe('ServiceBase', () => {
           text: 'new second data',
           meta
         };
-        const newTestData = [newTestDataFirst, newTestDataSecond];
+        const testDuplicate = {
+          id: '/test/newdata2',
+          value: -10,
+          text: 'new second data',
+          meta
+        };
+        const newTestData = [newTestDataFirst, newTestDataSecond, testDuplicate];
         const result = await testService.create({ items: newTestData });
         should.exist(result);
         should.not.exist(result.error);
@@ -300,6 +306,10 @@ describe('ServiceBase', () => {
           return e.value === -10 && e.text.length > 0;
         });
 
+        // validate error for testDuplicate element
+        should.exist(result.data.status);
+        result.data.status.should.be.length(3);
+        result.data.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: _test_newdata2`);
         const allTestData = await testService.read();
         should.exist(allTestData);
         should.not.exist(allTestData.error);
@@ -340,7 +350,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('update', () => {
-      it('should update all specified documents', async function
+      it('should update all specified documents and validate status message', async function
         checkUpdate() {
         const patch = _.map(testData, (data) => {
           data.value = 100;
@@ -356,6 +366,10 @@ describe('ServiceBase', () => {
           return e.value === 100 && e.text.length === 10;
         });
 
+        result.data.status.should.matchEach((status) => {
+          return status.code = 200 && status.message === 'success';
+        });
+
         const allTestData = await testService.read();
         should.exist(allTestData);
         should.not.exist(allTestData.error);
@@ -363,6 +377,20 @@ describe('ServiceBase', () => {
         result.data.items.should.matchEach((e) => {
           return e.value === 100 && e.text.length === 10;
         });
+      });
+      it('should return an error when trying to update invalid document', async function
+        checkUpdate() {
+        const patch = {
+          id: 'invalidDocument',
+          value: 2,
+          text: 'new value'
+        };
+        const result = await testService.update({ items: patch });
+        result.data.items.should.length(0);
+        result.data.status.should.length(1);
+        result.data.status[0].id.should.equal('invalidDocument');
+        result.data.status[0].code.should.equal(404);
+        result.data.status[0].message.should.equal('document not found');
       });
     });
     describe('upsert', () => {

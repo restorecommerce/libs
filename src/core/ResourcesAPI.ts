@@ -289,6 +289,7 @@ export class ResourcesAPIBase {
       }
       else {
         result = await this.db.insert(collection, this.bufferField ? toInsert : documents);
+        return result;
       }
     } catch (e) {
       this.logger.error('Error creating documents', { error: e.message });
@@ -450,11 +451,13 @@ export class ResourcesAPIBase {
               meta: 1
             }
           });
-        if (_.isEmpty(foundDocs)) {
-          throw { code: 404 };
+        let dbDoc;
+        if (foundDocs && foundDocs.length === 1) {
+          dbDoc = foundDocs[0];
+          doc = updateMetadata(dbDoc.meta, doc);
+        } else {
+          dbDoc = doc; // doc not existing assigning to generate error message in response
         }
-        const dbDoc = foundDocs[0];
-        doc = updateMetadata(dbDoc.meta, doc);
 
         if (this.isGraphDB(this.db)) {
           const db = this.db;

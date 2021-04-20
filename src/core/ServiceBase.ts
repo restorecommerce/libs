@@ -8,6 +8,19 @@ import { Logger } from 'winston';
 
 const errors = chassis.errors;
 
+// Mapping of arangodb error codes to standard HTTP error codes
+const arangoHttpErrCodeMap = new Map([
+  [1210, 409], // ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED
+  [1200, 409], // ERROR_ARANGO_CONFLICT
+  [1201, 400], // ERROR_ARANGO_DATADIR_INVALID
+  [1202, 404], // ERROR_ARANGO_DOCUMENT_NOT_FOUND
+  [1203, 404], // ERROR_ARANGO_DATA_SOURCE_NOT_FOUND
+  [1204, 400], // ERROR_ARANGO_COLLECTION_PARAMETER_MISSING
+  [1205, 400], // ERROR_ARANGO_DOCUMENT_HANDLE_BAD
+  [1207, 409], // ERROR_ARANGO_DUPLICATE_NAME
+  [1228, 404], // ERROR_ARANGO_DATABASE_NOT_FOUND
+]);
+
 /**
  * A microservice chassis ready class which provides endpoints for
  * CRUD resource operations.
@@ -120,6 +133,38 @@ export class ServiceBase {
     }
   }
 
+  private generateStatusResponse(responseItems: any[], inputItems: any[]) {
+    let statusArray = [];
+    if (!_.isArray(responseItems)) {
+      responseItems = [responseItems];
+    }
+    for (let i = 0; i < responseItems.length; i++) {
+      const item = responseItems[i];
+      if (item.error) {
+        let code;
+        let id = inputItems[i].id;
+        // map arango error code to http error code
+        arangoHttpErrCodeMap.forEach((value, key) => {
+          if (key === item.errorNum) {
+            code = value;
+          }
+        });
+        statusArray.push({
+          id,
+          code: code ? code : item.errorNum,
+          message: item.errorMessage
+        });
+      } else {
+        statusArray.push({
+          id: item.id,
+          code: 200,
+          message: 'success'
+        });
+      }
+    }
+    return statusArray;
+  }
+
   /**
    * Endpoint create.
    * Inserts resources.
@@ -128,18 +173,23 @@ export class ServiceBase {
    */
   async create(call: ServiceCall<CreateRequest>, context?: any): Promise<any> {
     try {
-      await this.resourceapi.create(call.request.items);
+      const createDocs = _.cloneDeep(call.request.items);
+      let createResponse = await this.resourceapi.create(createDocs);
       const dispatch = [];
       const events: Topic = this.events.entity;
       this.logger.info(this.name + ' created', { items: call.request.items });
       if (this.isEventsEnabled) {
-        _.forEach(call.request.items, (item) => {
-          dispatch.push(events.emit(`${this.name}Created`, item));
+        _.forEach(createResponse, (item) => {
+          if (!item.error) {
+            dispatch.push(events.emit(`${this.name}Created`, item));
+          }
         });
         await dispatch;
       }
-
-      return { items: call.request.items, total_count: call.request.items.length, };
+      let statusArray = this.generateStatusResponse(createResponse, createDocs);
+      // remove error items from createResponse
+      createResponse = createResponse.filter(item => !item.error);
+      return { items: createResponse, total_count: createResponse.length, status: statusArray };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing create request', { code, message });
@@ -199,17 +249,23 @@ export class ServiceBase {
    */
   async update(call: ServiceCall<UpdateRequest>, context?: any): Promise<any> {
     try {
-      const updateResult = await this.resourceapi.update(call.request.items);
-      this.logger.info(this.name + ' updated', { items: updateResult });
+      let updateDocs = _.cloneDeep(call.request.items);
+      let updateResponse = await this.resourceapi.update(updateDocs);
+      this.logger.info(this.name + ' updated', { items: updateResponse });
       if (this.isEventsEnabled) {
         const dispatch = [];
         const events = this.events.entity;
-        _.forEach(updateResult, (update) => {
-          dispatch.push(events.emit(`${this.name}Modified`, update));
+        _.forEach(updateResponse, (update) => {
+          if (!update.error) {
+            dispatch.push(events.emit(`${this.name}Modified`, update));
+          }
         });
         await dispatch;
       }
-      return { items: updateResult, total_count: updateResult.length };
+      let statusArray = this.generateStatusResponse(updateResponse, updateDocs);
+      // remove error items from updateResponse
+      updateResponse = updateResponse.filter(item => !item.error);
+      return { items: updateResponse, total_count: updateResponse.length, status: statusArray };
     } catch (e) {
       const { code, message, details } = e;
       this.logger.error('Error caught while processing update request', { code, message });

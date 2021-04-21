@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html style="height: 100%" >
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{subject}}</title>
+    <style>
+      body: {
+        background-color: #f6f6f6;
+      }
+      @media only screen and (max-width: 1024px) {
+        .vclEmailBody {
+          width: 80% !important;
+        }
+      }
+      @media only screen and (max-width: 640px) {
+        body {
+          padding: 0 !important;
+        }
+
+        .vclEmailViewport {
+          background-color: #FFFFFF;
+          padding-top: 0;
+        }
+
+        .vclEmailBody {
+          background-color: #FFFFFF;
+          width: 97% !important;
+          margin: 0 auto !important;
+          padding: 0 !important;
+          border: none !important;
+        }
+      }
+
+      @media print {
+        .vclEmailBody {
+          width: 97% !important;
+          margin: 0 auto !important;
+          padding: 0 !important;
+          border: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="height: 100%" itemscope itemtype="http://schema.org/EmailMessage">
+    <div style="min-height: 100%;" class="vclEmailViewport">
+      <div class="vclEmailBody">
+        {{email}}
+      </div>
+      <div class="vclEmailFooter vclHidden-print">
+        {{{t 'emails.common.footerEmail'}}}
+        <a href="mailto:{{footerEmail}}">{{footerEmail}}</a>
+      </div>
+    </div>
+  </body>
+</html>

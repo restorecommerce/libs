@@ -10,6 +10,7 @@ Library monorepo for Restorecommerce.
 - [@restorecommerce/facade](packages/facade)
 - [@restorecommerce/gql-bot](packages/gql-bot)
 - [@restorecommerce/grpc-client](packages/grpc-client)
+- [@restorecommerce/handlebars-helperized](packages/handlebars-helperized)
 - [@restorecommerce/kafka-client](packages/kafka-client)
 - [@restorecommerce/koa-req-res-logger](packages/koa-req-res-logger)
 - [@restorecommerce/logger](packages/logger)

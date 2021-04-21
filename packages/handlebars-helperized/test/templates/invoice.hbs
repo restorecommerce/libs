@@ -1,0 +1,154 @@
+<h3>
+  {{t 'emails.invoice.title'}}
+</h3>
+
+<table id="invoicemeta" class="vclNoBorder vclFloatRight" style="min-width: 18em;">
+  <tr>
+    <td><b>{{t 'emails.invoice.invoiceNumber'}}</b></td>
+    <td class="vclAlignRight">{{invoice.number}}</td>
+  </tr>
+  <tr>
+    <td>{{t 'emails.orderConfirmation.orderNumber'}}</td>
+    <td class="vclAlignRight">{{invoice.orderNumber}}</td>
+  </tr>
+  <tr>
+    <td>{{t 'emails.orderConfirmation.orderDate'}}</td>
+    <td class="vclAlignRight">{{df orderDate}}</td>
+  </tr>
+</table>
+
+<div class="vclClear"></div>
+<br>
+<br>
+
+<table id="address" class="vclTable">
+  <tbody>
+    {{#if billingAddress}}
+      <tr>
+        <td class="vclSpan-10p">{{t 'emails.orderConfirmation.billingAddress'}}</td>
+        <td>
+          {{#if billingAddress.legalName}}{{billingAddress.legalName}}<br>{{/if}}
+          {{billingAddress.givenName}} {{billingAddress.familyName}}
+        </td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>{{billingAddress.street}}</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>{{billingAddress.postcode}} {{billingAddress.locality}}</td>
+      </tr>
+      <tr>
+        <td> </td>
+        <td>{{billingCountry.name}}</td>
+      </tr>
+    {{else}}
+      <tr>
+        <td class="vclSpan-10p">{{t 'emails.invoice.target'}}</td>
+        <td>
+          {{person.givenName}} {{person.familyName}}
+        </td>
+      </tr>
+    {{/if}}
+  </tbody>
+</table>
+
+<br>
+
+<table id="items" class="vclTable vclSumTable">
+  <thead>
+    <tr>
+      <th>{{t 'emails.orderConfirmation.position'}}</th>
+      <th>{{t 'emails.orderConfirmation.name'}}</th>
+      <th>{{t 'emails.orderConfirmation.quantity'}}</th>
+      <th class="vclAlignRight">{{t 'emails.orderConfirmation.singlePrice'}}</th>
+      <th class="vclAlignRight">{{t 'emails.orderConfirmation.itemTotalPrice'}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each items}}
+      <tr>
+        <td>{{i}}</td>
+        <td>{{{name}}}
+        {{#if voucher}}
+          <br> {{voucher}}
+        {{/if}}</td>
+        <td>{{quantity}}</td>
+        <td class="vclAlignRight">{{nfc fullPrice cs=cs csPos=csPos}}</td>
+        <td class="vclAlignRight">
+            {{nfc total cs=cs csPos=csPos}}
+            {{#if freeTax}}
+              *
+            {{/if}}
+        </td>
+      </tr>
+    {{/each}}
+    {{#if hasShipping}}
+      <tr>
+        <td colspan="3">{{t 'emails.orderConfirmation.shipping'}}</td>
+        <td colspan="2" class="vclAlignRight">{{nfc shipping cs=cs csPos=csPos}}</td>
+      </tr>
+    {{/if}}
+    {{#if hasPaymentFee}}
+      <tr>
+        <td colspan="3">{{t 'components.cart.paymentFees'}}</td>
+        <td colspan="2" class="vclAlignRight">{{nfc paymentFee cs=cs csPos=csPos}}</td>
+      </tr>
+    {{/if}}
+    <tr class="vclNoBorder">
+      <td colspan="5">&nbsp;</td>
+    </tr>
+    {{#if taxList}}
+      {{#each taxList}}
+        <tr class="vclNoBorder">
+          <td colspan="3">{{taxName}}</td>
+          <td colspan="2" class="vclAlignRight">{{nfc taxAmount cs=cs csPos=csPos}}</td>
+        </tr>
+      {{/each}}
+    {{/if}}
+
+    {{#if voucherResources}}
+      {{#each voucherResources}}
+        <tr class="vclNoBorder">
+          <td colspan="3">{{t 'emails.orderConfirmation.voucher'}}: {{code}}</td>
+          <td colspan="2" class="vclAlignRight">({{nfc value cs=cs csPos=csPos}})</td>
+        </tr>
+      {{/each}}
+    {{/if}}
+
+    {{#if discount}}
+      <tr class="vclNoBorder">
+        <td colspan="3">{{t 'emails.orderConfirmation.discount'}}</td>
+        <td colspan="2" class="vclAlignRight">{{nfc discount cs=cs csPos=csPos}}</td>
+      </tr>
+    {{/if}}
+
+    <tr class="vclSumTableTotal">
+      <td colspan="3">{{t 'emails.orderConfirmation.total'}}</td>
+      <td colspan="2" class="vclAlignRight">{{nfc total cs=cs csPos=csPos}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<br>
+
+{{#if hasFree}}
+  <p> * {{t 'message.free_tax'}} </p>
+{{/if}}
+
+<p class="vclAlignCentered">
+  {{{t 'emails.common.footer' appName=app.name}}}
+  <br>
+  <br>
+  <img src="cid:logo"/>
+  <br>
+  <br>
+  {{t 'emails.common.footerText' name=organization.legalName street=organization.address.street
+    postcode=organization.address.postcode locality=organization.address.locality
+    country=organization.address.country vatID=organization.vatID}}
+</p>
+
+<p class="vclAlignCentered">
+  {{t 'emails.orderConfirmation.paymentMethod'}}: {{paymentMethodAdditionalType.name}}
+</p>

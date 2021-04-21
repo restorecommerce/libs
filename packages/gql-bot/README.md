@@ -17,7 +17,7 @@ Example use cases:
 
 Supported data format: `YAML`.
 
-The jobs are defined as JSON files whose syntax can be seen in a [test job](test/job2.json).
+The jobs are defined as JSON files whose syntax can be seen in a [test job](test/job1.json).
 
 ## Usage
 
@@ -26,9 +26,11 @@ The module mainly consists of two usable components.
 ### GraphQL Client
 
 A wrapper around [graphql-request](https://github.com/graphcool/graphql-request).
-It is used to connect to a GraphQL endpoint with custom headers and to parse
-resource files. Such resources are described in a YAML-based DSL, and they are
-parsed to build the payload used in the requests of mutations/queries.
+It is used to connect to a GraphQL endpoint with custom headers, further
+prepare the mutation parameters based on job specifications and parsed resources,
+and for making the mutations/queries requests.
+Such resources are described in a YAML file, and they are
+initially parsed by the Job Processor before handing them to the Client.
 
 ### Job Processor
 
@@ -36,11 +38,20 @@ The job processor implements a pipeline mechanism to process JSON-based job
 files, which can contain one or more tasks, which can be run concurrently or
 sequentially. The job can have different options such as the maximum number of
 concurrent tasks and each task contains useful information for the GraphQL Client,
-such as the file path filter (e.g: 'create*.yaml'),
-the desired operation, batching, or useful metadata.
-Currently, the only implemented operation is 'sync'.
+such as the file path filter (e.g: 'create*.yaml'), the desired operation,
+batching, or useful metadata. Currently, the only implemented operation is 'sync'.
 There is a GraphQL-based processor, which performs calls to the GraphQL client 
 and a generic processor, to which the GraphQL-specific processor is provided.
+
+### Batching
+After reading the resources from the `.yaml` file, splitting of documents is done
+in streaming fashion, using
+[yaml-document-stream](https://www.npmjs.com/package/yaml-document-stream),
+(which internally uses `js-yaml` for single document parsing), and then gathered
+into a single payload or optionally batched if the property `batchSize` is
+provided inside the job's task properties. This way, a larger amount of data can
+be imported as-well, by making subsequent GraphQL requests.
+
 
 Example:
 

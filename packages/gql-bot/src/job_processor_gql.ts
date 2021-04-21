@@ -30,6 +30,7 @@ export class GraphQLProcessor {
         let batchsize;
         if (job.batchSize) {
           batchsize = job.batchSize;
+          console.log('Batch size=', batchsize);
         }
 
         let promiseArray: any;
@@ -38,12 +39,11 @@ export class GraphQLProcessor {
         let docArr: any[] = [];
 
         console.log('Batch size=', batchsize);
-        const myPromise = await new Promise<void>((resolve, reject) => {
-          yamlStream.on('data', (doc) => {
+        return new Promise<void>((resolve, reject) => {
+          yamlStream.on('data', async (doc) => {
             if (batchsize && batchsize != undefined) {
               docArr.push(doc);
               counter++;
-
               if (counter === batchsize) {
                 yamlStream.cork();
 
@@ -51,7 +51,7 @@ export class GraphQLProcessor {
                 batchCounter++;
                 console.log('Processing batch number:', batchCounter);
 
-                this.client.post(docArr, job);
+                await this.client.post(docArr, job);
                 docArr = [];
 
                 yamlStream.uncork();
@@ -70,8 +70,6 @@ export class GraphQLProcessor {
             resolve(result);
           });
         });
-
-        return myPromise;
       }
       default: {
         throw new Error('Unsupported job operation');

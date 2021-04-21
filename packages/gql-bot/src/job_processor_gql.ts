@@ -39,7 +39,7 @@ export class GraphQLProcessor {
         let docArr: any[] = [];
 
         return new Promise<void>((resolve, reject) => {
-          yamlStream.on('data', async (doc) => {
+          yamlStream.on('data', (doc) => {
             if (batchsize && batchsize != undefined) {
               docArr.push(doc);
               counter++;
@@ -50,7 +50,7 @@ export class GraphQLProcessor {
                 batchCounter++;
                 console.log('Processing batch number:', batchCounter);
 
-                await this.client.post(docArr, job);
+                this.client.post(docArr, job);
                 docArr = [];
 
                 yamlStream.uncork();

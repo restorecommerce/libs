@@ -37,7 +37,7 @@
     "test": "nyc mocha",
     "lint": "eslint *.json *.js",
     "mocha": "mocha ./test/*",
-    "lcov-report": "nyc report --reporter=text-lcov"
+    "lcov-report": "nyc report --reporter=lcov"
   },
   "engines": {
     "node": ">= 8.0.0"

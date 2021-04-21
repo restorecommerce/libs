@@ -1,6 +1,0 @@
-{
-  "resource_list": [
-    { "resourceName": "organizations" }
-  ],
-  "mutation": "mutation{deleteResources(input:{listOfResources: ${resource_list}, apiKey: ${apiKey} }) {deleteStatus, error{code, message} }}"
-}

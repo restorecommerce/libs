@@ -30,7 +30,7 @@ export class GraphQLProcessor {
         let batchsize;
         if (job.batchSize) {
           batchsize = job.batchSize;
-          console.log('Batch size=', batchsize);
+          console.log('Batch size:', batchsize);
         }
 
         let promiseArray: any;
@@ -38,7 +38,6 @@ export class GraphQLProcessor {
         let batchCounter = 0;
         let docArr: any[] = [];
 
-        console.log('Batch size=', batchsize);
         return new Promise<void>((resolve, reject) => {
           yamlStream.on('data', async (doc) => {
             if (batchsize && batchsize != undefined) {

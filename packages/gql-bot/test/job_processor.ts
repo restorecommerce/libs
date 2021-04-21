@@ -63,12 +63,12 @@ describe('jobproc-grapqhl-proc:', (): void => {
         .reply(200, createUsersRespMessage).post('/graphql')
         .reply(200, createOrgsRespMessage);
 
-      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
-      job3.options.processor = new GraphQLProcessor({
+      const job2 = JSON.parse(fs.readFileSync('./test/job2.json', 'utf8'));
+      job2.options.processor = new GraphQLProcessor({
         entry: 'http://example.com/graphql'
       });
 
-      jobProcessor = new JobProcessor(job3);
+      jobProcessor = new JobProcessor(job2);
       let jobResult = new Job();
 
       jobResult.on('progress', (task) => {
@@ -94,14 +94,14 @@ describe('jobproc-grapqhl-proc:', (): void => {
         }
       };
 
-      const job4 = JSON.parse(fs.readFileSync('./test/job4.json', 'utf8'));
-      job4.options.processor = new GraphQLProcessor({
+      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
+      job3.options.processor = new GraphQLProcessor({
         entry: 'http://example.com/graphql'
       });
       nock('http://example.com').post('/graphql')
       .reply(200, createRulesRespMessage);
 
-      jobProcessor = new JobProcessor(job4);
+      jobProcessor = new JobProcessor(job3);
       let jobResult = new Job();
 
       jobResult.on('progress', (task) => {

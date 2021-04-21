@@ -15,11 +15,9 @@ Example use cases:
 - Seeding of GraphQL based services.
 - Reset (deletion and re-import of data) of GraphQL based services.
 
-Supported data formats:
+Supported data format: `YAML`.
 
-- `YAML`
-
-The jobs are defined as JSON files whose syntax can be seen in a [test job](test/job3.json).
+The jobs are defined as JSON files whose syntax can be seen in a [test job](test/job2.json).
 
 ## Usage
 
@@ -30,20 +28,7 @@ The module mainly consists of two usable components.
 A wrapper around [graphql-request](https://github.com/graphcool/graphql-request).
 It is used to connect to a GraphQL endpoint with custom headers and to parse
 resource files. Such resources are described in a YAML-based DSL, and they are
-parsed to build mutations/queries.
-It is possible to solely use the GraphQL Client if job automation is not required:
-
-```js
-import { Client } from 'gql-bot';
-let gqlClient = new Client({
-  entry: 'http://example.com/graphql',
-  apiKey: 'apiKey',
-  headers: { /* Custom HTTP headers */}
-});
-
-const mutation = fs.readFileSync('test/folder/createUsers.json');
-const response = await gqlClient.post(mutation);
-```
+parsed to build the payload used in the requests of mutations/queries.
 
 ### Job Processor
 
@@ -51,7 +36,7 @@ The job processor implements a pipeline mechanism to process JSON-based job
 files, which can contain one or more tasks, which can be run concurrently or
 sequentially. The job can have different options such as the maximum number of
 concurrent tasks and each task contains useful information for the GraphQL Client,
-such as the file path filter (e.g: 'create*.json'),
+such as the file path filter (e.g: 'create*.yaml'),
 the desired operation, batching, or useful metadata.
 Currently, the only implemented operation is 'sync'.
 There is a GraphQL-based processor, which performs calls to the GraphQL client 
@@ -82,7 +67,7 @@ job.on('done', () => {
 await jobProcessor.start(jobInfo, job);
 ```
 
-Refer to [tests](test/) for more details.
+Refer to [tests](./test) for more details.
 
 ## Events
 

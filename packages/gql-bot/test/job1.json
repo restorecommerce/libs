@@ -8,7 +8,8 @@
       "name": "job1",
       "operation": "sync",
       "src": "./test/folder/",
-      "filter": "createUsers.json",
+      "filter": "createUsers.yaml",
+      "mutation": "mutation{createUsers(input:{listOfUsers: ${resource_list}, apiKey: ${apiKey} }) {regStatus, error{code, message} }}",
       "depth": 0,
       "prefix": "graphql",
       "metaData": {

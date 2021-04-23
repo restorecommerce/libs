@@ -1,8 +1,8 @@
 {
   "name": "@restorecommerce/gql-bot",
-  "description": "GraphQL Client automated tasks processor",
+  "description": "GraphQL Client Automated Task Processor",
   "main": "lib/index",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "repository": {
     "type": "git",
     "url": "http://github.com/restorecommerce/gql-bot.git"

@@ -1,3 +1,9 @@
+### 0.1.7 (April 23rd, 2021)
+
+- Add implementation for optional batching of resources which enables
+importing of large amount of data stored in single file (.yaml format only).
+- Remove support for storing resources (and mutation) in single .json file  
+
 ### 0.1.6 (January 14th, 2021)
 
 - Support query variables at root level

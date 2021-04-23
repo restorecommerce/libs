@@ -538,7 +538,7 @@ export class Kafka {
             throw err;
           });
         }).then(resolveRetry).catch(err => {
-          const attemptNo = operation.attempts();
+          const attemptNo = (operation.attempts as () => number)();
           this.producer.disconnect();
           this.logger.info(`Retry initialize the Producer, attempt no: ${attemptNo}`);
           operation.retry(err);

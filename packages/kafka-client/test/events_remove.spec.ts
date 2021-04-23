@@ -1,16 +1,19 @@
 import * as _ from 'lodash';
-import { Events, Topic } from '../lib/index';
+import { Events, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
+import 'should';
 
 const kafkaConfig = {
   events: {
     kafkaTest: {
       provider: 'kafka',
       groupId: 'restore-chassis-test-server',
-      clientId: 'restore-chassis-test-server',
-      kafkaHost: 'localhost:29092',
-      autoConnect: true,
-      timeout: 1000,
+      kafka: {
+        clientId: 'restore-chassis-test-server',
+        brokers: [
+          'localhost:29092'
+        ],
+      },
       testEvent: {
         protos: ['test/test.proto'],
         protoRoot: 'protos/',
@@ -24,7 +27,7 @@ const loggerConfig: any = {
   logger: {
     console: {
       handleExceptions: false,
-      level: 'error',
+      level: 'debug',
       colorize: true,
       prettyPrint: true
     }
@@ -41,37 +44,40 @@ describe('events', () => {
       let events: Events;
       const topicName = 'com.example.test';
       let topic: Topic;
-      let listener: any;
       const eventName = 'testEvent';
 
-      before(async function start(): Promise<void> {
+      before(async function () {
         this.timeout(10000);
         const kafkaConfigEvents = kafkaConfig.events[providerName];
         events = new Events(kafkaConfig.events[providerName], logger);
         await events.start();
         // Subscribe to topic
         topic = await (events.topic(topicName));
-        listener = () => {
-          // empty listener
-        };
-        await topic.on(eventName, listener);
       });
-      after(async function stop(): Promise<void> {
+      after(async function () {
+        this.timeout(10000);
         await events.stop();
       });
       describe('removing listener', () => {
         it('should allow removing the subscribed listener from topic',
-          async function removeAllListeners(): Promise<void> {
+          async () => {
+            const listener = () => {
+            };
+            await topic.on(eventName, listener);
+            await topic.on(eventName, () => {
+            });
             await topic.removeListener(eventName, listener);
             const count: number = await topic.listenerCount(eventName);
             logger.info('Count of listeners after removing :', count);
+            count.should.equal(1);
           });
-        it('should allow removing all the subscribed listeners from topic',
-          async function removeAllListeners(): Promise<void> {
-            await topic.removeAllListeners(eventName);
-            const count: number = await topic.listenerCount(eventName);
-            logger.info('Count of listeners after removing :', count);
-          });
+        it('should allow removing all the subscribed listeners from topic', async function() {
+          this.timeout(20000);
+          await topic.removeAllListeners(eventName);
+          const count: number = await topic.listenerCount(eventName);
+          logger.info('Count of listeners after removing :', count);
+          count.should.equal(0);
+        });
       });
     });
   });

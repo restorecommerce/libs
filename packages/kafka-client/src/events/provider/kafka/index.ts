@@ -1,11 +1,10 @@
-import * as kafka from 'kafka-node';
 import * as retry from 'retry';
 import * as _ from 'lodash';
 import { EventEmitter } from 'events';
 import * as protobuf from 'protobufjs';
 import * as async from 'async';
 import { Logger } from 'winston';
-
+import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer } from 'kafkajs';
 
 const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
   return (origin: string, target: string): string => {
@@ -18,24 +17,31 @@ const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
   };
 };
 
+interface MessageWithContext {
+  message: KafkaMessage;
+  topic: string;
+  partition: number;
+}
+
 /**
  * A Kafka topic.
  */
 export class Topic {
 
   name: string;
-  emitter: any;
-  provider: any;
+  emitter: EventEmitter;
+  provider: Kafka;
   subscribed: string[];
   waitQueue: any[];
   currentOffset: number;
-  consumer: kafka.Consumer;
+  consumer: Consumer;
   config: any;
   // message sync throttling attributes
   asyncQueue: async.AsyncQueue<any>;
-  drainEvent: any;
+  drainEvent: (context: MessageWithContext, done: (err) => void) => void;
   // default process one message at at time
   asyncLimit = 1;
+
   /**
    * Kafka topic.
    * When the listener count for all events are zero, the consumer unsubscribes
@@ -44,8 +50,10 @@ export class Topic {
    * @constructor
    * @private
    * @param {string} name Topic name
+   * @param provider
+   * @param config
    */
-  constructor(name: string, provider: any, config: any) {
+  constructor(name: string, provider: Kafka, config: any) {
     this.name = name;
     this.emitter = new EventEmitter();
     this.provider = provider;
@@ -53,15 +61,29 @@ export class Topic {
     this.waitQueue = [];
     this.currentOffset = 0;
     this.config = config;
-    this.provider.producer.createTopics([this.name], true,
-      (err, data) => {
-        if (err) {
-          this.provider.logger.error(`Cannot create topic ${this.name}:`, err);
-          throw err;
+  }
+
+  async createIfNotExists(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.provider.admin.listTopics().then((topics) => {
+        if (topics.indexOf(this.name) < 0) {
+          this.provider.admin.createTopics({
+            topics: [{
+              topic: this.name
+            }],
+          }).then(() => {
+            this.provider.logger.info(`Topic ${this.name} created successfully`);
+            resolve();
+          }).catch(err => {
+            this.provider.logger.error(`Cannot create topic ${this.name}:`, err);
+            reject(err);
+          });
+        } else {
+          this.provider.logger.warn(`Topic ${this.name} already exists`);
+          resolve();
         }
-        this.provider.logger.info(` Topic ${this.name} created successfully`);
-      }
-    );
+      });
+    });
   }
 
   /**
@@ -89,10 +111,7 @@ export class Topic {
       throw new Error('missing argument eventName');
     }
     const listeners = this.emitter.listeners(eventName);
-    if (listeners.length > 0)
-      return true;
-    else
-      return false;
+    return listeners.length > 0;
   }
 
   /**
@@ -128,23 +147,25 @@ export class Topic {
   /**
    * Return the offset number of this topic.
    *
-   * @param {number} time Use -1 for latest and -2 for earliest.
+   * @param {number} time Use -1 for latest and 0 for earliest.
    * @return {number} offset number
    */
-  async $offset(time: number): Promise<number> {
-    const topic = this.name;
-    const partition = 0;
-    const tt = time || -1; // the latest (next) offset by default
+  async $offset(time = -1): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-      this.provider.offset.fetch([
-        { topic, partition, time: tt, maxNum: 1 }
-      ], (err, data) => {
-        if (err) {
-          this.provider.logger.error('Error occured retreiving topic offset:', err);
+      if (time < 0) {
+        return this.provider.admin.fetchTopicOffsets(this.name).then(data => {
+          resolve(parseInt(data[0].offset, 10));
+        }).catch(err => {
+          this.provider.logger.error('Error occurred retrieving topic offset:', err);
           reject(err);
-        } else {
-          resolve(data[topic][partition][0]);
-        }
+        });
+      }
+
+      return this.provider.admin.fetchTopicOffsetsByTimestamp(this.name, time).then(data => {
+        resolve(parseInt(data[0].offset, 10));
+      }).catch(err => {
+        this.provider.logger.error('Error occurred retrieving topic offset:', err);
+        reject(err);
       });
     });
   }
@@ -152,25 +173,25 @@ export class Topic {
   /**
    * Suspend the calling function until the Kafka client received a message with the offset.
    * @param {number} offset Kafka message offset.
-   * @return {thunk} Thunk will be resolved when a message is received
+   * @return {Promise} Thunk will be resolved when a message is received
    * with the corresponding offset.
    */
   async $wait(offset: number): Promise<any> {
-    const that = this;
     return new Promise((() => {
       return (cb) => {
-        if (that.currentOffset >= offset) {
+        if (this.currentOffset >= offset) {
           cb();
           return;
         }
-        that.waitQueue = [{ offset, cb }];
+        this.waitQueue.push({offset, cb});
       };
     })());
   }
 
   /**
-   * Force a comitted offset reset.
+   * Force a committed offset reset.
    *
+   * @param {string} eventName
    * @param {number} offset The offset at which to restart from.
    */
   async $reset(eventName: string, offset: number): Promise<void> {
@@ -190,27 +211,13 @@ export class Topic {
     const index = this.subscribed.indexOf(eventName);
     this.subscribed.splice(index, 1);
 
-    const that = this;
     if (this.subscribed.length == 0) {
       this.provider.logger.info(`Closing consumer from topic ${this.name}`);
-      await new Promise((resolve, reject) => {
-        that.consumer.removeTopics([that.name], (err, removed) => {
-          if (err) {
-            that.provider.logger.error('Error removing topic:', err);
-            reject(err);
-          }
-          // workaround for typings bug on `consumer.close()`
-          const consumer = that.consumer as any;
-          consumer.close((err) => {
-            if (err) {
-              reject(err);
-            }
-            that.consumer = null;
-            resolve();
-          });
-        });
+      await this.consumer.stop().then(() => this.consumer.disconnect()).then(() => {
+        this.provider.logger.info(`Consumer disconnected from topic ${this.name}`);
+        this.consumer = undefined;
       }).catch((err) => {
-        this.provider.logger.error(`Error occured unsubscribing ${eventName} on topic ${this.name}`, err);
+        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`, err);
       });
     }
   }
@@ -220,31 +227,26 @@ export class Topic {
    * invokes $receive(event, msg, context);
    * @return {function}
    */
-  private makeDataHandler(message: kafka.Message): void {
-    const msg = message.value;
-    const eventName = message.key.toString();
-    const context = {
-      offset: message.offset,
-      topic: message.topic,
-      partition: message.partition,
-    };
+  private makeDataHandler(context: MessageWithContext): void {
+    const eventName = context.message.key.toString();
     if (_.includes(this.subscribed, eventName)) {
       const logger = this.provider.logger;
       try {
-        this.$receive(eventName, msg, context);
+        this.$receive(eventName, context.message.value, context);
         // commit offset
-        this.filterWaitQueue(message.offset);
-        this.currentOffset = message.offset;
+        const offset = parseInt(context.message.offset, 10);
+        this.filterWaitQueue(offset);
+        this.currentOffset = offset;
         this.commit();
       } catch (error) {
         // do not commit offset
-        logger.error(`topic ${message.topic} error`, error);
+        logger.error(`topic ${context.topic} error`, error);
         throw error;
       }
     }
   }
 
-  private filterWaitQueue(offset: any): void {
+  private filterWaitQueue(offset: number | { offset: number }): void {
     if (typeof offset === 'object') {
       offset = offset.offset;
     }
@@ -260,70 +262,73 @@ export class Topic {
   /**
    * Subscribe to the kafka topic.
    *
-   * @param  {number} startingOffset =             Kafka.LATEST_OFFSET Offset index
+   * @param eventName
+   * @param offsetValue
+   * @param queue
    **/
   private async $subscribe(eventName: string, offsetValue: number, queue?: boolean): Promise<void> {
     if (!this.consumer) {
-      const consumerClient = new kafka.KafkaClient(this.config);
-      this.consumer = new kafka.Consumer(
-        consumerClient,
-        [
-          { topic: this.name, offset: offsetValue }
-        ],
-        {
-          autoCommit: true,
-          encoding: 'buffer',
-          fromOffset: true
-        }
-      );
-      // On receiving the message on Kafka consumer put the message to asyn Queue.
+      this.consumer = this.provider.client.consumer({
+        groupId: this.provider.config.groupId
+      });
+
+      await this.consumer.subscribe({
+        topic: this.name
+      }).then(() => {
+        this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);
+      }).catch(err => {
+        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error: ${err}`);
+      });
+
+      // On receiving the message on Kafka consumer put the message to async Queue.
       if (queue) {
         // start drain process
         this.drain();
-        this.consumer.on('message', (message) => {
-          this.onMessageForQueue(message);
-        });
-      } else {
-        this.consumer.on('message', (message: kafka.Message) => {
-          this.makeDataHandler(message);
-        });
       }
+
+      await this.consumer.run({
+        eachMessage: async (payload) => {
+          if (queue) {
+            this.onMessageForQueue(payload);
+          } else {
+            this.makeDataHandler(payload);
+          }
+        }
+      }).catch(err => {
+        this.provider.logger.error(`Consumer for topic '${this.name}' failed to run: ${err}`);
+      });
     }
+
     this.subscribed.push(eventName);
   }
 
-  private onMessageForQueue(message: any): void {
-    const eventName = message.key.toString();
-    if (_.includes(this.subscribed, eventName)) {
-      this.asyncQueue.push(message);
+  private onMessageForQueue(context: MessageWithContext): void {
+    if (_.includes(this.subscribed, context.message.key.toString())) {
+      this.asyncQueue.push(context);
     }
   }
 
   /**
    * main reg. function, pass it a function to receive messages
    * under flow control
-   * @param drainEvent
    */
   private drain(): void {
-    this.drainEvent = (message, done) => {
-      const msg = message.value;
-      const eventName = message.key.toString();
-      const context = _.pick(message, ['offset', 'partition', 'topic']);
-      this.$receive(eventName, msg, context);
+    this.drainEvent = (context: MessageWithContext, done: (err) => void) => {
+      this.$receive(context.message.key.toString(), context.message.value, context);
     };
     this.startToReceiveMessages();
   }
 
   private startToReceiveMessages(): void {
-    this.asyncQueue = async.queue((msg, done) => {
+    this.asyncQueue = async.queue(({topic, partition, message}: MessageWithContext, done) => {
       if (this.drainEvent) {
         setImmediate(() => {
-          this.drainEvent(msg, (err) => {
+          this.drainEvent({topic, partition, message}, (err) => {
             if (err) {
               done(err);
             }
           });
-          this.filterWaitQueue(msg);
+          this.filterWaitQueue(parseInt(message.offset, 10));
           done();
         });
       } else {
@@ -332,11 +337,12 @@ export class Topic {
       }
     }, this.asyncLimit);
 
-    this.asyncQueue.drain = () => {
+    (this.asyncQueue.drain as any)(() => {
       // commit state first, before resuming
       this.provider.logger.verbose('Committing offsets upon async queue drain');
       this.commit();
-    };
+    });
+
     this.provider.logger.info('Async queue draining started.');
   }
 
@@ -344,19 +350,21 @@ export class Topic {
     this.commitCurrentOffsets().then(() => {
       this.provider.logger.verbose('Offsets committed successfully');
     }).catch(error => {
-      this.provider.logger.error('Failed to commit offsets, resuming anyway after:', error);
+      this.provider.logger.warn('Failed to commit offsets, resuming anyway after:', error);
     });
   }
 
-  async commitCurrentOffsets(): Promise<any> {
+  async commitCurrentOffsets(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.consumer.commit((err, data) => {
-        if (err) {
-          this.provider.logger.error('Error commiting offset:', err);
-          return reject(err);
-        } else {
-          resolve(data);
+      this.consumer.commitOffsets([
+        {
+          topic: this.name,
+          offset: this.currentOffset.toString(10),
+          partition: 0 // ?
         }
+      ]).then(resolve).catch(err => {
+        this.provider.logger.error('Error committing offset:', err);
+        reject(err);
       });
     });
   }
@@ -393,9 +401,10 @@ export class Topic {
    *
    * @param  {string} eventName Event name
    * @param  {function|generator} listener  Listener
+   * @param opts
    */
   async on(eventName: string, listener: any, opts: SubscriptionOptions = {}): Promise<void> {
-    let { startingOffset, queue, forceOffset } = opts;
+    let {startingOffset, queue, forceOffset} = opts;
     if (!(this.subscribed.indexOf(eventName) > -1)) {
       if (_.isNil(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
@@ -418,18 +427,40 @@ export class Topic {
   }
 }
 
+export interface KafkaProviderConfig {
+  kafka: KafkaConfig;
+  timeout: number;
+  groupId: string;
+}
+
+const toWinstonLogLevel = level => {
+  switch (level) {
+    case logLevel.ERROR:
+    case logLevel.NOTHING:
+      return 'error';
+    case logLevel.WARN:
+      return 'warn';
+    case logLevel.INFO:
+      return 'info';
+    case logLevel.DEBUG:
+      return 'debug';
+  }
+};
+
 /**
  * Events provider.
  */
 export class Kafka {
 
-  config: any;
-  topics: any;
+  config: KafkaProviderConfig;
+  topics: { [key: string]: Topic };
   logger: Logger;
-  ready: boolean;
-  client: kafka.KafkaClient;
-  producer: kafka.Producer;
-  offset: kafka.Offset;
+  client: KafkaJS;
+  producer: Producer;
+  admin: Admin;
+
+  producerConnected: boolean;
+  adminConnected: boolean;
 
   /**
    * Kafka is a provider for Events.
@@ -443,7 +474,6 @@ export class Kafka {
     this.config = _.cloneDeep(config);
     this.topics = {};
     this.logger = logger;
-    this.ready = false;
   }
 
   /**
@@ -451,39 +481,65 @@ export class Kafka {
    * Suspends the calling function until the producer is connected.
    */
   async start(): Promise<any> {
-    const operation = retry.operation({ forever: true, maxTimeout: 2000 });
-    return new Promise((resolveRetry, reject) => {
+    const operation = retry.operation({forever: true, maxTimeout: 2000});
+    return new Promise((resolveRetry) => {
       operation.attempt(async () => {
-        this.client = new kafka.KafkaClient(this.config);
-        this.producer = new kafka.Producer(this.client);
-        this.offset = new kafka.Offset(this.client);
+        this.client = new KafkaJS({
+          ...this.config.kafka,
+          logCreator: () => {
+            return ({level, log}) => {
+              const {message, ...extra} = log;
+              this.logger.log(toWinstonLogLevel(level), message, extra);
+            };
+          },
+        });
+
+        this.producer = this.client.producer();
+        this.admin = this.client.admin();
         const timeout = this.config.timeout || 2000;
 
-        const that = this;
+        this.producer.connect().catch(err => {
+          this.logger.warn('Producer connection error: ' + err);
+        });
+
         // waiting for producer to be ready
         await new Promise((resolveProducer, rejectProducer) => {
           const timer = setTimeout(() => {
             const err = 'Connection timeout: Kafka host is unreachable';
-            that.logger.error(err, that.config.connectionString);
+            this.logger.error(err, this.config.kafka.brokers);
             rejectProducer(err);
           }, timeout);
 
-          this.producer.on('ready', () => {
+          this.producer.on('producer.connect', () => {
+            this.producerConnected = true;
             this.logger.info('The Producer is ready.');
             clearTimeout(timer);
             resolveProducer(true);
           });
-          this.producer.on('error', (err) => {
-            this.logger.error('The Producer has an error:', err);
+
+          this.producer.on('producer.disconnect', (err) => {
+            this.producerConnected = false;
+            this.logger.warn('The Producer has disconnected:', err);
             clearTimeout(timer);
             rejectProducer(err);
           });
-        }).then((resp) => {
-          resolveRetry(resp);
-        }).catch(err => {
+
+          this.producer.on('producer.network.request_timeout', (err) => {
+            this.logger.warn('The Producer timed out:', err);
+            clearTimeout(timer);
+            rejectProducer(err);
+          });
+        }).then(async () => {
+          this.admin.on('admin.connect', () => this.adminConnected = true);
+          this.admin.on('admin.disconnect', () => this.adminConnected = false);
+
+          await this.admin.connect().catch(err => {
+            this.logger.warn('Admin connection error: ' + err);
+            throw err;
+          });
+        }).then(resolveRetry).catch(err => {
           const attemptNo = operation.attempts();
-          this.client.close();
-          this.producer.close();
+          this.producer.disconnect();
           this.logger.info(`Retry initialize the Producer, attempt no: ${attemptNo}`);
           operation.retry(err);
         });
@@ -498,18 +554,16 @@ export class Kafka {
    * @param  {Object} msg
    * @param  {string} protoFilePath
    * @param  {string} messageObject
+   * @param  {string} protoRoot
    * @return {Object} buffer
    */
-  private encodeObject(eventName: string, msg: Object, protoFilePath: string,
-    messageObject: string, protoRoot: string): Uint8Array {
+  private static encodeObject(eventName: string, msg: Object, protoFilePath: string, messageObject: string, protoRoot: string): Uint8Array {
     let root = new protobuf.Root();
     root.resolvePath = makeProtoResolver(protoFilePath, protoRoot);
-    root = root.loadSync(protoFilePath, { keepCase: true });
+    root = root.loadSync(protoFilePath, {keepCase: true});
     const MessageClass: protobuf.Type = root.lookupType(messageObject);
     const convertedMessage: protobuf.Message<Object> = MessageClass.create(msg);
-    const buffer: Uint8Array = MessageClass.encode(convertedMessage).finish();
-
-    return buffer;
+    return MessageClass.encode(convertedMessage).finish();
   }
 
   /**
@@ -519,21 +573,20 @@ export class Kafka {
    * @param msg
    */
   decodeObject(config: any, eventName: string, msg: any): protobuf.Message<Object> {
-
     const protoFilePath = config[eventName].protoRoot + config[eventName].protos;
     const protoRoot = config[eventName].protoRoot;
     const messageObject = config[eventName].messageObject;
 
     let root = new protobuf.Root();
     root.resolvePath = makeProtoResolver(protoFilePath, protoRoot);
-    root = root.loadSync(protoFilePath, { keepCase: true });
+    root = root.loadSync(protoFilePath, {keepCase: true});
 
     const MessageClass = root.lookupType(messageObject);
     let decodedMsg;
     try {
       decodedMsg = MessageClass.decode(msg);
     } catch (err) {
-      this.logger.error(`error on decoding message with event ${eventName}:`, { message: msg, error: err });
+      this.logger.error(`error on decoding message with event ${eventName}:`, {message: msg, error: err});
     }
     return decodedMsg;
   }
@@ -544,9 +597,7 @@ export class Kafka {
    *
    * @param  {string} topicName
    * @param  {string} eventName
-   * @param  {Object} message
-   * @param  {array.Object} message
-   * @param {string} messageType
+   * @param  {Object|Object[]} message
    */
   async $send(topicName: string, eventName: string, message: any): Promise<any> {
     let messages = message;
@@ -556,14 +607,18 @@ export class Kafka {
       messages = [message];
     }
     try {
-      const values = [];
+      const values: Message[] = [];
       for (let i = 0; i < messages.length; i += 1) {
         //  get the binary representation of the message using serializeBinary()
         //  and build a Buffer from it.
         const msg = messages[i];
-        const bufferObj: any = this.encodeObject(eventName, msg,
+        const bufferObj = Kafka.encodeObject(eventName, msg,
           protoFilePath, messageObject, this.config[eventName].protoRoot);
-        values.push(new kafka.KeyedMessage(eventName, bufferObj));
+
+        values.push({
+          key: eventName,
+          value: Buffer.from(bufferObj)
+        });
       }
       for (let msg of messages) {
         if (this.config && this.config[eventName].bufferFields) {
@@ -571,19 +626,19 @@ export class Kafka {
           this.deleteBufferFields(keys, msg, this.config[eventName].enableLogging);
         }
       }
-      this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, { messages });
+      this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, {messages});
       return new Promise((resolve, reject) => {
-        this.producer.send([{ topic: topicName, messages: values }], (err, data) => {
-          if (err) {
-            this.logger.error(
-              `error sending event ${eventName} to topic ${topicName}`, err);
-            reject(err);
-          } else {
-            for (let msg of messages) {
-              this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
-            }
-            resolve(data);
+        this.producer.send({
+          topic: topicName,
+          messages: values
+        }).then((data) => {
+          for (let msg of messages) {
+            this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
           }
+          resolve(data);
+        }).catch((err) => {
+          this.logger.error(`error sending event ${eventName} to topic ${topicName}`, err);
+          reject(err);
         });
       });
     } catch (err) {
@@ -608,8 +663,7 @@ export class Kafka {
             for (let eachMsg of msg[key]) {
               msg[key] = eachMsg.value.toString();
             }
-          }
-          else {
+          } else {
             delete msg[key];
           }
         } else if (typeof key === 'object') {
@@ -624,13 +678,15 @@ export class Kafka {
    * Returns a Kafka topic.
    *
    * @param  {string} topicName Topic name
+   * @param config
    * @return {Topic} Kafka topic
    */
-  topic(topicName: string, config: any): any {
+  async topic(topicName: string, config: any): Promise<Topic> {
     if (this.topics[topicName]) {
       return this.topics[topicName];
     }
     this.topics[topicName] = new Topic(topicName, this, config);
+    await this.topics[topicName].createIfNotExists();
     return this.topics[topicName];
   }
 
@@ -640,18 +696,23 @@ export class Kafka {
    * all consumers from topics are disconnected.
    */
   async stop(): Promise<any> {
+    this.logger.warn('Stopping Kafka. Ignore any following connection errors');
+
     const errors = [];
-    await new Promise((resolve, reject) => {
-      try {
-        this.client.close(() => {
-          resolve();
-        });
-      } catch (err) {
-        this.logger.error('Error occured stopping Kafka client:', err);
+    if (this.producerConnected) {
+      await this.producer.disconnect().catch(err => {
+        this.logger.warn('Error occurred stopping Kafka producer:', err);
         errors.push(err);
-        reject(err);
-      }
-    });
+      });
+    }
+
+    if (this.adminConnected) {
+      await this.admin.disconnect().catch(err => {
+        this.logger.warn('Error occurred stopping Kafka admin:', err);
+        errors.push(err);
+      });
+    }
+
     const topicNames = _.keys(this.topics);
     for (let i = 0; i < topicNames.length; i += 1) {
       const topic: Topic = this.topics[topicNames[i]];
@@ -663,6 +724,7 @@ export class Kafka {
         await topic.removeAllListeners(eventName);
       }
     }
+
     if (errors.length > 0) {
       this.logger.error('Errors when stopping Kafka client:', errors);
       throw errors;

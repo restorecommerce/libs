@@ -90,7 +90,7 @@ export class Events {
    * @param  {string} name Topic name
    * @return {Topic}      Topic
    */
-  topic(name: string): Topic {
+  topic(name: string): Promise<Topic> {
     if (_.isNil(name)) {
       throw new Error('missing argument name');
     }

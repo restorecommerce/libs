@@ -1,8 +1,6 @@
-import * as mocha from 'mocha';
 import * as should from 'should';
 import * as _ from 'lodash';
-import * as sleep from 'sleep';
-import { Events, Topic } from '../lib/index';
+import { Events, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
 
 const kafkaConfig = {
@@ -10,10 +8,12 @@ const kafkaConfig = {
     kafkaTest: {
       provider: 'kafka',
       groupId: 'restore-chassis-test-server',
-      clientId: 'restore-chassis-test-server',
-      kafkaHost: 'localhost:29092',
-      autoConnect: true,
-      connectTimeout: 1000,
+      kafka: {
+        clientId: 'restore-chassis-test-server',
+        brokers: [
+          'localhost:29092'
+        ],
+      },
       testEvent: {
         protos: ['test/test.proto'],
         protoRoot: 'protos/',
@@ -35,7 +35,7 @@ const loggerConfig: any = {
   logger: {
     console: {
       handleExceptions: false,
-      level: 'error',
+      level: 'debug',
       colorize: true,
       prettyPrint: true
     }
@@ -49,12 +49,11 @@ describe('events', () => {
   describe('without a provider', () => {
     const topicName = 'test';
     describe('awaiting subscribe', () => {
-      it('should throw an error', async function checkGetTopic(): Promise<void> {
+      it('should throw an error', async () => {
         try {
           const events: Events = new Events();
           await events.topic(topicName);
-        }
-        catch (err) {
+        } catch (err) {
           should.exist(err);
           err.should.be.Error();
           err.message.should.equal('missing argument config');
@@ -69,20 +68,23 @@ describe('events', () => {
       const topicName = 'com.example.test';
       let topic: Topic;
       const eventName = 'testEvent';
-      const testMessage = { value: 'testValue', count: 1 };
+      const testMessage = {value: 'testValue', count: 1};
 
-      before(async function start(): Promise<void> {
+      before(async function () {
         this.timeout(10000);
-        const kafkaConfigEvents = kafkaConfig.events[providerName];
         events = new Events(kafkaConfig.events[providerName], logger);
         await events.start();
+
+        await new Promise(resolve => setTimeout(resolve, 5000));
       });
-      after(async function stop(): Promise<void> {
+
+      after(async function () {
+        this.timeout(10000);
         await events.stop();
-        events = null;
       });
+
       describe('creating a topic', () => {
-        it('should return a topic', async function checkGetTopic(): Promise<void> {
+        it('should return a topic', async () => {
           topic = await (events.topic(topicName));
           should.exist(topic);
           should.exist(topic.on);
@@ -93,34 +95,39 @@ describe('events', () => {
           should.exist(topic.removeAllListeners);
         });
       });
+
       describe('subscribing', function startKafka(): void {
         this.timeout(5000);
-        it('should allow listening to events', async function listenToEvents(): Promise<void> {
+        it('should allow listening to events', async () => {
           topic = await (events.topic(topicName));
+
           const listener = () => {
             // void listener
           };
           const count: number = await topic.listenerCount(eventName);
           should.exist(count);
           await topic.on(eventName, listener);
-          sleep.sleep(2);
+
           const countAfter = await topic.listenerCount(eventName);
           countAfter.should.equal(count + 1);
         });
-        it('should allow emitting and receiving a message',
-          async function sendEvents(): Promise<void> {
-            topic = await (events.topic(topicName));
-            this.timeout(20000);
-            let receivedMsg;
-            const listener = (message, context, config, eventName) => {
-              receivedMsg = message;
-              testMessage.value.should.equal(message.value);
-              testMessage.count.should.equal(message.count);
-            };
-            await topic.on(eventName, listener);
-            sleep.sleep(2);
-            await topic.emit(eventName, testMessage);
-          });
+        it('should allow emitting and receiving a message', async function () {
+          this.timeout(20000);
+          topic = await (events.topic(topicName));
+
+          let returnedMessage;
+          const listener = (message, context, config, eventName) => returnedMessage = message;
+          await topic.on(eventName, listener);
+
+          await topic.emit(eventName, testMessage);
+
+          while (returnedMessage == undefined) {
+            await new Promise((r) => setTimeout(r, 10));
+          }
+
+          returnedMessage.value.should.equal(testMessage.value);
+          returnedMessage.count.should.equal(testMessage.count);
+        });
       });
     });
   });

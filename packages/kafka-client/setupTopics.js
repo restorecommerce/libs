@@ -5,8 +5,12 @@ const kafkaConfig = {
     "kafka": {
       "provider": "kafka",
       "groupId": "test-group-id",
-      "clientId": "test-client-id",
-      "kafkaHost": 'localhost:29092',
+      "kafka": {
+        "clientId": "test-client-id",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
       "example-event": {
         "protos": ["test/test.proto"],
         "protoRoot": "protos/",
@@ -50,5 +54,5 @@ async function createTopics() {
 }
 
 createTopics().catch((err) => {
-  console.log(err);
+  console.log('error creating topics: ', err);
 });

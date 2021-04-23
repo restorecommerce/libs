@@ -1,7 +1,7 @@
 {
   "name": "@restorecommerce/libs",
   "version": "0.0.1",
-  "description": "Library mmonorepo for Restorecommerce",
+  "description": "Library monorepo for Restorecommerce",
   "main": "index.js",
   "author": "n-fuse GmbH",
   "scripts": {

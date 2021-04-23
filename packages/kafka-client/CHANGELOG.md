@@ -1,3 +1,12 @@
+### 0.2.0 (April 23rd, 2021)
+
+#### Contains breaking changes!
+
+* rewrite to use kafkajs library
+* changed config format
+* `topic()` function now returns a promise
+* updated dependencies
+
 ### 0.1.13 (November 18th, 2020)
 
 - updated dependencies

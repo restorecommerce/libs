@@ -1,3 +1,7 @@
+### 0.1.8 (April 26th, 2021)
+
+- Add error handling for case when no data is imported because of wrong file format.
+
 ### 0.1.7 (April 23rd, 2021)
 
 - Add implementation for optional batching of resources which enables

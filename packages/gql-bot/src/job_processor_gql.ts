@@ -23,6 +23,8 @@ export class GraphQLProcessor {
 
   async process(job: any): Promise<any> {
     let yamlStream = new YamlStreamReadTransformer();
+    let jobPath = job.path;
+    let data = false;
     switch (job.operation) {
       case 'sync': {  //  synchronous operation
         const fileStream = fs.createReadStream(job.fullPath);
@@ -44,6 +46,7 @@ export class GraphQLProcessor {
         // we pause the readable stream and emit a 'pause' event and
         // right after that we reset the dataset object 'docArr'.
         yamlStream.on('data', (doc) => {
+          data = true;
           if (batchsize && batchsize != undefined) {
             docArr.push(doc);
             counter++;
@@ -51,7 +54,7 @@ export class GraphQLProcessor {
             if (counter === batchsize) {
               counter = 0;
               batchCounter++;
-              console.log('Processing batch number:', batchCounter);
+              console.log('Processing batch:', batchCounter);
               yamlStream.pause();
               docArr = [];
             }
@@ -77,9 +80,13 @@ export class GraphQLProcessor {
         // Promise to return all the responses back to the initial caller.
         return new Promise<any>((resolve, reject) => {
           yamlStream.on('end', async () => {
+            if (data === false) {
+              throw new Error(`Could not import resources from ${jobPath}. Readable stream is empty. Please provide a file with YAML multi-document format.`);
+            }
+
             if (docArr && !_.isEmpty(docArr)) {
               batchCounter++;
-              console.log('Processing batch number:', batchCounter);
+              console.log('Processing batch:', batchCounter);
               let result = await this.client.post(docArr, job);
               resultArr.push(result);
               docArr = [];

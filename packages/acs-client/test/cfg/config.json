@@ -2,7 +2,7 @@
   "logger": {
     "console": {
       "handleExceptions": false,
-      "level": "crit",
+      "level": "debug",
       "colorize": true,
       "prettyPrint": true
     }
@@ -21,8 +21,12 @@
     "kafka": {
       "provider": "kafka",
       "groupId": "acs-client",
-      "clientId": "acs-client-id",
-      "kafkaHost": "localhost:29092",
+      "kafka": {
+        "clientId": "acs-client-id",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
       "policy_setCreated": {
         "protos": [
           "io/restorecommerce/policy_set.proto"

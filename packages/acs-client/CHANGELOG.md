@@ -1,3 +1,11 @@
+### 0.3.0 (April 27th, 2021)
+
+#### Contains breaking changes!
+
+- switch to kafkajs
+- change config format for events
+- updated dependencies
+
 ### 0.2.24 (March 23rd, 2021)
 
 - up grpc-client and other dependencies

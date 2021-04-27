@@ -177,6 +177,7 @@ async function stop(): Promise<void> {
 
 describe('testing acs-client', () => {
   before(async function startServer(): Promise<void> {
+    this.timeout(60000);
     const cacheEnabled = process.env.CACHE_ENABLED;
     if (cacheEnabled && cacheEnabled.toLowerCase() === 'true') {
       await initializeCache();

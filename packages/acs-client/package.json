@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "0.2.24",
+  "version": "0.3.0",
   "description": "Access Control Service Client",
   "author": "Invend GmbH",
   "repository": {
@@ -18,7 +18,7 @@
   "main": "./lib/index.js",
   "dependencies": {
     "@restorecommerce/grpc-client": "0.0.9",
-    "@restorecommerce/kafka-client": "^0.1.13",
+    "@restorecommerce/kafka-client": "^0.2.0",
     "@restorecommerce/logger": "^0.6.4",
     "@restorecommerce/protos": "^0.0.22",
     "@restorecommerce/service-config": "^0.4.1",
@@ -33,11 +33,11 @@
     "@types/node": "^14.14.35",
     "@types/redis": "^2.8.28",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "coveralls": "^3.1.0",
     "cross-env": "^7.0.3",
-    "eslint": "^7.22.0",
+    "eslint": "^7.25.0",
     "eslint-plugin-prefer-arrow-functions": "^3.0.1",
     "grpc-mock": "^0.7.0",
     "mocha": "^8.3.2",
@@ -47,7 +47,7 @@
     "rimraf": "^3.0.2",
     "should": "^13.2.3",
     "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "typescript": "^4.2.4"
   },
   "optionalDependencies": {
     "redis": "^2.8.0"

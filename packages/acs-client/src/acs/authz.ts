@@ -409,7 +409,7 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
         await events.start();
         for (let topicLabel in kafkaCfg.evictACSCache) {
           let topicCfg = kafkaCfg.evictACSCache[topicLabel];
-          let topic = events.topic(topicCfg.topic);
+          let topic = await events.topic(topicCfg.topic);
           if (topicCfg.events) {
             for (let eachEvent of topicCfg.events) {
               await topic.on(eachEvent, eventListener);

@@ -117,8 +117,12 @@
     "testevents": {
       "provider": "kafka",
       "groupId": "restore-resource-base-interface-test",
-      "clientId": "restore-resource-base-interface-test",
-      "kafkaHost": "localhost:29092",
+      "kafka": {
+        "clientId": "restore-resource-base-interface-test",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
       "ResourceCreated": {
         "protos": [
           "io/restorecommerce/resource_base.proto"

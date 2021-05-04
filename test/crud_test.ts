@@ -25,8 +25,8 @@ describe('converting to struct back to object', () => {
         $GT: 10,
       },
       $OR: [
-        { id: '/test/testdata' },
-        { id: '/test/testnew' },
+        { id: 'test_testdata' },
+        { id: 'test_testnew' },
       ],
     };
     const struct = toStruct(obj);
@@ -118,9 +118,9 @@ describe('ServiceBase', () => {
       await db.truncate();
       const now: number = Date.now();
       testData = [
-        { id: '/test/xy', meta, value: 1, text: 'a xy' },
-        { id: '/test/xyz', meta, value: 3, text: 'second test data' },
-        { id: '/test/zy', meta, value: 12, text: 'yz test data' }];
+        { id: 'test_xy', meta, value: 1, text: 'a xy' },
+        { id: 'test_xyz', meta, value: 3, text: 'second test data' },
+        { id: 'test_zy', meta, value: 12, text: 'yz test data' }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
@@ -278,19 +278,19 @@ describe('ServiceBase', () => {
           }]
         };
         const newTestDataFirst = {
-          id: '/test/newdata',
+          id: 'test_newdata',
           value: -10,
           text: 'new data',
           meta
         };
         const newTestDataSecond = {
-          id: '/test/newdata2',
+          id: 'test_newdata2',
           value: -10,
           text: 'new second data',
           meta
         };
         const testDuplicate = {
-          id: '/test/newdata2',
+          id: 'test_newdata2',
           value: -10,
           text: 'new second data',
           meta
@@ -309,7 +309,7 @@ describe('ServiceBase', () => {
         // validate error for testDuplicate element
         should.exist(result.data.status);
         result.data.status.should.be.length(3);
-        result.data.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: _test_newdata2`);
+        result.data.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
         const allTestData = await testService.read();
         should.exist(allTestData);
         should.not.exist(allTestData.error);
@@ -334,10 +334,15 @@ describe('ServiceBase', () => {
         should.exist(allTestData.data.items);
         allTestData.data.items.should.length(0);
       });
-      it('should delete all specified documents', async function checkDelete() {
-        const result = await testService.delete({ ids: [testData[1].id] });
+      it('should delete specified documents and return error if document does not exist', async function checkDelete() {
+        const result = await testService.delete({ ids: [testData[1].id, 'invalidID'] });
         should.exist(result);
         should.not.exist(result.error);
+        // success for 1st id and failure message for second invalid id
+        result.data.status[0].code.should.equal(200);
+        result.data.status[0].message.should.equal('success');
+        result.data.status[1].code.should.equal(404);
+        result.data.status[1].message.should.equal('document not found');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
@@ -408,7 +413,7 @@ describe('ServiceBase', () => {
           text: 'patched',
           meta
         }, {
-          id: '/test/newput',
+          id: 'test_newput',
           value: 0,
           text: '',
           meta
@@ -447,9 +452,9 @@ describe('ServiceBase', () => {
         should.not.exist(result.error);
         await testService.read();
         const objectMissingField = [
-          { id: '/test/xy', value: 1, meta },
-          { id: '/test/xyz', value: 3, meta },
-          { id: '/test/zy', value: 12, meta }];
+          { id: 'test_xy', value: 1, meta },
+          { id: 'test_xyz', value: 3, meta },
+          { id: 'test_zy', value: 12, meta }];
         result = await testService.create({ items: objectMissingField });
         should.exist(result);
         should.exist(result.data);

@@ -346,10 +346,12 @@ export class ResourcesAPIBase {
           ids = _.map(ids, (id) => {
             return `${this.collectionName}/${id}`;
           });
-          return await this.db.removeVertex(this.collectionName, ids);
+          deleteResponse = await this.db.removeVertex(this.collectionName, ids);
+          return deleteResponse;
         }
       }
       deleteResponse = await this.db.delete(this.collectionName, ids);
+      return deleteResponse;
     }
     catch (err) {
       this.logger.error('Error deleting documents', { error: err.message });

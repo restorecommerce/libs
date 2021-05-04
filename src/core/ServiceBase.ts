@@ -57,8 +57,14 @@ export class ServiceBase {
    * @param context
    */
   async read(call: ServiceCall<ReadRequest>, context?: any): Promise<any> {
+    let docs: any = {};
     if (!_.isEmpty(call.request.search)) {
-      throw new errors.Unimplemented('Full-text search is not implemented');
+      docs.status = {
+        id: '',
+        code: 404,
+        message: 'Full-text search is not implemented'
+      };
+      return docs;
     }
 
     try {
@@ -118,31 +124,49 @@ export class ServiceBase {
         customArgs
       )) || [];
 
-      return {
+
+      docs = {
         items: objectEntities,
         total_count: objectEntities.length,
+        status: {
+          code: 200,
+          message: 'success'
+        }
       };
+      return docs;
     } catch (e) {
-      const { code, message, details } = e;
+      const { code, message } = e;
       this.logger.error('Error caught while processing read request', { code, message });
-      if (details) {
-        throw { code, message: `${message} - ${details}` };
-      } else {
-        throw { code, message };
+      if (!docs.status) {
+        docs.status = {};
       }
+      docs.status = {
+        id: '',
+        code: e.code,
+        message: e.details ? e.details : e.message
+      };
+      return docs;
     }
   }
 
-  private generateStatusResponse(responseItems: any[], inputItems: any[]) {
+  private generateStatusResponse(responseItems: any[], inputItems: any[], deleteIds?: boolean) {
     let statusArray = [];
     if (!_.isArray(responseItems)) {
       responseItems = [responseItems];
+    }
+    if (!_.isArray(inputItems)) {
+      inputItems = [inputItems];
     }
     for (let i = 0; i < responseItems.length; i++) {
       const item = responseItems[i];
       if (item.error) {
         let code;
-        let id = inputItems[i].id;
+        let id;
+        if (!deleteIds) {
+          id = inputItems[i].id;
+        } else {
+          id = inputItems[i]; // for delete operation ids is a string and not object
+        }
         // map arango error code to http error code
         arangoHttpErrCodeMap.forEach((value, key) => {
           if (key === item.errorNum) {
@@ -172,6 +196,7 @@ export class ServiceBase {
    * @param context
    */
   async create(call: ServiceCall<CreateRequest>, context?: any): Promise<any> {
+    let docs: any = {};
     try {
       const createDocs = _.cloneDeep(call.request.items);
       let createResponse = await this.resourceapi.create(createDocs);
@@ -189,15 +214,20 @@ export class ServiceBase {
       let statusArray = this.generateStatusResponse(createResponse, createDocs);
       // remove error items from createResponse
       createResponse = createResponse.filter(item => !item.error);
-      return { items: createResponse, total_count: createResponse.length, status: statusArray };
+      docs = { items: createResponse, total_count: createResponse.length, status: statusArray };
+      return docs;
     } catch (e) {
-      const { code, message, details } = e;
+      const { code, message } = e;
       this.logger.error('Error caught while processing create request', { code, message });
-      if (details) {
-        throw { code, message: `${message} - ${details}` };
-      } else {
-        throw { code, message };
+      if (!docs.status) {
+        docs.status = [];
       }
+      docs.status.push({
+        id: '',
+        code: e.code,
+        message: e.details ? e.details : e.message
+      });
+      return docs;
     }
   }
   /**
@@ -207,16 +237,26 @@ export class ServiceBase {
    * @param context
    */
   async delete(call: ServiceCall<DeleteRequest>, context?: any): Promise<any> {
+    let deleteResponse = { status: [] };
     try {
       const events = this.events.entity;
-      let docs: any[];
+      let docs: any;
       if (call.request.collection) {
         docs = await this.resourceapi.deleteCollection();
-
         this.logger.info(`${this.name} deleted`);
       } else {
-        await this.resourceapi.delete(call.request.ids);
-        docs = call.request.ids;
+        docs = await this.resourceapi.delete(call.request.ids);
+      }
+
+      // sanitize delete response for docs
+      for (let doc of docs) {
+        if (doc._id && doc._key && doc._rev) {
+          delete doc._id;
+          const id = doc._key;
+          doc.id = id;
+          delete doc._key;
+          delete doc._rev;
+        }
       }
 
       if (this.isEventsEnabled) {
@@ -225,19 +265,35 @@ export class ServiceBase {
           if (typeof id == 'string') {
             id = { id };
           }
-          dispatch.push(events.emit(`${this.name}Deleted`, id));
+          if (!id.error) {
+            dispatch.push(events.emit(`${this.name}Deleted`, id));
+          }
         });
         await dispatch;
       }
-      return {};
-    } catch (e) {
-      const { code, message, details } = e;
-      this.logger.error('Error caught while processing delete request', { code, message });
-      if (details) {
-        throw { code, message: `${message} - ${details}` };
-      } else {
-        throw { code, message };
+
+      // if complete collection is dropped then there are no input ids provided,
+      // iterate docs and put ids to call.request.ids
+      if (call.request.collection && (_.isNil(call.request.ids) || _.isEmpty(call.request.ids))) {
+        call.request.ids = [];
+        for (let doc of docs) {
+          call.request.ids.push(doc.id);
+        }
       }
+      let statusArray = this.generateStatusResponse(docs, call.request.ids, true);
+      return statusArray;
+    } catch (e) {
+      const { code, message } = e;
+      this.logger.error('Error caught while processing delete request', { code, message });
+      if (!deleteResponse.status) {
+        deleteResponse.status = [];
+      }
+      deleteResponse.status.push({
+        id: '',
+        code: e.code,
+        message: e.details ? e.details : e.message
+      });
+      return deleteResponse;
     }
   }
 
@@ -248,6 +304,7 @@ export class ServiceBase {
    * @param context
    */
   async update(call: ServiceCall<UpdateRequest>, context?: any): Promise<any> {
+    let docs: any = {};
     try {
       let updateDocs = _.cloneDeep(call.request.items);
       let updateResponse = await this.resourceapi.update(updateDocs);
@@ -265,15 +322,20 @@ export class ServiceBase {
       let statusArray = this.generateStatusResponse(updateResponse, updateDocs);
       // remove error items from updateResponse
       updateResponse = updateResponse.filter(item => !item.error);
-      return { items: updateResponse, total_count: updateResponse.length, status: statusArray };
+      docs = { items: updateResponse, total_count: updateResponse.length, status: statusArray };
+      return docs;
     } catch (e) {
-      const { code, message, details } = e;
+      const { code, message } = e;
       this.logger.error('Error caught while processing update request', { code, message });
-      if (details) {
-        throw { code, message: `${message} - ${details}` };
-      } else {
-        throw { code, message };
+      if (!docs.status) {
+        docs.status = [];
       }
+      docs.status.push({
+        id: '',
+        code: e.code,
+        message: e.details ? e.details : e.message
+      });
+      return docs;
     }
   }
 
@@ -284,6 +346,7 @@ export class ServiceBase {
    * @param context
    */
   async upsert(call: ServiceCall<UpsertRequest>, context?: any): Promise<any> {
+    let docs: any = {};
     try {
       let upsertDocs = _.cloneDeep(call.request.items);
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
@@ -292,15 +355,20 @@ export class ServiceBase {
       let statusArray = this.generateStatusResponse(upsertResponse, upsertDocs);
       // remove error items from updateResponse
       upsertResponse = upsertResponse.filter(item => !item.error);
-      return { items: upsertResponse, total_count: upsertResponse.length, status: statusArray };
+      docs = { items: upsertResponse, total_count: upsertResponse.length, status: statusArray };
+      return docs;
     } catch (e) {
-      const { code, message, details } = e;
+      const { code, message } = e;
       this.logger.error('Error caught while processing upsert request', { code, message });
-      if (details) {
-        throw { code, message: `${message} - ${details}` };
-      } else {
-        throw { code, message };
+      if (!docs.status) {
+        docs.status = [];
       }
+      docs.status.push({
+        id: '',
+        code: e.code,
+        message: e.details ? e.details : e.message
+      });
+      return docs;
     }
   }
 }

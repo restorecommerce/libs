@@ -225,7 +225,7 @@ export class GrpcClient {
         } else if (!methodDefinition.requestStream && methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.serverStream({methodPath: methodDefinition.path, deserialize: methodDefinition.requestDeserialize, serialize: methodDefinition.responseSerialize, data})
+            [method]: (data: any) => this.serverStream({methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.responseSerialize, data})
           }
         } else if (methodDefinition.requestStream && methodDefinition.responseStream) {
           return {

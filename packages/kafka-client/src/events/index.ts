@@ -71,7 +71,7 @@ export class Events {
    * Allows sending and receiving events after this call.
    * Suspends the function until the provider is started.
    */
-  async start(): Promise<any> {
+  async start(): Promise<void> {
     return await this.provider.start();
   }
 

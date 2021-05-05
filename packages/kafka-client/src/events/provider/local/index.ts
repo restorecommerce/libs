@@ -214,7 +214,7 @@ export class Local {
   /**
    * Initialize the event provider.
    */
-  async start(): Promise<any> {
+  async start(): Promise<void> {
     if (_.isNil(this.topics)) {
       this.topics = {};
     }

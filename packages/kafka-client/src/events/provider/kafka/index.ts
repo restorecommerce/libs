@@ -272,6 +272,12 @@ export class Topic {
         groupId: this.provider.config.groupId
       });
 
+      await this.consumer.connect().then(() => {
+        this.provider.logger.info(`Consumer for topic '${this.name}' connected`);
+      }).catch(err => {
+        this.provider.logger.error(`Consumer for topic '${this.name}' connection error: ${err}`);
+      });
+
       await this.consumer.subscribe({
         topic: this.name
       }).then(() => {
@@ -296,6 +302,12 @@ export class Topic {
         }
       }).catch(err => {
         this.provider.logger.error(`Consumer for topic '${this.name}' failed to run: ${err}`);
+      });
+
+      this.consumer.seek({
+        topic: this.name,
+        partition: 0,
+        offset: offsetValue.toString(10)
       });
     }
 
@@ -480,16 +492,17 @@ export class Kafka {
    * Start connects to kafka with a producer.
    * Suspends the calling function until the producer is connected.
    */
-  async start(): Promise<any> {
+  async start(): Promise<void> {
     const operation = retry.operation({forever: true, maxTimeout: 2000});
-    return new Promise((resolveRetry) => {
+    return new Promise<void>((resolveRetry) => {
       operation.attempt(async () => {
         this.client = new KafkaJS({
           ...this.config.kafka,
+          logLevel: logLevel.DEBUG,
           logCreator: () => {
             return ({level, log}) => {
               const {message, ...extra} = log;
-              this.logger.log(toWinstonLogLevel(level), message, extra);
+              this.logger.log(toWinstonLogLevel(level), '[kafka-client] ' + message, extra);
             };
           },
         });
@@ -617,7 +630,8 @@ export class Kafka {
 
         values.push({
           key: eventName,
-          value: Buffer.from(bufferObj)
+          value: Buffer.from(bufferObj),
+          partition: 0
         });
       }
       for (let msg of messages) {

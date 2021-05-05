@@ -1,3 +1,9 @@
+### 0.2.1 (May 5th, 2021)
+
+* connect consumer before running
+* seek to provided offset after consumer is ran
+* add prefix to logged messages
+
 ### 0.2.0 (April 23rd, 2021)
 
 #### Contains breaking changes!

@@ -420,4 +420,5 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
       return authZ;
     }
   }
+  return authZ;
 };

@@ -1,3 +1,8 @@
+### 0.3.1 (May 7th, 2021)
+
+- return AuthZ instance if already instantiated
+- update kafka-client
+
 ### 0.3.0 (April 27th, 2021)
 
 #### Contains breaking changes!

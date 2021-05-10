@@ -10,7 +10,6 @@ import { Database } from 'arangojs';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
 import * as _ from 'lodash';
-import * as co from 'co';
 
 const database = chassis.database;
 let cfg = createServiceConfig(process.cwd() + '/test');
@@ -21,27 +20,7 @@ let server = new chassis.Server(cfg.get('server'));
 
 /* global describe it before after beforeEach */
 
-const providers = [
-  {
-    name: 'arango',
-    init: async function init(): Promise<any> {
-      const dbHost: string = cfg.get('database:testdb:host');
-      const dbPort: string = cfg.get('database:testdb:port');
-      const dbName: string = cfg.get('database:testdb:database');
-      const db = new Database('http://' + dbHost + ':' + dbPort);
-      await db.dropDatabase(dbName);
-      return database.get(cfg.get('database:testdb'), server.logger, 'testGraph',
-        cfg.get('graph:edgeDefinitions'));
-    }
-  }
-];
-providers.forEach((providerCfg) => {
-  describe(`with database provider ${providerCfg.name}`, () => {
-    testProvider(providerCfg);
-  });
-});
-
-function testProvider(providerCfg) {
+const testProvider = (providerCfg) => {
   describe('GraphServiceBase', () => {
     let db: any;
     let client: Client;
@@ -49,7 +28,7 @@ function testProvider(providerCfg) {
     let testResourceBaseService;
     let graphCfg;
     let resourcesList;
-    before(async function before() {
+    before(async () => {
       db = await providerCfg.init();
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
@@ -68,7 +47,7 @@ function testProvider(providerCfg) {
       let resourceBaseClient = new Client(cfg.get('client:test'), server.logger);
       testResourceBaseService = await resourceBaseClient.connect();
     });
-    after(async function after() {
+    after(async () => {
       await client.end();
       await server.stop();
     });
@@ -77,8 +56,7 @@ function testProvider(providerCfg) {
       let result_1, result_2, result_3;
       let service_1, service_2, service_3;
       let meta;
-      it('should create a vertex collection and insert data into it', async function
-        createVertices() {
+      it('should create a vertex collection and insert data into it', async () => {
         let meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
         };
@@ -119,7 +97,7 @@ function testProvider(providerCfg) {
       });
       // Test for graph traversal
       it('should traverse all vertices and edges in the graph',
-        async function checkGraphTraversal() {
+        async () => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].id}`,
             opts: { direction: 'outbound' },
@@ -127,8 +105,8 @@ function testProvider(providerCfg) {
             path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-          { car: 'bmw', id: 'c', org_id: 'e' },
-          { org: 'Bayern', id: 'e' }];
+            { car: 'bmw', id: 'c', org_id: 'e' },
+            { org: 'Bayern', id: 'e' }];
           let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
           let traversalResponseStream = call.getResponseStream();
@@ -160,12 +138,12 @@ function testProvider(providerCfg) {
             finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
-            _.sortBy(finalVertices, [function (o) { return o.id; }]);
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
           finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by excluding specified vertices using filter in the graph',
-        async function checkGraphTraversal() {
+        async () => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].id}`,
             opts: {
@@ -176,7 +154,7 @@ function testProvider(providerCfg) {
             path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-          { org: 'Bayern', id: 'e' }];
+            { org: 'Bayern', id: 'e' }];
           let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
           let traversalResponseStream = await call.getResponseStream();
@@ -205,12 +183,12 @@ function testProvider(providerCfg) {
             finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
-            _.sortBy(finalVertices, [function (o) { return o.id; }]);
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
           finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by including only specified edges using expander in the graph',
-        async function checkGraphTraversal() {
+        async () => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].id}`,
             opts: {
@@ -220,7 +198,7 @@ function testProvider(providerCfg) {
             data: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-          { car: 'bmw', id: 'c', org_id: 'e' }];
+            { car: 'bmw', id: 'c', org_id: 'e' }];
           let traversalResponse = { data: [], paths: [] };
           let call = await testService.traversal(traversalRequest);
           let traversalResponseStream = call.getResponseStream();
@@ -249,12 +227,12 @@ function testProvider(providerCfg) {
             finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
           }
           finalVertices =
-            _.sortBy(finalVertices, [function (o) { return o.id; }]);
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
           finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('delete vertices, should delete the edges associated as well',
-        async function deleteAllEdges() {
+        async () => {
           // Deleting the ids of vertexCollection 'cars' should remove
           // both 'person_has_car'  and 'car_has_org' both edges
           await service_2.delete({ request: { collection: 'cars' } });
@@ -262,4 +240,24 @@ function testProvider(providerCfg) {
         });
     });
   });
-}
+};
+
+const providers = [
+  {
+    name: 'arango',
+    init: async (): Promise<any> => {
+      const dbHost: string = cfg.get('database:testdb:host');
+      const dbPort: string = cfg.get('database:testdb:port');
+      const dbName: string = cfg.get('database:testdb:database');
+      const db = new Database('http://' + dbHost + ':' + dbPort);
+      await db.dropDatabase(dbName);
+      return database.get(cfg.get('database:testdb'), server.logger, 'testGraph',
+        cfg.get('graph:edgeDefinitions'));
+    }
+  }
+];
+providers.forEach((providerCfg) => {
+  describe(`with database provider ${providerCfg.name}`, () => {
+    testProvider(providerCfg);
+  });
+});

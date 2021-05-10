@@ -40,12 +40,12 @@ let meta = {
   modified: now,
   modified_by: 'Admin',
   owner: [{
-    id: "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
-    value: "urn:restorecommerce:acs:model:user.User"
+    id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
+    value: 'urn:restorecommerce:acs:model:user.User'
   },
   {
-    id: "urn:restorecommerce:acs:names:ownerInstance",
-    value: "Admin"
+    id: 'urn:restorecommerce:acs:names:ownerInstance',
+    value: 'Admin'
   }]
 };
 
@@ -58,7 +58,7 @@ describe('ServiceBase', () => {
   let testService;
   let testData: any;
   let cfg;
-  before(async function before() {
+  before(async () => {
     // Load test config from chassis service config
     cfg = createServiceConfig(process.cwd() + '/test');
     server = new chassis.Server(cfg.get('server'));
@@ -107,13 +107,13 @@ describe('ServiceBase', () => {
     client = new Client(cfg.get('client:test'), server.logger);
     testService = await client.connect();
   });
-  after(async function after() {
+  after(async () => {
     await client.end();
     await server.stop();
     await events.stop();
   });
   describe('endpoints', () => {
-    beforeEach(async function restoreDB() {
+    beforeEach(async () => {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
       const now: number = Date.now();
@@ -124,7 +124,7 @@ describe('ServiceBase', () => {
       await db.insert('resources', testData);
     });
     describe('read', () => {
-      it('should return all three elements with no arguments', async function checkRead() {
+      it('should return all three elements with no arguments', async () => {
         const result = await testService.read({});
         should.exist(result);
         should.not.exist(result.error);
@@ -136,7 +136,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(3);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(testData, 'id'));
       });
-      it('should return two elements with offset 1', async function checkRead() {
+      it('should return two elements with offset 1', async () => {
         const compareData = _.drop((await testService.read({})).data.items, 1);
         const result = await testService.read({
           offset: 1,
@@ -151,7 +151,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
       });
-      it('should return two elements with limit 2', async function checkRead() {
+      it('should return two elements with limit 2', async () => {
         const compareData = _.dropRight((await testService.read({})).data.items, 1);
         const result = await testService.read({
           limit: 2,
@@ -166,7 +166,7 @@ describe('ServiceBase', () => {
         result.data.items.should.length(2);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
       });
-      it('should return elements sorted', async function checkRead() {
+      it('should return elements sorted', async () => {
         const result = await testService.read({
           sort: [{
             field: 'id',
@@ -193,7 +193,7 @@ describe('ServiceBase', () => {
         });
         result.data.items.should.deepEqual(testDataDescending);
       });
-      it('should return only resources with value higher than 10', async function checkRead() {
+      it('should return only resources with value higher than 10', async () => {
         const filter = toStruct({
           value: {
             $gt: 10,
@@ -214,7 +214,7 @@ describe('ServiceBase', () => {
           return data.value > 10;
         }), 'id'));
       });
-      it('should return elements only with field value', async function checkRead() {
+      it('should return elements only with field value', async () => {
         const result = await testService.read({
           field: [{
             name: 'value',
@@ -236,7 +236,7 @@ describe('ServiceBase', () => {
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });
-      it('should apply a custom filter', async function checkRead() {
+      it('should apply a custom filter', async () => {
         const result = await testService.read({
           field: [{
             name: 'value',
@@ -265,16 +265,16 @@ describe('ServiceBase', () => {
       });
     });
     describe('create', () => {
-      it('should create new documents and validate duplicate element error', async function checkCreate() {
+      it('should create new documents and validate duplicate element error', async () => {
         const meta = {
           modified_by: 'Admin',
           owner: [{
-            id: "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
-            value: "urn:restorecommerce:acs:model:user.User"
+            id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
+            value: 'urn:restorecommerce:acs:model:user.User'
           },
           {
-            id: "urn:restorecommerce:acs:names:ownerInstance",
-            value: "Admin"
+            id: 'urn:restorecommerce:acs:names:ownerInstance',
+            value: 'Admin'
           }]
         };
         const newTestDataFirst = {
@@ -322,7 +322,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('delete', () => {
-      it('should delete collection when requested', async function checkDelete() {
+      it('should delete collection when requested', async () => {
         const result = await testService.delete({ collection: true });
         should.exist(result);
         should.not.exist(result.error);
@@ -334,7 +334,7 @@ describe('ServiceBase', () => {
         should.exist(allTestData.data.items);
         allTestData.data.items.should.length(0);
       });
-      it('should delete specified documents and return error if document does not exist', async function checkDelete() {
+      it('should delete specified documents and return error if document does not exist', async () => {
         const result = await testService.delete({ ids: [testData[1].id, 'invalidID'] });
         should.exist(result);
         should.not.exist(result.error);
@@ -355,8 +355,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('update', () => {
-      it('should update all specified documents and validate status message', async function
-        checkUpdate() {
+      it('should update all specified documents and validate status message', async () => {
         const patch = _.map(testData, (data) => {
           data.value = 100;
           data.text = 'test-patch';
@@ -383,8 +382,7 @@ describe('ServiceBase', () => {
           return e.value === 100 && e.text.length === 10;
         });
       });
-      it('should return an error when trying to update invalid document', async function
-        checkUpdate() {
+      it('should return an error when trying to update invalid document', async () => {
         const patch = {
           id: 'invalidDocument',
           value: 2,
@@ -399,8 +397,7 @@ describe('ServiceBase', () => {
       });
     });
     describe('upsert', () => {
-      it('should create or update specified documents', async function
-        checkUpsert() {
+      it('should create or update specified documents', async () => {
         const now = Date.now();
         const replace = [{
           id: testData[2].id,
@@ -446,7 +443,7 @@ describe('ServiceBase', () => {
     });
     // Test to check required field
     describe('check required fileds', () => {
-      it('should return an error when trying to insert with missing requried fields', async function checkGet() {
+      it('should return an error when trying to insert with missing requried fields', async () => {
         let result = await testService.delete({ collection: true });
         should.exist(result);
         should.not.exist(result.error);
@@ -465,12 +462,12 @@ describe('ServiceBase', () => {
     // Test to check buffered fields
     describe('check buffered fileds', () => {
       it('should decode the buffered field before storing in DB',
-        async function checkBufferedData() {
+        async () => {
           client = new Client(cfg.get('client:testBufferedService'), server.logger);
           let testBufferService = await client.connect();
           const bufData = {
             type_url: '',
-            value: Buffer.from(JSON.stringify({ testkey: "testValue" }))
+            value: Buffer.from(JSON.stringify({ testkey: 'testValue' }))
           };
           const bufferObjects = [
             { value: 'testValue1', count: 1, data: bufData, meta },

@@ -1,3 +1,11 @@
+### 0.1.0 (April 27th, 2021)
+
+#### Contains breaking changes!
+
+- switch to kafkajs
+- change config format for events
+- updated dependencies
+
 ### 0.0.9 (March 19th, 2021)
 
 - fix create and update to support inbound edges

@@ -463,12 +463,7 @@ export class ResourcesAPIBase {
           doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
         }
 
-        const foundDocs = await this.db.find(collectionName, { id: doc.id },
-          {
-            fields: {
-              meta: 1
-            }
-          });
+        const foundDocs = await this.db.find(collectionName, { id: doc.id });
         let dbDoc;
         if (foundDocs && foundDocs.length === 1) {
           dbDoc = foundDocs[0];
@@ -505,12 +500,16 @@ export class ResourcesAPIBase {
 
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              for (let outgoingEdge of outgoingEdges) {
-                await db.removeEdge(edgeCollectionName, outgoingEdge._id);
+              if (_.isArray(outgoingEdges.edges)) {
+                for (let outgoingEdge of outgoingEdges.edges) {
+                  await db.removeEdge(edgeCollectionName, outgoingEdge._id);
+                }
               }
               let incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              for (let incomingEdge of incomingEdges) {
-                await db.removeEdge(edgeCollectionName, incomingEdge._id);
+              if (_.isArray(incomingEdges.edges)) {
+                for (let incomingEdge of incomingEdges.edges) {
+                  await db.removeEdge(edgeCollectionName, incomingEdge._id);
+                }
               }
               // Create new edges
               if (from_id && modified_to_idValues) {
@@ -519,10 +518,10 @@ export class ResourcesAPIBase {
                     await db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                   }
-                  continue;
+                } else {
+                  await db.createEdge(edgeCollectionName, null,
+                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
                 }
-                await db.createEdge(edgeCollectionName, null,
-                  `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
               }
             }
           }

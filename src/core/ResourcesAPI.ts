@@ -255,7 +255,7 @@ export class ResourcesAPIBase {
       if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
-        result = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
+        let createVertexResp = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
         for (let document of documents) {
           if (this.edgeCfg && _.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
             for (let eachEdgeCfg of this.edgeCfg) {
@@ -277,15 +277,19 @@ export class ResourcesAPIBase {
                     await this.db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                   }
-                  continue;
+                } else {
+                  await this.db.createEdge(eachEdgeCfg.edgeName, null,
+                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
                 }
-                await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                  `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
               }
             }
           }
         }
-        result.push(result);
+        if (_.isArray(createVertexResp)) {
+          result = createVertexResp;
+        } else {
+          result.push(createVertexResp);
+        }
         return result;
       }
       else {
@@ -297,7 +301,7 @@ export class ResourcesAPIBase {
       result.push({
         error: true,
         errorNum: e.code,
-        errorMessage: e.details ? e.details: e.message
+        errorMessage: e.details ? e.details : e.message
       });
       return result;
     }
@@ -358,7 +362,7 @@ export class ResourcesAPIBase {
       deleteResponse.push({
         error: true,
         errorNum: err.code,
-        errorMessage: err.details ? err.details: err.message
+        errorMessage: err.details ? err.details : err.message
       });
       return deleteResponse;
     }
@@ -436,7 +440,7 @@ export class ResourcesAPIBase {
       result.push({
         error: true,
         errorNum: error.code,
-        errorMessage: error.details ? error.details: error.message
+        errorMessage: error.details ? error.details : error.message
       });
       return result;
     }

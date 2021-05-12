@@ -202,7 +202,6 @@ export class ServiceBase {
       let createResponse = await this.resourceapi.create(createDocs);
       const dispatch = [];
       const events: Topic = this.events.entity;
-      this.logger.info(this.name + ' created', { items: call.request.items });
       if (this.isEventsEnabled) {
         _.forEach(createResponse, (item) => {
           if (!item.error) {
@@ -215,6 +214,7 @@ export class ServiceBase {
       // remove error items from createResponse
       createResponse = createResponse.filter(item => !item.error);
       docs = { items: createResponse, total_count: createResponse.length, status: statusArray };
+      this.logger.info(this.name + ' create response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
@@ -308,7 +308,6 @@ export class ServiceBase {
     try {
       let updateDocs = _.cloneDeep(call.request.items);
       let updateResponse = await this.resourceapi.update(updateDocs);
-      this.logger.info(this.name + ' updated', { items: updateResponse });
       if (this.isEventsEnabled) {
         const dispatch = [];
         const events = this.events.entity;
@@ -323,6 +322,7 @@ export class ServiceBase {
       // remove error items from updateResponse
       updateResponse = updateResponse.filter(item => !item.error);
       docs = { items: updateResponse, total_count: updateResponse.length, status: statusArray };
+      this.logger.info(this.name + ' update response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
@@ -351,11 +351,11 @@ export class ServiceBase {
       let upsertDocs = _.cloneDeep(call.request.items);
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
         this.events.entity, this.name);
-      this.logger.info(`${this.name} upserted`, { items: upsertResponse });
       let statusArray = this.generateStatusResponse(upsertResponse, upsertDocs);
       // remove error items from updateResponse
       upsertResponse = upsertResponse.filter(item => !item.error);
       docs = { items: upsertResponse, total_count: upsertResponse.length, status: statusArray };
+      this.logger.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs;
     } catch (e) {
       const { code, message } = e;

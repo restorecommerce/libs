@@ -8,6 +8,14 @@ const opts: RestoreLoggerOptions = {
     colorize: true,
     prettyPrint: true
   },
+  elasticsearch: {
+    level: "silly",
+    clientOpts: {
+      node: "http://localhost:9200"
+    },
+    dataStream: true,
+    source: "logger-test"
+  }
 };
 
 describe('a logger', () => {
@@ -38,6 +46,10 @@ describe('a logger', () => {
       logger.log('debug', 'Message with multiple objects',
         { test: 'test' },
         { test2: 'test2' });
+      done();
+    });
+    it('an error with stack trace', (done) => {
+      logger.error('Generic Error!');
       done();
     });
   });

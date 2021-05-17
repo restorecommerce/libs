@@ -1,5 +1,6 @@
 import { format, transports } from "winston";
 import * as rTracer from 'cls-rtracer';
+import { traceFormatter } from "./utils";
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
   prettyPrint?:  boolean | any;
@@ -36,7 +37,6 @@ export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOption
     rTracerFormat
   ]
 
-  let prettyPrint = undefined;
   if (opts.prettyPrint !== false) {
     const prettyPrintOpts = typeof opts.prettyPrint === 'object' ? opts.prettyPrint : undefined;
     formats.unshift(format.prettyPrint(prettyPrintOpts))
@@ -46,6 +46,8 @@ export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOption
     const colorizeOpts = typeof opts.colorize === 'object' ? opts.colorize : undefined;
     formats.unshift(format.colorize(colorizeOpts))
   }
+
+  formats.unshift(traceFormatter());
 
   return new transports.Console({
     format: format.combine(...formats),

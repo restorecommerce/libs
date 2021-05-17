@@ -48,6 +48,8 @@ jobs:
 
       - name: Setup System
         uses: restorecommerce/setup-system-action@v1
+        with:
+          backing-only: true
 
       - name: Install Dependencies
         run: npm ci && npm run install:ci -- --scope="@restorecommerce/logger" --include-filtered-dependencies
@@ -56,5 +58,5 @@ jobs:
         run: npm run build -- --scope="@restorecommerce/logger" --include-filtered-dependencies
 
       - name: Test
-        run: npm run test
+        run: npm run test && curl "localhost:9200/logs-app-default/_search?size=100" | jq
         working-directory: ./packages/logger

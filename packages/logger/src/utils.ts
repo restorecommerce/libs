@@ -95,10 +95,13 @@ export const traceFormatter = format((info, opts) => {
   return info;
 });
 
+const ignoredRegex = /node_modules\/winston|node_modules\/readable-stream|node:events/;
+const ignoredList = ['node:events', 'events.js'];
+
 export const getRealTrace = (): any => {
   const stackTrace = parse(getStackTrace());
   const sourceTrace = stackTrace.slice(4)
-    .find(t => !t['native'] && !t.fileName.match(/node_modules\/winston|node_modules\/readable-stream|node:events/));
+    .find(t => !t['native'] && t.fileName.indexOf('/') >= 0 && !t.fileName.match(ignoredRegex) && ignoredList.indexOf(t.fileName) < 0);
 
   const resultTrace: any = {
     fileName: sourceTrace.fileName,

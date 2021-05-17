@@ -1,6 +1,7 @@
 import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from "winston-elasticsearch";
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
+import { getRealTrace } from "./utils";
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
@@ -20,6 +21,11 @@ const transformer: Transformer = (logData) => {
   if (rTracer.id()) {
     transformed.rid = rTracer.id();
   }
+
+  if (logData.level === 'error') {
+    logData.meta.source = getRealTrace();
+  }
+
   transformed['@timestamp'] = new Date().toISOString();
   transformed.source_host = os.hostname();
   transformed.message = logData.message;

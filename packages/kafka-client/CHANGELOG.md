@@ -1,3 +1,7 @@
+### 0.2.2 (May 18th, 2021)
+
+* removed log level
+
 ### 0.2.1 (May 5th, 2021)
 
 * connect consumer before running

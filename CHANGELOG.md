@@ -1,3 +1,7 @@
+### 0.1.1 (May 18th, 2021)
+
+- improved logging
+
 ### 0.1.0 (April 27th, 2021)
 
 #### Contains breaking changes!

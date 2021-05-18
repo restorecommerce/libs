@@ -8,6 +8,7 @@ import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';
 import { createServiceConfig } from '@restorecommerce/service-config';
+import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
 import * as co from 'co';
@@ -52,7 +53,7 @@ function testProvider(providerCfg) {
       db = await providerCfg.init();
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
-        cfg.get('fieldHandlers:bufferFields'));
+        cfg.get('fieldHandlers:bufferFields'), createLogger(cfg.get('server:logger')));
       await server.bind('graphsTestService', graphAPIService);
 
       await server.start();

@@ -1,3 +1,7 @@
+### 0.2.4 (May 20th, 2021)
+
+* removed debug logger for kafkajs
+
 ### 0.2.3 (May 20th, 2021)
 
 * fix issue for topic subscribers kicked out (since we were using same groupID), renamed consumer groupID to `groupID_topic` so that its unique for each topic

@@ -498,7 +498,6 @@ export class Kafka {
       operation.attempt(async () => {
         this.client = new KafkaJS({
           ...this.config.kafka,
-          logLevel: logLevel.DEBUG,
           logCreator: () => {
             return ({level, log}) => {
               const {message, ...extra} = log;

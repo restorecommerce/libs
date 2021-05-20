@@ -269,7 +269,7 @@ export class Topic {
   private async $subscribe(eventName: string, offsetValue: number, queue?: boolean): Promise<void> {
     if (!this.consumer) {
       this.consumer = this.provider.client.consumer({
-        groupId: this.provider.config.groupId
+        groupId: this.provider.config.groupId + '_' + this.name
       });
 
       await this.consumer.connect().then(() => {
@@ -498,6 +498,7 @@ export class Kafka {
       operation.attempt(async () => {
         this.client = new KafkaJS({
           ...this.config.kafka,
+          logLevel: logLevel.DEBUG,
           logCreator: () => {
             return ({level, log}) => {
               const {message, ...extra} = log;

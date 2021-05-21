@@ -5,36 +5,54 @@ import { traceFormatter } from "./utils";
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
   prettyPrint?:  boolean | any;
   colorize?: boolean | any;
+  sourcePointer?: boolean;
 }
 
 // a custom format that outputs request id
-const rTracerFormat = format.printf((info) => {
-  const rid = rTracer.id();
-  const time = info.timestamp;
-  const level = info.level;
-  let message = info.message;
-  const splatSym: any = Object.getOwnPropertySymbols(info).find((s) => {
-    return String(s) === 'Symbol(splat)';
+function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
+  return format.printf((info) => {
+    const rid = rTracer.id();
+    const time = info.timestamp;
+    const level = info.level;
+    let message = info.message;
+    const splatSym: any = Object.getOwnPropertySymbols(info).find((s) => {
+      return String(s) === 'Symbol(splat)';
+    });
+    const splat = info[splatSym];
+    const sourceSym: any = Object.getOwnPropertySymbols(info).find((s) => {
+      return String(s) === 'Symbol(source)';
+    });
+    const source = info[sourceSym];
+    const sourceFile = source.sourceFile;
+    const sourceLine = source.sourceLine;
+
+    delete info.timestamp;
+    let object = {};
+    if (splat) {
+      object = JSON.stringify(splat);
+    }
+    if (Object.entries(message).length !== 0 && message.constructor === Object) {
+      message = JSON.stringify(message);
+    }
+    let ret: string[] = [];
+    ret.push(`${level}: ${time}`);
+    if (opts.sourcePointer) {
+      ret.push(` ${sourceFile}:${sourceLine}`);
+    }
+    if (rid) {
+      ret.push(`[rid:${rid}]`);
+    }
+    ret.push(`: ${message} ${((object))}`);
+
+    return ret.join('');
   });
-  const splat = info[splatSym];
-  delete info.timestamp;
-  let object = '';
-  if (splat) {
-    object = JSON.stringify(splat);
-  }
-  if (Object.entries(message).length !== 0 && message.constructor === Object) {
-    message = JSON.stringify(message);
-  }
-  return rid
-    ? `${level}: ${time} [rid:${rid}]: ${message} ${((object))}`
-    : `${level}: ${time}: ${message} ${(object)}`;
-});
+}
 
 export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
   let formats: any[] = [
     format.simple(),
     format.timestamp(),
-    rTracerFormat
+    createTracerFormat(opts),
   ]
 
   if (opts.prettyPrint !== false) {

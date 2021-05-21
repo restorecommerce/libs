@@ -6,8 +6,8 @@ const parse = (stack: string): any[] => {
     .map((line: string) => {
       if (line.match(/^\s*[-]{4,}$/)) {
         return {
-          fileName: line,
-          lineNumber: null,
+          file: line,
+          line: null,
           functionName: null,
           typeName: null,
           methodName: null,
@@ -58,8 +58,8 @@ const parse = (stack: string): any[] => {
       }
 
       return {
-        fileName: lineMatch[2] || null,
-        lineNumber: parseInt(lineMatch[3], 10) || null,
+        file: lineMatch[2] || null,
+        line: parseInt(lineMatch[3], 10) || null,
         functionName: functionName,
         typeName: typeName,
         methodName: methodName,
@@ -85,13 +85,10 @@ export const getStackTrace = (obj?: any) => {
 }
 
 export const traceFormatter = format((info, opts) => {
-  if (info.level === 'error') {
-    if (!(info as any)[Symbol.for('splat')]) {
-      (info as any)[Symbol.for('splat')] = [];
-    }
-    (info as any)[Symbol.for('splat')].push(getRealTrace());
+  if (!(info as any)[Symbol.for('source')]) {
+    (info as any)[Symbol.for('source')] = {};
   }
-
+  (info as any)[Symbol.for('source')] = getRealTrace();
   return info;
 });
 
@@ -101,11 +98,11 @@ const ignoredList = ['node:events', 'events.js'];
 export const getRealTrace = (): any => {
   const stackTrace = parse(getStackTrace());
   const sourceTrace = stackTrace.slice(4)
-    .find(t => !t['native'] && t.fileName.indexOf('/') >= 0 && !t.fileName.match(ignoredRegex) && ignoredList.indexOf(t.fileName) < 0);
+    .find(t => !t['native'] && t.file.indexOf('/') >= 0 && !t.file.match(ignoredRegex) && ignoredList.indexOf(t.file) < 0);
 
   const resultTrace: any = {
-    fileName: sourceTrace.fileName,
-    lineNumber: sourceTrace.lineNumber
+    file: sourceTrace.file,
+    line: sourceTrace.line
   }
 
   if (sourceTrace.functionName) {

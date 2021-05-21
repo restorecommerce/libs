@@ -1,6 +1,7 @@
 import { createLogger, RestoreLoggerOptions } from '../src/index';
 
 const opts: RestoreLoggerOptions = {
+  sourcePointer: true,
   loggerName: 'test',
   console: {
     handleExceptions: false,

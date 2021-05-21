@@ -8,6 +8,7 @@ export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   file?: RestoreLoggerFileTransportOptions;
   elasticsearch?: RestoreLoggerElasticsearchTransportOptions;
   loggerName?: string;
+  sourcePointer?: boolean;
 }
 
 export type TransportStreamArray = Logger['transports'];
@@ -25,14 +26,14 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
   }
 
   if (opts.console) {
-    transports.push(createConsoleTransport(opts.console));
+    transports.push(createConsoleTransport({ ...opts.console, sourcePointer: opts.sourcePointer }));
   }
   if (opts.file) {
-    transports.push(createFileTransport(opts.file));
+    transports.push(createFileTransport({ ...opts.file, sourcePointer: opts.sourcePointer }));
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    transports.push(createElasticSearchTransport(opts.elasticsearch));
+    transports.push(createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer }));
   }
   if (transports.length === 0) {
     transports.push(createConsoleTransport());

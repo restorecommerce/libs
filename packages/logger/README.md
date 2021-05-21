@@ -20,6 +20,8 @@ These transports can be added and configured with a corresponding property in
 the options hash:
 
 ```json
+  "loggerName": "somelogger",   // Optional name
+  "sourcePointer": true,        // Whether the source file and line where the log statement was issued should be logged [default: `false`]
   "console": {
     "handleExceptions": false,
     "level": "silly",

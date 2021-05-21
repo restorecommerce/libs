@@ -5,46 +5,50 @@ import { getRealTrace } from "./utils";
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
-/**
- Transformer function to transform logged data into a
- the message structure used in restore for storage in ES.
+function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
+  /**
+   Transformer function to transform logged data into a
+  the message structure used in restore for storage in ES.
 
- @param {Object} logData
- @param {Object} logData.message - the log message
- @param {Object} logData.level - the log level
- @param {Object} logData.meta - the log meta data
- @returns {Object} transformed message
- */
-const transformer: Transformer = (logData) => {
-  const transformed: any = {};
-  // set rid if it exists
-  if (rTracer.id()) {
-    transformed.rid = rTracer.id();
-  }
+  @param {Object} logData
+  @param {Object} logData.message - the log message
+  @param {Object} logData.level - the log level
+  @param {Object} logData.meta - the log meta data
+  @returns {Object} transformed message
+  */
+  return (logData: any) => {
+    const source = opts.source; // will be read internally
+    const transformed: any = {};
+    // set rid if it exists
+    if (rTracer.id()) {
+      transformed.rid = rTracer.id();
+    }
 
-  if (logData.level === 'error') {
-    logData.meta.source = getRealTrace();
-  }
+    if (opts.sourcePointer) {
+      logData.meta.source = getRealTrace();
+    }
 
-  transformed['@timestamp'] = new Date().toISOString();
-  transformed.source_host = os.hostname();
-  transformed.message = logData.message;
-  if (typeof transformed.message === 'object') {
-    transformed.message = JSON.stringify(transformed.message);
-  }
-  transformed.severity = logData.level;
-  transformed.fields = logData.meta;
-  if (typeof transformed.fields !== 'object') {
-    transformed.fields = { 0: transformed.fields };
-  }
-  return transformed;
-};
+    transformed['@timestamp'] = new Date().toISOString();
+    transformed.source_host = os.hostname();
+    transformed.message = logData.message;
+    if (typeof transformed.message === 'object') {
+      transformed.message = JSON.stringify(transformed.message);
+    }
+    transformed.severity = logData.level;
+    transformed.fields = logData.meta;
+    if (typeof transformed.fields !== 'object') {
+      transformed.fields = { 0: transformed.fields };
+    }
+    return transformed;
+  };
+}
 
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
-  source?: any;
+  sourcePointer?: any;
 }
+
 export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
-  (transformer as any)['source'] = opts.source;
+  const transformer = createTransformer(opts);
   return new ElasticsearchTransport({
     indexTemplate,
     transformer,

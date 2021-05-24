@@ -7,11 +7,11 @@ Commit messages are not linted.
 
 ## Testing all packages
 
-Run `npm test` from the cli to run tests for all packages
+Run `npm test` from the shell to run tests for all packages.
 
 ## Releasing one (or more) packages
 
-Run `npm run publish` from the cli to
+Run `npm run publish` from the shell to:
 
 - update version in changed packages
 - create a release commit and tag

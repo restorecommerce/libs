@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/protos",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Protobuf descriptors for Restorecommerce services",
   "author": "n-fuse GmbH",
   "repository": {

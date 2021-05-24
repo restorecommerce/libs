@@ -1,3 +1,20 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.2.5 (2021-05-24)
+
+
+### Bug Fixes
+
+* **kafka-client:** add winston as a dependency ([9a82cb7](https://github.com/restorecommerce/kafka-client/commit/9a82cb76b19274e39579db824546b839e539eee5))
+* **kafka-client:** cast typing for function ([a9b3ddd](https://github.com/restorecommerce/kafka-client/commit/a9b3dddb2cb23e8a61fe800b2469ad16483288be))
+
+
+
+
+
 ### 0.2.4 (May 20th, 2021)
 
 * removed debug logger for kafkajs

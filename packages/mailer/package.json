@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/mailer",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Multi transport mailer based on nodemailer",
   "main": "index",
   "author": "Invend GmbH",

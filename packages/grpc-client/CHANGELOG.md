@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.1...@restorecommerce/grpc-client@0.2.2) (2021-05-24)
+
+
+### Bug Fixes
+
+* **grpc-client:** end grpc call on observable completion ([4ee8f5f](https://github.com/restorecommerce/libs/commit/4ee8f5f1e36a6d5c29fdeb3719e8c3f6280e907b))
+
+
+
+
+
 ## [0.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.0...@restorecommerce/grpc-client@0.2.1) (2021-02-24)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

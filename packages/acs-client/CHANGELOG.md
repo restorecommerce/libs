@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.3.2 (2021-05-24)
+
+
+### Bug Fixes
+
+* **acs-client:** return AuthZ instance if already instantiated ([0a6cd98](https://github.com/restorecommerce/acs-client/commit/0a6cd98e2fb4ba4e95b57e1c44a6da0cfc410099))
+
+
+
+
+
 ### 0.3.1 (May 7th, 2021)
 
 - return AuthZ instance if already instantiated

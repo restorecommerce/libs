@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.1.9 (2021-05-24)
+
+**Note:** Version bump only for package @restorecommerce/koa-req-res-logger
+
+
+
+
+
 ### 0.1.8 (March 3rd, 2021)
 
 - Introduce special mode for GraphQL based APIs

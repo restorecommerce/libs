@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.4...@restorecommerce/logger@0.7.0) (2021-05-24)
+
+
+### Bug Fixes
+
+* **logger:** more trace exclusions ([956e17d](https://github.com/restorecommerce/libs/commit/956e17d9ae05583e481f0fe521f137fdadc1e465))
+
+
+### Features
+
+* **logger:** Add possibility to log source code reference ([77f728a](https://github.com/restorecommerce/libs/commit/77f728a242ba112b3bc70c12a8d9d91259192c86))
+* **logger:** add source trace of error ([b311658](https://github.com/restorecommerce/libs/commit/b311658f69a23dca94390e1bb9605671923b62f6))
+
+
+
+
+
 ## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.3...@restorecommerce/logger@0.6.4) (2021-03-03)
 
 **Note:** Version bump only for package @restorecommerce/logger

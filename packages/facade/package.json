@@ -24,7 +24,7 @@
     "@cloudnative/health": "^2.1.2",
     "@grpc/grpc-js": "^1.2.12",
     "@grpc/proto-loader": "^0.6.0",
-    "@restorecommerce/grpc-client": "^0.1.0",
+    "@restorecommerce/grpc-client": "^0.2.1",
     "@restorecommerce/kafka-client": "^0.1.13",
     "@restorecommerce/logger": "^0.6.4",
     "@restorecommerce/rc-grpc-clients": "^0.1.1",

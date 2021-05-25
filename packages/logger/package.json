@@ -19,7 +19,7 @@
     "cls-hooked": "^4.2.2",
     "cls-rtracer": "^2.6.0",
     "winston": "^3.3.3",
-    "winston-elasticsearch": "^0.15.4"
+    "winston-elasticsearch": "^0.15.5"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

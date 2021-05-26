@@ -31,12 +31,22 @@ function bufferToObservable(buffer: Buffer): Observable<any> {
   });
 }
 
+/**
+ * Marshall any payload to google.protobuf.Any
+ */
+export const marshallProtobufAny = (data: any): any => {
+  return {
+    type_url: '',
+    value: Buffer.from(JSON.stringify(data))
+  };
+};
+
 describe('grpc client', () => {
   const grpcClient = new GrpcClient({
     address: ADDRESS,
     proto: {
       protoRoot: './tests/protos',
-      protoPath: './echo.proto',
+      protoPath: './echo/echo.proto',
       services: {
         echo: {
           packageName: "echo",
@@ -47,10 +57,13 @@ describe('grpc client', () => {
   });
 
   it('should send and receive a unary request', async () => {
-    const data = randomBytes(1 << 16).toString('hex');
+    // const data = randomBytes(1 << 16).toString('hex');
+    const data = 'This is a test message';
 
     const result = await grpcClient.echo.echoUnary({
-      message: data
+      message: data,
+      data: 'test Data',
+      test: marshallProtobufAny({ testAny: 'testMessage' })
     });
 
     expect(result).toHaveProperty('message');

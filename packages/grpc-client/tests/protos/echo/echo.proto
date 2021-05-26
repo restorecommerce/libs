@@ -2,6 +2,7 @@ syntax = "proto3";
 package echo;
 
 // import "google/protobuf/wrappers.proto";
+import "google/protobuf/any.proto";
 
 // The greeting service definition.
 service EchoService {
@@ -14,9 +15,12 @@ service EchoService {
 
 message EchoRequest {
   string message = 1;
+  string data = 3;
+  // google.protobuf.Any test = 2;
   // google.protobuf.StringValue foo = 2;
 }
 
 message EchoResponse {
   string message = 1;
+  google.protobuf.Any testResponse = 2;
 }

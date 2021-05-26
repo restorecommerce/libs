@@ -5,11 +5,12 @@ export function createMockServer(address: string) {
   const server = new GrpcMockServer(address);
   server.addService({
     protoRoot: './tests/protos',
-    protoPath: 'echo.proto',
+    protoPath: './echo/echo.proto',
     packageName: "echo",
     serviceName: "EchoService",
     implementations: {
       echoUnary: (call: any, callback: any) => {
+        console.log('Received Req is...', call.request);
         callback(null, call.request);
       },
       echoServerStream: (call: any, callback: any) => {

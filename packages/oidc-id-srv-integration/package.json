@@ -61,5 +61,5 @@
     "build": "npm-run-all lint build:clean build:tsc",
     "postinstall": "tsc && cp -r ./src/views ./lib/views"
   },
-  "gitHead": "a43af6ac39db48c9e3c96ff671325d57e4569b7b"
+  "gitHead": "c4fad070047fb039529d49a1eff3f4433c36e3da"
 }

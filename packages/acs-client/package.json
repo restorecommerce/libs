@@ -68,5 +68,5 @@
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "createtopics": "node setupTopics.js io.restorecommerce.rules.resource io.restorecommerce.policies.resource io.restorecommerce.policy_sets.resource"
   },
-  "gitHead": "a43af6ac39db48c9e3c96ff671325d57e4569b7b"
+  "gitHead": "c4fad070047fb039529d49a1eff3f4433c36e3da"
 }

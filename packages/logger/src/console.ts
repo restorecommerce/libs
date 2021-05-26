@@ -23,8 +23,8 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
       return String(s) === 'Symbol(source)';
     });
     const source = info[sourceSym];
-    const sourceFile = source.sourceFile;
-    const sourceLine = source.sourceLine;
+    const sourceFile = source.file;
+    const sourceLine = source.line;
 
     delete info.timestamp;
     let object = {};

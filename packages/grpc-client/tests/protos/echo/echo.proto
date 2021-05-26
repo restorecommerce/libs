@@ -16,7 +16,7 @@ service EchoService {
 message EchoRequest {
   string message = 1;
   string data = 3;
-  // google.protobuf.Any test = 2;
+  google.protobuf.Any test = 2;
   // google.protobuf.StringValue foo = 2;
 }
 

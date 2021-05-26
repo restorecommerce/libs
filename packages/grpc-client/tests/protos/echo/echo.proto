@@ -15,12 +15,10 @@ service EchoService {
 
 message EchoRequest {
   string message = 1;
-  string data = 3;
   google.protobuf.Any test = 2;
-  // google.protobuf.StringValue foo = 2;
 }
 
 message EchoResponse {
   string message = 1;
-  google.protobuf.Any testResponse = 2;
+  google.protobuf.Any test = 2;
 }

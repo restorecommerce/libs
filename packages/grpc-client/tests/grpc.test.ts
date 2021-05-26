@@ -57,17 +57,17 @@ describe('grpc client', () => {
   });
 
   it('should send and receive a unary request', async () => {
-    // const data = randomBytes(1 << 16).toString('hex');
-    const data = 'This is a test message';
+    const data = randomBytes(1 << 16).toString('hex');
 
     const result = await grpcClient.echo.echoUnary({
       message: data,
-      data: 'test Data',
       test: marshallProtobufAny({ testAny: 'testMessage' })
     });
 
     expect(result).toHaveProperty('message');
     expect(result.message).toEqual(data);
+    const decodedAnyData = JSON.parse(result.test.value.toString());
+    expect(decodedAnyData.testAny).toEqual('testMessage');
   });
 
   it('should send and receive a server-stream request', async (done) => {

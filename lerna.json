@@ -2,6 +2,12 @@
   "packages": [
     "packages/*"
   ],
+  "ignoreChanges": [
+    "**/node_modules/**",
+    "**/package.json",
+    "**/*.md",
+    "**/perf/**"
+  ],
   "version": "independent",
   "command": {
     "publish": {

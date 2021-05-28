@@ -1,6 +1,6 @@
 import {
   RoleAssociation, UserScope, Subject, PolicySetRQ, Effect,
-  AttributeTarget, Attribute, HierarchicalScope
+  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -195,9 +195,9 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
         if (filterId && !scopingUpdated) {
           userCondition = true;
           filter.push({
-            id: {
-              $eq: filterId
-            }
+            field: 'id',
+            operation: FilterOperation.eq,
+            value: filterId
           });
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
@@ -206,9 +206,9 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       else if (filterId && !scopingUpdated) {
         userCondition = true;
         filter.push({
-          id: {
-            $eq: filterId
-          }
+          field: 'id',
+          operation: FilterOperation.eq,
+          value: filterId
         });
       } else {
         return;
@@ -254,17 +254,15 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     if (attribute.id == urns.resourceID) {
       if (effect == Effect.PERMIT) {
         filter.push({
-          id: {
-            $eq: attribute.value
-          }
+          field: 'id',
+          operation: FilterOperation.eq,
+          value: attribute.value
         });
       } else {
         filter.push({
-          id: {
-            $not: {
-              $eq: attribute.value
-            }
-          }
+          field: 'id',
+          operation: FilterOperation.neq,
+          value: attribute.value
         });
       }
       // add ID filter
@@ -280,13 +278,11 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     }
   }
 
-  const key = effect == Effect.PERMIT ? '$or' : '$and';
-  if (query['filter']) {
-    query['filter'] = Object.assign({}, query['filter'], { [key]: filter });
-  } else if (!_.isEmpty(filter) || key == '$or') {
-    query['filter'] = {
-      [key]: filter
-    };
+  const key = effect == Effect.PERMIT ? OperatorType.or : OperatorType.and;
+  if (query.filter && !query.filters) {
+    query.filters = { filter: query['filter'] };
+    query.filters.operator = key;
+    delete query['filter'];
   }
   query.scopingUpdated = scopingUpdated;
   query.userCondition = userCondition;
@@ -321,13 +317,15 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
   }
   Object.assign(subject, { hierarchical_scopes, role_associations });
   const urns = cfg.get('authorization:urns');
-  let query = {
-    filter: []
+  let query: any = {
+    filters: {
+      filter: []
+    }
   };
 
   const pSetAlgorithm = policySet.combining_algorithm;
   const policyEffects = [];
-  const policyFilters = [];
+  const policyFiltersArr = [];
 
   if (policySet.policies) {
     for (let policy of policySet.policies) {
@@ -377,7 +375,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
               delete filterPermissions.userCondition;
             }
             if (!_.isEmpty(filterPermissions)) {
-              policyFilters.push(filterPermissions);
+              policyFiltersArr.push(filterPermissions);
             }
           }
         }
@@ -400,29 +398,19 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
   }
 
   const key = applicable == Effect.PERMIT ? '$or' : '$and';
-  if (policyFilters.length === 0) {
+  if (policyFiltersArr.length === 0) {
     return undefined;
   }
-  for (let policy of policyFilters) {
-    if (policy.filter && database && database === 'postgres') {
-      // add a filter for org key based on user scope
-      let keys = Object.keys(policy.filter);
-      if (!query['filter']) {
-        query['filter'] = [];
-      }
-      for (let key of keys) {
-        query['filter'].push(policy.filter[key]);
-      }
-      continue;
-    }
 
-    if (policy.filter && policy.filter[key] && policy.filter[key].length > 0) {
-      (query as any) = { filter: {} };
-      if (!query.filter[key]) {
-        query.filter[key] = [];
-      }
-      query.filter[key].push(policy.filter);
+  for (let policy of policyFiltersArr) {
+    let filterList = [];
+    if (policy.filters && policy.filters.filter) {
+      filterList = policy.filters.filter;
     }
+    for (let filter of filterList) {
+      query.filters.filter.push(filter);
+    }
+    query.filters.operator = key;
     if (policy.scope && applicable == Effect.PERMIT && !query['custom_query']) {
       if (!query['custom_queries']) {
         query['custom_queries'] = [];
@@ -446,7 +434,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     }
   }
 
-  if (!_.isEmpty(query) && (!_.isNil(query.filter) || !_.isEmpty(query['field']) || !_.isEmpty(query['custom_query']))) {
+  if (!_.isEmpty(query) && (!_.isNil(query.filters) || !_.isEmpty(query['field']) || !_.isEmpty(query['custom_query']))) {
     if (query['custom_arguments']) {
       query['custom_arguments'] = { value: Buffer.from(JSON.stringify(query['custom_arguments'])) };
     }
@@ -462,39 +450,3 @@ interface QueryParams {
   scopingUpdated?: boolean;
   userCondition?: boolean;
 }
-
-const decodeValue = (value: any): any => {
-  let ret = {};
-
-  if (value.number_value) {
-    ret = value.number_value;
-  }
-  else if (value.string_value) {
-    ret = value.string_value;
-  }
-  else if (value.list_value) {
-    ret = _.map(value.list_value.values, (v) => {
-      return toObject(v, true); // eslint-disable-line
-    });
-  }
-  else if (value.struct_value) {
-    ret = toObject(value.struct_value); // eslint-disable-line
-  }
-  else if (!_.isNil(value.bool_value)) {
-    ret = value.bool_value;
-  }
-  return ret;
-};
-
-export const toObject = (struct: any, fromArray: any = false): Object => {
-  let obj = {};
-  if (!fromArray) {
-    _.forEach(struct.fields, (value, key) => {
-      obj[key] = decodeValue(value);
-    });
-  }
-  else {
-    obj = decodeValue(struct);
-  }
-  return obj;
-};

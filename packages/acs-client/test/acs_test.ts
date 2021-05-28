@@ -6,7 +6,7 @@ import { AuthZAction, Decision, PolicySetRQ, ACSRequest } from '../lib/acs/inter
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
-import { toObject, cfg } from '../lib';
+import { cfg } from '../lib';
 
 let authZ: ACSAuthZ;
 let mockServer: any;
@@ -333,9 +333,9 @@ describe('testing acs-client', () => {
         await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQ;
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
-        const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetScope' };
-        const actualResponse = toObject(input.args.filter, true);
-        actualResponse[0].should.deepEqual(expectedFilterResponse);
+        const expectedFilterResponse = [{ field: filterParamKey, operation: 'eq', value: 'targetScope' }, { field: filterParamKey, operation: 'eq', value: 'targetSubScope' }];
+        input.args.filters.filter[0].should.deepEqual(expectedFilterResponse[0]);
+        input.args.filters.filter[1].should.deepEqual(expectedFilterResponse[1]);
         stopGrpcMockServer();
       });
     it('Should PERMIT reading Test resource (PERMIT rule) with HR scoping enabled and verify input filter ' +
@@ -383,8 +383,7 @@ describe('testing acs-client', () => {
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
         const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
-        const actualFilterResponse = toObject(input.args.filter, true);
-        actualFilterResponse[0].should.deepEqual(expectedFilterResponse);
+        input.args.filters.filter[0].should.deepEqual(expectedFilterResponse);
         stopGrpcMockServer();
       });
     it('Should DENY reading Test resource (PERMIT rule) with HR scoping disabled', async () => {

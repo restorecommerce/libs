@@ -202,3 +202,20 @@ export interface Context {
   resources: any[];
   security: any;
 }
+
+export enum FilterOperation {
+  eq = 0,
+  lt = 1,
+  lte = 2,
+  gt = 3,
+  gte = 4,
+  isEmpty = 5,
+  iLike = 6,
+  in = 7,
+  neq = 8
+};
+
+export enum OperatorType {
+  and = 0,
+  or = 1,
+};

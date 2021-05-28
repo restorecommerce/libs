@@ -2,7 +2,7 @@
   "logger": {
     "console": {
       "handleExceptions": false,
-      "level": "debug",
+      "level": "error",
       "colorize": true,
       "prettyPrint": true
     }

@@ -22,6 +22,7 @@ message Tokens {
   repeated string scopes = 4; // identifier for role_association
   string type = 5; // type of token eg: access_token, refresh_token
   bool interactive = 6;
+  double last_login = 7;
 }
 
 message HierarchicalScope {

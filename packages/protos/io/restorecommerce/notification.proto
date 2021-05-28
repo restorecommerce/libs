@@ -2,48 +2,40 @@ syntax = "proto3";
 
 package io.restorecommerce.notification;
 
+import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
 
+// Message structure for Notification
 service Service {
-  // direct notifications
-  rpc Send (Notification) returns (google.protobuf.Empty); /// generic fallback
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationList);
+  rpc Create (NotificationList) returns (NotificationList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
+  rpc Update (NotificationList) returns (NotificationList);
+  rpc Upsert (NotificationList) returns (NotificationList);
 }
 
-// mimics nodemailer properties for easy configuration
-message Attachment {
-  string filename = 1;
-
-  // the "content" may be on of the following:
-  string text = 2; // for textual data
-  bytes buffer = 3; // for binary data, eg.: images
-
-  string path = 4;
-  string content_type = 5;
-  string content_disposition = 6;
-  string cid = 7;
-  string encoding = 8;
+message Deleted {
+  string id = 1;
 }
 
-// sendEmail Notification event
+message NotificationList {
+  repeated Notification items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
 message Notification {
-  oneof channel {
-    Email email = 1;
-    Log log = 2;
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3;
+  string description = 4;
+  repeated string notification_channel_ids = 5;
+  oneof address_type {
+    string email = 6;
+    string telephone_number = 7;
   }
-  string subject = 3;
-  string body = 4;  // text/HTML content
-  string transport = 5; /// 'email', 'log', ... default == 'log'
-  string provider = 6; /// specific transport provider, eg: 'console' for transport == 'log'
-  repeated Attachment attachments = 7;
-}
-
-message Email {
-  repeated string to = 1; // array of to email list
-  repeated string cc = 2 ;// array of cc email list
-  repeated string bcc = 3;  // array of bcc email list
-  string replyto = 4; // if set, the outgoing mail will have this replyTo header set
-}
-
-message Log {
-  string level = 1;
+  string subject_template = 8;
+  string body_template = 9;
 }

@@ -101,3 +101,11 @@ message ListRequest {
   google.protobuf.Struct filter = 2; /// Filter based on fieldName|operation, value|list
   io.restorecommerce.auth.Subject subject = 3;
 }
+
+// OstorageMessage is used for emitting
+// objectUploaded and objectDownloaded events
+message OstorageMessage {
+  string key = 1;
+  string bucket = 2;
+  google.protobuf.Any metadata = 3;
+}

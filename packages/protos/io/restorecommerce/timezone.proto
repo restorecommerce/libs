@@ -31,6 +31,5 @@ message TimezoneList {
 message Timezone {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
-  string value = 3;
-  string description = 4;
+  string description = 3;
 }

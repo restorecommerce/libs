@@ -34,6 +34,7 @@ service Service {
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
   rpc FindByToken (FindByTokenRequest) returns (User);
+  rpc SendActivationEmail (SendActivationEmailRequest) returns (google.protobuf.Empty);
 }
 
 /**
@@ -85,67 +86,68 @@ message RegisterRequest {
   string timezone_id = 9;
   string locale_id = 10;
 
-  repeated io.restorecommerce.auth.RoleAssociation role_associations = 11;
-  string default_scope = 12; // default hierarchical scope
-  UserType user_type = 13;
-  string captcha_code = 14;
+  string default_scope = 11; // default hierarchical scope
+  UserType user_type = 12;
+  string captcha_code = 13;
 }
 
 message ActivateRequest {
-  string name = 1; /// User name (unique)
+  string identifier = 1; /// user name or email
   string activation_code = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmUserInvitationRequest {
-  string name = 1;
+  string identifier = 1; // user name or email
   string password = 2;
   string activation_code = 3;
   io.restorecommerce.auth.Subject subject = 4;
 }
 
 message SendInvitationEmailRequest {
-  string user_id = 1;
-  string invited_by_user_id = 2;
+  string identifier = 1; // user name or email
+  string invited_by_user_identifier = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ChangePasswordRequest {
-  string id = 1; /// User ID
+  string identifier = 1; /// user name or email
   string password = 2;
   string new_password = 3;
   io.restorecommerce.auth.Subject subject = 4;
 }
 
 message RequestPasswordChangeRequest {
-  oneof input_field {
-    string name = 1;
-    string email = 2;
-  }
-  io.restorecommerce.auth.Subject subject = 3;
+  string identifier = 1; // user name or email
+  io.restorecommerce.auth.Subject subject = 2;
 }
 
 message ConfirmPasswordChangeRequest {
-  string name = 1;
+  string identifier = 1; // user name or email
   string activation_code = 2;
   string password = 3;
   io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ChangeEmailRequest {
-  string id = 1; /// User ID
-  string email = 2;
+  string identifier = 1; // user name or email
+  string new_email = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmEmailChangeRequest {
-  string name = 1;
+  string identifier = 1; // user name or email
   string activation_code = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
 message UnregisterRequest {
-  string id = 1; /// User ID
+  string identifier = 1; /// User ID
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+message SendActivationEmailRequest {
+  string identifier = 1; /// User name or email
   io.restorecommerce.auth.Subject subject = 2;
 }
 
@@ -240,6 +242,5 @@ message User {
   string invited_by_user_first_name = 22; // First name of user inviting
   string invited_by_user_last_name = 23; // Last name of user inviting
   repeated io.restorecommerce.auth.Tokens tokens = 24;
-  double last_login = 25;
-  double last_access = 26;
+  double last_access = 25;
 }

@@ -31,13 +31,47 @@ message Sort {
   SortOrder order = 2;
 }
 
+message Filter {
+  string field = 1;
+  enum Operation {
+    eq = 0;
+    lt = 1;
+    lte = 2;
+    gt = 3;
+    gte = 4;
+    isEmpty = 5;
+    iLike = 6;
+    in = 7;
+    neq = 8;
+  }
+  Operation operation = 2;
+  string value = 3;
+  enum ValueType {
+    STRING = 0; // default value type if not specified
+    NUMBER = 1;
+    BOOLEAN = 2;
+    DATE = 3;
+    ARRAY = 4;
+  }
+  ValueType type = 4;
+  repeated FilterOp filters = 5;
+}
+
+message FilterOp {
+  repeated Filter filter = 1;
+  enum operator {
+    and = 0;
+    or = 1;
+  }
+}
+
 message ReadRequest {
   uint32 offset = 1;
   uint32 limit = 2;
   repeated Sort sort = 3;
 
   /// Filter based on fieldName|operation, value|list
-  google.protobuf.Struct filter = 4;
+  repeated FilterOp filters = 4;
 
   /// Fields selector
   repeated FieldFilter field = 5;
@@ -78,4 +112,7 @@ message Resource {
   io.restorecommerce.meta.Meta meta = 2;
   int32 value = 3;
   string text = 4;
+  bool active = 5;
+  double created = 6;
+  string status = 7;
 }

@@ -6,13 +6,14 @@ import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RoleList);
-  rpc Create (RoleList) returns (RoleList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (RoleList) returns (RoleList);
-  rpc Upsert (RoleList) returns (RoleList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RoleListReadResponse);
+  rpc Create (RoleList) returns (RoleListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (RoleList) returns (RoleListResponse);
+  rpc Upsert (RoleList) returns (RoleListResponse);
 }
 
 message Role {
@@ -27,6 +28,18 @@ message RoleList {
   repeated Role items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message RoleListResponse {
+  repeated Role items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message RoleListReadResponse {
+  repeated Role items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message Deleted {

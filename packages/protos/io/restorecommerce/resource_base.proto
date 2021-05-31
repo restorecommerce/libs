@@ -6,14 +6,15 @@ import "google/protobuf/any.proto";
 import "google/protobuf/struct.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // Service provides the CRUD operations
 service Service {
-  rpc Read (ReadRequest) returns (ResourceList);
-  rpc Create (ResourceList) returns (ResourceList);
-  rpc Delete (DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (ResourceList) returns (ResourceList);
-  rpc Upsert (ResourceList) returns (ResourceList);
+  rpc Read (ReadRequest) returns (ResourceListReadResponse);
+  rpc Create (ResourceList) returns (ResourceListResponse);
+  rpc Delete (DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (ResourceList) returns (ResourceListResponse);
+  rpc Upsert (ResourceList) returns (ResourceListResponse);
 }
 
 message FieldFilter {
@@ -104,6 +105,21 @@ message ResourceList {
   repeated Resource items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+  repeated io.restorecommerce.status.Status status = 4;
+}
+
+// ResourceList response
+message ResourceListResponse {
+  repeated Resource items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 4;
+}
+
+// resource read response
+message ResourceListReadResponse {
+  repeated Resource items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 4;
 }
 
 /// Example resource

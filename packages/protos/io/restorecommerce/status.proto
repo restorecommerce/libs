@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package io.restorecommerce.status;
+
+message Status {
+  string id = 1;
+  uint32 code = 2;
+  string message = 3;
+}
+
+message StatusArray {
+repeated Status status = 1;
+}

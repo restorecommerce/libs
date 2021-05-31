@@ -6,16 +6,17 @@ import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeList);
-  rpc Create (TaxTypeList) returns (TaxTypeList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (TaxTypeList) returns (TaxTypeList);
-  rpc Upsert (TaxTypeList) returns (TaxTypeList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeListReadResponse);
+  rpc Create (TaxTypeList) returns (TaxTypeListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (TaxTypeList) returns (TaxTypeListResponse);
+  rpc Upsert (TaxTypeList) returns (TaxTypeListResponse);
 }
 
 message Deleted {
@@ -26,6 +27,18 @@ message TaxTypeList {
   repeated TaxType items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message TaxTypeListResponse {
+  repeated TaxType items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message TaxTypeListReadResponse {
+  repeated TaxType items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message TaxType {

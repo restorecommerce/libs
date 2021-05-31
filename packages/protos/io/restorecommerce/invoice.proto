@@ -8,16 +8,17 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/organization.proto";
 import "io/restorecommerce/auth.proto";
 import "google/protobuf/any.proto";
+import "io/restorecommerce/status.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (InvoiceList);
-  rpc Create (InvoiceList) returns (InvoiceList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (InvoiceList) returns (InvoiceList);
-  rpc Upsert (InvoiceList) returns (InvoiceList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (InvoiceListReadResponse);
+  rpc Create (InvoiceList) returns (InvoiceListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (InvoiceList) returns (InvoiceListResponse);
+  rpc Upsert (InvoiceList) returns (InvoiceListResponse);
 }
 
 message Deleted {
@@ -31,6 +32,18 @@ message InvoiceList {
   repeated Invoice items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message InvoiceListResponse {
+  repeated Invoice items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message InvoiceListReadResponse {
+  repeated Invoice items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 /*

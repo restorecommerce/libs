@@ -8,18 +8,19 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/image.proto";
+import "io/restorecommerce/status.proto";
 
 /**
  * The microservice for the user resource.
  */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserList);
-  rpc Create (UserList) returns (UserList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (UserList) returns (UserList);
-  rpc Upsert (UserList) returns (UserList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListReadResponse);
+  rpc Create (UserList) returns (UserListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (UserList) returns (UserListResponse);
+  rpc Upsert (UserList) returns (UserListResponse);
 
-  rpc Find (FindRequest) returns (UserList);
+  rpc Find (FindRequest) returns (UserListReadResponse);
   rpc Register (RegisterRequest) returns (User);
   rpc Activate (ActivateRequest) returns (google.protobuf.Empty);
   rpc ChangePassword (ChangePasswordRequest) returns (google.protobuf.Empty);
@@ -29,7 +30,7 @@ service Service {
   rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (google.protobuf.Empty);
   rpc Unregister (UnregisterRequest) returns (google.protobuf.Empty);
   rpc Login (LoginRequest) returns (User);
-  rpc FindByRole (FindByRoleRequest) returns (UserList);
+  rpc FindByRole (FindByRoleRequest) returns (UserListReadResponse);
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
@@ -199,6 +200,18 @@ message UserList {
   repeated User items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message UserListResponse {
+  repeated User items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message UserListReadResponse {
+  repeated User items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 /**

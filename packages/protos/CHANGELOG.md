@@ -61,10 +61,46 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
+### 0.0.22 (March 4th, 2021)
 
-### 0.0.14 (November 4th, 2020)
+- updated job proto to introduce job identifier for Job options and repeat options
 
-- renamed vertex fields
+### 0.0.21 (February 24th, 2021)
+
+- add `OstorageMessage` to `ostorage.proto`
+
+### 0.0.20 (January 21st, 2021)
+
+- rename `notification.proto` to `notification_req.proto` as this is being 
+required for the notification resource.
+- add `notification_channel.proto` and `notification.proto`
+
+### 0.0.19 (January 19th, 2021)
+
+- added `sendActivationEmail` to resend registration emails
+
+### 0.0.18 (January 19th, 2021)
+
+- changed the input field to `identifier` to support both user-name and email for all operations from `id`.
+
+### 0.0.17 (December 4th, 2020)
+
+- moved last_login from user proto to token proto
+
+### 0.0.16 (November 22nd, 2020)
+
+- added role_associations and HR scopes to subject
+
+### 0.0.15 (November 18th, 2020)
+
+- removed duplicate field from graph proto
+
+### 0.0.14 (November 18th, 2020)
+
+- updated graph proto to rename vertex fields
+- updated user proto to remove populateRoleAssocCache rpc, updated token proto to remove findByUid and findByuserCode, added token_type to Tokens and moved HRScopeReq and Response from user proto to auth proto
+- added interactive flag for tokens
+- up token type and expires in fields to match oidc keys
 
 ### 0.0.13 (October 30th, 2020)
 

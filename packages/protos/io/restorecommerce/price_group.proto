@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // PriceGroup resource
 message PriceGroup {
@@ -21,14 +22,26 @@ message PriceGroupList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message PriceGroupListResponse {
+  repeated PriceGroup items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message PriceGroupListReadResponse {
+  repeated PriceGroup items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 message Deleted {
   string id = 1;
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupList);
-  rpc Create (PriceGroupList) returns (PriceGroupList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (PriceGroupList) returns (PriceGroupList);
-  rpc Upsert (PriceGroupList) returns (PriceGroupList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupListReadResponse);
+  rpc Create (PriceGroupList) returns (PriceGroupListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (PriceGroupList) returns (PriceGroupListResponse);
+  rpc Upsert (PriceGroupList) returns (PriceGroupListResponse);
 }

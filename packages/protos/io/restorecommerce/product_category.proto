@@ -7,6 +7,7 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/image.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // ProductCategory resource
 message ProductCategory {
@@ -25,6 +26,18 @@ message ProductCategoryList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message ProductCategoryListResponse {
+  repeated ProductCategory items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message ProductCategoryListReadResponse {
+  repeated ProductCategory items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 message Deleted {
   string id = 1;
 }
@@ -34,9 +47,9 @@ message Parent {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryList);
-  rpc Create (ProductCategoryList) returns (ProductCategoryList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (ProductCategoryList) returns (ProductCategoryList);
-  rpc Upsert (ProductCategoryList) returns (ProductCategoryList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListReadResponse);
+  rpc Create (ProductCategoryList) returns (ProductCategoryListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (ProductCategoryList) returns (ProductCategoryListResponse);
+  rpc Upsert (ProductCategoryList) returns (ProductCategoryListResponse);
 }

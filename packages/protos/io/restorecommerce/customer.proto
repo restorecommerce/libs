@@ -6,22 +6,35 @@ import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 /*
 Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerList);
-  rpc Create (CustomerList) returns (CustomerList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (CustomerList) returns (CustomerList);
-  rpc Upsert (CustomerList) returns (CustomerList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerListReadResponse);
+  rpc Create (CustomerList) returns (CustomerListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (CustomerList) returns (CustomerListResponse);
+  rpc Upsert (CustomerList) returns (CustomerListResponse);
 }
 
 message CustomerList {
   repeated Customer items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message CustomerListResponse {
+  repeated Customer items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message CustomerListReadResponse {
+  repeated Customer items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message Customer {

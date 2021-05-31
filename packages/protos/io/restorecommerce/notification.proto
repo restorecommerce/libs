@@ -6,14 +6,15 @@ import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // Message structure for Notification
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationList);
-  rpc Create (NotificationList) returns (NotificationList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (NotificationList) returns (NotificationList);
-  rpc Upsert (NotificationList) returns (NotificationList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListReadResponse);
+  rpc Create (NotificationList) returns (NotificationListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (NotificationList) returns (NotificationListResponse);
+  rpc Upsert (NotificationList) returns (NotificationListResponse);
 }
 
 message Deleted {
@@ -24,6 +25,18 @@ message NotificationList {
   repeated Notification items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message NotificationListResponse {
+  repeated Notification items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message NotificationListReadResponse {
+  repeated Notification items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message Notification {

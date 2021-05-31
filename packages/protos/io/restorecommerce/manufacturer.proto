@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // Manufacturer resource
 message Manufacturer {
@@ -21,14 +22,26 @@ message ManufacturerList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message ManufacturerListResponse {
+  repeated Manufacturer items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message ManufacturerListReadResponse {
+  repeated Manufacturer items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 message Deleted {
   string id = 1;
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerList);
-  rpc Create (ManufacturerList) returns (ManufacturerList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (ManufacturerList) returns (ManufacturerList);
-  rpc Upsert (ManufacturerList) returns (ManufacturerList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerListReadResponse);
+  rpc Create (ManufacturerList) returns (ManufacturerListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (ManufacturerList) returns (ManufacturerListResponse);
+  rpc Upsert (ManufacturerList) returns (ManufacturerListResponse);
 }

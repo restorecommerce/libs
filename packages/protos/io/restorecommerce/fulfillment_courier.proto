@@ -6,23 +6,36 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 /**
 Microservice defination   
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierList);
-  rpc Create (CourierList) returns (CourierList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (CourierList) returns (CourierList);
-  rpc Upsert (CourierList) returns (CourierList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListReadResponse);
+  rpc Create (CourierList) returns (CourierListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (CourierList) returns (CourierListResponse);
+  rpc Upsert (CourierList) returns (CourierListResponse);
 }
 
 message CourierList  {
   repeated Courier items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message CourierListResponse  {
+  repeated Courier items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message CourierListReadResponse  {
+  repeated Courier items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message Courier {

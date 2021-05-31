@@ -6,6 +6,7 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // command resource
 message Command {
@@ -37,10 +38,22 @@ message CommandList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message CommandListResponse {
+  repeated Command items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message CommandListReadResponse {
+  repeated Command items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandList);
-  rpc Create (CommandList) returns (CommandList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (CommandList) returns (CommandList);
-  rpc Upsert (CommandList) returns (CommandList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListReadResponse);
+  rpc Create (CommandList) returns (CommandListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (CommandList) returns (CommandListResponse);
+  rpc Upsert (CommandList) returns (CommandListResponse);
 }

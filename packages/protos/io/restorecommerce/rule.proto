@@ -8,6 +8,7 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/status.proto";
 
 
 /**
@@ -54,6 +55,18 @@ message RuleList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message RuleListResponse {
+  repeated Rule items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message RuleListReadResponse {
+  repeated Rule items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 // Query to pull resources from an external service
 //  and append them to the request's context.
 // The retrieved data can then be passed onto the request's context
@@ -68,9 +81,9 @@ message ContextQuery {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleList);
-  rpc Create (RuleList) returns (RuleList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (RuleList) returns (RuleList);
-  rpc Upsert (RuleList) returns (RuleList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListReadResponse);
+  rpc Create (RuleList) returns (RuleListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (RuleList) returns (RuleListResponse);
+  rpc Upsert (RuleList) returns (RuleListResponse);
 }

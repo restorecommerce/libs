@@ -9,6 +9,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/policy.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/rule.proto";
+import "io/restorecommerce/status.proto";
 
 message PolicySet {
   string id = 1;
@@ -26,6 +27,18 @@ message PolicySetList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message PolicySetListResponse {
+  repeated PolicySet items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message PolicySetListReadResponse {
+  repeated PolicySet items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 message PolicySetRQ {
   string id = 1;
   io.restorecommerce.rule.Target target = 2;
@@ -35,9 +48,9 @@ message PolicySetRQ {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetList);
-  rpc Create (PolicySetList) returns (PolicySetList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (PolicySetList) returns (PolicySetList);
-  rpc Upsert (PolicySetList) returns (PolicySetList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListReadResponse);
+  rpc Create (PolicySetList) returns (PolicySetListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (PolicySetList) returns (PolicySetListResponse);
+  rpc Upsert (PolicySetList) returns (PolicySetListResponse);
 }

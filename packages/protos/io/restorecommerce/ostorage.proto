@@ -8,11 +8,12 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Get (GetRequest) returns (stream Object);
+  rpc Get (GetRequest) returns (stream ObjectResponse);
   rpc Put (stream Object) returns (Response);
-  rpc Delete (DeleteRequest) returns (google.protobuf.Empty);
+  rpc Delete (DeleteRequest) returns (io.restorecommerce.status.Status);
   rpc List (ListRequest) returns (ObjectsData);
   rpc Copy (CopyRequest) returns (CopyResponse);
 }
@@ -24,6 +25,7 @@ message CopyRequest {
 
 message CopyResponse {
   repeated CopyResponseItem response = 1;
+  repeated io.restorecommerce.status.Status status = 3;
 }
 
 message CopyRequestItem {
@@ -64,15 +66,26 @@ message Object {
   io.restorecommerce.auth.Subject subject = 7;
 }
 
+message ObjectResponse {
+  string key = 1;
+  string bucket = 2;
+  bytes object = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  string url = 5;
+  Options options = 6;
+  io.restorecommerce.status.Status status = 7;
+}
+
 message GetRequest {
   string key = 1;
   string bucket = 2;
   bool download = 3;
-io.restorecommerce.auth.Subject subject = 4;
+  io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ObjectsData {
   repeated ObjectData object_data = 1;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message ObjectData {
@@ -94,6 +107,7 @@ message Response {
   io.restorecommerce.meta.Meta meta = 4;
   repeated io.restorecommerce.attribute.Attribute tags = 5;
   int32 length = 6; // file size of uploaded object
+  io.restorecommerce.status.Status status = 7;
 }
 
 message ListRequest {

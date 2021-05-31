@@ -8,16 +8,17 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/user.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodList);
-  rpc Create (PaymentMethodList) returns (PaymentMethodList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (PaymentMethodList) returns (PaymentMethodList);
-  rpc Upsert (PaymentMethodList) returns (PaymentMethodList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodListReadResponse);
+  rpc Create (PaymentMethodList) returns (PaymentMethodListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (PaymentMethodList) returns (PaymentMethodListResponse);
+  rpc Upsert (PaymentMethodList) returns (PaymentMethodListResponse);
 }
 
 message Deleted {
@@ -28,6 +29,18 @@ message PaymentMethodList {
   repeated PaymentMethod items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message PaymentMethodListResponse {
+  repeated PaymentMethod items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message PaymentMethodListReadResponse {
+  repeated PaymentMethod items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 enum PaymentMethodEnum {

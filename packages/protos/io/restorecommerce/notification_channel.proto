@@ -6,14 +6,15 @@ import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/empty.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // Message structure for Notification Channel
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationChannelList);
-  rpc Create (NotificationChannelList) returns (NotificationChannelList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (NotificationChannelList) returns (NotificationChannelList);
-  rpc Upsert (NotificationChannelList) returns (NotificationChannelList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationChannelListReadResponse);
+  rpc Create (NotificationChannelList) returns (NotificationChannelListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (NotificationChannelList) returns (NotificationChannelListResponse);
+  rpc Upsert (NotificationChannelList) returns (NotificationChannelListResponse);
 }
 
 message Deleted {
@@ -24,6 +25,18 @@ message NotificationChannelList {
   repeated NotificationChannel items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message NotificationChannelListResponse {
+  repeated NotificationChannel items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message NotificationChannelListReadResponse {
+  repeated NotificationChannel items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message NotificationChannel {

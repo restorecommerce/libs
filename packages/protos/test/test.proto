@@ -4,14 +4,15 @@ package test;
 import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/status.proto";
 
 service Test {
   rpc Test (TestRequest) returns (TestResponse);
   rpc Throw (TestRequest) returns (TestResponse);
   rpc NotImplemented (TestRequest) returns (TestResponse);
   rpc NotFound (TestRequest) returns (TestResponse);
-  rpc Create (TestBufferedDataList) returns (TestBufferedDataList);
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TestBufferedDataList);
+  rpc Create (TestBufferedDataList) returns (TestBufferedDataListResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TestBufferedDataListReadResponse);
 }
 
 service Stream {
@@ -43,6 +44,18 @@ message TestBufferedData {
 message TestBufferedDataList {
   repeated TestBufferedData items = 1;
   uint32 total_count = 2;
+}
+
+message TestBufferedDataListResponse {
+  repeated TestBufferedData items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 4;
+}
+
+message TestBufferedDataListReadResponse {
+  repeated TestBufferedData items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 4;
 }
 
 message ExtendMe {

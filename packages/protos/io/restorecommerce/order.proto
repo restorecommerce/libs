@@ -6,13 +6,14 @@ import "google/protobuf/empty.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderList);
-  rpc Create (OrderList) returns (OrderList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (google.protobuf.Empty);
-  rpc Update (OrderList) returns (OrderList);
-  rpc Upsert (OrderList) returns (OrderList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListReadResponse);
+  rpc Create (OrderList) returns (OrderListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Update (OrderList) returns (OrderListResponse);
+  rpc Upsert (OrderList) returns (OrderListResponse);
   rpc TriggerFulfillment (OrderDataList) returns (FulfillmentResults);
 }
 
@@ -21,6 +22,18 @@ message OrderList {
   repeated Order items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message OrderListResponse {
+  repeated Order items = 1;
+  uint32 total_count = 2;
+  repeated io.restorecommerce.status.Status status = 3;
+}
+
+message OrderListReadResponse {
+  repeated Order items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message Order {

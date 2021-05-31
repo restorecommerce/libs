@@ -54,7 +54,7 @@ message Filter {
     ARRAY = 4;
   }
   ValueType type = 4;
-  repeated FilterOp filters = 5;
+  repeated FilterOp filters = 5; // for nested filtering
 }
 
 message FilterOp {
@@ -71,7 +71,7 @@ message ReadRequest {
   repeated Sort sort = 3;
 
   /// Filter based on fieldName|operation, value|list
-  repeated FilterOp filters = 4;
+  repeated FilterOp filters = 4; // repeated filters
 
   /// Fields selector
   repeated FieldFilter field = 5;

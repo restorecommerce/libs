@@ -1,7 +1,8 @@
-import { GrpcClient } from "../src/index";
+import { GrpcClient } from '../src/index';
 import { createMockServer } from './mock/index'
 import { randomBytes } from 'crypto';
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
+import { createLogger } from '@restorecommerce/logger';
 
 const ADDRESS = '127.0.0.1:50001';
 const mockServer = createMockServer(ADDRESS)
@@ -42,6 +43,15 @@ export const marshallProtobufAny = (data: any): any => {
 };
 
 describe('grpc client', () => {
+  const loggerConfig = {
+    console: {
+      handleExceptions: false,
+      level: 'debug',
+      colorize: true,
+      prettyPrint: true
+    }
+  };
+  const logger = createLogger(loggerConfig);
   const grpcClient = new GrpcClient({
     address: ADDRESS,
     proto: {
@@ -49,15 +59,18 @@ describe('grpc client', () => {
       protoPath: './echo/echo.proto',
       services: {
         echo: {
-          packageName: "echo",
-          serviceName: "EchoService",
+          packageName: 'echo',
+          serviceName: 'EchoService',
         }
       }
+    },
+    bufferFields: {
+      EchoRequest: ['message', 'test']
     }
-  });
+  }, logger);
 
   it('should send and receive a unary request', async () => {
-    const data = randomBytes(1 << 16).toString('hex');
+    const data = 'Test String message';
 
     const result = await grpcClient.echo.echoUnary({
       message: data,

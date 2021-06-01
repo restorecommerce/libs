@@ -1,7 +1,8 @@
 import { Observable } from "rxjs";
-import { Client, credentials, ServiceDefinition }  from "@grpc/grpc-js";
+import { Client, credentials, ServiceDefinition } from '@grpc/grpc-js';
 import { loadSync as protoLoaderLoadSync } from '@grpc/proto-loader';
-import { Writer } from "protobufjs/minimal";
+import { Writer } from 'protobufjs/minimal';
+import { Logger } from 'winston';
 
 export interface GrpcClientLoadProtoConfig {
   protoRoot?: string;
@@ -20,11 +21,12 @@ export interface GrpcClientConfig {
   address: string;
   timeout?: number;
   proto?: GrpcClientLoadProtoConfig;
+  bufferFields?: any;
 }
 
 // A service must only have functions that that take an argument and return a Promise or Observable
 export interface GrpcService {
-  [key: string]: {(req: Object): Promise<Object> | Observable<Object>};
+  [key: string]: { (req: Object): Promise<Object> | Observable<Object> };
 }
 
 export type Optional<T> = {
@@ -67,12 +69,12 @@ export interface GrpcClientRpcMethodDefinition<TArguments extends Object, TRespo
 }
 
 
-export type FirstArgType<T extends {(arg: any): any}> = Parameters<T>[0];
+export type FirstArgType<T extends { (arg: any): any }> = Parameters<T>[0];
 
 // Extract the argument of a rpc call
-export type ExtractRpcArgument<T extends {(arg: any): any}> = UnwrapType<FirstArgType<T>>;
+export type ExtractRpcArgument<T extends { (arg: any): any }> = UnwrapType<FirstArgType<T>>;
 // Extract the return type of a rpc call
-export type ExtractRpcReturnType<T extends {(arg: any): any}> = (UnwrapType<ReturnType<T>>);
+export type ExtractRpcReturnType<T extends { (arg: any): any }> = (UnwrapType<ReturnType<T>>);
 
 export type GrpcServiceMethods<TService extends GrpcService> = {
   [P in keyof TService]: GrpcClientRpcMethodDefinition<ExtractRpcArgument<TService[P]>, ExtractRpcReturnType<TService[P]>>;
@@ -85,20 +87,44 @@ export class GrpcClient {
   readonly timeout: number;
   readonly client: Client;
   readonly [key: string]: any;
+  readonly logger: Logger;
+  readonly bufferFields: any;
 
-  constructor({address, timeout, proto}: GrpcClientConfig) {
+  constructor(grpcCientConfig: GrpcClientConfig, logger: Logger) {
+    let address, timeout, proto, bufferFields;
+    if (!grpcCientConfig) {
+      throw new Error('Grpc client configuration missing');
+    }
+    address = grpcCientConfig.address ? grpcCientConfig.address : undefined;
+    proto = grpcCientConfig.proto ? grpcCientConfig.proto : undefined;
+    timeout = grpcCientConfig.timeout ? grpcCientConfig.timeout : undefined;
+    bufferFields = grpcCientConfig.bufferFields ? grpcCientConfig.bufferFields : undefined;
+    if (!address) {
+      throw new Error('endpoint configuration missing');
+    }
+    if (!proto) {
+      throw new Error('proto configuration definition missing');
+    }
+    if (!logger) {
+      throw new Error('missing logger configuration');
+    }
     this.timeout = timeout ?? 100000;
     this.client = new Client(address, credentials.createInsecure());
     if (proto) {
       const protoServices = this.loadProtoServices(proto);
       Object.assign(this, protoServices);
     }
+    this.logger = logger;
+    this.bufferFields = bufferFields;
   }
 
   async unary<TArguments = any, TResponse = any>(
-      { methodPath, serialize, deserialize, data}: UnaryArgs<TArguments, TResponse>
-    ): Promise<TResponse> {
+    { methodPath, serialize, deserialize, data }: UnaryArgs<TArguments, TResponse>
+  ): Promise<TResponse> {
     return new Promise<TResponse>((resolve, reject) => {
+      this.logger.info(`Invoking Unary endpoint ${methodPath}`);
+      this.logRequestMessage(data, methodPath);
+      // this.logger.debug('Unary Request', data);
       this.client.makeUnaryRequest<TArguments, TResponse>(
         methodPath,
         serialize,
@@ -110,9 +136,12 @@ export class GrpcClient {
   }
 
   serverStream<TArguments = any, TResponse = any>(
-    { methodPath, serialize, deserialize, data}: ServerStreamArgs<TArguments, TResponse>
+    { methodPath, serialize, deserialize, data }: ServerStreamArgs<TArguments, TResponse>
   ): Observable<TResponse> {
     return new Observable<TResponse>((subscriber) => {
+      this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
+      this.logRequestMessage(data, methodPath);
+      // this.logger.debug('Server Stream Request', data);
       const serverStream =
         this.client.makeServerStreamRequest<TArguments, TResponse>(
           methodPath,
@@ -130,9 +159,12 @@ export class GrpcClient {
   }
 
   async clientStream<TArguments = any, TResponse = any>(
-    { methodPath, serialize, deserialize, data}: ClientStreamArgs<TArguments, TResponse>
+    { methodPath, serialize, deserialize, data }: ClientStreamArgs<TArguments, TResponse>
   ): Promise<TResponse> {
     return new Promise<TResponse>((resolve, reject) => {
+      this.logger.info(`Invoking Client Stream endpoint ${methodPath}`);
+      this.logRequestMessage(data, methodPath);
+      // this.logger.debug('Client Stream Request', data);
       const clientStream =
         this.client.makeClientStreamRequest<TArguments, TResponse>(
           methodPath,
@@ -140,23 +172,26 @@ export class GrpcClient {
           deserialize,
           (err, value) => err ? reject(err) : resolve(value!)
         );
-        const sub = data?.subscribe(_data => {
-          clientStream.write(_data);
-        }, undefined, () => clientStream.end());
+      const sub = data?.subscribe(_data => {
+        clientStream.write(_data);
+      }, undefined, () => clientStream.end());
 
-        clientStream.on('close', () => sub?.unsubscribe());
-        clientStream.on('end', () => sub?.unsubscribe());
-        clientStream.on('error', (err) => {
-          sub?.unsubscribe();
-          reject(err);
-        });
+      clientStream.on('close', () => sub?.unsubscribe());
+      clientStream.on('end', () => sub?.unsubscribe());
+      clientStream.on('error', (err) => {
+        sub?.unsubscribe();
+        reject(err);
+      });
     });
   }
 
   bidiStream<TArguments = any, TResponse = any>(
-    { methodPath, serialize, deserialize, data}: BidiStreamArgs<TArguments, TResponse>
+    { methodPath, serialize, deserialize, data }: BidiStreamArgs<TArguments, TResponse>
   ): Observable<TResponse> {
     return new Observable<TResponse>((subscriber) => {
+      this.logger.info(`Invoking Bidirectional Stream endpoint ${methodPath}`);
+      this.logRequestMessage(data, methodPath);
+      // this.logger.debug('Bidirectional Stream Request', data);
       const bidiStream =
         this.client.makeBidiStreamRequest<TArguments, TResponse>(
           methodPath,
@@ -182,7 +217,7 @@ export class GrpcClient {
     this.client.close();
   }
 
-  private loadProtoServices({protoPath, protoRoot, services}: GrpcClientLoadProtoConfig) {
+  private loadProtoServices({ protoPath, protoRoot, services }: GrpcClientLoadProtoConfig) {
     const packageDefinition = protoLoaderLoadSync(
       protoPath,
       {
@@ -215,22 +250,22 @@ export class GrpcClient {
         if (!methodDefinition.requestStream && !methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.unary({methodPath: methodDefinition.path, deserialize: methodDefinition.requestDeserialize, serialize: methodDefinition.responseSerialize, data})
+            [method]: (data: any) => this.unary({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
           }
         } else if (methodDefinition.requestStream && !methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.clientStream({methodPath: methodDefinition.path, deserialize: methodDefinition.requestDeserialize, serialize: methodDefinition.responseSerialize, data})
+            [method]: (data: any) => this.clientStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
           }
         } else if (!methodDefinition.requestStream && methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.serverStream({methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.responseSerialize, data})
+            [method]: (data: any) => this.serverStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
           }
         } else if (methodDefinition.requestStream && methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.bidiStream({methodPath: methodDefinition.path, deserialize: methodDefinition.requestDeserialize, serialize: methodDefinition.responseSerialize, data})
+            [method]: (data: any) => this.bidiStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
           }
         } else {
           throw new Error(`Invalid method ${method}`);
@@ -244,34 +279,52 @@ export class GrpcClient {
     }, {} as any);
   }
 
-  protected createService<TService extends Record<string, any> = any>({methods, serviceName, packageName}: GrpcClientCreateServiceConfig<TService>): TService {
+  protected createService<TService extends Record<string, any> = any>({ methods, serviceName, packageName }: GrpcClientCreateServiceConfig<TService>): TService {
     return Object.keys(methods).reduce((service, method) => {
       const methodDefinition = methods[method];
-      const methodPath =  `/${packageName}.${serviceName}/${methodDefinition.method ?? method}`;
+      const methodPath = `/${packageName}.${serviceName}/${methodDefinition.method ?? method}`;
 
       if (methodDefinition.type === 'unary') {
         return {
           ...service,
-          [method]: (data: any) => this.unary({methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data})
+          [method]: (data: any) => this.unary({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
         }
       } else if (methodDefinition.type === 'clientStream') {
         return {
           ...service,
-          [method]: (data: any) => this.clientStream({methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data})
+          [method]: (data: any) => this.clientStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
         }
       } else if (methodDefinition.type === 'serverStream') {
         return {
           ...service,
-          [method]: (data: any) => this.serverStream({methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data})
+          [method]: (data: any) => this.serverStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
         }
       } else if (methodDefinition.type === 'bidiStream') {
         return {
           ...service,
-          [method]: (data: any) => this.bidiStream({methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data})
+          [method]: (data: any) => this.bidiStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
         }
       }
 
       return service;
     }, {} as TService);
+  }
+
+  private logRequestMessage(data: any, method: string) {
+    let cloned = Object.assign({}, data);
+    if (this.bufferFields) {
+      const keys = Object.keys(this.bufferFields);
+      for (let key of keys) {
+        const bufferField = this.bufferFields[key];
+        if (Array.isArray(bufferField)) {
+          for (let eachBufField of bufferField) {
+            delete cloned[eachBufField];
+          }
+        } else if (cloned[bufferField]) {
+          delete cloned[bufferField];
+        }
+      }
+    }
+    this.logger.debug(`invoking ${method} endpoint with data:`, { request: cloned });
   }
 }

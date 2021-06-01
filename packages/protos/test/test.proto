@@ -26,6 +26,7 @@ message TestRequest {
 }
 message TestResponse {
   string result = 1;
+  repeated io.restorecommerce.status.Status status = 4;
 }
 
 message TestEvent {

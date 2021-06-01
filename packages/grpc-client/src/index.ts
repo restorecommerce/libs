@@ -140,7 +140,22 @@ export class GrpcClient {
         data,
         meta,
         options,
-        (err, value) => err ? reject(err) : resolve(value!)
+        (err, value) => {
+          if (err) {
+            this.logger.error('Error serving unary request', { message: err.message });
+            this.logger.error('Error stack', { stack: err.stack });
+            return resolve({
+              status: {
+                error: {
+                  code: err.code,
+                  message: err.message
+                }
+              }
+            } as any);
+          } else {
+            return resolve(value!)
+          }
+        }
       );
     });
   }
@@ -198,7 +213,22 @@ export class GrpcClient {
           deserialize,
           meta,
           options,
-          (err, value) => err ? reject(err) : resolve(value!)
+          (err, value) => {
+            if (err) {
+              this.logger.error('Error client stream request', { message: err.message });
+              this.logger.error('Error stack', { stack: err.stack });
+              return resolve({
+                status: {
+                  error: {
+                    code: err.code,
+                    message: err.message
+                  }
+                }
+              } as any);
+            } else {
+              return resolve(value!)
+            }
+          }
         );
       const sub = data?.subscribe(_data => {
         clientStream.write(_data);

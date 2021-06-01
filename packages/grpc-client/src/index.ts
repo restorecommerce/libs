@@ -1,8 +1,9 @@
 import { Observable } from "rxjs";
-import { Client, credentials, ServiceDefinition } from '@grpc/grpc-js';
+import { Client, credentials, ServiceDefinition, Metadata } from '@grpc/grpc-js';
 import { loadSync as protoLoaderLoadSync } from '@grpc/proto-loader';
 import { Writer } from 'protobufjs/minimal';
 import { Logger } from 'winston';
+import * as rTracer from 'cls-rtracer';
 
 export interface GrpcClientLoadProtoConfig {
   protoRoot?: string;
@@ -124,12 +125,21 @@ export class GrpcClient {
     return new Promise<TResponse>((resolve, reject) => {
       this.logger.info(`Invoking Unary endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
-      // this.logger.debug('Unary Request', data);
+      const options = {
+        deadline: Date.now() + this.timeout
+      };
+      const meta = new Metadata();
+      const rid: any = rTracer.id();
+      if (rid) {
+        meta.add('rid', rid);
+      }
       this.client.makeUnaryRequest<TArguments, TResponse>(
         methodPath,
         serialize,
         deserialize,
         data,
+        meta,
+        options,
         (err, value) => err ? reject(err) : resolve(value!)
       );
     });
@@ -141,13 +151,22 @@ export class GrpcClient {
     return new Observable<TResponse>((subscriber) => {
       this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
-      // this.logger.debug('Server Stream Request', data);
+      const options = {
+        deadline: Date.now() + this.timeout
+      };
+      const meta = new Metadata();
+      const rid: any = rTracer.id();
+      if (rid) {
+        meta.add('rid', rid);
+      }
       const serverStream =
         this.client.makeServerStreamRequest<TArguments, TResponse>(
           methodPath,
           serialize,
           deserialize,
-          data
+          data,
+          meta,
+          options
         );
       serverStream.on('data', value => subscriber.next(value))
       serverStream.on('error', err => subscriber.error(err))
@@ -164,12 +183,21 @@ export class GrpcClient {
     return new Promise<TResponse>((resolve, reject) => {
       this.logger.info(`Invoking Client Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
-      // this.logger.debug('Client Stream Request', data);
+      const options = {
+        deadline: Date.now() + this.timeout
+      };
+      const meta = new Metadata();
+      const rid: any = rTracer.id();
+      if (rid) {
+        meta.add('rid', rid);
+      }
       const clientStream =
         this.client.makeClientStreamRequest<TArguments, TResponse>(
           methodPath,
           serialize,
           deserialize,
+          meta,
+          options,
           (err, value) => err ? reject(err) : resolve(value!)
         );
       const sub = data?.subscribe(_data => {
@@ -191,12 +219,21 @@ export class GrpcClient {
     return new Observable<TResponse>((subscriber) => {
       this.logger.info(`Invoking Bidirectional Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
-      // this.logger.debug('Bidirectional Stream Request', data);
+      const options = {
+        deadline: Date.now() + this.timeout
+      };
+      const meta = new Metadata();
+      const rid: any = rTracer.id();
+      if (rid) {
+        meta.add('rid', rid);
+      }
       const bidiStream =
         this.client.makeBidiStreamRequest<TArguments, TResponse>(
           methodPath,
           serialize,
           deserialize,
+          meta,
+          options
         );
 
       const sub = data?.subscribe(_data => {

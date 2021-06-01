@@ -4,7 +4,7 @@ import {
   PolicySetRQ, IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
   Resource, Decision, Subject
 } from './interfaces';
-import { Client } from '@restorecommerce/grpc-client';
+import { GrpcClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
 import logger from '../logger';
 import { getOrFill, flushCache } from './cache';
@@ -399,8 +399,8 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
     if (authzCfg.enabled) {
       const grpcClientConfig = cfg.get('client');
       const grpcACSConfig = grpcClientConfig['acs-srv'];
-      const acsClient = new Client(grpcACSConfig, logger);
-      const acs = await acsClient.connect();
+      const acsClient = new GrpcClient(grpcACSConfig);
+      const acs = acsClient['acs-srv'];
       authZ = new ACSAuthZ(acs);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified

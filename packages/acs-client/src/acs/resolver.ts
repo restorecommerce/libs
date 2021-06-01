@@ -7,10 +7,9 @@ import { AuthZAction } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
 import { buildFilterPermissions } from '../utils';
-import { Client, toStruct } from '@restorecommerce/grpc-client';
+import { GrpcClient } from '@restorecommerce/grpc-client';
 import { UnAuthZ, ACSAuthZ } from './authz';
 import { Unauthenticated, PermissionDenied } from './errors';
-import { toObject } from './../utils';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
@@ -22,7 +21,7 @@ const whatIsAllowedRequest = async (subject: Subject,
   resources: Resource[], action: AuthZAction[], authZ: ACSAuthZ, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new Client(grpcConfig, logger);
+    const acsClient = new GrpcClient(grpcConfig);
     const acs = await acsClient.connect();
     return await new UnAuthZ(acs).whatIsAllowed({
       target: {
@@ -54,7 +53,7 @@ export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
   resources: Resource[], action: AuthZAction, authZ: ACSAuthZ, useCache: boolean): Promise<Decision> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new Client(grpcConfig, logger);
+    const acsClient = new GrpcClient(grpcConfig);
     const acs = await acsClient.connect();
     return await new UnAuthZ(acs).isAllowed({
       target: {
@@ -193,30 +192,20 @@ export const accessRequest = async (subject: Subject,
 
     // below fix is to convert the input filter to object only if it is already a structrue
     // i.e. struct filter containing `fileds` property
-    if (request.args && request.args.filter && !_.isEmpty(request.args.filter.fields)) {
-      if (_.isArray(request.args.filter)) {
-        request.args.filter = toObject(request.args.filter, true);
-      } else {
-        request.args.filter = toObject(request.args.filter);
-      }
-      if (_.isArray(request.args.filter)) {
-        for (let filter of request.args.filter) {
-          if (!_.isArray(permissionArguments.filter)) {
-            permissionArguments.filter = [filter];
+    if (request.args && request.args.filters && !_.isEmpty(request.args.filters)) {
+      if (_.isArray(request.args.filters)) {
+        for (let filter of request.args.filters) {
+          if (!_.isArray(permissionArguments.filters)) {
+            permissionArguments.filters = [filter];
           }
-          permissionArguments.filter.push(filter);
+          permissionArguments.filters.push(filter);
         }
       } else {
-        if (!_.isArray(permissionArguments.filter)) {
-          permissionArguments.filter = [permissionArguments.filter];
+        if (!_.isArray(permissionArguments.filters)) {
+          permissionArguments.filters = [permissionArguments.filters];
         }
-        permissionArguments.filter.push(request.args.filter);
+        permissionArguments.filters.push(request.args.filters);
       }
-    }
-    if (_.isArray(permissionArguments.filter)) {
-      permissionArguments.filter = toStruct(permissionArguments.filter, true);
-    } else {
-      permissionArguments.filter = toStruct(permissionArguments.filter);
     }
     Object.assign(request.args, permissionArguments);
     return policySet;
@@ -361,7 +350,7 @@ export interface ReadRequest {
 }
 
 export interface QueryArguments {
-  filter?: any;
+  filters?: any;
   limit?: any;
   sort?: any;
   offset?: any;

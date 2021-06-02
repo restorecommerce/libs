@@ -1,5 +1,22 @@
 import * as _ from 'lodash';
 
+const filterOperationMap = new Map([
+  [0, 'eq'],
+  [1, 'lt'],
+  [2, 'lte'],
+  [3, 'gt'],
+  [4, 'gte'],
+  [5, 'isEmpty'],
+  [6, 'iLike'],
+  [7, 'in'],
+  [8, 'neq']
+]);
+
+const filterOperatorMap = new Map([
+  [0, 'and'],
+  [1, 'or']
+]);
+
 /**
  * Takes filter object containing field, operation and value and inserts it
  * to the obj using the operatorList for finding the last operator position and updates obj
@@ -10,17 +27,17 @@ import * as _ from 'lodash';
 const convertFilterToObject = (filter, obj, operatorList) => {
   let temp = _.clone(obj);
   let value;
-  if (!filter.type || filter.type === 'STRING') {
+  if (!filter.type || filter.type === 'STRING' || filter.type === 0) {
     value = filter.value;
-  } else if (filter.type === 'NUMBER' && !isNaN(filter.value)) {
+  } else if ( (filter.type === 'NUMBER' || filter.type === 1) && !isNaN(filter.value)) {
     value = Number(filter.value);
-  } else if (filter.type === 'BOOLEAN') {
+  } else if (filter.type === 'BOOLEAN' || filter.type === 2) {
     if (filter.value === 'true') {
       value = true;
     } else if (filter.value === 'false') {
       value = false;
     }
-  } else if (filter.type === 'ARRAY') {
+  } else if (filter.type === 'ARRAY' || filter.type === 4) {
     try {
       value = JSON.parse(filter.value);
     } catch (err) {
@@ -31,7 +48,7 @@ const convertFilterToObject = (filter, obj, operatorList) => {
         throw err;
       }
     }
-  } else if (filter.type === 'DATE') {
+  } else if (filter.type === 'DATE' || filter.type === 3) {
     value = (new Date(filter.value)).getTime();
   }
 
@@ -43,20 +60,26 @@ const convertFilterToObject = (filter, obj, operatorList) => {
     }
     if (i === (operatorList.length - 1)) {
       // push for final element in the operatorList array
-      if (filter.operation === 'eq') {
+      if (filter.operation === 'eq' || filter.operation === 0) {
         if (_.isArray(temp)) {
           temp.push({ [filter.field]: value });
         } else {
           temp[operatorList[i]].push({ [filter.field]: value });
         }
-      } else if (filter.operation === 'neq') {
+      } else if (filter.operation === 'neq' || filter.operation === 8) {
         if (_.isArray(temp)) {
           temp.push({ [filter.field]: { $not: { $eq: value } } });
         } else {
           temp[operatorList[i]].push({ [filter.field]: { $not: { $eq: value } } });
         }
       } else {
-        const op = `$${filter.operation}`;
+        let op, opValue;
+        if (typeof filter.operation === 'string' || filter.operation instanceof String) {
+          opValue = filter.operation;
+        } else if (Number.isInteger(filter.operation)) {
+          opValue = filterOperationMap.get(filter.operation);
+        }
+        op = `$${opValue}`;
         if (_.isArray(temp)) {
           temp.push({ [filter.field]: { [op]: value } });
         } else {
@@ -114,7 +137,13 @@ export const toObject = (input: any, obj?: any, operatorList?: string[]) => {
     obj = {};
   }
   if (_.isArray(filters.filter)) {
-    const newOperator = `$${filters.operator}`;
+    let operatorValue;
+    if (typeof filters.operator === 'string' || filters.operator instanceof String) {
+      operatorValue = filters.operator;
+    } else if (Number.isInteger(filters.operator)) {
+      operatorValue = filterOperatorMap.get(filters.operator);
+    }
+    const newOperator = `$${operatorValue}`;
     if (operatorList && newOperator) {
       // insert obj with new operator
       obj = insertNewOpAndUpdateObj(obj, operatorList, newOperator);
@@ -129,7 +158,7 @@ export const toObject = (input: any, obj?: any, operatorList?: string[]) => {
     for (let filterObj of filters) {
       toObject(filterObj, obj, operatorList);
     }
-  } else if (filters.field && filters.operation && filters.value) {
+  } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value) {
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(filters, obj, operatorList);
   }

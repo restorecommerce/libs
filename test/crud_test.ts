@@ -6,7 +6,7 @@ import { ResourcesAPIBase } from '../lib';
 import { FilterOperation, FilterValueType } from '../lib/core/interfaces';
 import { toObject } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
-import { Client } from '@restorecommerce/grpc-client';
+import { GrpcClient } from '@restorecommerce/grpc-client';
 import { Events, Topic } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
@@ -90,7 +90,7 @@ describe('ServiceBase', () => {
   let db: chassis.GraphDatabaseProvider;
   let server: chassis.Server;
   let events: Events;
-  let client: Client;
+  let client: GrpcClient;
   let testService;
   let testData: any;
   let cfg;
@@ -142,11 +142,11 @@ describe('ServiceBase', () => {
 
     await server.start();
 
-    client = new Client(cfg.get('client:test'), server.logger);
-    testService = await client.connect();
+    client = new GrpcClient(cfg.get('client:test'), server.logger);
+    testService = client.test;
   });
   after(async () => {
-    await client.end();
+    await client.close();
     await server.stop();
     await events.stop();
   });
@@ -156,53 +156,54 @@ describe('ServiceBase', () => {
       await db.truncate();
       const now: number = Date.now();
       testData = [
-        { id: '/test/xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD' },
-        { id: '/test/xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD' },
-        { id: '/test/zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN' }];
+        { id: 'test_xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD' },
+        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD' },
+        { id: 'test_zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN' }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
       it('should return all three elements with no arguments', async () => {
         const result = await testService.read({});
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(3);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(3);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(testData, 'id'));
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(3);
+        result.items.should.be.Array();
+        result.items.should.length(3);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(testData, 'id'));
+        should.exist(result.status);
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return two elements with offset 1', async () => {
-        const compareData = _.drop((await testService.read({})).data.items, 1);
+        const compareData = _.drop((await testService.read({})).items, 1);
         const result = await testService.read({
           offset: 1,
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(compareData.length);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(compareData.length);
+        result.items.should.be.Array();
+        result.items.should.length(2);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return two elements with limit 2', async () => {
-        const compareData = _.dropRight((await testService.read({})).data.items, 1);
+        const compareData = _.dropRight((await testService.read({})).items, 1);
         const result = await testService.read({
           limit: 2,
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(compareData.length);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(compareData.length);
+        result.items.should.be.Array();
+        result.items.should.length(2);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return elements sorted', async () => {
         const result = await testService.read({
@@ -212,13 +213,11 @@ describe('ServiceBase', () => {
           }],
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(3);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(3);
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(3);
+        result.items.should.be.Array();
+        result.items.should.length(3);
         const testDataDescending = testData.sort((a, b) => {
           if (a.value > b.value) {
             return -1;
@@ -229,149 +228,151 @@ describe('ServiceBase', () => {
           // a must be equal to b
           return 0;
         });
-        result.data.items.should.deepEqual(testDataDescending);
+        result.items.should.deepEqual(testDataDescending);
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return only resources with value higher than 10', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'value',
             operation: FilterOperation.gt,
             value: '10',
             type: FilterValueType.NUMBER
-          }
-        };
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(1);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(1);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(1);
+        result.items.should.be.Array();
+        result.items.should.length(1);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.value > 10;
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return only resources with string filter value equal to id', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'id',
             operation: FilterOperation.eq,
-            value: '/test/xy',
-          }
-        };
+            value: 'test_xy'
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(1);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(1);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.id === '/test/xy';
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(1);
+        result.items.should.be.Array();
+        result.items.should.length(1);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.id === 'test_xy';
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return only resources matching boolean filter', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'active',
             operation: FilterOperation.eq,
             value: 'true',
             type: FilterValueType.BOOLEAN
-          }
-        };
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(1);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(1);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(1);
+        result.items.should.be.Array();
+        result.items.should.length(1);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.active === true;
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return resources matching date filter', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'created',
             operation: FilterOperation.lt,
             value: today.toString(),
             type: FilterValueType.DATE,
-          }
-        };
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(2);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(2);
+        result.items.should.be.Array();
+        result.items.should.length(2);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.created < today.getTime();
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return resources matching array filter', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'status',
             operation: FilterOperation.in,
             value: '["BAD", "UNKNOWN"]',
             type: FilterValueType.ARRAY,
-          }
-        };
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(2);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(2);
+        result.items.should.be.Array();
+        result.items.should.length(2);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return (data.status === "BAD" || data.status === "UNKNOWN");
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return only resources with not equal filter', async () => {
-        const filters = {
-          filter: {
+        const filters = [{
+          filter: [{
             field: 'id',
             operation: FilterOperation.neq,
-            value: '/test/xy',
-          }
-        };
+            value: 'test_xy',
+          }]
+        }];
         const result = await testService.read({
           filters
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(2);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
-        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.id != '/test/xy';
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(2);
+        result.items.should.be.Array();
+        result.items.should.length(2);
+        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.id != 'test_xy';
         }), 'id'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should return elements only with field value', async () => {
         const result = await testService.read({
@@ -381,19 +382,19 @@ describe('ServiceBase', () => {
           }],
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
-        result.data.total_count.should.be.equal(3);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(3);
+        should.exist(result.items);
+        should.exist(result.total_count);
+        result.total_count.should.be.equal(3);
+        result.items.should.be.Array();
+        result.items.should.length(3);
         const testDataReduced = [
           { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
           { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
           { id: '', text: '', meta: null, value: testData[2].value, active: false, created: 0, status: '' },
         ];
-        _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        _.sortBy(result.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
       it('should apply a custom filter', async () => {
         const result = await testService.read({
@@ -407,20 +408,20 @@ describe('ServiceBase', () => {
           }
         });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        should.exist(result.data.total_count);
+        should.exist(result.items);
+        should.exist(result.total_count);
 
-        result.data.total_count.should.be.equal(2);
-        result.data.items.should.be.Array();
-        result.data.items.should.length(2);
+        result.total_count.should.be.equal(2);
+        result.items.should.be.Array();
+        result.items.should.length(2);
 
         const testDataReduced = [
           { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
           { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
         ];
-        _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        _.sortBy(result.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
     });
     describe('create', () => {
@@ -457,25 +458,22 @@ describe('ServiceBase', () => {
         const newTestData = [newTestDataFirst, newTestDataSecond, testDuplicate];
         const result = await testService.create({ items: newTestData });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        result.data.items.should.be.length(2);
-        result.data.items.should.matchEach((e) => {
+        should.exist(result.items);
+        result.items.should.be.length(2);
+        result.items.should.matchEach((e) => {
           return e.value === -10 && e.text.length > 0;
         });
 
         // validate error for testDuplicate element
-        should.exist(result.data.status);
-        result.data.status.should.be.length(3);
-        result.data.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
-        const allTestData = await testService.read();
+        should.exist(result.status);
+        result.status.should.be.length(3);
+        result.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
+        const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.not.exist(allTestData.error);
-        should.exist(allTestData.data);
+        should.exist(allTestData.status);
 
-        const compareData = _.concat(testData, result.data.items);
-        _.forEach(allTestData.data.items, (e) => {
+        const compareData = _.concat(testData, result.items);
+        _.forEach(allTestData.items, (e) => {
           compareData.should.matchAny(e);
         });
       });
@@ -484,32 +482,39 @@ describe('ServiceBase', () => {
       it('should delete collection when requested', async () => {
         const result = await testService.delete({ collection: true });
         should.exist(result);
-        should.not.exist(result.error);
+        should.exist(result.status);
+        result.status.length.should.equal(3);
+        result.status.should.matchEach((status) => {
+          return status.code = 200 && status.message === 'success';
+        });
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.not.exist(allTestData.error);
-        should.exist(allTestData.data);
-        should.exist(allTestData.data.items);
-        allTestData.data.items.should.length(0);
+        should.exist(allTestData.status);
+        should.exist(allTestData.items);
+        allTestData.items.should.length(0);
+        allTestData.status.code.should.equal(200);
+        allTestData.status.message.should.equal('success');
       });
       it('should delete specified documents and return error if document does not exist', async () => {
         const result = await testService.delete({ ids: [testData[1].id, 'invalidID'] });
         should.exist(result);
-        should.not.exist(result.error);
+        should.exist(result.status);
         // success for 1st id and failure message for second invalid id
-        result.data.status[0].code.should.equal(200);
-        result.data.status[0].message.should.equal('success');
-        result.data.status[1].code.should.equal(404);
-        result.data.status[1].message.should.equal('document not found');
+        result.status[0].code.should.equal(200);
+        result.status[0].message.should.equal('success');
+        result.status[1].code.should.equal(404);
+        result.status[1].message.should.equal('document not found');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.not.exist(allTestData.error);
-        should.exist(allTestData.data);
-        should.exist(allTestData.data.items);
-        allTestData.data.items.should.length(2);
-        _.sortBy(allTestData.data.items, 'id')
+        should.exist(allTestData.status);
+        should.exist(allTestData);
+        should.exist(allTestData.items);
+        allTestData.items.should.length(2);
+        allTestData.status.code.should.equal(200);
+        allTestData.status.message.should.equal('success');
+        _.sortBy(allTestData.items, 'id')
           .should.deepEqual(_.sortBy([testData[0], testData[2]], 'id'));
       });
     });
@@ -522,37 +527,36 @@ describe('ServiceBase', () => {
         });
         const result = await testService.update({ items: patch });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        should.exist(result.data.items);
-        result.data.items.should.matchEach((e) => {
+        should.exist(result.status);
+        should.exist(result.items);
+        result.items.should.matchEach((e) => {
           return e.value === 100 && e.text.length === 10;
         });
 
-        result.data.status.should.matchEach((status) => {
+        result.status.should.matchEach((status) => {
           return status.code = 200 && status.message === 'success';
         });
 
-        const allTestData = await testService.read();
+        const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.not.exist(allTestData.error);
-        should.exist(allTestData.data);
-        result.data.items.should.matchEach((e) => {
+        should.exist(allTestData.items);
+        should.exist(allTestData.status);
+        result.items.should.matchEach((e) => {
           return e.value === 100 && e.text.length === 10;
         });
       });
       it('should return an error when trying to update invalid document', async () => {
-        const patch = {
+        const patch = [{
           id: 'invalidDocument',
           value: 2,
           text: 'new value'
-        };
+        }];
         const result = await testService.update({ items: patch });
-        result.data.items.should.length(0);
-        result.data.status.should.length(1);
-        result.data.status[0].id.should.equal('invalidDocument');
-        result.data.status[0].code.should.equal(404);
-        result.data.status[0].message.should.equal('document not found');
+        result.items.should.length(0);
+        result.status.should.length(1);
+        result.status[0].id.should.equal('invalidDocument');
+        result.status[0].code.should.equal(404);
+        result.status[0].message.should.equal('document not found');
       });
     });
     describe('upsert', () => {
@@ -576,27 +580,27 @@ describe('ServiceBase', () => {
         }];
         const result = await testService.upsert({ items: replace });
         should.exist(result);
-        should.not.exist(result.error);
-        should.exist(result.data);
-        result.data.items.should.matchEach((e) => {
+        should.exist(result.status);
+        should.exist(result.items);
+        result.items.should.matchEach((e) => {
           return e.value === 0;
         });
 
-        result.data.status.should.matchEach((status) => {
+        result.status.should.matchEach((status) => {
           return status.code = 200 && status.message === 'success';
         });
-        const allTestData = await testService.read();
+        const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.not.exist(allTestData.error);
-        should.exist(allTestData.data);
+        should.exist(allTestData.status);
+        should.exist(allTestData.items);
 
-        let replaced = _.find(allTestData.data.items, { id: replace[0].id });
+        let replaced = _.find(allTestData.items, { id: replace[0].id });
         should.exist(replaced);
 
-        replaced = _.find(allTestData.data.items, { id: replace[1].id });
+        replaced = _.find(allTestData.items, { id: replace[1].id });
         should.exist(replaced);
 
-        const inserted = _.find(allTestData.data.items, { id: replace[2].id });
+        const inserted = _.find(allTestData.items, { id: replace[2].id });
         should.exist(inserted);
       });
     });
@@ -605,25 +609,24 @@ describe('ServiceBase', () => {
       it('should return an error when trying to insert with missing requried fields', async () => {
         let result = await testService.delete({ collection: true });
         should.exist(result);
-        should.not.exist(result.error);
-        await testService.read();
         const objectMissingField = [
           { id: 'test_xy', value: 1, meta },
           { id: 'test_xyz', value: 3, meta },
           { id: 'test_zy', value: 12, meta }];
         result = await testService.create({ items: objectMissingField });
         should.exist(result);
-        should.exist(result.data);
-        result.data.items.should.length(0);
-        result.data.status[0].message.should.equal('Field text is necessary\n            for resource');
+        should.exist(result.status);
+        should.exist(result.items);
+        result.items.should.length(0);
+        result.status[0].message.should.equal('Field text is necessary\n            for resource');
       });
     });
     // Test to check buffered fields
     describe('check buffered fileds', () => {
       it('should decode the buffered field before storing in DB',
         async () => {
-          client = new Client(cfg.get('client:testBufferedService'), server.logger);
-          let testBufferService = await client.connect();
+          client = new GrpcClient(cfg.get('client:testBufferedService'), server.logger);
+          let testBufferService = client.testBufferedService;
           const bufData = {
             type_url: '',
             value: Buffer.from(JSON.stringify({ testkey: 'testValue' }))
@@ -637,7 +640,7 @@ describe('ServiceBase', () => {
           // This way, we check if the data was actually encoded by reading it fromt the DB.
           const result = await db.find('testBufferedDatas');
           should.exist(result);
-          should.exist(result[0].data);
+          should.exist(result[0]);
           should.exist(result[0].data.testkey);
           result[0].data.testkey.should.equal('testValue');
           // delete the collection

@@ -5,7 +5,7 @@ import { GraphResourcesServiceBase } from '../lib';
 import { ResourcesAPIBase } from '../lib';
 import { ServiceBase } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
-import { Client } from '@restorecommerce/grpc-client';
+import { GrpcClient } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
@@ -23,7 +23,7 @@ let server = new chassis.Server(cfg.get('server'));
 const testProvider = (providerCfg) => {
   describe('GraphServiceBase', () => {
     let db: any;
-    let client: Client;
+    let client: GrpcClient;
     let testService;
     let testResourceBaseService;
     let graphCfg;
@@ -37,18 +37,18 @@ const testProvider = (providerCfg) => {
 
       await server.start();
 
-      client = new Client(cfg.get('client:graphsTestService'), server.logger);
-      testService = await client.connect();
+      client = new GrpcClient(cfg.get('client:graphsTestService'), server.logger);
+      testService = client.graphsTestService;
 
       // Start resource base server for the graph services
       graphCfg = cfg.get('graph');
       resourcesList = Object.keys(graphCfg.vertices);
 
-      let resourceBaseClient = new Client(cfg.get('client:test'), server.logger);
-      testResourceBaseService = await resourceBaseClient.connect();
+      let resourceBaseClient = new GrpcClient(cfg.get('client:test'), server.logger);
+      testResourceBaseService = resourceBaseClient.test;
     });
     after(async () => {
-      await client.end();
+      await client.close();
       await server.stop();
     });
 
@@ -109,37 +109,33 @@ const testProvider = (providerCfg) => {
             { org: 'Bayern', id: 'e' }];
           let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
-          let traversalResponseStream = call.getResponseStream();
-          traversalResponseStream.on('data', (partResp) => {
-            if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
-            }
-            if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
-            }
-          });
-          traversalResponseStream.on('errorResolved', (err) => {
-            server.logger.error('Error received:', err);
-          });
-          // wait till stream ends
-          await new Promise((resolve: any, reject) => {
-            traversalResponseStream.on('end', () => {
-              resolve();
+          // let traversalResponseStream = call.getResponseStream();
+          await new Promise((resolve, reject) => {
+            call.subscribe(partResp => {
+              {
+                if ((partResp && partResp.data && partResp.data.value)) {
+                  Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+                }
+                if ((partResp && partResp.paths && partResp.paths.value)) {
+                  Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+                }
+              }
+            }, undefined, () => {
+              // compare data
+              should.exist(traversalResponse.paths);
+              should.exist(traversalResponse.data);
+              traversalResponse.paths.should.have.size(3);
+              traversalResponse.data.should.have.size(3);
+              let finalVertices: any = [];
+              for (let eachVertice of traversalResponse.data) {
+                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+              }
+              finalVertices =
+                _.sortBy(finalVertices, [(o) => { return o.id; }]);
+              finalVertices.should.deepEqual(expectedVertices);
+              resolve(traversalResponse);
             });
           });
-
-          // compare data
-          should.exist(traversalResponse.paths);
-          should.exist(traversalResponse.data);
-          traversalResponse.paths.should.have.size(3);
-          traversalResponse.data.should.have.size(3);
-          let finalVertices: any = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by excluding specified vertices using filter in the graph',
@@ -157,34 +153,29 @@ const testProvider = (providerCfg) => {
             { org: 'Bayern', id: 'e' }];
           let call = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
-          let traversalResponseStream = await call.getResponseStream();
-          traversalResponseStream.on('data', (partResp) => {
-            if (partResp && partResp.data && partResp.data.value) {
-              traversalResponse.data = JSON.parse(partResp.data.value.toString());
-            }
-            if (partResp && partResp.paths && partResp.paths.value) {
-              traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
-            }
-          });
-          traversalResponseStream.on('errorResolved', (err) => {
-            server.logger.error('Error received:', err);
-          });
-          // wait till stream ends
-          await new Promise((resolve: any, reject) => {
-            traversalResponseStream.on('end', () => {
-              resolve();
+
+          await new Promise((resolve, reject) => {
+            call.subscribe(partResp => {
+              if (partResp && partResp.data && partResp.data.value) {
+                traversalResponse.data = JSON.parse(partResp.data.value.toString());
+              }
+              if (partResp && partResp.paths && partResp.paths.value) {
+                traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
+              }
+            }, undefined, () => {
+              // compare data
+              traversalResponse.paths.should.have.size(2);
+              traversalResponse.data.should.have.size(2);
+              let finalVertices = [];
+              for (let eachVertice of traversalResponse.data) {
+                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+              }
+              finalVertices =
+                _.sortBy(finalVertices, [(o) => { return o.id; }]);
+              finalVertices.should.deepEqual(expectedVertices);
+              resolve(traversalResponse);
             });
           });
-          // compare data
-          traversalResponse.paths.should.have.size(2);
-          traversalResponse.data.should.have.size(2);
-          let finalVertices = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by including only specified edges using expander in the graph',
@@ -201,34 +192,29 @@ const testProvider = (providerCfg) => {
             { car: 'bmw', id: 'c', org_id: 'e' }];
           let traversalResponse = { data: [], paths: [] };
           let call = await testService.traversal(traversalRequest);
-          let traversalResponseStream = call.getResponseStream();
-          traversalResponseStream.on('data', (partResp) => {
-            if (partResp && partResp.data && partResp.data.value) {
-              traversalResponse.data = JSON.parse(partResp.data.value.toString());
-            }
-            if (partResp && partResp.paths && partResp.paths.value) {
-              traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
-            }
-          });
-          traversalResponseStream.on('errorResolved', (err) => {
-            server.logger.error('Error received:', err);
-          });
-          // wait till stream ends
-          await new Promise((resolve: any, reject) => {
-            traversalResponseStream.on('end', () => {
-              resolve();
+          // let traversalResponseStream = call.getResponseStream();
+          await new Promise((resolve, reject) => {
+            call.subscribe(partResp => {
+              if (partResp && partResp.data && partResp.data.value) {
+                traversalResponse.data = JSON.parse(partResp.data.value.toString());
+              }
+              if (partResp && partResp.paths && partResp.paths.value) {
+                traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
+              }
+            }, undefined, () => {
+              // compare data
+              traversalResponse.paths.should.have.size(2);
+              traversalResponse.data.should.have.size(2);
+              let finalVertices = [];
+              for (let eachVertice of traversalResponse.data) {
+                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+              }
+              finalVertices =
+                _.sortBy(finalVertices, [(o) => { return o.id; }]);
+              finalVertices.should.deepEqual(expectedVertices);
+              resolve(traversalResponse);
             });
           });
-          // compare data
-          traversalResponse.paths.should.have.size(2);
-          traversalResponse.data.should.have.size(2);
-          let finalVertices = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('delete vertices, should delete the edges associated as well',

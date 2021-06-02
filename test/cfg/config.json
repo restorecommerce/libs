@@ -48,80 +48,42 @@
   },
   "client": {
     "test": {
-      "transports": {
-        "grpc": {
-          "service": "io.restorecommerce.resourcebase.Service",
-          "protos": [
-            "io/restorecommerce/resource_base.proto"
-          ],
-          "protoRoot": "node_modules/@restorecommerce/protos/",
-          "timeout": 3000
+      "address": "localhost:50051",
+      "proto": {
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "protoPath": "io/restorecommerce/resource_base.proto",
+        "services": {
+          "test": {
+            "packageName": "io.restorecommerce.resourcebase",
+            "serviceName": "Service"
+          }
         }
-      },
-      "loadbalancer": {
-        "name": "roundRobin"
-      },
-      "publisher": {
-        "name": "static",
-        "instances": [
-          "grpc://localhost:50051"
-        ]
-      },
-      "endpoints": {
-        "read": {},
-        "create": {},
-        "delete": {},
-        "update": {},
-        "upsert": {}
       }
     },
     "testBufferedService": {
-      "transports": {
-        "grpc": {
-          "service": "test.Test",
-          "protos": [
-            "test/test.proto"
-          ],
-          "protoRoot": "node_modules/@restorecommerce/protos/",
-          "timeout": 3000
+      "address": "localhost:50051",
+      "proto": {
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "protoPath": "test/test.proto",
+        "services": {
+          "testBufferedService": {
+            "packageName": "test",
+            "serviceName": "Test"
+          }
         }
-      },
-      "loadbalancer": {
-        "name": "roundRobin"
-      },
-      "publisher": {
-        "name": "static",
-        "instances": [
-          "grpc://localhost:50051"
-        ]
-      },
-      "endpoints": {
-        "create": {},
-        "read": {}
       }
     },
     "graphsTestService": {
-      "transports": {
-        "grpc": {
-          "service": "io.restorecommerce.graph.Service",
-          "protos": [
-            "io/restorecommerce/graph.proto"
-          ],
-          "protoRoot": "node_modules/@restorecommerce/protos/",
-          "timeout": 3000
+      "address": "localhost:50051",
+      "proto": {
+        "protoRoot": "node_modules/@restorecommerce/protos/",
+        "protoPath": "io/restorecommerce/graph.proto",
+        "services": {
+          "graphsTestService": {
+            "packageName": "io.restorecommerce.graph",
+            "serviceName": "Service"
+          }
         }
-      },
-      "loadbalancer": {
-        "name": "roundRobin"
-      },
-      "publisher": {
-        "name": "static",
-        "instances": [
-          "grpc://localhost:50051"
-        ]
-      },
-      "endpoints": {
-        "traversal": {}
       }
     }
   },

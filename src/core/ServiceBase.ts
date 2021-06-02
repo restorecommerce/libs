@@ -98,7 +98,15 @@ export class ServiceBase {
       let filter = {};
       // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
       if (!_.isEmpty(call.request.filters)) {
-        filter = toObject(call.request.filters);
+        if (_.isArray(call.request.filters)) {
+          for (let eachFilter of call.request.filters) {
+            let prevFilter = filter;
+            filter = toObject(eachFilter);
+            Object.assign(filter, prevFilter);
+          }
+        } else {
+          filter = toObject(call.request.filters);
+        }
       }
       const field = {};
       _.forEach(call.request.field, (f) => {
@@ -278,7 +286,7 @@ export class ServiceBase {
         }
       }
       let statusArray = this.generateStatusResponse(docs, call.request.ids, true);
-      return statusArray;
+      return { status: statusArray };
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing delete request', { code, message });

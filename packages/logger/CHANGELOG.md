@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.3...@restorecommerce/logger@0.8.0) (2021-06-02)
+
+
+### Features
+
+* **logger:** support typescript sourcemaps ([dcd702e](https://github.com/restorecommerce/libs/commit/dcd702ef5d73295d46dd7173618eeeec27260d18))
+
+
+
+
+
 ## [0.7.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.2...@restorecommerce/logger@0.7.3) (2021-06-02)
 
 

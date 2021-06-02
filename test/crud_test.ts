@@ -65,7 +65,7 @@ describe('converting to filter to object', () => {
     };
     /* eslint-disable */
     const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
-    const dbFilter = toObject(protoFilter);
+    const dbFilter = toObject(protoFilter, undefined, undefined);
     dbFilter.should.deepEqual(expectedDBObject);
   });
 });

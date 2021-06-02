@@ -18,6 +18,7 @@
   "dependencies": {
     "cls-hooked": "^4.2.2",
     "cls-rtracer": "^2.6.0",
+    "source-map-support": "^0.5.19",
     "winston": "^3.3.3",
     "winston-elasticsearch": "^0.15.6"
   },

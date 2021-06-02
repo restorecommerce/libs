@@ -3,7 +3,7 @@
 import * as mocha from 'mocha';
 import { ServiceBase } from '../lib';
 import { ResourcesAPIBase } from '../lib';
-import { toStruct } from '../lib';
+import { FilterOperation, FilterValueType } from '../lib/core/interfaces';
 import { toObject } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Client } from '@restorecommerce/grpc-client';
@@ -18,19 +18,55 @@ import * as _ from 'lodash';
  */
 
 /* global describe it before after beforeEach */
-describe('converting to struct back to object', () => {
-  it('should result in the same object', () => {
-    const obj = {
-      aNumber: {
-        $GT: 10,
-      },
-      $OR: [
-        { id: 'test_testdata' },
-        { id: 'test_testnew' },
-      ],
+describe('converting to filter to object', () => {
+  it('should convert proto filter to valid DB filter object', () => {
+    const protoFilter =
+    {
+      filters: {
+        filter: [
+          {
+            field: 'device_id',
+            operation: 'eq',
+            value: '12345'
+          },
+          {
+            field: 'overall_status',
+            operation: 'in',
+            value: '["BAD", "GOOD"]',
+            type: 'ARRAY'
+          },
+          {
+            field: 'device_active',
+            operation: 'eq',
+            value: 'true',
+            type: 'BOOLEAN'
+          },
+          {
+            filters: {
+              filter: [{
+                field: 'firstname',
+                operation: 'eq',
+                value: 'test_first'
+              }, {
+                field: 'lastname',
+                operation: 'eq',
+                value: 'test_last'
+              }, {
+                field: 'middleName',
+                operation: 'eq',
+                value: 'test_middle'
+              }],
+              operator: 'and'
+            },
+          }
+        ], // Default And case
+        operator: 'or'
+      }
     };
-    const struct = toStruct(obj);
-    obj.should.deepEqual(toObject(struct));
+    /* eslint-disable */
+    const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
+    const dbFilter = toObject(protoFilter);
+    dbFilter.should.deepEqual(expectedDBObject);
   });
 });
 
@@ -58,6 +94,8 @@ describe('ServiceBase', () => {
   let testService;
   let testData: any;
   let cfg;
+  const today = new Date();
+  const tomorrow = new Date(((new Date()).getDate() + 1));
   before(async () => {
     // Load test config from chassis service config
     cfg = createServiceConfig(process.cwd() + '/test');
@@ -118,9 +156,9 @@ describe('ServiceBase', () => {
       await db.truncate();
       const now: number = Date.now();
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'a xy' },
-        { id: 'test_xyz', meta, value: 3, text: 'second test data' },
-        { id: 'test_zy', meta, value: 12, text: 'yz test data' }];
+        { id: '/test/xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD' },
+        { id: '/test/xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD' },
+        { id: '/test/zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN' }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
@@ -194,13 +232,16 @@ describe('ServiceBase', () => {
         result.data.items.should.deepEqual(testDataDescending);
       });
       it('should return only resources with value higher than 10', async () => {
-        const filter = toStruct({
-          value: {
-            $gt: 10,
-          },
-        });
+        const filters = {
+          filter: {
+            field: 'value',
+            operation: FilterOperation.gt,
+            value: '10',
+            type: FilterValueType.NUMBER
+          }
+        };
         const result = await testService.read({
-          filter,
+          filters
         });
         should.exist(result);
         should.not.exist(result.error);
@@ -212,6 +253,124 @@ describe('ServiceBase', () => {
         result.data.items.should.length(1);
         _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.value > 10;
+        }), 'id'));
+      });
+      it('should return only resources with string filter value equal to id', async () => {
+        const filters = {
+          filter: {
+            field: 'id',
+            operation: FilterOperation.eq,
+            value: '/test/xy',
+          }
+        };
+        const result = await testService.read({
+          filters
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+        result.data.total_count.should.be.equal(1);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(1);
+        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.id === '/test/xy';
+        }), 'id'));
+      });
+      it('should return only resources matching boolean filter', async () => {
+        const filters = {
+          filter: {
+            field: 'active',
+            operation: FilterOperation.eq,
+            value: 'true',
+            type: FilterValueType.BOOLEAN
+          }
+        };
+        const result = await testService.read({
+          filters
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+        result.data.total_count.should.be.equal(1);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(1);
+        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.active === true;
+        }), 'id'));
+      });
+      it('should return resources matching date filter', async () => {
+        const filters = {
+          filter: {
+            field: 'created',
+            operation: FilterOperation.lt,
+            value: today.toString(),
+            type: FilterValueType.DATE,
+          }
+        };
+        const result = await testService.read({
+          filters
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+        result.data.total_count.should.be.equal(2);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(2);
+        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.created < today.getTime();
+        }), 'id'));
+      });
+      it('should return resources matching array filter', async () => {
+        const filters = {
+          filter: {
+            field: 'status',
+            operation: FilterOperation.in,
+            value: '["BAD", "UNKNOWN"]',
+            type: FilterValueType.ARRAY,
+          }
+        };
+        const result = await testService.read({
+          filters
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+        result.data.total_count.should.be.equal(2);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(2);
+        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return (data.status === "BAD" || data.status === "UNKNOWN");
+        }), 'id'));
+      });
+      it('should return only resources with not equal filter', async () => {
+        const filters = {
+          filter: {
+            field: 'id',
+            operation: FilterOperation.neq,
+            value: '/test/xy',
+          }
+        };
+        const result = await testService.read({
+          filters
+        });
+        should.exist(result);
+        should.not.exist(result.error);
+        should.exist(result.data);
+        should.exist(result.data.items);
+        should.exist(result.data.total_count);
+        result.data.total_count.should.be.equal(2);
+        result.data.items.should.be.Array();
+        result.data.items.should.length(2);
+        _.sortBy(result.data.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.id != '/test/xy';
         }), 'id'));
       });
       it('should return elements only with field value', async () => {
@@ -230,9 +389,9 @@ describe('ServiceBase', () => {
         result.data.items.should.be.Array();
         result.data.items.should.length(3);
         const testDataReduced = [
-          { id: '', text: '', meta: null, value: testData[0].value },
-          { id: '', text: '', meta: null, value: testData[1].value },
-          { id: '', text: '', meta: null, value: testData[2].value },
+          { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
+          { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
+          { id: '', text: '', meta: null, value: testData[2].value, active: false, created: 0, status: '' },
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });
@@ -258,8 +417,8 @@ describe('ServiceBase', () => {
         result.data.items.should.length(2);
 
         const testDataReduced = [
-          { id: '', text: '', meta: null, value: testData[0].value },
-          { id: '', text: '', meta: null, value: testData[1].value },
+          { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
+          { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
         ];
         _.sortBy(result.data.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
       });

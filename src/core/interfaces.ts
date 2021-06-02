@@ -5,13 +5,51 @@ export interface ServiceCall<TRequest> {
 
 export type SortType = 'ASCENDING' | 'DESCENDING' | 'UNSORTED' | 2 | 1 | 0;
 
+export enum FilterOperation {
+  eq = 0,
+  lt = 1,
+  lte = 2,
+  gt = 3,
+  gte = 4,
+  isEmpty = 5,
+  iLike = 6,
+  in = 7,
+  neq = 8
+};
+
+export enum FilterValueType {
+  STRING = 0,
+  NUMBER = 1,
+  BOOLEAN = 2,
+  DATE = 3,
+  ARRAY = 4,
+};
+
+export enum OperatorType {
+  and = 0,
+  or = 1,
+};
+
+export interface Filter {
+  field: string;
+  operation: FilterOperation;
+  value: string;
+  type?: FilterValueType; // defaults to string data type if not provided
+  filters?: FilterOp [];
+}
+
+export interface FilterOp {
+  filter?: Filter[];
+  operator?: OperatorType;
+}
+
 export interface ReadRequest {
   search?: string; // fulltext search
   sort?: { field: string; order: SortType }[];
   limit?: number;
   offset?: number;
   field?: { name: string; include: boolean }[];
-  filter?: any;
+  filters?: FilterOp[];
   custom_queries?: string[];
   custom_arguments?: any;
 }

@@ -96,12 +96,9 @@ export class ServiceBase {
       }
       const offset = call.request.offset;
       let filter = {};
-      if (!_.isEmpty(call.request.filter)) {
-        if (call.request.filter.list_value) {
-          filter = toObject(call.request.filter, true);
-        } else {
-          filter = toObject(call.request.filter);
-        }
+      // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
+      if (!_.isEmpty(call.request.filters)) {
+        filter = toObject(call.request.filters);
       }
       const field = {};
       _.forEach(call.request.field, (f) => {

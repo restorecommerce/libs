@@ -21,8 +21,8 @@ const whatIsAllowedRequest = async (subject: Subject,
   resources: Resource[], action: AuthZAction[], authZ: ACSAuthZ, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new GrpcClient(grpcConfig);
-    const acs = await acsClient.connect();
+    const acsClient = new GrpcClient(grpcConfig, logger);
+    const acs = acsClient['acs-srv'];
     return await new UnAuthZ(acs).whatIsAllowed({
       target: {
         action, resources, subject: (subject as UnauthenticatedData)
@@ -53,8 +53,8 @@ export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
   resources: Resource[], action: AuthZAction, authZ: ACSAuthZ, useCache: boolean): Promise<Decision> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new GrpcClient(grpcConfig);
-    const acs = await acsClient.connect();
+    const acsClient = new GrpcClient(grpcConfig, logger);
+    const acs = acsClient['acs-srv'];
     return await new UnAuthZ(acs).isAllowed({
       target: {
         action, resources, subject: (subject as UnauthenticatedData)
@@ -279,10 +279,10 @@ export const isAllowed = async (request: ACSRequest,
   authZ: ACSAuthZ): Promise<Decision> => {
   const response = await authZ.acs.isAllowed(request);
 
-  if (_.isEmpty(response) || _.isEmpty(response.data)) {
+  if (_.isEmpty(response)) {
     logger.error('Unexpected empty response from ACS');
-  } else if (response.data.decision) {
-    return response.data.decision;
+  } else if (response.decision) {
+    return response.decision;
   }
 
   if (response.error) {
@@ -303,7 +303,7 @@ export const isAllowed = async (request: ACSRequest,
 export const whatIsAllowed = async (request: ACSRequest,
   authZ: ACSAuthZ): Promise<PolicySetRQ> => {
   const response = await authZ.acs.whatIsAllowed(request);
-  if (_.isEmpty(response) || _.isEmpty(response.data)) {
+  if (_.isEmpty(response)) {
     logger.error('Unexpected empty response from ACS');
   }
 
@@ -311,7 +311,7 @@ export const whatIsAllowed = async (request: ACSRequest,
     logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
     throw new Error('Error while requesting authorization to ACS');
   }
-  return (response.data.policy_sets || []).length > 0 ? response.data.policy_sets[0] : {};
+  return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
 };
 
 export interface Output {

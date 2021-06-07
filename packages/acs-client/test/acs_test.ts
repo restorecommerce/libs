@@ -479,7 +479,7 @@ describe('testing acs-client', () => {
         context: {
           // Need to send encoded subject and resources in context
           subject: encode(JSON.stringify(authenticatedSubject)),
-          resources: encode(JSON.stringify(resources))
+          resources: [encode(JSON.stringify(resources))]
         }
       } as ACSRequest;
       const response = await isAllowed(isAllowedReqAuth, authZ);;
@@ -504,7 +504,7 @@ describe('testing acs-client', () => {
         context: {
           // Need to send encoded subject and resources in context
           subject: encode(JSON.stringify(authenticatedSubject)),
-          resources: encode(JSON.stringify(resources))
+          resources: [encode(JSON.stringify(resources))]
         }
       } as ACSRequest;
       // call accessRequest(), the response is from mock ACS

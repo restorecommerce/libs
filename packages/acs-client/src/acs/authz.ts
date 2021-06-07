@@ -164,11 +164,10 @@ export class UnAuthZ implements IAuthZ {
       return await this.acs.isAllowed(authZRequest);
     }, useCache, 'UnAuthZ:isAllowed');
 
-    if (_.isEmpty(response) || _.isEmpty(response.data)) {
-      logger.error(response.error);
+    if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    } else if (response.data.decision) {
-      return response.data.decision;
+    } else if (response.decision) {
+      return response.decision;
     }
 
     if (response.error) {
@@ -195,7 +194,7 @@ export class UnAuthZ implements IAuthZ {
       return await this.acs.whatIsAllowed(authZRequest);
     }, useCache, 'UnAuthZ:whatIsAllowed');
 
-    if (_.isEmpty(response) || _.isEmpty(response.data)) {
+    if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
     }
 
@@ -203,7 +202,7 @@ export class UnAuthZ implements IAuthZ {
       logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
       throw response.error;
     }
-    return (response.data.policy_sets || []).length > 0 ? response.data.policy_sets[0] : {};
+    return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
   }
 }
 
@@ -266,11 +265,10 @@ export class ACSAuthZ implements IAuthZ {
       return await this.acs.isAllowed(authZRequest);
     }, useCache, cachePrefix + ':isAllowed');
 
-    if (_.isEmpty(response) || _.isEmpty(response.data)) {
-      logger.error(response.error);
+    if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    } else if (response.data.decision) {
-      return response.data.decision;
+    } else if (response.decision) {
+      return response.decision;
     }
 
     if (response.error) {
@@ -311,7 +309,7 @@ export class ACSAuthZ implements IAuthZ {
       return await this.acs.whatIsAllowed(authZRequest);
     }, useCache, cachePrefix + ':whatIsAllowed');
 
-    if (_.isEmpty(response) || _.isEmpty(response.data)) {
+    if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
     }
 
@@ -319,7 +317,7 @@ export class ACSAuthZ implements IAuthZ {
       logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
       throw response.error;
     }
-    return (response.data.policy_sets || []).length > 0 ? response.data.policy_sets[0] : {};
+    return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
   }
 
   private encode(object: any): any {
@@ -399,7 +397,7 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
     if (authzCfg.enabled) {
       const grpcClientConfig = cfg.get('client');
       const grpcACSConfig = grpcClientConfig['acs-srv'];
-      const acsClient = new GrpcClient(grpcACSConfig);
+      const acsClient = new GrpcClient(grpcACSConfig, logger);
       const acs = acsClient['acs-srv'];
       authZ = new ACSAuthZ(acs);
       // listeners for rules / policies / policySets modified, so as to

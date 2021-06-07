@@ -406,11 +406,14 @@ export class ResourcesAPIBase {
         let doc = documents[i];
         decodeBufferObj(doc, this.bufferField);
 
-        const foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
-          fields: {
-            meta: 1
-          }
-        });
+        let foundDocs;
+        if (doc && doc.id) {
+          foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
+            fields: {
+              meta: 1
+            }
+          });
+        }
 
         let eventName: string;
         if (_.isEmpty(foundDocs)) {

@@ -397,7 +397,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     applicable = _.includes(policyEffects, Effect.DENY) ? Effect.DENY : Effect.PERMIT;
   }
 
-  const key = applicable == Effect.PERMIT ? '$or' : '$and';
+  const key = applicable == Effect.PERMIT ? 'or' : 'and';
   if (policyFiltersArr.length === 0) {
     return undefined;
   }
@@ -410,7 +410,9 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     for (let filter of filterList) {
       query.filters.filter.push(filter);
     }
-    query.filters.operator = key;
+    if(_.isArray(filterList) && filterList.length > 0) {
+      query.filters.operator = key;
+    }
     if (policy.scope && applicable == Effect.PERMIT && !query['custom_query']) {
       if (!query['custom_queries']) {
         query['custom_queries'] = [];

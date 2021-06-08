@@ -19,12 +19,6 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
       return String(s) === 'Symbol(splat)';
     });
     const splat = info[splatSym];
-    const sourceSym: any = Object.getOwnPropertySymbols(info).find((s) => {
-      return String(s) === 'Symbol(source)';
-    });
-    const source = info[sourceSym];
-    const sourceFile = source.file;
-    const sourceLine = source.line;
 
     delete info.timestamp;
     let object = {};
@@ -37,12 +31,23 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     let ret: string[] = [];
     ret.push(`${level}: ${time}`);
     if (opts.sourcePointer) {
+      const sourceSym: any = Object.getOwnPropertySymbols(info).find((s) => {
+        return String(s) === 'Symbol(source)';
+      });
+      const source = info[sourceSym];
+      const sourceFile = source.file;
+      const sourceLine = source.line;
       ret.push(` ${sourceFile}:${sourceLine}`);
     }
     if (rid) {
       ret.push(`[rid:${rid}]`);
     }
-    ret.push(`: ${message} ${((object))}`);
+
+    ret.push(`: ${message}`);
+
+    if (splat) {
+      ret.push(` ${object}`);
+    }
 
     return ret.join('');
   });
@@ -65,7 +70,9 @@ export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOption
     formats.unshift(format.colorize(colorizeOpts))
   }
 
-  formats.unshift(traceFormatter());
+  if (opts.sourcePointer) {
+    formats.unshift(traceFormatter());
+  }
 
   return new transports.Console({
     format: format.combine(...formats),

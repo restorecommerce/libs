@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import { createLogger as createWinsonLogger, LoggerOptions as WinstonLoggerOptions, log, Logger } from 'winston';
 import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './console';
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';

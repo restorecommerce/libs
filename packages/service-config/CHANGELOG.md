@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.4.5...@restorecommerce/service-config@0.4.6) (2021-06-02)
+
+**Note:** Version bump only for package @restorecommerce/service-config
+
+
+
+
+
+## [0.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.4.4...@restorecommerce/service-config@0.4.5) (2021-06-02)
+
+**Note:** Version bump only for package @restorecommerce/service-config
+
+
+
+
+
 ## [0.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.4.3...@restorecommerce/service-config@0.4.4) (2021-05-26)
 
 **Note:** Version bump only for package @restorecommerce/service-config

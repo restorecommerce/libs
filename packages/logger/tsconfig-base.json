@@ -6,5 +6,6 @@
     ],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-  },
+    "sourceMap": true
+  }
 }

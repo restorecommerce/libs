@@ -21,10 +21,11 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { Logger } from "winston";
 
 export class AccessControlSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig) {
-    super(cfg);
+  constructor(cfg: GrpcClientConfig, logger: Logger) {
+    super(cfg, logger);
   }
 
   access_control = getGRPCService<access_controlService>(this, access_controlProtobufPackage, access_controlMetaService.fileDescriptor.service![0]);

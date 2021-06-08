@@ -11,10 +11,11 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_courier";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { Logger } from "winston";
 
 export class FulfillmentSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig) {
-    super(cfg);
+  constructor(cfg: GrpcClientConfig, logger: Logger) {
+    super(cfg, logger);
   }
   fulfillment = getGRPCService<fulfillmentService>(this, fulfillmentProtobufPackage, fulfillmentMetaService.fileDescriptor.service![0]);
   fulfillment_courier = getGRPCService<fulfillment_courierService>(this, fulfillment_courierProtobufPackage, fulfillment_courierMetaService.fileDescriptor.service![0]);

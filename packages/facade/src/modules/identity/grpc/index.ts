@@ -21,10 +21,11 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { Logger } from "winston";
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig) {
-    super(cfg);
+  constructor(cfg: GrpcClientConfig, logger: Logger) {
+    super(cfg, logger);
   }
 
   user = getGRPCService<userService>(this, userProtobufPackage, userMetaService.fileDescriptor.service![0]);

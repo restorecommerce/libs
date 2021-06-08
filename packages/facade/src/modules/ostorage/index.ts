@@ -5,7 +5,7 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const ostorageModule = createFacadeModuleFactory<OstorageConfig, OstorageModule>(namespace, (facade, config) => {
   const ostorage = {
-    client: new OstorageSrvGrpcClient(config.config.client)
+    client: new OstorageSrvGrpcClient(config.config.client, facade.logger)
   };
 
   facade.addApolloService({

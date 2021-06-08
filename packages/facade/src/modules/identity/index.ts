@@ -10,7 +10,7 @@ export { OIDCConfig } from './oidc';
 export { IdentityModule, IdentityConfig, IdentityContext } from './interfaces';
 
 export const identityModule = createFacadeModuleFactory<IdentityConfig, IdentityModule>('identity', (facade, config) => {
-  const identitySrvClient = new IdentitySrvGrpcClient(config.identitySrvClientConfig);
+  const identitySrvClient = new IdentitySrvGrpcClient(config.identitySrvClientConfig, facade.logger);
 
   if (!!config.apiKey) {
     const apiKey = setupApiKey({

@@ -5,7 +5,7 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const invoicingModule = createFacadeModuleFactory<InvoicingConfig, InvoicingModule>(namespace, (facade, config) => {
   const invoicing = {
-    client: new InvoicingSrvGrpcClient(config.config.client)
+    client: new InvoicingSrvGrpcClient(config.config.client, facade.logger)
   };
 
   facade.addApolloService({

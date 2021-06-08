@@ -26,10 +26,11 @@ import {
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { Logger } from "winston";
 
 export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig) {
-    super(cfg);
+  constructor(cfg: GrpcClientConfig, logger: Logger) {
+    super(cfg, logger);
   }
 
   product = getGRPCService<productService>(this, productProtobufPackage, productMetaService.fileDescriptor.service![0]);

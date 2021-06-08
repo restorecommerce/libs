@@ -5,7 +5,7 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const indexingModule = createFacadeModuleFactory<IndexingConfig, IndexingModule>(namespace, (facade, config) => {
   const indexing = {
-    client: new IndexingSrvGrpcClient(config.config.client)
+    client: new IndexingSrvGrpcClient(config.config.client, facade.logger)
   };
 
   facade.addApolloService({

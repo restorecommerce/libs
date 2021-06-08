@@ -12,7 +12,7 @@ import "io/restorecommerce/status.proto";
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeListResponse);
   rpc Create (TaxTypeList) returns (TaxTypeListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (TaxTypeList) returns (TaxTypeListResponse);
@@ -30,14 +30,13 @@ message TaxTypeList {
 }
 
 message TaxTypeListResponse {
-  repeated TaxType items = 1;
+  repeated TaxTypeResponse items = 1;
   uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
+  io.restorecommerce.status.Status status = 3;
 }
 
-message TaxTypeListReadResponse {
-  repeated TaxType items = 1;
-  uint32 total_count = 2;
+message TaxTypeResponse {
+  TaxType payload = 1;
   io.restorecommerce.status.Status status = 3;
 }
 

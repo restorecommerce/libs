@@ -39,19 +39,18 @@ message CommandList {
 }
 
 message CommandListResponse {
-  repeated Command items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message CommandListReadResponse {
-  repeated Command items = 1;
+  repeated CommandResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
 }
 
+message CommandResponse {
+  Command payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListResponse);
   rpc Create (CommandList) returns (CommandListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (CommandList) returns (CommandListResponse);

@@ -28,15 +28,14 @@ message PolicySetList {
 }
 
 message PolicySetListResponse {
-  repeated PolicySet items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message PolicySetListReadResponse {
-  repeated PolicySet items = 1;
+  repeated PolicySetResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message PolicySetResponse {
+  PolicySet payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message PolicySetRQ {
@@ -48,7 +47,7 @@ message PolicySetRQ {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListResponse);
   rpc Create (PolicySetList) returns (PolicySetListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (PolicySetList) returns (PolicySetListResponse);

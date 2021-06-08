@@ -10,7 +10,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse);
   rpc Create (ProductList) returns (ProductListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ProductList) returns (ProductListResponse);
@@ -54,14 +54,13 @@ message ProductList {
 }
 
 message ProductListResponse {
-  repeated MainProduct items = 1;
+  repeated ProductResponse items = 1;
   uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
+  io.restorecommerce.status.Status status = 3;
 }
 
-message ProductListReadResponse {
-  repeated MainProduct items = 1;
-  uint32 total_count = 2;
+message ProductResponse {
+  MainProduct payload = 1;
   io.restorecommerce.status.Status status = 3;
 }
 

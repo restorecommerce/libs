@@ -25,15 +25,14 @@ message ProductPrototypeList {
 }
 
 message ProductPrototypeListResponse {
-  repeated ProductPrototype items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message ProductPrototypeListReadResponse {
-  repeated ProductPrototype items = 1;
+  repeated ProductPrototypeResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message ProductPrototypeResponse {
+  ProductPrototype payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Deleted {
@@ -41,7 +40,7 @@ message Deleted {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse);
   rpc Create (ProductPrototypeList) returns (ProductPrototypeListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ProductPrototypeList) returns (ProductPrototypeListResponse);

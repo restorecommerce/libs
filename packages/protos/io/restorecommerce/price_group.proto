@@ -23,14 +23,13 @@ message PriceGroupList {
 }
 
 message PriceGroupListResponse {
-  repeated PriceGroup items = 1;
+  repeated PriceGroupResponse items = 1;
   uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
+  io.restorecommerce.status.Status status = 3;
 }
 
-message PriceGroupListReadResponse {
-  repeated PriceGroup items = 1;
-  uint32 total_count = 2;
+message PriceGroupResponse {
+  PriceGroup payload = 1;
   io.restorecommerce.status.Status status = 3;
 }
 
@@ -39,7 +38,7 @@ message Deleted {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupListResponse);
   rpc Create (PriceGroupList) returns (PriceGroupListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (PriceGroupList) returns (PriceGroupListResponse);

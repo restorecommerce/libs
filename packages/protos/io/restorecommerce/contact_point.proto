@@ -9,7 +9,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointListResponse);
   rpc Create (ContactPointList) returns (ContactPointListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ContactPointList) returns (ContactPointListResponse);
@@ -27,15 +27,14 @@ message ContactPointList {
 }
 
 message ContactPointListResponse {
-  repeated ContactPoint items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message ContactPointListReadResponse {
-  repeated ContactPoint items = 1;
+  repeated ContactPointResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message ContactPointResponse {
+  ContactPoint payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message ContactPoint {

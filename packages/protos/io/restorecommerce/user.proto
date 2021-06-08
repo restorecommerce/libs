@@ -14,7 +14,7 @@ import "io/restorecommerce/status.proto";
  * The microservice for the user resource.
  */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListResponse);
   rpc Create (UserList) returns (UserListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (UserList) returns (UserListResponse);
@@ -203,15 +203,14 @@ message UserList {
 }
 
 message UserListResponse {
-  repeated User items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message UserListReadResponse {
-  repeated User items = 1;
+  repeated UserResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message UserResponse {
+  User payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 /**

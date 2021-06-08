@@ -12,7 +12,7 @@ import "io/restorecommerce/status.proto";
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (LocaleListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (LocaleListResponse);
   rpc Create (LocaleList) returns (LocaleListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (LocaleList) returns (LocaleListResponse);
@@ -30,15 +30,14 @@ message LocaleList {
 }
 
 message LocaleListResponse {
-  repeated Locale items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message LocaleListReadResponse {
-  repeated Locale items = 1;
+  repeated LocaleResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message LocaleResponse {
+  Locale payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Locale {

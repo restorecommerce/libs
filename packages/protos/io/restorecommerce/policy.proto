@@ -42,19 +42,18 @@ message PolicyList {
 }
 
 message PolicyListResponse {
-  repeated Policy items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message PolicyListReadResponse {
-  repeated Policy items = 1;
+  repeated PolicyResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
 }
 
+message PolicyResponse {
+  Policy payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListResponse);
   rpc Create (PolicyList) returns (PolicyListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (PolicyList) returns (PolicyListResponse);

@@ -27,15 +27,14 @@ message ProductCategoryList {
 }
 
 message ProductCategoryListResponse {
-  repeated ProductCategory items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message ProductCategoryListReadResponse {
-  repeated ProductCategory items = 1;
+  repeated ProductCategoryResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message ProductCategoryResponse {
+  ProductCategory payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Deleted {
@@ -47,7 +46,7 @@ message Parent {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListResponse);
   rpc Create (ProductCategoryList) returns (ProductCategoryListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ProductCategoryList) returns (ProductCategoryListResponse);

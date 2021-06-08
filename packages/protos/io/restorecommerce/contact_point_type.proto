@@ -12,7 +12,7 @@ import "io/restorecommerce/status.proto";
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointTypeListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointTypeListResponse);
   rpc Create (ContactPointTypeList) returns (ContactPointTypeListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ContactPointTypeList) returns (ContactPointTypeListResponse);
@@ -29,20 +29,19 @@ message ContactPointTypeList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message ContactPointTypeListResponse {
-  repeated ContactPointType items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message ContactPointTypeListReadResponse {
-  repeated ContactPointType items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.Status status = 3;
-}
-
 message ContactPointType {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string type = 3;
+}
+
+message ContactPointTypeListResponse {
+  repeated ContactPointTypeResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
+message ContactPointTypeResponse {
+  ContactPointType payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }

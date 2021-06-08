@@ -23,15 +23,14 @@ message ManufacturerList {
 }
 
 message ManufacturerListResponse {
-  repeated Manufacturer items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message ManufacturerListReadResponse {
-  repeated Manufacturer items = 1;
+  repeated ManufacturerResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message ManufacturerResponse {
+  Manufacturer payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Deleted {
@@ -39,7 +38,7 @@ message Deleted {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerListResponse);
   rpc Create (ManufacturerList) returns (ManufacturerListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ManufacturerList) returns (ManufacturerListResponse);

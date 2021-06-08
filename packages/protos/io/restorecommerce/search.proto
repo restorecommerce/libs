@@ -13,7 +13,7 @@ message SearchRequest {
   string collection = 1;
   string text = 2;
   repeated string acl = 3;
-io.restorecommerce.auth.Subject subject = 4;
+  io.restorecommerce.auth.Subject subject = 4;
 }
 
 message SearchResponse {

@@ -10,7 +10,7 @@ import "io/restorecommerce/status.proto";
 
 // Message structure for Notification
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListResponse);
   rpc Create (NotificationList) returns (NotificationListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (NotificationList) returns (NotificationListResponse);
@@ -28,15 +28,14 @@ message NotificationList {
 }
 
 message NotificationListResponse {
-  repeated Notification items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message NotificationListReadResponse {
-  repeated Notification items = 1;
+  repeated NotificationResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message NotificationResponse {
+  Notification items = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Notification {

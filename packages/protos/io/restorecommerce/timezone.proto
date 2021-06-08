@@ -12,7 +12,7 @@ import "io/restorecommerce/status.proto";
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TimezoneListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TimezoneListResponse);
   rpc Create (TimezoneList) returns (TimezoneListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (TimezoneList) returns (TimezoneListResponse);
@@ -30,15 +30,14 @@ message TimezoneList {
 }
 
 message TimezoneListResponse {
-  repeated Timezone items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message TimezoneListReadResponse {
-  repeated Timezone items = 1;
+  repeated TimezoneResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message TimezoneResponse {
+  Timezone payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Timezone {

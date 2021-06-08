@@ -24,8 +24,13 @@ message CopyRequest {
 }
 
 message CopyResponse {
-  repeated CopyResponseItem response = 1;
-  repeated io.restorecommerce.status.Status status = 3;
+  repeated copyResponsePayloadWithStatus response = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message copyResponsePayloadWithStatus {
+  CopyResponseItem payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message CopyRequestItem {

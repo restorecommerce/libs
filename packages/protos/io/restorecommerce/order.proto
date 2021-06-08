@@ -9,7 +9,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse);
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (OrderList) returns (OrderListResponse);
@@ -25,15 +25,14 @@ message OrderList {
 }
 
 message OrderListResponse {
-  repeated Order items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message OrderListReadResponse {
-  repeated Order items = 1;
+  repeated OrderResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message OrderResponse {
+  Order payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Order {

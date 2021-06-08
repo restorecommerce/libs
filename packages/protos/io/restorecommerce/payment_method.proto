@@ -14,7 +14,7 @@ import "io/restorecommerce/status.proto";
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodListResponse);
   rpc Create (PaymentMethodList) returns (PaymentMethodListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (PaymentMethodList) returns (PaymentMethodListResponse);
@@ -32,15 +32,14 @@ message PaymentMethodList {
 }
 
 message PaymentMethodListResponse {
-  repeated PaymentMethod items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message PaymentMethodListReadResponse {
-  repeated PaymentMethod items = 1;
+  repeated PaymentMethodResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message PaymentMethodResponse {
+  PaymentMethod payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 enum PaymentMethodEnum {

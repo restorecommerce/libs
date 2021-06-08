@@ -10,7 +10,7 @@ import "io/restorecommerce/status.proto";
 
 // Service provides the CRUD operations
 service Service {
-  rpc Read (ReadRequest) returns (ResourceListReadResponse);
+  rpc Read (ReadRequest) returns (ResourceListResponse);
   rpc Create (ResourceList) returns (ResourceListResponse);
   rpc Delete (DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (ResourceList) returns (ResourceListResponse);
@@ -110,15 +110,14 @@ message ResourceList {
 
 // ResourceList response
 message ResourceListResponse {
-  repeated Resource items = 1;
+  repeated ResourceResponse items = 1;
   uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 4;
+  io.restorecommerce.status.Status status = 4;
 }
 
 // resource read response
-message ResourceListReadResponse {
-  repeated Resource items = 1;
-  uint32 total_count = 2;
+message ResourceResponse {
+  Resource payload = 1;
   io.restorecommerce.status.Status status = 4;
 }
 

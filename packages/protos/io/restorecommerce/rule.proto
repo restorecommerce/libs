@@ -56,15 +56,14 @@ message RuleList {
 }
 
 message RuleListResponse {
-  repeated Rule items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message RuleListReadResponse {
-  repeated Rule items = 1;
+  repeated RuleResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message RuleResponse {
+  Rule payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 // Query to pull resources from an external service
@@ -81,7 +80,7 @@ message ContextQuery {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListResponse);
   rpc Create (RuleList) returns (RuleListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (RuleList) returns (RuleListResponse);

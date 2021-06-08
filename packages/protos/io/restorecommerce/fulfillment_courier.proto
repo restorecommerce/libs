@@ -13,7 +13,7 @@ Microservice defination
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListResponse);
   rpc Create (CourierList) returns (CourierListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
   rpc Update (CourierList) returns (CourierListResponse);
@@ -27,15 +27,14 @@ message CourierList  {
 }
 
 message CourierListResponse  {
-  repeated Courier items = 1;
-  uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 3;
-}
-
-message CourierListReadResponse  {
-  repeated Courier items = 1;
+  repeated CourierResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.Status status = 3;
+}
+
+message CourierResponse  {
+  Courier payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Courier {

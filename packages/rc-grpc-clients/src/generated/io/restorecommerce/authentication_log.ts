@@ -5,6 +5,11 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
@@ -13,10 +18,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata2,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.authentication_log";
@@ -25,6 +27,18 @@ export interface AuthenticationLogList {
   items: AuthenticationLog[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface AuthenticationLogListResponse {
+  items: AuthenticationLog[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface AuthenticationLogListReadResponse {
+  items: AuthenticationLog[];
+  totalCount: number;
+  status?: Status;
 }
 
 /** Authentication Log */
@@ -157,6 +171,240 @@ export const AuthenticationLogList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    return obj;
+  },
+};
+
+const baseAuthenticationLogListResponse: object = { totalCount: 0 };
+
+export const AuthenticationLogListResponse = {
+  encode(
+    message: AuthenticationLogListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): AuthenticationLogListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseAuthenticationLogListResponse
+    ) as AuthenticationLogListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(AuthenticationLog.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AuthenticationLogListResponse {
+    const message = globalThis.Object.create(
+      baseAuthenticationLogListResponse
+    ) as AuthenticationLogListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(AuthenticationLog.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogListResponse>
+  ): AuthenticationLogListResponse {
+    const message = {
+      ...baseAuthenticationLogListResponse,
+    } as AuthenticationLogListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(AuthenticationLog.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: AuthenticationLogListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? AuthenticationLog.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseAuthenticationLogListReadResponse: object = { totalCount: 0 };
+
+export const AuthenticationLogListReadResponse = {
+  encode(
+    message: AuthenticationLogListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): AuthenticationLogListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseAuthenticationLogListReadResponse
+    ) as AuthenticationLogListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(AuthenticationLog.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AuthenticationLogListReadResponse {
+    const message = globalThis.Object.create(
+      baseAuthenticationLogListReadResponse
+    ) as AuthenticationLogListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(AuthenticationLog.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogListReadResponse>
+  ): AuthenticationLogListReadResponse {
+    const message = {
+      ...baseAuthenticationLogListReadResponse,
+    } as AuthenticationLogListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(AuthenticationLog.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: AuthenticationLogListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? AuthenticationLog.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -450,11 +698,17 @@ export const Deleted = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<AuthenticationLogList>;
-  Create(request: AuthenticationLogList): Promise<AuthenticationLogList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: AuthenticationLogList): Promise<AuthenticationLogList>;
-  Upsert(request: AuthenticationLogList): Promise<AuthenticationLogList>;
+  Read(request: ReadRequest): Promise<AuthenticationLogListReadResponse>;
+  Create(
+    request: AuthenticationLogList
+  ): Promise<AuthenticationLogListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(
+    request: AuthenticationLogList
+  ): Promise<AuthenticationLogListResponse>;
+  Upsert(
+    request: AuthenticationLogList
+  ): Promise<AuthenticationLogListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -470,6 +724,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -509,6 +764,78 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "AuthenticationLogList",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName:
+              ".io.restorecommerce.authentication_log.AuthenticationLog",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "AuthenticationLogListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName:
+              ".io.restorecommerce.authentication_log.AuthenticationLog",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "AuthenticationLogListReadResponse",
       },
       {
         field: [
@@ -601,33 +928,33 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+              ".io.restorecommerce.authentication_log.AuthenticationLogListReadResponse",
           },
           {
             name: "Create",
             inputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
-              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+              ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
-              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+              ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
           },
           {
             name: "Upsert",
             inputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
-              ".io.restorecommerce.authentication_log.AuthenticationLogList",
+              ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
           },
         ],
         name: "Service",
@@ -640,49 +967,49 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [12, 0, 18, 1],
+          span: [13, 0, 19, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
-          path: [4, 1],
-          span: [29, 0, 40, 1],
+          path: [4, 3],
+          span: [42, 0, 53, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Authentication Log\n",
         },
         {
-          path: [4, 1, 2, 0],
-          span: [30, 2, 16],
+          path: [4, 3, 2, 0],
+          span: [43, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " log id\n",
         },
         {
-          path: [4, 1, 2, 5],
-          span: [35, 2, 18],
+          path: [4, 3, 2, 5],
+          span: [48, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " time stamp of login, logout or token update\n",
         },
         {
-          path: [4, 1, 2, 6],
-          span: [36, 2, 22],
+          path: [4, 3, 2, 6],
+          span: [49, 2, 22],
           leadingDetachedComments: [],
           trailingComments: " login, logout\n",
         },
         {
-          path: [4, 1, 2, 7],
-          span: [37, 2, 40],
+          path: [4, 3, 2, 7],
+          span: [50, 2, 40],
           leadingDetachedComments: [],
           trailingComments: " meta info\n",
         },
         {
-          path: [4, 1, 2, 8],
-          span: [38, 2, 24],
+          path: [4, 3, 2, 8],
+          span: [51, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " subject id\n",
         },
         {
-          path: [4, 1, 2, 9],
-          span: [39, 2, 25],
+          path: [4, 3, 2, 9],
+          span: [52, 2, 25],
           leadingDetachedComments: [],
           trailingComments:
             " token name associated with io.restorecommerce.auth.Token.token_name\n",
@@ -693,6 +1020,8 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.authentication_log.AuthenticationLogList": AuthenticationLogList,
+    ".io.restorecommerce.authentication_log.AuthenticationLogListResponse": AuthenticationLogListResponse,
+    ".io.restorecommerce.authentication_log.AuthenticationLogListReadResponse": AuthenticationLogListReadResponse,
     ".io.restorecommerce.authentication_log.AuthenticationLog": AuthenticationLog,
     ".io.restorecommerce.authentication_log.Deleted": Deleted,
   },
@@ -701,6 +1030,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

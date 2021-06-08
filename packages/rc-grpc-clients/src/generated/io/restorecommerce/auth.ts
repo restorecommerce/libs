@@ -35,6 +35,7 @@ export interface Tokens {
   /** type of token eg: access_token, refresh_token */
   type: string;
   interactive: boolean;
+  lastLogin: number;
 }
 
 export interface HierarchicalScope {
@@ -258,6 +259,7 @@ const baseTokens: object = {
   scopes: "",
   type: "",
   interactive: false,
+  lastLogin: 0,
 };
 
 export const Tokens = {
@@ -279,6 +281,9 @@ export const Tokens = {
     }
     if (message.interactive === true) {
       writer.uint32(48).bool(message.interactive);
+    }
+    if (message.lastLogin !== 0) {
+      writer.uint32(57).double(message.lastLogin);
     }
     return writer;
   },
@@ -308,6 +313,9 @@ export const Tokens = {
           break;
         case 6:
           message.interactive = reader.bool();
+          break;
+        case 7:
+          message.lastLogin = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -350,6 +358,11 @@ export const Tokens = {
     } else {
       message.interactive = false;
     }
+    if (object.lastLogin !== undefined && object.lastLogin !== null) {
+      message.lastLogin = Number(object.lastLogin);
+    } else {
+      message.lastLogin = 0;
+    }
     return message;
   },
 
@@ -386,6 +399,11 @@ export const Tokens = {
     } else {
       message.interactive = false;
     }
+    if (object.lastLogin !== undefined && object.lastLogin !== null) {
+      message.lastLogin = object.lastLogin;
+    } else {
+      message.lastLogin = 0;
+    }
     return message;
   },
 
@@ -402,6 +420,7 @@ export const Tokens = {
     message.type !== undefined && (obj.type = message.type);
     message.interactive !== undefined &&
       (obj.interactive = message.interactive);
+    message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin);
     return obj;
   },
 };
@@ -871,6 +890,13 @@ export const protoMetadata: ProtoMetadata = {
             type: 8,
             jsonName: "interactive",
           },
+          {
+            name: "last_login",
+            number: 7,
+            label: 1,
+            type: 1,
+            jsonName: "lastLogin",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1042,39 +1068,39 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 2, 2, 0],
-          span: [27, 2, 16],
+          span: [28, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " root node\n",
         },
         {
           path: [4, 2, 2, 1],
-          span: [28, 2, 42],
+          span: [29, 2, 42],
           leadingDetachedComments: [],
           trailingComments: " children nodes\n",
         },
         {
           path: [4, 2, 2, 2],
-          span: [29, 2, 18],
+          span: [30, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             " role identifier associated with root node scope\n",
         },
         {
           path: [4, 3, 2, 0],
-          span: [33, 2, 18],
+          span: [34, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " role ID\n",
         },
         {
           path: [4, 3, 2, 1],
-          span: [34, 2, 65],
+          span: [35, 2, 65],
           leadingDetachedComments: [],
           trailingComments:
             " useful attributes for RBAC/ABAC like organizational scope\n",
         },
         {
           path: [4, 3, 2, 2],
-          span: [35, 2, 16],
+          span: [36, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " identifier for role_association\n",
         },

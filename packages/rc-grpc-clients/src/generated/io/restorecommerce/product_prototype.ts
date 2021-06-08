@@ -9,9 +9,11 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata2,
   ReadRequest,
@@ -35,6 +37,18 @@ export interface ProductPrototypeList {
   items: ProductPrototype[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface ProductPrototypeListResponse {
+  items: ProductPrototype[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface ProductPrototypeListReadResponse {
+  items: ProductPrototype[];
+  totalCount: number;
+  status?: Status;
 }
 
 export interface Deleted {
@@ -301,6 +315,240 @@ export const ProductPrototypeList = {
   },
 };
 
+const baseProductPrototypeListResponse: object = { totalCount: 0 };
+
+export const ProductPrototypeListResponse = {
+  encode(
+    message: ProductPrototypeListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      ProductPrototype.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ProductPrototypeListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseProductPrototypeListResponse
+    ) as ProductPrototypeListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(ProductPrototype.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ProductPrototypeListResponse {
+    const message = globalThis.Object.create(
+      baseProductPrototypeListResponse
+    ) as ProductPrototypeListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductPrototype.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<ProductPrototypeListResponse>
+  ): ProductPrototypeListResponse {
+    const message = {
+      ...baseProductPrototypeListResponse,
+    } as ProductPrototypeListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductPrototype.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: ProductPrototypeListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? ProductPrototype.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseProductPrototypeListReadResponse: object = { totalCount: 0 };
+
+export const ProductPrototypeListReadResponse = {
+  encode(
+    message: ProductPrototypeListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      ProductPrototype.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ProductPrototypeListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseProductPrototypeListReadResponse
+    ) as ProductPrototypeListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(ProductPrototype.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ProductPrototypeListReadResponse {
+    const message = globalThis.Object.create(
+      baseProductPrototypeListReadResponse
+    ) as ProductPrototypeListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductPrototype.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<ProductPrototypeListReadResponse>
+  ): ProductPrototypeListReadResponse {
+    const message = {
+      ...baseProductPrototypeListReadResponse,
+    } as ProductPrototypeListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ProductPrototype.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ProductPrototypeListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? ProductPrototype.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseDeleted: object = { id: "" };
 
 export const Deleted = {
@@ -357,11 +605,11 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<ProductPrototypeList>;
-  Create(request: ProductPrototypeList): Promise<ProductPrototypeList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: ProductPrototypeList): Promise<ProductPrototypeList>;
-  Upsert(request: ProductPrototypeList): Promise<ProductPrototypeList>;
+  Read(request: ReadRequest): Promise<ProductPrototypeListReadResponse>;
+  Create(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
+  Upsert(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -377,6 +625,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -460,6 +709,76 @@ export const protoMetadata: ProtoMetadata = {
         name: "ProductPrototypeList",
       },
       {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product_prototype.ProductPrototype",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductPrototypeListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product_prototype.ProductPrototype",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ProductPrototypeListReadResponse",
+      },
+      {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
         extension: [],
         nestedType: [],
@@ -479,33 +798,33 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.product_prototype.ProductPrototypeList",
+              ".io.restorecommerce.product_prototype.ProductPrototypeListReadResponse",
           },
           {
             name: "Create",
             inputType:
               ".io.restorecommerce.product_prototype.ProductPrototypeList",
             outputType:
-              ".io.restorecommerce.product_prototype.ProductPrototypeList",
+              ".io.restorecommerce.product_prototype.ProductPrototypeListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType:
               ".io.restorecommerce.product_prototype.ProductPrototypeList",
             outputType:
-              ".io.restorecommerce.product_prototype.ProductPrototypeList",
+              ".io.restorecommerce.product_prototype.ProductPrototypeListResponse",
           },
           {
             name: "Upsert",
             inputType:
               ".io.restorecommerce.product_prototype.ProductPrototypeList",
             outputType:
-              ".io.restorecommerce.product_prototype.ProductPrototypeList",
+              ".io.restorecommerce.product_prototype.ProductPrototypeListResponse",
           },
         ],
         name: "Service",
@@ -518,7 +837,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [10, 0, 17, 1],
+          span: [11, 0, 18, 1],
           leadingDetachedComments: [],
           leadingComments: " ProductPrototype resource\n",
         },
@@ -529,6 +848,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.product_prototype.ProductPrototype": ProductPrototype,
     ".io.restorecommerce.product_prototype.ProductPrototypeList": ProductPrototypeList,
+    ".io.restorecommerce.product_prototype.ProductPrototypeListResponse": ProductPrototypeListResponse,
+    ".io.restorecommerce.product_prototype.ProductPrototypeListReadResponse": ProductPrototypeListReadResponse,
     ".io.restorecommerce.product_prototype.Deleted": Deleted,
   },
   dependencies: [
@@ -536,6 +857,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

@@ -21,35 +21,38 @@ import {
 import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
-export const protobufPackage = "io.restorecommerce.locale";
+export const protobufPackage = "io.restorecommerce.notification_channel";
 
 export interface Deleted {
   id: string;
 }
 
-export interface LocaleList {
-  items: Locale[];
+export interface NotificationChannelList {
+  items: NotificationChannel[];
   totalCount: number;
   subject?: Subject;
 }
 
-export interface LocaleListResponse {
-  items: Locale[];
+export interface NotificationChannelListResponse {
+  items: NotificationChannel[];
   totalCount: number;
   status: Status[];
 }
 
-export interface LocaleListReadResponse {
-  items: Locale[];
+export interface NotificationChannelListReadResponse {
+  items: NotificationChannel[];
   totalCount: number;
   status?: Status;
 }
 
-export interface Locale {
+export interface NotificationChannel {
   id: string;
   meta?: Meta;
-  value: string;
+  name: string;
   description: string;
+  email: string | undefined;
+  sms: string | undefined;
+  webhook: string | undefined;
 }
 
 const baseDeleted: object = { id: "" };
@@ -107,12 +110,15 @@ export const Deleted = {
   },
 };
 
-const baseLocaleList: object = { totalCount: 0 };
+const baseNotificationChannelList: object = { totalCount: 0 };
 
-export const LocaleList = {
-  encode(message: LocaleList, writer: Writer = Writer.create()): Writer {
+export const NotificationChannelList = {
+  encode(
+    message: NotificationChannelList,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.items) {
-      Locale.encode(v!, writer.uint32(10).fork()).ldelim();
+      NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -123,16 +129,20 @@ export const LocaleList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): LocaleList {
+  decode(input: Reader | Uint8Array, length?: number): NotificationChannelList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseLocaleList) as LocaleList;
+    const message = globalThis.Object.create(
+      baseNotificationChannelList
+    ) as NotificationChannelList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Locale.decode(reader, reader.uint32()));
+          message.items.push(
+            NotificationChannel.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -148,12 +158,14 @@ export const LocaleList = {
     return message;
   },
 
-  fromJSON(object: any): LocaleList {
-    const message = globalThis.Object.create(baseLocaleList) as LocaleList;
+  fromJSON(object: any): NotificationChannelList {
+    const message = globalThis.Object.create(
+      baseNotificationChannelList
+    ) as NotificationChannelList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromJSON(e));
+        message.items.push(NotificationChannel.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -169,12 +181,16 @@ export const LocaleList = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<LocaleList>): LocaleList {
-    const message = { ...baseLocaleList } as LocaleList;
+  fromPartial(
+    object: DeepPartial<NotificationChannelList>
+  ): NotificationChannelList {
+    const message = {
+      ...baseNotificationChannelList,
+    } as NotificationChannelList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromPartial(e));
+        message.items.push(NotificationChannel.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -190,10 +206,12 @@ export const LocaleList = {
     return message;
   },
 
-  toJSON(message: LocaleList): unknown {
+  toJSON(message: NotificationChannelList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? NotificationChannel.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
@@ -206,15 +224,15 @@ export const LocaleList = {
   },
 };
 
-const baseLocaleListResponse: object = { totalCount: 0 };
+const baseNotificationChannelListResponse: object = { totalCount: 0 };
 
-export const LocaleListResponse = {
+export const NotificationChannelListResponse = {
   encode(
-    message: LocaleListResponse,
+    message: NotificationChannelListResponse,
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Locale.encode(v!, writer.uint32(10).fork()).ldelim();
+      NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -225,19 +243,24 @@ export const LocaleListResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): LocaleListResponse {
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): NotificationChannelListResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseLocaleListResponse
-    ) as LocaleListResponse;
+      baseNotificationChannelListResponse
+    ) as NotificationChannelListResponse;
     message.items = [];
     message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Locale.decode(reader, reader.uint32()));
+          message.items.push(
+            NotificationChannel.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -253,15 +276,15 @@ export const LocaleListResponse = {
     return message;
   },
 
-  fromJSON(object: any): LocaleListResponse {
+  fromJSON(object: any): NotificationChannelListResponse {
     const message = globalThis.Object.create(
-      baseLocaleListResponse
-    ) as LocaleListResponse;
+      baseNotificationChannelListResponse
+    ) as NotificationChannelListResponse;
     message.items = [];
     message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromJSON(e));
+        message.items.push(NotificationChannel.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -277,13 +300,17 @@ export const LocaleListResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<LocaleListResponse>): LocaleListResponse {
-    const message = { ...baseLocaleListResponse } as LocaleListResponse;
+  fromPartial(
+    object: DeepPartial<NotificationChannelListResponse>
+  ): NotificationChannelListResponse {
+    const message = {
+      ...baseNotificationChannelListResponse,
+    } as NotificationChannelListResponse;
     message.items = [];
     message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromPartial(e));
+        message.items.push(NotificationChannel.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -299,10 +326,12 @@ export const LocaleListResponse = {
     return message;
   },
 
-  toJSON(message: LocaleListResponse): unknown {
+  toJSON(message: NotificationChannelListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? NotificationChannel.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
@@ -318,15 +347,15 @@ export const LocaleListResponse = {
   },
 };
 
-const baseLocaleListReadResponse: object = { totalCount: 0 };
+const baseNotificationChannelListReadResponse: object = { totalCount: 0 };
 
-export const LocaleListReadResponse = {
+export const NotificationChannelListReadResponse = {
   encode(
-    message: LocaleListReadResponse,
+    message: NotificationChannelListReadResponse,
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Locale.encode(v!, writer.uint32(10).fork()).ldelim();
+      NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -337,18 +366,23 @@ export const LocaleListReadResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): LocaleListReadResponse {
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): NotificationChannelListReadResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseLocaleListReadResponse
-    ) as LocaleListReadResponse;
+      baseNotificationChannelListReadResponse
+    ) as NotificationChannelListReadResponse;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Locale.decode(reader, reader.uint32()));
+          message.items.push(
+            NotificationChannel.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -364,14 +398,14 @@ export const LocaleListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): LocaleListReadResponse {
+  fromJSON(object: any): NotificationChannelListReadResponse {
     const message = globalThis.Object.create(
-      baseLocaleListReadResponse
-    ) as LocaleListReadResponse;
+      baseNotificationChannelListReadResponse
+    ) as NotificationChannelListReadResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromJSON(e));
+        message.items.push(NotificationChannel.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -388,13 +422,15 @@ export const LocaleListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<LocaleListReadResponse>
-  ): LocaleListReadResponse {
-    const message = { ...baseLocaleListReadResponse } as LocaleListReadResponse;
+    object: DeepPartial<NotificationChannelListReadResponse>
+  ): NotificationChannelListReadResponse {
+    const message = {
+      ...baseNotificationChannelListReadResponse,
+    } as NotificationChannelListReadResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromPartial(e));
+        message.items.push(NotificationChannel.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -410,10 +446,12 @@ export const LocaleListReadResponse = {
     return message;
   },
 
-  toJSON(message: LocaleListReadResponse): unknown {
+  toJSON(message: NotificationChannelListReadResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? NotificationChannel.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
@@ -424,29 +462,43 @@ export const LocaleListReadResponse = {
   },
 };
 
-const baseLocale: object = { id: "", value: "", description: "" };
+const baseNotificationChannel: object = { id: "", name: "", description: "" };
 
-export const Locale = {
-  encode(message: Locale, writer: Writer = Writer.create()): Writer {
+export const NotificationChannel = {
+  encode(
+    message: NotificationChannel,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.value !== "") {
-      writer.uint32(26).string(message.value);
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
     }
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
     }
+    if (message.email !== undefined) {
+      writer.uint32(42).string(message.email);
+    }
+    if (message.sms !== undefined) {
+      writer.uint32(50).string(message.sms);
+    }
+    if (message.webhook !== undefined) {
+      writer.uint32(58).string(message.webhook);
+    }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Locale {
+  decode(input: Reader | Uint8Array, length?: number): NotificationChannel {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseLocale) as Locale;
+    const message = globalThis.Object.create(
+      baseNotificationChannel
+    ) as NotificationChannel;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -457,10 +509,19 @@ export const Locale = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.value = reader.string();
+          message.name = reader.string();
           break;
         case 4:
           message.description = reader.string();
+          break;
+        case 5:
+          message.email = reader.string();
+          break;
+        case 6:
+          message.sms = reader.string();
+          break;
+        case 7:
+          message.webhook = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -470,8 +531,10 @@ export const Locale = {
     return message;
   },
 
-  fromJSON(object: any): Locale {
-    const message = globalThis.Object.create(baseLocale) as Locale;
+  fromJSON(object: any): NotificationChannel {
+    const message = globalThis.Object.create(
+      baseNotificationChannel
+    ) as NotificationChannel;
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -482,21 +545,36 @@ export const Locale = {
     } else {
       message.meta = undefined;
     }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
     } else {
-      message.value = "";
+      message.name = "";
     }
     if (object.description !== undefined && object.description !== null) {
       message.description = String(object.description);
     } else {
       message.description = "";
     }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = String(object.email);
+    } else {
+      message.email = undefined;
+    }
+    if (object.sms !== undefined && object.sms !== null) {
+      message.sms = String(object.sms);
+    } else {
+      message.sms = undefined;
+    }
+    if (object.webhook !== undefined && object.webhook !== null) {
+      message.webhook = String(object.webhook);
+    } else {
+      message.webhook = undefined;
+    }
     return message;
   },
 
-  fromPartial(object: DeepPartial<Locale>): Locale {
-    const message = { ...baseLocale } as Locale;
+  fromPartial(object: DeepPartial<NotificationChannel>): NotificationChannel {
+    const message = { ...baseNotificationChannel } as NotificationChannel;
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -507,38 +585,62 @@ export const Locale = {
     } else {
       message.meta = undefined;
     }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
     } else {
-      message.value = "";
+      message.name = "";
     }
     if (object.description !== undefined && object.description !== null) {
       message.description = object.description;
     } else {
       message.description = "";
     }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = object.email;
+    } else {
+      message.email = undefined;
+    }
+    if (object.sms !== undefined && object.sms !== null) {
+      message.sms = object.sms;
+    } else {
+      message.sms = undefined;
+    }
+    if (object.webhook !== undefined && object.webhook !== null) {
+      message.webhook = object.webhook;
+    } else {
+      message.webhook = undefined;
+    }
     return message;
   },
 
-  toJSON(message: Locale): unknown {
+  toJSON(message: NotificationChannel): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.value !== undefined && (obj.value = message.value);
+    message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
+    message.email !== undefined && (obj.email = message.email);
+    message.sms !== undefined && (obj.sms = message.sms);
+    message.webhook !== undefined && (obj.webhook = message.webhook);
     return obj;
   },
 };
 
-/** Microservice definition. */
+/** Message structure for Notification Channel */
 export interface Service {
-  Read(request: ReadRequest): Promise<LocaleListReadResponse>;
-  Create(request: LocaleList): Promise<LocaleListResponse>;
+  Read(request: ReadRequest): Promise<NotificationChannelListReadResponse>;
+  Create(
+    request: NotificationChannelList
+  ): Promise<NotificationChannelListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
-  Update(request: LocaleList): Promise<LocaleListResponse>;
-  Upsert(request: LocaleList): Promise<LocaleListResponse>;
+  Update(
+    request: NotificationChannelList
+  ): Promise<NotificationChannelListResponse>;
+  Upsert(
+    request: NotificationChannelList
+  ): Promise<NotificationChannelListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -577,7 +679,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.locale.Locale",
+            typeName:
+              ".io.restorecommerce.notification_channel.NotificationChannel",
             jsonName: "items",
           },
           {
@@ -603,7 +706,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "LocaleList",
+        name: "NotificationChannelList",
       },
       {
         field: [
@@ -612,7 +715,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.locale.Locale",
+            typeName:
+              ".io.restorecommerce.notification_channel.NotificationChannel",
             jsonName: "items",
           },
           {
@@ -638,7 +742,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "LocaleListResponse",
+        name: "NotificationChannelListResponse",
       },
       {
         field: [
@@ -647,7 +751,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.locale.Locale",
+            typeName:
+              ".io.restorecommerce.notification_channel.NotificationChannel",
             jsonName: "items",
           },
           {
@@ -673,7 +778,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "LocaleListReadResponse",
+        name: "NotificationChannelListReadResponse",
       },
       {
         field: [
@@ -686,7 +791,7 @@ export const protoMetadata: ProtoMetadata = {
             typeName: ".io.restorecommerce.meta.Meta",
             jsonName: "meta",
           },
-          { name: "value", number: 3, label: 1, type: 9, jsonName: "value" },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
           {
             name: "description",
             number: 4,
@@ -694,15 +799,39 @@ export const protoMetadata: ProtoMetadata = {
             type: 9,
             jsonName: "description",
           },
+          {
+            name: "email",
+            number: 5,
+            label: 1,
+            type: 9,
+            oneofIndex: 0,
+            jsonName: "email",
+          },
+          {
+            name: "sms",
+            number: 6,
+            label: 1,
+            type: 9,
+            oneofIndex: 0,
+            jsonName: "sms",
+          },
+          {
+            name: "webhook",
+            number: 7,
+            label: 1,
+            type: 9,
+            oneofIndex: 0,
+            jsonName: "webhook",
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [],
+        oneofDecl: [{ name: "configuration_type" }],
         reservedRange: [],
         reservedName: [],
-        name: "Locale",
+        name: "NotificationChannel",
       },
     ],
     enumType: [],
@@ -712,12 +841,15 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.locale.LocaleListReadResponse",
+            outputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelListReadResponse",
           },
           {
             name: "Create",
-            inputType: ".io.restorecommerce.locale.LocaleList",
-            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            inputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelList",
+            outputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
           },
           {
             name: "Delete",
@@ -726,39 +858,43 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "Update",
-            inputType: ".io.restorecommerce.locale.LocaleList",
-            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            inputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelList",
+            outputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
           },
           {
             name: "Upsert",
-            inputType: ".io.restorecommerce.locale.LocaleList",
-            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            inputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelList",
+            outputType:
+              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
           },
         ],
         name: "Service",
       },
     ],
     extension: [],
-    name: "io/restorecommerce/locale.proto",
-    package: "io.restorecommerce.locale",
+    name: "io/restorecommerce/notification_channel.proto",
+    package: "io.restorecommerce.notification_channel",
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
-          span: [13, 0, 19, 1],
+          span: [11, 0, 17, 1],
           leadingDetachedComments: [],
-          leadingComments: "\n Microservice definition.\n",
+          leadingComments: " Message structure for Notification Channel\n",
         },
       ],
     },
     syntax: "proto3",
   }),
   references: {
-    ".io.restorecommerce.locale.Deleted": Deleted,
-    ".io.restorecommerce.locale.LocaleList": LocaleList,
-    ".io.restorecommerce.locale.LocaleListResponse": LocaleListResponse,
-    ".io.restorecommerce.locale.LocaleListReadResponse": LocaleListReadResponse,
-    ".io.restorecommerce.locale.Locale": Locale,
+    ".io.restorecommerce.notification_channel.Deleted": Deleted,
+    ".io.restorecommerce.notification_channel.NotificationChannelList": NotificationChannelList,
+    ".io.restorecommerce.notification_channel.NotificationChannelListResponse": NotificationChannelListResponse,
+    ".io.restorecommerce.notification_channel.NotificationChannelListReadResponse": NotificationChannelListReadResponse,
+    ".io.restorecommerce.notification_channel.NotificationChannel": NotificationChannel,
   },
   dependencies: [
     protoMetadata1,

@@ -5,6 +5,11 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata7,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
@@ -21,10 +26,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata2,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.invoice";
@@ -38,6 +40,18 @@ export interface InvoiceList {
   items: Invoice[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface InvoiceListResponse {
+  items: Invoice[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface InvoiceListReadResponse {
+  items: Invoice[];
+  totalCount: number;
+  status?: Status;
 }
 
 /** A simple invoice. */
@@ -267,6 +281,226 @@ export const InvoiceList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    return obj;
+  },
+};
+
+const baseInvoiceListResponse: object = { totalCount: 0 };
+
+export const InvoiceListResponse = {
+  encode(
+    message: InvoiceListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Invoice.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): InvoiceListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseInvoiceListResponse
+    ) as InvoiceListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Invoice.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvoiceListResponse {
+    const message = globalThis.Object.create(
+      baseInvoiceListResponse
+    ) as InvoiceListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<InvoiceListResponse>): InvoiceListResponse {
+    const message = { ...baseInvoiceListResponse } as InvoiceListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: InvoiceListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Invoice.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseInvoiceListReadResponse: object = { totalCount: 0 };
+
+export const InvoiceListReadResponse = {
+  encode(
+    message: InvoiceListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Invoice.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): InvoiceListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseInvoiceListReadResponse
+    ) as InvoiceListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Invoice.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvoiceListReadResponse {
+    const message = globalThis.Object.create(
+      baseInvoiceListReadResponse
+    ) as InvoiceListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<InvoiceListReadResponse>
+  ): InvoiceListReadResponse {
+    const message = {
+      ...baseInvoiceListReadResponse,
+    } as InvoiceListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Invoice.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: InvoiceListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Invoice.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -1578,11 +1812,11 @@ export const TriggerInvoices = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<InvoiceList>;
-  Create(request: InvoiceList): Promise<InvoiceList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: InvoiceList): Promise<InvoiceList>;
-  Upsert(request: InvoiceList): Promise<InvoiceList>;
+  Read(request: ReadRequest): Promise<InvoiceListReadResponse>;
+  Create(request: InvoiceList): Promise<InvoiceListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: InvoiceList): Promise<InvoiceListResponse>;
+  Upsert(request: InvoiceList): Promise<InvoiceListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -1600,6 +1834,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/organization.proto",
       "io/restorecommerce/auth.proto",
       "google/protobuf/any.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1649,6 +1884,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "InvoiceList",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.invoice.Invoice",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "InvoiceListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.invoice.Invoice",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "InvoiceListReadResponse",
       },
       {
         field: [
@@ -2010,27 +2315,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.invoice.InvoiceList",
-            outputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.invoice.InvoiceList",
-            outputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.invoice.InvoiceList",
-            outputType: ".io.restorecommerce.invoice.InvoiceList",
+            outputType: ".io.restorecommerce.invoice.InvoiceListResponse",
           },
         ],
         name: "Service",
@@ -2043,56 +2348,56 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [14, 0, 20, 1],
+          span: [15, 0, 21, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
           path: [4, 1],
-          span: [29, 0, 33, 1],
+          span: [30, 0, 34, 1],
           leadingDetachedComments: [],
           leadingComments: "\n For multiple invoices\n",
         },
         {
-          path: [4, 2],
-          span: [38, 0, 50, 1],
+          path: [4, 4],
+          span: [51, 0, 63, 1],
           leadingDetachedComments: [],
           leadingComments: "\n A simple invoice.\n",
         },
         {
-          path: [4, 2, 2, 7],
-          span: [46, 2, 24],
+          path: [4, 4, 2, 7],
+          span: [59, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " difference between net and total\n",
         },
         {
-          path: [4, 3],
-          span: [55, 0, 57, 1],
+          path: [4, 5],
+          span: [68, 0, 70, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n List of Invoice Positions data\n",
         },
         {
-          path: [4, 4, 2, 0],
-          span: [60, 2, 16],
+          path: [4, 6, 2, 0],
+          span: [73, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " contract or customer identifier\n",
         },
         {
-          path: [4, 5, 2, 0],
-          span: [71, 2, 16],
+          path: [4, 7, 2, 0],
+          span: [84, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " customer id - used to store the resource in DB\n",
         },
         {
-          path: [4, 5, 2, 1],
-          span: [72, 2, 29],
+          path: [4, 7, 2, 1],
+          span: [85, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             " displayed in invoice - auto generated per customer\n",
         },
         {
-          path: [4, 10, 2, 0],
-          span: [108, 2, 26],
+          path: [4, 12, 2, 0],
+          span: [121, 2, 26],
           leadingDetachedComments: [],
           trailingComments:
             " list of id referring to contract_ids or customer_ids\n",
@@ -2104,6 +2409,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.invoice.Deleted": Deleted,
     ".io.restorecommerce.invoice.InvoiceList": InvoiceList,
+    ".io.restorecommerce.invoice.InvoiceListResponse": InvoiceListResponse,
+    ".io.restorecommerce.invoice.InvoiceListReadResponse": InvoiceListReadResponse,
     ".io.restorecommerce.invoice.Invoice": Invoice,
     ".io.restorecommerce.invoice.InvoicesPositionsData": InvoicesPositionsData,
     ".io.restorecommerce.invoice.InvoicePositions": InvoicePositions,
@@ -2121,6 +2428,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
 };
 

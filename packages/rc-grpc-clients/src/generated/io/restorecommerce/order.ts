@@ -5,13 +5,15 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
-import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata2,
   ReadRequest,
@@ -25,6 +27,18 @@ export interface OrderList {
   items: Order[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface OrderListResponse {
+  items: Order[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface OrderListReadResponse {
+  items: Order[];
+  totalCount: number;
+  status?: Status;
 }
 
 export interface Order {
@@ -209,6 +223,221 @@ export const OrderList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    return obj;
+  },
+};
+
+const baseOrderListResponse: object = { totalCount: 0 };
+
+export const OrderListResponse = {
+  encode(message: OrderListResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.items) {
+      Order.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OrderListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOrderListResponse
+    ) as OrderListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Order.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OrderListResponse {
+    const message = globalThis.Object.create(
+      baseOrderListResponse
+    ) as OrderListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
+    const message = { ...baseOrderListResponse } as OrderListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: OrderListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Order.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseOrderListReadResponse: object = { totalCount: 0 };
+
+export const OrderListReadResponse = {
+  encode(
+    message: OrderListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Order.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OrderListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOrderListReadResponse
+    ) as OrderListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Order.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OrderListReadResponse {
+    const message = globalThis.Object.create(
+      baseOrderListReadResponse
+    ) as OrderListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<OrderListReadResponse>
+  ): OrderListReadResponse {
+    const message = { ...baseOrderListReadResponse } as OrderListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Order.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: OrderListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Order.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -1680,11 +1909,11 @@ export const ErrorList = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<OrderList>;
-  Create(request: OrderList): Promise<OrderList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: OrderList): Promise<OrderList>;
-  Upsert(request: OrderList): Promise<OrderList>;
+  Read(request: ReadRequest): Promise<OrderListReadResponse>;
+  Create(request: OrderList): Promise<OrderListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: OrderList): Promise<OrderListResponse>;
+  Upsert(request: OrderList): Promise<OrderListResponse>;
   TriggerFulfillment(request: OrderDataList): Promise<FulfillmentResults>;
 }
 
@@ -1701,6 +1930,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1739,6 +1969,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "OrderList",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.order.Order",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrderListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.order.Order",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OrderListReadResponse",
       },
       {
         field: [
@@ -2182,27 +2482,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderListResponse",
           },
           {
             name: "TriggerFulfillment",
@@ -2219,36 +2519,36 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
-          path: [4, 1, 2, 6],
-          span: [33, 2, 25],
+          path: [4, 3, 2, 6],
+          span: [46, 2, 25],
           leadingDetachedComments: [],
           leadingComments:
             " sum of all the quantity_price will be total_price\n",
         },
         {
-          path: [4, 1, 2, 7],
-          span: [35, 2, 39],
+          path: [4, 3, 2, 7],
+          span: [48, 2, 39],
           leadingDetachedComments: [],
           leadingComments: " shipping address\n",
         },
         {
-          path: [4, 3, 2, 0],
-          span: [47, 2, 39],
+          path: [4, 5, 2, 0],
+          span: [60, 2, 39],
           leadingDetachedComments: [],
           leadingComments:
             " below identifier is id of product, variant or bundle\n",
         },
         {
-          path: [4, 7, 2, 1],
-          span: [83, 2, 37],
+          path: [4, 9, 2, 1],
+          span: [96, 2, 37],
           leadingDetachedComments: [],
           leadingComments:
             " below properties are used for international packaging\n",
           trailingComments: " each items weight\n",
         },
         {
-          path: [4, 7, 2, 2],
-          span: [84, 2, 19],
+          path: [4, 9, 2, 2],
+          span: [97, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " number of items\n",
         },
@@ -2258,6 +2558,8 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.order.OrderList": OrderList,
+    ".io.restorecommerce.order.OrderListResponse": OrderListResponse,
+    ".io.restorecommerce.order.OrderListReadResponse": OrderListReadResponse,
     ".io.restorecommerce.order.Order": Order,
     ".io.restorecommerce.order.Items": Items,
     ".io.restorecommerce.order.Item": Item,
@@ -2275,6 +2577,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

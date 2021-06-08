@@ -5,6 +5,11 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata6,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/meta";
@@ -17,10 +22,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata3,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata3 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.credential";
@@ -33,6 +35,18 @@ export interface CredentialList {
   items: Credential[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface CredentialListResponse {
+  items: Credential[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface CredentialListReadResponse {
+  items: Credential[];
+  totalCount: number;
+  status?: Status;
 }
 
 export interface Credential {
@@ -202,6 +216,235 @@ export const CredentialList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    return obj;
+  },
+};
+
+const baseCredentialListResponse: object = { totalCount: 0 };
+
+export const CredentialListResponse = {
+  encode(
+    message: CredentialListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Credential.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CredentialListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCredentialListResponse
+    ) as CredentialListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Credential.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CredentialListResponse {
+    const message = globalThis.Object.create(
+      baseCredentialListResponse
+    ) as CredentialListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Credential.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<CredentialListResponse>
+  ): CredentialListResponse {
+    const message = { ...baseCredentialListResponse } as CredentialListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Credential.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: CredentialListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? Credential.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseCredentialListReadResponse: object = { totalCount: 0 };
+
+export const CredentialListReadResponse = {
+  encode(
+    message: CredentialListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Credential.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): CredentialListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCredentialListReadResponse
+    ) as CredentialListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Credential.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CredentialListReadResponse {
+    const message = globalThis.Object.create(
+      baseCredentialListReadResponse
+    ) as CredentialListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Credential.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<CredentialListReadResponse>
+  ): CredentialListReadResponse {
+    const message = {
+      ...baseCredentialListReadResponse,
+    } as CredentialListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Credential.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CredentialListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? Credential.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -376,11 +619,11 @@ export const Credential = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<CredentialList>;
-  Create(request: CredentialList): Promise<CredentialList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: CredentialList): Promise<CredentialList>;
-  Upsert(request: CredentialList): Promise<CredentialList>;
+  Read(request: ReadRequest): Promise<CredentialListReadResponse>;
+  Create(request: CredentialList): Promise<CredentialListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: CredentialList): Promise<CredentialListResponse>;
+  Upsert(request: CredentialList): Promise<CredentialListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -397,6 +640,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/empty.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -449,6 +693,76 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.credential.Credential",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CredentialListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.credential.Credential",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CredentialListReadResponse",
+      },
+      {
+        field: [
           { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
@@ -494,27 +808,28 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.credential.CredentialList",
+            outputType:
+              ".io.restorecommerce.credential.CredentialListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.credential.CredentialList",
-            outputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.credential.CredentialList",
-            outputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.credential.CredentialList",
-            outputType: ".io.restorecommerce.credential.CredentialList",
+            outputType: ".io.restorecommerce.credential.CredentialListResponse",
           },
         ],
         name: "Service",
@@ -527,13 +842,13 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [13, 0, 19, 1],
+          span: [14, 0, 20, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
-          path: [4, 2, 2, 6],
-          span: [38, 2, 38],
+          path: [4, 4, 2, 6],
+          span: [51, 2, 38],
           leadingDetachedComments: [],
           trailingComments:
             "/ additional credentials as auth key or certificates etc\n",
@@ -545,6 +860,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.credential.Deleted": Deleted,
     ".io.restorecommerce.credential.CredentialList": CredentialList,
+    ".io.restorecommerce.credential.CredentialListResponse": CredentialListResponse,
+    ".io.restorecommerce.credential.CredentialListReadResponse": CredentialListReadResponse,
     ".io.restorecommerce.credential.Credential": Credential,
   },
   dependencies: [
@@ -553,6 +870,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
 };
 

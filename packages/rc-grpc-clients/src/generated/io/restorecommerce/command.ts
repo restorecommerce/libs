@@ -9,9 +9,11 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata2,
   ReadRequest,
@@ -102,6 +104,18 @@ export interface CommandList {
   items: Command[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface CommandListResponse {
+  items: Command[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface CommandListReadResponse {
+  items: Command[];
+  totalCount: number;
+  status?: Status;
 }
 
 const baseCommand: object = { id: "", name: "", description: "" };
@@ -456,12 +470,232 @@ export const CommandList = {
   },
 };
 
+const baseCommandListResponse: object = { totalCount: 0 };
+
+export const CommandListResponse = {
+  encode(
+    message: CommandListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Command.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CommandListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCommandListResponse
+    ) as CommandListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Command.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandListResponse {
+    const message = globalThis.Object.create(
+      baseCommandListResponse
+    ) as CommandListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
+    const message = { ...baseCommandListResponse } as CommandListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: CommandListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Command.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseCommandListReadResponse: object = { totalCount: 0 };
+
+export const CommandListReadResponse = {
+  encode(
+    message: CommandListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Command.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CommandListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCommandListReadResponse
+    ) as CommandListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Command.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandListReadResponse {
+    const message = globalThis.Object.create(
+      baseCommandListReadResponse
+    ) as CommandListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<CommandListReadResponse>
+  ): CommandListReadResponse {
+    const message = {
+      ...baseCommandListReadResponse,
+    } as CommandListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Command.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CommandListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Command.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 export interface Service {
-  Read(request: ReadRequest): Promise<CommandList>;
-  Create(request: CommandList): Promise<CommandList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: CommandList): Promise<CommandList>;
-  Upsert(request: CommandList): Promise<CommandList>;
+  Read(request: ReadRequest): Promise<CommandListReadResponse>;
+  Create(request: CommandList): Promise<CommandListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: CommandList): Promise<CommandListResponse>;
+  Upsert(request: CommandList): Promise<CommandListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -477,6 +711,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -602,6 +837,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "CommandList",
       },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.command.Command",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CommandListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.command.Command",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "CommandListReadResponse",
+      },
     ],
     enumType: [],
     service: [
@@ -610,27 +915,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.command.CommandList",
-            outputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.command.CommandList",
-            outputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.command.CommandList",
-            outputType: ".io.restorecommerce.command.CommandList",
+            outputType: ".io.restorecommerce.command.CommandListResponse",
           },
         ],
         name: "Service",
@@ -643,49 +948,49 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [10, 0, 16, 1],
+          span: [11, 0, 17, 1],
           leadingDetachedComments: [],
           leadingComments: " command resource\n",
         },
         {
           path: [4, 0, 2, 2],
-          span: [13, 2, 18],
+          span: [14, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " command name\n",
         },
         {
           path: [4, 0, 2, 3],
-          span: [14, 2, 43],
+          span: [15, 2, 43],
           leadingDetachedComments: [],
           trailingComments: " all possible parameters\n",
         },
         {
           path: [4, 0, 2, 4],
-          span: [15, 2, 25],
+          span: [16, 2, 25],
           leadingDetachedComments: [],
           trailingComments: " command description\n",
         },
         {
           path: [4, 1, 2, 0],
-          span: [27, 2, 19],
+          span: [28, 2, 19],
           leadingDetachedComments: [],
           trailingComments: "  field name\n",
         },
         {
           path: [4, 1, 2, 1],
-          span: [28, 2, 25],
+          span: [29, 2, 25],
           leadingDetachedComments: [],
           trailingComments: " field description\n",
         },
         {
           path: [4, 1, 2, 2],
-          span: [29, 2, 25],
+          span: [30, 2, 25],
           leadingDetachedComments: [],
           trailingComments: " field's type\n",
         },
         {
           path: [4, 1, 2, 3],
-          span: [30, 2, 24],
+          span: [31, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " dump properties in case of `object_value``\n",
         },
@@ -698,12 +1003,15 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.command.CommandParameter": CommandParameter,
     ".io.restorecommerce.command.CommandParameter.ParameterType": CommandParameter_ParameterType,
     ".io.restorecommerce.command.CommandList": CommandList,
+    ".io.restorecommerce.command.CommandListResponse": CommandListResponse,
+    ".io.restorecommerce.command.CommandListReadResponse": CommandListReadResponse,
   },
   dependencies: [
     protoMetadata1,
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

@@ -5,6 +5,11 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
@@ -13,10 +18,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata2,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.tax_type";
@@ -29,6 +31,18 @@ export interface TaxTypeList {
   items: TaxType[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface TaxTypeListResponse {
+  items: TaxType[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface TaxTypeListReadResponse {
+  items: TaxType[];
+  totalCount: number;
+  status?: Status;
 }
 
 export interface TaxType {
@@ -192,6 +206,226 @@ export const TaxTypeList = {
   },
 };
 
+const baseTaxTypeListResponse: object = { totalCount: 0 };
+
+export const TaxTypeListResponse = {
+  encode(
+    message: TaxTypeListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      TaxType.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): TaxTypeListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseTaxTypeListResponse
+    ) as TaxTypeListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(TaxType.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TaxTypeListResponse {
+    const message = globalThis.Object.create(
+      baseTaxTypeListResponse
+    ) as TaxTypeListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(TaxType.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<TaxTypeListResponse>): TaxTypeListResponse {
+    const message = { ...baseTaxTypeListResponse } as TaxTypeListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(TaxType.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: TaxTypeListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? TaxType.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseTaxTypeListReadResponse: object = { totalCount: 0 };
+
+export const TaxTypeListReadResponse = {
+  encode(
+    message: TaxTypeListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      TaxType.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): TaxTypeListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseTaxTypeListReadResponse
+    ) as TaxTypeListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(TaxType.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TaxTypeListReadResponse {
+    const message = globalThis.Object.create(
+      baseTaxTypeListReadResponse
+    ) as TaxTypeListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(TaxType.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<TaxTypeListReadResponse>
+  ): TaxTypeListReadResponse {
+    const message = {
+      ...baseTaxTypeListReadResponse,
+    } as TaxTypeListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(TaxType.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: TaxTypeListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? TaxType.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseTaxType: object = { id: "", type: "", description: "" };
 
 export const TaxType = {
@@ -302,11 +536,11 @@ export const TaxType = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<TaxTypeList>;
-  Create(request: TaxTypeList): Promise<TaxTypeList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: TaxTypeList): Promise<TaxTypeList>;
-  Upsert(request: TaxTypeList): Promise<TaxTypeList>;
+  Read(request: ReadRequest): Promise<TaxTypeListReadResponse>;
+  Create(request: TaxTypeList): Promise<TaxTypeListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: TaxTypeList): Promise<TaxTypeListResponse>;
+  Upsert(request: TaxTypeList): Promise<TaxTypeListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -322,6 +556,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -374,6 +609,76 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.tax_type.TaxType",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "TaxTypeListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.tax_type.TaxType",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "TaxTypeListReadResponse",
+      },
+      {
+        field: [
           { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
@@ -409,27 +714,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.tax_type.TaxTypeList",
+            outputType: ".io.restorecommerce.tax_type.TaxTypeListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.tax_type.TaxTypeList",
-            outputType: ".io.restorecommerce.tax_type.TaxTypeList",
+            outputType: ".io.restorecommerce.tax_type.TaxTypeListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.tax_type.TaxTypeList",
-            outputType: ".io.restorecommerce.tax_type.TaxTypeList",
+            outputType: ".io.restorecommerce.tax_type.TaxTypeListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.tax_type.TaxTypeList",
-            outputType: ".io.restorecommerce.tax_type.TaxTypeList",
+            outputType: ".io.restorecommerce.tax_type.TaxTypeListResponse",
           },
         ],
         name: "Service",
@@ -442,7 +747,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [12, 0, 18, 1],
+          span: [13, 0, 19, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
@@ -453,6 +758,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.tax_type.Deleted": Deleted,
     ".io.restorecommerce.tax_type.TaxTypeList": TaxTypeList,
+    ".io.restorecommerce.tax_type.TaxTypeListResponse": TaxTypeListResponse,
+    ".io.restorecommerce.tax_type.TaxTypeListReadResponse": TaxTypeListReadResponse,
     ".io.restorecommerce.tax_type.TaxType": TaxType,
   },
   dependencies: [
@@ -460,6 +767,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

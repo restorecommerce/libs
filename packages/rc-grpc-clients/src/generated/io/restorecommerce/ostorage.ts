@@ -13,14 +13,15 @@ import {
   protoMetadata as protoMetadata3,
 } from "../../google/protobuf/any";
 import {
+  Status,
+  protoMetadata as protoMetadata7,
+} from "../../io/restorecommerce/status";
+import {
   Struct,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/struct";
 import { Observable } from "rxjs";
-import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata6,
   Attribute,
@@ -36,6 +37,7 @@ export interface CopyRequest {
 
 export interface CopyResponse {
   response: CopyResponseItem[];
+  status: Status[];
 }
 
 export interface CopyRequestItem {
@@ -77,6 +79,16 @@ export interface Object {
   subject?: Subject;
 }
 
+export interface ObjectResponse {
+  key: string;
+  bucket: string;
+  object: Buffer;
+  meta?: Meta;
+  url: string;
+  options?: Options;
+  status?: Status;
+}
+
 export interface GetRequest {
   key: string;
   bucket: string;
@@ -86,6 +98,7 @@ export interface GetRequest {
 
 export interface ObjectsData {
   objectData: ObjectData[];
+  status?: Status;
 }
 
 export interface ObjectData {
@@ -108,6 +121,7 @@ export interface Response {
   tags: Attribute[];
   /** file size of uploaded object */
   length: number;
+  status?: Status;
 }
 
 export interface ListRequest {
@@ -115,6 +129,16 @@ export interface ListRequest {
   /** / Filter based on fieldName|operation, value|list */
   filter?: Struct;
   subject?: Subject;
+}
+
+/**
+ * OstorageMessage is used for emitting
+ * objectUploaded and objectDownloaded events
+ */
+export interface OstorageMessage {
+  key: string;
+  bucket: string;
+  metadata?: Any;
 }
 
 const baseCopyRequest: object = {};
@@ -208,6 +232,9 @@ export const CopyResponse = {
     for (const v of message.response) {
       CopyResponseItem.encode(v!, writer.uint32(10).fork()).ldelim();
     }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -216,6 +243,7 @@ export const CopyResponse = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
+    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -223,6 +251,9 @@ export const CopyResponse = {
           message.response.push(
             CopyResponseItem.decode(reader, reader.uint32())
           );
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -235,9 +266,15 @@ export const CopyResponse = {
   fromJSON(object: any): CopyResponse {
     const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
+    message.status = [];
     if (object.response !== undefined && object.response !== null) {
       for (const e of object.response) {
         message.response.push(CopyResponseItem.fromJSON(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
       }
     }
     return message;
@@ -246,9 +283,15 @@ export const CopyResponse = {
   fromPartial(object: DeepPartial<CopyResponse>): CopyResponse {
     const message = { ...baseCopyResponse } as CopyResponse;
     message.response = [];
+    message.status = [];
     if (object.response !== undefined && object.response !== null) {
       for (const e of object.response) {
         message.response.push(CopyResponseItem.fromPartial(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
       }
     }
     return message;
@@ -262,6 +305,13 @@ export const CopyResponse = {
       );
     } else {
       obj.response = [];
+    }
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
     }
     return obj;
   },
@@ -916,6 +966,173 @@ export const Object = {
   },
 };
 
+const baseObjectResponse: object = { key: "", bucket: "", url: "" };
+
+export const ObjectResponse = {
+  encode(message: ObjectResponse, writer: Writer = Writer.create()): Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.object.length !== 0) {
+      writer.uint32(26).bytes(message.object);
+    }
+    if (message.meta !== undefined) {
+      Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.url !== "") {
+      writer.uint32(42).string(message.url);
+    }
+    if (message.options !== undefined) {
+      Options.encode(message.options, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(58).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): ObjectResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseObjectResponse
+    ) as ObjectResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.bucket = reader.string();
+          break;
+        case 3:
+          message.object = reader.bytes() as Buffer;
+          break;
+        case 4:
+          message.meta = Meta.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.url = reader.string();
+          break;
+        case 6:
+          message.options = Options.decode(reader, reader.uint32());
+          break;
+        case 7:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ObjectResponse {
+    const message = globalThis.Object.create(
+      baseObjectResponse
+    ) as ObjectResponse;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.bucket !== undefined && object.bucket !== null) {
+      message.bucket = String(object.bucket);
+    } else {
+      message.bucket = "";
+    }
+    if (object.object !== undefined && object.object !== null) {
+      message.object = Buffer.from(bytesFromBase64(object.object));
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.url !== undefined && object.url !== null) {
+      message.url = String(object.url);
+    } else {
+      message.url = "";
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = Options.fromJSON(object.options);
+    } else {
+      message.options = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<ObjectResponse>): ObjectResponse {
+    const message = { ...baseObjectResponse } as ObjectResponse;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.bucket !== undefined && object.bucket !== null) {
+      message.bucket = object.bucket;
+    } else {
+      message.bucket = "";
+    }
+    if (object.object !== undefined && object.object !== null) {
+      message.object = object.object;
+    } else {
+      message.object = new Buffer(0);
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.url !== undefined && object.url !== null) {
+      message.url = object.url;
+    } else {
+      message.url = "";
+    }
+    if (object.options !== undefined && object.options !== null) {
+      message.options = Options.fromPartial(object.options);
+    } else {
+      message.options = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ObjectResponse): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.bucket !== undefined && (obj.bucket = message.bucket);
+    message.object !== undefined &&
+      (obj.object = base64FromBytes(
+        message.object !== undefined ? message.object : new Buffer(0)
+      ));
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.url !== undefined && (obj.url = message.url);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? Options.toJSON(message.options)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseGetRequest: object = { key: "", bucket: "", download: false };
 
 export const GetRequest = {
@@ -1032,6 +1249,9 @@ export const ObjectsData = {
     for (const v of message.objectData) {
       ObjectData.encode(v!, writer.uint32(10).fork()).ldelim();
     }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -1045,6 +1265,9 @@ export const ObjectsData = {
       switch (tag >>> 3) {
         case 1:
           message.objectData.push(ObjectData.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1062,6 +1285,11 @@ export const ObjectsData = {
         message.objectData.push(ObjectData.fromJSON(e));
       }
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -1072,6 +1300,11 @@ export const ObjectsData = {
       for (const e of object.objectData) {
         message.objectData.push(ObjectData.fromPartial(e));
       }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
     }
     return message;
   },
@@ -1085,6 +1318,8 @@ export const ObjectsData = {
     } else {
       obj.objectData = [];
     }
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -1297,6 +1532,9 @@ export const Response = {
     if (message.length !== 0) {
       writer.uint32(48).int32(message.length);
     }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(58).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -1325,6 +1563,9 @@ export const Response = {
           break;
         case 6:
           message.length = reader.int32();
+          break;
+        case 7:
+          message.status = Status.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1367,6 +1608,11 @@ export const Response = {
     } else {
       message.length = 0;
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -1403,6 +1649,11 @@ export const Response = {
     } else {
       message.length = 0;
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -1419,6 +1670,8 @@ export const Response = {
       obj.tags = [];
     }
     message.length !== undefined && (obj.length = message.length);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -1516,10 +1769,106 @@ export const ListRequest = {
   },
 };
 
+const baseOstorageMessage: object = { key: "", bucket: "" };
+
+export const OstorageMessage = {
+  encode(message: OstorageMessage, writer: Writer = Writer.create()): Writer {
+    if (message.key !== "") {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.bucket !== "") {
+      writer.uint32(18).string(message.bucket);
+    }
+    if (message.metadata !== undefined) {
+      Any.encode(message.metadata, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OstorageMessage {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOstorageMessage
+    ) as OstorageMessage;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.key = reader.string();
+          break;
+        case 2:
+          message.bucket = reader.string();
+          break;
+        case 3:
+          message.metadata = Any.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OstorageMessage {
+    const message = globalThis.Object.create(
+      baseOstorageMessage
+    ) as OstorageMessage;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = String(object.key);
+    } else {
+      message.key = "";
+    }
+    if (object.bucket !== undefined && object.bucket !== null) {
+      message.bucket = String(object.bucket);
+    } else {
+      message.bucket = "";
+    }
+    if (object.metadata !== undefined && object.metadata !== null) {
+      message.metadata = Any.fromJSON(object.metadata);
+    } else {
+      message.metadata = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<OstorageMessage>): OstorageMessage {
+    const message = { ...baseOstorageMessage } as OstorageMessage;
+    if (object.key !== undefined && object.key !== null) {
+      message.key = object.key;
+    } else {
+      message.key = "";
+    }
+    if (object.bucket !== undefined && object.bucket !== null) {
+      message.bucket = object.bucket;
+    } else {
+      message.bucket = "";
+    }
+    if (object.metadata !== undefined && object.metadata !== null) {
+      message.metadata = Any.fromPartial(object.metadata);
+    } else {
+      message.metadata = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: OstorageMessage): unknown {
+    const obj: any = {};
+    message.key !== undefined && (obj.key = message.key);
+    message.bucket !== undefined && (obj.bucket = message.bucket);
+    message.metadata !== undefined &&
+      (obj.metadata = message.metadata
+        ? Any.toJSON(message.metadata)
+        : undefined);
+    return obj;
+  },
+};
+
 export interface Service {
-  Get(request: GetRequest): Observable<Object>;
+  Get(request: GetRequest): Observable<ObjectResponse>;
   Put(request: Observable<Object>): Promise<Response>;
-  Delete(request: DeleteRequest): Promise<Empty>;
+  Delete(request: DeleteRequest): Promise<Status>;
   List(request: ListRequest): Promise<ObjectsData>;
   Copy(request: CopyRequest): Promise<CopyResponse>;
 }
@@ -1539,6 +1888,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/attribute.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1580,6 +1930,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".io.restorecommerce.ostorage.CopyResponseItem",
             jsonName: "response",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
           },
         ],
         extension: [],
@@ -1774,6 +2132,46 @@ export const protoMetadata: ProtoMetadata = {
         field: [
           { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
           { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
+          { name: "object", number: 3, label: 1, type: 12, jsonName: "object" },
+          {
+            name: "meta",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          { name: "url", number: 5, label: 1, type: 9, jsonName: "url" },
+          {
+            name: "options",
+            number: 6,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.ostorage.Options",
+            jsonName: "options",
+          },
+          {
+            name: "status",
+            number: 7,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ObjectResponse",
+      },
+      {
+        field: [
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
           {
             name: "download",
             number: 3,
@@ -1808,6 +2206,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".io.restorecommerce.ostorage.ObjectData",
             jsonName: "objectData",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
           },
         ],
         extension: [],
@@ -1891,6 +2297,14 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "tags",
           },
           { name: "length", number: 6, label: 1, type: 5, jsonName: "length" },
+          {
+            name: "status",
+            number: 7,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1930,6 +2344,28 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "ListRequest",
       },
+      {
+        field: [
+          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+          { name: "bucket", number: 2, label: 1, type: 9, jsonName: "bucket" },
+          {
+            name: "metadata",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            jsonName: "metadata",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OstorageMessage",
+      },
     ],
     enumType: [],
     service: [
@@ -1938,7 +2374,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Get",
             inputType: ".io.restorecommerce.ostorage.GetRequest",
-            outputType: ".io.restorecommerce.ostorage.Object",
+            outputType: ".io.restorecommerce.ostorage.ObjectResponse",
             serverStreaming: true,
           },
           {
@@ -1950,7 +2386,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.ostorage.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.Status",
           },
           {
             name: "List",
@@ -1973,22 +2409,29 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 4, 2, 8],
-          span: [53, 2, 31],
+          span: [55, 2, 31],
           leadingDetachedComments: [],
           trailingComments: " optional meta data ex: from and to dates\n",
         },
         {
-          path: [4, 10, 2, 5],
-          span: [95, 2, 19],
+          path: [4, 11, 2, 5],
+          span: [108, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " file size of uploaded object\n",
         },
         {
-          path: [4, 11, 2, 1],
-          span: [100, 2, 36],
+          path: [4, 12, 2, 1],
+          span: [114, 2, 36],
           leadingDetachedComments: [],
           trailingComments:
             "/ Filter based on fieldName|operation, value|list\n",
+        },
+        {
+          path: [4, 13],
+          span: [120, 0, 124, 1],
+          leadingDetachedComments: [],
+          leadingComments:
+            " OstorageMessage is used for emitting\n objectUploaded and objectDownloaded events\n",
         },
       ],
     },
@@ -2001,12 +2444,14 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.ostorage.CopyResponseItem": CopyResponseItem,
     ".io.restorecommerce.ostorage.Options": Options,
     ".io.restorecommerce.ostorage.Object": Object,
+    ".io.restorecommerce.ostorage.ObjectResponse": ObjectResponse,
     ".io.restorecommerce.ostorage.GetRequest": GetRequest,
     ".io.restorecommerce.ostorage.ObjectsData": ObjectsData,
     ".io.restorecommerce.ostorage.ObjectData": ObjectData,
     ".io.restorecommerce.ostorage.DeleteRequest": DeleteRequest,
     ".io.restorecommerce.ostorage.Response": Response,
     ".io.restorecommerce.ostorage.ListRequest": ListRequest,
+    ".io.restorecommerce.ostorage.OstorageMessage": OstorageMessage,
   },
   dependencies: [
     protoMetadata1,
@@ -2015,6 +2460,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
 };
 

@@ -17,9 +17,11 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+  Status,
+  protoMetadata as protoMetadata6,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata2,
   ReadRequest,
@@ -58,6 +60,18 @@ export interface PolicyList {
   items: Policy[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface PolicyListResponse {
+  items: Policy[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface PolicyListReadResponse {
+  items: Policy[];
+  totalCount: number;
+  status?: Status;
 }
 
 const basePolicy: object = {
@@ -567,12 +581,230 @@ export const PolicyList = {
   },
 };
 
+const basePolicyListResponse: object = { totalCount: 0 };
+
+export const PolicyListResponse = {
+  encode(
+    message: PolicyListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Policy.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PolicyListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePolicyListResponse
+    ) as PolicyListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Policy.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PolicyListResponse {
+    const message = globalThis.Object.create(
+      basePolicyListResponse
+    ) as PolicyListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Policy.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PolicyListResponse>): PolicyListResponse {
+    const message = { ...basePolicyListResponse } as PolicyListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Policy.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: PolicyListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Policy.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const basePolicyListReadResponse: object = { totalCount: 0 };
+
+export const PolicyListReadResponse = {
+  encode(
+    message: PolicyListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Policy.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PolicyListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePolicyListReadResponse
+    ) as PolicyListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Policy.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PolicyListReadResponse {
+    const message = globalThis.Object.create(
+      basePolicyListReadResponse
+    ) as PolicyListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Policy.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<PolicyListReadResponse>
+  ): PolicyListReadResponse {
+    const message = { ...basePolicyListReadResponse } as PolicyListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Policy.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PolicyListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Policy.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 export interface Service {
-  Read(request: ReadRequest): Promise<PolicyList>;
-  Create(request: PolicyList): Promise<PolicyList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: PolicyList): Promise<PolicyList>;
-  Upsert(request: PolicyList): Promise<PolicyList>;
+  Read(request: ReadRequest): Promise<PolicyListReadResponse>;
+  Create(request: PolicyList): Promise<PolicyListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: PolicyList): Promise<PolicyListResponse>;
+  Upsert(request: PolicyList): Promise<PolicyListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -589,6 +821,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/rule.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -746,6 +979,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "PolicyList",
       },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.policy.Policy",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PolicyListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.policy.Policy",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PolicyListReadResponse",
+      },
     ],
     enumType: [],
     service: [
@@ -754,27 +1057,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.policy.PolicyList",
-            outputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.policy.PolicyList",
-            outputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.policy.PolicyList",
-            outputType: ".io.restorecommerce.policy.PolicyList",
+            outputType: ".io.restorecommerce.policy.PolicyListResponse",
           },
         ],
         name: "Service",
@@ -787,19 +1090,19 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [14, 0, 24, 1],
+          span: [15, 0, 25, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A Policy is defined by a set of Rules.\n",
         },
         {
           path: [4, 0, 2, 4],
-          span: [19, 2, 28],
+          span: [20, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " rule IDs\n",
         },
         {
           path: [4, 0, 2, 5],
-          span: [20, 2, 44],
+          span: [21, 2, 44],
           leadingDetachedComments: [],
           trailingComments: " general policy target\n",
         },
@@ -811,6 +1114,8 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.policy.Policy": Policy,
     ".io.restorecommerce.policy.PolicyRQ": PolicyRQ,
     ".io.restorecommerce.policy.PolicyList": PolicyList,
+    ".io.restorecommerce.policy.PolicyListResponse": PolicyListResponse,
+    ".io.restorecommerce.policy.PolicyListReadResponse": PolicyListReadResponse,
   },
   dependencies: [
     protoMetadata1,
@@ -818,6 +1123,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
 };
 

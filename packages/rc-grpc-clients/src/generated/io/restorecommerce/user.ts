@@ -11,6 +11,11 @@ import {
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
+  Status,
+  protoMetadata as protoMetadata7,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Image,
   protoMetadata as protoMetadata6,
 } from "../../io/restorecommerce/image";
@@ -119,7 +124,6 @@ export interface RegisterRequest {
   password: string;
   timezoneId: string;
   localeId: string;
-  roleAssociations: RoleAssociation[];
   /** default hierarchical scope */
   defaultScope: string;
   userType: UserType;
@@ -127,62 +131,72 @@ export interface RegisterRequest {
 }
 
 export interface ActivateRequest {
-  /** / User name (unique) */
-  name: string;
+  /** / user name or email */
+  identifier: string;
   activationCode: string;
   subject?: Subject;
 }
 
 export interface ConfirmUserInvitationRequest {
-  name: string;
+  /** user name or email */
+  identifier: string;
   password: string;
   activationCode: string;
   subject?: Subject;
 }
 
 export interface SendInvitationEmailRequest {
-  userId: string;
-  invitedByUserId: string;
+  /** user name or email */
+  identifier: string;
+  invitedByUserIdentifier: string;
   subject?: Subject;
 }
 
 export interface ChangePasswordRequest {
-  /** / User ID */
-  id: string;
+  /** / user name or email */
+  identifier: string;
   password: string;
   newPassword: string;
   subject?: Subject;
 }
 
 export interface RequestPasswordChangeRequest {
-  name: string | undefined;
-  email: string | undefined;
+  /** user name or email */
+  identifier: string;
   subject?: Subject;
 }
 
 export interface ConfirmPasswordChangeRequest {
-  name: string;
+  /** user name or email */
+  identifier: string;
   activationCode: string;
   password: string;
   subject?: Subject;
 }
 
 export interface ChangeEmailRequest {
-  /** / User ID */
-  id: string;
-  email: string;
+  /** user name or email */
+  identifier: string;
+  newEmail: string;
   subject?: Subject;
 }
 
 export interface ConfirmEmailChangeRequest {
-  name: string;
+  /** user name or email */
+  identifier: string;
   activationCode: string;
   subject?: Subject;
 }
 
 export interface UnregisterRequest {
   /** / User ID */
-  id: string;
+  identifier: string;
+  subject?: Subject;
+}
+
+export interface SendActivationEmailRequest {
+  /** / User name or email */
+  identifier: string;
   subject?: Subject;
 }
 
@@ -233,6 +247,18 @@ export interface UserList {
   items: User[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface UserListResponse {
+  items: User[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface UserListReadResponse {
+  items: User[];
+  totalCount: number;
+  status?: Status;
 }
 
 /** User activation request. */
@@ -291,7 +317,6 @@ export interface User {
   /** Last name of user inviting */
   invitedByUserLastName: string;
   tokens: Tokens[];
-  lastLogin: number;
   lastAccess: number;
 }
 
@@ -746,17 +771,14 @@ export const RegisterRequest = {
     if (message.localeId !== "") {
       writer.uint32(82).string(message.localeId);
     }
-    for (const v of message.roleAssociations) {
-      RoleAssociation.encode(v!, writer.uint32(90).fork()).ldelim();
-    }
     if (message.defaultScope !== "") {
-      writer.uint32(98).string(message.defaultScope);
+      writer.uint32(90).string(message.defaultScope);
     }
     if (message.userType !== 0) {
-      writer.uint32(104).int32(message.userType);
+      writer.uint32(96).int32(message.userType);
     }
     if (message.captchaCode !== "") {
-      writer.uint32(114).string(message.captchaCode);
+      writer.uint32(106).string(message.captchaCode);
     }
     return writer;
   },
@@ -767,7 +789,6 @@ export const RegisterRequest = {
     const message = globalThis.Object.create(
       baseRegisterRequest
     ) as RegisterRequest;
-    message.roleAssociations = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -802,17 +823,12 @@ export const RegisterRequest = {
           message.localeId = reader.string();
           break;
         case 11:
-          message.roleAssociations.push(
-            RoleAssociation.decode(reader, reader.uint32())
-          );
-          break;
-        case 12:
           message.defaultScope = reader.string();
           break;
-        case 13:
+        case 12:
           message.userType = reader.int32() as any;
           break;
-        case 14:
+        case 13:
           message.captchaCode = reader.string();
           break;
         default:
@@ -827,7 +843,6 @@ export const RegisterRequest = {
     const message = globalThis.Object.create(
       baseRegisterRequest
     ) as RegisterRequest;
-    message.roleAssociations = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -878,14 +893,6 @@ export const RegisterRequest = {
     } else {
       message.localeId = "";
     }
-    if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
-    ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromJSON(e));
-      }
-    }
     if (object.defaultScope !== undefined && object.defaultScope !== null) {
       message.defaultScope = String(object.defaultScope);
     } else {
@@ -906,7 +913,6 @@ export const RegisterRequest = {
 
   fromPartial(object: DeepPartial<RegisterRequest>): RegisterRequest {
     const message = { ...baseRegisterRequest } as RegisterRequest;
-    message.roleAssociations = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -957,14 +963,6 @@ export const RegisterRequest = {
     } else {
       message.localeId = "";
     }
-    if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
-    ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromPartial(e));
-      }
-    }
     if (object.defaultScope !== undefined && object.defaultScope !== null) {
       message.defaultScope = object.defaultScope;
     } else {
@@ -996,13 +994,6 @@ export const RegisterRequest = {
     message.password !== undefined && (obj.password = message.password);
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
-    if (message.roleAssociations) {
-      obj.roleAssociations = message.roleAssociations.map((e) =>
-        e ? RoleAssociation.toJSON(e) : undefined
-      );
-    } else {
-      obj.roleAssociations = [];
-    }
     message.defaultScope !== undefined &&
       (obj.defaultScope = message.defaultScope);
     message.userType !== undefined &&
@@ -1013,12 +1004,12 @@ export const RegisterRequest = {
   },
 };
 
-const baseActivateRequest: object = { name: "", activationCode: "" };
+const baseActivateRequest: object = { identifier: "", activationCode: "" };
 
 export const ActivateRequest = {
   encode(message: ActivateRequest, writer: Writer = Writer.create()): Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.activationCode !== "") {
       writer.uint32(18).string(message.activationCode);
@@ -1039,7 +1030,7 @@ export const ActivateRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.activationCode = reader.string();
@@ -1059,10 +1050,10 @@ export const ActivateRequest = {
     const message = globalThis.Object.create(
       baseActivateRequest
     ) as ActivateRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = String(object.activationCode);
@@ -1079,10 +1070,10 @@ export const ActivateRequest = {
 
   fromPartial(object: DeepPartial<ActivateRequest>): ActivateRequest {
     const message = { ...baseActivateRequest } as ActivateRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = object.activationCode;
@@ -1099,7 +1090,7 @@ export const ActivateRequest = {
 
   toJSON(message: ActivateRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.activationCode !== undefined &&
       (obj.activationCode = message.activationCode);
     message.subject !== undefined &&
@@ -1111,7 +1102,7 @@ export const ActivateRequest = {
 };
 
 const baseConfirmUserInvitationRequest: object = {
-  name: "",
+  identifier: "",
   password: "",
   activationCode: "",
 };
@@ -1121,8 +1112,8 @@ export const ConfirmUserInvitationRequest = {
     message: ConfirmUserInvitationRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.password !== "") {
       writer.uint32(18).string(message.password);
@@ -1149,7 +1140,7 @@ export const ConfirmUserInvitationRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.password = reader.string();
@@ -1172,10 +1163,10 @@ export const ConfirmUserInvitationRequest = {
     const message = globalThis.Object.create(
       baseConfirmUserInvitationRequest
     ) as ConfirmUserInvitationRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = String(object.password);
@@ -1201,10 +1192,10 @@ export const ConfirmUserInvitationRequest = {
     const message = {
       ...baseConfirmUserInvitationRequest,
     } as ConfirmUserInvitationRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = object.password;
@@ -1226,7 +1217,7 @@ export const ConfirmUserInvitationRequest = {
 
   toJSON(message: ConfirmUserInvitationRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.password !== undefined && (obj.password = message.password);
     message.activationCode !== undefined &&
       (obj.activationCode = message.activationCode);
@@ -1239,8 +1230,8 @@ export const ConfirmUserInvitationRequest = {
 };
 
 const baseSendInvitationEmailRequest: object = {
-  userId: "",
-  invitedByUserId: "",
+  identifier: "",
+  invitedByUserIdentifier: "",
 };
 
 export const SendInvitationEmailRequest = {
@@ -1248,11 +1239,11 @@ export const SendInvitationEmailRequest = {
     message: SendInvitationEmailRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.userId !== "") {
-      writer.uint32(10).string(message.userId);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
-    if (message.invitedByUserId !== "") {
-      writer.uint32(18).string(message.invitedByUserId);
+    if (message.invitedByUserIdentifier !== "") {
+      writer.uint32(18).string(message.invitedByUserIdentifier);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1273,10 +1264,10 @@ export const SendInvitationEmailRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userId = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
-          message.invitedByUserId = reader.string();
+          message.invitedByUserIdentifier = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1293,18 +1284,18 @@ export const SendInvitationEmailRequest = {
     const message = globalThis.Object.create(
       baseSendInvitationEmailRequest
     ) as SendInvitationEmailRequest;
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = String(object.userId);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.userId = "";
+      message.identifier = "";
     }
     if (
-      object.invitedByUserId !== undefined &&
-      object.invitedByUserId !== null
+      object.invitedByUserIdentifier !== undefined &&
+      object.invitedByUserIdentifier !== null
     ) {
-      message.invitedByUserId = String(object.invitedByUserId);
+      message.invitedByUserIdentifier = String(object.invitedByUserIdentifier);
     } else {
-      message.invitedByUserId = "";
+      message.invitedByUserIdentifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1320,18 +1311,18 @@ export const SendInvitationEmailRequest = {
     const message = {
       ...baseSendInvitationEmailRequest,
     } as SendInvitationEmailRequest;
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = object.userId;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.userId = "";
+      message.identifier = "";
     }
     if (
-      object.invitedByUserId !== undefined &&
-      object.invitedByUserId !== null
+      object.invitedByUserIdentifier !== undefined &&
+      object.invitedByUserIdentifier !== null
     ) {
-      message.invitedByUserId = object.invitedByUserId;
+      message.invitedByUserIdentifier = object.invitedByUserIdentifier;
     } else {
-      message.invitedByUserId = "";
+      message.invitedByUserIdentifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1343,9 +1334,9 @@ export const SendInvitationEmailRequest = {
 
   toJSON(message: SendInvitationEmailRequest): unknown {
     const obj: any = {};
-    message.userId !== undefined && (obj.userId = message.userId);
-    message.invitedByUserId !== undefined &&
-      (obj.invitedByUserId = message.invitedByUserId);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
+    message.invitedByUserIdentifier !== undefined &&
+      (obj.invitedByUserIdentifier = message.invitedByUserIdentifier);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1355,7 +1346,7 @@ export const SendInvitationEmailRequest = {
 };
 
 const baseChangePasswordRequest: object = {
-  id: "",
+  identifier: "",
   password: "",
   newPassword: "",
 };
@@ -1365,8 +1356,8 @@ export const ChangePasswordRequest = {
     message: ChangePasswordRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.password !== "") {
       writer.uint32(18).string(message.password);
@@ -1390,7 +1381,7 @@ export const ChangePasswordRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.password = reader.string();
@@ -1413,10 +1404,10 @@ export const ChangePasswordRequest = {
     const message = globalThis.Object.create(
       baseChangePasswordRequest
     ) as ChangePasswordRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.id = "";
+      message.identifier = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = String(object.password);
@@ -1440,10 +1431,10 @@ export const ChangePasswordRequest = {
     object: DeepPartial<ChangePasswordRequest>
   ): ChangePasswordRequest {
     const message = { ...baseChangePasswordRequest } as ChangePasswordRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.id = "";
+      message.identifier = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = object.password;
@@ -1465,7 +1456,7 @@ export const ChangePasswordRequest = {
 
   toJSON(message: ChangePasswordRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.password !== undefined && (obj.password = message.password);
     message.newPassword !== undefined &&
       (obj.newPassword = message.newPassword);
@@ -1477,21 +1468,18 @@ export const ChangePasswordRequest = {
   },
 };
 
-const baseRequestPasswordChangeRequest: object = {};
+const baseRequestPasswordChangeRequest: object = { identifier: "" };
 
 export const RequestPasswordChangeRequest = {
   encode(
     message: RequestPasswordChangeRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.name !== undefined) {
-      writer.uint32(10).string(message.name);
-    }
-    if (message.email !== undefined) {
-      writer.uint32(18).string(message.email);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
+      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1509,12 +1497,9 @@ export const RequestPasswordChangeRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
-          message.email = reader.string();
-          break;
-        case 3:
           message.subject = Subject.decode(reader, reader.uint32());
           break;
         default:
@@ -1529,15 +1514,10 @@ export const RequestPasswordChangeRequest = {
     const message = globalThis.Object.create(
       baseRequestPasswordChangeRequest
     ) as RequestPasswordChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.name = undefined;
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = undefined;
+      message.identifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1553,15 +1533,10 @@ export const RequestPasswordChangeRequest = {
     const message = {
       ...baseRequestPasswordChangeRequest,
     } as RequestPasswordChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.name = undefined;
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = undefined;
+      message.identifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1573,8 +1548,7 @@ export const RequestPasswordChangeRequest = {
 
   toJSON(message: RequestPasswordChangeRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
-    message.email !== undefined && (obj.email = message.email);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1584,7 +1558,7 @@ export const RequestPasswordChangeRequest = {
 };
 
 const baseConfirmPasswordChangeRequest: object = {
-  name: "",
+  identifier: "",
   activationCode: "",
   password: "",
 };
@@ -1594,8 +1568,8 @@ export const ConfirmPasswordChangeRequest = {
     message: ConfirmPasswordChangeRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.activationCode !== "") {
       writer.uint32(18).string(message.activationCode);
@@ -1622,7 +1596,7 @@ export const ConfirmPasswordChangeRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.activationCode = reader.string();
@@ -1645,10 +1619,10 @@ export const ConfirmPasswordChangeRequest = {
     const message = globalThis.Object.create(
       baseConfirmPasswordChangeRequest
     ) as ConfirmPasswordChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = String(object.activationCode);
@@ -1674,10 +1648,10 @@ export const ConfirmPasswordChangeRequest = {
     const message = {
       ...baseConfirmPasswordChangeRequest,
     } as ConfirmPasswordChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = object.activationCode;
@@ -1699,7 +1673,7 @@ export const ConfirmPasswordChangeRequest = {
 
   toJSON(message: ConfirmPasswordChangeRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.activationCode !== undefined &&
       (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
@@ -1711,18 +1685,18 @@ export const ConfirmPasswordChangeRequest = {
   },
 };
 
-const baseChangeEmailRequest: object = { id: "", email: "" };
+const baseChangeEmailRequest: object = { identifier: "", newEmail: "" };
 
 export const ChangeEmailRequest = {
   encode(
     message: ChangeEmailRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
-    if (message.email !== "") {
-      writer.uint32(18).string(message.email);
+    if (message.newEmail !== "") {
+      writer.uint32(18).string(message.newEmail);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1740,10 +1714,10 @@ export const ChangeEmailRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
-          message.email = reader.string();
+          message.newEmail = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1760,15 +1734,15 @@ export const ChangeEmailRequest = {
     const message = globalThis.Object.create(
       baseChangeEmailRequest
     ) as ChangeEmailRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.id = "";
+      message.identifier = "";
     }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = String(object.newEmail);
     } else {
-      message.email = "";
+      message.newEmail = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1780,15 +1754,15 @@ export const ChangeEmailRequest = {
 
   fromPartial(object: DeepPartial<ChangeEmailRequest>): ChangeEmailRequest {
     const message = { ...baseChangeEmailRequest } as ChangeEmailRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.id = "";
+      message.identifier = "";
     }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = object.newEmail;
     } else {
-      message.email = "";
+      message.newEmail = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1800,8 +1774,8 @@ export const ChangeEmailRequest = {
 
   toJSON(message: ChangeEmailRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.email !== undefined && (obj.email = message.email);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
+    message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1810,15 +1784,18 @@ export const ChangeEmailRequest = {
   },
 };
 
-const baseConfirmEmailChangeRequest: object = { name: "", activationCode: "" };
+const baseConfirmEmailChangeRequest: object = {
+  identifier: "",
+  activationCode: "",
+};
 
 export const ConfirmEmailChangeRequest = {
   encode(
     message: ConfirmEmailChangeRequest,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.activationCode !== "") {
       writer.uint32(18).string(message.activationCode);
@@ -1842,7 +1819,7 @@ export const ConfirmEmailChangeRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.name = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.activationCode = reader.string();
@@ -1862,10 +1839,10 @@ export const ConfirmEmailChangeRequest = {
     const message = globalThis.Object.create(
       baseConfirmEmailChangeRequest
     ) as ConfirmEmailChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = String(object.activationCode);
@@ -1886,10 +1863,10 @@ export const ConfirmEmailChangeRequest = {
     const message = {
       ...baseConfirmEmailChangeRequest,
     } as ConfirmEmailChangeRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.name = "";
+      message.identifier = "";
     }
     if (object.activationCode !== undefined && object.activationCode !== null) {
       message.activationCode = object.activationCode;
@@ -1906,7 +1883,7 @@ export const ConfirmEmailChangeRequest = {
 
   toJSON(message: ConfirmEmailChangeRequest): unknown {
     const obj: any = {};
-    message.name !== undefined && (obj.name = message.name);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.activationCode !== undefined &&
       (obj.activationCode = message.activationCode);
     message.subject !== undefined &&
@@ -1917,12 +1894,12 @@ export const ConfirmEmailChangeRequest = {
   },
 };
 
-const baseUnregisterRequest: object = { id: "" };
+const baseUnregisterRequest: object = { identifier: "" };
 
 export const UnregisterRequest = {
   encode(message: UnregisterRequest, writer: Writer = Writer.create()): Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
@@ -1940,7 +1917,7 @@ export const UnregisterRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
+          message.identifier = reader.string();
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1957,10 +1934,10 @@ export const UnregisterRequest = {
     const message = globalThis.Object.create(
       baseUnregisterRequest
     ) as UnregisterRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
     } else {
-      message.id = "";
+      message.identifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1972,10 +1949,10 @@ export const UnregisterRequest = {
 
   fromPartial(object: DeepPartial<UnregisterRequest>): UnregisterRequest {
     const message = { ...baseUnregisterRequest } as UnregisterRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
     } else {
-      message.id = "";
+      message.identifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1987,7 +1964,96 @@ export const UnregisterRequest = {
 
   toJSON(message: UnregisterRequest): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
+    message.identifier !== undefined && (obj.identifier = message.identifier);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
+    return obj;
+  },
+};
+
+const baseSendActivationEmailRequest: object = { identifier: "" };
+
+export const SendActivationEmailRequest = {
+  encode(
+    message: SendActivationEmailRequest,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.identifier !== "") {
+      writer.uint32(10).string(message.identifier);
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): SendActivationEmailRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseSendActivationEmailRequest
+    ) as SendActivationEmailRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.identifier = reader.string();
+          break;
+        case 2:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SendActivationEmailRequest {
+    const message = globalThis.Object.create(
+      baseSendActivationEmailRequest
+    ) as SendActivationEmailRequest;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = String(object.identifier);
+    } else {
+      message.identifier = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<SendActivationEmailRequest>
+  ): SendActivationEmailRequest {
+    const message = {
+      ...baseSendActivationEmailRequest,
+    } as SendActivationEmailRequest;
+    if (object.identifier !== undefined && object.identifier !== null) {
+      message.identifier = object.identifier;
+    } else {
+      message.identifier = "";
+    }
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: SendActivationEmailRequest): unknown {
+    const obj: any = {};
+    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -2473,6 +2539,219 @@ export const UserList = {
   },
 };
 
+const baseUserListResponse: object = { totalCount: 0 };
+
+export const UserListResponse = {
+  encode(message: UserListResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.items) {
+      User.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): UserListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseUserListResponse
+    ) as UserListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(User.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserListResponse {
+    const message = globalThis.Object.create(
+      baseUserListResponse
+    ) as UserListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(User.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<UserListResponse>): UserListResponse {
+    const message = { ...baseUserListResponse } as UserListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(User.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: UserListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? User.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseUserListReadResponse: object = { totalCount: 0 };
+
+export const UserListReadResponse = {
+  encode(
+    message: UserListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      User.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): UserListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseUserListReadResponse
+    ) as UserListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(User.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserListReadResponse {
+    const message = globalThis.Object.create(
+      baseUserListReadResponse
+    ) as UserListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(User.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<UserListReadResponse>): UserListReadResponse {
+    const message = { ...baseUserListReadResponse } as UserListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(User.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: UserListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? User.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseActivate: object = { id: "" };
 
 export const Activate = {
@@ -2654,7 +2933,6 @@ const baseUser: object = {
   invitedByUserName: "",
   invitedByUserFirstName: "",
   invitedByUserLastName: "",
-  lastLogin: 0,
   lastAccess: 0,
 };
 
@@ -2732,11 +3010,8 @@ export const User = {
     for (const v of message.tokens) {
       Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
     }
-    if (message.lastLogin !== 0) {
-      writer.uint32(201).double(message.lastLogin);
-    }
     if (message.lastAccess !== 0) {
-      writer.uint32(209).double(message.lastAccess);
+      writer.uint32(201).double(message.lastAccess);
     }
     return writer;
   },
@@ -2825,9 +3100,6 @@ export const User = {
           message.tokens.push(Tokens.decode(reader, reader.uint32()));
           break;
         case 25:
-          message.lastLogin = reader.double();
-          break;
-        case 26:
           message.lastAccess = reader.double();
           break;
         default:
@@ -2977,11 +3249,6 @@ export const User = {
         message.tokens.push(Tokens.fromJSON(e));
       }
     }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = Number(object.lastLogin);
-    } else {
-      message.lastLogin = 0;
-    }
     if (object.lastAccess !== undefined && object.lastAccess !== null) {
       message.lastAccess = Number(object.lastAccess);
     } else {
@@ -3129,11 +3396,6 @@ export const User = {
         message.tokens.push(Tokens.fromPartial(e));
       }
     }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = object.lastLogin;
-    } else {
-      message.lastLogin = 0;
-    }
     if (object.lastAccess !== undefined && object.lastAccess !== null) {
       message.lastAccess = object.lastAccess;
     } else {
@@ -3190,7 +3452,6 @@ export const User = {
     } else {
       obj.tokens = [];
     }
-    message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin);
     message.lastAccess !== undefined && (obj.lastAccess = message.lastAccess);
     return obj;
   },
@@ -3198,12 +3459,12 @@ export const User = {
 
 /** The microservice for the user resource. */
 export interface Service {
-  Read(request: ReadRequest): Promise<UserList>;
-  Create(request: UserList): Promise<UserList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: UserList): Promise<UserList>;
-  Upsert(request: UserList): Promise<UserList>;
-  Find(request: FindRequest): Promise<UserList>;
+  Read(request: ReadRequest): Promise<UserListReadResponse>;
+  Create(request: UserList): Promise<UserListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: UserList): Promise<UserListResponse>;
+  Upsert(request: UserList): Promise<UserListResponse>;
+  Find(request: FindRequest): Promise<UserListReadResponse>;
   Register(request: RegisterRequest): Promise<User>;
   Activate(request: ActivateRequest): Promise<Empty>;
   ChangePassword(request: ChangePasswordRequest): Promise<Empty>;
@@ -3213,11 +3474,12 @@ export interface Service {
   ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<Empty>;
   Unregister(request: UnregisterRequest): Promise<Empty>;
   Login(request: LoginRequest): Promise<User>;
-  FindByRole(request: FindByRoleRequest): Promise<UserList>;
+  FindByRole(request: FindByRoleRequest): Promise<UserListReadResponse>;
   DeleteUsersByOrg(request: OrgIDRequest): Promise<UserIDs>;
   ConfirmUserInvitation(request: ConfirmUserInvitationRequest): Promise<Empty>;
   SendInvitationEmail(request: SendInvitationEmailRequest): Promise<Empty>;
   FindByToken(request: FindByTokenRequest): Promise<User>;
+  SendActivationEmail(request: SendActivationEmailRequest): Promise<Empty>;
 }
 
 export interface ProtoMetadata {
@@ -3235,6 +3497,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/image.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -3392,23 +3655,15 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "localeId",
           },
           {
-            name: "role_associations",
-            number: 11,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.RoleAssociation",
-            jsonName: "roleAssociations",
-          },
-          {
             name: "default_scope",
-            number: 12,
+            number: 11,
             label: 1,
             type: 9,
             jsonName: "defaultScope",
           },
           {
             name: "user_type",
-            number: 13,
+            number: 12,
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.user.UserType",
@@ -3416,7 +3671,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "captcha_code",
-            number: 14,
+            number: 13,
             label: 1,
             type: 9,
             jsonName: "captchaCode",
@@ -3433,7 +3688,13 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "activation_code",
             number: 2,
@@ -3461,7 +3722,13 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "password",
             number: 2,
@@ -3496,13 +3763,19 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "user_id", number: 1, label: 1, type: 9, jsonName: "userId" },
           {
-            name: "invited_by_user_id",
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
+          {
+            name: "invited_by_user_identifier",
             number: 2,
             label: 1,
             type: 9,
-            jsonName: "invitedByUserId",
+            jsonName: "invitedByUserIdentifier",
           },
           {
             name: "subject",
@@ -3524,7 +3797,13 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "password",
             number: 2,
@@ -3560,24 +3839,15 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "name",
+            name: "identifier",
             number: 1,
             label: 1,
             type: 9,
-            oneofIndex: 0,
-            jsonName: "name",
-          },
-          {
-            name: "email",
-            number: 2,
-            label: 1,
-            type: 9,
-            oneofIndex: 0,
-            jsonName: "email",
+            jsonName: "identifier",
           },
           {
             name: "subject",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
@@ -3588,14 +3858,20 @@ export const protoMetadata: ProtoMetadata = {
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [{ name: "input_field" }],
+        oneofDecl: [],
         reservedRange: [],
         reservedName: [],
         name: "RequestPasswordChangeRequest",
       },
       {
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "activation_code",
             number: 2,
@@ -3630,8 +3906,20 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
-          { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
+          {
+            name: "new_email",
+            number: 2,
+            label: 1,
+            type: 9,
+            jsonName: "newEmail",
+          },
           {
             name: "subject",
             number: 3,
@@ -3652,7 +3940,13 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "activation_code",
             number: 2,
@@ -3680,7 +3974,13 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
           {
             name: "subject",
             number: 2,
@@ -3698,6 +3998,33 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "UnregisterRequest",
+      },
+      {
+        field: [
+          {
+            name: "identifier",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "identifier",
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SendActivationEmailRequest",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -3816,6 +4143,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "UserList",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.user.User",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.user.User",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserListReadResponse",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -3997,15 +4394,8 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "tokens",
           },
           {
-            name: "last_login",
-            number: 25,
-            label: 1,
-            type: 1,
-            jsonName: "lastLogin",
-          },
-          {
             name: "last_access",
-            number: 26,
+            number: 25,
             label: 1,
             type: 1,
             jsonName: "lastAccess",
@@ -4040,32 +4430,32 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.user.UserList",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.user.UserList",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.user.UserList",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "Find",
             inputType: ".io.restorecommerce.user.FindRequest",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListReadResponse",
           },
           {
             name: "Register",
@@ -4115,7 +4505,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "FindByRole",
             inputType: ".io.restorecommerce.user.FindByRoleRequest",
-            outputType: ".io.restorecommerce.user.UserList",
+            outputType: ".io.restorecommerce.user.UserListReadResponse",
           },
           {
             name: "DeleteUsersByOrg",
@@ -4137,6 +4527,11 @@ export const protoMetadata: ProtoMetadata = {
             inputType: ".io.restorecommerce.user.FindByTokenRequest",
             outputType: ".io.restorecommerce.user.User",
           },
+          {
+            name: "SendActivationEmail",
+            inputType: ".io.restorecommerce.user.SendActivationEmailRequest",
+            outputType: ".google.protobuf.Empty",
+          },
         ],
         name: "Service",
       },
@@ -4148,238 +4543,274 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [14, 0, 36, 1],
+          span: [15, 0, 38, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n The microservice for the user resource.\n",
         },
         {
           path: [4, 0],
-          span: [42, 0, 46, 1],
+          span: [44, 0, 48, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         },
         {
           path: [4, 0, 2, 0],
-          span: [43, 2, 24],
+          span: [45, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " User name or email\n",
         },
         {
           path: [4, 0, 2, 1],
-          span: [44, 2, 22],
+          span: [46, 2, 22],
           leadingDetachedComments: [],
           trailingComments: " Raw password\n",
         },
         {
           path: [4, 3, 2, 0],
-          span: [58, 2, 16],
+          span: [60, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 5, 2, 11],
-          span: [88, 2, 28],
+          path: [4, 5, 2, 10],
+          span: [89, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [94, 2, 18],
+          span: [95, 2, 24],
           leadingDetachedComments: [],
-          trailingComments: "/ User name (unique)\n",
+          trailingComments: "/ user name or email\n",
+        },
+        {
+          path: [4, 7, 2, 0],
+          span: [101, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " user name or email\n",
+        },
+        {
+          path: [4, 8, 2, 0],
+          span: [108, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " user name or email\n",
         },
         {
           path: [4, 9, 2, 0],
-          span: [113, 2, 16],
+          span: [114, 2, 24],
           leadingDetachedComments: [],
-          trailingComments: "/ User ID\n",
+          trailingComments: "/ user name or email\n",
+        },
+        {
+          path: [4, 10, 2, 0],
+          span: [121, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " user name or email\n",
+        },
+        {
+          path: [4, 11, 2, 0],
+          span: [126, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " user name or email\n",
         },
         {
           path: [4, 12, 2, 0],
-          span: [135, 2, 16],
+          span: [133, 2, 24],
           leadingDetachedComments: [],
-          trailingComments: "/ User ID\n",
+          trailingComments: " user name or email\n",
+        },
+        {
+          path: [4, 13, 2, 0],
+          span: [139, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " user name or email\n",
         },
         {
           path: [4, 14, 2, 0],
-          span: [147, 2, 16],
+          span: [145, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 15],
-          span: [159, 0, 161, 1],
+          path: [4, 15, 2, 0],
+          span: [150, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: "/ User name or email\n",
+        },
+        {
+          path: [4, 16],
+          span: [162, 0, 164, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
         },
         {
-          path: [4, 16],
-          span: [169, 0, 172, 1],
+          path: [4, 17],
+          span: [172, 0, 175, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
         },
         {
-          path: [4, 16, 2, 0],
-          span: [170, 2, 16],
+          path: [4, 17, 2, 0],
+          span: [173, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 17, 2, 0],
-          span: [175, 2, 16],
+          path: [4, 18, 2, 0],
+          span: [178, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " User ID\n",
         },
         {
-          path: [4, 18],
-          span: [181, 0, 185, 1],
+          path: [4, 19],
+          span: [184, 0, 188, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User email id changed event.\n",
         },
         {
-          path: [4, 19, 2, 0],
-          span: [188, 2, 16],
+          path: [4, 20, 2, 0],
+          span: [191, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 20],
-          span: [195, 0, 199, 1],
+          path: [4, 21],
+          span: [198, 0, 202, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A list of User.\n",
         },
         {
-          path: [4, 21],
-          span: [204, 0, 206, 1],
+          path: [4, 24],
+          span: [219, 0, 221, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User activation request.\n",
         },
         {
-          path: [4, 21, 2, 0],
-          span: [205, 2, 16],
+          path: [4, 24, 2, 0],
+          span: [220, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 23],
-          span: [217, 0, 244, 1],
+          path: [4, 26],
+          span: [232, 0, 258, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A User resource.\n",
         },
         {
-          path: [4, 23, 2, 0],
-          span: [218, 2, 16],
+          path: [4, 26, 2, 0],
+          span: [233, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID, unique, key\n",
         },
         {
-          path: [4, 23, 2, 2],
-          span: [220, 2, 18],
+          path: [4, 26, 2, 2],
+          span: [235, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " The name of the user, can be used for login\n",
         },
         {
-          path: [4, 23, 2, 5],
-          span: [223, 2, 19],
+          path: [4, 26, 2, 5],
+          span: [238, 2, 19],
           leadingDetachedComments: [],
           trailingComments: "/ Email address, can be used for login\n",
         },
         {
-          path: [4, 23, 2, 6],
-          span: [224, 2, 23],
+          path: [4, 26, 2, 6],
+          span: [239, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         },
         {
-          path: [4, 23, 2, 7],
-          span: [225, 2, 18],
+          path: [4, 26, 2, 7],
+          span: [240, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ If the user was activated via the activation process\n",
         },
         {
-          path: [4, 23, 2, 8],
-          span: [226, 2, 29],
+          path: [4, 26, 2, 8],
+          span: [241, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             "/ Activation code used in the activation process\n",
         },
         {
-          path: [4, 23, 2, 9],
-          span: [227, 2, 23],
+          path: [4, 26, 2, 9],
+          span: [242, 2, 23],
           leadingDetachedComments: [],
           trailingComments: "/ Raw password, not stored\n",
         },
         {
-          path: [4, 23, 2, 10],
-          span: [228, 2, 28],
+          path: [4, 26, 2, 10],
+          span: [243, 2, 28],
           leadingDetachedComments: [],
           trailingComments: "/ Encrypted password, stored\n",
         },
         {
-          path: [4, 23, 2, 11],
-          span: [229, 2, 74],
+          path: [4, 26, 2, 11],
+          span: [244, 2, 74],
           leadingDetachedComments: [],
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
         },
         {
-          path: [4, 23, 2, 12],
-          span: [230, 2, 26],
+          path: [4, 26, 2, 12],
+          span: [245, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " timezone_id specifications\n",
         },
         {
-          path: [4, 23, 2, 13],
-          span: [231, 2, 24],
+          path: [4, 26, 2, 13],
+          span: [246, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " locale specifications\n",
         },
         {
-          path: [4, 23, 2, 14],
-          span: [232, 2, 28],
+          path: [4, 26, 2, 14],
+          span: [247, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
-          path: [4, 23, 2, 15],
-          span: [233, 2, 28],
+          path: [4, 26, 2, 15],
+          span: [248, 2, 28],
           leadingDetachedComments: [],
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
         },
         {
-          path: [4, 23, 2, 16],
-          span: [234, 2, 18],
+          path: [4, 26, 2, 16],
+          span: [249, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         },
         {
-          path: [4, 23, 2, 19],
-          span: [237, 2, 19],
+          path: [4, 26, 2, 19],
+          span: [252, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " For user invitation\n",
         },
         {
-          path: [4, 23, 2, 20],
-          span: [238, 2, 35],
+          path: [4, 26, 2, 20],
+          span: [253, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " user who is inviting\n",
         },
         {
-          path: [4, 23, 2, 21],
-          span: [239, 2, 41],
+          path: [4, 26, 2, 21],
+          span: [254, 2, 41],
           leadingDetachedComments: [],
           trailingComments: " First name of user inviting\n",
         },
         {
-          path: [4, 23, 2, 22],
-          span: [240, 2, 40],
+          path: [4, 26, 2, 22],
+          span: [255, 2, 40],
           leadingDetachedComments: [],
           trailingComments: " Last name of user inviting\n",
         },
@@ -4404,12 +4835,15 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.user.ChangeEmailRequest": ChangeEmailRequest,
     ".io.restorecommerce.user.ConfirmEmailChangeRequest": ConfirmEmailChangeRequest,
     ".io.restorecommerce.user.UnregisterRequest": UnregisterRequest,
+    ".io.restorecommerce.user.SendActivationEmailRequest": SendActivationEmailRequest,
     ".io.restorecommerce.user.Deleted": Deleted,
     ".io.restorecommerce.user.PasswordChanged": PasswordChanged,
     ".io.restorecommerce.user.PasswordChangeRequested": PasswordChangeRequested,
     ".io.restorecommerce.user.EmailChangeRequested": EmailChangeRequested,
     ".io.restorecommerce.user.EmailChangeConfirmed": EmailChangeConfirmed,
     ".io.restorecommerce.user.UserList": UserList,
+    ".io.restorecommerce.user.UserListResponse": UserListResponse,
+    ".io.restorecommerce.user.UserListReadResponse": UserListReadResponse,
     ".io.restorecommerce.user.Activate": Activate,
     ".io.restorecommerce.user.FindByRoleRequest": FindByRoleRequest,
     ".io.restorecommerce.user.User": User,
@@ -4421,6 +4855,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
 };
 

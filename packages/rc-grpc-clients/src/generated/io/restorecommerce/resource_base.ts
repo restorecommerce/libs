@@ -1,10 +1,6 @@
 /* eslint-disable */
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
-  Struct,
-  protoMetadata as protoMetadata3,
-} from "../../google/protobuf/struct";
-import {
   Any,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
@@ -13,13 +9,16 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata6,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
-import {
-  protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata3 } from "../../google/protobuf/struct";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.resourcebase";
@@ -72,12 +71,182 @@ export function sort_SortOrderToJSON(object: Sort_SortOrder): string {
   }
 }
 
+export interface Filter {
+  field: string;
+  operation: Filter_Operation;
+  value: string;
+  type: Filter_ValueType;
+  /** for nested filtering */
+  filters: FilterOp[];
+}
+
+export enum Filter_Operation {
+  eq = 0,
+  lt = 1,
+  lte = 2,
+  gt = 3,
+  gte = 4,
+  isEmpty = 5,
+  iLike = 6,
+  in = 7,
+  neq = 8,
+  UNRECOGNIZED = -1,
+}
+
+export function filter_OperationFromJSON(object: any): Filter_Operation {
+  switch (object) {
+    case 0:
+    case "eq":
+      return Filter_Operation.eq;
+    case 1:
+    case "lt":
+      return Filter_Operation.lt;
+    case 2:
+    case "lte":
+      return Filter_Operation.lte;
+    case 3:
+    case "gt":
+      return Filter_Operation.gt;
+    case 4:
+    case "gte":
+      return Filter_Operation.gte;
+    case 5:
+    case "isEmpty":
+      return Filter_Operation.isEmpty;
+    case 6:
+    case "iLike":
+      return Filter_Operation.iLike;
+    case 7:
+    case "in":
+      return Filter_Operation.in;
+    case 8:
+    case "neq":
+      return Filter_Operation.neq;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Filter_Operation.UNRECOGNIZED;
+  }
+}
+
+export function filter_OperationToJSON(object: Filter_Operation): string {
+  switch (object) {
+    case Filter_Operation.eq:
+      return "eq";
+    case Filter_Operation.lt:
+      return "lt";
+    case Filter_Operation.lte:
+      return "lte";
+    case Filter_Operation.gt:
+      return "gt";
+    case Filter_Operation.gte:
+      return "gte";
+    case Filter_Operation.isEmpty:
+      return "isEmpty";
+    case Filter_Operation.iLike:
+      return "iLike";
+    case Filter_Operation.in:
+      return "in";
+    case Filter_Operation.neq:
+      return "neq";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export enum Filter_ValueType {
+  /** STRING - default value type if not specified */
+  STRING = 0,
+  NUMBER = 1,
+  BOOLEAN = 2,
+  DATE = 3,
+  ARRAY = 4,
+  UNRECOGNIZED = -1,
+}
+
+export function filter_ValueTypeFromJSON(object: any): Filter_ValueType {
+  switch (object) {
+    case 0:
+    case "STRING":
+      return Filter_ValueType.STRING;
+    case 1:
+    case "NUMBER":
+      return Filter_ValueType.NUMBER;
+    case 2:
+    case "BOOLEAN":
+      return Filter_ValueType.BOOLEAN;
+    case 3:
+    case "DATE":
+      return Filter_ValueType.DATE;
+    case 4:
+    case "ARRAY":
+      return Filter_ValueType.ARRAY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Filter_ValueType.UNRECOGNIZED;
+  }
+}
+
+export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
+  switch (object) {
+    case Filter_ValueType.STRING:
+      return "STRING";
+    case Filter_ValueType.NUMBER:
+      return "NUMBER";
+    case Filter_ValueType.BOOLEAN:
+      return "BOOLEAN";
+    case Filter_ValueType.DATE:
+      return "DATE";
+    case Filter_ValueType.ARRAY:
+      return "ARRAY";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export interface FilterOp {
+  filter: Filter[];
+}
+
+export enum FilterOp_operator {
+  and = 0,
+  or = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function filterOp_operatorFromJSON(object: any): FilterOp_operator {
+  switch (object) {
+    case 0:
+    case "and":
+      return FilterOp_operator.and;
+    case 1:
+    case "or":
+      return FilterOp_operator.or;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return FilterOp_operator.UNRECOGNIZED;
+  }
+}
+
+export function filterOp_operatorToJSON(object: FilterOp_operator): string {
+  switch (object) {
+    case FilterOp_operator.and:
+      return "and";
+    case FilterOp_operator.or:
+      return "or";
+    default:
+      return "UNKNOWN";
+  }
+}
+
 export interface ReadRequest {
   offset: number;
   limit: number;
   sort: Sort[];
   /** / Filter based on fieldName|operation, value|list */
-  filter?: Struct;
+  filters: FilterOp[];
   /** / Fields selector */
   field: FieldFilter[];
   search: string[];
@@ -108,6 +277,21 @@ export interface ResourceList {
   items: Resource[];
   totalCount: number;
   subject?: Subject;
+  status: Status[];
+}
+
+/** ResourceList response */
+export interface ResourceListResponse {
+  items: Resource[];
+  totalCount: number;
+  status: Status[];
+}
+
+/** resource read response */
+export interface ResourceListReadResponse {
+  items: Resource[];
+  totalCount: number;
+  status?: Status;
 }
 
 /** / Example resource */
@@ -116,6 +300,9 @@ export interface Resource {
   meta?: Meta;
   value: number;
   text: string;
+  active: boolean;
+  created: number;
+  status: string;
 }
 
 const baseFieldFilter: object = { name: "", include: false };
@@ -263,6 +450,204 @@ export const Sort = {
   },
 };
 
+const baseFilter: object = { field: "", operation: 0, value: "", type: 0 };
+
+export const Filter = {
+  encode(message: Filter, writer: Writer = Writer.create()): Writer {
+    if (message.field !== "") {
+      writer.uint32(10).string(message.field);
+    }
+    if (message.operation !== 0) {
+      writer.uint32(16).int32(message.operation);
+    }
+    if (message.value !== "") {
+      writer.uint32(26).string(message.value);
+    }
+    if (message.type !== 0) {
+      writer.uint32(32).int32(message.type);
+    }
+    for (const v of message.filters) {
+      FilterOp.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Filter {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseFilter) as Filter;
+    message.filters = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.field = reader.string();
+          break;
+        case 2:
+          message.operation = reader.int32() as any;
+          break;
+        case 3:
+          message.value = reader.string();
+          break;
+        case 4:
+          message.type = reader.int32() as any;
+          break;
+        case 5:
+          message.filters.push(FilterOp.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Filter {
+    const message = globalThis.Object.create(baseFilter) as Filter;
+    message.filters = [];
+    if (object.field !== undefined && object.field !== null) {
+      message.field = String(object.field);
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = filter_OperationFromJSON(object.operation);
+    } else {
+      message.operation = 0;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = filter_ValueTypeFromJSON(object.type);
+    } else {
+      message.type = 0;
+    }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(FilterOp.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Filter>): Filter {
+    const message = { ...baseFilter } as Filter;
+    message.filters = [];
+    if (object.field !== undefined && object.field !== null) {
+      message.field = object.field;
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = object.operation;
+    } else {
+      message.operation = 0;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = 0;
+    }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(FilterOp.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: Filter): unknown {
+    const obj: any = {};
+    message.field !== undefined && (obj.field = message.field);
+    message.operation !== undefined &&
+      (obj.operation = filter_OperationToJSON(message.operation));
+    message.value !== undefined && (obj.value = message.value);
+    message.type !== undefined &&
+      (obj.type = filter_ValueTypeToJSON(message.type));
+    if (message.filters) {
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp.toJSON(e) : undefined
+      );
+    } else {
+      obj.filters = [];
+    }
+    return obj;
+  },
+};
+
+const baseFilterOp: object = {};
+
+export const FilterOp = {
+  encode(message: FilterOp, writer: Writer = Writer.create()): Writer {
+    for (const v of message.filter) {
+      Filter.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): FilterOp {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseFilterOp) as FilterOp;
+    message.filter = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.filter.push(Filter.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FilterOp {
+    const message = globalThis.Object.create(baseFilterOp) as FilterOp;
+    message.filter = [];
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<FilterOp>): FilterOp {
+    const message = { ...baseFilterOp } as FilterOp;
+    message.filter = [];
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: FilterOp): unknown {
+    const obj: any = {};
+    if (message.filter) {
+      obj.filter = message.filter.map((e) =>
+        e ? Filter.toJSON(e) : undefined
+      );
+    } else {
+      obj.filter = [];
+    }
+    return obj;
+  },
+};
+
 const baseReadRequest: object = {
   offset: 0,
   limit: 0,
@@ -282,8 +667,8 @@ export const ReadRequest = {
     for (const v of message.sort) {
       Sort.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.filter !== undefined) {
-      Struct.encode(message.filter, writer.uint32(34).fork()).ldelim();
+    for (const v of message.filters) {
+      FilterOp.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.field) {
       FieldFilter.encode(v!, writer.uint32(42).fork()).ldelim();
@@ -311,6 +696,7 @@ export const ReadRequest = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseReadRequest) as ReadRequest;
     message.sort = [];
+    message.filters = [];
     message.field = [];
     message.search = [];
     message.localesLimiter = [];
@@ -328,7 +714,7 @@ export const ReadRequest = {
           message.sort.push(Sort.decode(reader, reader.uint32()));
           break;
         case 4:
-          message.filter = Struct.decode(reader, reader.uint32());
+          message.filters.push(FilterOp.decode(reader, reader.uint32()));
           break;
         case 5:
           message.field.push(FieldFilter.decode(reader, reader.uint32()));
@@ -359,6 +745,7 @@ export const ReadRequest = {
   fromJSON(object: any): ReadRequest {
     const message = globalThis.Object.create(baseReadRequest) as ReadRequest;
     message.sort = [];
+    message.filters = [];
     message.field = [];
     message.search = [];
     message.localesLimiter = [];
@@ -378,10 +765,10 @@ export const ReadRequest = {
         message.sort.push(Sort.fromJSON(e));
       }
     }
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = Struct.fromJSON(object.filter);
-    } else {
-      message.filter = undefined;
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(FilterOp.fromJSON(e));
+      }
     }
     if (object.field !== undefined && object.field !== null) {
       for (const e of object.field) {
@@ -422,6 +809,7 @@ export const ReadRequest = {
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = { ...baseReadRequest } as ReadRequest;
     message.sort = [];
+    message.filters = [];
     message.field = [];
     message.search = [];
     message.localesLimiter = [];
@@ -441,10 +829,10 @@ export const ReadRequest = {
         message.sort.push(Sort.fromPartial(e));
       }
     }
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = Struct.fromPartial(object.filter);
-    } else {
-      message.filter = undefined;
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(FilterOp.fromPartial(e));
+      }
     }
     if (object.field !== undefined && object.field !== null) {
       for (const e of object.field) {
@@ -491,8 +879,13 @@ export const ReadRequest = {
     } else {
       obj.sort = [];
     }
-    message.filter !== undefined &&
-      (obj.filter = message.filter ? Struct.toJSON(message.filter) : undefined);
+    if (message.filters) {
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp.toJSON(e) : undefined
+      );
+    } else {
+      obj.filters = [];
+    }
     if (message.field) {
       obj.field = message.field.map((e) =>
         e ? FieldFilter.toJSON(e) : undefined
@@ -643,6 +1036,9 @@ export const ResourceList = {
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -651,6 +1047,7 @@ export const ResourceList = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
+    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -663,6 +1060,9 @@ export const ResourceList = {
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
           break;
+        case 4:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -674,6 +1074,7 @@ export const ResourceList = {
   fromJSON(object: any): ResourceList {
     const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
+    message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
         message.items.push(Resource.fromJSON(e));
@@ -689,12 +1090,18 @@ export const ResourceList = {
     } else {
       message.subject = undefined;
     }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
     return message;
   },
 
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = { ...baseResourceList } as ResourceList;
     message.items = [];
+    message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
         message.items.push(Resource.fromPartial(e));
@@ -709,6 +1116,11 @@ export const ResourceList = {
       message.subject = Subject.fromPartial(object.subject);
     } else {
       message.subject = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
     }
     return message;
   },
@@ -727,11 +1139,252 @@ export const ResourceList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
     return obj;
   },
 };
 
-const baseResource: object = { id: "", value: 0, text: "" };
+const baseResourceListResponse: object = { totalCount: 0 };
+
+export const ResourceListResponse = {
+  encode(
+    message: ResourceListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Resource.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): ResourceListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseResourceListResponse
+    ) as ResourceListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Resource.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 4:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResourceListResponse {
+    const message = globalThis.Object.create(
+      baseResourceListResponse
+    ) as ResourceListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Resource.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
+    const message = { ...baseResourceListResponse } as ResourceListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Resource.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: ResourceListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseResourceListReadResponse: object = { totalCount: 0 };
+
+export const ResourceListReadResponse = {
+  encode(
+    message: ResourceListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Resource.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ResourceListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseResourceListReadResponse
+    ) as ResourceListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Resource.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 4:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResourceListReadResponse {
+    const message = globalThis.Object.create(
+      baseResourceListReadResponse
+    ) as ResourceListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Resource.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<ResourceListReadResponse>
+  ): ResourceListReadResponse {
+    const message = {
+      ...baseResourceListReadResponse,
+    } as ResourceListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Resource.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ResourceListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseResource: object = {
+  id: "",
+  value: 0,
+  text: "",
+  active: false,
+  created: 0,
+  status: "",
+};
 
 export const Resource = {
   encode(message: Resource, writer: Writer = Writer.create()): Writer {
@@ -746,6 +1399,15 @@ export const Resource = {
     }
     if (message.text !== "") {
       writer.uint32(34).string(message.text);
+    }
+    if (message.active === true) {
+      writer.uint32(40).bool(message.active);
+    }
+    if (message.created !== 0) {
+      writer.uint32(49).double(message.created);
+    }
+    if (message.status !== "") {
+      writer.uint32(58).string(message.status);
     }
     return writer;
   },
@@ -768,6 +1430,15 @@ export const Resource = {
           break;
         case 4:
           message.text = reader.string();
+          break;
+        case 5:
+          message.active = reader.bool();
+          break;
+        case 6:
+          message.created = reader.double();
+          break;
+        case 7:
+          message.status = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -799,6 +1470,21 @@ export const Resource = {
     } else {
       message.text = "";
     }
+    if (object.active !== undefined && object.active !== null) {
+      message.active = Boolean(object.active);
+    } else {
+      message.active = false;
+    }
+    if (object.created !== undefined && object.created !== null) {
+      message.created = Number(object.created);
+    } else {
+      message.created = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = String(object.status);
+    } else {
+      message.status = "";
+    }
     return message;
   },
 
@@ -824,6 +1510,21 @@ export const Resource = {
     } else {
       message.text = "";
     }
+    if (object.active !== undefined && object.active !== null) {
+      message.active = object.active;
+    } else {
+      message.active = false;
+    }
+    if (object.created !== undefined && object.created !== null) {
+      message.created = object.created;
+    } else {
+      message.created = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = object.status;
+    } else {
+      message.status = "";
+    }
     return message;
   },
 
@@ -834,17 +1535,20 @@ export const Resource = {
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = message.value);
     message.text !== undefined && (obj.text = message.text);
+    message.active !== undefined && (obj.active = message.active);
+    message.created !== undefined && (obj.created = message.created);
+    message.status !== undefined && (obj.status = message.status);
     return obj;
   },
 };
 
 /** Service provides the CRUD operations */
 export interface Service {
-  Read(request: ReadRequest): Promise<ResourceList>;
-  Create(request: ResourceList): Promise<ResourceList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: ResourceList): Promise<ResourceList>;
-  Upsert(request: ResourceList): Promise<ResourceList>;
+  Read(request: ReadRequest): Promise<ResourceListReadResponse>;
+  Create(request: ResourceList): Promise<ResourceListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: ResourceList): Promise<ResourceListResponse>;
+  Upsert(request: ResourceList): Promise<ResourceListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -861,6 +1565,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/struct.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -919,6 +1624,103 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
+          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
+          {
+            name: "operation",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.resourcebase.Filter.Operation",
+            jsonName: "operation",
+          },
+          { name: "value", number: 3, label: 1, type: 9, jsonName: "value" },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.resourcebase.Filter.ValueType",
+            jsonName: "type",
+          },
+          {
+            name: "filters",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.resourcebase.FilterOp",
+            jsonName: "filters",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            value: [
+              { name: "eq", number: 0 },
+              { name: "lt", number: 1 },
+              { name: "lte", number: 2 },
+              { name: "gt", number: 3 },
+              { name: "gte", number: 4 },
+              { name: "isEmpty", number: 5 },
+              { name: "iLike", number: 6 },
+              { name: "in", number: 7 },
+              { name: "neq", number: 8 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "Operation",
+          },
+          {
+            value: [
+              { name: "STRING", number: 0 },
+              { name: "NUMBER", number: 1 },
+              { name: "BOOLEAN", number: 2 },
+              { name: "DATE", number: 3 },
+              { name: "ARRAY", number: 4 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "ValueType",
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Filter",
+      },
+      {
+        field: [
+          {
+            name: "filter",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.resourcebase.Filter",
+            jsonName: "filter",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            value: [
+              { name: "and", number: 0 },
+              { name: "or", number: 1 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "operator",
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "FilterOp",
+      },
+      {
+        field: [
           { name: "offset", number: 1, label: 1, type: 13, jsonName: "offset" },
           { name: "limit", number: 2, label: 1, type: 13, jsonName: "limit" },
           {
@@ -930,12 +1732,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "sort",
           },
           {
-            name: "filter",
+            name: "filters",
             number: 4,
-            label: 1,
+            label: 3,
             type: 11,
-            typeName: ".google.protobuf.Struct",
-            jsonName: "filter",
+            typeName: ".io.restorecommerce.resourcebase.FilterOp",
+            jsonName: "filters",
           },
           {
             name: "field",
@@ -1039,6 +1841,14 @@ export const protoMetadata: ProtoMetadata = {
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
+          {
+            name: "status",
+            number: 4,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1048,6 +1858,76 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "ResourceList",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.resourcebase.Resource",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 4,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ResourceListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.resourcebase.Resource",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ResourceListReadResponse",
       },
       {
         field: [
@@ -1062,6 +1942,15 @@ export const protoMetadata: ProtoMetadata = {
           },
           { name: "value", number: 3, label: 1, type: 5, jsonName: "value" },
           { name: "text", number: 4, label: 1, type: 9, jsonName: "text" },
+          { name: "active", number: 5, label: 1, type: 8, jsonName: "active" },
+          {
+            name: "created",
+            number: 6,
+            label: 1,
+            type: 1,
+            jsonName: "created",
+          },
+          { name: "status", number: 7, label: 1, type: 9, jsonName: "status" },
         ],
         extension: [],
         nestedType: [],
@@ -1080,27 +1969,28 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType:
+              ".io.restorecommerce.resourcebase.ResourceListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.resourcebase.ResourceList",
-            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.resourcebase.ResourceList",
-            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.resourcebase.ResourceList",
-            outputType: ".io.restorecommerce.resourcebase.ResourceList",
+            outputType: ".io.restorecommerce.resourcebase.ResourceListResponse",
           },
         ],
         name: "Service",
@@ -1113,51 +2003,76 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [10, 0, 16, 1],
+          span: [11, 0, 17, 1],
           leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
-          path: [4, 2, 2, 3],
-          span: [39, 2, 36],
+          path: [4, 2, 4, 1, 2, 0],
+          span: [50, 4, 15],
           leadingDetachedComments: [],
-          leadingComments:
-            "/ Filter based on fieldName|operation, value|list\n",
+          trailingComments: " default value type if not specified\n",
         },
         {
           path: [4, 2, 2, 4],
-          span: [42, 2, 33],
+          span: [57, 2, 32],
+          leadingDetachedComments: [],
+          trailingComments: " for nested filtering\n",
+        },
+        {
+          path: [4, 4, 2, 3],
+          span: [74, 2, 32],
+          leadingDetachedComments: [],
+          leadingComments:
+            "/ Filter based on fieldName|operation, value|list\n",
+          trailingComments: " repeated filters\n",
+        },
+        {
+          path: [4, 4, 2, 4],
+          span: [77, 2, 33],
           leadingDetachedComments: [],
           leadingComments: "/ Fields selector\n",
         },
         {
-          path: [4, 2, 2, 6],
-          span: [52, 2, 38],
+          path: [4, 4, 2, 6],
+          span: [87, 2, 38],
           leadingDetachedComments: [],
           leadingComments:
             "* Check the query parameters of HTTP request.\n If query parameter `locales` is given,\n return all corresponding localized values.\n Otherwise, return always the localized value\n with highest priority.\n Can be empty, single locale or multiple locales.\n",
         },
         {
-          path: [4, 3, 2, 0],
-          span: [61, 2, 22],
+          path: [4, 5, 2, 0],
+          span: [96, 2, 22],
           leadingDetachedComments: [],
           leadingComments: "/ Request to purge the whole collection\n",
         },
         {
-          path: [4, 3, 2, 1],
-          span: [63, 2, 26],
+          path: [4, 5, 2, 1],
+          span: [98, 2, 26],
           leadingDetachedComments: [],
           leadingComments: "/ Delete specified documents\n",
         },
         {
-          path: [4, 4],
-          span: [68, 0, 72, 1],
+          path: [4, 6],
+          span: [103, 0, 108, 1],
           leadingDetachedComments: [],
           leadingComments: "/ List of resources\n",
         },
         {
-          path: [4, 5],
-          span: [75, 0, 80, 1],
+          path: [4, 7],
+          span: [111, 0, 115, 1],
+          leadingDetachedComments: [],
+          leadingComments: " ResourceList response\n",
+        },
+        {
+          path: [4, 8],
+          span: [118, 0, 122, 1],
+          leadingDetachedComments: [],
+          leadingComments: " resource read response\n",
+        },
+        {
+          path: [4, 9],
+          span: [125, 0, 133, 1],
           leadingDetachedComments: [],
           leadingComments: "/ Example resource\n",
         },
@@ -1169,9 +2084,16 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.FieldFilter": FieldFilter,
     ".io.restorecommerce.resourcebase.Sort": Sort,
     ".io.restorecommerce.resourcebase.Sort.SortOrder": Sort_SortOrder,
+    ".io.restorecommerce.resourcebase.Filter": Filter,
+    ".io.restorecommerce.resourcebase.Filter.Operation": Filter_Operation,
+    ".io.restorecommerce.resourcebase.Filter.ValueType": Filter_ValueType,
+    ".io.restorecommerce.resourcebase.FilterOp": FilterOp,
+    ".io.restorecommerce.resourcebase.FilterOp.operator": FilterOp_operator,
     ".io.restorecommerce.resourcebase.ReadRequest": ReadRequest,
     ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
     ".io.restorecommerce.resourcebase.ResourceList": ResourceList,
+    ".io.restorecommerce.resourcebase.ResourceListResponse": ResourceListResponse,
+    ".io.restorecommerce.resourcebase.ResourceListReadResponse": ResourceListReadResponse,
     ".io.restorecommerce.resourcebase.Resource": Resource,
   },
   dependencies: [
@@ -1180,6 +2102,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
 };
 

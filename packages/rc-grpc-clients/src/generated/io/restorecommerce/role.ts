@@ -9,14 +9,16 @@ import {
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata5,
+  StatusArray,
+} from "../../io/restorecommerce/status";
+import {
   protoMetadata as protoMetadata1,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata2,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.role";
@@ -35,6 +37,18 @@ export interface RoleList {
   items: Role[];
   totalCount: number;
   subject?: Subject;
+}
+
+export interface RoleListResponse {
+  items: Role[];
+  totalCount: number;
+  status: Status[];
+}
+
+export interface RoleListReadResponse {
+  items: Role[];
+  totalCount: number;
+  status?: Status;
 }
 
 export interface Deleted {
@@ -283,6 +297,219 @@ export const RoleList = {
   },
 };
 
+const baseRoleListResponse: object = { totalCount: 0 };
+
+export const RoleListResponse = {
+  encode(message: RoleListResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.items) {
+      Role.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): RoleListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseRoleListResponse
+    ) as RoleListResponse;
+    message.items = [];
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Role.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RoleListResponse {
+    const message = globalThis.Object.create(
+      baseRoleListResponse
+    ) as RoleListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Role.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<RoleListResponse>): RoleListResponse {
+    const message = { ...baseRoleListResponse } as RoleListResponse;
+    message.items = [];
+    message.status = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Role.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: RoleListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Role.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    return obj;
+  },
+};
+
+const baseRoleListReadResponse: object = { totalCount: 0 };
+
+export const RoleListReadResponse = {
+  encode(
+    message: RoleListReadResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      Role.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): RoleListReadResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseRoleListReadResponse
+    ) as RoleListReadResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(Role.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RoleListReadResponse {
+    const message = globalThis.Object.create(
+      baseRoleListReadResponse
+    ) as RoleListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Role.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<RoleListReadResponse>): RoleListReadResponse {
+    const message = { ...baseRoleListReadResponse } as RoleListReadResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(Role.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: RoleListReadResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? Role.toJSON(e) : undefined));
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseDeleted: object = { id: "" };
 
 export const Deleted = {
@@ -339,11 +566,11 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<RoleList>;
-  Create(request: RoleList): Promise<RoleList>;
-  Delete(request: DeleteRequest): Promise<Empty>;
-  Update(request: RoleList): Promise<RoleList>;
-  Upsert(request: RoleList): Promise<RoleList>;
+  Read(request: ReadRequest): Promise<RoleListReadResponse>;
+  Create(request: RoleList): Promise<RoleListResponse>;
+  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Update(request: RoleList): Promise<RoleListResponse>;
+  Upsert(request: RoleList): Promise<RoleListResponse>;
 }
 
 export interface ProtoMetadata {
@@ -359,6 +586,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -435,6 +663,76 @@ export const protoMetadata: ProtoMetadata = {
         name: "RoleList",
       },
       {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.role.Role",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RoleListResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.role.Role",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "RoleListReadResponse",
+      },
+      {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
         extension: [],
         nestedType: [],
@@ -453,27 +751,27 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleListReadResponse",
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.role.RoleList",
-            outputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleListResponse",
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusArray",
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.role.RoleList",
-            outputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleListResponse",
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.role.RoleList",
-            outputType: ".io.restorecommerce.role.RoleList",
+            outputType: ".io.restorecommerce.role.RoleListResponse",
           },
         ],
         name: "Service",
@@ -486,13 +784,13 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 2],
-          span: [20, 2, 18],
+          span: [21, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " specifies the role of the user\n",
         },
         {
           path: [4, 0, 2, 4],
-          span: [22, 2, 42],
+          span: [23, 2, 42],
           leadingDetachedComments: [],
           trailingComments: " role id who can assign this role\n",
         },
@@ -503,6 +801,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.role.Role": Role,
     ".io.restorecommerce.role.RoleList": RoleList,
+    ".io.restorecommerce.role.RoleListResponse": RoleListResponse,
+    ".io.restorecommerce.role.RoleListReadResponse": RoleListReadResponse,
     ".io.restorecommerce.role.Deleted": Deleted,
   },
   dependencies: [
@@ -510,6 +810,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

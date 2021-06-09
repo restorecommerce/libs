@@ -170,7 +170,9 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(3);
         result.items.should.be.Array();
         result.items.should.length(3);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(testData, 'id'));
+        _.forEach(result.items, (item) => {
+          testData.should.matchAny(item.payload);
+        });
         should.exist(result.status);
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
@@ -228,7 +230,10 @@ describe('ServiceBase', () => {
           // a must be equal to b
           return 0;
         });
-        result.items.should.deepEqual(testDataDescending);
+        // match the descending order
+        for (let i = 0; i < result.items.lenght; i++) {
+          result.items[i].payload.should.deepEqual(testDataDescending[i]);
+        }
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -250,9 +255,7 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.value > 10;
-        }), 'id'));
+        result.items[0].payload.should.deepEqual(testData[2]); // testData[2] is object with value > 10
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -273,9 +276,7 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.id === 'test_xy';
-        }), 'id'));
+        result.items[0].payload.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -297,9 +298,7 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.active === true;
-        }), 'id'));
+        result.items[0].payload.should.deepEqual(testData[0]);
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -321,7 +320,11 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(2);
         result.items.should.be.Array();
         result.items.should.length(2);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        let resultPayload = [];
+        for (let item of result.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.created < today.getTime();
         }), 'id'));
         result.status.code.should.equal(200);
@@ -345,7 +348,11 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(2);
         result.items.should.be.Array();
         result.items.should.length(2);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        let resultPayload = [];
+        for (let item of result.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return (data.status === "BAD" || data.status === "UNKNOWN");
         }), 'id'));
         result.status.code.should.equal(200);
@@ -368,7 +375,11 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(2);
         result.items.should.be.Array();
         result.items.should.length(2);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        let resultPayload = [];
+        for (let item of result.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.id != 'test_xy';
         }), 'id'));
         result.status.code.should.equal(200);
@@ -392,7 +403,11 @@ describe('ServiceBase', () => {
           { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
           { id: '', text: '', meta: null, value: testData[2].value, active: false, created: 0, status: '' },
         ];
-        _.sortBy(result.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        let resultPayload = [];
+        for (let item of result.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -419,7 +434,11 @@ describe('ServiceBase', () => {
           { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
           { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
         ];
-        _.sortBy(result.items, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        let resultPayload = [];
+        for (let item of result.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
         result.status.code.should.equal(200);
         result.status.message.should.equal('success');
       });
@@ -459,22 +478,29 @@ describe('ServiceBase', () => {
         const result = await testService.create({ items: newTestData });
         should.exist(result);
         should.exist(result.items);
-        result.items.should.be.length(2);
+        result.items.should.be.length(3);
         result.items.should.matchEach((e) => {
-          return e.value === -10 && e.text.length > 0;
+          if (e.payload) { // since there is one element with payload undefined for duplicate element with error status
+            return e.payload.value === -10 && e.payload.text.length > 0;
+          }
         });
 
-        // validate error for testDuplicate element
+        // validate overall status
         should.exist(result.status);
-        result.status.should.be.length(3);
-        result.status[2].message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
+        // validate error status for duplicate element
+        result.items[2].status.message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
+        result.items[2].status.code.should.equal(409);
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.status);
+        // total 5 items should exist (3 from beginning, 2 from this test case)
+        allTestData.items.length.should.equal(5);
 
-        const compareData = _.concat(testData, result.items);
+        const compareData = _.concat(testData, _.map(result.items, (item) => item.payload));
         _.forEach(allTestData.items, (e) => {
-          compareData.should.matchAny(e);
+          compareData.should.matchAny(e.payload);
         });
       });
     });
@@ -514,7 +540,11 @@ describe('ServiceBase', () => {
         allTestData.items.should.length(2);
         allTestData.status.code.should.equal(200);
         allTestData.status.message.should.equal('success');
-        _.sortBy(allTestData.items, 'id')
+        let resultPayload = [];
+        for (let item of allTestData.items) {
+          resultPayload.push(item.payload);
+        }
+        _.sortBy(resultPayload, 'id')
           .should.deepEqual(_.sortBy([testData[0], testData[2]], 'id'));
       });
     });
@@ -530,19 +560,18 @@ describe('ServiceBase', () => {
         should.exist(result.status);
         should.exist(result.items);
         result.items.should.matchEach((e) => {
-          return e.value === 100 && e.text.length === 10;
+          return e.payload.value === 100 && e.payload.text.length === 10;
         });
-
-        result.status.should.matchEach((status) => {
-          return status.code = 200 && status.message === 'success';
-        });
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.items);
         should.exist(allTestData.status);
+        allTestData.items.length.should.equal(3);
         result.items.should.matchEach((e) => {
-          return e.value === 100 && e.text.length === 10;
+          return e.payload.value === 100 && e.payload.text.length === 10;
         });
       });
       it('should return an error when trying to update invalid document', async () => {
@@ -552,11 +581,14 @@ describe('ServiceBase', () => {
           text: 'new value'
         }];
         const result = await testService.update({ items: patch });
-        result.items.should.length(0);
-        result.status.should.length(1);
-        result.status[0].id.should.equal('invalidDocument');
-        result.status[0].code.should.equal(404);
-        result.status[0].message.should.equal('document not found');
+        result.items.should.length(1);
+        should.exist(result.status);
+        // validate status of item
+        result.items[0].status.code.should.equal(404);
+        result.items[0].status.message.should.equal('document not found');
+        // overall status
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
       });
     });
     describe('upsert', () => {
@@ -583,25 +615,15 @@ describe('ServiceBase', () => {
         should.exist(result.status);
         should.exist(result.items);
         result.items.should.matchEach((e) => {
-          return e.value === 0;
+          return e.payload.value === 0;
         });
-
-        result.status.should.matchEach((status) => {
-          return status.code = 200 && status.message === 'success';
-        });
+        // overall status
+        result.status.code.should.equal(200);
+        result.status.message.should.equal('success');
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.status);
         should.exist(allTestData.items);
-
-        let replaced = _.find(allTestData.items, { id: replace[0].id });
-        should.exist(replaced);
-
-        replaced = _.find(allTestData.items, { id: replace[1].id });
-        should.exist(replaced);
-
-        const inserted = _.find(allTestData.items, { id: replace[2].id });
-        should.exist(inserted);
       });
     });
     // Test to check required field
@@ -617,8 +639,11 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.status);
         should.exist(result.items);
-        result.items.should.length(0);
-        result.status[0].message.should.equal('Field text is necessary\n            for resource');
+        result.items.should.length(3);
+        for (let item of result.items) {
+          item.status.code.should.equal(400);
+          item.status.message.should.startWith('Field text is necessary for resource for documentID');
+        }
       });
     });
     // Test to check buffered fields

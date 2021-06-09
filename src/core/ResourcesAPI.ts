@@ -238,6 +238,15 @@ export class ResourcesAPIBase {
     const toInsert = [];
     let result = [];
     try {
+      let result = [];
+      // check if all the required fields are present
+      if (this.requiredFields && this.requiredFields[this.resourceName]) {
+        const requiredFieldsResult = this.checkRequiredFields(this.requiredFields[this.resourceName],
+          documents, result);
+        documents = requiredFieldsResult.documents;
+        result = requiredFieldsResult.result;
+      }
+
       for (let i = 0; i < documents.length; i += 1) {
         documents[i] = await setDefaults(documents[i], collection);
         // decode the buffer and store it to DB
@@ -245,13 +254,7 @@ export class ResourcesAPIBase {
           toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
         }
       }
-      // check if all the required fields are present
-      if (this.requiredFields && this.requiredFields[this.resourceName]) {
-        this.checkRequiredFields(this.requiredFields[this.resourceName],
-          documents);
-      }
 
-      let result = [];
       if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
@@ -286,14 +289,25 @@ export class ResourcesAPIBase {
           }
         }
         if (_.isArray(createVertexResp)) {
-          result = createVertexResp;
+          for (let eachVertexResp of createVertexResp) {
+            result.push(eachVertexResp);
+          }
         } else {
           result.push(createVertexResp);
         }
         return result;
       }
       else {
+        let checkReqFieldResult = [];
+        if (!_.isEmpty(result)) {
+          checkReqFieldResult = result;
+        }
         result = await this.db.insert(collection, this.bufferField ? toInsert : documents);
+        if (!_.isEmpty(checkReqFieldResult)) {
+          for (let reqFieldResult of checkReqFieldResult) {
+            result.push(reqFieldResult);
+          }
+        }
         return result;
       }
     } catch (e) {
@@ -316,21 +330,29 @@ export class ResourcesAPIBase {
    * @param requiredFields
    * @param documents
    */
-  checkRequiredFields(requiredFields: string[], documents: any): void {
+  checkRequiredFields(requiredFields: string[], documents: any, result: any[]): any {
     for (let document of documents) {
       for (let eachField of requiredFields) {
         const isArray = _.isArray(eachField);
         if (!document[eachField]) {
-          throw new errors.InvalidArgument(`Field ${eachField} is necessary
-            for ${this.resourceName}`);
+          result.push({
+            error: true,
+            errorNum: 400,
+            errorMessage: `Field ${eachField} is necessary for ${this.resourceName} for documentID ${document.id}`
+          });
+          documents = documents.filter(doc => doc.id != document.id);
         }
         if ((isArray && document[eachField].length == 0)) {
-          throw new errors.InvalidArgument(`Field ${eachField} is necessary
-            for ${this.resourceName}`);
+          result.push({
+            error: true,
+            errorNum: 400,
+            errorMessage: `Field ${eachField} is necessary for ${this.resourceName} for documentID ${document.id}`
+          });
+          documents = documents.filter(doc => doc.id != document.id);
         }
       }
     }
-
+    return { documents, result };
   }
 
   /**

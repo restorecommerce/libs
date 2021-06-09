@@ -129,9 +129,18 @@ export class ServiceBase {
         customArgs
       )) || [];
 
-
+      let readResponseWithStatus = [];
+      for (let object of objectEntities) {
+        readResponseWithStatus.push({
+          payload: object,
+          status: {
+            code: 200,
+            message: 'success'
+          }
+        });
+      }
       docs = {
-        items: objectEntities,
+        items: readResponseWithStatus,
         total_count: objectEntities.length,
         status: {
           code: 200,
@@ -194,6 +203,55 @@ export class ServiceBase {
     return statusArray;
   }
 
+  private generateResponseWithStatus(responseItems: any[], inputItems: any[], deleteIds?: boolean) {
+    let statusArray = [];
+    let responseItemsWithStatus = [];
+    if (!_.isArray(responseItems)) {
+      responseItems = [responseItems];
+    }
+    if (!_.isArray(inputItems)) {
+      inputItems = [inputItems];
+    }
+    for (let i = 0; i < responseItems.length; i++) {
+      const item = responseItems[i];
+      if (item.error) {
+        let code;
+        let id;
+        if (!deleteIds) {
+          id = inputItems[i].id;
+        } else {
+          id = inputItems[i]; // for delete operation ids is a string and not object
+        }
+        // map arango error code to http error code
+        arangoHttpErrCodeMap.forEach((value, key) => {
+          if (key === item.errorNum) {
+            code = value;
+          }
+        });
+        responseItemsWithStatus.push({
+          payload: undefined,
+          status: {
+            id,
+            code: code ? code : item.errorNum,
+            message: item.errorMessage
+          }
+        });
+        statusArray.push();
+      } else {
+        responseItemsWithStatus.push({
+          payload: item,
+          status:
+          {
+            id: item.id,
+            code: 200,
+            message: 'success'
+          }
+        });
+      }
+    }
+    return responseItemsWithStatus;
+  }
+
   /**
    * Endpoint create.
    * Inserts resources.
@@ -215,23 +273,23 @@ export class ServiceBase {
         });
         await dispatch;
       }
-      let statusArray = this.generateStatusResponse(createResponse, createDocs);
-      // remove error items from createResponse
-      createResponse = createResponse.filter(item => !item.error);
-      docs = { items: createResponse, total_count: createResponse.length, status: statusArray };
+      let createResponseWithStatus = this.generateResponseWithStatus(createResponse, createDocs);
+      const overallStatus = {
+        id: '',
+        code: 200,
+        message: 'success'
+      };
+      docs = { items: createResponseWithStatus, total_count: createResponseWithStatus.length, status: overallStatus };
       this.logger.info(this.name + ' create response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing create request', { code, message });
-      if (!docs.status) {
-        docs.status = [];
-      }
-      docs.status.push({
+      docs.status = {
         id: '',
         code: e.code,
         message: e.details ? e.details : e.message
-      });
+      };
       return docs;
     }
   }
@@ -323,23 +381,23 @@ export class ServiceBase {
         });
         await dispatch;
       }
-      let statusArray = this.generateStatusResponse(updateResponse, updateDocs);
-      // remove error items from updateResponse
-      updateResponse = updateResponse.filter(item => !item.error);
-      docs = { items: updateResponse, total_count: updateResponse.length, status: statusArray };
+      let responseWithStatus = this.generateResponseWithStatus(updateResponse, updateDocs);
+      const overallStatus = {
+        id: '',
+        code: 200,
+        message: 'success'
+      };
+      docs = { items: responseWithStatus, total_count: responseWithStatus.length, status: overallStatus };
       this.logger.info(this.name + ' update response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing update request', { code, message });
-      if (!docs.status) {
-        docs.status = [];
-      }
-      docs.status.push({
+      docs.status = {
         id: '',
         code: e.code,
         message: e.details ? e.details : e.message
-      });
+      };
       return docs;
     }
   }
@@ -356,23 +414,23 @@ export class ServiceBase {
       let upsertDocs = _.cloneDeep(call.request.items);
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
         this.events.entity, this.name);
-      let statusArray = this.generateStatusResponse(upsertResponse, upsertDocs);
-      // remove error items from updateResponse
-      upsertResponse = upsertResponse.filter(item => !item.error);
-      docs = { items: upsertResponse, total_count: upsertResponse.length, status: statusArray };
+      let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
+      const overallStatus = {
+        id: '',
+        code: 200,
+        message: 'success'
+      };
+      docs = { items: responseWithStatus, total_count: responseWithStatus.length, status: overallStatus };
       this.logger.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing upsert request', { code, message });
-      if (!docs.status) {
-        docs.status = [];
-      }
-      docs.status.push({
+      docs.status = {
         id: '',
         code: e.code,
         message: e.details ? e.details : e.message
-      });
+      };
       return docs;
     }
   }

@@ -47,10 +47,15 @@ message TestBufferedDataList {
   uint32 total_count = 2;
 }
 
+message TestBufferedDataResponse {
+  TestBufferedData payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
 message TestBufferedDataListResponse {
-  repeated TestBufferedData items = 1;
+  repeated TestBufferedDataResponse items = 1;
   uint32 total_count = 2;
-  repeated io.restorecommerce.status.Status status = 4;
+  io.restorecommerce.status.Status status = 4;
 }
 
 message TestBufferedDataListReadResponse {

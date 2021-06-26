@@ -50,7 +50,7 @@
           "type": "keyword",
           "index": true
         },
-        "req_id": {
+        "rid": {
           "type": "keyword",
           "index": true
         },

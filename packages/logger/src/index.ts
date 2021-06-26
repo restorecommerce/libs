@@ -40,9 +40,12 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
     transports.push(createConsoleTransport());
   }
 
-  return createWinsonLogger({
+  const logger = createWinsonLogger({
     transports,
     ...opts
   });
-};
 
+  // logger.
+
+  return logger;
+};

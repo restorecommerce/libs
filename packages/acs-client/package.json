@@ -5,7 +5,7 @@
   "author": "Invend GmbH",
   "repository": {
     "type": "git",
-    "url": "https://github.com/restorecommerce/acs-client"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "license": "MIT",
   "keywords": [

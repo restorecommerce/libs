@@ -12,9 +12,9 @@ Opinionated wrapper and configurator for the
 
 The following transports are supported:
 
-- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a [specific transformer](https://github.com/restorecommerce/winston-elasticsearch-transformer)
-- Console (Winston built-in transport)
-- File (Winston built-in transport)
+- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a [specific transformer](https://github.com/restorecommerce/winston-elasticsearch-transformer) and ES data streams.
+- Console (Winston built-in transport).
+- File (Winston built-in transport).
 
 These transports can be added and configured with a corresponding property in
 the options hash:

@@ -13,6 +13,7 @@ Library monorepo for Restorecommerce.
 - [@restorecommerce/handlebars-helperized](packages/handlebars-helperized)
 - [@restorecommerce/kafka-client](packages/kafka-client)
 - [@restorecommerce/koa-req-res-logger](packages/koa-req-res-logger)
+- [@restorecommerce/koa-cloud-health](packages/koa-cloud-health)
 - [@restorecommerce/logger](packages/logger)
 - [@restorecommerce/mailer](packages/mailer)
 - [@restorecommerce/oidc-id-srv-integration](packages/oidc-id-srv-integration)

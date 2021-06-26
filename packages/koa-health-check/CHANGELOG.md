@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 0.1.5 (2021-06-26)
+
+**Note:** Version bump only for package @restorecommerce/koa-health-check
+
+
+
+
+
 ### 0.1.4 (June 25th, 2021)
 
 - Upgrade depdendencies.

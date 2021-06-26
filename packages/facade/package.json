@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/facade",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Facade for Restorecommerce microservices",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -28,7 +28,7 @@
     "@restorecommerce/kafka-client": "^0.1.13",
     "@restorecommerce/logger": "^0.6.4",
     "@restorecommerce/rc-grpc-clients": "^0.1.6",
-    "@restorecommerce/service-config": "^0.4.6",
+    "@restorecommerce/service-config": "^0.4.7",
     "apollo-server-koa": "^2.21.2",
     "debug": "^4.3.1",
     "handlebars": "^4.7.7",

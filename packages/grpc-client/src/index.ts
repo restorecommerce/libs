@@ -146,10 +146,8 @@ export class GrpcClient {
             this.logger.error('Error stack', { stack: err.stack });
             return resolve({
               status: {
-                error: {
-                  code: err.code,
-                  message: err.message
-                }
+                code: err.code,
+                message: err.message
               }
             } as any);
           } else {
@@ -219,10 +217,8 @@ export class GrpcClient {
               this.logger.error('Error stack', { stack: err.stack });
               return resolve({
                 status: {
-                  error: {
                     code: err.code,
                     message: err.message
-                  }
                 }
               } as any);
             } else {

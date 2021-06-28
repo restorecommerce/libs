@@ -16,17 +16,22 @@ service Test {
 }
 
 service Stream {
-  rpc BiStream (stream TestRequest) returns (stream TestResponse);
-  rpc ResponseStream (TestRequest) returns (stream TestResponse);
+  rpc BiStream (stream TestRequest) returns (stream StreamTestResponse);
+  rpc ResponseStream (TestRequest) returns (stream StreamTestResponse);
   rpc RequestStream (stream TestRequest) returns (TestResponse);
 }
 
 message TestRequest {
   string value = 1;
 }
+
+message StreamTestResponse {
+  string result = 1;
+}
+
 message TestResponse {
   string result = 1;
-  repeated io.restorecommerce.status.Status status = 4;
+  io.restorecommerce.status.Status status = 4;
 }
 
 message TestEvent {

@@ -99,7 +99,7 @@ const testProvider = (providerCfg) => {
       it('should traverse all vertices and edges in the graph',
         async () => {
           const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].id}`,
+            start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: { direction: 'outbound' },
             data: true,
             path: true
@@ -107,11 +107,11 @@ const testProvider = (providerCfg) => {
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
             { car: 'bmw', id: 'c', org_id: 'e' },
             { org: 'Bayern', id: 'e' }];
-          let call = await testService.traversal(traversalRequest);
+          let result = await testService.traversal(traversalRequest);
           let traversalResponse = { data: [], paths: [] };
           // let traversalResponseStream = call.getResponseStream();
           await new Promise((resolve, reject) => {
-            call.subscribe(partResp => {
+            result.subscribe(partResp => {
               {
                 if ((partResp && partResp.data && partResp.data.value)) {
                   Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
@@ -141,7 +141,7 @@ const testProvider = (providerCfg) => {
       it('should traverse by excluding specified vertices using filter in the graph',
         async () => {
           const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].id}`,
+            start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: {
               direction: 'outbound',
               filter: [{ vertex: 'cars' }]
@@ -181,7 +181,7 @@ const testProvider = (providerCfg) => {
       it('should traverse by including only specified edges using expander in the graph',
         async () => {
           const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].id}`,
+            start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: {
               expander: [{ edge: 'has_car', direction: 'outbound' }]
             },

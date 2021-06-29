@@ -139,6 +139,10 @@ export const accessRequest = async (subject: Subject,
   if (subject && subject.id) {
     subjectID = subject.id;
   }
+  if (!entity) {
+    entity = request.entity;
+  }
+  let resourceWithNS = resourceNameSpace ? `${resourceNameSpace}.${entity}` : entity;
   // for read operations
   if (action == AuthZAction.READ && isReadRequest(request)
     // for action create or modify with read request to get policySetRQ
@@ -160,7 +164,7 @@ export const accessRequest = async (subject: Subject,
     // handle case if policySet is empty
     if (_.isEmpty(policySet) && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
@@ -169,7 +173,7 @@ export const accessRequest = async (subject: Subject,
 
     if (_.isEmpty(policySet) && !authzEnforced) {
       logger.verbose(`The Access response was INDETERMIATE for a request with subject:` +
-        `${subjectID}, resource:${resourceName}, action:${action}, target_scope:${targetScope} ` +
+        `${subjectID}, resource:${resourceWithNS}, action:${action}, target_scope:${targetScope} ` +
         `as no matching policy/rule could be found, but since ACS enforcement ` +
         `config is disabled overriding the ACS result`);
     }
@@ -177,7 +181,7 @@ export const accessRequest = async (subject: Subject,
     let permissionArguments = await buildFilterPermissions(policySet, subClone, request, authZ, request.database);
     if (!permissionArguments && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
+        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was DENY`;
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
@@ -186,7 +190,7 @@ export const accessRequest = async (subject: Subject,
 
     if (!permissionArguments && !authzEnforced) {
       logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}, ` +
+        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}, ` +
         `but since ACS enforcement config is disabled overriding the ACS result`);
     }
 
@@ -247,7 +251,7 @@ export const accessRequest = async (subject: Subject,
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceList[0].type}, action:${action}, target_scope:${targetScope}; the response was ${decision}`;
+        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decision}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
       throw new PermissionDenied(msg, Number(errors.ACTION_NOT_ALLOWED.code));
@@ -261,7 +265,7 @@ export const accessRequest = async (subject: Subject,
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
     logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${resourceList[0].type}, action:${action}, target_scope:${targetScope}; the response was ${decision}`);
+      `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decision}`);
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decision = Decision.PERMIT;
   }

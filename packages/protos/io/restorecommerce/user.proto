@@ -20,7 +20,7 @@ service Service {
   rpc Update (UserList) returns (UserListResponse);
   rpc Upsert (UserList) returns (UserListResponse);
 
-  rpc Find (FindRequest) returns (UserListReadResponse);
+  rpc Find (FindRequest) returns (UserListResponse);
   rpc Register (RegisterRequest) returns (User);
   rpc Activate (ActivateRequest) returns (google.protobuf.Empty);
   rpc ChangePassword (ChangePasswordRequest) returns (google.protobuf.Empty);
@@ -30,7 +30,7 @@ service Service {
   rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (google.protobuf.Empty);
   rpc Unregister (UnregisterRequest) returns (google.protobuf.Empty);
   rpc Login (LoginRequest) returns (User);
-  rpc FindByRole (FindByRoleRequest) returns (UserListReadResponse);
+  rpc FindByRole (FindByRoleRequest) returns (UserListResponse);
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.1...@restorecommerce/logger@0.9.0) (2021-07-01)
+
+
+### Features
+
+* **logger:** support asynclocalstorage logger context ([d71b30e](https://github.com/restorecommerce/libs/commit/d71b30e7b9321ad4d43a8f66c010cf108380b7b5))
+
+
+
+
+
 ## [0.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.0...@restorecommerce/logger@0.8.1) (2021-06-26)
 
 **Note:** Version bump only for package @restorecommerce/logger

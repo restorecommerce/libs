@@ -1,6 +1,6 @@
-import { format, transports } from "winston";
+import { format, transports } from 'winston';
 import * as rTracer from 'cls-rtracer';
-import { traceFormatter } from "./utils";
+import { globalLoggerCtxKey, traceFormatter } from './utils';
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
   prettyPrint?:  boolean | any;
@@ -40,7 +40,23 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
       ret.push(` ${sourceFile}:${sourceLine}`);
     }
     if (rid) {
-      ret.push(`[rid:${rid}]`);
+      ret.push(` [rid:${rid}]`);
+    }
+
+    if (global[globalLoggerCtxKey]) {
+      const store = global[globalLoggerCtxKey].getStore();
+      if (store && store.size > 0) {
+        let i = store.size;
+        ret.push(` [`);
+        for (let [key, value] of store.entries()) {
+          ret.push(`${key}:${value}`);
+          i--;
+          if (i > 0) {
+            ret.push(`, `);
+          }
+        }
+        ret.push(`]`);
+      }
     }
 
     ret.push(`: ${message}`);

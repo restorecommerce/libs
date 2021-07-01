@@ -3,6 +3,7 @@ import { createLogger as createWinsonLogger, LoggerOptions as WinstonLoggerOptio
 import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './console';
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';
 import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport } from './elasticsearch';
+import { globalLoggerCtxKey } from './utils';
 
 export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
@@ -45,7 +46,7 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
     ...opts
   });
 
-  // logger.
-
   return logger;
 };
+
+export { globalLoggerCtxKey };

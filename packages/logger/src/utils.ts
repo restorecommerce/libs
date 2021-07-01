@@ -111,3 +111,6 @@ export const getRealTrace = (): any => {
 
   return resultTrace;
 }
+
+// A symbol used as key in the global name space to put the AsyncLocalStorage store under
+export const globalLoggerCtxKey = Symbol('loggerCtx');

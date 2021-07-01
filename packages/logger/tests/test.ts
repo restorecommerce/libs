@@ -1,4 +1,14 @@
-import { createLogger, RestoreLoggerOptions } from '../src/index';
+import { createLogger, RestoreLoggerOptions, globalLoggerCtxKey } from '../src/index';
+import { AsyncLocalStorage } from 'async_hooks';
+
+/*
+Define a key in the AsyncLocalStorage that the logger should pick up
+*/
+const loggerCtx = new AsyncLocalStorage<Map<string, string>>();
+const store = new Map<string, string>();
+global[globalLoggerCtxKey] = loggerCtx;
+global[globalLoggerCtxKey].enterWith(store);
+store.set('requestId', '12345678');
 
 const opts: RestoreLoggerOptions = {
   sourcePointer: false,

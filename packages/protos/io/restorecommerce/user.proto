@@ -21,7 +21,7 @@ service Service {
   rpc Upsert (UserList) returns (UserListResponse);
 
   rpc Find (FindRequest) returns (UserListResponse);
-  rpc Register (RegisterRequest) returns (User);
+  rpc Register (RegisterRequest) returns (UserResponse);
   rpc Activate (ActivateRequest) returns (google.protobuf.Empty);
   rpc ChangePassword (ChangePasswordRequest) returns (google.protobuf.Empty);
   rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (google.protobuf.Empty);
@@ -29,12 +29,12 @@ service Service {
   rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (google.protobuf.Empty);
   rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (google.protobuf.Empty);
   rpc Unregister (UnregisterRequest) returns (google.protobuf.Empty);
-  rpc Login (LoginRequest) returns (User);
+  rpc Login (LoginRequest) returns (UserResponse);
   rpc FindByRole (FindByRoleRequest) returns (UserListResponse);
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
-  rpc FindByToken (FindByTokenRequest) returns (User);
+  rpc FindByToken (FindByTokenRequest) returns (UserResponse);
   rpc SendActivationEmail (SendActivationEmailRequest) returns (google.protobuf.Empty);
 }
 

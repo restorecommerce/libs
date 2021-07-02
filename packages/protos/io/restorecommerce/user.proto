@@ -22,20 +22,20 @@ service Service {
 
   rpc Find (FindRequest) returns (UserListResponse);
   rpc Register (RegisterRequest) returns (UserResponse);
-  rpc Activate (ActivateRequest) returns (google.protobuf.Empty);
-  rpc ChangePassword (ChangePasswordRequest) returns (google.protobuf.Empty);
-  rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (google.protobuf.Empty);
-  rpc RequestEmailChange (ChangeEmailRequest) returns (google.protobuf.Empty);
-  rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (google.protobuf.Empty);
-  rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (google.protobuf.Empty);
-  rpc Unregister (UnregisterRequest) returns (google.protobuf.Empty);
+  rpc Activate (ActivateRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc ChangePassword (ChangePasswordRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc RequestEmailChange (ChangeEmailRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc Unregister (UnregisterRequest) returns (io.restorecommerce.status.StatusObj);
   rpc Login (LoginRequest) returns (UserResponse);
   rpc FindByRole (FindByRoleRequest) returns (UserListResponse);
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
-  rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (google.protobuf.Empty);
-  rpc SendInvitationEmail (SendInvitationEmailRequest) returns (google.protobuf.Empty);
+  rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc SendInvitationEmail (SendInvitationEmailRequest) returns (io.restorecommerce.status.StatusObj);
   rpc FindByToken (FindByTokenRequest) returns (UserResponse);
-  rpc SendActivationEmail (SendActivationEmailRequest) returns (google.protobuf.Empty);
+  rpc SendActivationEmail (SendActivationEmailRequest) returns (io.restorecommerce.status.StatusObj);
 }
 
 /**

@@ -11,3 +11,7 @@ message Status {
 message StatusArray {
 repeated Status status = 1;
 }
+
+message StatusObj {
+  Status status = 1;
+}

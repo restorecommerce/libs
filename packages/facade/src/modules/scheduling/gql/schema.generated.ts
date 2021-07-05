@@ -28,7 +28,7 @@ export type SchedulingQuery = {
 
 export type SchedulingJobQuery = {
   __typename?: 'SchedulingJobQuery';
-  Read?: Maybe<ProtoIoRestorecommerceJobJobList>;
+  Read?: Maybe<ProtoIoRestorecommerceJobJobListResponse>;
 };
 
 
@@ -36,28 +36,34 @@ export type SchedulingJobQueryReadArgs = {
   input: IIoRestorecommerceJobJobReadRequest;
 };
 
-export type ProtoIoRestorecommerceJobJobList = {
-  __typename?: 'ProtoIoRestorecommerceJobJobList';
+export type ProtoIoRestorecommerceJobJobListResponse = {
+  __typename?: 'ProtoIoRestorecommerceJobJobListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceJobJobList>;
+  details?: Maybe<IoRestorecommerceJobJobListResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
 export type StatusType = {
   __typename?: 'StatusType';
-  /** Status key */
-  key: Scalars['String'];
+  /** Status ID */
+  id: Scalars['String'];
   /** Status code */
   code: Scalars['Int'];
   /** Status message description */
   message?: Maybe<Scalars['String']>;
 };
 
-export type IoRestorecommerceJobJobList = {
-  __typename?: 'IoRestorecommerceJobJobList';
-  items?: Maybe<Array<IoRestorecommerceJobJob>>;
+export type IoRestorecommerceJobJobListResponse = {
+  __typename?: 'IoRestorecommerceJobJobListResponse';
+  items?: Maybe<Array<IoRestorecommerceJobJobResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceJobJobResponse = {
+  __typename?: 'IoRestorecommerceJobJobResponse';
+  payload?: Maybe<IoRestorecommerceJobJob>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceJobJob = {
@@ -105,6 +111,8 @@ export type IoRestorecommerceJobJobOptions = {
   backoff?: Maybe<IoRestorecommerceJobBackoff>;
   timeout?: Maybe<Scalars['Int']>;
   repeat?: Maybe<IoRestorecommerceJobRepeat>;
+  jobId?: Maybe<Scalars['String']>;
+  removeOnComplete?: Maybe<Scalars['Boolean']>;
 };
 
 export enum IoRestorecommerceJobJobOptionsPriority {
@@ -133,30 +141,14 @@ export type IoRestorecommerceJobRepeat = {
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
   count?: Maybe<Scalars['Int']>;
+  jobId?: Maybe<Scalars['String']>;
 };
 
-export type IoRestorecommerceAuthSubject = {
-  __typename?: 'IoRestorecommerceAuthSubject';
+export type IoRestorecommerceStatusStatus = {
+  __typename?: 'IoRestorecommerceStatusStatus';
   id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IoRestorecommerceAuthRoleAssociation = {
-  __typename?: 'IoRestorecommerceAuthRoleAssociation';
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IoRestorecommerceAuthHierarchicalScope = {
-  __typename?: 'IoRestorecommerceAuthHierarchicalScope';
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobJobReadRequest = {
@@ -194,8 +186,8 @@ export type SchedulingMutation = {
 
 export type SchedulingJobMutation = {
   __typename?: 'SchedulingJobMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceJobJobList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceJobJobListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -253,6 +245,8 @@ export type IIoRestorecommerceJobJobOptions = {
   backoff?: Maybe<IIoRestorecommerceJobBackoff>;
   timeout?: Maybe<Scalars['Int']>;
   repeat?: Maybe<IIoRestorecommerceJobRepeat>;
+  jobId?: Maybe<Scalars['String']>;
+  removeOnComplete?: Maybe<Scalars['Boolean']>;
 };
 
 export type IIoRestorecommerceJobBackoff = {
@@ -266,6 +260,7 @@ export type IIoRestorecommerceJobRepeat = {
   startDate?: Maybe<Scalars['String']>;
   endDate?: Maybe<Scalars['String']>;
   count?: Maybe<Scalars['Int']>;
+  jobId?: Maybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -274,9 +269,15 @@ export enum ModeType {
   Upsert = 'UPSERT'
 }
 
-export type ProtoGoogleProtobufEmpty = {
-  __typename?: 'ProtoGoogleProtobufEmpty';
+export type ProtoIoRestorecommerceStatusStatusArray = {
+  __typename?: 'ProtoIoRestorecommerceStatusStatusArray';
   status: StatusType;
+  details?: Maybe<IoRestorecommerceStatusStatusArray>;
+};
+
+export type IoRestorecommerceStatusStatusArray = {
+  __typename?: 'IoRestorecommerceStatusStatusArray';
+  status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
@@ -353,11 +354,12 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   SchedulingQuery: ResolverTypeWrapper<SchedulingQuery>;
   SchedulingJobQuery: ResolverTypeWrapper<SchedulingJobQuery>;
-  ProtoIoRestorecommerceJobJobList: ResolverTypeWrapper<ProtoIoRestorecommerceJobJobList>;
+  ProtoIoRestorecommerceJobJobListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceJobJobListResponse>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  IoRestorecommerceJobJobList: ResolverTypeWrapper<IoRestorecommerceJobJobList>;
+  IoRestorecommerceJobJobListResponse: ResolverTypeWrapper<IoRestorecommerceJobJobListResponse>;
+  IoRestorecommerceJobJobResponse: ResolverTypeWrapper<IoRestorecommerceJobJobResponse>;
   IoRestorecommerceJobJob: ResolverTypeWrapper<IoRestorecommerceJobJob>;
   IoRestorecommerceJobData: ResolverTypeWrapper<IoRestorecommerceJobData>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
@@ -370,10 +372,8 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceJobBackoff: ResolverTypeWrapper<IoRestorecommerceJobBackoff>;
   IoRestorecommerceJobBackoffType: IoRestorecommerceJobBackoffType;
   IoRestorecommerceJobRepeat: ResolverTypeWrapper<IoRestorecommerceJobRepeat>;
-  IoRestorecommerceAuthSubject: ResolverTypeWrapper<IoRestorecommerceAuthSubject>;
-  IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
-  IoRestorecommerceAuthHierarchicalScope: ResolverTypeWrapper<IoRestorecommerceAuthHierarchicalScope>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IIoRestorecommerceJobJobReadRequest: IIoRestorecommerceJobJobReadRequest;
   IoRestorecommerceJobJobReadRequestSortOrder: IoRestorecommerceJobJobReadRequestSortOrder;
   IIoRestorecommerceJobJobFilter: IIoRestorecommerceJobJobFilter;
@@ -392,7 +392,8 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceJobBackoff: IIoRestorecommerceJobBackoff;
   IIoRestorecommerceJobRepeat: IIoRestorecommerceJobRepeat;
   ModeType: ModeType;
-  ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
+  ProtoIoRestorecommerceStatusStatusArray: ResolverTypeWrapper<ProtoIoRestorecommerceStatusStatusArray>;
+  IoRestorecommerceStatusStatusArray: ResolverTypeWrapper<IoRestorecommerceStatusStatusArray>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
@@ -401,11 +402,12 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   SchedulingQuery: SchedulingQuery;
   SchedulingJobQuery: SchedulingJobQuery;
-  ProtoIoRestorecommerceJobJobList: ProtoIoRestorecommerceJobJobList;
+  ProtoIoRestorecommerceJobJobListResponse: ProtoIoRestorecommerceJobJobListResponse;
   StatusType: StatusType;
   String: Scalars['String'];
   Int: Scalars['Int'];
-  IoRestorecommerceJobJobList: IoRestorecommerceJobJobList;
+  IoRestorecommerceJobJobListResponse: IoRestorecommerceJobJobListResponse;
+  IoRestorecommerceJobJobResponse: IoRestorecommerceJobJobResponse;
   IoRestorecommerceJobJob: IoRestorecommerceJobJob;
   IoRestorecommerceJobData: IoRestorecommerceJobData;
   GoogleProtobufAny: GoogleProtobufAny;
@@ -416,10 +418,8 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceJobJobOptions: IoRestorecommerceJobJobOptions;
   IoRestorecommerceJobBackoff: IoRestorecommerceJobBackoff;
   IoRestorecommerceJobRepeat: IoRestorecommerceJobRepeat;
-  IoRestorecommerceAuthSubject: IoRestorecommerceAuthSubject;
-  IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
-  IoRestorecommerceAuthHierarchicalScope: IoRestorecommerceAuthHierarchicalScope;
   Boolean: Scalars['Boolean'];
+  IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IIoRestorecommerceJobJobReadRequest: IIoRestorecommerceJobJobReadRequest;
   IIoRestorecommerceJobJobFilter: IIoRestorecommerceJobJobFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
@@ -436,7 +436,8 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
   IIoRestorecommerceJobBackoff: IIoRestorecommerceJobBackoff;
   IIoRestorecommerceJobRepeat: IIoRestorecommerceJobRepeat;
-  ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
+  ProtoIoRestorecommerceStatusStatusArray: ProtoIoRestorecommerceStatusStatusArray;
+  IoRestorecommerceStatusStatusArray: IoRestorecommerceStatusStatusArray;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
@@ -450,27 +451,33 @@ export type SchedulingQueryResolvers<ContextType = SchedulingContext, ParentType
 }>;
 
 export type SchedulingJobQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobQuery'] = ResolversParentTypes['SchedulingJobQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingJobQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceJobJobListResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceJobJobList'] = ResolversParentTypes['ProtoIoRestorecommerceJobJobList']> = ResolversObject<{
+export type ProtoIoRestorecommerceJobJobListResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceJobJobListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceJobJobListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobJobList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobJobListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StatusTypeResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobJobListResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobJobList'] = ResolversParentTypes['IoRestorecommerceJobJobList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceJobJob']>>, ParentType, ContextType>;
+export type IoRestorecommerceJobJobListResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobJobListResponse'] = ResolversParentTypes['IoRestorecommerceJobJobListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceJobJobResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceJobJobResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobJobResponse'] = ResolversParentTypes['IoRestorecommerceJobJobResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobJob']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -521,6 +528,8 @@ export type IoRestorecommerceJobJobOptionsResolvers<ContextType = SchedulingCont
   backoff?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobBackoff']>, ParentType, ContextType>;
   timeout?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   repeat?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobRepeat']>, ParentType, ContextType>;
+  jobId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  removeOnComplete?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -540,30 +549,14 @@ export type IoRestorecommerceJobRepeatResolvers<ContextType = SchedulingContext,
   startDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   endDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  jobId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAuthSubjectResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthSubject'] = ResolversParentTypes['IoRestorecommerceAuthSubject']> = ResolversObject<{
+export type IoRestorecommerceStatusStatusResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  scope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
-  hierarchicalScopes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAuthRoleAssociationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthRoleAssociation'] = ResolversParentTypes['IoRestorecommerceAuthRoleAssociation']> = ResolversObject<{
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope'] = ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  children?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -579,8 +572,8 @@ export type SchedulingMutationResolvers<ContextType = SchedulingContext, ParentT
 }>;
 
 export type SchedulingJobMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobMutation'] = ResolversParentTypes['SchedulingJobMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobList']>, ParentType, ContextType, RequireFields<SchedulingJobMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<SchedulingJobMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<SchedulingJobMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -588,8 +581,14 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
   name: 'Upload';
 }
 
-export type ProtoGoogleProtobufEmptyResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoGoogleProtobufEmpty'] = ResolversParentTypes['ProtoGoogleProtobufEmpty']> = ResolversObject<{
+export type ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray'] = ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatusArray']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceStatusStatusArrayResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatusArray'] = ResolversParentTypes['IoRestorecommerceStatusStatusArray']> = ResolversObject<{
+  status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -597,9 +596,10 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   SchedulingQuery?: SchedulingQueryResolvers<ContextType>;
   SchedulingJobQuery?: SchedulingJobQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceJobJobList?: ProtoIoRestorecommerceJobJobListResolvers<ContextType>;
+  ProtoIoRestorecommerceJobJobListResponse?: ProtoIoRestorecommerceJobJobListResponseResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
-  IoRestorecommerceJobJobList?: IoRestorecommerceJobJobListResolvers<ContextType>;
+  IoRestorecommerceJobJobListResponse?: IoRestorecommerceJobJobListResponseResolvers<ContextType>;
+  IoRestorecommerceJobJobResponse?: IoRestorecommerceJobJobResponseResolvers<ContextType>;
   IoRestorecommerceJobJob?: IoRestorecommerceJobJobResolvers<ContextType>;
   IoRestorecommerceJobData?: IoRestorecommerceJobDataResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
@@ -611,15 +611,14 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   IoRestorecommerceJobBackoff?: IoRestorecommerceJobBackoffResolvers<ContextType>;
   IoRestorecommerceJobBackoffType?: IoRestorecommerceJobBackoffTypeResolvers;
   IoRestorecommerceJobRepeat?: IoRestorecommerceJobRepeatResolvers<ContextType>;
-  IoRestorecommerceAuthSubject?: IoRestorecommerceAuthSubjectResolvers<ContextType>;
-  IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
-  IoRestorecommerceAuthHierarchicalScope?: IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType>;
+  IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceJobJobReadRequestSortOrder?: IoRestorecommerceJobJobReadRequestSortOrderResolvers;
   Mutation?: MutationResolvers<ContextType>;
   SchedulingMutation?: SchedulingMutationResolvers<ContextType>;
   SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
   Upload?: GraphQLScalarType;
-  ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
+  ProtoIoRestorecommerceStatusStatusArray?: ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType>;
+  IoRestorecommerceStatusStatusArray?: IoRestorecommerceStatusStatusArrayResolvers<ContextType>;
 }>;
 
 

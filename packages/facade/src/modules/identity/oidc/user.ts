@@ -80,7 +80,7 @@ export async function findUserById(service: userService, id: string): Promise<Au
     throw new Error('USER_NOT_FOUND');
   }
 
-  const user = result.items[0];
+  const user = result.items[0].payload;
 
   if (!user) {
     throw new Error('USER_NOT_FOUND');

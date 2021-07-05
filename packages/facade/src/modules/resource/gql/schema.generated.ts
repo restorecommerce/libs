@@ -39,7 +39,7 @@ export type ResourceQuery = {
 
 export type ResourceAddressQuery = {
   __typename?: 'ResourceAddressQuery';
-  Read?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
+  Read?: Maybe<ProtoIoRestorecommerceAddressAddressListResponse>;
 };
 
 
@@ -47,28 +47,34 @@ export type ResourceAddressQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceAddressAddressList = {
-  __typename?: 'ProtoIoRestorecommerceAddressAddressList';
+export type ProtoIoRestorecommerceAddressAddressListResponse = {
+  __typename?: 'ProtoIoRestorecommerceAddressAddressListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceAddressAddressList>;
+  details?: Maybe<IoRestorecommerceAddressAddressListResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
 export type StatusType = {
   __typename?: 'StatusType';
-  /** Status key */
-  key: Scalars['String'];
+  /** Status ID */
+  id: Scalars['String'];
   /** Status code */
   code: Scalars['Int'];
   /** Status message description */
   message?: Maybe<Scalars['String']>;
 };
 
-export type IoRestorecommerceAddressAddressList = {
-  __typename?: 'IoRestorecommerceAddressAddressList';
-  items?: Maybe<Array<IoRestorecommerceAddressAddress>>;
+export type IoRestorecommerceAddressAddressListResponse = {
+  __typename?: 'IoRestorecommerceAddressAddressListResponse';
+  items?: Maybe<Array<IoRestorecommerceAddressAddressResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceAddressAddressResponse = {
+  __typename?: 'IoRestorecommerceAddressAddressResponse';
+  payload?: Maybe<IoRestorecommerceAddressAddress>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceAddressAddress = {
@@ -112,35 +118,18 @@ export type IoRestorecommerceAddressAddressAddition = {
   field2?: Maybe<Scalars['String']>;
 };
 
-export type IoRestorecommerceAuthSubject = {
-  __typename?: 'IoRestorecommerceAuthSubject';
+export type IoRestorecommerceStatusStatus = {
+  __typename?: 'IoRestorecommerceStatusStatus';
   id?: Maybe<Scalars['String']>;
-  scope?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
-  hierarchicalScopes?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  token?: Maybe<Scalars['String']>;
-};
-
-export type IoRestorecommerceAuthRoleAssociation = {
-  __typename?: 'IoRestorecommerceAuthRoleAssociation';
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-};
-
-export type IoRestorecommerceAuthHierarchicalScope = {
-  __typename?: 'IoRestorecommerceAuthHierarchicalScope';
-  id?: Maybe<Scalars['String']>;
-  children?: Maybe<Array<IoRestorecommerceAuthHierarchicalScope>>;
-  role?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseReadRequest = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   sort?: Maybe<Array<IIoRestorecommerceResourcebaseSort>>;
-  filter?: Maybe<IGoogleProtobufStruct>;
+  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
   search?: Maybe<Array<Scalars['String']>>;
   localesLimiter?: Maybe<Array<Scalars['String']>>;
@@ -159,31 +148,37 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
   Descending = 2
 }
 
-export type IGoogleProtobufStruct = {
-  fields?: Maybe<Array<IGoogleProtobufStructFieldsEntry>>;
+export type IIoRestorecommerceResourcebaseFilterOp = {
+  filter?: Maybe<Array<IIoRestorecommerceResourcebaseFilter>>;
 };
 
-export type IGoogleProtobufStructFieldsEntry = {
-  key?: Maybe<Scalars['String']>;
-  value?: Maybe<IGoogleProtobufValue>;
+export type IIoRestorecommerceResourcebaseFilter = {
+  field?: Maybe<Scalars['String']>;
+  operation?: Maybe<IoRestorecommerceResourcebaseFilterOperation>;
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<IoRestorecommerceResourcebaseFilterValueType>;
+  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
 };
 
-export type IGoogleProtobufValue = {
-  nullValue?: Maybe<GoogleProtobufNullValue>;
-  numberValue?: Maybe<Scalars['Float']>;
-  stringValue?: Maybe<Scalars['String']>;
-  boolValue?: Maybe<Scalars['Boolean']>;
-  structValue?: Maybe<IGoogleProtobufStruct>;
-  listValue?: Maybe<IGoogleProtobufListValue>;
-};
-
-export enum GoogleProtobufNullValue {
-  NullValue = 0
+export enum IoRestorecommerceResourcebaseFilterOperation {
+  Eq = 0,
+  Lt = 1,
+  Lte = 2,
+  Gt = 3,
+  Gte = 4,
+  IsEmpty = 5,
+  ILike = 6,
+  In = 7,
+  Neq = 8
 }
 
-export type IGoogleProtobufListValue = {
-  values?: Maybe<Array<IGoogleProtobufValue>>;
-};
+export enum IoRestorecommerceResourcebaseFilterValueType {
+  String = 0,
+  Number = 1,
+  Boolean = 2,
+  Date = 3,
+  Array = 4
+}
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: Maybe<Scalars['String']>;
@@ -198,7 +193,7 @@ export type IGoogleProtobufAny = {
 
 export type ResourceCountryQuery = {
   __typename?: 'ResourceCountryQuery';
-  Read?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
+  Read?: Maybe<ProtoIoRestorecommerceCountryCountryListResponse>;
 };
 
 
@@ -206,17 +201,23 @@ export type ResourceCountryQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceCountryCountryList = {
-  __typename?: 'ProtoIoRestorecommerceCountryCountryList';
+export type ProtoIoRestorecommerceCountryCountryListResponse = {
+  __typename?: 'ProtoIoRestorecommerceCountryCountryListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceCountryCountryList>;
+  details?: Maybe<IoRestorecommerceCountryCountryListResponse>;
 };
 
-export type IoRestorecommerceCountryCountryList = {
-  __typename?: 'IoRestorecommerceCountryCountryList';
-  items?: Maybe<Array<IoRestorecommerceCountryCountry>>;
+export type IoRestorecommerceCountryCountryListResponse = {
+  __typename?: 'IoRestorecommerceCountryCountryListResponse';
+  items?: Maybe<Array<IoRestorecommerceCountryCountryResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceCountryCountryResponse = {
+  __typename?: 'IoRestorecommerceCountryCountryResponse';
+  payload?: Maybe<IoRestorecommerceCountryCountry>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceCountryCountry = {
@@ -231,7 +232,7 @@ export type IoRestorecommerceCountryCountry = {
 
 export type ResourceTimezoneQuery = {
   __typename?: 'ResourceTimezoneQuery';
-  Read?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
+  Read?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneListResponse>;
 };
 
 
@@ -239,30 +240,35 @@ export type ResourceTimezoneQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceTimezoneTimezoneList = {
-  __typename?: 'ProtoIoRestorecommerceTimezoneTimezoneList';
+export type ProtoIoRestorecommerceTimezoneTimezoneListResponse = {
+  __typename?: 'ProtoIoRestorecommerceTimezoneTimezoneListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceTimezoneTimezoneList>;
+  details?: Maybe<IoRestorecommerceTimezoneTimezoneListResponse>;
 };
 
-export type IoRestorecommerceTimezoneTimezoneList = {
-  __typename?: 'IoRestorecommerceTimezoneTimezoneList';
-  items?: Maybe<Array<IoRestorecommerceTimezoneTimezone>>;
+export type IoRestorecommerceTimezoneTimezoneListResponse = {
+  __typename?: 'IoRestorecommerceTimezoneTimezoneListResponse';
+  items?: Maybe<Array<IoRestorecommerceTimezoneTimezoneResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceTimezoneTimezoneResponse = {
+  __typename?: 'IoRestorecommerceTimezoneTimezoneResponse';
+  payload?: Maybe<IoRestorecommerceTimezoneTimezone>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceTimezoneTimezone = {
   __typename?: 'IoRestorecommerceTimezoneTimezone';
   id?: Maybe<Scalars['String']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  value?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
 export type ResourceContactPointTypeQuery = {
   __typename?: 'ResourceContactPointTypeQuery';
-  Read?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
+  Read?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse>;
 };
 
 
@@ -270,17 +276,23 @@ export type ResourceContactPointTypeQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceContactPointTypeContactPointTypeList = {
-  __typename?: 'ProtoIoRestorecommerceContactPointTypeContactPointTypeList';
+export type ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse = {
+  __typename?: 'ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceContactPointTypeContactPointTypeList>;
+  details?: Maybe<IoRestorecommerceContactPointTypeContactPointTypeListResponse>;
 };
 
-export type IoRestorecommerceContactPointTypeContactPointTypeList = {
-  __typename?: 'IoRestorecommerceContactPointTypeContactPointTypeList';
-  items?: Maybe<Array<IoRestorecommerceContactPointTypeContactPointType>>;
+export type IoRestorecommerceContactPointTypeContactPointTypeListResponse = {
+  __typename?: 'IoRestorecommerceContactPointTypeContactPointTypeListResponse';
+  items?: Maybe<Array<IoRestorecommerceContactPointTypeContactPointTypeResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceContactPointTypeContactPointTypeResponse = {
+  __typename?: 'IoRestorecommerceContactPointTypeContactPointTypeResponse';
+  payload?: Maybe<IoRestorecommerceContactPointTypeContactPointType>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceContactPointTypeContactPointType = {
@@ -292,7 +304,7 @@ export type IoRestorecommerceContactPointTypeContactPointType = {
 
 export type ResourceCustomerQuery = {
   __typename?: 'ResourceCustomerQuery';
-  Read?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
+  Read?: Maybe<ProtoIoRestorecommerceCustomerCustomerListResponse>;
 };
 
 
@@ -300,17 +312,23 @@ export type ResourceCustomerQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceCustomerCustomerList = {
-  __typename?: 'ProtoIoRestorecommerceCustomerCustomerList';
+export type ProtoIoRestorecommerceCustomerCustomerListResponse = {
+  __typename?: 'ProtoIoRestorecommerceCustomerCustomerListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceCustomerCustomerList>;
+  details?: Maybe<IoRestorecommerceCustomerCustomerListResponse>;
 };
 
-export type IoRestorecommerceCustomerCustomerList = {
-  __typename?: 'IoRestorecommerceCustomerCustomerList';
-  items?: Maybe<Array<IoRestorecommerceCustomerCustomer>>;
+export type IoRestorecommerceCustomerCustomerListResponse = {
+  __typename?: 'IoRestorecommerceCustomerCustomerListResponse';
+  items?: Maybe<Array<IoRestorecommerceCustomerCustomerResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceCustomerCustomerResponse = {
+  __typename?: 'IoRestorecommerceCustomerCustomerResponse';
+  payload?: Maybe<IoRestorecommerceCustomerCustomer>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceCustomerCustomer = {
@@ -344,7 +362,7 @@ export type IoRestorecommerceCustomerGuest = {
 
 export type ResourceContactPointQuery = {
   __typename?: 'ResourceContactPointQuery';
-  Read?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
+  Read?: Maybe<ProtoIoRestorecommerceContactPointContactPointListResponse>;
 };
 
 
@@ -352,17 +370,23 @@ export type ResourceContactPointQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceContactPointContactPointList = {
-  __typename?: 'ProtoIoRestorecommerceContactPointContactPointList';
+export type ProtoIoRestorecommerceContactPointContactPointListResponse = {
+  __typename?: 'ProtoIoRestorecommerceContactPointContactPointListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceContactPointContactPointList>;
+  details?: Maybe<IoRestorecommerceContactPointContactPointListResponse>;
 };
 
-export type IoRestorecommerceContactPointContactPointList = {
-  __typename?: 'IoRestorecommerceContactPointContactPointList';
-  items?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
+export type IoRestorecommerceContactPointContactPointListResponse = {
+  __typename?: 'IoRestorecommerceContactPointContactPointListResponse';
+  items?: Maybe<Array<IoRestorecommerceContactPointContactPointResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceContactPointContactPointResponse = {
+  __typename?: 'IoRestorecommerceContactPointContactPointResponse';
+  payload?: Maybe<IoRestorecommerceContactPointContactPoint>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceContactPointContactPoint = {
@@ -380,7 +404,7 @@ export type IoRestorecommerceContactPointContactPoint = {
 
 export type ResourceLocaleQuery = {
   __typename?: 'ResourceLocaleQuery';
-  Read?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
+  Read?: Maybe<ProtoIoRestorecommerceLocaleLocaleListResponse>;
 };
 
 
@@ -388,17 +412,23 @@ export type ResourceLocaleQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceLocaleLocaleList = {
-  __typename?: 'ProtoIoRestorecommerceLocaleLocaleList';
+export type ProtoIoRestorecommerceLocaleLocaleListResponse = {
+  __typename?: 'ProtoIoRestorecommerceLocaleLocaleListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceLocaleLocaleList>;
+  details?: Maybe<IoRestorecommerceLocaleLocaleListResponse>;
 };
 
-export type IoRestorecommerceLocaleLocaleList = {
-  __typename?: 'IoRestorecommerceLocaleLocaleList';
-  items?: Maybe<Array<IoRestorecommerceLocaleLocale>>;
+export type IoRestorecommerceLocaleLocaleListResponse = {
+  __typename?: 'IoRestorecommerceLocaleLocaleListResponse';
+  items?: Maybe<Array<IoRestorecommerceLocaleLocaleResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceLocaleLocaleResponse = {
+  __typename?: 'IoRestorecommerceLocaleLocaleResponse';
+  payload?: Maybe<IoRestorecommerceLocaleLocale>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceLocaleLocale = {
@@ -411,7 +441,7 @@ export type IoRestorecommerceLocaleLocale = {
 
 export type ResourceLocationQuery = {
   __typename?: 'ResourceLocationQuery';
-  Read?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
+  Read?: Maybe<ProtoIoRestorecommerceLocationLocationListResponse>;
 };
 
 
@@ -419,17 +449,23 @@ export type ResourceLocationQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceLocationLocationList = {
-  __typename?: 'ProtoIoRestorecommerceLocationLocationList';
+export type ProtoIoRestorecommerceLocationLocationListResponse = {
+  __typename?: 'ProtoIoRestorecommerceLocationLocationListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceLocationLocationList>;
+  details?: Maybe<IoRestorecommerceLocationLocationListResponse>;
 };
 
-export type IoRestorecommerceLocationLocationList = {
-  __typename?: 'IoRestorecommerceLocationLocationList';
-  items?: Maybe<Array<IoRestorecommerceLocationLocation>>;
+export type IoRestorecommerceLocationLocationListResponse = {
+  __typename?: 'IoRestorecommerceLocationLocationListResponse';
+  items?: Maybe<Array<IoRestorecommerceLocationLocationResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceLocationLocationResponse = {
+  __typename?: 'IoRestorecommerceLocationLocationResponse';
+  payload?: Maybe<IoRestorecommerceLocationLocation>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceLocationLocation = {
@@ -454,7 +490,7 @@ export type GoogleProtobufAny = {
 
 export type ResourceOrganizationQuery = {
   __typename?: 'ResourceOrganizationQuery';
-  Read?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
+  Read?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationListResponse>;
 };
 
 
@@ -462,17 +498,23 @@ export type ResourceOrganizationQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceOrganizationOrganizationList = {
-  __typename?: 'ProtoIoRestorecommerceOrganizationOrganizationList';
+export type ProtoIoRestorecommerceOrganizationOrganizationListResponse = {
+  __typename?: 'ProtoIoRestorecommerceOrganizationOrganizationListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceOrganizationOrganizationList>;
+  details?: Maybe<IoRestorecommerceOrganizationOrganizationListResponse>;
 };
 
-export type IoRestorecommerceOrganizationOrganizationList = {
-  __typename?: 'IoRestorecommerceOrganizationOrganizationList';
-  items?: Maybe<Array<IoRestorecommerceOrganizationOrganization>>;
+export type IoRestorecommerceOrganizationOrganizationListResponse = {
+  __typename?: 'IoRestorecommerceOrganizationOrganizationListResponse';
+  items?: Maybe<Array<IoRestorecommerceOrganizationOrganizationResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceOrganizationOrganizationResponse = {
+  __typename?: 'IoRestorecommerceOrganizationOrganizationResponse';
+  payload?: Maybe<IoRestorecommerceOrganizationOrganization>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceOrganizationOrganization = {
@@ -497,7 +539,7 @@ export type IoRestorecommerceOrganizationOrganization = {
 
 export type ResourceTaxQuery = {
   __typename?: 'ResourceTaxQuery';
-  Read?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
+  Read?: Maybe<ProtoIoRestorecommerceTaxTaxListResponse>;
 };
 
 
@@ -505,17 +547,23 @@ export type ResourceTaxQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceTaxTaxList = {
-  __typename?: 'ProtoIoRestorecommerceTaxTaxList';
+export type ProtoIoRestorecommerceTaxTaxListResponse = {
+  __typename?: 'ProtoIoRestorecommerceTaxTaxListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceTaxTaxList>;
+  details?: Maybe<IoRestorecommerceTaxTaxListResponse>;
 };
 
-export type IoRestorecommerceTaxTaxList = {
-  __typename?: 'IoRestorecommerceTaxTaxList';
-  items?: Maybe<Array<IoRestorecommerceTaxTax>>;
+export type IoRestorecommerceTaxTaxListResponse = {
+  __typename?: 'IoRestorecommerceTaxTaxListResponse';
+  items?: Maybe<Array<IoRestorecommerceTaxTaxResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceTaxTaxResponse = {
+  __typename?: 'IoRestorecommerceTaxTaxResponse';
+  payload?: Maybe<IoRestorecommerceTaxTax>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceTaxTax = {
@@ -530,7 +578,7 @@ export type IoRestorecommerceTaxTax = {
 
 export type ResourceTaxTypeQuery = {
   __typename?: 'ResourceTaxTypeQuery';
-  Read?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
+  Read?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeListResponse>;
 };
 
 
@@ -538,17 +586,23 @@ export type ResourceTaxTypeQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceTaxTypeTaxTypeList = {
-  __typename?: 'ProtoIoRestorecommerceTaxTypeTaxTypeList';
+export type ProtoIoRestorecommerceTaxTypeTaxTypeListResponse = {
+  __typename?: 'ProtoIoRestorecommerceTaxTypeTaxTypeListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceTaxTypeTaxTypeList>;
+  details?: Maybe<IoRestorecommerceTaxTypeTaxTypeListResponse>;
 };
 
-export type IoRestorecommerceTaxTypeTaxTypeList = {
-  __typename?: 'IoRestorecommerceTaxTypeTaxTypeList';
-  items?: Maybe<Array<IoRestorecommerceTaxTypeTaxType>>;
+export type IoRestorecommerceTaxTypeTaxTypeListResponse = {
+  __typename?: 'IoRestorecommerceTaxTypeTaxTypeListResponse';
+  items?: Maybe<Array<IoRestorecommerceTaxTypeTaxTypeResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceTaxTypeTaxTypeResponse = {
+  __typename?: 'IoRestorecommerceTaxTypeTaxTypeResponse';
+  payload?: Maybe<IoRestorecommerceTaxTypeTaxType>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceTaxTypeTaxType = {
@@ -561,7 +615,7 @@ export type IoRestorecommerceTaxTypeTaxType = {
 
 export type ResourceCommandQuery = {
   __typename?: 'ResourceCommandQuery';
-  Read?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
+  Read?: Maybe<ProtoIoRestorecommerceCommandCommandListResponse>;
 };
 
 
@@ -569,17 +623,23 @@ export type ResourceCommandQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoIoRestorecommerceCommandCommandList = {
-  __typename?: 'ProtoIoRestorecommerceCommandCommandList';
+export type ProtoIoRestorecommerceCommandCommandListResponse = {
+  __typename?: 'ProtoIoRestorecommerceCommandCommandListResponse';
   status: StatusType;
-  payload?: Maybe<IoRestorecommerceCommandCommandList>;
+  details?: Maybe<IoRestorecommerceCommandCommandListResponse>;
 };
 
-export type IoRestorecommerceCommandCommandList = {
-  __typename?: 'IoRestorecommerceCommandCommandList';
-  items?: Maybe<Array<IoRestorecommerceCommandCommand>>;
+export type IoRestorecommerceCommandCommandListResponse = {
+  __typename?: 'IoRestorecommerceCommandCommandListResponse';
+  items?: Maybe<Array<IoRestorecommerceCommandCommandResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  subject?: Maybe<IoRestorecommerceAuthSubject>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceCommandCommandResponse = {
+  __typename?: 'IoRestorecommerceCommandCommandResponse';
+  payload?: Maybe<IoRestorecommerceCommandCommand>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceCommandCommand = {
@@ -630,8 +690,8 @@ export type ResourceMutation = {
 
 export type ResourceAddressMutation = {
   __typename?: 'ResourceAddressMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceAddressAddressList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceAddressAddressListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -692,9 +752,15 @@ export enum ModeType {
   Upsert = 'UPSERT'
 }
 
-export type ProtoGoogleProtobufEmpty = {
-  __typename?: 'ProtoGoogleProtobufEmpty';
+export type ProtoIoRestorecommerceStatusStatusArray = {
+  __typename?: 'ProtoIoRestorecommerceStatusStatusArray';
   status: StatusType;
+  details?: Maybe<IoRestorecommerceStatusStatusArray>;
+};
+
+export type IoRestorecommerceStatusStatusArray = {
+  __typename?: 'IoRestorecommerceStatusStatusArray';
+  status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
@@ -704,8 +770,8 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 
 export type ResourceCountryMutation = {
   __typename?: 'ResourceCountryMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceCountryCountryList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCountryCountryListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -735,8 +801,8 @@ export type IIoRestorecommerceCountryCountry = {
 
 export type ResourceTimezoneMutation = {
   __typename?: 'ResourceTimezoneMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTimezoneTimezoneListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -758,14 +824,13 @@ export type IIoRestorecommerceTimezoneTimezoneList = {
 export type IIoRestorecommerceTimezoneTimezone = {
   id?: Maybe<Scalars['String']>;
   meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  value?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };
 
 export type ResourceContactPointTypeMutation = {
   __typename?: 'ResourceContactPointTypeMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -792,8 +857,8 @@ export type IIoRestorecommerceContactPointTypeContactPointType = {
 
 export type ResourceCustomerMutation = {
   __typename?: 'ResourceCustomerMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceCustomerCustomerList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCustomerCustomerListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -839,8 +904,8 @@ export type IIoRestorecommerceCustomerGuest = {
 
 export type ResourceContactPointMutation = {
   __typename?: 'ResourceContactPointMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceContactPointContactPointList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceContactPointContactPointListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -873,8 +938,8 @@ export type IIoRestorecommerceContactPointContactPoint = {
 
 export type ResourceLocaleMutation = {
   __typename?: 'ResourceLocaleMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceLocaleLocaleList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceLocaleLocaleListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -902,8 +967,8 @@ export type IIoRestorecommerceLocaleLocale = {
 
 export type ResourceLocationMutation = {
   __typename?: 'ResourceLocationMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceLocationLocationList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceLocationLocationListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -936,8 +1001,8 @@ export type IIoRestorecommerceLocationLocation = {
 
 export type ResourceOrganizationMutation = {
   __typename?: 'ResourceOrganizationMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceOrganizationOrganizationListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -977,8 +1042,8 @@ export type IIoRestorecommerceOrganizationOrganization = {
 
 export type ResourceTaxMutation = {
   __typename?: 'ResourceTaxMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceTaxTaxList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTaxTaxListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -1008,8 +1073,8 @@ export type IIoRestorecommerceTaxTax = {
 
 export type ResourceTaxTypeMutation = {
   __typename?: 'ResourceTaxTypeMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceTaxTypeTaxTypeListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -1037,8 +1102,8 @@ export type IIoRestorecommerceTaxTypeTaxType = {
 
 export type ResourceCommandMutation = {
   __typename?: 'ResourceCommandMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceCommandCommandList>;
-  Delete?: Maybe<ProtoGoogleProtobufEmpty>;
+  Mutate?: Maybe<ProtoIoRestorecommerceCommandCommandListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
@@ -1141,80 +1206,89 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   ResourceQuery: ResolverTypeWrapper<ResourceQuery>;
   ResourceAddressQuery: ResolverTypeWrapper<ResourceAddressQuery>;
-  ProtoIoRestorecommerceAddressAddressList: ResolverTypeWrapper<ProtoIoRestorecommerceAddressAddressList>;
+  ProtoIoRestorecommerceAddressAddressListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceAddressAddressListResponse>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  IoRestorecommerceAddressAddressList: ResolverTypeWrapper<IoRestorecommerceAddressAddressList>;
+  IoRestorecommerceAddressAddressListResponse: ResolverTypeWrapper<IoRestorecommerceAddressAddressListResponse>;
+  IoRestorecommerceAddressAddressResponse: ResolverTypeWrapper<IoRestorecommerceAddressAddressResponse>;
   IoRestorecommerceAddressAddress: ResolverTypeWrapper<IoRestorecommerceAddressAddress>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAddressAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressAddressGeoPoint>;
   IoRestorecommerceAddressAddressAddition: ResolverTypeWrapper<IoRestorecommerceAddressAddressAddition>;
-  IoRestorecommerceAuthSubject: ResolverTypeWrapper<IoRestorecommerceAuthSubject>;
-  IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
-  IoRestorecommerceAuthHierarchicalScope: ResolverTypeWrapper<IoRestorecommerceAuthHierarchicalScope>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IoRestorecommerceResourcebaseSortSortOrder: IoRestorecommerceResourcebaseSortSortOrder;
-  IGoogleProtobufStruct: IGoogleProtobufStruct;
-  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
-  IGoogleProtobufValue: IGoogleProtobufValue;
-  GoogleProtobufNullValue: GoogleProtobufNullValue;
-  IGoogleProtobufListValue: IGoogleProtobufListValue;
+  IIoRestorecommerceResourcebaseFilterOp: IIoRestorecommerceResourcebaseFilterOp;
+  IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
+  IoRestorecommerceResourcebaseFilterOperation: IoRestorecommerceResourcebaseFilterOperation;
+  IoRestorecommerceResourcebaseFilterValueType: IoRestorecommerceResourcebaseFilterValueType;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   ResourceCountryQuery: ResolverTypeWrapper<ResourceCountryQuery>;
-  ProtoIoRestorecommerceCountryCountryList: ResolverTypeWrapper<ProtoIoRestorecommerceCountryCountryList>;
-  IoRestorecommerceCountryCountryList: ResolverTypeWrapper<IoRestorecommerceCountryCountryList>;
+  ProtoIoRestorecommerceCountryCountryListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceCountryCountryListResponse>;
+  IoRestorecommerceCountryCountryListResponse: ResolverTypeWrapper<IoRestorecommerceCountryCountryListResponse>;
+  IoRestorecommerceCountryCountryResponse: ResolverTypeWrapper<IoRestorecommerceCountryCountryResponse>;
   IoRestorecommerceCountryCountry: ResolverTypeWrapper<IoRestorecommerceCountryCountry>;
   ResourceTimezoneQuery: ResolverTypeWrapper<ResourceTimezoneQuery>;
-  ProtoIoRestorecommerceTimezoneTimezoneList: ResolverTypeWrapper<ProtoIoRestorecommerceTimezoneTimezoneList>;
-  IoRestorecommerceTimezoneTimezoneList: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneList>;
+  ProtoIoRestorecommerceTimezoneTimezoneListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceTimezoneTimezoneListResponse>;
+  IoRestorecommerceTimezoneTimezoneListResponse: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneListResponse>;
+  IoRestorecommerceTimezoneTimezoneResponse: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneResponse>;
   IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
   ResourceContactPointTypeQuery: ResolverTypeWrapper<ResourceContactPointTypeQuery>;
-  ProtoIoRestorecommerceContactPointTypeContactPointTypeList: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointTypeContactPointTypeList>;
-  IoRestorecommerceContactPointTypeContactPointTypeList: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointTypeList>;
+  ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse>;
+  IoRestorecommerceContactPointTypeContactPointTypeListResponse: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointTypeListResponse>;
+  IoRestorecommerceContactPointTypeContactPointTypeResponse: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointTypeResponse>;
   IoRestorecommerceContactPointTypeContactPointType: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointType>;
   ResourceCustomerQuery: ResolverTypeWrapper<ResourceCustomerQuery>;
-  ProtoIoRestorecommerceCustomerCustomerList: ResolverTypeWrapper<ProtoIoRestorecommerceCustomerCustomerList>;
-  IoRestorecommerceCustomerCustomerList: ResolverTypeWrapper<IoRestorecommerceCustomerCustomerList>;
+  ProtoIoRestorecommerceCustomerCustomerListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceCustomerCustomerListResponse>;
+  IoRestorecommerceCustomerCustomerListResponse: ResolverTypeWrapper<IoRestorecommerceCustomerCustomerListResponse>;
+  IoRestorecommerceCustomerCustomerResponse: ResolverTypeWrapper<IoRestorecommerceCustomerCustomerResponse>;
   IoRestorecommerceCustomerCustomer: ResolverTypeWrapper<IoRestorecommerceCustomerCustomer>;
   IoRestorecommerceCustomerIndividualUser: ResolverTypeWrapper<IoRestorecommerceCustomerIndividualUser>;
   IoRestorecommerceCustomerOrgUser: ResolverTypeWrapper<IoRestorecommerceCustomerOrgUser>;
   IoRestorecommerceCustomerGuest: ResolverTypeWrapper<IoRestorecommerceCustomerGuest>;
   ResourceContactPointQuery: ResolverTypeWrapper<ResourceContactPointQuery>;
-  ProtoIoRestorecommerceContactPointContactPointList: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointContactPointList>;
-  IoRestorecommerceContactPointContactPointList: ResolverTypeWrapper<IoRestorecommerceContactPointContactPointList>;
+  ProtoIoRestorecommerceContactPointContactPointListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointContactPointListResponse>;
+  IoRestorecommerceContactPointContactPointListResponse: ResolverTypeWrapper<IoRestorecommerceContactPointContactPointListResponse>;
+  IoRestorecommerceContactPointContactPointResponse: ResolverTypeWrapper<IoRestorecommerceContactPointContactPointResponse>;
   IoRestorecommerceContactPointContactPoint: ResolverTypeWrapper<IoRestorecommerceContactPointContactPoint>;
   ResourceLocaleQuery: ResolverTypeWrapper<ResourceLocaleQuery>;
-  ProtoIoRestorecommerceLocaleLocaleList: ResolverTypeWrapper<ProtoIoRestorecommerceLocaleLocaleList>;
-  IoRestorecommerceLocaleLocaleList: ResolverTypeWrapper<IoRestorecommerceLocaleLocaleList>;
+  ProtoIoRestorecommerceLocaleLocaleListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceLocaleLocaleListResponse>;
+  IoRestorecommerceLocaleLocaleListResponse: ResolverTypeWrapper<IoRestorecommerceLocaleLocaleListResponse>;
+  IoRestorecommerceLocaleLocaleResponse: ResolverTypeWrapper<IoRestorecommerceLocaleLocaleResponse>;
   IoRestorecommerceLocaleLocale: ResolverTypeWrapper<IoRestorecommerceLocaleLocale>;
   ResourceLocationQuery: ResolverTypeWrapper<ResourceLocationQuery>;
-  ProtoIoRestorecommerceLocationLocationList: ResolverTypeWrapper<ProtoIoRestorecommerceLocationLocationList>;
-  IoRestorecommerceLocationLocationList: ResolverTypeWrapper<IoRestorecommerceLocationLocationList>;
+  ProtoIoRestorecommerceLocationLocationListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceLocationLocationListResponse>;
+  IoRestorecommerceLocationLocationListResponse: ResolverTypeWrapper<IoRestorecommerceLocationLocationListResponse>;
+  IoRestorecommerceLocationLocationResponse: ResolverTypeWrapper<IoRestorecommerceLocationLocationResponse>;
   IoRestorecommerceLocationLocation: ResolverTypeWrapper<IoRestorecommerceLocationLocation>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
   ResourceOrganizationQuery: ResolverTypeWrapper<ResourceOrganizationQuery>;
-  ProtoIoRestorecommerceOrganizationOrganizationList: ResolverTypeWrapper<ProtoIoRestorecommerceOrganizationOrganizationList>;
-  IoRestorecommerceOrganizationOrganizationList: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganizationList>;
+  ProtoIoRestorecommerceOrganizationOrganizationListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOrganizationOrganizationListResponse>;
+  IoRestorecommerceOrganizationOrganizationListResponse: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganizationListResponse>;
+  IoRestorecommerceOrganizationOrganizationResponse: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganizationResponse>;
   IoRestorecommerceOrganizationOrganization: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganization>;
   ResourceTaxQuery: ResolverTypeWrapper<ResourceTaxQuery>;
-  ProtoIoRestorecommerceTaxTaxList: ResolverTypeWrapper<ProtoIoRestorecommerceTaxTaxList>;
-  IoRestorecommerceTaxTaxList: ResolverTypeWrapper<IoRestorecommerceTaxTaxList>;
+  ProtoIoRestorecommerceTaxTaxListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceTaxTaxListResponse>;
+  IoRestorecommerceTaxTaxListResponse: ResolverTypeWrapper<IoRestorecommerceTaxTaxListResponse>;
+  IoRestorecommerceTaxTaxResponse: ResolverTypeWrapper<IoRestorecommerceTaxTaxResponse>;
   IoRestorecommerceTaxTax: ResolverTypeWrapper<IoRestorecommerceTaxTax>;
   ResourceTaxTypeQuery: ResolverTypeWrapper<ResourceTaxTypeQuery>;
-  ProtoIoRestorecommerceTaxTypeTaxTypeList: ResolverTypeWrapper<ProtoIoRestorecommerceTaxTypeTaxTypeList>;
-  IoRestorecommerceTaxTypeTaxTypeList: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxTypeList>;
+  ProtoIoRestorecommerceTaxTypeTaxTypeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceTaxTypeTaxTypeListResponse>;
+  IoRestorecommerceTaxTypeTaxTypeListResponse: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxTypeListResponse>;
+  IoRestorecommerceTaxTypeTaxTypeResponse: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxTypeResponse>;
   IoRestorecommerceTaxTypeTaxType: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxType>;
   ResourceCommandQuery: ResolverTypeWrapper<ResourceCommandQuery>;
-  ProtoIoRestorecommerceCommandCommandList: ResolverTypeWrapper<ProtoIoRestorecommerceCommandCommandList>;
-  IoRestorecommerceCommandCommandList: ResolverTypeWrapper<IoRestorecommerceCommandCommandList>;
+  ProtoIoRestorecommerceCommandCommandListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceCommandCommandListResponse>;
+  IoRestorecommerceCommandCommandListResponse: ResolverTypeWrapper<IoRestorecommerceCommandCommandListResponse>;
+  IoRestorecommerceCommandCommandResponse: ResolverTypeWrapper<IoRestorecommerceCommandCommandResponse>;
   IoRestorecommerceCommandCommand: ResolverTypeWrapper<IoRestorecommerceCommandCommand>;
   IoRestorecommerceCommandCommandParameter: ResolverTypeWrapper<IoRestorecommerceCommandCommandParameter>;
   IoRestorecommerceCommandCommandParameterParameterType: IoRestorecommerceCommandCommandParameterParameterType;
@@ -1228,7 +1302,8 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
   ModeType: ModeType;
-  ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
+  ProtoIoRestorecommerceStatusStatusArray: ResolverTypeWrapper<ProtoIoRestorecommerceStatusStatusArray>;
+  IoRestorecommerceStatusStatusArray: ResolverTypeWrapper<IoRestorecommerceStatusStatusArray>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   ResourceCountryMutation: ResolverTypeWrapper<ResourceCountryMutation>;
   IIoRestorecommerceCountryCountryList: IIoRestorecommerceCountryCountryList;
@@ -1274,78 +1349,86 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   ResourceQuery: ResourceQuery;
   ResourceAddressQuery: ResourceAddressQuery;
-  ProtoIoRestorecommerceAddressAddressList: ProtoIoRestorecommerceAddressAddressList;
+  ProtoIoRestorecommerceAddressAddressListResponse: ProtoIoRestorecommerceAddressAddressListResponse;
   StatusType: StatusType;
   String: Scalars['String'];
   Int: Scalars['Int'];
-  IoRestorecommerceAddressAddressList: IoRestorecommerceAddressAddressList;
+  IoRestorecommerceAddressAddressListResponse: IoRestorecommerceAddressAddressListResponse;
+  IoRestorecommerceAddressAddressResponse: IoRestorecommerceAddressAddressResponse;
   IoRestorecommerceAddressAddress: IoRestorecommerceAddressAddress;
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAddressAddressGeoPoint: IoRestorecommerceAddressAddressGeoPoint;
   IoRestorecommerceAddressAddressAddition: IoRestorecommerceAddressAddressAddition;
-  IoRestorecommerceAuthSubject: IoRestorecommerceAuthSubject;
-  IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
-  IoRestorecommerceAuthHierarchicalScope: IoRestorecommerceAuthHierarchicalScope;
-  Boolean: Scalars['Boolean'];
+  IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
-  IGoogleProtobufStruct: IGoogleProtobufStruct;
-  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
-  IGoogleProtobufValue: IGoogleProtobufValue;
-  IGoogleProtobufListValue: IGoogleProtobufListValue;
+  IIoRestorecommerceResourcebaseFilterOp: IIoRestorecommerceResourcebaseFilterOp;
+  IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
+  Boolean: Scalars['Boolean'];
   IGoogleProtobufAny: IGoogleProtobufAny;
   Upload: Scalars['Upload'];
   ResourceCountryQuery: ResourceCountryQuery;
-  ProtoIoRestorecommerceCountryCountryList: ProtoIoRestorecommerceCountryCountryList;
-  IoRestorecommerceCountryCountryList: IoRestorecommerceCountryCountryList;
+  ProtoIoRestorecommerceCountryCountryListResponse: ProtoIoRestorecommerceCountryCountryListResponse;
+  IoRestorecommerceCountryCountryListResponse: IoRestorecommerceCountryCountryListResponse;
+  IoRestorecommerceCountryCountryResponse: IoRestorecommerceCountryCountryResponse;
   IoRestorecommerceCountryCountry: IoRestorecommerceCountryCountry;
   ResourceTimezoneQuery: ResourceTimezoneQuery;
-  ProtoIoRestorecommerceTimezoneTimezoneList: ProtoIoRestorecommerceTimezoneTimezoneList;
-  IoRestorecommerceTimezoneTimezoneList: IoRestorecommerceTimezoneTimezoneList;
+  ProtoIoRestorecommerceTimezoneTimezoneListResponse: ProtoIoRestorecommerceTimezoneTimezoneListResponse;
+  IoRestorecommerceTimezoneTimezoneListResponse: IoRestorecommerceTimezoneTimezoneListResponse;
+  IoRestorecommerceTimezoneTimezoneResponse: IoRestorecommerceTimezoneTimezoneResponse;
   IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
   ResourceContactPointTypeQuery: ResourceContactPointTypeQuery;
-  ProtoIoRestorecommerceContactPointTypeContactPointTypeList: ProtoIoRestorecommerceContactPointTypeContactPointTypeList;
-  IoRestorecommerceContactPointTypeContactPointTypeList: IoRestorecommerceContactPointTypeContactPointTypeList;
+  ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse: ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse;
+  IoRestorecommerceContactPointTypeContactPointTypeListResponse: IoRestorecommerceContactPointTypeContactPointTypeListResponse;
+  IoRestorecommerceContactPointTypeContactPointTypeResponse: IoRestorecommerceContactPointTypeContactPointTypeResponse;
   IoRestorecommerceContactPointTypeContactPointType: IoRestorecommerceContactPointTypeContactPointType;
   ResourceCustomerQuery: ResourceCustomerQuery;
-  ProtoIoRestorecommerceCustomerCustomerList: ProtoIoRestorecommerceCustomerCustomerList;
-  IoRestorecommerceCustomerCustomerList: IoRestorecommerceCustomerCustomerList;
+  ProtoIoRestorecommerceCustomerCustomerListResponse: ProtoIoRestorecommerceCustomerCustomerListResponse;
+  IoRestorecommerceCustomerCustomerListResponse: IoRestorecommerceCustomerCustomerListResponse;
+  IoRestorecommerceCustomerCustomerResponse: IoRestorecommerceCustomerCustomerResponse;
   IoRestorecommerceCustomerCustomer: IoRestorecommerceCustomerCustomer;
   IoRestorecommerceCustomerIndividualUser: IoRestorecommerceCustomerIndividualUser;
   IoRestorecommerceCustomerOrgUser: IoRestorecommerceCustomerOrgUser;
   IoRestorecommerceCustomerGuest: IoRestorecommerceCustomerGuest;
   ResourceContactPointQuery: ResourceContactPointQuery;
-  ProtoIoRestorecommerceContactPointContactPointList: ProtoIoRestorecommerceContactPointContactPointList;
-  IoRestorecommerceContactPointContactPointList: IoRestorecommerceContactPointContactPointList;
+  ProtoIoRestorecommerceContactPointContactPointListResponse: ProtoIoRestorecommerceContactPointContactPointListResponse;
+  IoRestorecommerceContactPointContactPointListResponse: IoRestorecommerceContactPointContactPointListResponse;
+  IoRestorecommerceContactPointContactPointResponse: IoRestorecommerceContactPointContactPointResponse;
   IoRestorecommerceContactPointContactPoint: IoRestorecommerceContactPointContactPoint;
   ResourceLocaleQuery: ResourceLocaleQuery;
-  ProtoIoRestorecommerceLocaleLocaleList: ProtoIoRestorecommerceLocaleLocaleList;
-  IoRestorecommerceLocaleLocaleList: IoRestorecommerceLocaleLocaleList;
+  ProtoIoRestorecommerceLocaleLocaleListResponse: ProtoIoRestorecommerceLocaleLocaleListResponse;
+  IoRestorecommerceLocaleLocaleListResponse: IoRestorecommerceLocaleLocaleListResponse;
+  IoRestorecommerceLocaleLocaleResponse: IoRestorecommerceLocaleLocaleResponse;
   IoRestorecommerceLocaleLocale: IoRestorecommerceLocaleLocale;
   ResourceLocationQuery: ResourceLocationQuery;
-  ProtoIoRestorecommerceLocationLocationList: ProtoIoRestorecommerceLocationLocationList;
-  IoRestorecommerceLocationLocationList: IoRestorecommerceLocationLocationList;
+  ProtoIoRestorecommerceLocationLocationListResponse: ProtoIoRestorecommerceLocationLocationListResponse;
+  IoRestorecommerceLocationLocationListResponse: IoRestorecommerceLocationLocationListResponse;
+  IoRestorecommerceLocationLocationResponse: IoRestorecommerceLocationLocationResponse;
   IoRestorecommerceLocationLocation: IoRestorecommerceLocationLocation;
   GoogleProtobufAny: GoogleProtobufAny;
   TodoScalar: Scalars['TodoScalar'];
   ResourceOrganizationQuery: ResourceOrganizationQuery;
-  ProtoIoRestorecommerceOrganizationOrganizationList: ProtoIoRestorecommerceOrganizationOrganizationList;
-  IoRestorecommerceOrganizationOrganizationList: IoRestorecommerceOrganizationOrganizationList;
+  ProtoIoRestorecommerceOrganizationOrganizationListResponse: ProtoIoRestorecommerceOrganizationOrganizationListResponse;
+  IoRestorecommerceOrganizationOrganizationListResponse: IoRestorecommerceOrganizationOrganizationListResponse;
+  IoRestorecommerceOrganizationOrganizationResponse: IoRestorecommerceOrganizationOrganizationResponse;
   IoRestorecommerceOrganizationOrganization: IoRestorecommerceOrganizationOrganization;
   ResourceTaxQuery: ResourceTaxQuery;
-  ProtoIoRestorecommerceTaxTaxList: ProtoIoRestorecommerceTaxTaxList;
-  IoRestorecommerceTaxTaxList: IoRestorecommerceTaxTaxList;
+  ProtoIoRestorecommerceTaxTaxListResponse: ProtoIoRestorecommerceTaxTaxListResponse;
+  IoRestorecommerceTaxTaxListResponse: IoRestorecommerceTaxTaxListResponse;
+  IoRestorecommerceTaxTaxResponse: IoRestorecommerceTaxTaxResponse;
   IoRestorecommerceTaxTax: IoRestorecommerceTaxTax;
   ResourceTaxTypeQuery: ResourceTaxTypeQuery;
-  ProtoIoRestorecommerceTaxTypeTaxTypeList: ProtoIoRestorecommerceTaxTypeTaxTypeList;
-  IoRestorecommerceTaxTypeTaxTypeList: IoRestorecommerceTaxTypeTaxTypeList;
+  ProtoIoRestorecommerceTaxTypeTaxTypeListResponse: ProtoIoRestorecommerceTaxTypeTaxTypeListResponse;
+  IoRestorecommerceTaxTypeTaxTypeListResponse: IoRestorecommerceTaxTypeTaxTypeListResponse;
+  IoRestorecommerceTaxTypeTaxTypeResponse: IoRestorecommerceTaxTypeTaxTypeResponse;
   IoRestorecommerceTaxTypeTaxType: IoRestorecommerceTaxTypeTaxType;
   ResourceCommandQuery: ResourceCommandQuery;
-  ProtoIoRestorecommerceCommandCommandList: ProtoIoRestorecommerceCommandCommandList;
-  IoRestorecommerceCommandCommandList: IoRestorecommerceCommandCommandList;
+  ProtoIoRestorecommerceCommandCommandListResponse: ProtoIoRestorecommerceCommandCommandListResponse;
+  IoRestorecommerceCommandCommandListResponse: IoRestorecommerceCommandCommandListResponse;
+  IoRestorecommerceCommandCommandResponse: IoRestorecommerceCommandCommandResponse;
   IoRestorecommerceCommandCommand: IoRestorecommerceCommandCommand;
   IoRestorecommerceCommandCommandParameter: IoRestorecommerceCommandCommandParameter;
   Mutation: {};
@@ -1357,7 +1440,8 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
-  ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
+  ProtoIoRestorecommerceStatusStatusArray: ProtoIoRestorecommerceStatusStatusArray;
+  IoRestorecommerceStatusStatusArray: IoRestorecommerceStatusStatusArray;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
   ResourceCountryMutation: ResourceCountryMutation;
   IIoRestorecommerceCountryCountryList: IIoRestorecommerceCountryCountryList;
@@ -1419,27 +1503,33 @@ export type ResourceQueryResolvers<ContextType = ResourceContext, ParentType ext
 }>;
 
 export type ResourceAddressQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceAddressQuery'] = ResolversParentTypes['ResourceAddressQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressListResponse']>, ParentType, ContextType, RequireFields<ResourceAddressQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceAddressAddressListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceAddressAddressList'] = ResolversParentTypes['ProtoIoRestorecommerceAddressAddressList']> = ResolversObject<{
+export type ProtoIoRestorecommerceAddressAddressListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceAddressAddressListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceAddressAddressListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StatusTypeResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAddressAddressListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressList'] = ResolversParentTypes['IoRestorecommerceAddressAddressList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAddressAddress']>>, ParentType, ContextType>;
+export type IoRestorecommerceAddressAddressListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressListResponse'] = ResolversParentTypes['IoRestorecommerceAddressAddressListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAddressAddressResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressAddressResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressResponse'] = ResolversParentTypes['IoRestorecommerceAddressAddressResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1484,51 +1574,44 @@ export type IoRestorecommerceAddressAddressAdditionResolvers<ContextType = Resou
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAuthSubjectResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthSubject'] = ResolversParentTypes['IoRestorecommerceAuthSubject']> = ResolversObject<{
+export type IoRestorecommerceStatusStatusResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  scope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
-  hierarchicalScopes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAuthRoleAssociationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthRoleAssociation'] = ResolversParentTypes['IoRestorecommerceAuthRoleAssociation']> = ResolversObject<{
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope'] = ResolversParentTypes['IoRestorecommerceAuthHierarchicalScope']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  children?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthHierarchicalScope']>>, ParentType, ContextType>;
-  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+
+export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+
+export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
 
 export type ResourceCountryQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCountryQuery'] = ResolversParentTypes['ResourceCountryQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryListResponse']>, ParentType, ContextType, RequireFields<ResourceCountryQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceCountryCountryListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCountryCountryList'] = ResolversParentTypes['ProtoIoRestorecommerceCountryCountryList']> = ResolversObject<{
+export type ProtoIoRestorecommerceCountryCountryListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCountryCountryListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCountryCountryListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountryList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountryListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCountryCountryListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCountryCountryList'] = ResolversParentTypes['IoRestorecommerceCountryCountryList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCountryCountry']>>, ParentType, ContextType>;
+export type IoRestorecommerceCountryCountryListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCountryCountryListResponse'] = ResolversParentTypes['IoRestorecommerceCountryCountryListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCountryCountryResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCountryCountryResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCountryCountryResponse'] = ResolversParentTypes['IoRestorecommerceCountryCountryResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountry']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1543,46 +1626,57 @@ export type IoRestorecommerceCountryCountryResolvers<ContextType = ResourceConte
 }>;
 
 export type ResourceTimezoneQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTimezoneQuery'] = ResolversParentTypes['ResourceTimezoneQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse']>, ParentType, ContextType, RequireFields<ResourceTimezoneQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceTimezoneTimezoneListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneList'] = ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneList']> = ResolversObject<{
+export type ProtoIoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezoneListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceTimezoneTimezoneListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezoneList'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezoneList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTimezoneTimezone']>>, ParentType, ContextType>;
+export type IoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezoneListResponse'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezoneListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTimezoneTimezoneResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTimezoneTimezoneResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezoneResponse'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezoneResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceTimezoneTimezoneResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezone'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezone']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceContactPointTypeQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointTypeQuery'] = ResolversParentTypes['ResourceContactPointTypeQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceContactPointTypeContactPointTypeListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']> = ResolversObject<{
+export type ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointTypeListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceContactPointTypeContactPointTypeListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeList'] = ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>>, ParentType, ContextType>;
+export type IoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeListResponse'] = ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointTypeContactPointTypeResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceContactPointTypeContactPointTypeResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeResponse'] = ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointTypeResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1594,20 +1688,26 @@ export type IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextTy
 }>;
 
 export type ResourceCustomerQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCustomerQuery'] = ResolversParentTypes['ResourceCustomerQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerListResponse']>, ParentType, ContextType, RequireFields<ResourceCustomerQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceCustomerCustomerListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerList'] = ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerList']> = ResolversObject<{
+export type ProtoIoRestorecommerceCustomerCustomerListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomerList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomerListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerCustomerListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomerList'] = ResolversParentTypes['IoRestorecommerceCustomerCustomerList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCustomerCustomer']>>, ParentType, ContextType>;
+export type IoRestorecommerceCustomerCustomerListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomerListResponse'] = ResolversParentTypes['IoRestorecommerceCustomerCustomerListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCustomerCustomerResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCustomerCustomerResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomerResponse'] = ResolversParentTypes['IoRestorecommerceCustomerCustomerResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomer']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1641,20 +1741,26 @@ export type IoRestorecommerceCustomerGuestResolvers<ContextType = ResourceContex
 }>;
 
 export type ResourceContactPointQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointQuery'] = ResolversParentTypes['ResourceContactPointQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointListResponse']>, ParentType, ContextType, RequireFields<ResourceContactPointQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceContactPointContactPointListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointList'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointList']> = ResolversObject<{
+export type ProtoIoRestorecommerceContactPointContactPointListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPointList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPointListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceContactPointContactPointListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPointList'] = ResolversParentTypes['IoRestorecommerceContactPointContactPointList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
+export type IoRestorecommerceContactPointContactPointListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPointListResponse'] = ResolversParentTypes['IoRestorecommerceContactPointContactPointListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPointResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceContactPointContactPointResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPointResponse'] = ResolversParentTypes['IoRestorecommerceContactPointContactPointResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPoint']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1672,20 +1778,26 @@ export type IoRestorecommerceContactPointContactPointResolvers<ContextType = Res
 }>;
 
 export type ResourceLocaleQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocaleQuery'] = ResolversParentTypes['ResourceLocaleQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleListResponse']>, ParentType, ContextType, RequireFields<ResourceLocaleQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceLocaleLocaleListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleList'] = ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleList']> = ResolversObject<{
+export type ProtoIoRestorecommerceLocaleLocaleListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocaleList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocaleListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceLocaleLocaleListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocaleLocaleList'] = ResolversParentTypes['IoRestorecommerceLocaleLocaleList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceLocaleLocale']>>, ParentType, ContextType>;
+export type IoRestorecommerceLocaleLocaleListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocaleLocaleListResponse'] = ResolversParentTypes['IoRestorecommerceLocaleLocaleListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceLocaleLocaleResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceLocaleLocaleResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocaleLocaleResponse'] = ResolversParentTypes['IoRestorecommerceLocaleLocaleResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1698,20 +1810,26 @@ export type IoRestorecommerceLocaleLocaleResolvers<ContextType = ResourceContext
 }>;
 
 export type ResourceLocationQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocationQuery'] = ResolversParentTypes['ResourceLocationQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationListResponse']>, ParentType, ContextType, RequireFields<ResourceLocationQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceLocationLocationListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocationLocationList'] = ResolversParentTypes['ProtoIoRestorecommerceLocationLocationList']> = ResolversObject<{
+export type ProtoIoRestorecommerceLocationLocationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocationLocationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceLocationLocationListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocationLocationList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocationLocationListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceLocationLocationListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocationLocationList'] = ResolversParentTypes['IoRestorecommerceLocationLocationList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceLocationLocation']>>, ParentType, ContextType>;
+export type IoRestorecommerceLocationLocationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocationLocationListResponse'] = ResolversParentTypes['IoRestorecommerceLocationLocationListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceLocationLocationResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceLocationLocationResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocationLocationResponse'] = ResolversParentTypes['IoRestorecommerceLocationLocationResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocationLocation']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1739,20 +1857,26 @@ export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<Resolver
 }
 
 export type ResourceOrganizationQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceOrganizationQuery'] = ResolversParentTypes['ResourceOrganizationQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse']>, ParentType, ContextType, RequireFields<ResourceOrganizationQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceOrganizationOrganizationListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationList'] = ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationList']> = ResolversObject<{
+export type ProtoIoRestorecommerceOrganizationOrganizationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganizationListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceOrganizationOrganizationListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceOrganizationOrganizationList'] = ResolversParentTypes['IoRestorecommerceOrganizationOrganizationList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOrganizationOrganization']>>, ParentType, ContextType>;
+export type IoRestorecommerceOrganizationOrganizationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceOrganizationOrganizationListResponse'] = ResolversParentTypes['IoRestorecommerceOrganizationOrganizationListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOrganizationOrganizationResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceOrganizationOrganizationResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceOrganizationOrganizationResponse'] = ResolversParentTypes['IoRestorecommerceOrganizationOrganizationResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1777,20 +1901,26 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Res
 }>;
 
 export type ResourceTaxQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxQuery'] = ResolversParentTypes['ResourceTaxQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceTaxTaxListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTaxList'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTaxList']> = ResolversObject<{
+export type ProtoIoRestorecommerceTaxTaxListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTaxListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTaxListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTaxList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceTaxTaxListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTaxList'] = ResolversParentTypes['IoRestorecommerceTaxTaxList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTax']>>, ParentType, ContextType>;
+export type IoRestorecommerceTaxTaxListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTaxListResponse'] = ResolversParentTypes['IoRestorecommerceTaxTaxListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTaxResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTaxTaxResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTaxResponse'] = ResolversParentTypes['IoRestorecommerceTaxTaxResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTax']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1805,20 +1935,26 @@ export type IoRestorecommerceTaxTaxResolvers<ContextType = ResourceContext, Pare
 }>;
 
 export type ResourceTaxTypeQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxTypeQuery'] = ResolversParentTypes['ResourceTaxTypeQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxTypeQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceTaxTypeTaxTypeListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']> = ResolversObject<{
+export type ProtoIoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxTypeListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceTaxTypeTaxTypeListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeList'] = ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTypeTaxType']>>, ParentType, ContextType>;
+export type IoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeListResponse'] = ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTypeTaxTypeResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTaxTypeTaxTypeResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeResponse'] = ResolversParentTypes['IoRestorecommerceTaxTypeTaxTypeResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxType']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1831,20 +1967,26 @@ export type IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType = ResourceConte
 }>;
 
 export type ResourceCommandQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCommandQuery'] = ResolversParentTypes['ResourceCommandQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandListResponse']>, ParentType, ContextType, RequireFields<ResourceCommandQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceCommandCommandListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCommandCommandList'] = ResolversParentTypes['ProtoIoRestorecommerceCommandCommandList']> = ResolversObject<{
+export type ProtoIoRestorecommerceCommandCommandListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCommandCommandListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCommandCommandListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCommandCommandList']>, ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCommandCommandListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCommandCommandListResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCommandCommandList'] = ResolversParentTypes['IoRestorecommerceCommandCommandList']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCommandCommand']>>, ParentType, ContextType>;
+export type IoRestorecommerceCommandCommandListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCommandCommandListResponse'] = ResolversParentTypes['IoRestorecommerceCommandCommandListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCommandCommandResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subject?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAuthSubject']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCommandCommandResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCommandCommandResponse'] = ResolversParentTypes['IoRestorecommerceCommandCommandResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCommandCommand']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1888,79 +2030,85 @@ export type ResourceMutationResolvers<ContextType = ResourceContext, ParentType 
 }>;
 
 export type ResourceAddressMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceAddressMutation'] = ResolversParentTypes['ResourceAddressMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressList']>, ParentType, ContextType, RequireFields<ResourceAddressMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceAddressMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAddressAddressListResponse']>, ParentType, ContextType, RequireFields<ResourceAddressMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceAddressMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoGoogleProtobufEmptyResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoGoogleProtobufEmpty'] = ResolversParentTypes['ProtoGoogleProtobufEmpty']> = ResolversObject<{
+export type ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray'] = ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatusArray']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceStatusStatusArrayResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatusArray'] = ResolversParentTypes['IoRestorecommerceStatusStatusArray']> = ResolversObject<{
+  status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceCountryMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCountryMutation'] = ResolversParentTypes['ResourceCountryMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryList']>, ParentType, ContextType, RequireFields<ResourceCountryMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCountryMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCountryCountryListResponse']>, ParentType, ContextType, RequireFields<ResourceCountryMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceCountryMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTimezoneMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTimezoneMutation'] = ResolversParentTypes['ResourceTimezoneMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneList']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceTimezoneMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceContactPointTypeMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointTypeMutation'] = ResolversParentTypes['ResourceContactPointTypeMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeList']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceContactPointTypeMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceCustomerMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCustomerMutation'] = ResolversParentTypes['ResourceCustomerMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerList']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCustomerCustomerListResponse']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceCustomerMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceContactPointMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceContactPointMutation'] = ResolversParentTypes['ResourceContactPointMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointList']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceContactPointContactPointListResponse']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceContactPointMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceLocaleMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocaleMutation'] = ResolversParentTypes['ResourceLocaleMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleList']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocaleLocaleListResponse']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceLocaleMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceLocationMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceLocationMutation'] = ResolversParentTypes['ResourceLocationMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationList']>, ParentType, ContextType, RequireFields<ResourceLocationMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceLocationMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceLocationLocationListResponse']>, ParentType, ContextType, RequireFields<ResourceLocationMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceLocationMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceOrganizationMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceOrganizationMutation'] = ResolversParentTypes['ResourceOrganizationMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationList']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceOrganizationMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTaxMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxMutation'] = ResolversParentTypes['ResourceTaxMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxList']>, ParentType, ContextType, RequireFields<ResourceTaxMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTaxMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceTaxMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceTaxTypeMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxTypeMutation'] = ResolversParentTypes['ResourceTaxTypeMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeList']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceTaxTypeMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type ResourceCommandMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCommandMutation'] = ResolversParentTypes['ResourceCommandMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandList']>, ParentType, ContextType, RequireFields<ResourceCommandMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<ResourceCommandMutationDeleteArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandListResponse']>, ParentType, ContextType, RequireFields<ResourceCommandMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<ResourceCommandMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1968,74 +2116,87 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   ResourceQuery?: ResourceQueryResolvers<ContextType>;
   ResourceAddressQuery?: ResourceAddressQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceAddressAddressList?: ProtoIoRestorecommerceAddressAddressListResolvers<ContextType>;
+  ProtoIoRestorecommerceAddressAddressListResponse?: ProtoIoRestorecommerceAddressAddressListResponseResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
-  IoRestorecommerceAddressAddressList?: IoRestorecommerceAddressAddressListResolvers<ContextType>;
+  IoRestorecommerceAddressAddressListResponse?: IoRestorecommerceAddressAddressListResponseResolvers<ContextType>;
+  IoRestorecommerceAddressAddressResponse?: IoRestorecommerceAddressAddressResponseResolvers<ContextType>;
   IoRestorecommerceAddressAddress?: IoRestorecommerceAddressAddressResolvers<ContextType>;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAddressAddressGeoPoint?: IoRestorecommerceAddressAddressGeoPointResolvers<ContextType>;
   IoRestorecommerceAddressAddressAddition?: IoRestorecommerceAddressAddressAdditionResolvers<ContextType>;
-  IoRestorecommerceAuthSubject?: IoRestorecommerceAuthSubjectResolvers<ContextType>;
-  IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
-  IoRestorecommerceAuthHierarchicalScope?: IoRestorecommerceAuthHierarchicalScopeResolvers<ContextType>;
+  IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
+  IoRestorecommerceResourcebaseFilterOperation?: IoRestorecommerceResourcebaseFilterOperationResolvers;
+  IoRestorecommerceResourcebaseFilterValueType?: IoRestorecommerceResourcebaseFilterValueTypeResolvers;
   Upload?: GraphQLScalarType;
   ResourceCountryQuery?: ResourceCountryQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceCountryCountryList?: ProtoIoRestorecommerceCountryCountryListResolvers<ContextType>;
-  IoRestorecommerceCountryCountryList?: IoRestorecommerceCountryCountryListResolvers<ContextType>;
+  ProtoIoRestorecommerceCountryCountryListResponse?: ProtoIoRestorecommerceCountryCountryListResponseResolvers<ContextType>;
+  IoRestorecommerceCountryCountryListResponse?: IoRestorecommerceCountryCountryListResponseResolvers<ContextType>;
+  IoRestorecommerceCountryCountryResponse?: IoRestorecommerceCountryCountryResponseResolvers<ContextType>;
   IoRestorecommerceCountryCountry?: IoRestorecommerceCountryCountryResolvers<ContextType>;
   ResourceTimezoneQuery?: ResourceTimezoneQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceTimezoneTimezoneList?: ProtoIoRestorecommerceTimezoneTimezoneListResolvers<ContextType>;
-  IoRestorecommerceTimezoneTimezoneList?: IoRestorecommerceTimezoneTimezoneListResolvers<ContextType>;
+  ProtoIoRestorecommerceTimezoneTimezoneListResponse?: ProtoIoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType>;
+  IoRestorecommerceTimezoneTimezoneListResponse?: IoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType>;
+  IoRestorecommerceTimezoneTimezoneResponse?: IoRestorecommerceTimezoneTimezoneResponseResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
   ResourceContactPointTypeQuery?: ResourceContactPointTypeQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceContactPointTypeContactPointTypeList?: ProtoIoRestorecommerceContactPointTypeContactPointTypeListResolvers<ContextType>;
-  IoRestorecommerceContactPointTypeContactPointTypeList?: IoRestorecommerceContactPointTypeContactPointTypeListResolvers<ContextType>;
+  ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse?: ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType>;
+  IoRestorecommerceContactPointTypeContactPointTypeListResponse?: IoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType>;
+  IoRestorecommerceContactPointTypeContactPointTypeResponse?: IoRestorecommerceContactPointTypeContactPointTypeResponseResolvers<ContextType>;
   IoRestorecommerceContactPointTypeContactPointType?: IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType>;
   ResourceCustomerQuery?: ResourceCustomerQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceCustomerCustomerList?: ProtoIoRestorecommerceCustomerCustomerListResolvers<ContextType>;
-  IoRestorecommerceCustomerCustomerList?: IoRestorecommerceCustomerCustomerListResolvers<ContextType>;
+  ProtoIoRestorecommerceCustomerCustomerListResponse?: ProtoIoRestorecommerceCustomerCustomerListResponseResolvers<ContextType>;
+  IoRestorecommerceCustomerCustomerListResponse?: IoRestorecommerceCustomerCustomerListResponseResolvers<ContextType>;
+  IoRestorecommerceCustomerCustomerResponse?: IoRestorecommerceCustomerCustomerResponseResolvers<ContextType>;
   IoRestorecommerceCustomerCustomer?: IoRestorecommerceCustomerCustomerResolvers<ContextType>;
   IoRestorecommerceCustomerIndividualUser?: IoRestorecommerceCustomerIndividualUserResolvers<ContextType>;
   IoRestorecommerceCustomerOrgUser?: IoRestorecommerceCustomerOrgUserResolvers<ContextType>;
   IoRestorecommerceCustomerGuest?: IoRestorecommerceCustomerGuestResolvers<ContextType>;
   ResourceContactPointQuery?: ResourceContactPointQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceContactPointContactPointList?: ProtoIoRestorecommerceContactPointContactPointListResolvers<ContextType>;
-  IoRestorecommerceContactPointContactPointList?: IoRestorecommerceContactPointContactPointListResolvers<ContextType>;
+  ProtoIoRestorecommerceContactPointContactPointListResponse?: ProtoIoRestorecommerceContactPointContactPointListResponseResolvers<ContextType>;
+  IoRestorecommerceContactPointContactPointListResponse?: IoRestorecommerceContactPointContactPointListResponseResolvers<ContextType>;
+  IoRestorecommerceContactPointContactPointResponse?: IoRestorecommerceContactPointContactPointResponseResolvers<ContextType>;
   IoRestorecommerceContactPointContactPoint?: IoRestorecommerceContactPointContactPointResolvers<ContextType>;
   ResourceLocaleQuery?: ResourceLocaleQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceLocaleLocaleList?: ProtoIoRestorecommerceLocaleLocaleListResolvers<ContextType>;
-  IoRestorecommerceLocaleLocaleList?: IoRestorecommerceLocaleLocaleListResolvers<ContextType>;
+  ProtoIoRestorecommerceLocaleLocaleListResponse?: ProtoIoRestorecommerceLocaleLocaleListResponseResolvers<ContextType>;
+  IoRestorecommerceLocaleLocaleListResponse?: IoRestorecommerceLocaleLocaleListResponseResolvers<ContextType>;
+  IoRestorecommerceLocaleLocaleResponse?: IoRestorecommerceLocaleLocaleResponseResolvers<ContextType>;
   IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;
   ResourceLocationQuery?: ResourceLocationQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceLocationLocationList?: ProtoIoRestorecommerceLocationLocationListResolvers<ContextType>;
-  IoRestorecommerceLocationLocationList?: IoRestorecommerceLocationLocationListResolvers<ContextType>;
+  ProtoIoRestorecommerceLocationLocationListResponse?: ProtoIoRestorecommerceLocationLocationListResponseResolvers<ContextType>;
+  IoRestorecommerceLocationLocationListResponse?: IoRestorecommerceLocationLocationListResponseResolvers<ContextType>;
+  IoRestorecommerceLocationLocationResponse?: IoRestorecommerceLocationLocationResponseResolvers<ContextType>;
   IoRestorecommerceLocationLocation?: IoRestorecommerceLocationLocationResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   TodoScalar?: GraphQLScalarType;
   ResourceOrganizationQuery?: ResourceOrganizationQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceOrganizationOrganizationList?: ProtoIoRestorecommerceOrganizationOrganizationListResolvers<ContextType>;
-  IoRestorecommerceOrganizationOrganizationList?: IoRestorecommerceOrganizationOrganizationListResolvers<ContextType>;
+  ProtoIoRestorecommerceOrganizationOrganizationListResponse?: ProtoIoRestorecommerceOrganizationOrganizationListResponseResolvers<ContextType>;
+  IoRestorecommerceOrganizationOrganizationListResponse?: IoRestorecommerceOrganizationOrganizationListResponseResolvers<ContextType>;
+  IoRestorecommerceOrganizationOrganizationResponse?: IoRestorecommerceOrganizationOrganizationResponseResolvers<ContextType>;
   IoRestorecommerceOrganizationOrganization?: IoRestorecommerceOrganizationOrganizationResolvers<ContextType>;
   ResourceTaxQuery?: ResourceTaxQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceTaxTaxList?: ProtoIoRestorecommerceTaxTaxListResolvers<ContextType>;
-  IoRestorecommerceTaxTaxList?: IoRestorecommerceTaxTaxListResolvers<ContextType>;
+  ProtoIoRestorecommerceTaxTaxListResponse?: ProtoIoRestorecommerceTaxTaxListResponseResolvers<ContextType>;
+  IoRestorecommerceTaxTaxListResponse?: IoRestorecommerceTaxTaxListResponseResolvers<ContextType>;
+  IoRestorecommerceTaxTaxResponse?: IoRestorecommerceTaxTaxResponseResolvers<ContextType>;
   IoRestorecommerceTaxTax?: IoRestorecommerceTaxTaxResolvers<ContextType>;
   ResourceTaxTypeQuery?: ResourceTaxTypeQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceTaxTypeTaxTypeList?: ProtoIoRestorecommerceTaxTypeTaxTypeListResolvers<ContextType>;
-  IoRestorecommerceTaxTypeTaxTypeList?: IoRestorecommerceTaxTypeTaxTypeListResolvers<ContextType>;
+  ProtoIoRestorecommerceTaxTypeTaxTypeListResponse?: ProtoIoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType>;
+  IoRestorecommerceTaxTypeTaxTypeListResponse?: IoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType>;
+  IoRestorecommerceTaxTypeTaxTypeResponse?: IoRestorecommerceTaxTypeTaxTypeResponseResolvers<ContextType>;
   IoRestorecommerceTaxTypeTaxType?: IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType>;
   ResourceCommandQuery?: ResourceCommandQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceCommandCommandList?: ProtoIoRestorecommerceCommandCommandListResolvers<ContextType>;
-  IoRestorecommerceCommandCommandList?: IoRestorecommerceCommandCommandListResolvers<ContextType>;
+  ProtoIoRestorecommerceCommandCommandListResponse?: ProtoIoRestorecommerceCommandCommandListResponseResolvers<ContextType>;
+  IoRestorecommerceCommandCommandListResponse?: IoRestorecommerceCommandCommandListResponseResolvers<ContextType>;
+  IoRestorecommerceCommandCommandResponse?: IoRestorecommerceCommandCommandResponseResolvers<ContextType>;
   IoRestorecommerceCommandCommand?: IoRestorecommerceCommandCommandResolvers<ContextType>;
   IoRestorecommerceCommandCommandParameter?: IoRestorecommerceCommandCommandParameterResolvers<ContextType>;
   IoRestorecommerceCommandCommandParameterParameterType?: IoRestorecommerceCommandCommandParameterParameterTypeResolvers;
   Mutation?: MutationResolvers<ContextType>;
   ResourceMutation?: ResourceMutationResolvers<ContextType>;
   ResourceAddressMutation?: ResourceAddressMutationResolvers<ContextType>;
-  ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
+  ProtoIoRestorecommerceStatusStatusArray?: ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType>;
+  IoRestorecommerceStatusStatusArray?: IoRestorecommerceStatusStatusArrayResolvers<ContextType>;
   ResourceCountryMutation?: ResourceCountryMutationResolvers<ContextType>;
   ResourceTimezoneMutation?: ResourceTimezoneMutationResolvers<ContextType>;
   ResourceContactPointTypeMutation?: ResourceContactPointTypeMutationResolvers<ContextType>;

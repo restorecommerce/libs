@@ -4,9 +4,9 @@ export const StatusType = new GraphQLObjectType({
   name: 'StatusType',
   description: 'Objects with error returned for GraphQL operations',
   fields: () => ({
-    key: {
+    id: {
       type: new GraphQLNonNull(GraphQLString),
-      description: 'Status key',
+      description: 'Status ID',
     },
     code: {
       type: new GraphQLNonNull(GraphQLInt),

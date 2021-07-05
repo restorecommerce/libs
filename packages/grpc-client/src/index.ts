@@ -100,12 +100,13 @@ export class GrpcClient {
     proto = grpcCientConfig.proto ? grpcCientConfig.proto : undefined;
     timeout = grpcCientConfig.timeout ? grpcCientConfig.timeout : undefined;
     bufferFields = grpcCientConfig.bufferFields ? grpcCientConfig.bufferFields : undefined;
-    if (!address) {
-      throw new Error('endpoint configuration missing');
-    }
-    if (!proto) {
-      throw new Error('proto configuration definition missing');
-    }
+    // address and proto are generated dynamically, so its not initialized in config
+    // if (!address) {
+    //   throw new Error('endpoint configuration missing');
+    // }
+    // if (!proto) {
+    //   throw new Error('proto configuration definition missing');
+    // }
     if (!logger) {
       throw new Error('missing logger configuration');
     }

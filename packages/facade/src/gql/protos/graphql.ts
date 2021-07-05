@@ -41,7 +41,7 @@ export const getGQLSchema = <TSource, TContext>
   }
 
   if (method.outputType! !== '.google.protobuf.Empty') {
-    fields['payload'] = {
+    fields['details'] = {
       type: responseTyping.output,
     }
   }
@@ -195,21 +195,21 @@ export const getGQLResolverFunctions =
           // TODO Handle client-stream methods
           const result = await service[method.name!](req);
           return {
-            payload: result,
-            status: {
-              code: 1,
-              key: '',
-              message: 'Success'
-            }
-          }
+            details: {
+              items: result.items, // items includes both payload and individual status
+            },
+            status: result.status // overall status
+          };
         } catch (error) {
           console.error(error);
           return {
-            payload: undefined,
+            details: {
+              items: []
+            },
             status: {
-              code: 99,
-              key: '',
-              message: error.details
+              code: error.code,
+              id: '',
+              message: error.message
             }
           }
         }
@@ -278,20 +278,21 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
       subject
     });
     return {
-      payload: result,
-      status: {
-        code: 1,
-        key: '',
-        message: 'Success'
-      }
+      details: {
+        items: result.items, // items includes both payload and individual status
+      },
+      status: result.status // overall status
     };
   } catch (error) {
+    console.error(error);
     return {
-      payload: undefined,
+      details: {
+        items: []
+      },
       status: {
-        code: 99,
-        key: '',
-        message: error?.message
+        code: error.code,
+        id: '',
+        message: error.message
       }
     }
   }

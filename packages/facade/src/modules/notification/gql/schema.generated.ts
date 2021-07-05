@@ -27,62 +27,207 @@ export type NotificationMutation = {
 
 export type NotificationServiceMutation = {
   __typename?: 'NotificationServiceMutation';
-  Send?: Maybe<ProtoGoogleProtobufEmpty>;
+  Read?: Maybe<ProtoIoRestorecommerceNotificationNotificationListResponse>;
+  Mutate?: Maybe<ProtoIoRestorecommerceNotificationNotificationListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
 };
 
 
-export type NotificationServiceMutationSendArgs = {
-  input: IIoRestorecommerceNotificationNotification;
+export type NotificationServiceMutationReadArgs = {
+  input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
-export type ProtoGoogleProtobufEmpty = {
-  __typename?: 'ProtoGoogleProtobufEmpty';
+
+export type NotificationServiceMutationMutateArgs = {
+  input: IIoRestorecommerceNotificationNotificationList;
+};
+
+
+export type NotificationServiceMutationDeleteArgs = {
+  input: IIoRestorecommerceResourcebaseDeleteRequest;
+};
+
+export type ProtoIoRestorecommerceNotificationNotificationListResponse = {
+  __typename?: 'ProtoIoRestorecommerceNotificationNotificationListResponse';
   status: StatusType;
+  details?: Maybe<IoRestorecommerceNotificationNotificationListResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
 export type StatusType = {
   __typename?: 'StatusType';
-  /** Status key */
-  key: Scalars['String'];
+  /** Status ID */
+  id: Scalars['String'];
   /** Status code */
   code: Scalars['Int'];
   /** Status message description */
   message?: Maybe<Scalars['String']>;
 };
 
+export type IoRestorecommerceNotificationNotificationListResponse = {
+  __typename?: 'IoRestorecommerceNotificationNotificationListResponse';
+  items?: Maybe<Array<IoRestorecommerceNotificationNotificationResponse>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceNotificationNotificationResponse = {
+  __typename?: 'IoRestorecommerceNotificationNotificationResponse';
+  items?: Maybe<IoRestorecommerceNotificationNotification>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceNotificationNotification = {
+  __typename?: 'IoRestorecommerceNotificationNotification';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  notificationChannelIds?: Maybe<Array<Scalars['String']>>;
+  email?: Maybe<Scalars['String']>;
+  telephoneNumber?: Maybe<Scalars['String']>;
+  subjectTemplate?: Maybe<Scalars['String']>;
+  bodyTemplate?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceMetaMeta = {
+  __typename?: 'IoRestorecommerceMetaMeta';
+  created?: Maybe<Scalars['Float']>;
+  modified?: Maybe<Scalars['Float']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+  owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+};
+
+export type IoRestorecommerceAttributeAttribute = {
+  __typename?: 'IoRestorecommerceAttributeAttribute';
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceStatusStatus = {
+  __typename?: 'IoRestorecommerceStatusStatus';
+  id?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceResourcebaseReadRequest = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  sort?: Maybe<Array<IIoRestorecommerceResourcebaseSort>>;
+  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
+  field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: Maybe<Array<Scalars['String']>>;
+  localesLimiter?: Maybe<Array<Scalars['String']>>;
+  customQueries?: Maybe<Array<Scalars['String']>>;
+  customArguments?: Maybe<IGoogleProtobufAny>;
+};
+
+export type IIoRestorecommerceResourcebaseSort = {
+  field?: Maybe<Scalars['String']>;
+  order?: Maybe<IoRestorecommerceResourcebaseSortSortOrder>;
+};
+
+export enum IoRestorecommerceResourcebaseSortSortOrder {
+  Unsorted = 0,
+  Ascending = 1,
+  Descending = 2
+}
+
+export type IIoRestorecommerceResourcebaseFilterOp = {
+  filter?: Maybe<Array<IIoRestorecommerceResourcebaseFilter>>;
+};
+
+export type IIoRestorecommerceResourcebaseFilter = {
+  field?: Maybe<Scalars['String']>;
+  operation?: Maybe<IoRestorecommerceResourcebaseFilterOperation>;
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<IoRestorecommerceResourcebaseFilterValueType>;
+  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
+};
+
+export enum IoRestorecommerceResourcebaseFilterOperation {
+  Eq = 0,
+  Lt = 1,
+  Lte = 2,
+  Gt = 3,
+  Gte = 4,
+  IsEmpty = 5,
+  ILike = 6,
+  In = 7,
+  Neq = 8
+}
+
+export enum IoRestorecommerceResourcebaseFilterValueType {
+  String = 0,
+  Number = 1,
+  Boolean = 2,
+  Date = 3,
+  Array = 4
+}
+
+export type IIoRestorecommerceResourcebaseFieldFilter = {
+  name?: Maybe<Scalars['String']>;
+  include?: Maybe<Scalars['Boolean']>;
+};
+
+export type IGoogleProtobufAny = {
+  typeUrl?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['Upload']>;
+};
+
+
+export type IIoRestorecommerceNotificationNotificationList = {
+  items?: Maybe<Array<IIoRestorecommerceNotificationNotification>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  mode?: Maybe<ModeType>;
+};
+
 export type IIoRestorecommerceNotificationNotification = {
-  email?: Maybe<IIoRestorecommerceNotificationEmail>;
-  log?: Maybe<IIoRestorecommerceNotificationLog>;
-  subject?: Maybe<Scalars['String']>;
-  body?: Maybe<Scalars['String']>;
-  transport?: Maybe<Scalars['String']>;
-  provider?: Maybe<Scalars['String']>;
-  attachments?: Maybe<Array<IIoRestorecommerceNotificationAttachment>>;
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IIoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  notificationChannelIds?: Maybe<Array<Scalars['String']>>;
+  email?: Maybe<Scalars['String']>;
+  telephoneNumber?: Maybe<Scalars['String']>;
+  subjectTemplate?: Maybe<Scalars['String']>;
+  bodyTemplate?: Maybe<Scalars['String']>;
 };
 
-export type IIoRestorecommerceNotificationEmail = {
-  to?: Maybe<Array<Scalars['String']>>;
-  cc?: Maybe<Array<Scalars['String']>>;
-  bcc?: Maybe<Array<Scalars['String']>>;
-  replyto?: Maybe<Scalars['String']>;
+export type IIoRestorecommerceMetaMeta = {
+  created?: Maybe<Scalars['Float']>;
+  modified?: Maybe<Scalars['Float']>;
+  modifiedBy?: Maybe<Scalars['String']>;
+  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
-export type IIoRestorecommerceNotificationLog = {
-  level?: Maybe<Scalars['String']>;
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
 };
 
-export type IIoRestorecommerceNotificationAttachment = {
-  filename?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
-  buffer?: Maybe<Scalars['Upload']>;
-  path?: Maybe<Scalars['String']>;
-  contentType?: Maybe<Scalars['String']>;
-  contentDisposition?: Maybe<Scalars['String']>;
-  cid?: Maybe<Scalars['String']>;
-  encoding?: Maybe<Scalars['String']>;
+export enum ModeType {
+  Create = 'CREATE',
+  Update = 'UPDATE',
+  Upsert = 'UPSERT'
+}
+
+export type ProtoIoRestorecommerceStatusStatusArray = {
+  __typename?: 'ProtoIoRestorecommerceStatusStatusArray';
+  status: StatusType;
+  details?: Maybe<IoRestorecommerceStatusStatusArray>;
 };
 
+export type IoRestorecommerceStatusStatusArray = {
+  __typename?: 'IoRestorecommerceStatusStatusArray';
+  status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
+};
+
+export type IIoRestorecommerceResourcebaseDeleteRequest = {
+  collection?: Maybe<Scalars['Boolean']>;
+  ids?: Maybe<Array<Scalars['String']>>;
+};
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -153,16 +298,36 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   NotificationMutation: ResolverTypeWrapper<NotificationMutation>;
   NotificationServiceMutation: ResolverTypeWrapper<NotificationServiceMutation>;
-  ProtoGoogleProtobufEmpty: ResolverTypeWrapper<ProtoGoogleProtobufEmpty>;
+  ProtoIoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceNotificationNotificationListResponse>;
   StatusType: ResolverTypeWrapper<StatusType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
-  IIoRestorecommerceNotificationEmail: IIoRestorecommerceNotificationEmail;
-  IIoRestorecommerceNotificationLog: IIoRestorecommerceNotificationLog;
-  IIoRestorecommerceNotificationAttachment: IIoRestorecommerceNotificationAttachment;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
+  IoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationListResponse>;
+  IoRestorecommerceNotificationNotificationResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationResponse>;
+  IoRestorecommerceNotificationNotification: ResolverTypeWrapper<IoRestorecommerceNotificationNotification>;
+  IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
+  Float: ResolverTypeWrapper<Scalars['Float']>;
+  IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
+  IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
+  IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
+  IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
+  IoRestorecommerceResourcebaseSortSortOrder: IoRestorecommerceResourcebaseSortSortOrder;
+  IIoRestorecommerceResourcebaseFilterOp: IIoRestorecommerceResourcebaseFilterOp;
+  IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
+  IoRestorecommerceResourcebaseFilterOperation: IoRestorecommerceResourcebaseFilterOperation;
+  IoRestorecommerceResourcebaseFilterValueType: IoRestorecommerceResourcebaseFilterValueType;
+  IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  IGoogleProtobufAny: IGoogleProtobufAny;
+  Upload: ResolverTypeWrapper<Scalars['Upload']>;
+  IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
+  IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
+  IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  ModeType: ModeType;
+  ProtoIoRestorecommerceStatusStatusArray: ResolverTypeWrapper<ProtoIoRestorecommerceStatusStatusArray>;
+  IoRestorecommerceStatusStatusArray: ResolverTypeWrapper<IoRestorecommerceStatusStatusArray>;
+  IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -170,16 +335,32 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   NotificationMutation: NotificationMutation;
   NotificationServiceMutation: NotificationServiceMutation;
-  ProtoGoogleProtobufEmpty: ProtoGoogleProtobufEmpty;
+  ProtoIoRestorecommerceNotificationNotificationListResponse: ProtoIoRestorecommerceNotificationNotificationListResponse;
   StatusType: StatusType;
   String: Scalars['String'];
   Int: Scalars['Int'];
-  IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
-  IIoRestorecommerceNotificationEmail: IIoRestorecommerceNotificationEmail;
-  IIoRestorecommerceNotificationLog: IIoRestorecommerceNotificationLog;
-  IIoRestorecommerceNotificationAttachment: IIoRestorecommerceNotificationAttachment;
-  Upload: Scalars['Upload'];
+  IoRestorecommerceNotificationNotificationListResponse: IoRestorecommerceNotificationNotificationListResponse;
+  IoRestorecommerceNotificationNotificationResponse: IoRestorecommerceNotificationNotificationResponse;
+  IoRestorecommerceNotificationNotification: IoRestorecommerceNotificationNotification;
+  IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
+  Float: Scalars['Float'];
+  IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
+  IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
+  IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
+  IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
+  IIoRestorecommerceResourcebaseFilterOp: IIoRestorecommerceResourcebaseFilterOp;
+  IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
+  IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: Scalars['Boolean'];
+  IGoogleProtobufAny: IGoogleProtobufAny;
+  Upload: Scalars['Upload'];
+  IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
+  IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
+  IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  ProtoIoRestorecommerceStatusStatusArray: ProtoIoRestorecommerceStatusStatusArray;
+  IoRestorecommerceStatusStatusArray: IoRestorecommerceStatusStatusArray;
+  IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
 export type MutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -192,33 +373,111 @@ export type NotificationMutationResolvers<ContextType = NotificationContext, Par
 }>;
 
 export type NotificationServiceMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationServiceMutation'] = ResolversParentTypes['NotificationServiceMutation']> = ResolversObject<{
-  Send?: Resolver<Maybe<ResolversTypes['ProtoGoogleProtobufEmpty']>, ParentType, ContextType, RequireFields<NotificationServiceMutationSendArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationServiceMutationReadArgs, 'input'>>;
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationServiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<NotificationServiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoGoogleProtobufEmptyResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoGoogleProtobufEmpty'] = ResolversParentTypes['ProtoGoogleProtobufEmpty']> = ResolversObject<{
+export type ProtoIoRestorecommerceNotificationNotificationListResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceNotificationNotificationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']> = ResolversObject<{
   status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StatusTypeResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  key?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IoRestorecommerceNotificationNotificationListResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceNotificationNotificationListResponse'] = ResolversParentTypes['IoRestorecommerceNotificationNotificationListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceNotificationNotificationResponse']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceNotificationNotificationResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceNotificationNotificationResponse'] = ResolversParentTypes['IoRestorecommerceNotificationNotificationResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<ResolversTypes['IoRestorecommerceNotificationNotification']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceNotificationNotificationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceNotificationNotification'] = ResolversParentTypes['IoRestorecommerceNotificationNotification']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  notificationChannelIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  telephoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  subjectTemplate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bodyTemplate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceMetaMetaResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
+  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAttributeAttributeResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceStatusStatusResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+
+export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+
+export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
 }
+
+export type ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray'] = ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray']> = ResolversObject<{
+  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatusArray']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceStatusStatusArrayResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatusArray'] = ResolversParentTypes['IoRestorecommerceStatusStatusArray']> = ResolversObject<{
+  status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
   NotificationServiceMutation?: NotificationServiceMutationResolvers<ContextType>;
-  ProtoGoogleProtobufEmpty?: ProtoGoogleProtobufEmptyResolvers<ContextType>;
+  ProtoIoRestorecommerceNotificationNotificationListResponse?: ProtoIoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
   StatusType?: StatusTypeResolvers<ContextType>;
+  IoRestorecommerceNotificationNotificationListResponse?: IoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
+  IoRestorecommerceNotificationNotificationResponse?: IoRestorecommerceNotificationNotificationResponseResolvers<ContextType>;
+  IoRestorecommerceNotificationNotification?: IoRestorecommerceNotificationNotificationResolvers<ContextType>;
+  IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
+  IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
+  IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
+  IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
+  IoRestorecommerceResourcebaseFilterOperation?: IoRestorecommerceResourcebaseFilterOperationResolvers;
+  IoRestorecommerceResourcebaseFilterValueType?: IoRestorecommerceResourcebaseFilterValueTypeResolvers;
   Upload?: GraphQLScalarType;
+  ProtoIoRestorecommerceStatusStatusArray?: ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType>;
+  IoRestorecommerceStatusStatusArray?: IoRestorecommerceStatusStatusArrayResolvers<ContextType>;
 }>;
 
 

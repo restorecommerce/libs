@@ -30,14 +30,13 @@ export interface CourierList {
 }
 
 export interface CourierListResponse {
-  items: Courier[];
+  items: CourierResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface CourierListReadResponse {
-  items: Courier[];
-  totalCount: number;
+export interface CourierResponse {
+  payload?: Courier;
   status?: Status;
 }
 
@@ -155,13 +154,13 @@ export const CourierListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Courier.encode(v!, writer.uint32(10).fork()).ldelim();
+      CourierResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -173,123 +172,11 @@ export const CourierListResponse = {
       baseCourierListResponse
     ) as CourierListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Courier.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CourierListResponse {
-    const message = globalThis.Object.create(
-      baseCourierListResponse
-    ) as CourierListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Courier.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CourierListResponse>): CourierListResponse {
-    const message = { ...baseCourierListResponse } as CourierListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Courier.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: CourierListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Courier.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseCourierListReadResponse: object = { totalCount: 0 };
-
-export const CourierListReadResponse = {
-  encode(
-    message: CourierListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Courier.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): CourierListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCourierListReadResponse
-    ) as CourierListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Courier.decode(reader, reader.uint32()));
+          message.items.push(CourierResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -305,14 +192,14 @@ export const CourierListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): CourierListReadResponse {
+  fromJSON(object: any): CourierListResponse {
     const message = globalThis.Object.create(
-      baseCourierListReadResponse
-    ) as CourierListReadResponse;
+      baseCourierListResponse
+    ) as CourierListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Courier.fromJSON(e));
+        message.items.push(CourierResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -328,16 +215,12 @@ export const CourierListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<CourierListReadResponse>
-  ): CourierListReadResponse {
-    const message = {
-      ...baseCourierListReadResponse,
-    } as CourierListReadResponse;
+  fromPartial(object: DeepPartial<CourierListResponse>): CourierListResponse {
+    const message = { ...baseCourierListResponse } as CourierListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Courier.fromPartial(e));
+        message.items.push(CourierResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -353,14 +236,96 @@ export const CourierListReadResponse = {
     return message;
   },
 
-  toJSON(message: CourierListReadResponse): unknown {
+  toJSON(message: CourierListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Courier.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? CourierResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseCourierResponse: object = {};
+
+export const CourierResponse = {
+  encode(message: CourierResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Courier.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CourierResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCourierResponse
+    ) as CourierResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Courier.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CourierResponse {
+    const message = globalThis.Object.create(
+      baseCourierResponse
+    ) as CourierResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Courier.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CourierResponse>): CourierResponse {
+    const message = { ...baseCourierResponse } as CourierResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Courier.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CourierResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Courier.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -476,7 +441,7 @@ export const Courier = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<CourierListReadResponse>;
+  Read(request: ReadRequest): Promise<CourierListResponse>;
   Create(request: CourierList): Promise<CourierListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: CourierList): Promise<CourierListResponse>;
@@ -543,7 +508,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment_courier.Courier",
+            typeName: ".io.restorecommerce.fulfillment_courier.CourierResponse",
             jsonName: "items",
           },
           {
@@ -556,7 +521,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -574,23 +539,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.fulfillment_courier.Courier",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -604,7 +562,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "CourierListReadResponse",
+        name: "CourierResponse",
       },
       {
         field: [
@@ -644,7 +602,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.fulfillment_courier.CourierListReadResponse",
+              ".io.restorecommerce.fulfillment_courier.CourierListResponse",
           },
           {
             name: "Create",
@@ -682,7 +640,7 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.fulfillment_courier.CourierList": CourierList,
     ".io.restorecommerce.fulfillment_courier.CourierListResponse": CourierListResponse,
-    ".io.restorecommerce.fulfillment_courier.CourierListReadResponse": CourierListReadResponse,
+    ".io.restorecommerce.fulfillment_courier.CourierResponse": CourierResponse,
     ".io.restorecommerce.fulfillment_courier.Courier": Courier,
   },
   dependencies: [

@@ -38,14 +38,13 @@ export interface ManufacturerList {
 }
 
 export interface ManufacturerListResponse {
-  items: Manufacturer[];
+  items: ManufacturerResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface ManufacturerListReadResponse {
-  items: Manufacturer[];
-  totalCount: number;
+export interface ManufacturerResponse {
+  payload?: Manufacturer;
   status?: Status;
 }
 
@@ -274,128 +273,7 @@ export const ManufacturerListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Manufacturer.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): ManufacturerListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseManufacturerListResponse
-    ) as ManufacturerListResponse;
-    message.items = [];
-    message.status = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Manufacturer.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ManufacturerListResponse {
-    const message = globalThis.Object.create(
-      baseManufacturerListResponse
-    ) as ManufacturerListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Manufacturer.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ManufacturerListResponse>
-  ): ManufacturerListResponse {
-    const message = {
-      ...baseManufacturerListResponse,
-    } as ManufacturerListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Manufacturer.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: ManufacturerListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Manufacturer.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseManufacturerListReadResponse: object = { totalCount: 0 };
-
-export const ManufacturerListReadResponse = {
-  encode(
-    message: ManufacturerListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Manufacturer.encode(v!, writer.uint32(10).fork()).ldelim();
+      ManufacturerResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -409,18 +287,20 @@ export const ManufacturerListReadResponse = {
   decode(
     input: Reader | Uint8Array,
     length?: number
-  ): ManufacturerListReadResponse {
+  ): ManufacturerListResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseManufacturerListReadResponse
-    ) as ManufacturerListReadResponse;
+      baseManufacturerListResponse
+    ) as ManufacturerListResponse;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Manufacturer.decode(reader, reader.uint32()));
+          message.items.push(
+            ManufacturerResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -436,14 +316,14 @@ export const ManufacturerListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): ManufacturerListReadResponse {
+  fromJSON(object: any): ManufacturerListResponse {
     const message = globalThis.Object.create(
-      baseManufacturerListReadResponse
-    ) as ManufacturerListReadResponse;
+      baseManufacturerListResponse
+    ) as ManufacturerListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Manufacturer.fromJSON(e));
+        message.items.push(ManufacturerResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -460,15 +340,15 @@ export const ManufacturerListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<ManufacturerListReadResponse>
-  ): ManufacturerListReadResponse {
+    object: DeepPartial<ManufacturerListResponse>
+  ): ManufacturerListResponse {
     const message = {
-      ...baseManufacturerListReadResponse,
-    } as ManufacturerListReadResponse;
+      ...baseManufacturerListResponse,
+    } as ManufacturerListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Manufacturer.fromPartial(e));
+        message.items.push(ManufacturerResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -484,16 +364,99 @@ export const ManufacturerListReadResponse = {
     return message;
   },
 
-  toJSON(message: ManufacturerListReadResponse): unknown {
+  toJSON(message: ManufacturerListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Manufacturer.toJSON(e) : undefined
+        e ? ManufacturerResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseManufacturerResponse: object = {};
+
+export const ManufacturerResponse = {
+  encode(
+    message: ManufacturerResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      Manufacturer.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): ManufacturerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseManufacturerResponse
+    ) as ManufacturerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Manufacturer.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ManufacturerResponse {
+    const message = globalThis.Object.create(
+      baseManufacturerResponse
+    ) as ManufacturerResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Manufacturer.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<ManufacturerResponse>): ManufacturerResponse {
+    const message = { ...baseManufacturerResponse } as ManufacturerResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Manufacturer.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ManufacturerResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Manufacturer.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -556,7 +519,7 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<ManufacturerListReadResponse>;
+  Read(request: ReadRequest): Promise<ManufacturerListResponse>;
   Create(request: ManufacturerList): Promise<ManufacturerListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: ManufacturerList): Promise<ManufacturerListResponse>;
@@ -652,7 +615,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.manufacturer.Manufacturer",
+            typeName: ".io.restorecommerce.manufacturer.ManufacturerResponse",
             jsonName: "items",
           },
           {
@@ -665,7 +628,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -683,23 +646,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.manufacturer.Manufacturer",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -713,7 +669,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "ManufacturerListReadResponse",
+        name: "ManufacturerResponse",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -735,7 +691,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.manufacturer.ManufacturerListReadResponse",
+              ".io.restorecommerce.manufacturer.ManufacturerListResponse",
           },
           {
             name: "Create",
@@ -783,7 +739,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.manufacturer.Manufacturer": Manufacturer,
     ".io.restorecommerce.manufacturer.ManufacturerList": ManufacturerList,
     ".io.restorecommerce.manufacturer.ManufacturerListResponse": ManufacturerListResponse,
-    ".io.restorecommerce.manufacturer.ManufacturerListReadResponse": ManufacturerListReadResponse,
+    ".io.restorecommerce.manufacturer.ManufacturerResponse": ManufacturerResponse,
     ".io.restorecommerce.manufacturer.Deleted": Deleted,
   },
   dependencies: [

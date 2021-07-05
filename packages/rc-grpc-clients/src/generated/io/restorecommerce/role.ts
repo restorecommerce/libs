@@ -40,14 +40,13 @@ export interface RoleList {
 }
 
 export interface RoleListResponse {
-  items: Role[];
+  items: RoleResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface RoleListReadResponse {
-  items: Role[];
-  totalCount: number;
+export interface RoleResponse {
+  payload?: Role;
   status?: Status;
 }
 
@@ -302,13 +301,13 @@ const baseRoleListResponse: object = { totalCount: 0 };
 export const RoleListResponse = {
   encode(message: RoleListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
-      Role.encode(v!, writer.uint32(10).fork()).ldelim();
+      RoleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -320,123 +319,11 @@ export const RoleListResponse = {
       baseRoleListResponse
     ) as RoleListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Role.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): RoleListResponse {
-    const message = globalThis.Object.create(
-      baseRoleListResponse
-    ) as RoleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Role.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RoleListResponse>): RoleListResponse {
-    const message = { ...baseRoleListResponse } as RoleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Role.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: RoleListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Role.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseRoleListReadResponse: object = { totalCount: 0 };
-
-export const RoleListReadResponse = {
-  encode(
-    message: RoleListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Role.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): RoleListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRoleListReadResponse
-    ) as RoleListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Role.decode(reader, reader.uint32()));
+          message.items.push(RoleResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -452,14 +339,14 @@ export const RoleListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): RoleListReadResponse {
+  fromJSON(object: any): RoleListResponse {
     const message = globalThis.Object.create(
-      baseRoleListReadResponse
-    ) as RoleListReadResponse;
+      baseRoleListResponse
+    ) as RoleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Role.fromJSON(e));
+        message.items.push(RoleResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -475,12 +362,12 @@ export const RoleListReadResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<RoleListReadResponse>): RoleListReadResponse {
-    const message = { ...baseRoleListReadResponse } as RoleListReadResponse;
+  fromPartial(object: DeepPartial<RoleListResponse>): RoleListResponse {
+    const message = { ...baseRoleListResponse } as RoleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Role.fromPartial(e));
+        message.items.push(RoleResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -496,14 +383,92 @@ export const RoleListReadResponse = {
     return message;
   },
 
-  toJSON(message: RoleListReadResponse): unknown {
+  toJSON(message: RoleListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Role.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? RoleResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseRoleResponse: object = {};
+
+export const RoleResponse = {
+  encode(message: RoleResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Role.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): RoleResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseRoleResponse) as RoleResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Role.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RoleResponse {
+    const message = globalThis.Object.create(baseRoleResponse) as RoleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Role.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<RoleResponse>): RoleResponse {
+    const message = { ...baseRoleResponse } as RoleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Role.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: RoleResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Role.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -566,7 +531,7 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<RoleListReadResponse>;
+  Read(request: ReadRequest): Promise<RoleListResponse>;
   Create(request: RoleList): Promise<RoleListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: RoleList): Promise<RoleListResponse>;
@@ -669,7 +634,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.role.Role",
+            typeName: ".io.restorecommerce.role.RoleResponse",
             jsonName: "items",
           },
           {
@@ -682,7 +647,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -700,23 +665,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.role.Role",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -730,7 +688,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "RoleListReadResponse",
+        name: "RoleResponse",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -751,7 +709,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.role.RoleListReadResponse",
+            outputType: ".io.restorecommerce.role.RoleListResponse",
           },
           {
             name: "Create",
@@ -802,7 +760,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.role.Role": Role,
     ".io.restorecommerce.role.RoleList": RoleList,
     ".io.restorecommerce.role.RoleListResponse": RoleListResponse,
-    ".io.restorecommerce.role.RoleListReadResponse": RoleListReadResponse,
+    ".io.restorecommerce.role.RoleResponse": RoleResponse,
     ".io.restorecommerce.role.Deleted": Deleted,
   },
   dependencies: [

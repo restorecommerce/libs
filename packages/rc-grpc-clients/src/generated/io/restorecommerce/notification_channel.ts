@@ -34,14 +34,13 @@ export interface NotificationChannelList {
 }
 
 export interface NotificationChannelListResponse {
-  items: NotificationChannel[];
+  items: NotificationChannelResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface NotificationChannelListReadResponse {
-  items: NotificationChannel[];
-  totalCount: number;
+export interface NotificationChannelResponse {
+  items?: NotificationChannel;
   status?: Status;
 }
 
@@ -232,130 +231,7 @@ export const NotificationChannelListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): NotificationChannelListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseNotificationChannelListResponse
-    ) as NotificationChannelListResponse;
-    message.items = [];
-    message.status = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(
-            NotificationChannel.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): NotificationChannelListResponse {
-    const message = globalThis.Object.create(
-      baseNotificationChannelListResponse
-    ) as NotificationChannelListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(NotificationChannel.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<NotificationChannelListResponse>
-  ): NotificationChannelListResponse {
-    const message = {
-      ...baseNotificationChannelListResponse,
-    } as NotificationChannelListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(NotificationChannel.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: NotificationChannelListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? NotificationChannel.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseNotificationChannelListReadResponse: object = { totalCount: 0 };
-
-export const NotificationChannelListReadResponse = {
-  encode(
-    message: NotificationChannelListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
+      NotificationChannelResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -369,19 +245,19 @@ export const NotificationChannelListReadResponse = {
   decode(
     input: Reader | Uint8Array,
     length?: number
-  ): NotificationChannelListReadResponse {
+  ): NotificationChannelListResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseNotificationChannelListReadResponse
-    ) as NotificationChannelListReadResponse;
+      baseNotificationChannelListResponse
+    ) as NotificationChannelListResponse;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.items.push(
-            NotificationChannel.decode(reader, reader.uint32())
+            NotificationChannelResponse.decode(reader, reader.uint32())
           );
           break;
         case 2:
@@ -398,14 +274,14 @@ export const NotificationChannelListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): NotificationChannelListReadResponse {
+  fromJSON(object: any): NotificationChannelListResponse {
     const message = globalThis.Object.create(
-      baseNotificationChannelListReadResponse
-    ) as NotificationChannelListReadResponse;
+      baseNotificationChannelListResponse
+    ) as NotificationChannelListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(NotificationChannel.fromJSON(e));
+        message.items.push(NotificationChannelResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -422,15 +298,15 @@ export const NotificationChannelListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<NotificationChannelListReadResponse>
-  ): NotificationChannelListReadResponse {
+    object: DeepPartial<NotificationChannelListResponse>
+  ): NotificationChannelListResponse {
     const message = {
-      ...baseNotificationChannelListReadResponse,
-    } as NotificationChannelListReadResponse;
+      ...baseNotificationChannelListResponse,
+    } as NotificationChannelListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(NotificationChannel.fromPartial(e));
+        message.items.push(NotificationChannelResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -446,16 +322,109 @@ export const NotificationChannelListReadResponse = {
     return message;
   },
 
-  toJSON(message: NotificationChannelListReadResponse): unknown {
+  toJSON(message: NotificationChannelListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? NotificationChannel.toJSON(e) : undefined
+        e ? NotificationChannelResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseNotificationChannelResponse: object = {};
+
+export const NotificationChannelResponse = {
+  encode(
+    message: NotificationChannelResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.items !== undefined) {
+      NotificationChannel.encode(
+        message.items,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): NotificationChannelResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseNotificationChannelResponse
+    ) as NotificationChannelResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items = NotificationChannel.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): NotificationChannelResponse {
+    const message = globalThis.Object.create(
+      baseNotificationChannelResponse
+    ) as NotificationChannelResponse;
+    if (object.items !== undefined && object.items !== null) {
+      message.items = NotificationChannel.fromJSON(object.items);
+    } else {
+      message.items = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<NotificationChannelResponse>
+  ): NotificationChannelResponse {
+    const message = {
+      ...baseNotificationChannelResponse,
+    } as NotificationChannelResponse;
+    if (object.items !== undefined && object.items !== null) {
+      message.items = NotificationChannel.fromPartial(object.items);
+    } else {
+      message.items = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: NotificationChannelResponse): unknown {
+    const obj: any = {};
+    message.items !== undefined &&
+      (obj.items = message.items
+        ? NotificationChannel.toJSON(message.items)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -630,7 +599,7 @@ export const NotificationChannel = {
 
 /** Message structure for Notification Channel */
 export interface Service {
-  Read(request: ReadRequest): Promise<NotificationChannelListReadResponse>;
+  Read(request: ReadRequest): Promise<NotificationChannelListResponse>;
   Create(
     request: NotificationChannelList
   ): Promise<NotificationChannelListResponse>;
@@ -716,7 +685,7 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName:
-              ".io.restorecommerce.notification_channel.NotificationChannel",
+              ".io.restorecommerce.notification_channel.NotificationChannelResponse",
             jsonName: "items",
           },
           {
@@ -729,7 +698,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -749,22 +718,15 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "items",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName:
               ".io.restorecommerce.notification_channel.NotificationChannel",
             jsonName: "items",
           },
           {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
-          },
-          {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -778,7 +740,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "NotificationChannelListReadResponse",
+        name: "NotificationChannelResponse",
       },
       {
         field: [
@@ -842,7 +804,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelListReadResponse",
+              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
           },
           {
             name: "Create",
@@ -893,7 +855,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.notification_channel.Deleted": Deleted,
     ".io.restorecommerce.notification_channel.NotificationChannelList": NotificationChannelList,
     ".io.restorecommerce.notification_channel.NotificationChannelListResponse": NotificationChannelListResponse,
-    ".io.restorecommerce.notification_channel.NotificationChannelListReadResponse": NotificationChannelListReadResponse,
+    ".io.restorecommerce.notification_channel.NotificationChannelResponse": NotificationChannelResponse,
     ".io.restorecommerce.notification_channel.NotificationChannel": NotificationChannel,
   },
   dependencies: [

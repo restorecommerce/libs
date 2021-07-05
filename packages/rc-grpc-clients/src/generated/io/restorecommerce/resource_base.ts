@@ -282,15 +282,14 @@ export interface ResourceList {
 
 /** ResourceList response */
 export interface ResourceListResponse {
-  items: Resource[];
+  items: ResourceResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
 /** resource read response */
-export interface ResourceListReadResponse {
-  items: Resource[];
-  totalCount: number;
+export interface ResourceResponse {
+  payload?: Resource;
   status?: Status;
 }
 
@@ -1158,13 +1157,13 @@ export const ResourceListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Resource.encode(v!, writer.uint32(10).fork()).ldelim();
+      ResourceResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1176,128 +1175,11 @@ export const ResourceListResponse = {
       baseResourceListResponse
     ) as ResourceListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Resource.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 4:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ResourceListResponse {
-    const message = globalThis.Object.create(
-      baseResourceListResponse
-    ) as ResourceListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Resource.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
-    const message = { ...baseResourceListResponse } as ResourceListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Resource.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: ResourceListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Resource.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseResourceListReadResponse: object = { totalCount: 0 };
-
-export const ResourceListReadResponse = {
-  encode(
-    message: ResourceListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Resource.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): ResourceListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseResourceListReadResponse
-    ) as ResourceListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Resource.decode(reader, reader.uint32()));
+          message.items.push(ResourceResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -1313,14 +1195,14 @@ export const ResourceListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): ResourceListReadResponse {
+  fromJSON(object: any): ResourceListResponse {
     const message = globalThis.Object.create(
-      baseResourceListReadResponse
-    ) as ResourceListReadResponse;
+      baseResourceListResponse
+    ) as ResourceListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Resource.fromJSON(e));
+        message.items.push(ResourceResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -1336,16 +1218,12 @@ export const ResourceListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<ResourceListReadResponse>
-  ): ResourceListReadResponse {
-    const message = {
-      ...baseResourceListReadResponse,
-    } as ResourceListReadResponse;
+  fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
+    const message = { ...baseResourceListResponse } as ResourceListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Resource.fromPartial(e));
+        message.items.push(ResourceResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -1361,16 +1239,96 @@ export const ResourceListReadResponse = {
     return message;
   },
 
-  toJSON(message: ResourceListReadResponse): unknown {
+  toJSON(message: ResourceListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Resource.toJSON(e) : undefined
+        e ? ResourceResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseResourceResponse: object = {};
+
+export const ResourceResponse = {
+  encode(message: ResourceResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Resource.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): ResourceResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseResourceResponse
+    ) as ResourceResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Resource.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ResourceResponse {
+    const message = globalThis.Object.create(
+      baseResourceResponse
+    ) as ResourceResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Resource.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<ResourceResponse>): ResourceResponse {
+    const message = { ...baseResourceResponse } as ResourceResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Resource.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ResourceResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Resource.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -1544,7 +1502,7 @@ export const Resource = {
 
 /** Service provides the CRUD operations */
 export interface Service {
-  Read(request: ReadRequest): Promise<ResourceListReadResponse>;
+  Read(request: ReadRequest): Promise<ResourceListResponse>;
   Create(request: ResourceList): Promise<ResourceListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: ResourceList): Promise<ResourceListResponse>;
@@ -1866,7 +1824,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.resourcebase.Resource",
+            typeName: ".io.restorecommerce.resourcebase.ResourceResponse",
             jsonName: "items",
           },
           {
@@ -1879,7 +1837,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 4,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -1897,19 +1855,12 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.resourcebase.Resource",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
@@ -1927,7 +1878,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "ResourceListReadResponse",
+        name: "ResourceResponse",
       },
       {
         field: [
@@ -1969,8 +1920,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType:
-              ".io.restorecommerce.resourcebase.ResourceListReadResponse",
+            outputType: ".io.restorecommerce.resourcebase.ResourceListResponse",
           },
           {
             name: "Create",
@@ -2066,13 +2016,13 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 8],
-          span: [118, 0, 122, 1],
+          span: [118, 0, 121, 1],
           leadingDetachedComments: [],
           leadingComments: " resource read response\n",
         },
         {
           path: [4, 9],
-          span: [125, 0, 133, 1],
+          span: [124, 0, 132, 1],
           leadingDetachedComments: [],
           leadingComments: "/ Example resource\n",
         },
@@ -2093,7 +2043,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
     ".io.restorecommerce.resourcebase.ResourceList": ResourceList,
     ".io.restorecommerce.resourcebase.ResourceListResponse": ResourceListResponse,
-    ".io.restorecommerce.resourcebase.ResourceListReadResponse": ResourceListReadResponse,
+    ".io.restorecommerce.resourcebase.ResourceResponse": ResourceResponse,
     ".io.restorecommerce.resourcebase.Resource": Resource,
   },
   dependencies: [

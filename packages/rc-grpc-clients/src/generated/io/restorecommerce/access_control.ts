@@ -9,6 +9,10 @@ import {
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
 import {
+  Status,
+  protoMetadata as protoMetadata4,
+} from "../../io/restorecommerce/status";
+import {
   protoMetadata as protoMetadata3,
   PolicySetRQ,
 } from "../../io/restorecommerce/policy_set";
@@ -35,6 +39,7 @@ export interface Response {
   decision: Response_Decision;
   obligation: string;
   evaluationCacheable: boolean;
+  status?: Status;
 }
 
 export enum Response_Decision {
@@ -83,6 +88,7 @@ export function response_DecisionToJSON(object: Response_Decision): string {
 
 export interface ReverseQuery {
   policySets: PolicySetRQ[];
+  status?: Status;
 }
 
 const baseRequest: object = {};
@@ -280,6 +286,9 @@ export const Response = {
     if (message.evaluationCacheable === true) {
       writer.uint32(24).bool(message.evaluationCacheable);
     }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -298,6 +307,9 @@ export const Response = {
           break;
         case 3:
           message.evaluationCacheable = reader.bool();
+          break;
+        case 4:
+          message.status = Status.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -327,6 +339,11 @@ export const Response = {
     } else {
       message.evaluationCacheable = false;
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -350,6 +367,11 @@ export const Response = {
     } else {
       message.evaluationCacheable = false;
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -360,6 +382,8 @@ export const Response = {
     message.obligation !== undefined && (obj.obligation = message.obligation);
     message.evaluationCacheable !== undefined &&
       (obj.evaluationCacheable = message.evaluationCacheable);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -370,6 +394,9 @@ export const ReverseQuery = {
   encode(message: ReverseQuery, writer: Writer = Writer.create()): Writer {
     for (const v of message.policySets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -384,6 +411,9 @@ export const ReverseQuery = {
       switch (tag >>> 3) {
         case 1:
           message.policySets.push(PolicySetRQ.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -401,6 +431,11 @@ export const ReverseQuery = {
         message.policySets.push(PolicySetRQ.fromJSON(e));
       }
     }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
     return message;
   },
 
@@ -411,6 +446,11 @@ export const ReverseQuery = {
       for (const e of object.policySets) {
         message.policySets.push(PolicySetRQ.fromPartial(e));
       }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
     }
     return message;
   },
@@ -424,6 +464,8 @@ export const ReverseQuery = {
     } else {
       obj.policySets = [];
     }
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -445,6 +487,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/any.proto",
       "io/restorecommerce/rule.proto",
       "io/restorecommerce/policy_set.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -537,6 +580,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 8,
             jsonName: "evaluationCacheable",
           },
+          {
+            name: "status",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -568,6 +619,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".io.restorecommerce.policy_set.PolicySetRQ",
             jsonName: "policySets",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
           },
         ],
         extension: [],
@@ -605,7 +664,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 1],
-          span: [16, 2, 22],
+          span: [17, 2, 22],
           leadingDetachedComments: [],
           leadingComments:
             " generic data structure which can be provided\n to a contextQuery (see io/restorecommerce/rule.proto)\n",
@@ -621,7 +680,12 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.access_control.Response.Decision": Response_Decision,
     ".io.restorecommerce.access_control.ReverseQuery": ReverseQuery,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+  ],
 };
 
 declare var self: any | undefined;

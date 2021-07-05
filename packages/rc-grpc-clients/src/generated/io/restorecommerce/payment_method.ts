@@ -115,14 +115,13 @@ export interface PaymentMethodList {
 }
 
 export interface PaymentMethodListResponse {
-  items: PaymentMethod[];
+  items: PaymentMethodResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface PaymentMethodListReadResponse {
-  items: PaymentMethod[];
-  totalCount: number;
+export interface PaymentMethodResponse {
+  payload?: PaymentMethod;
   status?: Status;
 }
 
@@ -302,128 +301,7 @@ export const PaymentMethodListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): PaymentMethodListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePaymentMethodListResponse
-    ) as PaymentMethodListResponse;
-    message.items = [];
-    message.status = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(PaymentMethod.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PaymentMethodListResponse {
-    const message = globalThis.Object.create(
-      basePaymentMethodListResponse
-    ) as PaymentMethodListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethod.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<PaymentMethodListResponse>
-  ): PaymentMethodListResponse {
-    const message = {
-      ...basePaymentMethodListResponse,
-    } as PaymentMethodListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethod.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: PaymentMethodListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? PaymentMethod.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const basePaymentMethodListReadResponse: object = { totalCount: 0 };
-
-export const PaymentMethodListReadResponse = {
-  encode(
-    message: PaymentMethodListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
+      PaymentMethodResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -437,18 +315,20 @@ export const PaymentMethodListReadResponse = {
   decode(
     input: Reader | Uint8Array,
     length?: number
-  ): PaymentMethodListReadResponse {
+  ): PaymentMethodListResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      basePaymentMethodListReadResponse
-    ) as PaymentMethodListReadResponse;
+      basePaymentMethodListResponse
+    ) as PaymentMethodListResponse;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(PaymentMethod.decode(reader, reader.uint32()));
+          message.items.push(
+            PaymentMethodResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -464,14 +344,14 @@ export const PaymentMethodListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): PaymentMethodListReadResponse {
+  fromJSON(object: any): PaymentMethodListResponse {
     const message = globalThis.Object.create(
-      basePaymentMethodListReadResponse
-    ) as PaymentMethodListReadResponse;
+      basePaymentMethodListResponse
+    ) as PaymentMethodListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PaymentMethod.fromJSON(e));
+        message.items.push(PaymentMethodResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -488,15 +368,15 @@ export const PaymentMethodListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<PaymentMethodListReadResponse>
-  ): PaymentMethodListReadResponse {
+    object: DeepPartial<PaymentMethodListResponse>
+  ): PaymentMethodListResponse {
     const message = {
-      ...basePaymentMethodListReadResponse,
-    } as PaymentMethodListReadResponse;
+      ...basePaymentMethodListResponse,
+    } as PaymentMethodListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PaymentMethod.fromPartial(e));
+        message.items.push(PaymentMethodResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -512,16 +392,101 @@ export const PaymentMethodListReadResponse = {
     return message;
   },
 
-  toJSON(message: PaymentMethodListReadResponse): unknown {
+  toJSON(message: PaymentMethodListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? PaymentMethod.toJSON(e) : undefined
+        e ? PaymentMethodResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basePaymentMethodResponse: object = {};
+
+export const PaymentMethodResponse = {
+  encode(
+    message: PaymentMethodResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      PaymentMethod.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentMethodResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePaymentMethodResponse
+    ) as PaymentMethodResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = PaymentMethod.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PaymentMethodResponse {
+    const message = globalThis.Object.create(
+      basePaymentMethodResponse
+    ) as PaymentMethodResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PaymentMethod.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<PaymentMethodResponse>
+  ): PaymentMethodResponse {
+    const message = { ...basePaymentMethodResponse } as PaymentMethodResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PaymentMethod.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PaymentMethodResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? PaymentMethod.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -661,7 +626,7 @@ export const PaymentMethod = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<PaymentMethodListReadResponse>;
+  Read(request: ReadRequest): Promise<PaymentMethodListResponse>;
   Create(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
@@ -741,7 +706,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.payment_method.PaymentMethod",
+            typeName:
+              ".io.restorecommerce.payment_method.PaymentMethodResponse",
             jsonName: "items",
           },
           {
@@ -754,7 +720,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -772,23 +738,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.payment_method.PaymentMethod",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -802,7 +761,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethodListReadResponse",
+        name: "PaymentMethodResponse",
       },
       {
         field: [
@@ -879,7 +838,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.payment_method.PaymentMethodListReadResponse",
+              ".io.restorecommerce.payment_method.PaymentMethodListResponse",
           },
           {
             name: "Create",
@@ -929,7 +888,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.payment_method.Deleted": Deleted,
     ".io.restorecommerce.payment_method.PaymentMethodList": PaymentMethodList,
     ".io.restorecommerce.payment_method.PaymentMethodListResponse": PaymentMethodListResponse,
-    ".io.restorecommerce.payment_method.PaymentMethodListReadResponse": PaymentMethodListReadResponse,
+    ".io.restorecommerce.payment_method.PaymentMethodResponse": PaymentMethodResponse,
     ".io.restorecommerce.payment_method.PaymentMethod": PaymentMethod,
   },
   dependencies: [

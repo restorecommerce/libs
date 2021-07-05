@@ -34,14 +34,13 @@ export interface AddressList {
 }
 
 export interface AddressListResponse {
-  items: Address[];
+  items: AddressResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface AddressListReadResponse {
-  items: Address[];
-  totalCount: number;
+export interface AddressResponse {
+  payload?: Address;
   status?: Status;
 }
 
@@ -231,13 +230,13 @@ export const AddressListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Address.encode(v!, writer.uint32(10).fork()).ldelim();
+      AddressResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -249,123 +248,11 @@ export const AddressListResponse = {
       baseAddressListResponse
     ) as AddressListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Address.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): AddressListResponse {
-    const message = globalThis.Object.create(
-      baseAddressListResponse
-    ) as AddressListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Address.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AddressListResponse>): AddressListResponse {
-    const message = { ...baseAddressListResponse } as AddressListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Address.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: AddressListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Address.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseAddressListReadResponse: object = { totalCount: 0 };
-
-export const AddressListReadResponse = {
-  encode(
-    message: AddressListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Address.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): AddressListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAddressListReadResponse
-    ) as AddressListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Address.decode(reader, reader.uint32()));
+          message.items.push(AddressResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -381,14 +268,14 @@ export const AddressListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): AddressListReadResponse {
+  fromJSON(object: any): AddressListResponse {
     const message = globalThis.Object.create(
-      baseAddressListReadResponse
-    ) as AddressListReadResponse;
+      baseAddressListResponse
+    ) as AddressListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Address.fromJSON(e));
+        message.items.push(AddressResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -404,16 +291,12 @@ export const AddressListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<AddressListReadResponse>
-  ): AddressListReadResponse {
-    const message = {
-      ...baseAddressListReadResponse,
-    } as AddressListReadResponse;
+  fromPartial(object: DeepPartial<AddressListResponse>): AddressListResponse {
+    const message = { ...baseAddressListResponse } as AddressListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Address.fromPartial(e));
+        message.items.push(AddressResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -429,14 +312,96 @@ export const AddressListReadResponse = {
     return message;
   },
 
-  toJSON(message: AddressListReadResponse): unknown {
+  toJSON(message: AddressListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Address.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? AddressResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseAddressResponse: object = {};
+
+export const AddressResponse = {
+  encode(message: AddressResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Address.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): AddressResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseAddressResponse
+    ) as AddressResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Address.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): AddressResponse {
+    const message = globalThis.Object.create(
+      baseAddressResponse
+    ) as AddressResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Address.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<AddressResponse>): AddressResponse {
+    const message = { ...baseAddressResponse } as AddressResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Address.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: AddressResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Address.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -863,7 +828,7 @@ export const AddressAddition = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<AddressListReadResponse>;
+  Read(request: ReadRequest): Promise<AddressListResponse>;
   Create(request: AddressList): Promise<AddressListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: AddressList): Promise<AddressListResponse>;
@@ -941,7 +906,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.address.Address",
+            typeName: ".io.restorecommerce.address.AddressResponse",
             jsonName: "items",
           },
           {
@@ -954,7 +919,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -972,23 +937,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.address.Address",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -1002,7 +960,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "AddressListReadResponse",
+        name: "AddressResponse",
       },
       {
         field: [
@@ -1127,7 +1085,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.address.AddressListReadResponse",
+            outputType: ".io.restorecommerce.address.AddressListResponse",
           },
           {
             name: "Create",
@@ -1172,7 +1130,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.address.Deleted": Deleted,
     ".io.restorecommerce.address.AddressList": AddressList,
     ".io.restorecommerce.address.AddressListResponse": AddressListResponse,
-    ".io.restorecommerce.address.AddressListReadResponse": AddressListReadResponse,
+    ".io.restorecommerce.address.AddressResponse": AddressResponse,
     ".io.restorecommerce.address.Address": Address,
     ".io.restorecommerce.address.Address.GeoPoint": Address_GeoPoint,
     ".io.restorecommerce.address.AddressAddition": AddressAddition,

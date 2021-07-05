@@ -107,14 +107,13 @@ export interface CommandList {
 }
 
 export interface CommandListResponse {
-  items: Command[];
+  items: CommandResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface CommandListReadResponse {
-  items: Command[];
-  totalCount: number;
+export interface CommandResponse {
+  payload?: Command;
   status?: Status;
 }
 
@@ -478,13 +477,13 @@ export const CommandListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Command.encode(v!, writer.uint32(10).fork()).ldelim();
+      CommandResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -496,123 +495,11 @@ export const CommandListResponse = {
       baseCommandListResponse
     ) as CommandListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Command.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CommandListResponse {
-    const message = globalThis.Object.create(
-      baseCommandListResponse
-    ) as CommandListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Command.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
-    const message = { ...baseCommandListResponse } as CommandListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Command.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: CommandListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Command.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseCommandListReadResponse: object = { totalCount: 0 };
-
-export const CommandListReadResponse = {
-  encode(
-    message: CommandListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Command.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): CommandListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandListReadResponse
-    ) as CommandListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Command.decode(reader, reader.uint32()));
+          message.items.push(CommandResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -628,14 +515,14 @@ export const CommandListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): CommandListReadResponse {
+  fromJSON(object: any): CommandListResponse {
     const message = globalThis.Object.create(
-      baseCommandListReadResponse
-    ) as CommandListReadResponse;
+      baseCommandListResponse
+    ) as CommandListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Command.fromJSON(e));
+        message.items.push(CommandResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -651,16 +538,12 @@ export const CommandListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<CommandListReadResponse>
-  ): CommandListReadResponse {
-    const message = {
-      ...baseCommandListReadResponse,
-    } as CommandListReadResponse;
+  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
+    const message = { ...baseCommandListResponse } as CommandListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Command.fromPartial(e));
+        message.items.push(CommandResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -676,10 +559,12 @@ export const CommandListReadResponse = {
     return message;
   },
 
-  toJSON(message: CommandListReadResponse): unknown {
+  toJSON(message: CommandListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Command.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? CommandResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
@@ -690,8 +575,88 @@ export const CommandListReadResponse = {
   },
 };
 
+const baseCommandResponse: object = {};
+
+export const CommandResponse = {
+  encode(message: CommandResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Command.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CommandResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCommandResponse
+    ) as CommandResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Command.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CommandResponse {
+    const message = globalThis.Object.create(
+      baseCommandResponse
+    ) as CommandResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Command.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
+    const message = { ...baseCommandResponse } as CommandResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Command.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CommandResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Command.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 export interface Service {
-  Read(request: ReadRequest): Promise<CommandListReadResponse>;
+  Read(request: ReadRequest): Promise<CommandListResponse>;
   Create(request: CommandList): Promise<CommandListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: CommandList): Promise<CommandListResponse>;
@@ -844,7 +809,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.command.Command",
+            typeName: ".io.restorecommerce.command.CommandResponse",
             jsonName: "items",
           },
           {
@@ -857,7 +822,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -875,23 +840,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.command.Command",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -905,7 +863,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "CommandListReadResponse",
+        name: "CommandResponse",
       },
     ],
     enumType: [],
@@ -915,7 +873,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.command.CommandListReadResponse",
+            outputType: ".io.restorecommerce.command.CommandListResponse",
           },
           {
             name: "Create",
@@ -1004,7 +962,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.command.CommandParameter.ParameterType": CommandParameter_ParameterType,
     ".io.restorecommerce.command.CommandList": CommandList,
     ".io.restorecommerce.command.CommandListResponse": CommandListResponse,
-    ".io.restorecommerce.command.CommandListReadResponse": CommandListReadResponse,
+    ".io.restorecommerce.command.CommandResponse": CommandResponse,
   },
   dependencies: [
     protoMetadata1,

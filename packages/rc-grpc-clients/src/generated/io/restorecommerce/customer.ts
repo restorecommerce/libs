@@ -30,14 +30,13 @@ export interface CustomerList {
 }
 
 export interface CustomerListResponse {
-  items: Customer[];
+  items: CustomerResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface CustomerListReadResponse {
-  items: Customer[];
-  totalCount: number;
+export interface CustomerResponse {
+  payload?: Customer;
   status?: Status;
 }
 
@@ -175,13 +174,13 @@ export const CustomerListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Customer.encode(v!, writer.uint32(10).fork()).ldelim();
+      CustomerResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -193,128 +192,11 @@ export const CustomerListResponse = {
       baseCustomerListResponse
     ) as CustomerListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Customer.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CustomerListResponse {
-    const message = globalThis.Object.create(
-      baseCustomerListResponse
-    ) as CustomerListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Customer.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CustomerListResponse>): CustomerListResponse {
-    const message = { ...baseCustomerListResponse } as CustomerListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Customer.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: CustomerListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Customer.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseCustomerListReadResponse: object = { totalCount: 0 };
-
-export const CustomerListReadResponse = {
-  encode(
-    message: CustomerListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Customer.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): CustomerListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCustomerListReadResponse
-    ) as CustomerListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Customer.decode(reader, reader.uint32()));
+          message.items.push(CustomerResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -330,14 +212,14 @@ export const CustomerListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): CustomerListReadResponse {
+  fromJSON(object: any): CustomerListResponse {
     const message = globalThis.Object.create(
-      baseCustomerListReadResponse
-    ) as CustomerListReadResponse;
+      baseCustomerListResponse
+    ) as CustomerListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Customer.fromJSON(e));
+        message.items.push(CustomerResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -353,16 +235,12 @@ export const CustomerListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<CustomerListReadResponse>
-  ): CustomerListReadResponse {
-    const message = {
-      ...baseCustomerListReadResponse,
-    } as CustomerListReadResponse;
+  fromPartial(object: DeepPartial<CustomerListResponse>): CustomerListResponse {
+    const message = { ...baseCustomerListResponse } as CustomerListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Customer.fromPartial(e));
+        message.items.push(CustomerResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -378,16 +256,96 @@ export const CustomerListReadResponse = {
     return message;
   },
 
-  toJSON(message: CustomerListReadResponse): unknown {
+  toJSON(message: CustomerListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Customer.toJSON(e) : undefined
+        e ? CustomerResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseCustomerResponse: object = {};
+
+export const CustomerResponse = {
+  encode(message: CustomerResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Customer.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CustomerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCustomerResponse
+    ) as CustomerResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Customer.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CustomerResponse {
+    const message = globalThis.Object.create(
+      baseCustomerResponse
+    ) as CustomerResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Customer.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CustomerResponse>): CustomerResponse {
+    const message = { ...baseCustomerResponse } as CustomerResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Customer.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CustomerResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Customer.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -820,7 +778,7 @@ export const Guest = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<CustomerListReadResponse>;
+  Read(request: ReadRequest): Promise<CustomerListResponse>;
   Create(request: CustomerList): Promise<CustomerListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: CustomerList): Promise<CustomerListResponse>;
@@ -887,7 +845,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.customer.Customer",
+            typeName: ".io.restorecommerce.customer.CustomerResponse",
             jsonName: "items",
           },
           {
@@ -900,7 +858,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -918,23 +876,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.customer.Customer",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -948,7 +899,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "CustomerListReadResponse",
+        name: "CustomerResponse",
       },
       {
         field: [
@@ -1080,7 +1031,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.customer.CustomerListReadResponse",
+            outputType: ".io.restorecommerce.customer.CustomerListResponse",
           },
           {
             name: "Create",
@@ -1124,7 +1075,7 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.customer.CustomerList": CustomerList,
     ".io.restorecommerce.customer.CustomerListResponse": CustomerListResponse,
-    ".io.restorecommerce.customer.CustomerListReadResponse": CustomerListReadResponse,
+    ".io.restorecommerce.customer.CustomerResponse": CustomerResponse,
     ".io.restorecommerce.customer.Customer": Customer,
     ".io.restorecommerce.customer.IndividualUser": IndividualUser,
     ".io.restorecommerce.customer.OrgUser": OrgUser,

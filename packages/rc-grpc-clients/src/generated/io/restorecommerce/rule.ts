@@ -97,14 +97,13 @@ export interface RuleList {
 }
 
 export interface RuleListResponse {
-  items: Rule[];
+  items: RuleResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface RuleListReadResponse {
-  items: Rule[];
-  totalCount: number;
+export interface RuleResponse {
+  payload?: Rule;
   status?: Status;
 }
 
@@ -717,13 +716,13 @@ const baseRuleListResponse: object = { totalCount: 0 };
 export const RuleListResponse = {
   encode(message: RuleListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
-      Rule.encode(v!, writer.uint32(10).fork()).ldelim();
+      RuleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -735,123 +734,11 @@ export const RuleListResponse = {
       baseRuleListResponse
     ) as RuleListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Rule.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): RuleListResponse {
-    const message = globalThis.Object.create(
-      baseRuleListResponse
-    ) as RuleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Rule.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
-    const message = { ...baseRuleListResponse } as RuleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Rule.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: RuleListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Rule.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseRuleListReadResponse: object = { totalCount: 0 };
-
-export const RuleListReadResponse = {
-  encode(
-    message: RuleListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Rule.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): RuleListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRuleListReadResponse
-    ) as RuleListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Rule.decode(reader, reader.uint32()));
+          message.items.push(RuleResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -867,14 +754,14 @@ export const RuleListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): RuleListReadResponse {
+  fromJSON(object: any): RuleListResponse {
     const message = globalThis.Object.create(
-      baseRuleListReadResponse
-    ) as RuleListReadResponse;
+      baseRuleListResponse
+    ) as RuleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Rule.fromJSON(e));
+        message.items.push(RuleResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -890,12 +777,12 @@ export const RuleListReadResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<RuleListReadResponse>): RuleListReadResponse {
-    const message = { ...baseRuleListReadResponse } as RuleListReadResponse;
+  fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
+    const message = { ...baseRuleListResponse } as RuleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Rule.fromPartial(e));
+        message.items.push(RuleResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -911,14 +798,92 @@ export const RuleListReadResponse = {
     return message;
   },
 
-  toJSON(message: RuleListReadResponse): unknown {
+  toJSON(message: RuleListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Rule.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? RuleResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseRuleResponse: object = {};
+
+export const RuleResponse = {
+  encode(message: RuleResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Rule.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): RuleResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseRuleResponse) as RuleResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Rule.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): RuleResponse {
+    const message = globalThis.Object.create(baseRuleResponse) as RuleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Rule.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<RuleResponse>): RuleResponse {
+    const message = { ...baseRuleResponse } as RuleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Rule.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: RuleResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Rule.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -1105,7 +1070,7 @@ export const ContextQuery_Filter = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<RuleListReadResponse>;
+  Read(request: ReadRequest): Promise<RuleListResponse>;
   Create(request: RuleList): Promise<RuleListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: RuleList): Promise<RuleListResponse>;
@@ -1327,7 +1292,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.rule.Rule",
+            typeName: ".io.restorecommerce.rule.RuleResponse",
             jsonName: "items",
           },
           {
@@ -1340,7 +1305,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -1358,23 +1323,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.Rule",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -1388,7 +1346,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "RuleListReadResponse",
+        name: "RuleResponse",
       },
       {
         field: [
@@ -1463,7 +1421,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.rule.RuleListReadResponse",
+            outputType: ".io.restorecommerce.rule.RuleListResponse",
           },
           {
             name: "Create",
@@ -1520,7 +1478,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 6],
-          span: [72, 0, 80, 1],
+          span: [71, 0, 79, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
@@ -1536,7 +1494,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.rule.RuleRQ": RuleRQ,
     ".io.restorecommerce.rule.RuleList": RuleList,
     ".io.restorecommerce.rule.RuleListResponse": RuleListResponse,
-    ".io.restorecommerce.rule.RuleListReadResponse": RuleListReadResponse,
+    ".io.restorecommerce.rule.RuleResponse": RuleResponse,
     ".io.restorecommerce.rule.ContextQuery": ContextQuery,
     ".io.restorecommerce.rule.ContextQuery.Filter": ContextQuery_Filter,
   },

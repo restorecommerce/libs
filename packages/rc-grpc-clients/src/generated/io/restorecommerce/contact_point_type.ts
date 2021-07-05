@@ -5,14 +5,14 @@ import {
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/auth";
 import {
+  Meta,
+  protoMetadata as protoMetadata4,
+} from "../../io/restorecommerce/meta";
+import {
   Status,
   protoMetadata as protoMetadata5,
   StatusArray,
 } from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/meta";
 import {
   protoMetadata as protoMetadata1,
   ReadRequest,
@@ -33,22 +33,21 @@ export interface ContactPointTypeList {
   subject?: Subject;
 }
 
-export interface ContactPointTypeListResponse {
-  items: ContactPointType[];
-  totalCount: number;
-  status: Status[];
-}
-
-export interface ContactPointTypeListReadResponse {
-  items: ContactPointType[];
-  totalCount: number;
-  status?: Status;
-}
-
 export interface ContactPointType {
   id: string;
   meta?: Meta;
   type: string;
+}
+
+export interface ContactPointTypeListResponse {
+  items: ContactPointTypeResponse[];
+  totalCount: number;
+  status?: Status;
+}
+
+export interface ContactPointTypeResponse {
+  payload?: ContactPointType;
+  status?: Status;
 }
 
 const baseDeleted: object = { id: "" };
@@ -214,240 +213,6 @@ export const ContactPointTypeList = {
   },
 };
 
-const baseContactPointTypeListResponse: object = { totalCount: 0 };
-
-export const ContactPointTypeListResponse = {
-  encode(
-    message: ContactPointTypeListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      ContactPointType.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): ContactPointTypeListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContactPointTypeListResponse
-    ) as ContactPointTypeListResponse;
-    message.items = [];
-    message.status = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(ContactPointType.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ContactPointTypeListResponse {
-    const message = globalThis.Object.create(
-      baseContactPointTypeListResponse
-    ) as ContactPointTypeListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointType.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ContactPointTypeListResponse>
-  ): ContactPointTypeListResponse {
-    const message = {
-      ...baseContactPointTypeListResponse,
-    } as ContactPointTypeListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointType.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: ContactPointTypeListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? ContactPointType.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseContactPointTypeListReadResponse: object = { totalCount: 0 };
-
-export const ContactPointTypeListReadResponse = {
-  encode(
-    message: ContactPointTypeListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      ContactPointType.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): ContactPointTypeListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContactPointTypeListReadResponse
-    ) as ContactPointTypeListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(ContactPointType.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status = Status.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ContactPointTypeListReadResponse {
-    const message = globalThis.Object.create(
-      baseContactPointTypeListReadResponse
-    ) as ContactPointTypeListReadResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointType.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ContactPointTypeListReadResponse>
-  ): ContactPointTypeListReadResponse {
-    const message = {
-      ...baseContactPointTypeListReadResponse,
-    } as ContactPointTypeListReadResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointType.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  toJSON(message: ContactPointTypeListReadResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? ContactPointType.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
-    return obj;
-  },
-};
-
 const baseContactPointType: object = { id: "", type: "" };
 
 export const ContactPointType = {
@@ -542,9 +307,217 @@ export const ContactPointType = {
   },
 };
 
+const baseContactPointTypeListResponse: object = { totalCount: 0 };
+
+export const ContactPointTypeListResponse = {
+  encode(
+    message: ContactPointTypeListResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      ContactPointTypeResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ContactPointTypeListResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseContactPointTypeListResponse
+    ) as ContactPointTypeListResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(
+            ContactPointTypeResponse.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ContactPointTypeListResponse {
+    const message = globalThis.Object.create(
+      baseContactPointTypeListResponse
+    ) as ContactPointTypeListResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ContactPointTypeResponse.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<ContactPointTypeListResponse>
+  ): ContactPointTypeListResponse {
+    const message = {
+      ...baseContactPointTypeListResponse,
+    } as ContactPointTypeListResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(ContactPointTypeResponse.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ContactPointTypeListResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? ContactPointTypeResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseContactPointTypeResponse: object = {};
+
+export const ContactPointTypeResponse = {
+  encode(
+    message: ContactPointTypeResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      ContactPointType.encode(
+        message.payload,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): ContactPointTypeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseContactPointTypeResponse
+    ) as ContactPointTypeResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = ContactPointType.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ContactPointTypeResponse {
+    const message = globalThis.Object.create(
+      baseContactPointTypeResponse
+    ) as ContactPointTypeResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = ContactPointType.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<ContactPointTypeResponse>
+  ): ContactPointTypeResponse {
+    const message = {
+      ...baseContactPointTypeResponse,
+    } as ContactPointTypeResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = ContactPointType.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: ContactPointTypeResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? ContactPointType.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<ContactPointTypeListReadResponse>;
+  Read(request: ReadRequest): Promise<ContactPointTypeListResponse>;
   Create(request: ContactPointTypeList): Promise<ContactPointTypeListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: ContactPointTypeList): Promise<ContactPointTypeListResponse>;
@@ -617,76 +590,6 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.contact_point_type.ContactPointType",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
-          },
-          {
-            name: "status",
-            number: 3,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "ContactPointTypeListResponse",
-      },
-      {
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.contact_point_type.ContactPointType",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
-          },
-          {
-            name: "status",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "ContactPointTypeListReadResponse",
-      },
-      {
-        field: [
           { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
           {
             name: "meta",
@@ -707,6 +610,70 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "ContactPointType",
       },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName:
+              ".io.restorecommerce.contact_point_type.ContactPointTypeResponse",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ContactPointTypeListResponse",
+      },
+      {
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.contact_point_type.ContactPointType",
+            jsonName: "payload",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "ContactPointTypeResponse",
+      },
     ],
     enumType: [],
     service: [
@@ -716,7 +683,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.contact_point_type.ContactPointTypeListReadResponse",
+              ".io.restorecommerce.contact_point_type.ContactPointTypeListResponse",
           },
           {
             name: "Create",
@@ -766,9 +733,9 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.contact_point_type.Deleted": Deleted,
     ".io.restorecommerce.contact_point_type.ContactPointTypeList": ContactPointTypeList,
-    ".io.restorecommerce.contact_point_type.ContactPointTypeListResponse": ContactPointTypeListResponse,
-    ".io.restorecommerce.contact_point_type.ContactPointTypeListReadResponse": ContactPointTypeListReadResponse,
     ".io.restorecommerce.contact_point_type.ContactPointType": ContactPointType,
+    ".io.restorecommerce.contact_point_type.ContactPointTypeListResponse": ContactPointTypeListResponse,
+    ".io.restorecommerce.contact_point_type.ContactPointTypeResponse": ContactPointTypeResponse,
   },
   dependencies: [
     protoMetadata1,

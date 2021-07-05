@@ -34,14 +34,13 @@ export interface TimezoneList {
 }
 
 export interface TimezoneListResponse {
-  items: Timezone[];
+  items: TimezoneResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface TimezoneListReadResponse {
-  items: Timezone[];
-  totalCount: number;
+export interface TimezoneResponse {
+  payload?: Timezone;
   status?: Status;
 }
 
@@ -215,13 +214,13 @@ export const TimezoneListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Timezone.encode(v!, writer.uint32(10).fork()).ldelim();
+      TimezoneResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -233,128 +232,11 @@ export const TimezoneListResponse = {
       baseTimezoneListResponse
     ) as TimezoneListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Timezone.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): TimezoneListResponse {
-    const message = globalThis.Object.create(
-      baseTimezoneListResponse
-    ) as TimezoneListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Timezone.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<TimezoneListResponse>): TimezoneListResponse {
-    const message = { ...baseTimezoneListResponse } as TimezoneListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Timezone.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: TimezoneListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Timezone.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseTimezoneListReadResponse: object = { totalCount: 0 };
-
-export const TimezoneListReadResponse = {
-  encode(
-    message: TimezoneListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Timezone.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): TimezoneListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseTimezoneListReadResponse
-    ) as TimezoneListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Timezone.decode(reader, reader.uint32()));
+          message.items.push(TimezoneResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -370,14 +252,14 @@ export const TimezoneListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): TimezoneListReadResponse {
+  fromJSON(object: any): TimezoneListResponse {
     const message = globalThis.Object.create(
-      baseTimezoneListReadResponse
-    ) as TimezoneListReadResponse;
+      baseTimezoneListResponse
+    ) as TimezoneListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Timezone.fromJSON(e));
+        message.items.push(TimezoneResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -393,16 +275,12 @@ export const TimezoneListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<TimezoneListReadResponse>
-  ): TimezoneListReadResponse {
-    const message = {
-      ...baseTimezoneListReadResponse,
-    } as TimezoneListReadResponse;
+  fromPartial(object: DeepPartial<TimezoneListResponse>): TimezoneListResponse {
+    const message = { ...baseTimezoneListResponse } as TimezoneListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Timezone.fromPartial(e));
+        message.items.push(TimezoneResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -418,16 +296,96 @@ export const TimezoneListReadResponse = {
     return message;
   },
 
-  toJSON(message: TimezoneListReadResponse): unknown {
+  toJSON(message: TimezoneListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Timezone.toJSON(e) : undefined
+        e ? TimezoneResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseTimezoneResponse: object = {};
+
+export const TimezoneResponse = {
+  encode(message: TimezoneResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Timezone.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): TimezoneResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseTimezoneResponse
+    ) as TimezoneResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Timezone.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TimezoneResponse {
+    const message = globalThis.Object.create(
+      baseTimezoneResponse
+    ) as TimezoneResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Timezone.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<TimezoneResponse>): TimezoneResponse {
+    const message = { ...baseTimezoneResponse } as TimezoneResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Timezone.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: TimezoneResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Timezone.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -527,7 +485,7 @@ export const Timezone = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<TimezoneListReadResponse>;
+  Read(request: ReadRequest): Promise<TimezoneListResponse>;
   Create(request: TimezoneList): Promise<TimezoneListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: TimezoneList): Promise<TimezoneListResponse>;
@@ -605,7 +563,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.timezone.Timezone",
+            typeName: ".io.restorecommerce.timezone.TimezoneResponse",
             jsonName: "items",
           },
           {
@@ -618,7 +576,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -636,23 +594,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.timezone.Timezone",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -666,7 +617,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "TimezoneListReadResponse",
+        name: "TimezoneResponse",
       },
       {
         field: [
@@ -704,7 +655,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.timezone.TimezoneListReadResponse",
+            outputType: ".io.restorecommerce.timezone.TimezoneListResponse",
           },
           {
             name: "Create",
@@ -749,7 +700,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.timezone.Deleted": Deleted,
     ".io.restorecommerce.timezone.TimezoneList": TimezoneList,
     ".io.restorecommerce.timezone.TimezoneListResponse": TimezoneListResponse,
-    ".io.restorecommerce.timezone.TimezoneListReadResponse": TimezoneListReadResponse,
+    ".io.restorecommerce.timezone.TimezoneResponse": TimezoneResponse,
     ".io.restorecommerce.timezone.Timezone": Timezone,
   },
   dependencies: [

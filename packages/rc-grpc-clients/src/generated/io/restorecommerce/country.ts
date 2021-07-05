@@ -34,14 +34,13 @@ export interface CountryList {
 }
 
 export interface CountryListResponse {
-  items: Country[];
+  items: CountryResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface CountryListReadResponse {
-  items: Country[];
-  totalCount: number;
+export interface CountryResponse {
+  payload?: Country;
   status?: Status;
 }
 
@@ -216,13 +215,13 @@ export const CountryListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Country.encode(v!, writer.uint32(10).fork()).ldelim();
+      CountryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -234,123 +233,11 @@ export const CountryListResponse = {
       baseCountryListResponse
     ) as CountryListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Country.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CountryListResponse {
-    const message = globalThis.Object.create(
-      baseCountryListResponse
-    ) as CountryListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Country.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CountryListResponse>): CountryListResponse {
-    const message = { ...baseCountryListResponse } as CountryListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Country.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: CountryListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Country.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseCountryListReadResponse: object = { totalCount: 0 };
-
-export const CountryListReadResponse = {
-  encode(
-    message: CountryListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Country.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): CountryListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCountryListReadResponse
-    ) as CountryListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Country.decode(reader, reader.uint32()));
+          message.items.push(CountryResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -366,14 +253,14 @@ export const CountryListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): CountryListReadResponse {
+  fromJSON(object: any): CountryListResponse {
     const message = globalThis.Object.create(
-      baseCountryListReadResponse
-    ) as CountryListReadResponse;
+      baseCountryListResponse
+    ) as CountryListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Country.fromJSON(e));
+        message.items.push(CountryResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -389,16 +276,12 @@ export const CountryListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<CountryListReadResponse>
-  ): CountryListReadResponse {
-    const message = {
-      ...baseCountryListReadResponse,
-    } as CountryListReadResponse;
+  fromPartial(object: DeepPartial<CountryListResponse>): CountryListResponse {
+    const message = { ...baseCountryListResponse } as CountryListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Country.fromPartial(e));
+        message.items.push(CountryResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -414,14 +297,96 @@ export const CountryListReadResponse = {
     return message;
   },
 
-  toJSON(message: CountryListReadResponse): unknown {
+  toJSON(message: CountryListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Country.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? CountryResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseCountryResponse: object = {};
+
+export const CountryResponse = {
+  encode(message: CountryResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Country.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CountryResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCountryResponse
+    ) as CountryResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Country.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CountryResponse {
+    const message = globalThis.Object.create(
+      baseCountryResponse
+    ) as CountryResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Country.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CountryResponse>): CountryResponse {
+    const message = { ...baseCountryResponse } as CountryResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Country.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CountryResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Country.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -592,7 +557,7 @@ export const Country = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<CountryListReadResponse>;
+  Read(request: ReadRequest): Promise<CountryListResponse>;
   Create(request: CountryList): Promise<CountryListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: CountryList): Promise<CountryListResponse>;
@@ -670,7 +635,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.country.Country",
+            typeName: ".io.restorecommerce.country.CountryResponse",
             jsonName: "items",
           },
           {
@@ -683,7 +648,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -701,23 +666,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.country.Country",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -731,7 +689,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "CountryListReadResponse",
+        name: "CountryResponse",
       },
       {
         field: [
@@ -784,7 +742,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.country.CountryListReadResponse",
+            outputType: ".io.restorecommerce.country.CountryListResponse",
           },
           {
             name: "Create",
@@ -829,7 +787,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.country.Deleted": Deleted,
     ".io.restorecommerce.country.CountryList": CountryList,
     ".io.restorecommerce.country.CountryListResponse": CountryListResponse,
-    ".io.restorecommerce.country.CountryListReadResponse": CountryListReadResponse,
+    ".io.restorecommerce.country.CountryResponse": CountryResponse,
     ".io.restorecommerce.country.Country": Country,
   },
   dependencies: [

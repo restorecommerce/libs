@@ -38,14 +38,13 @@ export interface CredentialList {
 }
 
 export interface CredentialListResponse {
-  items: Credential[];
+  items: CredentialResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface CredentialListReadResponse {
-  items: Credential[];
-  totalCount: number;
+export interface CredentialResponse {
+  payload?: Credential;
   status?: Status;
 }
 
@@ -228,13 +227,13 @@ export const CredentialListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Credential.encode(v!, writer.uint32(10).fork()).ldelim();
+      CredentialResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -246,130 +245,13 @@ export const CredentialListResponse = {
       baseCredentialListResponse
     ) as CredentialListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Credential.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CredentialListResponse {
-    const message = globalThis.Object.create(
-      baseCredentialListResponse
-    ) as CredentialListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Credential.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<CredentialListResponse>
-  ): CredentialListResponse {
-    const message = { ...baseCredentialListResponse } as CredentialListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Credential.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: CredentialListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Credential.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseCredentialListReadResponse: object = { totalCount: 0 };
-
-export const CredentialListReadResponse = {
-  encode(
-    message: CredentialListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Credential.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): CredentialListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCredentialListReadResponse
-    ) as CredentialListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Credential.decode(reader, reader.uint32()));
+          message.items.push(
+            CredentialResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -385,14 +267,14 @@ export const CredentialListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): CredentialListReadResponse {
+  fromJSON(object: any): CredentialListResponse {
     const message = globalThis.Object.create(
-      baseCredentialListReadResponse
-    ) as CredentialListReadResponse;
+      baseCredentialListResponse
+    ) as CredentialListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Credential.fromJSON(e));
+        message.items.push(CredentialResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -409,15 +291,13 @@ export const CredentialListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<CredentialListReadResponse>
-  ): CredentialListReadResponse {
-    const message = {
-      ...baseCredentialListReadResponse,
-    } as CredentialListReadResponse;
+    object: DeepPartial<CredentialListResponse>
+  ): CredentialListResponse {
+    const message = { ...baseCredentialListResponse } as CredentialListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Credential.fromPartial(e));
+        message.items.push(CredentialResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -433,16 +313,99 @@ export const CredentialListReadResponse = {
     return message;
   },
 
-  toJSON(message: CredentialListReadResponse): unknown {
+  toJSON(message: CredentialListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Credential.toJSON(e) : undefined
+        e ? CredentialResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseCredentialResponse: object = {};
+
+export const CredentialResponse = {
+  encode(
+    message: CredentialResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      Credential.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CredentialResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseCredentialResponse
+    ) as CredentialResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Credential.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CredentialResponse {
+    const message = globalThis.Object.create(
+      baseCredentialResponse
+    ) as CredentialResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Credential.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<CredentialResponse>): CredentialResponse {
+    const message = { ...baseCredentialResponse } as CredentialResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Credential.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: CredentialResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Credential.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -619,7 +582,7 @@ export const Credential = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<CredentialListReadResponse>;
+  Read(request: ReadRequest): Promise<CredentialListResponse>;
   Create(request: CredentialList): Promise<CredentialListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: CredentialList): Promise<CredentialListResponse>;
@@ -698,7 +661,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.credential.Credential",
+            typeName: ".io.restorecommerce.credential.CredentialResponse",
             jsonName: "items",
           },
           {
@@ -711,7 +674,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -729,23 +692,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.credential.Credential",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -759,7 +715,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "CredentialListReadResponse",
+        name: "CredentialResponse",
       },
       {
         field: [
@@ -808,8 +764,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType:
-              ".io.restorecommerce.credential.CredentialListReadResponse",
+            outputType: ".io.restorecommerce.credential.CredentialListResponse",
           },
           {
             name: "Create",
@@ -848,7 +803,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 4, 2, 6],
-          span: [51, 2, 38],
+          span: [50, 2, 38],
           leadingDetachedComments: [],
           trailingComments:
             "/ additional credentials as auth key or certificates etc\n",
@@ -861,7 +816,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.credential.Deleted": Deleted,
     ".io.restorecommerce.credential.CredentialList": CredentialList,
     ".io.restorecommerce.credential.CredentialListResponse": CredentialListResponse,
-    ".io.restorecommerce.credential.CredentialListReadResponse": CredentialListReadResponse,
+    ".io.restorecommerce.credential.CredentialResponse": CredentialResponse,
     ".io.restorecommerce.credential.Credential": Credential,
   },
   dependencies: [

@@ -14,6 +14,7 @@ import {
   Status,
   protoMetadata as protoMetadata7,
   StatusArray,
+  StatusObj,
 } from "../../io/restorecommerce/status";
 import {
   Image,
@@ -24,10 +25,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata2,
-  Empty,
-} from "../../google/protobuf/empty";
+import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import {
   protoMetadata as protoMetadata5,
   Attribute,
@@ -250,14 +248,13 @@ export interface UserList {
 }
 
 export interface UserListResponse {
-  items: User[];
+  items: UserResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface UserListReadResponse {
-  items: User[];
-  totalCount: number;
+export interface UserResponse {
+  payload?: User;
   status?: Status;
 }
 
@@ -2544,13 +2541,13 @@ const baseUserListResponse: object = { totalCount: 0 };
 export const UserListResponse = {
   encode(message: UserListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
-      User.encode(v!, writer.uint32(10).fork()).ldelim();
+      UserResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -2562,123 +2559,11 @@ export const UserListResponse = {
       baseUserListResponse
     ) as UserListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(User.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): UserListResponse {
-    const message = globalThis.Object.create(
-      baseUserListResponse
-    ) as UserListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(User.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<UserListResponse>): UserListResponse {
-    const message = { ...baseUserListResponse } as UserListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(User.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: UserListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? User.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseUserListReadResponse: object = { totalCount: 0 };
-
-export const UserListReadResponse = {
-  encode(
-    message: UserListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      User.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): UserListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseUserListReadResponse
-    ) as UserListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(User.decode(reader, reader.uint32()));
+          message.items.push(UserResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -2694,14 +2579,14 @@ export const UserListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): UserListReadResponse {
+  fromJSON(object: any): UserListResponse {
     const message = globalThis.Object.create(
-      baseUserListReadResponse
-    ) as UserListReadResponse;
+      baseUserListResponse
+    ) as UserListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(User.fromJSON(e));
+        message.items.push(UserResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -2717,12 +2602,12 @@ export const UserListReadResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<UserListReadResponse>): UserListReadResponse {
-    const message = { ...baseUserListReadResponse } as UserListReadResponse;
+  fromPartial(object: DeepPartial<UserListResponse>): UserListResponse {
+    const message = { ...baseUserListResponse } as UserListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(User.fromPartial(e));
+        message.items.push(UserResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -2738,14 +2623,92 @@ export const UserListReadResponse = {
     return message;
   },
 
-  toJSON(message: UserListReadResponse): unknown {
+  toJSON(message: UserListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? User.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? UserResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseUserResponse: object = {};
+
+export const UserResponse = {
+  encode(message: UserResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      User.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): UserResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseUserResponse) as UserResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = User.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserResponse {
+    const message = globalThis.Object.create(baseUserResponse) as UserResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = User.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<UserResponse>): UserResponse {
+    const message = { ...baseUserResponse } as UserResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = User.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: UserResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? User.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -3459,27 +3422,33 @@ export const User = {
 
 /** The microservice for the user resource. */
 export interface Service {
-  Read(request: ReadRequest): Promise<UserListReadResponse>;
+  Read(request: ReadRequest): Promise<UserListResponse>;
   Create(request: UserList): Promise<UserListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: UserList): Promise<UserListResponse>;
   Upsert(request: UserList): Promise<UserListResponse>;
-  Find(request: FindRequest): Promise<UserListReadResponse>;
-  Register(request: RegisterRequest): Promise<User>;
-  Activate(request: ActivateRequest): Promise<Empty>;
-  ChangePassword(request: ChangePasswordRequest): Promise<Empty>;
-  RequestPasswordChange(request: RequestPasswordChangeRequest): Promise<Empty>;
-  RequestEmailChange(request: ChangeEmailRequest): Promise<Empty>;
-  ConfirmPasswordChange(request: ConfirmPasswordChangeRequest): Promise<Empty>;
-  ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<Empty>;
-  Unregister(request: UnregisterRequest): Promise<Empty>;
-  Login(request: LoginRequest): Promise<User>;
-  FindByRole(request: FindByRoleRequest): Promise<UserListReadResponse>;
+  Find(request: FindRequest): Promise<UserListResponse>;
+  Register(request: RegisterRequest): Promise<UserResponse>;
+  Activate(request: ActivateRequest): Promise<StatusObj>;
+  ChangePassword(request: ChangePasswordRequest): Promise<StatusObj>;
+  RequestPasswordChange(
+    request: RequestPasswordChangeRequest
+  ): Promise<StatusObj>;
+  RequestEmailChange(request: ChangeEmailRequest): Promise<StatusObj>;
+  ConfirmPasswordChange(
+    request: ConfirmPasswordChangeRequest
+  ): Promise<StatusObj>;
+  ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<StatusObj>;
+  Unregister(request: UnregisterRequest): Promise<StatusObj>;
+  Login(request: LoginRequest): Promise<UserResponse>;
+  FindByRole(request: FindByRoleRequest): Promise<UserListResponse>;
   DeleteUsersByOrg(request: OrgIDRequest): Promise<UserIDs>;
-  ConfirmUserInvitation(request: ConfirmUserInvitationRequest): Promise<Empty>;
-  SendInvitationEmail(request: SendInvitationEmailRequest): Promise<Empty>;
-  FindByToken(request: FindByTokenRequest): Promise<User>;
-  SendActivationEmail(request: SendActivationEmailRequest): Promise<Empty>;
+  ConfirmUserInvitation(
+    request: ConfirmUserInvitationRequest
+  ): Promise<StatusObj>;
+  SendInvitationEmail(request: SendInvitationEmailRequest): Promise<StatusObj>;
+  FindByToken(request: FindByTokenRequest): Promise<UserResponse>;
+  SendActivationEmail(request: SendActivationEmailRequest): Promise<StatusObj>;
 }
 
 export interface ProtoMetadata {
@@ -4151,7 +4120,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.user.User",
+            typeName: ".io.restorecommerce.user.UserResponse",
             jsonName: "items",
           },
           {
@@ -4164,7 +4133,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -4182,23 +4151,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.user.User",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -4212,7 +4174,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "UserListReadResponse",
+        name: "UserResponse",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -4430,7 +4392,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.user.UserListReadResponse",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "Create",
@@ -4455,57 +4417,57 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Find",
             inputType: ".io.restorecommerce.user.FindRequest",
-            outputType: ".io.restorecommerce.user.UserListReadResponse",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "Register",
             inputType: ".io.restorecommerce.user.RegisterRequest",
-            outputType: ".io.restorecommerce.user.User",
+            outputType: ".io.restorecommerce.user.UserResponse",
           },
           {
             name: "Activate",
             inputType: ".io.restorecommerce.user.ActivateRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "ChangePassword",
             inputType: ".io.restorecommerce.user.ChangePasswordRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "RequestPasswordChange",
             inputType: ".io.restorecommerce.user.RequestPasswordChangeRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "RequestEmailChange",
             inputType: ".io.restorecommerce.user.ChangeEmailRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "ConfirmPasswordChange",
             inputType: ".io.restorecommerce.user.ConfirmPasswordChangeRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "ConfirmEmailChange",
             inputType: ".io.restorecommerce.user.ConfirmEmailChangeRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "Unregister",
             inputType: ".io.restorecommerce.user.UnregisterRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "Login",
             inputType: ".io.restorecommerce.user.LoginRequest",
-            outputType: ".io.restorecommerce.user.User",
+            outputType: ".io.restorecommerce.user.UserResponse",
           },
           {
             name: "FindByRole",
             inputType: ".io.restorecommerce.user.FindByRoleRequest",
-            outputType: ".io.restorecommerce.user.UserListReadResponse",
+            outputType: ".io.restorecommerce.user.UserListResponse",
           },
           {
             name: "DeleteUsersByOrg",
@@ -4515,22 +4477,22 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "ConfirmUserInvitation",
             inputType: ".io.restorecommerce.user.ConfirmUserInvitationRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "SendInvitationEmail",
             inputType: ".io.restorecommerce.user.SendInvitationEmailRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
           {
             name: "FindByToken",
             inputType: ".io.restorecommerce.user.FindByTokenRequest",
-            outputType: ".io.restorecommerce.user.User",
+            outputType: ".io.restorecommerce.user.UserResponse",
           },
           {
             name: "SendActivationEmail",
             inputType: ".io.restorecommerce.user.SendActivationEmailRequest",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.StatusObj",
           },
         ],
         name: "Service",
@@ -4684,133 +4646,133 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 24],
-          span: [219, 0, 221, 1],
+          span: [218, 0, 220, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User activation request.\n",
         },
         {
           path: [4, 24, 2, 0],
-          span: [220, 2, 16],
+          span: [219, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 26],
-          span: [232, 0, 258, 1],
+          span: [231, 0, 257, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A User resource.\n",
         },
         {
           path: [4, 26, 2, 0],
-          span: [233, 2, 16],
+          span: [232, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID, unique, key\n",
         },
         {
           path: [4, 26, 2, 2],
-          span: [235, 2, 18],
+          span: [234, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " The name of the user, can be used for login\n",
         },
         {
           path: [4, 26, 2, 5],
-          span: [238, 2, 19],
+          span: [237, 2, 19],
           leadingDetachedComments: [],
           trailingComments: "/ Email address, can be used for login\n",
         },
         {
           path: [4, 26, 2, 6],
-          span: [239, 2, 23],
+          span: [238, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         },
         {
           path: [4, 26, 2, 7],
-          span: [240, 2, 18],
+          span: [239, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ If the user was activated via the activation process\n",
         },
         {
           path: [4, 26, 2, 8],
-          span: [241, 2, 29],
+          span: [240, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             "/ Activation code used in the activation process\n",
         },
         {
           path: [4, 26, 2, 9],
-          span: [242, 2, 23],
+          span: [241, 2, 23],
           leadingDetachedComments: [],
           trailingComments: "/ Raw password, not stored\n",
         },
         {
           path: [4, 26, 2, 10],
-          span: [243, 2, 28],
+          span: [242, 2, 28],
           leadingDetachedComments: [],
           trailingComments: "/ Encrypted password, stored\n",
         },
         {
           path: [4, 26, 2, 11],
-          span: [244, 2, 74],
+          span: [243, 2, 74],
           leadingDetachedComments: [],
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
         },
         {
           path: [4, 26, 2, 12],
-          span: [245, 2, 26],
+          span: [244, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " timezone_id specifications\n",
         },
         {
           path: [4, 26, 2, 13],
-          span: [246, 2, 24],
+          span: [245, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " locale specifications\n",
         },
         {
           path: [4, 26, 2, 14],
-          span: [247, 2, 28],
+          span: [246, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 26, 2, 15],
-          span: [248, 2, 28],
+          span: [247, 2, 28],
           leadingDetachedComments: [],
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
         },
         {
           path: [4, 26, 2, 16],
-          span: [249, 2, 18],
+          span: [248, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         },
         {
           path: [4, 26, 2, 19],
-          span: [252, 2, 19],
+          span: [251, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " For user invitation\n",
         },
         {
           path: [4, 26, 2, 20],
-          span: [253, 2, 35],
+          span: [252, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " user who is inviting\n",
         },
         {
           path: [4, 26, 2, 21],
-          span: [254, 2, 41],
+          span: [253, 2, 41],
           leadingDetachedComments: [],
           trailingComments: " First name of user inviting\n",
         },
         {
           path: [4, 26, 2, 22],
-          span: [255, 2, 40],
+          span: [254, 2, 40],
           leadingDetachedComments: [],
           trailingComments: " Last name of user inviting\n",
         },
@@ -4843,7 +4805,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.user.EmailChangeConfirmed": EmailChangeConfirmed,
     ".io.restorecommerce.user.UserList": UserList,
     ".io.restorecommerce.user.UserListResponse": UserListResponse,
-    ".io.restorecommerce.user.UserListReadResponse": UserListReadResponse,
+    ".io.restorecommerce.user.UserResponse": UserResponse,
     ".io.restorecommerce.user.Activate": Activate,
     ".io.restorecommerce.user.FindByRoleRequest": FindByRoleRequest,
     ".io.restorecommerce.user.User": User,

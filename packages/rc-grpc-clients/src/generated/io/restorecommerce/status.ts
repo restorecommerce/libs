@@ -14,6 +14,10 @@ export interface StatusArray {
   status: Status[];
 }
 
+export interface StatusObj {
+  status?: Status;
+}
+
 const baseStatus: object = { id: "", code: 0, message: "" };
 
 export const Status = {
@@ -167,6 +171,62 @@ export const StatusArray = {
   },
 };
 
+const baseStatusObj: object = {};
+
+export const StatusObj = {
+  encode(message: StatusObj, writer: Writer = Writer.create()): Writer {
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): StatusObj {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseStatusObj) as StatusObj;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StatusObj {
+    const message = globalThis.Object.create(baseStatusObj) as StatusObj;
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<StatusObj>): StatusObj {
+    const message = { ...baseStatusObj } as StatusObj;
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: StatusObj): unknown {
+    const obj: any = {};
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 export interface ProtoMetadata {
   fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
@@ -220,6 +280,26 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "StatusArray",
       },
+      {
+        field: [
+          {
+            name: "status",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "StatusObj",
+      },
     ],
     enumType: [],
     service: [],
@@ -232,6 +312,7 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.status.Status": Status,
     ".io.restorecommerce.status.StatusArray": StatusArray,
+    ".io.restorecommerce.status.StatusObj": StatusObj,
   },
   dependencies: [],
 };

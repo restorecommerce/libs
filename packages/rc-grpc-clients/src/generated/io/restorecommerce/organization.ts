@@ -44,14 +44,13 @@ export interface OrganizationList {
 }
 
 export interface OrganizationListResponse {
-  items: Organization[];
+  items: OrganizationResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface OrganizationListReadResponse {
-  items: Organization[];
-  totalCount: number;
+export interface OrganizationResponse {
+  payload?: Organization;
   status?: Status;
 }
 
@@ -359,128 +358,7 @@ export const OrganizationListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Organization.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): OrganizationListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrganizationListResponse
-    ) as OrganizationListResponse;
-    message.items = [];
-    message.status = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Organization.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): OrganizationListResponse {
-    const message = globalThis.Object.create(
-      baseOrganizationListResponse
-    ) as OrganizationListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Organization.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<OrganizationListResponse>
-  ): OrganizationListResponse {
-    const message = {
-      ...baseOrganizationListResponse,
-    } as OrganizationListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Organization.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: OrganizationListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Organization.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseOrganizationListReadResponse: object = { totalCount: 0 };
-
-export const OrganizationListReadResponse = {
-  encode(
-    message: OrganizationListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Organization.encode(v!, writer.uint32(10).fork()).ldelim();
+      OrganizationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -494,18 +372,20 @@ export const OrganizationListReadResponse = {
   decode(
     input: Reader | Uint8Array,
     length?: number
-  ): OrganizationListReadResponse {
+  ): OrganizationListResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseOrganizationListReadResponse
-    ) as OrganizationListReadResponse;
+      baseOrganizationListResponse
+    ) as OrganizationListResponse;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Organization.decode(reader, reader.uint32()));
+          message.items.push(
+            OrganizationResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -521,14 +401,14 @@ export const OrganizationListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): OrganizationListReadResponse {
+  fromJSON(object: any): OrganizationListResponse {
     const message = globalThis.Object.create(
-      baseOrganizationListReadResponse
-    ) as OrganizationListReadResponse;
+      baseOrganizationListResponse
+    ) as OrganizationListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Organization.fromJSON(e));
+        message.items.push(OrganizationResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -545,15 +425,15 @@ export const OrganizationListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<OrganizationListReadResponse>
-  ): OrganizationListReadResponse {
+    object: DeepPartial<OrganizationListResponse>
+  ): OrganizationListResponse {
     const message = {
-      ...baseOrganizationListReadResponse,
-    } as OrganizationListReadResponse;
+      ...baseOrganizationListResponse,
+    } as OrganizationListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Organization.fromPartial(e));
+        message.items.push(OrganizationResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -569,16 +449,99 @@ export const OrganizationListReadResponse = {
     return message;
   },
 
-  toJSON(message: OrganizationListReadResponse): unknown {
+  toJSON(message: OrganizationListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Organization.toJSON(e) : undefined
+        e ? OrganizationResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseOrganizationResponse: object = {};
+
+export const OrganizationResponse = {
+  encode(
+    message: OrganizationResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      Organization.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OrganizationResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOrganizationResponse
+    ) as OrganizationResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Organization.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OrganizationResponse {
+    const message = globalThis.Object.create(
+      baseOrganizationResponse
+    ) as OrganizationResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Organization.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<OrganizationResponse>): OrganizationResponse {
+    const message = { ...baseOrganizationResponse } as OrganizationResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Organization.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: OrganizationResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Organization.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -954,7 +917,7 @@ export const Organization = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<OrganizationListReadResponse>;
+  Read(request: ReadRequest): Promise<OrganizationListResponse>;
   Create(request: OrganizationList): Promise<OrganizationListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: OrganizationList): Promise<OrganizationListResponse>;
@@ -1061,7 +1024,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.organization.Organization",
+            typeName: ".io.restorecommerce.organization.OrganizationResponse",
             jsonName: "items",
           },
           {
@@ -1074,7 +1037,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -1092,23 +1055,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.organization.Organization",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -1122,7 +1078,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "OrganizationListReadResponse",
+        name: "OrganizationResponse",
       },
       {
         field: [
@@ -1229,7 +1185,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.organization.OrganizationListReadResponse",
+              ".io.restorecommerce.organization.OrganizationListResponse",
           },
           {
             name: "Create",
@@ -1265,46 +1221,46 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 5, 2, 0],
-          span: [48, 2, 16],
+          span: [47, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ Organization ID, unique, key\n",
         },
         {
           path: [4, 5, 2, 2],
-          span: [50, 2, 24],
+          span: [49, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ Address for the organization\n",
         },
         {
           path: [4, 5, 2, 3],
-          span: [51, 2, 23],
+          span: [50, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "  Hierarchically superior organization; may be null\n",
         },
         {
           path: [4, 5, 2, 4],
-          span: [52, 2, 35],
+          span: [51, 2, 35],
           leadingDetachedComments: [],
           trailingComments:
             " Hierarchically inferior organizations; may be null/empty\n",
         },
         {
           path: [4, 5, 2, 5],
-          span: [53, 2, 40],
+          span: [52, 2, 40],
           leadingDetachedComments: [],
           trailingComments:
             " list of possible legal addresses of different types\n",
         },
         {
           path: [4, 5, 2, 8],
-          span: [56, 2, 18],
+          span: [55, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " base64; arangoDB does not support blob storage\n",
         },
         {
           path: [4, 5, 2, 15],
-          span: [63, 2, 32],
+          span: [62, 2, 32],
           leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
@@ -1317,7 +1273,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.organization.DeleteOrgData": DeleteOrgData,
     ".io.restorecommerce.organization.OrganizationList": OrganizationList,
     ".io.restorecommerce.organization.OrganizationListResponse": OrganizationListResponse,
-    ".io.restorecommerce.organization.OrganizationListReadResponse": OrganizationListReadResponse,
+    ".io.restorecommerce.organization.OrganizationResponse": OrganizationResponse,
     ".io.restorecommerce.organization.Organization": Organization,
   },
   dependencies: [

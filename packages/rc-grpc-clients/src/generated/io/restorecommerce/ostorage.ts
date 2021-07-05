@@ -5,6 +5,10 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
+  protoMetadata as protoMetadata7,
+} from "../../io/restorecommerce/status";
+import {
   Meta,
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/meta";
@@ -12,10 +16,6 @@ import {
   Any,
   protoMetadata as protoMetadata3,
 } from "../../google/protobuf/any";
-import {
-  Status,
-  protoMetadata as protoMetadata7,
-} from "../../io/restorecommerce/status";
 import {
   Struct,
   protoMetadata as protoMetadata2,
@@ -36,8 +36,13 @@ export interface CopyRequest {
 }
 
 export interface CopyResponse {
-  response: CopyResponseItem[];
-  status: Status[];
+  response: copyResponsePayloadWithStatus[];
+  status?: Status;
+}
+
+export interface copyResponsePayloadWithStatus {
+  payload?: CopyResponseItem;
+  status?: Status;
 }
 
 export interface CopyRequestItem {
@@ -230,10 +235,12 @@ const baseCopyResponse: object = {};
 export const CopyResponse = {
   encode(message: CopyResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.response) {
-      CopyResponseItem.encode(v!, writer.uint32(10).fork()).ldelim();
+      copyResponsePayloadWithStatus
+        .encode(v!, writer.uint32(10).fork())
+        .ldelim();
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -243,17 +250,16 @@ export const CopyResponse = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.response.push(
-            CopyResponseItem.decode(reader, reader.uint32())
+            copyResponsePayloadWithStatus.decode(reader, reader.uint32())
           );
           break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -266,16 +272,15 @@ export const CopyResponse = {
   fromJSON(object: any): CopyResponse {
     const message = globalThis.Object.create(baseCopyResponse) as CopyResponse;
     message.response = [];
-    message.status = [];
     if (object.response !== undefined && object.response !== null) {
       for (const e of object.response) {
-        message.response.push(CopyResponseItem.fromJSON(e));
+        message.response.push(copyResponsePayloadWithStatus.fromJSON(e));
       }
     }
     if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
     }
     return message;
   },
@@ -283,16 +288,15 @@ export const CopyResponse = {
   fromPartial(object: DeepPartial<CopyResponse>): CopyResponse {
     const message = { ...baseCopyResponse } as CopyResponse;
     message.response = [];
-    message.status = [];
     if (object.response !== undefined && object.response !== null) {
       for (const e of object.response) {
-        message.response.push(CopyResponseItem.fromPartial(e));
+        message.response.push(copyResponsePayloadWithStatus.fromPartial(e));
       }
     }
     if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
     }
     return message;
   },
@@ -301,18 +305,106 @@ export const CopyResponse = {
     const obj: any = {};
     if (message.response) {
       obj.response = message.response.map((e) =>
-        e ? CopyResponseItem.toJSON(e) : undefined
+        e ? copyResponsePayloadWithStatus.toJSON(e) : undefined
       );
     } else {
       obj.response = [];
     }
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basecopyResponsePayloadWithStatus: object = {};
+
+export const copyResponsePayloadWithStatus = {
+  encode(
+    message: copyResponsePayloadWithStatus,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      CopyResponseItem.encode(
+        message.payload,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): copyResponsePayloadWithStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basecopyResponsePayloadWithStatus
+    ) as copyResponsePayloadWithStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = CopyResponseItem.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): copyResponsePayloadWithStatus {
+    const message = globalThis.Object.create(
+      basecopyResponsePayloadWithStatus
+    ) as copyResponsePayloadWithStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = CopyResponseItem.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<copyResponsePayloadWithStatus>
+  ): copyResponsePayloadWithStatus {
+    const message = {
+      ...basecopyResponsePayloadWithStatus,
+    } as copyResponsePayloadWithStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = CopyResponseItem.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: copyResponsePayloadWithStatus): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? CopyResponseItem.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 };
@@ -1928,13 +2020,14 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.ostorage.CopyResponseItem",
+            typeName:
+              ".io.restorecommerce.ostorage.copyResponsePayloadWithStatus",
             jsonName: "response",
           },
           {
             name: "status",
-            number: 3,
-            label: 3,
+            number: 2,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -1948,6 +2041,34 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "CopyResponse",
+      },
+      {
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.ostorage.CopyResponseItem",
+            jsonName: "payload",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "copyResponsePayloadWithStatus",
       },
       {
         field: [
@@ -2408,27 +2529,27 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
-          path: [4, 4, 2, 8],
-          span: [55, 2, 31],
+          path: [4, 5, 2, 8],
+          span: [60, 2, 31],
           leadingDetachedComments: [],
           trailingComments: " optional meta data ex: from and to dates\n",
         },
         {
-          path: [4, 11, 2, 5],
-          span: [108, 2, 19],
+          path: [4, 12, 2, 5],
+          span: [113, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " file size of uploaded object\n",
         },
         {
-          path: [4, 12, 2, 1],
-          span: [114, 2, 36],
+          path: [4, 13, 2, 1],
+          span: [119, 2, 36],
           leadingDetachedComments: [],
           trailingComments:
             "/ Filter based on fieldName|operation, value|list\n",
         },
         {
-          path: [4, 13],
-          span: [120, 0, 124, 1],
+          path: [4, 14],
+          span: [125, 0, 129, 1],
           leadingDetachedComments: [],
           leadingComments:
             " OstorageMessage is used for emitting\n objectUploaded and objectDownloaded events\n",
@@ -2440,6 +2561,7 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.ostorage.CopyRequest": CopyRequest,
     ".io.restorecommerce.ostorage.CopyResponse": CopyResponse,
+    ".io.restorecommerce.ostorage.copyResponsePayloadWithStatus": copyResponsePayloadWithStatus,
     ".io.restorecommerce.ostorage.CopyRequestItem": CopyRequestItem,
     ".io.restorecommerce.ostorage.CopyResponseItem": CopyResponseItem,
     ".io.restorecommerce.ostorage.Options": Options,

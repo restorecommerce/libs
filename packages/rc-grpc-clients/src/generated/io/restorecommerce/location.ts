@@ -38,14 +38,13 @@ export interface LocationList {
 }
 
 export interface LocationListResponse {
-  items: Location[];
+  items: LocationResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface LocationListReadResponse {
-  items: Location[];
-  totalCount: number;
+export interface LocationResponse {
+  payload?: Location;
   status?: Status;
 }
 
@@ -231,13 +230,13 @@ export const LocationListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Location.encode(v!, writer.uint32(10).fork()).ldelim();
+      LocationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -249,128 +248,11 @@ export const LocationListResponse = {
       baseLocationListResponse
     ) as LocationListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Location.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): LocationListResponse {
-    const message = globalThis.Object.create(
-      baseLocationListResponse
-    ) as LocationListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Location.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<LocationListResponse>): LocationListResponse {
-    const message = { ...baseLocationListResponse } as LocationListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Location.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: LocationListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Location.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseLocationListReadResponse: object = { totalCount: 0 };
-
-export const LocationListReadResponse = {
-  encode(
-    message: LocationListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Location.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): LocationListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseLocationListReadResponse
-    ) as LocationListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Location.decode(reader, reader.uint32()));
+          message.items.push(LocationResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -386,14 +268,14 @@ export const LocationListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): LocationListReadResponse {
+  fromJSON(object: any): LocationListResponse {
     const message = globalThis.Object.create(
-      baseLocationListReadResponse
-    ) as LocationListReadResponse;
+      baseLocationListResponse
+    ) as LocationListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Location.fromJSON(e));
+        message.items.push(LocationResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -409,16 +291,12 @@ export const LocationListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<LocationListReadResponse>
-  ): LocationListReadResponse {
-    const message = {
-      ...baseLocationListReadResponse,
-    } as LocationListReadResponse;
+  fromPartial(object: DeepPartial<LocationListResponse>): LocationListResponse {
+    const message = { ...baseLocationListResponse } as LocationListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Location.fromPartial(e));
+        message.items.push(LocationResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -434,16 +312,96 @@ export const LocationListReadResponse = {
     return message;
   },
 
-  toJSON(message: LocationListReadResponse): unknown {
+  toJSON(message: LocationListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? Location.toJSON(e) : undefined
+        e ? LocationResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseLocationResponse: object = {};
+
+export const LocationResponse = {
+  encode(message: LocationResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Location.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): LocationResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseLocationResponse
+    ) as LocationResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Location.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): LocationResponse {
+    const message = globalThis.Object.create(
+      baseLocationResponse
+    ) as LocationResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Location.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<LocationResponse>): LocationResponse {
+    const message = { ...baseLocationResponse } as LocationResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Location.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: LocationResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Location.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -662,7 +620,7 @@ export const Location = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<LocationListReadResponse>;
+  Read(request: ReadRequest): Promise<LocationListResponse>;
   Create(request: LocationList): Promise<LocationListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: LocationList): Promise<LocationListResponse>;
@@ -741,7 +699,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.location.Location",
+            typeName: ".io.restorecommerce.location.LocationResponse",
             jsonName: "items",
           },
           {
@@ -754,7 +712,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -772,23 +730,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.location.Location",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -802,7 +753,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "LocationListReadResponse",
+        name: "LocationResponse",
       },
       {
         field: [
@@ -877,7 +828,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.location.LocationListReadResponse",
+            outputType: ".io.restorecommerce.location.LocationListResponse",
           },
           {
             name: "Create",
@@ -916,38 +867,38 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 4, 2, 0],
-          span: [45, 2, 16],
+          span: [44, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Location ID, unique, key\n",
         },
         {
           path: [4, 4, 2, 2],
-          span: [47, 2, 18],
+          span: [46, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Location name\n",
         },
         {
           path: [4, 4, 2, 4],
-          span: [49, 2, 29],
+          span: [48, 2, 29],
           leadingDetachedComments: [],
           trailingComments: " Organization to which this location is linked\n",
         },
         {
           path: [4, 4, 2, 5],
-          span: [50, 2, 23],
+          span: [49, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "  Location which may contain this location; may be null\n",
         },
         {
           path: [4, 4, 2, 6],
-          span: [51, 2, 35],
+          span: [50, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " Locations contained in this location\n",
         },
         {
           path: [4, 4, 2, 8],
-          span: [53, 2, 31],
+          span: [52, 2, 31],
           leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
@@ -959,7 +910,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.location.Deleted": Deleted,
     ".io.restorecommerce.location.LocationList": LocationList,
     ".io.restorecommerce.location.LocationListResponse": LocationListResponse,
-    ".io.restorecommerce.location.LocationListReadResponse": LocationListReadResponse,
+    ".io.restorecommerce.location.LocationResponse": LocationResponse,
     ".io.restorecommerce.location.Location": Location,
   },
   dependencies: [

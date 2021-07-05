@@ -38,14 +38,13 @@ export interface PriceGroupList {
 }
 
 export interface PriceGroupListResponse {
-  items: PriceGroup[];
+  items: PriceGroupResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface PriceGroupListReadResponse {
-  items: PriceGroup[];
-  totalCount: number;
+export interface PriceGroupResponse {
+  payload?: PriceGroup;
   status?: Status;
 }
 
@@ -274,13 +273,13 @@ export const PriceGroupListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      PriceGroup.encode(v!, writer.uint32(10).fork()).ldelim();
+      PriceGroupResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -292,130 +291,13 @@ export const PriceGroupListResponse = {
       basePriceGroupListResponse
     ) as PriceGroupListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(PriceGroup.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PriceGroupListResponse {
-    const message = globalThis.Object.create(
-      basePriceGroupListResponse
-    ) as PriceGroupListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PriceGroup.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<PriceGroupListResponse>
-  ): PriceGroupListResponse {
-    const message = { ...basePriceGroupListResponse } as PriceGroupListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PriceGroup.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: PriceGroupListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? PriceGroup.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const basePriceGroupListReadResponse: object = { totalCount: 0 };
-
-export const PriceGroupListReadResponse = {
-  encode(
-    message: PriceGroupListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      PriceGroup.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): PriceGroupListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePriceGroupListReadResponse
-    ) as PriceGroupListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(PriceGroup.decode(reader, reader.uint32()));
+          message.items.push(
+            PriceGroupResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -431,14 +313,14 @@ export const PriceGroupListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): PriceGroupListReadResponse {
+  fromJSON(object: any): PriceGroupListResponse {
     const message = globalThis.Object.create(
-      basePriceGroupListReadResponse
-    ) as PriceGroupListReadResponse;
+      basePriceGroupListResponse
+    ) as PriceGroupListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PriceGroup.fromJSON(e));
+        message.items.push(PriceGroupResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -455,15 +337,13 @@ export const PriceGroupListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<PriceGroupListReadResponse>
-  ): PriceGroupListReadResponse {
-    const message = {
-      ...basePriceGroupListReadResponse,
-    } as PriceGroupListReadResponse;
+    object: DeepPartial<PriceGroupListResponse>
+  ): PriceGroupListResponse {
+    const message = { ...basePriceGroupListResponse } as PriceGroupListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PriceGroup.fromPartial(e));
+        message.items.push(PriceGroupResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -479,16 +359,99 @@ export const PriceGroupListReadResponse = {
     return message;
   },
 
-  toJSON(message: PriceGroupListReadResponse): unknown {
+  toJSON(message: PriceGroupListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? PriceGroup.toJSON(e) : undefined
+        e ? PriceGroupResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basePriceGroupResponse: object = {};
+
+export const PriceGroupResponse = {
+  encode(
+    message: PriceGroupResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      PriceGroup.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PriceGroupResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePriceGroupResponse
+    ) as PriceGroupResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = PriceGroup.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PriceGroupResponse {
+    const message = globalThis.Object.create(
+      basePriceGroupResponse
+    ) as PriceGroupResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PriceGroup.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PriceGroupResponse>): PriceGroupResponse {
+    const message = { ...basePriceGroupResponse } as PriceGroupResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PriceGroup.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PriceGroupResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? PriceGroup.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -551,7 +514,7 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<PriceGroupListReadResponse>;
+  Read(request: ReadRequest): Promise<PriceGroupListResponse>;
   Create(request: PriceGroupList): Promise<PriceGroupListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: PriceGroupList): Promise<PriceGroupListResponse>;
@@ -647,7 +610,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.price_group.PriceGroup",
+            typeName: ".io.restorecommerce.price_group.PriceGroupResponse",
             jsonName: "items",
           },
           {
@@ -660,7 +623,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -678,19 +641,12 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.price_group.PriceGroup",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
@@ -708,7 +664,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "PriceGroupListReadResponse",
+        name: "PriceGroupResponse",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -730,7 +686,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.price_group.PriceGroupListReadResponse",
+              ".io.restorecommerce.price_group.PriceGroupListResponse",
           },
           {
             name: "Create",
@@ -778,7 +734,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.price_group.PriceGroup": PriceGroup,
     ".io.restorecommerce.price_group.PriceGroupList": PriceGroupList,
     ".io.restorecommerce.price_group.PriceGroupListResponse": PriceGroupListResponse,
-    ".io.restorecommerce.price_group.PriceGroupListReadResponse": PriceGroupListReadResponse,
+    ".io.restorecommerce.price_group.PriceGroupResponse": PriceGroupResponse,
     ".io.restorecommerce.price_group.Deleted": Deleted,
   },
   dependencies: [

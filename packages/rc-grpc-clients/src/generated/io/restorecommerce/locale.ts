@@ -34,14 +34,13 @@ export interface LocaleList {
 }
 
 export interface LocaleListResponse {
-  items: Locale[];
+  items: LocaleResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface LocaleListReadResponse {
-  items: Locale[];
-  totalCount: number;
+export interface LocaleResponse {
+  payload?: Locale;
   status?: Status;
 }
 
@@ -214,13 +213,13 @@ export const LocaleListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      Locale.encode(v!, writer.uint32(10).fork()).ldelim();
+      LocaleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -232,123 +231,11 @@ export const LocaleListResponse = {
       baseLocaleListResponse
     ) as LocaleListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Locale.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): LocaleListResponse {
-    const message = globalThis.Object.create(
-      baseLocaleListResponse
-    ) as LocaleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Locale.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<LocaleListResponse>): LocaleListResponse {
-    const message = { ...baseLocaleListResponse } as LocaleListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Locale.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: LocaleListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseLocaleListReadResponse: object = { totalCount: 0 };
-
-export const LocaleListReadResponse = {
-  encode(
-    message: LocaleListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Locale.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): LocaleListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseLocaleListReadResponse
-    ) as LocaleListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Locale.decode(reader, reader.uint32()));
+          message.items.push(LocaleResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -364,14 +251,14 @@ export const LocaleListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): LocaleListReadResponse {
+  fromJSON(object: any): LocaleListResponse {
     const message = globalThis.Object.create(
-      baseLocaleListReadResponse
-    ) as LocaleListReadResponse;
+      baseLocaleListResponse
+    ) as LocaleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromJSON(e));
+        message.items.push(LocaleResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -387,14 +274,12 @@ export const LocaleListReadResponse = {
     return message;
   },
 
-  fromPartial(
-    object: DeepPartial<LocaleListReadResponse>
-  ): LocaleListReadResponse {
-    const message = { ...baseLocaleListReadResponse } as LocaleListReadResponse;
+  fromPartial(object: DeepPartial<LocaleListResponse>): LocaleListResponse {
+    const message = { ...baseLocaleListResponse } as LocaleListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Locale.fromPartial(e));
+        message.items.push(LocaleResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -410,14 +295,96 @@ export const LocaleListReadResponse = {
     return message;
   },
 
-  toJSON(message: LocaleListReadResponse): unknown {
+  toJSON(message: LocaleListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? LocaleResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseLocaleResponse: object = {};
+
+export const LocaleResponse = {
+  encode(message: LocaleResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Locale.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): LocaleResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseLocaleResponse
+    ) as LocaleResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Locale.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): LocaleResponse {
+    const message = globalThis.Object.create(
+      baseLocaleResponse
+    ) as LocaleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Locale.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<LocaleResponse>): LocaleResponse {
+    const message = { ...baseLocaleResponse } as LocaleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Locale.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: LocaleResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Locale.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -534,7 +501,7 @@ export const Locale = {
 
 /** Microservice definition. */
 export interface Service {
-  Read(request: ReadRequest): Promise<LocaleListReadResponse>;
+  Read(request: ReadRequest): Promise<LocaleListResponse>;
   Create(request: LocaleList): Promise<LocaleListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: LocaleList): Promise<LocaleListResponse>;
@@ -612,7 +579,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.locale.Locale",
+            typeName: ".io.restorecommerce.locale.LocaleResponse",
             jsonName: "items",
           },
           {
@@ -625,7 +592,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -643,23 +610,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.locale.Locale",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -673,7 +633,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "LocaleListReadResponse",
+        name: "LocaleResponse",
       },
       {
         field: [
@@ -712,7 +672,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.locale.LocaleListReadResponse",
+            outputType: ".io.restorecommerce.locale.LocaleListResponse",
           },
           {
             name: "Create",
@@ -757,7 +717,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.locale.Deleted": Deleted,
     ".io.restorecommerce.locale.LocaleList": LocaleList,
     ".io.restorecommerce.locale.LocaleListResponse": LocaleListResponse,
-    ".io.restorecommerce.locale.LocaleListReadResponse": LocaleListReadResponse,
+    ".io.restorecommerce.locale.LocaleResponse": LocaleResponse,
     ".io.restorecommerce.locale.Locale": Locale,
   },
   dependencies: [

@@ -43,14 +43,13 @@ export interface JobList {
 }
 
 export interface JobListResponse {
-  items: Job[];
+  items: JobResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface JobListReadResponse {
-  items: Job[];
-  totalCount: number;
+export interface JobResponse {
+  payload?: Job;
   status?: Status;
 }
 
@@ -462,13 +461,13 @@ const baseJobListResponse: object = { totalCount: 0 };
 export const JobListResponse = {
   encode(message: JobListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
-      Job.encode(v!, writer.uint32(10).fork()).ldelim();
+      JobResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -480,123 +479,11 @@ export const JobListResponse = {
       baseJobListResponse
     ) as JobListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Job.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): JobListResponse {
-    const message = globalThis.Object.create(
-      baseJobListResponse
-    ) as JobListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Job.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<JobListResponse>): JobListResponse {
-    const message = { ...baseJobListResponse } as JobListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Job.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: JobListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Job.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const baseJobListReadResponse: object = { totalCount: 0 };
-
-export const JobListReadResponse = {
-  encode(
-    message: JobListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      Job.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): JobListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseJobListReadResponse
-    ) as JobListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(Job.decode(reader, reader.uint32()));
+          message.items.push(JobResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -612,14 +499,14 @@ export const JobListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): JobListReadResponse {
+  fromJSON(object: any): JobListResponse {
     const message = globalThis.Object.create(
-      baseJobListReadResponse
-    ) as JobListReadResponse;
+      baseJobListResponse
+    ) as JobListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Job.fromJSON(e));
+        message.items.push(JobResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -635,12 +522,12 @@ export const JobListReadResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<JobListReadResponse>): JobListReadResponse {
-    const message = { ...baseJobListReadResponse } as JobListReadResponse;
+  fromPartial(object: DeepPartial<JobListResponse>): JobListResponse {
+    const message = { ...baseJobListResponse } as JobListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Job.fromPartial(e));
+        message.items.push(JobResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -656,14 +543,90 @@ export const JobListReadResponse = {
     return message;
   },
 
-  toJSON(message: JobListReadResponse): unknown {
+  toJSON(message: JobListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Job.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? JobResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseJobResponse: object = {};
+
+export const JobResponse = {
+  encode(message: JobResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      Job.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): JobResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseJobResponse) as JobResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = Job.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): JobResponse {
+    const message = globalThis.Object.create(baseJobResponse) as JobResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Job.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<JobResponse>): JobResponse {
+    const message = { ...baseJobResponse } as JobResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = Job.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: JobResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Job.toJSON(message.payload) : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -1878,7 +1841,7 @@ export const JobFilter = {
  * Provides CRUD operations.
  */
 export interface Service {
-  Read(request: JobReadRequest): Promise<JobListReadResponse>;
+  Read(request: JobReadRequest): Promise<JobListResponse>;
   Create(request: JobList): Promise<JobListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: JobList): Promise<JobListResponse>;
@@ -1957,7 +1920,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.job.Job",
+            typeName: ".io.restorecommerce.job.JobResponse",
             jsonName: "items",
           },
           {
@@ -1970,7 +1933,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -1988,23 +1951,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.job.Job",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -2018,7 +1974,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "JobListReadResponse",
+        name: "JobResponse",
       },
       {
         field: [
@@ -2390,7 +2346,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.job.JobReadRequest",
-            outputType: ".io.restorecommerce.job.JobListReadResponse",
+            outputType: ".io.restorecommerce.job.JobListResponse",
           },
           {
             name: "Create",
@@ -2443,262 +2399,262 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 4],
-          span: [55, 0, 64, 1],
+          span: [54, 0, 63, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A Job resource\n",
         },
         {
           path: [4, 4, 2, 0],
-          span: [56, 2, 16],
+          span: [55, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job ID\n",
         },
         {
           path: [4, 4, 2, 1],
-          span: [58, 2, 19],
+          span: [57, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 4, 2, 2],
-          span: [59, 2, 17],
+          span: [58, 2, 17],
           leadingDetachedComments: [],
           trailingComments: " Job-specific data with variable payload\n",
         },
         {
           path: [4, 4, 2, 3],
-          span: [61, 2, 19],
+          span: [60, 2, 19],
           leadingDetachedComments: [],
           trailingComments:
             " Used to specify the time at which the job is run\n",
         },
         {
           path: [4, 4, 2, 4],
-          span: [63, 2, 26],
+          span: [62, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " The job options\n",
         },
         {
           path: [4, 5],
-          span: [69, 0, 86, 1],
+          span: [68, 0, 85, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Job Options\n",
         },
         {
           path: [4, 5, 2, 0],
-          span: [78, 2, 25],
+          span: [77, 2, 25],
           leadingDetachedComments: [],
           trailingComments: " Job priority\n",
         },
         {
           path: [4, 5, 2, 1],
-          span: [79, 2, 23],
+          span: [78, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             " Amount of possible failing runs until job fails\n",
         },
         {
           path: [4, 5, 2, 2],
-          span: [80, 2, 23],
+          span: [79, 2, 23],
           leadingDetachedComments: [],
           trailingComments: " Delay settings between failed job runs\n",
         },
         {
           path: [4, 5, 2, 3],
-          span: [81, 2, 22],
+          span: [80, 2, 22],
           leadingDetachedComments: [],
           trailingComments:
             " The number of milliseconds after which the job should be fail with a timeout error\n",
         },
         {
           path: [4, 5, 2, 4],
-          span: [83, 2, 21],
+          span: [82, 2, 21],
           leadingDetachedComments: [],
           trailingComments: " Used for periodic jobs\n",
         },
         {
           path: [4, 5, 2, 5],
-          span: [84, 2, 20],
+          span: [83, 2, 20],
           leadingDetachedComments: [],
           trailingComments:
             " To override the job ID - by default, the job ID is a unique generated by bull\n",
         },
         {
           path: [4, 5, 2, 6],
-          span: [85, 2, 29],
+          span: [84, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             " If true, removes the job when it successfully completes\n",
         },
         {
           path: [4, 6, 2, 5],
-          span: [94, 2, 19],
+          span: [93, 2, 19],
           leadingDetachedComments: [],
           trailingComments:
             " To override the job ID - by default, the job ID is a unique generated by bull\n",
         },
         {
           path: [4, 7],
-          span: [98, 0, 103, 1],
+          span: [97, 0, 102, 1],
           leadingDetachedComments: [],
           leadingComments: " Data which is stored within a job instance\n",
         },
         {
           path: [4, 7, 2, 1],
-          span: [100, 2, 34],
+          span: [99, 2, 34],
           leadingDetachedComments: [],
           trailingComments: " optional variable payload\n",
         },
         {
           path: [4, 7, 2, 3],
-          span: [102, 2, 24],
+          span: [101, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " id of job creator\n",
         },
         {
           path: [4, 8],
-          span: [109, 0, 114, 1],
+          span: [108, 0, 113, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A scheduled Job.\n Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.\n",
         },
         {
           path: [4, 8, 2, 0],
-          span: [110, 2, 16],
+          span: [109, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 8, 2, 2],
-          span: [112, 2, 16],
+          span: [111, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job-specific data with variable payload\n",
         },
         {
           path: [4, 8, 2, 3],
-          span: [113, 2, 27],
+          span: [112, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
         },
         {
           path: [4, 9],
-          span: [120, 0, 126, 1],
+          span: [119, 0, 125, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A finished scheduled Job.\n Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.\n",
         },
         {
           path: [4, 9, 2, 0],
-          span: [121, 2, 16],
+          span: [120, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 9, 2, 1],
-          span: [122, 2, 27],
+          span: [121, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
         },
         {
           path: [4, 9, 2, 2],
-          span: [123, 2, 28],
+          span: [122, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " Whether to delete scheduled job\n",
         },
         {
           path: [4, 9, 2, 3],
-          span: [124, 2, 18],
+          span: [123, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 10],
-          span: [132, 0, 137, 1],
+          span: [131, 0, 136, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A failed scheduled Job event from the Job Service.\n Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.\n",
         },
         {
           path: [4, 10, 2, 0],
-          span: [133, 2, 16],
+          span: [132, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 10, 2, 1],
-          span: [134, 2, 19],
+          span: [133, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Error message\n",
         },
         {
           path: [4, 10, 2, 2],
-          span: [135, 2, 27],
+          span: [134, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of job ex: ONCE, RECURR etc.\n",
         },
         {
           path: [4, 10, 2, 3],
-          span: [136, 2, 18],
+          span: [135, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 11],
-          span: [142, 0, 149, 1],
+          span: [141, 0, 148, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Delay between retries.\n",
         },
         {
           path: [4, 11, 4, 0, 2, 0],
-          span: [144, 4, 14],
+          span: [143, 4, 14],
           leadingDetachedComments: [],
           trailingComments: " Retry with the same delay\n",
         },
         {
           path: [4, 11, 4, 0, 2, 1],
-          span: [145, 4, 20],
+          span: [144, 4, 20],
           leadingDetachedComments: [],
           trailingComments: " Exponential delay increase between retries\n",
         },
         {
           path: [4, 11, 2, 0],
-          span: [147, 2, 19],
+          span: [146, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Time until retry in milliseconds\n",
         },
         {
           path: [4, 11, 2, 1],
-          span: [148, 2, 16],
+          span: [147, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Calculation of the delay\n",
         },
         {
           path: [4, 12],
-          span: [152, 0, 168, 1],
+          span: [151, 0, 167, 1],
           leadingDetachedComments: [],
           leadingComments: " Job-specific read request\n",
         },
         {
           path: [4, 12, 4, 0],
-          span: [155, 2, 159, 3],
+          span: [154, 2, 158, 3],
           leadingDetachedComments: [],
           leadingComments: " only possible to sort jobs by creation date\n",
         },
         {
           path: [4, 12, 2, 2],
-          span: [163, 2, 23],
+          span: [162, 2, 23],
           leadingDetachedComments: [],
           leadingComments: " Filter based on fieldName|operation, value|list\n",
         },
         {
           path: [4, 12, 2, 3],
-          span: [166, 2, 65],
+          span: [165, 2, 65],
           leadingDetachedComments: [],
           leadingComments: " Fields selector\n",
         },
         {
           path: [4, 13],
-          span: [171, 0, 174, 1],
+          span: [170, 0, 173, 1],
           leadingDetachedComments: [],
           leadingComments: " filter\n",
         },
@@ -2710,7 +2666,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.job.Deleted": Deleted,
     ".io.restorecommerce.job.JobList": JobList,
     ".io.restorecommerce.job.JobListResponse": JobListResponse,
-    ".io.restorecommerce.job.JobListReadResponse": JobListReadResponse,
+    ".io.restorecommerce.job.JobResponse": JobResponse,
     ".io.restorecommerce.job.Job": Job,
     ".io.restorecommerce.job.JobOptions": JobOptions,
     ".io.restorecommerce.job.JobOptions.Priority": JobOptions_Priority,

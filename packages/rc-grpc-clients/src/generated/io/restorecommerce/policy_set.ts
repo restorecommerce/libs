@@ -52,14 +52,13 @@ export interface PolicySetList {
 }
 
 export interface PolicySetListResponse {
-  items: PolicySet[];
+  items: PolicySetResponse[];
   totalCount: number;
-  status: Status[];
+  status?: Status;
 }
 
-export interface PolicySetListReadResponse {
-  items: PolicySet[];
-  totalCount: number;
+export interface PolicySetResponse {
+  payload?: PolicySet;
   status?: Status;
 }
 
@@ -364,13 +363,13 @@ export const PolicySetListResponse = {
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
+      PolicySetResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(26).fork()).ldelim();
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -382,130 +381,11 @@ export const PolicySetListResponse = {
       basePolicySetListResponse
     ) as PolicySetListResponse;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(PolicySet.decode(reader, reader.uint32()));
-          break;
-        case 2:
-          message.totalCount = reader.uint32();
-          break;
-        case 3:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PolicySetListResponse {
-    const message = globalThis.Object.create(
-      basePolicySetListResponse
-    ) as PolicySetListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PolicySet.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<PolicySetListResponse>
-  ): PolicySetListResponse {
-    const message = { ...basePolicySetListResponse } as PolicySetListResponse;
-    message.items = [];
-    message.status = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PolicySet.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: PolicySetListResponse): unknown {
-    const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? PolicySet.toJSON(e) : undefined
-      );
-    } else {
-      obj.items = [];
-    }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
-    return obj;
-  },
-};
-
-const basePolicySetListReadResponse: object = { totalCount: 0 };
-
-export const PolicySetListReadResponse = {
-  encode(
-    message: PolicySetListReadResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.items) {
-      PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
-    }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): PolicySetListReadResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePolicySetListReadResponse
-    ) as PolicySetListReadResponse;
-    message.items = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.items.push(PolicySet.decode(reader, reader.uint32()));
+          message.items.push(PolicySetResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -521,14 +401,14 @@ export const PolicySetListReadResponse = {
     return message;
   },
 
-  fromJSON(object: any): PolicySetListReadResponse {
+  fromJSON(object: any): PolicySetListResponse {
     const message = globalThis.Object.create(
-      basePolicySetListReadResponse
-    ) as PolicySetListReadResponse;
+      basePolicySetListResponse
+    ) as PolicySetListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PolicySet.fromJSON(e));
+        message.items.push(PolicySetResponse.fromJSON(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -545,15 +425,13 @@ export const PolicySetListReadResponse = {
   },
 
   fromPartial(
-    object: DeepPartial<PolicySetListReadResponse>
-  ): PolicySetListReadResponse {
-    const message = {
-      ...basePolicySetListReadResponse,
-    } as PolicySetListReadResponse;
+    object: DeepPartial<PolicySetListResponse>
+  ): PolicySetListResponse {
+    const message = { ...basePolicySetListResponse } as PolicySetListResponse;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(PolicySet.fromPartial(e));
+        message.items.push(PolicySetResponse.fromPartial(e));
       }
     }
     if (object.totalCount !== undefined && object.totalCount !== null) {
@@ -569,16 +447,96 @@ export const PolicySetListReadResponse = {
     return message;
   },
 
-  toJSON(message: PolicySetListReadResponse): unknown {
+  toJSON(message: PolicySetListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? PolicySet.toJSON(e) : undefined
+        e ? PolicySetResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basePolicySetResponse: object = {};
+
+export const PolicySetResponse = {
+  encode(message: PolicySetResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      PolicySet.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PolicySetResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePolicySetResponse
+    ) as PolicySetResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = PolicySet.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PolicySetResponse {
+    const message = globalThis.Object.create(
+      basePolicySetResponse
+    ) as PolicySetResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PolicySet.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PolicySetResponse>): PolicySetResponse {
+    const message = { ...basePolicySetResponse } as PolicySetResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PolicySet.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PolicySetResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? PolicySet.toJSON(message.payload)
+        : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
@@ -726,7 +684,7 @@ export const PolicySetRQ = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<PolicySetListReadResponse>;
+  Read(request: ReadRequest): Promise<PolicySetListResponse>;
   Create(request: PolicySetList): Promise<PolicySetListResponse>;
   Delete(request: DeleteRequest): Promise<StatusArray>;
   Update(request: PolicySetList): Promise<PolicySetListResponse>;
@@ -846,7 +804,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.policy_set.PolicySet",
+            typeName: ".io.restorecommerce.policy_set.PolicySetResponse",
             jsonName: "items",
           },
           {
@@ -859,7 +817,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "status",
             number: 3,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
             jsonName: "status",
@@ -877,23 +835,16 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "items",
+            name: "payload",
             number: 1,
-            label: 3,
+            label: 1,
             type: 11,
             typeName: ".io.restorecommerce.policy_set.PolicySet",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            jsonName: "totalCount",
+            jsonName: "payload",
           },
           {
             name: "status",
-            number: 3,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -907,7 +858,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "PolicySetListReadResponse",
+        name: "PolicySetResponse",
       },
       {
         field: [
@@ -961,8 +912,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType:
-              ".io.restorecommerce.policy_set.PolicySetListReadResponse",
+            outputType: ".io.restorecommerce.policy_set.PolicySetListResponse",
           },
           {
             name: "Create",
@@ -1007,7 +957,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.policy_set.PolicySet": PolicySet,
     ".io.restorecommerce.policy_set.PolicySetList": PolicySetList,
     ".io.restorecommerce.policy_set.PolicySetListResponse": PolicySetListResponse,
-    ".io.restorecommerce.policy_set.PolicySetListReadResponse": PolicySetListReadResponse,
+    ".io.restorecommerce.policy_set.PolicySetResponse": PolicySetResponse,
     ".io.restorecommerce.policy_set.PolicySetRQ": PolicySetRQ,
   },
   dependencies: [

@@ -12,9 +12,9 @@ import "io/restorecommerce/status.proto";
 
 service Service {
   rpc Get (GetRequest) returns (stream ObjectResponse);
-  rpc Put (stream Object) returns (Response);
+  rpc Put (stream Object) returns (PutResponse);
   rpc Delete (DeleteRequest) returns (io.restorecommerce.status.Status);
-  rpc List (ListRequest) returns (ObjectsData);
+  rpc List (ListRequest) returns (ListResponse);
   rpc Copy (CopyRequest) returns (CopyResponse);
 }
 
@@ -25,7 +25,7 @@ message CopyRequest {
 
 message CopyResponse {
   repeated copyResponsePayloadWithStatus response = 1;
-  io.restorecommerce.status.Status status = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message copyResponsePayloadWithStatus {
@@ -72,13 +72,17 @@ message Object {
 }
 
 message ObjectResponse {
+  ObjectResponsePayload payload = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message ObjectResponsePayload {
   string key = 1;
   string bucket = 2;
   bytes object = 3;
   io.restorecommerce.meta.Meta meta = 4;
   string url = 5;
   Options options = 6;
-  io.restorecommerce.status.Status status = 7;
 }
 
 message GetRequest {
@@ -88,9 +92,13 @@ message GetRequest {
   io.restorecommerce.auth.Subject subject = 4;
 }
 
+message ListResponse {
+  ObjectsData payload = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
 message ObjectsData {
   repeated ObjectData object_data = 1;
-  io.restorecommerce.status.Status status = 3;
 }
 
 message ObjectData {
@@ -105,6 +113,11 @@ message DeleteRequest {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message PutResponse {
+  Response payload = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
 message Response {
   string url = 1;
   string bucket = 2 ;
@@ -112,7 +125,6 @@ message Response {
   io.restorecommerce.meta.Meta meta = 4;
   repeated io.restorecommerce.attribute.Attribute tags = 5;
   int32 length = 6; // file size of uploaded object
-  io.restorecommerce.status.Status status = 7;
 }
 
 message ListRequest {

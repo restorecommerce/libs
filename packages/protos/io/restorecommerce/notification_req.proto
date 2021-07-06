@@ -6,7 +6,7 @@ import "google/protobuf/empty.proto";
 
 service Service {
   // direct notifications
-  rpc Send (NotificationReq) returns (google.protobuf.Empty); /// generic fallback
+  rpc Send (NotificationReq) returns (io.restorecommerce.status.OperationStatusObj); /// generic fallback
 }
 
 // mimics nodemailer properties for easy configuration

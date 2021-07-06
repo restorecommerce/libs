@@ -22,20 +22,20 @@ service Service {
 
   rpc Find (FindRequest) returns (UserListResponse);
   rpc Register (RegisterRequest) returns (UserResponse);
-  rpc Activate (ActivateRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc ChangePassword (ChangePasswordRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc RequestEmailChange (ChangeEmailRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc Unregister (UnregisterRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc Activate (ActivateRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc ChangePassword (ChangePasswordRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc RequestPasswordChange (RequestPasswordChangeRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc RequestEmailChange (ChangeEmailRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc Unregister (UnregisterRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc Login (LoginRequest) returns (UserResponse);
   rpc FindByRole (FindByRoleRequest) returns (UserListResponse);
   rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
-  rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (io.restorecommerce.status.StatusObj);
-  rpc SendInvitationEmail (SendInvitationEmailRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc SendInvitationEmail (SendInvitationEmailRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc FindByToken (FindByTokenRequest) returns (UserResponse);
-  rpc SendActivationEmail (SendActivationEmailRequest) returns (io.restorecommerce.status.StatusObj);
+  rpc SendActivationEmail (SendActivationEmailRequest) returns (io.restorecommerce.status.OperationStatusObj);
 }
 
 /**
@@ -205,7 +205,7 @@ message UserList {
 message UserListResponse {
   repeated UserResponse items = 1;
   uint32 total_count = 2;
-  io.restorecommerce.status.Status status = 3;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message UserResponse {

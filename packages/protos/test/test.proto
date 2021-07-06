@@ -12,7 +12,7 @@ service Test {
   rpc NotImplemented (TestRequest) returns (TestResponse);
   rpc NotFound (TestRequest) returns (TestResponse);
   rpc Create (TestBufferedDataList) returns (TestBufferedDataListResponse);
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TestBufferedDataListReadResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TestBufferedDataListResponse);
 }
 
 service Stream {
@@ -60,13 +60,7 @@ message TestBufferedDataResponse {
 message TestBufferedDataListResponse {
   repeated TestBufferedDataResponse items = 1;
   uint32 total_count = 2;
-  io.restorecommerce.status.Status status = 4;
-}
-
-message TestBufferedDataListReadResponse {
-  repeated TestBufferedData items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.Status status = 4;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message ExtendMe {

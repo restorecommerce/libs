@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package io.restorecommerce.filter;
+
+message Filter {
+  string field = 1;
+  enum Operation {
+    eq = 0;
+    lt = 1;
+    lte = 2;
+    gt = 3;
+    gte = 4;
+    isEmpty = 5;
+    iLike = 6;
+    in = 7;
+    neq = 8;
+  }
+  Operation operation = 2;
+  string value = 3;
+  enum ValueType {
+    STRING = 0; // default value type if not specified
+    NUMBER = 1;
+    BOOLEAN = 2;
+    DATE = 3;
+    ARRAY = 4;
+  }
+  ValueType type = 4;
+  repeated FilterOp filters = 6;
+}
+
+message FilterOp {
+  repeated Filter filter = 1;
+  enum Operator {
+    and = 0;
+    or = 1;
+  }
+  Operator operator = 2;
+}

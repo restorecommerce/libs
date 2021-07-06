@@ -30,7 +30,7 @@ message NotificationChannelList {
 message NotificationChannelListResponse {
   repeated NotificationChannelResponse items = 1;
   uint32 total_count = 2;
-  io.restorecommerce.status.Status status = 3;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message NotificationChannelResponse {

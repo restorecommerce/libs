@@ -1,8 +1,6 @@
 syntax = "proto3";
 
 package io.restorecommerce.policy_set;
-
-import "google/protobuf/empty.proto";
  
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";

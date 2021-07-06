@@ -297,7 +297,7 @@ export class ServiceBase {
    * @param context
    */
   async delete(call: ServiceCall<DeleteRequest>, context?: any): Promise<any> {
-    let deleteResponse = { status: [] };
+    let deleteResponse = { status: [], operation_status: {} };
     try {
       const events = this.events.entity;
       let docs: any;
@@ -341,17 +341,18 @@ export class ServiceBase {
         }
       }
       let statusArray = this.generateStatusResponse(docs, call.request.ids, true);
-      return { status: statusArray };
+      const operation_status = {
+        code: 200,
+        message: 'success'
+      };
+      return { status: statusArray, operation_status };
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing delete request', { code, message });
-      if (!deleteResponse.status) {
-        deleteResponse.status = [];
-      }
-      deleteResponse.status.push({
+      deleteResponse.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
-      });
+      };
       return deleteResponse;
     }
   }

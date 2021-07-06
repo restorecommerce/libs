@@ -513,6 +513,9 @@ describe('ServiceBase', () => {
         result.status.should.matchEach((status) => {
           return status.code = 200 && status.message === 'success';
         });
+        should.exist(result.operation_status);
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
@@ -531,6 +534,9 @@ describe('ServiceBase', () => {
         result.status[0].message.should.equal('success');
         result.status[1].code.should.equal(404);
         result.status[1].message.should.equal('document not found');
+        should.exist(result.operation_status);
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
@@ -631,6 +637,9 @@ describe('ServiceBase', () => {
       it('should return an error when trying to insert with missing requried fields', async () => {
         let result = await testService.delete({ collection: true });
         should.exist(result);
+        should.exist(result.operation_status);
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
         const objectMissingField = [
           { id: 'test_xy', value: 1, meta },
           { id: 'test_xyz', value: 3, meta },

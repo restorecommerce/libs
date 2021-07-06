@@ -59,8 +59,7 @@ export class ServiceBase {
   async read(call: ServiceCall<ReadRequest>, context?: any): Promise<any> {
     let docs: any = {};
     if (!_.isEmpty(call.request.search)) {
-      docs.status = {
-        id: '',
+      docs.operation_status = {
         code: 404,
         message: 'Full-text search is not implemented'
       };
@@ -142,7 +141,7 @@ export class ServiceBase {
       docs = {
         items: readResponseWithStatus,
         total_count: objectEntities.length,
-        status: {
+        operation_status: {
           code: 200,
           message: 'success'
         }
@@ -274,19 +273,17 @@ export class ServiceBase {
         await dispatch;
       }
       let createResponseWithStatus = this.generateResponseWithStatus(createResponse, createDocs);
-      const overallStatus = {
-        id: '',
+      const operation_status = {
         code: 200,
         message: 'success'
       };
-      docs = { items: createResponseWithStatus, total_count: createResponseWithStatus.length, status: overallStatus };
+      docs = { items: createResponseWithStatus, total_count: createResponseWithStatus.length, operation_status };
       this.logger.info(this.name + ' create response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing create request', { code, message });
-      docs.status = {
-        id: '',
+      docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
       };
@@ -352,7 +349,6 @@ export class ServiceBase {
         deleteResponse.status = [];
       }
       deleteResponse.status.push({
-        id: '',
         code: e.code,
         message: e.details ? e.details : e.message
       });
@@ -382,19 +378,17 @@ export class ServiceBase {
         await dispatch;
       }
       let responseWithStatus = this.generateResponseWithStatus(updateResponse, updateDocs);
-      const overallStatus = {
-        id: '',
+      const operation_status = {
         code: 200,
         message: 'success'
       };
-      docs = { items: responseWithStatus, total_count: responseWithStatus.length, status: overallStatus };
+      docs = { items: responseWithStatus, total_count: responseWithStatus.length, operation_status };
       this.logger.info(this.name + ' update response', docs);
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing update request', { code, message });
-      docs.status = {
-        id: '',
+      docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
       };
@@ -415,19 +409,17 @@ export class ServiceBase {
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
         this.events.entity, this.name);
       let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
-      const overallStatus = {
-        id: '',
+      const operation_status = {
         code: 200,
         message: 'success'
       };
-      docs = { items: responseWithStatus, total_count: responseWithStatus.length, status: overallStatus };
+      docs = { items: responseWithStatus, total_count: responseWithStatus.length, operation_status };
       this.logger.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs;
     } catch (e) {
       const { code, message } = e;
       this.logger.error('Error caught while processing upsert request', { code, message });
-      docs.status = {
-        id: '',
+      docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
       };

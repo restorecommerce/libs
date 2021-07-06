@@ -173,9 +173,9 @@ describe('ServiceBase', () => {
         _.forEach(result.items, (item) => {
           testData.should.matchAny(item.payload);
         });
-        should.exist(result.status);
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        should.exist(result.operation_status);
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return two elements with offset 1', async () => {
         const compareData = _.drop((await testService.read({})).items, 1);
@@ -189,8 +189,8 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(2);
         _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return two elements with limit 2', async () => {
         const compareData = _.dropRight((await testService.read({})).items, 1);
@@ -204,8 +204,8 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(2);
         _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return elements sorted', async () => {
         const result = await testService.read({
@@ -234,8 +234,8 @@ describe('ServiceBase', () => {
         for (let i = 0; i < result.items.lenght; i++) {
           result.items[i].payload.should.deepEqual(testDataDescending[i]);
         }
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return only resources with value higher than 10', async () => {
         const filters = [{
@@ -256,8 +256,8 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(1);
         result.items[0].payload.should.deepEqual(testData[2]); // testData[2] is object with value > 10
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return only resources with string filter value equal to id', async () => {
         const filters = [{
@@ -277,8 +277,8 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(1);
         result.items[0].payload.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return only resources matching boolean filter', async () => {
         const filters = [{
@@ -299,8 +299,8 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(1);
         result.items[0].payload.should.deepEqual(testData[0]);
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return resources matching date filter', async () => {
         const filters = [{
@@ -327,8 +327,8 @@ describe('ServiceBase', () => {
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.created < today.getTime();
         }), 'id'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return resources matching array filter', async () => {
         const filters = [{
@@ -355,8 +355,8 @@ describe('ServiceBase', () => {
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return (data.status === "BAD" || data.status === "UNKNOWN");
         }), 'id'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return only resources with not equal filter', async () => {
         const filters = [{
@@ -382,8 +382,8 @@ describe('ServiceBase', () => {
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.id != 'test_xy';
         }), 'id'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should return elements only with field value', async () => {
         const result = await testService.read({
@@ -408,8 +408,8 @@ describe('ServiceBase', () => {
           resultPayload.push(item.payload);
         }
         _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
       it('should apply a custom filter', async () => {
         const result = await testService.read({
@@ -439,8 +439,8 @@ describe('ServiceBase', () => {
           resultPayload.push(item.payload);
         }
         _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
     });
     describe('create', () => {
@@ -486,15 +486,15 @@ describe('ServiceBase', () => {
         });
 
         // validate overall status
-        should.exist(result.status);
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        should.exist(result.operation_status);
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
         // validate error status for duplicate element
         result.items[2].status.message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
         result.items[2].status.code.should.equal(409);
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.exist(allTestData.status);
+        should.exist(allTestData.operation_status);
         // total 5 items should exist (3 from beginning, 2 from this test case)
         allTestData.items.length.should.equal(5);
 
@@ -516,11 +516,11 @@ describe('ServiceBase', () => {
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.exist(allTestData.status);
+        should.exist(allTestData.operation_status);
         should.exist(allTestData.items);
         allTestData.items.should.length(0);
-        allTestData.status.code.should.equal(200);
-        allTestData.status.message.should.equal('success');
+        allTestData.operation_status.code.should.equal(200);
+        allTestData.operation_status.message.should.equal('success');
       });
       it('should delete specified documents and return error if document does not exist', async () => {
         const result = await testService.delete({ ids: [testData[1].id, 'invalidID'] });
@@ -534,12 +534,12 @@ describe('ServiceBase', () => {
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.exist(allTestData.status);
+        should.exist(allTestData.operation_status);
         should.exist(allTestData);
         should.exist(allTestData.items);
         allTestData.items.should.length(2);
-        allTestData.status.code.should.equal(200);
-        allTestData.status.message.should.equal('success');
+        allTestData.operation_status.code.should.equal(200);
+        allTestData.operation_status.message.should.equal('success');
         let resultPayload = [];
         for (let item of allTestData.items) {
           resultPayload.push(item.payload);
@@ -557,18 +557,18 @@ describe('ServiceBase', () => {
         });
         const result = await testService.update({ items: patch });
         should.exist(result);
-        should.exist(result.status);
+        should.exist(result.operation_status);
         should.exist(result.items);
         result.items.should.matchEach((e) => {
           return e.payload.value === 100 && e.payload.text.length === 10;
         });
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.items);
-        should.exist(allTestData.status);
+        should.exist(allTestData.operation_status);
         allTestData.items.length.should.equal(3);
         result.items.should.matchEach((e) => {
           return e.payload.value === 100 && e.payload.text.length === 10;
@@ -582,13 +582,13 @@ describe('ServiceBase', () => {
         }];
         const result = await testService.update({ items: patch });
         result.items.should.length(1);
-        should.exist(result.status);
+        should.exist(result.operation_status);
         // validate status of item
         result.items[0].status.code.should.equal(404);
         result.items[0].status.message.should.equal('document not found');
         // overall status
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
       });
     });
     describe('upsert', () => {
@@ -612,17 +612,17 @@ describe('ServiceBase', () => {
         }];
         const result = await testService.upsert({ items: replace });
         should.exist(result);
-        should.exist(result.status);
+        should.exist(result.operation_status);
         should.exist(result.items);
         result.items.should.matchEach((e) => {
           return e.payload.value === 0;
         });
         // overall status
-        result.status.code.should.equal(200);
-        result.status.message.should.equal('success');
+        result.operation_status.code.should.equal(200);
+        result.operation_status.message.should.equal('success');
         const allTestData = await testService.read({});
         should.exist(allTestData);
-        should.exist(allTestData.status);
+        should.exist(allTestData.operation_status);
         should.exist(allTestData.items);
       });
     });
@@ -637,7 +637,7 @@ describe('ServiceBase', () => {
           { id: 'test_zy', value: 12, meta }];
         result = await testService.create({ items: objectMissingField });
         should.exist(result);
-        should.exist(result.status);
+        should.exist(result.operation_status);
         should.exist(result.items);
         result.items.should.length(3);
         for (let item of result.items) {

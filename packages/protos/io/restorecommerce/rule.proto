@@ -82,7 +82,7 @@ message ContextQuery {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListResponse);
   rpc Create (RuleList) returns (RuleListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (RuleList) returns (RuleListResponse);
   rpc Upsert (RuleList) returns (RuleListResponse);
 }

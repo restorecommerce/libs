@@ -12,7 +12,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationChannelListResponse);
   rpc Create (NotificationChannelList) returns (NotificationChannelListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (NotificationChannelList) returns (NotificationChannelListResponse);
   rpc Upsert (NotificationChannelList) returns (NotificationChannelListResponse);
 }

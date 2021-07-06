@@ -42,7 +42,7 @@ message Deleted {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse);
   rpc Create (ProductPrototypeList) returns (ProductPrototypeListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductPrototypeList) returns (ProductPrototypeListResponse);
   rpc Upsert (ProductPrototypeList) returns (ProductPrototypeListResponse);
 }

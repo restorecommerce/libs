@@ -49,7 +49,7 @@ message PolicySetRQ {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListResponse);
   rpc Create (PolicySetList) returns (PolicySetListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (PolicySetList) returns (PolicySetListResponse);
   rpc Upsert (PolicySetList) returns (PolicySetListResponse);
 }

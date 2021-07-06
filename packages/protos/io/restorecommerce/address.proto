@@ -14,7 +14,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AddressListResponse);
   rpc Create (AddressList) returns (AddressListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (AddressList) returns (AddressListResponse);
   rpc Upsert (AddressList) returns (AddressListResponse);
 }

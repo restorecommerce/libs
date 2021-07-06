@@ -14,7 +14,7 @@ Microservice definition.
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerListResponse);
   rpc Create (CustomerList) returns (CustomerListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CustomerList) returns (CustomerListResponse);
   rpc Upsert (CustomerList) returns (CustomerListResponse);
 }

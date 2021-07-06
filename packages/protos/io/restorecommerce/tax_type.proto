@@ -14,7 +14,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxTypeListResponse);
   rpc Create (TaxTypeList) returns (TaxTypeListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (TaxTypeList) returns (TaxTypeListResponse);
   rpc Upsert (TaxTypeList) returns (TaxTypeListResponse);
 }

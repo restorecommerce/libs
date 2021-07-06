@@ -13,7 +13,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Get (GetRequest) returns (stream ObjectResponse);
   rpc Put (stream Object) returns (PutResponse);
-  rpc Delete (DeleteRequest) returns (io.restorecommerce.status.Status);
+  rpc Delete (DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc List (ListRequest) returns (ListResponse);
   rpc Copy (CopyRequest) returns (CopyResponse);
 }

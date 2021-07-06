@@ -11,7 +11,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RoleListResponse);
   rpc Create (RoleList) returns (RoleListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (RoleList) returns (RoleListResponse);
   rpc Upsert (RoleList) returns (RoleListResponse);
 }

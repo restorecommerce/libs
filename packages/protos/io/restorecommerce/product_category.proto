@@ -48,7 +48,7 @@ message Parent {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListResponse);
   rpc Create (ProductCategoryList) returns (ProductCategoryListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductCategoryList) returns (ProductCategoryListResponse);
   rpc Upsert (ProductCategoryList) returns (ProductCategoryListResponse);
 }

@@ -55,7 +55,7 @@ message PolicyResponse {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListResponse);
   rpc Create (PolicyList) returns (PolicyListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (PolicyList) returns (PolicyListResponse);
   rpc Upsert (PolicyList) returns (PolicyListResponse);
 }

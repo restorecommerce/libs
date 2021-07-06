@@ -16,7 +16,7 @@ import "io/restorecommerce/status.proto";
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodListResponse);
   rpc Create (PaymentMethodList) returns (PaymentMethodListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (PaymentMethodList) returns (PaymentMethodListResponse);
   rpc Upsert (PaymentMethodList) returns (PaymentMethodListResponse);
 }

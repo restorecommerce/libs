@@ -13,7 +13,7 @@ import "io/restorecommerce/filter.proto";
 service Service {
   rpc Read (ReadRequest) returns (ResourceListResponse);
   rpc Create (ResourceList) returns (ResourceListResponse);
-  rpc Delete (DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (DeleteRequest) returns (DeleteResponse);
   rpc Update (ResourceList) returns (ResourceListResponse);
   rpc Upsert (ResourceList) returns (ResourceListResponse);
 }
@@ -100,6 +100,11 @@ message DeleteRequest {
   /// Delete specified documents
   repeated string ids = 2;
   io.restorecommerce.auth.Subject subject = 3;
+}
+
+message DeleteResponse {
+  repeated io.restorecommerce.status.Status status = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 /// List of resources

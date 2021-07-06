@@ -52,7 +52,7 @@ message CommandResponse {
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListResponse);
   rpc Create (CommandList) returns (CommandListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.status.StatusArray);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CommandList) returns (CommandListResponse);
   rpc Upsert (CommandList) returns (CommandListResponse);
 }

@@ -223,7 +223,7 @@ export const accessRequest = async (subject: Subject,
   }
 
   // default deny
-  let decisionResponse: DecisionResponse = { decision: Decision.DENY };
+  let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
   let resourceList = [];
   // for write operations
   if (!_.isEmpty(resources) || action === AuthZAction.DELETE ||
@@ -306,7 +306,7 @@ export const whatIsAllowed = async (request: ACSRequest,
   let whatIsAllowedResponse: PolicySetRQResponse;
   try {
     whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
-  } catch(err) {
+  } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method', err.message);
     logger.error('Error Stack', err.stack);
     return { decision: Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };

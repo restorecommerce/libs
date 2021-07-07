@@ -38,7 +38,7 @@ export enum Decision {
 export interface DecisionResponse {
   decision: Decision;
   obligation?: string;
-  operation_status?: {
+  operation_status: {
     code: number;
     message: string;
   };

@@ -29,6 +29,11 @@ message Any {
   bytes value = 2;
 }
 
+message OperationStatus {
+  uint32 code = 1;
+  string message = 2;
+}
+
 message Response {
   enum Decision {
     PERMIT = 0;
@@ -38,6 +43,8 @@ message Response {
   }
   Decision decision = 1;
   string obligation = 2;
+  bool evaluation_cacheable = 3;
+  OperationStatus operation_status = 4;
 }
 
 /**
@@ -67,6 +74,7 @@ enum Effect {
 
 message ReverseQuery {
  repeated PolicySetRQ policy_sets = 1;
+ OperationStatus operation_status = 2;
 }
 
 message PolicySetRQ {

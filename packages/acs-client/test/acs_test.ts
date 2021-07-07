@@ -2,7 +2,7 @@ import * as should from 'should';
 import { accessRequest, ReadRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
 import { flushCache, initializeCache } from '../lib/acs/cache';
 import { createMockServer } from 'grpc-mock';
-import { AuthZAction, Decision, PolicySetRQ, ACSRequest } from '../lib/acs/interfaces';
+import { AuthZAction, Decision, ACSRequest, DecisionResponse, PolicySetRQResponse } from '../lib/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
@@ -64,7 +64,11 @@ let policySetRQ = {
           ],
           has_rules: true
         }]
-    }]
+    }],
+  operation_status: {
+    code: 200,
+    message: 'success'
+  }
 };
 
 const unauthenticatedSubject = [
@@ -214,24 +218,17 @@ describe('testing acs-client', () => {
         unauthenticated: true
       };
       testResource = updateMetaData(testResource);
-      let response;
-      let error;
-      try {
-        // call accessRequest(), the response is from mock ACS
-        response = await accessRequest(subject, testResource, AuthZAction.CREATE, authZ, 'Test') as Decision;
-      } catch (err) {
-        error = err;
-      }
-      should.not.exist(response);
-      should.exist(error);
-      error.name.should.equal('PermissionDenied');
-      error.message.should.equal('permission denied');
-      error.details.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:CREATE, target_scope:targetScope; the response was DENY');
-      error.code.should.equal(403);
+      let response: DecisionResponse;
+      response = await accessRequest(subject, testResource, AuthZAction.CREATE, authZ, 'Test') as DecisionResponse;
+      should.exist(response);
+      should.exist(response.operation_status);
+      response.decision.should.equal(Decision.DENY);
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:CREATE, target_scope:targetScope; the response was DENY')
       stopGrpcMockServer();
     });
     it('Should PERMIT creating Test resource with valid user Ctx', async () => {
-      startGrpcMockServer([{ method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: { decision: 'PERMIT' } },
+      startGrpcMockServer([{ method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } } },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
       let testResource = [{
@@ -252,9 +249,11 @@ describe('testing acs-client', () => {
       };
       testResource = updateMetaData(testResource);
       // call accessRequest(), the response is from mock ACS
-      const response = await accessRequest(subject, testResource, AuthZAction.CREATE, authZ, 'Test') as Decision;
+      const response = await accessRequest(subject, testResource, AuthZAction.CREATE, authZ, 'Test') as DecisionResponse;
       should.exist(response);
-      response.should.equal('PERMIT');
+      response.decision.should.equal('PERMIT');
+      response.operation_status.code.should.equal(200);
+      response.operation_status.message.should.equal('success');
       stopGrpcMockServer();
     });
     it('Should DENY reading Test resource (DENY rule)', async () => {
@@ -278,17 +277,10 @@ describe('testing acs-client', () => {
         ]
       };
       // call accessRequest(), the response is from mock ACS
-      let error;
-      try {
-        await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQ;
-      } catch (err) {
-        error = err;
-      }
-      should.exist(error);
-      error.name.should.equal('PermissionDenied');
-      error.message.should.equal('permission denied');
-      error.details.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetScope; the response was DENY');
-      error.code.should.equal(403);
+      let response = await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQResponse;
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetScope; the response was DENY');
       stopGrpcMockServer();
     });
     it('Should PERMIT reading Test resource (PERMIT rule) and verify input filter ' +
@@ -330,7 +322,11 @@ describe('testing acs-client', () => {
           }]
         };
         // call accessRequest(), the response is from mock ACS
-        await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQ;
+        const readResponse = await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQResponse;
+        should.exist(readResponse.decision);
+        readResponse.decision.should.equal('PERMIT');
+        readResponse.operation_status.code.should.equal(200);
+        readResponse.operation_status.message.should.equal('success');
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
         const expectedFilterResponse = [{ field: filterParamKey, operation: 'eq', value: 'targetScope' }, { field: filterParamKey, operation: 'eq', value: 'targetSubScope' }];
@@ -379,7 +375,11 @@ describe('testing acs-client', () => {
           ]
         };
         // call accessRequest(), the response is from mock ACS
-        await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQ;
+        const readResponse = await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQResponse;
+        should.exist(readResponse.decision);
+        readResponse.decision.should.equal('PERMIT');
+        readResponse.operation_status.code.should.equal(200);
+        readResponse.operation_status.message.should.equal('success');
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
         const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
@@ -432,17 +432,11 @@ describe('testing acs-client', () => {
         ]
       };
       // call accessRequest(), the response is from mock ACS
-      let error;
-      try {
-        await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQ;
-      } catch (err) {
-        error = err;
-      }
-      should.exist(error);
-      error.name.should.equal('PermissionDenied');
-      error.message.should.equal('permission denied');
-      error.details.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetSubScope; the response was DENY');
-      error.code.should.equal(403);
+      let readResponse = await accessRequest(subject, input, AuthZAction.READ, authZ) as PolicySetRQResponse;
+      should.exist(readResponse.decision);
+      readResponse.decision.should.equal(Decision.DENY);
+      readResponse.operation_status.code.should.equal(403);
+      readResponse.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetSubScope; the response was DENY');
       stopGrpcMockServer();
       // enable HR scoping for permitRule
       permitRule.target.subject[2].value = 'true';
@@ -450,7 +444,8 @@ describe('testing acs-client', () => {
   });
   describe('Test isAllowed', () => {
     it('Should DENY creating Test resource with unauthenticated context', async () => {
-      startGrpcMockServer([{ method: 'isAllowed', input: '.*', output: { decision: 'DENY' } },
+      startGrpcMockServer([{ method: 'isAllowed', input: '.*',
+      output: { decision: 'DENY', operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY'} } },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       const isAllowedReqUnauth = {
         target:
@@ -462,12 +457,14 @@ describe('testing acs-client', () => {
         context: {}
       } as ACSRequest;
       const response = await isAllowed(isAllowedReqUnauth, authZ);
-      should.exist(response);
-      response.should.equal('DENY');
+      should.exist(response.decision);
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY');
       stopGrpcMockServer();
     });
     it('Should PERMIT creating Test resource with valid Auth context', async () => {
-      startGrpcMockServer([{ method: 'isAllowed', input: '.*', output: { decision: 'PERMIT' } },
+      startGrpcMockServer([{ method: 'isAllowed', input: '.*', output: { decision: 'PERMIT', operation_status: {code: 200, message: 'success'} } },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       const isAllowedReqAuth = {
         target:
@@ -482,9 +479,11 @@ describe('testing acs-client', () => {
           resources: [encode(JSON.stringify(resources))]
         }
       } as ACSRequest;
-      const response = await isAllowed(isAllowedReqAuth, authZ);;
+      const response = await isAllowed(isAllowedReqAuth, authZ);
       should.exist(response);
-      response.should.equal('PERMIT');
+      response.decision.should.equal('PERMIT');
+      response.operation_status.code.should.equal(200);
+      response.operation_status.message.should.equal('success');
       stopGrpcMockServer();
     });
   });
@@ -509,11 +508,12 @@ describe('testing acs-client', () => {
       } as ACSRequest;
       // call accessRequest(), the response is from mock ACS
       const policySetRQResponse = await whatIsAllowed(whatIsAllowedReqAuth, authZ);
-      should.exist(policySetRQResponse);
-      policySetRQResponse.id.should.equal('test_policy_set_id');
-      policySetRQResponse.policies.length.should.equal(1);
-      policySetRQResponse.policies[0].rules.length.should.equal(1);
-      policySetRQResponse.policies[0].rules[0].effect.should.equal('PERMIT');
+      should.exist(policySetRQResponse.policy_sets);
+      policySetRQResponse.policy_sets.length.should.equal(1);
+      policySetRQResponse.policy_sets[0].id.should.equal('test_policy_set_id');
+      policySetRQResponse.policy_sets[0].policies.length.should.equal(1);
+      policySetRQResponse.policy_sets[0].policies[0].rules.length.should.equal(1);
+      policySetRQResponse.policy_sets[0].policies[0].effect.should.equal('PERMIT');
       stopGrpcMockServer();
     });
   });

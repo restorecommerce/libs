@@ -452,3 +452,13 @@ interface QueryParams {
   scopingUpdated?: boolean;
   userCondition?: boolean;
 }
+
+export const generateOperationStatus = (code?: number, message?: string) => {
+  if (!code) {
+    code = 500; // Internal server error
+  }
+  return {
+    code,
+    message
+  };
+};

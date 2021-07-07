@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import {
   AuthZContext, Attribute, AuthZAction, AuthZTarget, AuthZWhatIsAllowedTarget,
-  PolicySetRQ, IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
-  Resource, Decision, Subject
+  IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
+  Resource, Decision, Subject, DecisionResponse, PolicySetRQResponse
 } from './interfaces';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
@@ -150,7 +150,7 @@ export class UnAuthZ implements IAuthZ {
     this.acs = acs;
   }
 
-  async isAllowed(request: Request<NoAuthTarget, AuthZContext>, useCache): Promise<Decision> {
+  async isAllowed(request: Request<NoAuthTarget, AuthZContext>, useCache): Promise<DecisionResponse> {
     const authZRequest = {
       target: {
         action: createActionTarget(request.target.action),
@@ -160,27 +160,36 @@ export class UnAuthZ implements IAuthZ {
       context: request.context
     };
 
-    const response = await getOrFill(authZRequest, async (req) => {
-      return await this.acs.isAllowed(authZRequest);
-    }, useCache, 'UnAuthZ:isAllowed');
+    let response: DecisionResponse;
+    try {
+      response = await getOrFill(authZRequest, async (req) => {
+        return await this.acs.isAllowed(authZRequest);
+      }, useCache, 'UnAuthZ:isAllowed');
+    } catch (err) {
+      logger.error('Error invoking access-control-srv isAllowed operation', err);
+      logger.error('error stack', err.stack);
+      if (!err.code) {
+        err.code = 500;
+      }
+      response = {
+        decision: Decision.DENY,
+        operation_status: {
+          code: err.code,
+          message: err.message
+        }
+      };
+    }
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    } else if (response.decision) {
-      return response.decision;
     }
 
-    if (response.error) {
-      logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-      throw response.error;
-    }
-
-    return Decision.DENY;
+    return response;
 
   }
 
   async whatIsAllowed(request: Request<NoAuthWhatIsAllowedTarget, AuthZContext>,
-    useCache): Promise<PolicySetRQ> {
+    useCache): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
         action: createActionTarget(request.target.action),
@@ -189,20 +198,31 @@ export class UnAuthZ implements IAuthZ {
       },
       context: request.context
     };
-
-    const response = await getOrFill(authZRequest, async (req) => {
-      return await this.acs.whatIsAllowed(authZRequest);
-    }, useCache, 'UnAuthZ:whatIsAllowed');
+    let response: PolicySetRQResponse;
+    try {
+      response = await getOrFill(authZRequest, async (req) => {
+        return await this.acs.whatIsAllowed(authZRequest);
+      }, useCache, 'UnAuthZ:whatIsAllowed');
+    } catch (err) {
+      logger.error('Error invoking access-control-srv whatIsAllowed operation', err);
+      logger.error('error stack', err.stack);
+      if (!err.code) {
+        err.code = 500;
+      }
+      response = {
+        decision: Decision.DENY,
+        operation_status: {
+          code: err.code,
+          message: err.message
+        }
+      };
+    }
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
     }
 
-    if (response.error) {
-      logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-      throw response.error;
-    }
-    return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
+    return response;
   }
 }
 
@@ -224,9 +244,9 @@ export class ACSAuthZ implements IAuthZ {
    * Perform request to access-control-srv
    * @param request - authZRequest containing subject, resources and action
    * @param useCache
-   * @returns {Decision}
+   * @returns {DecisionResponse}
    */
-  async isAllowed(request: Request<AuthZTarget, AuthZContext>, useCache): Promise<Decision> {
+  async isAllowed(request: Request<AuthZTarget, AuthZContext>, useCache): Promise<DecisionResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
@@ -261,22 +281,31 @@ export class ACSAuthZ implements IAuthZ {
     let cacheKey = {
       target: authZRequest.target
     };
-    const response = await getOrFill(cacheKey, async (req) => {
-      return await this.acs.isAllowed(authZRequest);
-    }, useCache, cachePrefix + ':isAllowed');
+    let response: DecisionResponse;
+    try {
+      response = await getOrFill(cacheKey, async (req) => {
+        return await this.acs.isAllowed(authZRequest);
+      }, useCache, cachePrefix + ':isAllowed');
+    } catch (err) {
+      logger.error('Error invoking access-control-srv isAllowed operation', err);
+      logger.error('error stack', err.stack);
+      if (!err.code) {
+        err.code = 500;
+      }
+      response = {
+        decision: Decision.DENY,
+        operation_status: {
+          code: err.code,
+          message: err.message
+        }
+      };
+    }
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    } else if (response.decision) {
-      return response.decision;
     }
 
-    if (response.error) {
-      logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-      throw response.error;
-    }
-
-    return Decision.DENY;
+    return response;
   }
 
   /**
@@ -286,7 +315,7 @@ export class ACSAuthZ implements IAuthZ {
   * @param resource
   */
   async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
-    useCache): Promise<PolicySetRQ> {
+    useCache): Promise<PolicySetRQResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
@@ -305,19 +334,31 @@ export class ACSAuthZ implements IAuthZ {
     authZRequest.context.subject = this.encode(subject);
     authZRequest.context.resources = this.encode(resources);
 
-    const response = await getOrFill(authZRequest, async (req) => {
-      return await this.acs.whatIsAllowed(authZRequest);
-    }, useCache, cachePrefix + ':whatIsAllowed');
+    let response: PolicySetRQResponse;
+    try {
+      response = await getOrFill(authZRequest, async (req) => {
+        return await this.acs.whatIsAllowed(authZRequest);
+      }, useCache, cachePrefix + ':whatIsAllowed');
+    } catch(err) {
+      logger.error('Error invoking access-control-srv whatIsAllowed operation', err);
+      logger.error('error stack', err.stack);
+      if (!err.code) {
+        err.code = 500;
+      }
+      response = {
+        decision: Decision.DENY,
+        operation_status: {
+          code: err.code,
+          message: err.message
+        }
+      };
+    }
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
     }
 
-    if (response.error) {
-      logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-      throw response.error;
-    }
-    return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
+    return response;
   }
 
   private encode(object: any): any {

@@ -1,15 +1,14 @@
 import * as _ from 'lodash';
 import {
-  PolicySetRQ, UnauthenticatedContext, Resource, Decision,
-  ACSRequest, Subject, UnauthenticatedData
+  UnauthenticatedContext, Resource, Decision,
+  ACSRequest, Subject, UnauthenticatedData, DecisionResponse, PolicySetRQResponse
 } from './interfaces';
 import { AuthZAction } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
-import { buildFilterPermissions } from '../utils';
+import { buildFilterPermissions, generateOperationStatus } from '../utils';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { UnAuthZ, ACSAuthZ } from './authz';
-import { Unauthenticated, PermissionDenied } from './errors';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
@@ -50,7 +49,7 @@ const isReadRequest = (object: any): object is ReadRequest => {
 };
 
 export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
-  resources: Resource[], action: AuthZAction, authZ: ACSAuthZ, useCache: boolean): Promise<Decision> => {
+  resources: Resource[], action: AuthZAction, authZ: ACSAuthZ, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
     const acsClient = new GrpcClient(grpcConfig, logger);
@@ -92,11 +91,11 @@ export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
  * @param {string} resourceNameSpace resource name space optional
  * @param {boolean} useCache by default ACS caching is used, if set to false then ACS cache
  * is not used and ACS request is made to `access-control-srv`
- * @returns {Decision | PolicySetRQ}
+ * @returns {DecisionResponse | PolicySetRQResponse}
  */
 export const accessRequest = async (subject: Subject,
   request: any | any[] | ReadRequest, action: AuthZAction, authZ: ACSAuthZ, entity?: string,
-  resourceNameSpace?: string, useCache = true): Promise<Decision | PolicySetRQ> => {
+  resourceNameSpace?: string, useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
   // when subject is not passed (if auth header is not set)
   if (_.isEmpty(subject)) {
     subject = { unauthenticated: true };
@@ -110,7 +109,7 @@ export const accessRequest = async (subject: Subject,
   if (token) {
     const configuredApiKey = cfg.get('authentication:apiKey');
     if (configuredApiKey === token) {
-      return Decision.PERMIT;
+      return { decision: Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
     }
   }
   let authzEnabled = cfg.get('authorization:enabled');
@@ -125,11 +124,11 @@ export const accessRequest = async (subject: Subject,
   }
   // if authorization is disabled
   if (!authzEnabled) {
-    return Decision.PERMIT;
+    return { decision: Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
   }
 
   if (_.isEmpty(subject)) {
-    throw new Unauthenticated(errors.USER_NOT_LOGGED_IN.message, errors.USER_NOT_LOGGED_IN.code);
+    return { decision: Decision.DENY, operation_status: generateOperationStatus(errors.USER_NOT_LOGGED_IN.code, errors.USER_NOT_LOGGED_IN.message) };
   }
 
   let resources: any[] = [];
@@ -148,44 +147,45 @@ export const accessRequest = async (subject: Subject,
     // for action create or modify with read request to get policySetRQ
     || ((action == AuthZAction.CREATE || action == AuthZAction.MODIFY) && isReadRequest(request))) {
     const resourceName = request.entity;
-    let policySet: PolicySetRQ;
+    let policySetResponse: PolicySetRQResponse;
     try {
       // retrieving set of applicable policies/rules from ACS
       // Note: it is assumed that there is only one policy set
-      policySet = await whatIsAllowedRequest(subClone, [{
+      policySetResponse = await whatIsAllowedRequest(subClone, [{
         type: resourceName,
         namespace: (request as ReadRequest).namespace
       }], [action], authZ, useCache);
     } catch (err) {
       logger.error('Error calling whatIsAllowed:', { message: err.message });
-      throw err;
+      logger.error('Error stack', err.stack);
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
     // handle case if policySet is empty
-    if (_.isEmpty(policySet) && authzEnforced) {
+    if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
         `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      throw new PermissionDenied(msg, Number(errors.ACTION_NOT_ALLOWED.code));
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
 
-    if (_.isEmpty(policySet) && !authzEnforced) {
+    if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && !authzEnforced) {
       logger.verbose(`The Access response was INDETERMIATE for a request with subject:` +
         `${subjectID}, resource:${resourceWithNS}, action:${action}, target_scope:${targetScope} ` +
         `as no matching policy/rule could be found, but since ACS enforcement ` +
         `config is disabled overriding the ACS result`);
     }
     // extend input filter to enforce applicable policies
-    let permissionArguments = await buildFilterPermissions(policySet, subClone, request, authZ, request.database);
+    let permissionArguments = await buildFilterPermissions(policySetResponse.policy_sets[0], subClone, request, authZ, request.database);
     if (!permissionArguments && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
         `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was DENY`;
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      throw new PermissionDenied(msg, Number(errors.ACTION_NOT_ALLOWED.code));
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
 
     if (!permissionArguments && !authzEnforced) {
@@ -212,7 +212,8 @@ export const accessRequest = async (subject: Subject,
       }
     }
     Object.assign(request.args, permissionArguments);
-    return policySet;
+    policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
+    return policySetResponse;
   }
 
   if (!_.isArray(request)) {
@@ -222,7 +223,7 @@ export const accessRequest = async (subject: Subject,
   }
 
   // default deny
-  let decision: Decision = Decision.DENY;
+  let decisionResponse: DecisionResponse = { decision: Decision.DENY };
   let resourceList = [];
   // for write operations
   if (!_.isEmpty(resources) || action === AuthZAction.DELETE ||
@@ -238,38 +239,38 @@ export const accessRequest = async (subject: Subject,
     }
     // authorization
     try {
-      decision = await isAllowedRequest(subClone as Subject, resourceList, action, authZ, useCache);
+      decisionResponse = await isAllowedRequest(subClone as Subject, resourceList, action, authZ, useCache);
     } catch (err) {
-      throw err;
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
-    if (decision && decision != Decision.PERMIT && authzEnforced) {
+    if (decisionResponse && decisionResponse.decision != Decision.PERMIT && authzEnforced) {
       let details = '';
-      if (decision === Decision.INDETERMINATE) {
+      if (decisionResponse.decision === Decision.INDETERMINATE) {
         details = 'No matching policy / rule was found';
-      } else if (decision === Decision.DENY) {
+      } else if (decisionResponse.decision === Decision.DENY) {
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decision}`;
+        `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      throw new PermissionDenied(msg, Number(errors.ACTION_NOT_ALLOWED.code));
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
   }
-  if (!authzEnforced && decision && decision != Decision.PERMIT) {
+  if (!authzEnforced && decisionResponse && decisionResponse.decision != Decision.PERMIT) {
     let details = '';
-    if (decision === Decision.INDETERMINATE) {
+    if (decisionResponse.decision === Decision.INDETERMINATE) {
       details = 'No matching policy / rule was found';
-    } else if (decision === Decision.DENY) {
+    } else if (decisionResponse.decision === Decision.DENY) {
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
     logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decision}`);
+      `resource:${resourceWithNS}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
-    decision = Decision.PERMIT;
+    decisionResponse.decision = Decision.PERMIT;
   }
-  return decision;
+  return decisionResponse;
 };
 
 /**
@@ -280,21 +281,17 @@ export const accessRequest = async (subject: Subject,
  * @return {Decision} PERMIT or DENY or INDETERMINATE
  */
 export const isAllowed = async (request: ACSRequest,
-  authZ: ACSAuthZ): Promise<Decision> => {
-  const response = await authZ.acs.isAllowed(request);
-
-  if (_.isEmpty(response)) {
-    logger.error('Unexpected empty response from ACS');
-  } else if (response.decision) {
-    return response.decision;
+  authZ: ACSAuthZ): Promise<DecisionResponse> => {
+  let isAllowedResponse: DecisionResponse;
+  try {
+    isAllowedResponse = await authZ.acs.isAllowed(request);
+  } catch (err) {
+    logger.error('Error invoking acs-srv isAllowed method', err.message);
+    logger.error('Error Stack', err.stack);
+    return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
 
-  if (response.error) {
-    logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-    throw new Error('Error while requesting authorization to ACS');
-  }
-
-  return Decision.DENY;
+  return isAllowedResponse;
 };
 
 /**
@@ -305,17 +302,17 @@ export const isAllowed = async (request: ACSRequest,
  * @return {PolicySetRQ} set of applicalbe policies and rules for the input request
  */
 export const whatIsAllowed = async (request: ACSRequest,
-  authZ: ACSAuthZ): Promise<PolicySetRQ> => {
-  const response = await authZ.acs.whatIsAllowed(request);
-  if (_.isEmpty(response)) {
-    logger.error('Unexpected empty response from ACS');
+  authZ: ACSAuthZ): Promise<PolicySetRQResponse> => {
+  let whatIsAllowedResponse: PolicySetRQResponse;
+  try {
+    whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
+  } catch(err) {
+    logger.error('Error invoking acs-srv whatIsAllowed method', err.message);
+    logger.error('Error Stack', err.stack);
+    return { decision: Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
   }
 
-  if (response.error) {
-    logger.verbose('Error while requesting authorization to ACS...', { error: response.error.message });
-    throw new Error('Error while requesting authorization to ACS');
-  }
-  return (response.policy_sets || []).length > 0 ? response.policy_sets[0] : {};
+  return whatIsAllowedResponse;
 };
 
 export interface Output {

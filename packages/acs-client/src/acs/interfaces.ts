@@ -35,6 +35,15 @@ export enum Decision {
   INDETERMINATE = 'INDETERMINATE'
 }
 
+export interface DecisionResponse {
+  decision: Decision;
+  obligation?: string;
+  operation_status?: {
+    code: number;
+    message: string;
+  };
+};
+
 export interface Resource {
   type: string;
   fields?: string[];
@@ -65,7 +74,7 @@ export interface AuthZ<TSubject, TContext = any, TResource = Resource, TAction =
    * Check is the subject is allowed to do an action on a specific resource
    */
   isAllowed(request: Request<Target<TSubject, TResource, TAction>, TContext>,
-    useCache: boolean): Promise<Decision>;
+    useCache: boolean): Promise<DecisionResponse>;
 }
 
 export interface Credentials {
@@ -102,7 +111,7 @@ export interface AuthZResponse extends Response {
 
 export interface IAuthZ extends AuthZ<AuthZSubject | UnauthenticatedData, AuthZContext, Resource, AuthZAction> {
   whatIsAllowed: (request: Request<AuthZWhatIsAllowedTarget | NoAuthWhatIsAllowedTarget, AuthZContext>,
-    useCache: boolean) => Promise<PolicySetRQ>;
+    useCache: boolean) => Promise<PolicySetRQResponse>;
 }
 
 export interface UserCredentials extends Credentials {
@@ -159,10 +168,21 @@ export interface AccessControlObjectInterface {
   condition?: string;
 }
 
-// Reverse query response
 export interface PolicySetRQ extends AccessControlObjectInterface {
-  combining_algorithm: string;
+  // CA and policies
+  combining_algorithm?: string;
   policies?: PolicyRQ[];
+}
+
+// Reverse query response
+export interface PolicySetRQResponse extends AccessControlObjectInterface {
+  // policies?: PolicyRQ[];
+  policy_sets?: PolicySetRQ[];
+  decision: Decision;
+  operation_status: {
+    code: number;
+    message: string;
+  };
 }
 
 export interface PolicyRQ extends AccessControlObjectInterface {

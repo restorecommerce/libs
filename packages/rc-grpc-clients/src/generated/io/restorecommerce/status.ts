@@ -18,6 +18,15 @@ export interface StatusObj {
   status?: Status;
 }
 
+export interface OperationStatusObj {
+  operationStatus?: OperationStatus;
+}
+
+export interface OperationStatus {
+  code: number;
+  message: string;
+}
+
 const baseStatus: object = { id: "", code: 0, message: "" };
 
 export const Status = {
@@ -227,6 +236,163 @@ export const StatusObj = {
   },
 };
 
+const baseOperationStatusObj: object = {};
+
+export const OperationStatusObj = {
+  encode(
+    message: OperationStatusObj,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OperationStatusObj {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOperationStatusObj
+    ) as OperationStatusObj;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OperationStatusObj {
+    const message = globalThis.Object.create(
+      baseOperationStatusObj
+    ) as OperationStatusObj;
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<OperationStatusObj>): OperationStatusObj {
+    const message = { ...baseOperationStatusObj } as OperationStatusObj;
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: OperationStatusObj): unknown {
+    const obj: any = {};
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
+    return obj;
+  },
+};
+
+const baseOperationStatus: object = { code: 0, message: "" };
+
+export const OperationStatus = {
+  encode(message: OperationStatus, writer: Writer = Writer.create()): Writer {
+    if (message.code !== 0) {
+      writer.uint32(8).uint32(message.code);
+    }
+    if (message.message !== "") {
+      writer.uint32(18).string(message.message);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): OperationStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseOperationStatus
+    ) as OperationStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.code = reader.uint32();
+          break;
+        case 2:
+          message.message = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): OperationStatus {
+    const message = globalThis.Object.create(
+      baseOperationStatus
+    ) as OperationStatus;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = Number(object.code);
+    } else {
+      message.code = 0;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = String(object.message);
+    } else {
+      message.message = "";
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<OperationStatus>): OperationStatus {
+    const message = { ...baseOperationStatus } as OperationStatus;
+    if (object.code !== undefined && object.code !== null) {
+      message.code = object.code;
+    } else {
+      message.code = 0;
+    }
+    if (object.message !== undefined && object.message !== null) {
+      message.message = object.message;
+    } else {
+      message.message = "";
+    }
+    return message;
+  },
+
+  toJSON(message: OperationStatus): unknown {
+    const obj: any = {};
+    message.code !== undefined && (obj.code = message.code);
+    message.message !== undefined && (obj.message = message.message);
+    return obj;
+  },
+};
+
 export interface ProtoMetadata {
   fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
@@ -300,6 +466,46 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "StatusObj",
       },
+      {
+        field: [
+          {
+            name: "operation_status",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OperationStatusObj",
+      },
+      {
+        field: [
+          { name: "code", number: 1, label: 1, type: 13, jsonName: "code" },
+          {
+            name: "message",
+            number: 2,
+            label: 1,
+            type: 9,
+            jsonName: "message",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "OperationStatus",
+      },
     ],
     enumType: [],
     service: [],
@@ -313,6 +519,8 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.status.Status": Status,
     ".io.restorecommerce.status.StatusArray": StatusArray,
     ".io.restorecommerce.status.StatusObj": StatusObj,
+    ".io.restorecommerce.status.OperationStatusObj": OperationStatusObj,
+    ".io.restorecommerce.status.OperationStatus": OperationStatus,
   },
   dependencies: [],
 };

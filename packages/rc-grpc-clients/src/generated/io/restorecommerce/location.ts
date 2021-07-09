@@ -2,27 +2,27 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata6,
-  StatusArray,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/status";
 import {
   Meta,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Any,
-  protoMetadata as protoMetadata3,
+  protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
 import {
   protoMetadata as protoMetadata1,
+  DeleteResponse,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.location";
@@ -40,7 +40,7 @@ export interface LocationList {
 export interface LocationListResponse {
   items: LocationResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface LocationResponse {
@@ -235,8 +235,11 @@ export const LocationListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -258,7 +261,10 @@ export const LocationListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -283,10 +289,15 @@ export const LocationListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -304,10 +315,15 @@ export const LocationListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -322,8 +338,10 @@ export const LocationListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -622,7 +640,7 @@ export const Location = {
 export interface Service {
   Read(request: ReadRequest): Promise<LocationListResponse>;
   Create(request: LocationList): Promise<LocationListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: LocationList): Promise<LocationListResponse>;
   Upsert(request: LocationList): Promise<LocationListResponse>;
 }
@@ -637,7 +655,6 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
-      "google/protobuf/empty.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -710,12 +727,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -838,7 +855,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -861,44 +878,44 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [14, 0, 20, 1],
+          span: [13, 0, 19, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
           path: [4, 4, 2, 0],
-          span: [44, 2, 16],
+          span: [43, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Location ID, unique, key\n",
         },
         {
           path: [4, 4, 2, 2],
-          span: [46, 2, 18],
+          span: [45, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Location name\n",
         },
         {
           path: [4, 4, 2, 4],
-          span: [48, 2, 29],
+          span: [47, 2, 29],
           leadingDetachedComments: [],
           trailingComments: " Organization to which this location is linked\n",
         },
         {
           path: [4, 4, 2, 5],
-          span: [49, 2, 23],
+          span: [48, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "  Location which may contain this location; may be null\n",
         },
         {
           path: [4, 4, 2, 6],
-          span: [50, 2, 35],
+          span: [49, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " Locations contained in this location\n",
         },
         {
           path: [4, 4, 2, 8],
-          span: [52, 2, 31],
+          span: [51, 2, 31],
           leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
@@ -919,7 +936,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
-    protoMetadata6,
   ],
 };
 

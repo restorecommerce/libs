@@ -2,20 +2,20 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Meta,
-  protoMetadata as protoMetadata3,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/meta";
 import {
   Subject,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata5,
-  StatusArray,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/status";
-import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
 import {
-  protoMetadata as protoMetadata2,
+  protoMetadata as protoMetadata1,
+  DeleteResponse,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
@@ -42,7 +42,7 @@ export interface ProductPrototypeList {
 export interface ProductPrototypeListResponse {
   items: ProductPrototypeResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface ProductPrototypeResponse {
@@ -327,8 +327,11 @@ export const ProductPrototypeListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -355,7 +358,10 @@ export const ProductPrototypeListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -380,10 +386,15 @@ export const ProductPrototypeListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -405,10 +416,15 @@ export const ProductPrototypeListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -423,8 +439,10 @@ export const ProductPrototypeListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -580,7 +598,7 @@ export const Deleted = {
 export interface Service {
   Read(request: ReadRequest): Promise<ProductPrototypeListResponse>;
   Create(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
   Upsert(request: ProductPrototypeList): Promise<ProductPrototypeListResponse>;
 }
@@ -594,7 +612,6 @@ export interface ProtoMetadata {
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
-      "google/protobuf/empty.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -700,12 +717,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -777,7 +794,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -804,7 +821,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [11, 0, 18, 1],
+          span: [10, 0, 17, 1],
           leadingDetachedComments: [],
           leadingComments: " ProductPrototype resource\n",
         },
@@ -824,7 +841,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
-    protoMetadata5,
   ],
 };
 

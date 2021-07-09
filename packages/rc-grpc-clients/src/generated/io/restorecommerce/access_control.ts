@@ -9,7 +9,7 @@ import {
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
 import {
-  Status,
+  OperationStatus,
   protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/status";
 import {
@@ -39,7 +39,7 @@ export interface Response {
   decision: Response_Decision;
   obligation: string;
   evaluationCacheable: boolean;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export enum Response_Decision {
@@ -88,7 +88,7 @@ export function response_DecisionToJSON(object: Response_Decision): string {
 
 export interface ReverseQuery {
   policySets: PolicySetRQ[];
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 const baseRequest: object = {};
@@ -286,8 +286,11 @@ export const Response = {
     if (message.evaluationCacheable === true) {
       writer.uint32(24).bool(message.evaluationCacheable);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(34).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -309,7 +312,10 @@ export const Response = {
           message.evaluationCacheable = reader.bool();
           break;
         case 4:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -339,10 +345,15 @@ export const Response = {
     } else {
       message.evaluationCacheable = false;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -367,10 +378,15 @@ export const Response = {
     } else {
       message.evaluationCacheable = false;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -382,8 +398,10 @@ export const Response = {
     message.obligation !== undefined && (obj.obligation = message.obligation);
     message.evaluationCacheable !== undefined &&
       (obj.evaluationCacheable = message.evaluationCacheable);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -395,8 +413,11 @@ export const ReverseQuery = {
     for (const v of message.policySets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -413,7 +434,10 @@ export const ReverseQuery = {
           message.policySets.push(PolicySetRQ.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -431,10 +455,15 @@ export const ReverseQuery = {
         message.policySets.push(PolicySetRQ.fromJSON(e));
       }
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -447,10 +476,15 @@ export const ReverseQuery = {
         message.policySets.push(PolicySetRQ.fromPartial(e));
       }
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -464,8 +498,10 @@ export const ReverseQuery = {
     } else {
       obj.policySets = [];
     }
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -581,12 +617,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "evaluationCacheable",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 4,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -621,12 +657,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "policySets",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 2,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],

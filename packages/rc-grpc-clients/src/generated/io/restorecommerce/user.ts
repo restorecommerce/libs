@@ -2,32 +2,32 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
   RoleAssociation,
   Tokens,
 } from "../../io/restorecommerce/auth";
 import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
-import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata7,
-  StatusArray,
-  StatusObj,
+  protoMetadata as protoMetadata6,
+  OperationStatusObj,
 } from "../../io/restorecommerce/status";
 import {
+  Meta,
+  protoMetadata as protoMetadata2,
+} from "../../io/restorecommerce/meta";
+import {
   Image,
-  protoMetadata as protoMetadata6,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/image";
 import {
   protoMetadata as protoMetadata1,
+  DeleteResponse,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import {
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata4,
   Attribute,
 } from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
@@ -95,8 +95,9 @@ export interface OrgIDRequest {
   subject?: Subject;
 }
 
-export interface UserIDs {
+export interface DeleteUsersByOrgResponse {
   userIds: string[];
+  operationStatus?: OperationStatus;
 }
 
 export interface FindRequest {
@@ -250,7 +251,7 @@ export interface UserList {
 export interface UserListResponse {
   items: UserResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface UserResponse {
@@ -488,26 +489,46 @@ export const OrgIDRequest = {
   },
 };
 
-const baseUserIDs: object = { userIds: "" };
+const baseDeleteUsersByOrgResponse: object = { userIds: "" };
 
-export const UserIDs = {
-  encode(message: UserIDs, writer: Writer = Writer.create()): Writer {
+export const DeleteUsersByOrgResponse = {
+  encode(
+    message: DeleteUsersByOrgResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.userIds) {
       writer.uint32(10).string(v!);
+    }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): UserIDs {
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): DeleteUsersByOrgResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseUserIDs) as UserIDs;
+    const message = globalThis.Object.create(
+      baseDeleteUsersByOrgResponse
+    ) as DeleteUsersByOrgResponse;
     message.userIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.userIds.push(reader.string());
+          break;
+        case 2:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -517,35 +538,65 @@ export const UserIDs = {
     return message;
   },
 
-  fromJSON(object: any): UserIDs {
-    const message = globalThis.Object.create(baseUserIDs) as UserIDs;
+  fromJSON(object: any): DeleteUsersByOrgResponse {
+    const message = globalThis.Object.create(
+      baseDeleteUsersByOrgResponse
+    ) as DeleteUsersByOrgResponse;
     message.userIds = [];
     if (object.userIds !== undefined && object.userIds !== null) {
       for (const e of object.userIds) {
         message.userIds.push(String(e));
       }
     }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
     return message;
   },
 
-  fromPartial(object: DeepPartial<UserIDs>): UserIDs {
-    const message = { ...baseUserIDs } as UserIDs;
+  fromPartial(
+    object: DeepPartial<DeleteUsersByOrgResponse>
+  ): DeleteUsersByOrgResponse {
+    const message = {
+      ...baseDeleteUsersByOrgResponse,
+    } as DeleteUsersByOrgResponse;
     message.userIds = [];
     if (object.userIds !== undefined && object.userIds !== null) {
       for (const e of object.userIds) {
         message.userIds.push(e);
       }
     }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
     return message;
   },
 
-  toJSON(message: UserIDs): unknown {
+  toJSON(message: DeleteUsersByOrgResponse): unknown {
     const obj: any = {};
     if (message.userIds) {
       obj.userIds = message.userIds.map((e) => e);
     } else {
       obj.userIds = [];
     }
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -2546,8 +2597,11 @@ export const UserListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -2569,7 +2623,10 @@ export const UserListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -2594,10 +2651,15 @@ export const UserListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -2615,10 +2677,15 @@ export const UserListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -2633,8 +2700,10 @@ export const UserListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -3424,31 +3493,37 @@ export const User = {
 export interface Service {
   Read(request: ReadRequest): Promise<UserListResponse>;
   Create(request: UserList): Promise<UserListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: UserList): Promise<UserListResponse>;
   Upsert(request: UserList): Promise<UserListResponse>;
   Find(request: FindRequest): Promise<UserListResponse>;
   Register(request: RegisterRequest): Promise<UserResponse>;
-  Activate(request: ActivateRequest): Promise<StatusObj>;
-  ChangePassword(request: ChangePasswordRequest): Promise<StatusObj>;
+  Activate(request: ActivateRequest): Promise<OperationStatusObj>;
+  ChangePassword(request: ChangePasswordRequest): Promise<OperationStatusObj>;
   RequestPasswordChange(
     request: RequestPasswordChangeRequest
-  ): Promise<StatusObj>;
-  RequestEmailChange(request: ChangeEmailRequest): Promise<StatusObj>;
+  ): Promise<OperationStatusObj>;
+  RequestEmailChange(request: ChangeEmailRequest): Promise<OperationStatusObj>;
   ConfirmPasswordChange(
     request: ConfirmPasswordChangeRequest
-  ): Promise<StatusObj>;
-  ConfirmEmailChange(request: ConfirmEmailChangeRequest): Promise<StatusObj>;
-  Unregister(request: UnregisterRequest): Promise<StatusObj>;
+  ): Promise<OperationStatusObj>;
+  ConfirmEmailChange(
+    request: ConfirmEmailChangeRequest
+  ): Promise<OperationStatusObj>;
+  Unregister(request: UnregisterRequest): Promise<OperationStatusObj>;
   Login(request: LoginRequest): Promise<UserResponse>;
   FindByRole(request: FindByRoleRequest): Promise<UserListResponse>;
-  DeleteUsersByOrg(request: OrgIDRequest): Promise<UserIDs>;
+  DeleteUsersByOrg(request: OrgIDRequest): Promise<DeleteUsersByOrgResponse>;
   ConfirmUserInvitation(
     request: ConfirmUserInvitationRequest
-  ): Promise<StatusObj>;
-  SendInvitationEmail(request: SendInvitationEmailRequest): Promise<StatusObj>;
+  ): Promise<OperationStatusObj>;
+  SendInvitationEmail(
+    request: SendInvitationEmailRequest
+  ): Promise<OperationStatusObj>;
   FindByToken(request: FindByTokenRequest): Promise<UserResponse>;
-  SendActivationEmail(request: SendActivationEmailRequest): Promise<StatusObj>;
+  SendActivationEmail(
+    request: SendActivationEmailRequest
+  ): Promise<OperationStatusObj>;
 }
 
 export interface ProtoMetadata {
@@ -3461,7 +3536,6 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
-      "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/attribute.proto",
@@ -3528,6 +3602,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 9,
             jsonName: "userIds",
           },
+          {
+            name: "operation_status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -3536,7 +3618,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "UserIDs",
+        name: "DeleteUsersByOrgResponse",
       },
       {
         field: [
@@ -4131,12 +4213,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -4402,7 +4484,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -4427,37 +4509,37 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Activate",
             inputType: ".io.restorecommerce.user.ActivateRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "ChangePassword",
             inputType: ".io.restorecommerce.user.ChangePasswordRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "RequestPasswordChange",
             inputType: ".io.restorecommerce.user.RequestPasswordChangeRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "RequestEmailChange",
             inputType: ".io.restorecommerce.user.ChangeEmailRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "ConfirmPasswordChange",
             inputType: ".io.restorecommerce.user.ConfirmPasswordChangeRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "ConfirmEmailChange",
             inputType: ".io.restorecommerce.user.ConfirmEmailChangeRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "Unregister",
             inputType: ".io.restorecommerce.user.UnregisterRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "Login",
@@ -4472,17 +4554,17 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "DeleteUsersByOrg",
             inputType: ".io.restorecommerce.user.OrgIDRequest",
-            outputType: ".io.restorecommerce.user.UserIDs",
+            outputType: ".io.restorecommerce.user.DeleteUsersByOrgResponse",
           },
           {
             name: "ConfirmUserInvitation",
             inputType: ".io.restorecommerce.user.ConfirmUserInvitationRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "SendInvitationEmail",
             inputType: ".io.restorecommerce.user.SendInvitationEmailRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
           {
             name: "FindByToken",
@@ -4492,7 +4574,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "SendActivationEmail",
             inputType: ".io.restorecommerce.user.SendActivationEmailRequest",
-            outputType: ".io.restorecommerce.status.StatusObj",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
         ],
         name: "Service",
@@ -4505,26 +4587,26 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [15, 0, 38, 1],
+          span: [14, 0, 37, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n The microservice for the user resource.\n",
         },
         {
           path: [4, 0],
-          span: [44, 0, 48, 1],
+          span: [43, 0, 47, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         },
         {
           path: [4, 0, 2, 0],
-          span: [45, 2, 24],
+          span: [44, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " User name or email\n",
         },
         {
           path: [4, 0, 2, 1],
-          span: [46, 2, 22],
+          span: [45, 2, 22],
           leadingDetachedComments: [],
           trailingComments: " Raw password\n",
         },
@@ -4784,7 +4866,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.user.UserType": UserType,
     ".io.restorecommerce.user.LoginRequest": LoginRequest,
     ".io.restorecommerce.user.OrgIDRequest": OrgIDRequest,
-    ".io.restorecommerce.user.UserIDs": UserIDs,
+    ".io.restorecommerce.user.DeleteUsersByOrgResponse": DeleteUsersByOrgResponse,
     ".io.restorecommerce.user.FindRequest": FindRequest,
     ".io.restorecommerce.user.FindByTokenRequest": FindByTokenRequest,
     ".io.restorecommerce.user.RegisterRequest": RegisterRequest,
@@ -4817,7 +4899,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
-    protoMetadata7,
   ],
 };
 

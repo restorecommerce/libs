@@ -2,8 +2,8 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   protoMetadata as protoMetadata1,
-  Empty,
-} from "../../google/protobuf/empty";
+  OperationStatusObj,
+} from "../../io/restorecommerce/status";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.notification_req";
@@ -603,7 +603,7 @@ export const Log = {
 
 export interface Service {
   /** direct notifications */
-  Send(request: NotificationReq): Promise<Empty>;
+  Send(request: NotificationReq): Promise<OperationStatusObj>;
 }
 
 export interface ProtoMetadata {
@@ -614,7 +614,7 @@ export interface ProtoMetadata {
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    dependency: ["google/protobuf/empty.proto"],
+    dependency: ["io/restorecommerce/status.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
@@ -765,7 +765,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Send",
             inputType: ".io.restorecommerce.notification_req.NotificationReq",
-            outputType: ".google.protobuf.Empty",
+            outputType: ".io.restorecommerce.status.OperationStatusObj",
           },
         ],
         name: "Service",
@@ -778,7 +778,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0, 2, 0],
-          span: [8, 2, 61],
+          span: [8, 2, 84],
           leadingDetachedComments: [],
           leadingComments: " direct notifications\n",
           trailingComments: "/ generic fallback\n",

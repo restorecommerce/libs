@@ -2,28 +2,27 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata6,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata7,
-  StatusArray,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/status";
 import {
   Meta,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   Any,
-  protoMetadata as protoMetadata3,
+  protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
 import {
   protoMetadata as protoMetadata1,
+  DeleteResponse,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
-import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/user";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment_method";
@@ -117,7 +116,7 @@ export interface PaymentMethodList {
 export interface PaymentMethodListResponse {
   items: PaymentMethodResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface PaymentMethodResponse {
@@ -306,8 +305,11 @@ export const PaymentMethodListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -334,7 +336,10 @@ export const PaymentMethodListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -359,10 +364,15 @@ export const PaymentMethodListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -384,10 +394,15 @@ export const PaymentMethodListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -402,8 +417,10 @@ export const PaymentMethodListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -628,7 +645,7 @@ export const PaymentMethod = {
 export interface Service {
   Read(request: ReadRequest): Promise<PaymentMethodListResponse>;
   Create(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
   Upsert(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
 }
@@ -643,10 +660,8 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
-      "google/protobuf/empty.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
-      "io/restorecommerce/user.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
     ],
@@ -718,12 +733,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -849,7 +864,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -874,7 +889,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [15, 0, 21, 1],
+          span: [13, 0, 19, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
@@ -897,8 +912,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
-    protoMetadata6,
-    protoMetadata7,
   ],
 };
 

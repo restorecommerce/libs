@@ -2,31 +2,31 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata7,
-  StatusArray,
+  protoMetadata as protoMetadata6,
 } from "../../io/restorecommerce/status";
 import {
   Meta,
-  protoMetadata as protoMetadata3,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/meta";
 import {
   Organization,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/organization";
 import {
   Any,
-  protoMetadata as protoMetadata6,
+  protoMetadata as protoMetadata5,
 } from "../../google/protobuf/any";
 import {
   protoMetadata as protoMetadata1,
+  DeleteResponse,
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata2 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.invoice";
@@ -45,7 +45,7 @@ export interface InvoiceList {
 export interface InvoiceListResponse {
   items: InvoiceResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface InvoiceResponse {
@@ -297,8 +297,11 @@ export const InvoiceListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -320,7 +323,10 @@ export const InvoiceListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -345,10 +351,15 @@ export const InvoiceListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -366,10 +377,15 @@ export const InvoiceListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -384,8 +400,10 @@ export const InvoiceListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -1779,7 +1797,7 @@ export const TriggerInvoices = {
 export interface Service {
   Read(request: ReadRequest): Promise<InvoiceListResponse>;
   Create(request: InvoiceList): Promise<InvoiceListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: InvoiceList): Promise<InvoiceListResponse>;
   Upsert(request: InvoiceList): Promise<InvoiceListResponse>;
 }
@@ -1794,7 +1812,6 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
       "io/restorecommerce/resource_base.proto",
-      "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/organization.proto",
       "io/restorecommerce/auth.proto",
@@ -1868,12 +1885,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -2283,7 +2300,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -2306,56 +2323,56 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [15, 0, 21, 1],
+          span: [14, 0, 20, 1],
           leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
         },
         {
           path: [4, 1],
-          span: [30, 0, 34, 1],
+          span: [29, 0, 33, 1],
           leadingDetachedComments: [],
           leadingComments: "\n For multiple invoices\n",
         },
         {
           path: [4, 4],
-          span: [50, 0, 62, 1],
+          span: [49, 0, 61, 1],
           leadingDetachedComments: [],
           leadingComments: "\n A simple invoice.\n",
         },
         {
           path: [4, 4, 2, 7],
-          span: [58, 2, 24],
+          span: [57, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " difference between net and total\n",
         },
         {
           path: [4, 5],
-          span: [67, 0, 69, 1],
+          span: [66, 0, 68, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n List of Invoice Positions data\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [72, 2, 16],
+          span: [71, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " contract or customer identifier\n",
         },
         {
           path: [4, 7, 2, 0],
-          span: [83, 2, 16],
+          span: [82, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " customer id - used to store the resource in DB\n",
         },
         {
           path: [4, 7, 2, 1],
-          span: [84, 2, 29],
+          span: [83, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             " displayed in invoice - auto generated per customer\n",
         },
         {
           path: [4, 12, 2, 0],
-          span: [120, 2, 26],
+          span: [119, 2, 26],
           leadingDetachedComments: [],
           trailingComments:
             " list of id referring to contract_ids or customer_ids\n",
@@ -2386,7 +2403,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
-    protoMetadata7,
   ],
 };
 

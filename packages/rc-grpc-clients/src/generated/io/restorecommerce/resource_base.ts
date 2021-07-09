@@ -2,23 +2,25 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Any,
-  protoMetadata as protoMetadata2,
+  protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
 import {
   Subject,
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata6,
-  StatusArray,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/status";
 import {
   Meta,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/meta";
-import { protoMetadata as protoMetadata1 } from "../../google/protobuf/empty";
-import { protoMetadata as protoMetadata3 } from "../../google/protobuf/struct";
+import {
+  protoMetadata as protoMetadata5,
+  FilterOp as FilterOp6,
+} from "../../io/restorecommerce/filter";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.resourcebase";
@@ -76,8 +78,8 @@ export interface Filter {
   operation: Filter_Operation;
   value: string;
   type: Filter_ValueType;
-  /** for nested filtering */
-  filters: FilterOp[];
+  /** for nested filtering and to make optional its in separate filter.proto file */
+  filters: FilterOp6[];
 }
 
 export enum Filter_Operation {
@@ -207,34 +209,35 @@ export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
 
 export interface FilterOp {
   filter: Filter[];
+  operator: FilterOp_Operator;
 }
 
-export enum FilterOp_operator {
+export enum FilterOp_Operator {
   and = 0,
   or = 1,
   UNRECOGNIZED = -1,
 }
 
-export function filterOp_operatorFromJSON(object: any): FilterOp_operator {
+export function filterOp_OperatorFromJSON(object: any): FilterOp_Operator {
   switch (object) {
     case 0:
     case "and":
-      return FilterOp_operator.and;
+      return FilterOp_Operator.and;
     case 1:
     case "or":
-      return FilterOp_operator.or;
+      return FilterOp_Operator.or;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return FilterOp_operator.UNRECOGNIZED;
+      return FilterOp_Operator.UNRECOGNIZED;
   }
 }
 
-export function filterOp_operatorToJSON(object: FilterOp_operator): string {
+export function filterOp_OperatorToJSON(object: FilterOp_Operator): string {
   switch (object) {
-    case FilterOp_operator.and:
+    case FilterOp_Operator.and:
       return "and";
-    case FilterOp_operator.or:
+    case FilterOp_Operator.or:
       return "or";
     default:
       return "UNKNOWN";
@@ -272,19 +275,23 @@ export interface DeleteRequest {
   subject?: Subject;
 }
 
+export interface DeleteResponse {
+  status: Status[];
+  operationStatus?: OperationStatus;
+}
+
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
   totalCount: number;
   subject?: Subject;
-  status: Status[];
 }
 
 /** ResourceList response */
 export interface ResourceListResponse {
   items: ResourceResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 /** resource read response */
@@ -466,7 +473,7 @@ export const Filter = {
       writer.uint32(32).int32(message.type);
     }
     for (const v of message.filters) {
-      FilterOp.encode(v!, writer.uint32(42).fork()).ldelim();
+      FilterOp6.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -492,7 +499,7 @@ export const Filter = {
           message.type = reader.int32() as any;
           break;
         case 5:
-          message.filters.push(FilterOp.decode(reader, reader.uint32()));
+          message.filters.push(FilterOp6.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -527,7 +534,7 @@ export const Filter = {
     }
     if (object.filters !== undefined && object.filters !== null) {
       for (const e of object.filters) {
-        message.filters.push(FilterOp.fromJSON(e));
+        message.filters.push(FilterOp6.fromJSON(e));
       }
     }
     return message;
@@ -558,7 +565,7 @@ export const Filter = {
     }
     if (object.filters !== undefined && object.filters !== null) {
       for (const e of object.filters) {
-        message.filters.push(FilterOp.fromPartial(e));
+        message.filters.push(FilterOp6.fromPartial(e));
       }
     }
     return message;
@@ -574,7 +581,7 @@ export const Filter = {
       (obj.type = filter_ValueTypeToJSON(message.type));
     if (message.filters) {
       obj.filters = message.filters.map((e) =>
-        e ? FilterOp.toJSON(e) : undefined
+        e ? FilterOp6.toJSON(e) : undefined
       );
     } else {
       obj.filters = [];
@@ -583,12 +590,15 @@ export const Filter = {
   },
 };
 
-const baseFilterOp: object = {};
+const baseFilterOp: object = { operator: 0 };
 
 export const FilterOp = {
   encode(message: FilterOp, writer: Writer = Writer.create()): Writer {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.operator !== 0) {
+      writer.uint32(16).int32(message.operator);
     }
     return writer;
   },
@@ -603,6 +613,9 @@ export const FilterOp = {
       switch (tag >>> 3) {
         case 1:
           message.filter.push(Filter.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.operator = reader.int32() as any;
           break;
         default:
           reader.skipType(tag & 7);
@@ -620,6 +633,11 @@ export const FilterOp = {
         message.filter.push(Filter.fromJSON(e));
       }
     }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = filterOp_OperatorFromJSON(object.operator);
+    } else {
+      message.operator = 0;
+    }
     return message;
   },
 
@@ -630,6 +648,11 @@ export const FilterOp = {
       for (const e of object.filter) {
         message.filter.push(Filter.fromPartial(e));
       }
+    }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = object.operator;
+    } else {
+      message.operator = 0;
     }
     return message;
   },
@@ -643,6 +666,8 @@ export const FilterOp = {
     } else {
       obj.filter = [];
     }
+    message.operator !== undefined &&
+      (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
   },
 };
@@ -1022,6 +1047,110 @@ export const DeleteRequest = {
   },
 };
 
+const baseDeleteResponse: object = {};
+
+export const DeleteResponse = {
+  encode(message: DeleteResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): DeleteResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseDeleteResponse
+    ) as DeleteResponse;
+    message.status = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeleteResponse {
+    const message = globalThis.Object.create(
+      baseDeleteResponse
+    ) as DeleteResponse;
+    message.status = [];
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromJSON(e));
+      }
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<DeleteResponse>): DeleteResponse {
+    const message = { ...baseDeleteResponse } as DeleteResponse;
+    message.status = [];
+    if (object.status !== undefined && object.status !== null) {
+      for (const e of object.status) {
+        message.status.push(Status.fromPartial(e));
+      }
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: DeleteResponse): unknown {
+    const obj: any = {};
+    if (message.status) {
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
+    } else {
+      obj.status = [];
+    }
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
+    return obj;
+  },
+};
+
 const baseResourceList: object = { totalCount: 0 };
 
 export const ResourceList = {
@@ -1035,9 +1164,6 @@ export const ResourceList = {
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.status) {
-      Status.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
     return writer;
   },
 
@@ -1046,7 +1172,6 @@ export const ResourceList = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
-    message.status = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1059,9 +1184,6 @@ export const ResourceList = {
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
           break;
-        case 4:
-          message.status.push(Status.decode(reader, reader.uint32()));
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1073,7 +1195,6 @@ export const ResourceList = {
   fromJSON(object: any): ResourceList {
     const message = globalThis.Object.create(baseResourceList) as ResourceList;
     message.items = [];
-    message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
         message.items.push(Resource.fromJSON(e));
@@ -1089,18 +1210,12 @@ export const ResourceList = {
     } else {
       message.subject = undefined;
     }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromJSON(e));
-      }
-    }
     return message;
   },
 
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = { ...baseResourceList } as ResourceList;
     message.items = [];
-    message.status = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
         message.items.push(Resource.fromPartial(e));
@@ -1115,11 +1230,6 @@ export const ResourceList = {
       message.subject = Subject.fromPartial(object.subject);
     } else {
       message.subject = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      for (const e of object.status) {
-        message.status.push(Status.fromPartial(e));
-      }
     }
     return message;
   },
@@ -1138,13 +1248,6 @@ export const ResourceList = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
-    if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
-    } else {
-      obj.status = [];
-    }
     return obj;
   },
 };
@@ -1162,8 +1265,11 @@ export const ResourceListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -1184,8 +1290,11 @@ export const ResourceListResponse = {
         case 2:
           message.totalCount = reader.uint32();
           break;
-        case 4:
-          message.status = Status.decode(reader, reader.uint32());
+        case 3:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1210,10 +1319,15 @@ export const ResourceListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1231,10 +1345,15 @@ export const ResourceListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1249,8 +1368,10 @@ export const ResourceListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -1263,7 +1384,7 @@ export const ResourceResponse = {
       Resource.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
     if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(34).fork()).ldelim();
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1280,7 +1401,7 @@ export const ResourceResponse = {
         case 1:
           message.payload = Resource.decode(reader, reader.uint32());
           break;
-        case 4:
+        case 2:
           message.status = Status.decode(reader, reader.uint32());
           break;
         default:
@@ -1504,7 +1625,7 @@ export const Resource = {
 export interface Service {
   Read(request: ReadRequest): Promise<ResourceListResponse>;
   Create(request: ResourceList): Promise<ResourceListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: ResourceList): Promise<ResourceListResponse>;
   Upsert(request: ResourceList): Promise<ResourceListResponse>;
 }
@@ -1518,12 +1639,11 @@ export interface ProtoMetadata {
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
-      "google/protobuf/empty.proto",
       "google/protobuf/any.proto",
-      "google/protobuf/struct.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/filter.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1605,7 +1725,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 5,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.resourcebase.FilterOp",
+            typeName: ".io.restorecommerce.filter.FilterOp",
             jsonName: "filters",
           },
         ],
@@ -1657,6 +1777,14 @@ export const protoMetadata: ProtoMetadata = {
             typeName: ".io.restorecommerce.resourcebase.Filter",
             jsonName: "filter",
           },
+          {
+            name: "operator",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.resourcebase.FilterOp.Operator",
+            jsonName: "operator",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1668,7 +1796,7 @@ export const protoMetadata: ProtoMetadata = {
             ],
             reservedRange: [],
             reservedName: [],
-            name: "operator",
+            name: "Operator",
           },
         ],
         extensionRange: [],
@@ -1777,6 +1905,34 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
+            name: "status",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+          {
+            name: "operation_status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "DeleteResponse",
+      },
+      {
+        field: [
+          {
             name: "items",
             number: 1,
             label: 3,
@@ -1798,14 +1954,6 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
-          },
-          {
-            name: "status",
-            number: 4,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
           },
         ],
         extension: [],
@@ -1835,12 +1983,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
-            number: 4,
+            name: "operation_status",
+            number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -1864,7 +2012,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "status",
-            number: 4,
+            number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
@@ -1930,7 +2078,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -1953,21 +2101,22 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [11, 0, 17, 1],
+          span: [10, 0, 16, 1],
           leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
           path: [4, 2, 4, 1, 2, 0],
-          span: [50, 4, 15],
+          span: [49, 4, 15],
           leadingDetachedComments: [],
           trailingComments: " default value type if not specified\n",
         },
         {
           path: [4, 2, 2, 4],
-          span: [57, 2, 32],
+          span: [56, 2, 58],
           leadingDetachedComments: [],
-          trailingComments: " for nested filtering\n",
+          trailingComments:
+            " for nested filtering and to make optional its in separate filter.proto file\n",
         },
         {
           path: [4, 4, 2, 3],
@@ -2003,26 +2152,26 @@ export const protoMetadata: ProtoMetadata = {
           leadingComments: "/ Delete specified documents\n",
         },
         {
-          path: [4, 6],
-          span: [103, 0, 108, 1],
+          path: [4, 7],
+          span: [108, 0, 112, 1],
           leadingDetachedComments: [],
           leadingComments: "/ List of resources\n",
         },
         {
-          path: [4, 7],
-          span: [111, 0, 115, 1],
+          path: [4, 8],
+          span: [115, 0, 119, 1],
           leadingDetachedComments: [],
           leadingComments: " ResourceList response\n",
         },
         {
-          path: [4, 8],
-          span: [118, 0, 121, 1],
+          path: [4, 9],
+          span: [122, 0, 125, 1],
           leadingDetachedComments: [],
           leadingComments: " resource read response\n",
         },
         {
-          path: [4, 9],
-          span: [124, 0, 132, 1],
+          path: [4, 10],
+          span: [128, 0, 136, 1],
           leadingDetachedComments: [],
           leadingComments: "/ Example resource\n",
         },
@@ -2038,9 +2187,10 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.Filter.Operation": Filter_Operation,
     ".io.restorecommerce.resourcebase.Filter.ValueType": Filter_ValueType,
     ".io.restorecommerce.resourcebase.FilterOp": FilterOp,
-    ".io.restorecommerce.resourcebase.FilterOp.operator": FilterOp_operator,
+    ".io.restorecommerce.resourcebase.FilterOp.Operator": FilterOp_Operator,
     ".io.restorecommerce.resourcebase.ReadRequest": ReadRequest,
     ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
+    ".io.restorecommerce.resourcebase.DeleteResponse": DeleteResponse,
     ".io.restorecommerce.resourcebase.ResourceList": ResourceList,
     ".io.restorecommerce.resourcebase.ResourceListResponse": ResourceListResponse,
     ".io.restorecommerce.resourcebase.ResourceResponse": ResourceResponse,
@@ -2052,7 +2202,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
-    protoMetadata6,
   ],
 };
 

@@ -2,12 +2,12 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata4,
 } from "../../io/restorecommerce/auth";
 import {
+  OperationStatus,
   Status,
-  protoMetadata as protoMetadata6,
-  StatusArray,
+  protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/status";
 import {
   Any,
@@ -15,14 +15,14 @@ import {
 } from "../../google/protobuf/any";
 import {
   Meta,
-  protoMetadata as protoMetadata4,
+  protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/meta";
 import {
   protoMetadata as protoMetadata1,
   FieldFilter,
+  DeleteResponse,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata3 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.job";
@@ -45,7 +45,7 @@ export interface JobList {
 export interface JobListResponse {
   items: JobResponse[];
   totalCount: number;
-  status?: Status;
+  operationStatus?: OperationStatus;
 }
 
 export interface JobResponse {
@@ -466,8 +466,11 @@ export const JobListResponse = {
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -489,7 +492,10 @@ export const JobListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.status = Status.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -514,10 +520,15 @@ export const JobListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -535,10 +546,15 @@ export const JobListResponse = {
     } else {
       message.totalCount = 0;
     }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
     } else {
-      message.status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -553,8 +569,10 @@ export const JobListResponse = {
       obj.items = [];
     }
     message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -1843,7 +1861,7 @@ export const JobFilter = {
 export interface Service {
   Read(request: JobReadRequest): Promise<JobListResponse>;
   Create(request: JobList): Promise<JobListResponse>;
-  Delete(request: DeleteRequest): Promise<StatusArray>;
+  Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: JobList): Promise<JobListResponse>;
   Upsert(request: JobList): Promise<JobListResponse>;
 }
@@ -1859,7 +1877,6 @@ export const protoMetadata: ProtoMetadata = {
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
-      "google/protobuf/empty.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
@@ -1931,12 +1948,12 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "totalCount",
           },
           {
-            name: "status",
+            name: "operation_status",
             number: 3,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            jsonName: "status",
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -2356,7 +2373,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.status.StatusArray",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
           },
           {
             name: "Update",
@@ -2379,282 +2396,282 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [15, 0, 21, 1],
+          span: [14, 0, 20, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n The microservice for scheduling jobs.\n Provides CRUD operations.\n",
         },
         {
           path: [4, 0],
-          span: [27, 0, 29, 1],
+          span: [26, 0, 28, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A Kafka event.\n Send when a job resource got deleted.\n",
         },
         {
           path: [4, 1],
-          span: [34, 0, 38, 1],
+          span: [33, 0, 37, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A list of jobs.\n",
         },
         {
           path: [4, 4],
-          span: [54, 0, 63, 1],
+          span: [53, 0, 62, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A Job resource\n",
         },
         {
           path: [4, 4, 2, 0],
-          span: [55, 2, 16],
+          span: [54, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job ID\n",
         },
         {
           path: [4, 4, 2, 1],
-          span: [57, 2, 19],
+          span: [56, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 4, 2, 2],
-          span: [58, 2, 17],
+          span: [57, 2, 17],
           leadingDetachedComments: [],
           trailingComments: " Job-specific data with variable payload\n",
         },
         {
           path: [4, 4, 2, 3],
-          span: [60, 2, 19],
+          span: [59, 2, 19],
           leadingDetachedComments: [],
           trailingComments:
             " Used to specify the time at which the job is run\n",
         },
         {
           path: [4, 4, 2, 4],
-          span: [62, 2, 26],
+          span: [61, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " The job options\n",
         },
         {
           path: [4, 5],
-          span: [68, 0, 85, 1],
+          span: [67, 0, 84, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Job Options\n",
         },
         {
           path: [4, 5, 2, 0],
-          span: [77, 2, 25],
+          span: [76, 2, 25],
           leadingDetachedComments: [],
           trailingComments: " Job priority\n",
         },
         {
           path: [4, 5, 2, 1],
-          span: [78, 2, 23],
+          span: [77, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             " Amount of possible failing runs until job fails\n",
         },
         {
           path: [4, 5, 2, 2],
-          span: [79, 2, 23],
+          span: [78, 2, 23],
           leadingDetachedComments: [],
           trailingComments: " Delay settings between failed job runs\n",
         },
         {
           path: [4, 5, 2, 3],
-          span: [80, 2, 22],
+          span: [79, 2, 22],
           leadingDetachedComments: [],
           trailingComments:
             " The number of milliseconds after which the job should be fail with a timeout error\n",
         },
         {
           path: [4, 5, 2, 4],
-          span: [82, 2, 21],
+          span: [81, 2, 21],
           leadingDetachedComments: [],
           trailingComments: " Used for periodic jobs\n",
         },
         {
           path: [4, 5, 2, 5],
-          span: [83, 2, 20],
+          span: [82, 2, 20],
           leadingDetachedComments: [],
           trailingComments:
             " To override the job ID - by default, the job ID is a unique generated by bull\n",
         },
         {
           path: [4, 5, 2, 6],
-          span: [84, 2, 29],
+          span: [83, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             " If true, removes the job when it successfully completes\n",
         },
         {
           path: [4, 6, 2, 5],
-          span: [93, 2, 19],
+          span: [92, 2, 19],
           leadingDetachedComments: [],
           trailingComments:
             " To override the job ID - by default, the job ID is a unique generated by bull\n",
         },
         {
           path: [4, 7],
-          span: [97, 0, 102, 1],
+          span: [96, 0, 101, 1],
           leadingDetachedComments: [],
           leadingComments: " Data which is stored within a job instance\n",
         },
         {
           path: [4, 7, 2, 1],
-          span: [99, 2, 34],
+          span: [98, 2, 34],
           leadingDetachedComments: [],
           trailingComments: " optional variable payload\n",
         },
         {
           path: [4, 7, 2, 3],
-          span: [101, 2, 24],
+          span: [100, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " id of job creator\n",
         },
         {
           path: [4, 8],
-          span: [108, 0, 113, 1],
+          span: [107, 0, 112, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A scheduled Job.\n Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.\n",
         },
         {
           path: [4, 8, 2, 0],
-          span: [109, 2, 16],
+          span: [108, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 8, 2, 2],
-          span: [111, 2, 16],
+          span: [110, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job-specific data with variable payload\n",
         },
         {
           path: [4, 8, 2, 3],
-          span: [112, 2, 27],
+          span: [111, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
         },
         {
           path: [4, 9],
-          span: [119, 0, 125, 1],
+          span: [118, 0, 124, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A finished scheduled Job.\n Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.\n",
         },
         {
           path: [4, 9, 2, 0],
-          span: [120, 2, 16],
+          span: [119, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 9, 2, 1],
-          span: [121, 2, 27],
+          span: [120, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of schedule (ONCE, RECURR, etc)\n",
         },
         {
           path: [4, 9, 2, 2],
-          span: [122, 2, 28],
+          span: [121, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " Whether to delete scheduled job\n",
         },
         {
           path: [4, 9, 2, 3],
-          span: [123, 2, 18],
+          span: [122, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 10],
-          span: [131, 0, 136, 1],
+          span: [130, 0, 135, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n A failed scheduled Job event from the Job Service.\n Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.\n",
         },
         {
           path: [4, 10, 2, 0],
-          span: [132, 2, 16],
+          span: [131, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Job instance ID\n",
         },
         {
           path: [4, 10, 2, 1],
-          span: [133, 2, 19],
+          span: [132, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Error message\n",
         },
         {
           path: [4, 10, 2, 2],
-          span: [134, 2, 27],
+          span: [133, 2, 27],
           leadingDetachedComments: [],
           trailingComments: " Type of job ex: ONCE, RECURR etc.\n",
         },
         {
           path: [4, 10, 2, 3],
-          span: [135, 2, 18],
+          span: [134, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " Job type\n",
         },
         {
           path: [4, 11],
-          span: [141, 0, 148, 1],
+          span: [140, 0, 147, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Delay between retries.\n",
         },
         {
           path: [4, 11, 4, 0, 2, 0],
-          span: [143, 4, 14],
+          span: [142, 4, 14],
           leadingDetachedComments: [],
           trailingComments: " Retry with the same delay\n",
         },
         {
           path: [4, 11, 4, 0, 2, 1],
-          span: [144, 4, 20],
+          span: [143, 4, 20],
           leadingDetachedComments: [],
           trailingComments: " Exponential delay increase between retries\n",
         },
         {
           path: [4, 11, 2, 0],
-          span: [146, 2, 19],
+          span: [145, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " Time until retry in milliseconds\n",
         },
         {
           path: [4, 11, 2, 1],
-          span: [147, 2, 16],
+          span: [146, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " Calculation of the delay\n",
         },
         {
           path: [4, 12],
-          span: [151, 0, 167, 1],
+          span: [150, 0, 166, 1],
           leadingDetachedComments: [],
           leadingComments: " Job-specific read request\n",
         },
         {
           path: [4, 12, 4, 0],
-          span: [154, 2, 158, 3],
+          span: [153, 2, 157, 3],
           leadingDetachedComments: [],
           leadingComments: " only possible to sort jobs by creation date\n",
         },
         {
           path: [4, 12, 2, 2],
-          span: [162, 2, 23],
+          span: [161, 2, 23],
           leadingDetachedComments: [],
           leadingComments: " Filter based on fieldName|operation, value|list\n",
         },
         {
           path: [4, 12, 2, 3],
-          span: [165, 2, 65],
+          span: [164, 2, 65],
           leadingDetachedComments: [],
           leadingComments: " Fields selector\n",
         },
         {
           path: [4, 13],
-          span: [170, 0, 173, 1],
+          span: [169, 0, 172, 1],
           leadingDetachedComments: [],
           leadingComments: " filter\n",
         },
@@ -2687,7 +2704,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
-    protoMetadata6,
   ],
 };
 

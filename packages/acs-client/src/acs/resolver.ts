@@ -213,6 +213,7 @@ export const accessRequest = async (subject: Subject,
     }
     Object.assign(request.args, permissionArguments);
     policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
+    policySetResponse.operation_status = generateOperationStatus(200, 'success');
     return policySetResponse;
   }
 

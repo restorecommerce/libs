@@ -30,7 +30,7 @@ service Service {
   rpc Unregister (UnregisterRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc Login (LoginRequest) returns (UserResponse);
   rpc FindByRole (FindByRoleRequest) returns (UserListResponse);
-  rpc DeleteUsersByOrg (OrgIDRequest) returns (UserIDs);
+  rpc DeleteUsersByOrg (OrgIDRequest) returns (DeleteUsersByOrgResponse);
   rpc ConfirmUserInvitation (ConfirmUserInvitationRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc SendInvitationEmail (SendInvitationEmailRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc FindByToken (FindByTokenRequest) returns (UserResponse);
@@ -52,8 +52,9 @@ message OrgIDRequest {
   io.restorecommerce.auth.Subject subject = 2;
 }
 
-message UserIDs {
+message DeleteUsersByOrgResponse {
   repeated string user_ids = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message FindRequest {

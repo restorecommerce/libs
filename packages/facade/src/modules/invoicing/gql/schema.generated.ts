@@ -37,15 +37,13 @@ export type InvoicingInvoiceQueryReadArgs = {
 
 export type ProtoIoRestorecommerceInvoiceInvoiceListResponse = {
   __typename?: 'ProtoIoRestorecommerceInvoiceInvoiceListResponse';
-  status: StatusType;
+  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceInvoiceInvoiceListResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
 export type StatusType = {
   __typename?: 'StatusType';
-  /** Status ID */
-  id: Scalars['String'];
   /** Status code */
   code: Scalars['Int'];
   /** Status message description */
@@ -56,7 +54,7 @@ export type IoRestorecommerceInvoiceInvoiceListResponse = {
   __typename?: 'IoRestorecommerceInvoiceInvoiceListResponse';
   items?: Maybe<Array<IoRestorecommerceInvoiceInvoiceResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
-  status?: Maybe<IoRestorecommerceStatusStatus>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
 export type IoRestorecommerceInvoiceInvoiceResponse = {
@@ -101,6 +99,12 @@ export type IoRestorecommerceStatusStatus = {
   message?: Maybe<Scalars['String']>;
 };
 
+export type IoRestorecommerceStatusOperationStatus = {
+  __typename?: 'IoRestorecommerceStatusOperationStatus';
+  code?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
+};
+
 export type IIoRestorecommerceResourcebaseReadRequest = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -126,6 +130,7 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: Maybe<Array<IIoRestorecommerceResourcebaseFilter>>;
+  operator?: Maybe<IoRestorecommerceResourcebaseFilterOpOperator>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -133,7 +138,7 @@ export type IIoRestorecommerceResourcebaseFilter = {
   operation?: Maybe<IoRestorecommerceResourcebaseFilterOperation>;
   value?: Maybe<Scalars['String']>;
   type?: Maybe<IoRestorecommerceResourcebaseFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
+  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -154,6 +159,49 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
   Boolean = 2,
   Date = 3,
   Array = 4
+}
+
+export type IIoRestorecommerceFilterFilterOp = {
+  filter?: Maybe<Array<IIoRestorecommerceFilterFilter>>;
+  operator?: Maybe<IoRestorecommerceFilterFilterOpOperator>;
+};
+
+export type IIoRestorecommerceFilterFilter = {
+  field?: Maybe<Scalars['String']>;
+  operation?: Maybe<IoRestorecommerceFilterFilterOperation>;
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<IoRestorecommerceFilterFilterValueType>;
+  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+};
+
+export enum IoRestorecommerceFilterFilterOperation {
+  Eq = 0,
+  Lt = 1,
+  Lte = 2,
+  Gt = 3,
+  Gte = 4,
+  IsEmpty = 5,
+  ILike = 6,
+  In = 7,
+  Neq = 8
+}
+
+export enum IoRestorecommerceFilterFilterValueType {
+  String = 0,
+  Number = 1,
+  Boolean = 2,
+  Date = 3,
+  Array = 4
+}
+
+export enum IoRestorecommerceFilterFilterOpOperator {
+  And = 0,
+  Or = 1
+}
+
+export enum IoRestorecommerceResourcebaseFilterOpOperator {
+  And = 0,
+  Or = 1
 }
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
@@ -180,7 +228,7 @@ export type InvoicingMutation = {
 export type InvoicingInvoiceMutation = {
   __typename?: 'InvoicingInvoiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceListResponse>;
-  Delete?: Maybe<ProtoIoRestorecommerceStatusStatusArray>;
+  Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
@@ -231,15 +279,16 @@ export enum ModeType {
   Upsert = 'UPSERT'
 }
 
-export type ProtoIoRestorecommerceStatusStatusArray = {
-  __typename?: 'ProtoIoRestorecommerceStatusStatusArray';
-  status: StatusType;
-  details?: Maybe<IoRestorecommerceStatusStatusArray>;
+export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
+  __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
+  operationStatus: StatusType;
+  details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
-export type IoRestorecommerceStatusStatusArray = {
-  __typename?: 'IoRestorecommerceStatusStatusArray';
+export type IoRestorecommerceResourcebaseDeleteResponse = {
+  __typename?: 'IoRestorecommerceResourcebaseDeleteResponse';
   status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
@@ -318,8 +367,8 @@ export type ResolversTypes = ResolversObject<{
   InvoicingInvoiceQuery: ResolverTypeWrapper<InvoicingInvoiceQuery>;
   ProtoIoRestorecommerceInvoiceInvoiceListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceInvoiceInvoiceListResponse>;
   StatusType: ResolverTypeWrapper<StatusType>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceInvoiceInvoiceListResponse: ResolverTypeWrapper<IoRestorecommerceInvoiceInvoiceListResponse>;
   IoRestorecommerceInvoiceInvoiceResponse: ResolverTypeWrapper<IoRestorecommerceInvoiceInvoiceResponse>;
   IoRestorecommerceInvoiceInvoice: ResolverTypeWrapper<IoRestorecommerceInvoiceInvoice>;
@@ -327,6 +376,7 @@ export type ResolversTypes = ResolversObject<{
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
+  IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IoRestorecommerceResourcebaseSortSortOrder: IoRestorecommerceResourcebaseSortSortOrder;
@@ -334,6 +384,12 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
   IoRestorecommerceResourcebaseFilterOperation: IoRestorecommerceResourcebaseFilterOperation;
   IoRestorecommerceResourcebaseFilterValueType: IoRestorecommerceResourcebaseFilterValueType;
+  IIoRestorecommerceFilterFilterOp: IIoRestorecommerceFilterFilterOp;
+  IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
+  IoRestorecommerceFilterFilterOperation: IoRestorecommerceFilterFilterOperation;
+  IoRestorecommerceFilterFilterValueType: IoRestorecommerceFilterFilterValueType;
+  IoRestorecommerceFilterFilterOpOperator: IoRestorecommerceFilterFilterOpOperator;
+  IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IGoogleProtobufAny: IGoogleProtobufAny;
@@ -346,8 +402,8 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   ModeType: ModeType;
-  ProtoIoRestorecommerceStatusStatusArray: ResolverTypeWrapper<ProtoIoRestorecommerceStatusStatusArray>;
-  IoRestorecommerceStatusStatusArray: ResolverTypeWrapper<IoRestorecommerceStatusStatusArray>;
+  ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
+  IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
@@ -358,8 +414,8 @@ export type ResolversParentTypes = ResolversObject<{
   InvoicingInvoiceQuery: InvoicingInvoiceQuery;
   ProtoIoRestorecommerceInvoiceInvoiceListResponse: ProtoIoRestorecommerceInvoiceInvoiceListResponse;
   StatusType: StatusType;
-  String: Scalars['String'];
   Int: Scalars['Int'];
+  String: Scalars['String'];
   IoRestorecommerceInvoiceInvoiceListResponse: IoRestorecommerceInvoiceInvoiceListResponse;
   IoRestorecommerceInvoiceInvoiceResponse: IoRestorecommerceInvoiceInvoiceResponse;
   IoRestorecommerceInvoiceInvoice: IoRestorecommerceInvoiceInvoice;
@@ -367,10 +423,13 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
+  IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
   IIoRestorecommerceResourcebaseFilterOp: IIoRestorecommerceResourcebaseFilterOp;
   IIoRestorecommerceResourcebaseFilter: IIoRestorecommerceResourcebaseFilter;
+  IIoRestorecommerceFilterFilterOp: IIoRestorecommerceFilterFilterOp;
+  IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: Scalars['Boolean'];
   IGoogleProtobufAny: IGoogleProtobufAny;
@@ -382,8 +441,8 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceInvoiceInvoice: IIoRestorecommerceInvoiceInvoice;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  ProtoIoRestorecommerceStatusStatusArray: ProtoIoRestorecommerceStatusStatusArray;
-  IoRestorecommerceStatusStatusArray: IoRestorecommerceStatusStatusArray;
+  ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
+  IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
 }>;
 
@@ -402,13 +461,12 @@ export type InvoicingInvoiceQueryResolvers<ContextType = InvoicingContext, Paren
 }>;
 
 export type ProtoIoRestorecommerceInvoiceInvoiceListResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceInvoiceListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StatusTypeResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -417,7 +475,7 @@ export type StatusTypeResolvers<ContextType = InvoicingContext, ParentType exten
 export type IoRestorecommerceInvoiceInvoiceListResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceInvoiceListResponse'] = ResolversParentTypes['IoRestorecommerceInvoiceInvoiceListResponse']> = ResolversObject<{
   items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceInvoiceInvoiceResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -463,11 +521,25 @@ export type IoRestorecommerceStatusStatusResolvers<ContextType = InvoicingContex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusOperationStatus'] = ResolversParentTypes['IoRestorecommerceStatusOperationStatus']> = ResolversObject<{
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
 
 export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
 export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+
+export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+
+export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+
+export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+
+export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
 
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload';
@@ -484,18 +556,19 @@ export type InvoicingMutationResolvers<ContextType = InvoicingContext, ParentTyp
 
 export type InvoicingInvoiceMutationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingInvoiceMutation'] = ResolversParentTypes['InvoicingInvoiceMutation']> = ResolversObject<{
   Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusArray']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationDeleteArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray'] = ResolversParentTypes['ProtoIoRestorecommerceStatusStatusArray']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
-  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatusArray']>, ParentType, ContextType>;
+export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
+  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceStatusStatusArrayResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatusArray'] = ResolversParentTypes['IoRestorecommerceStatusStatusArray']> = ResolversObject<{
+export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -511,15 +584,20 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
+  IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
   IoRestorecommerceResourcebaseFilterOperation?: IoRestorecommerceResourcebaseFilterOperationResolvers;
   IoRestorecommerceResourcebaseFilterValueType?: IoRestorecommerceResourcebaseFilterValueTypeResolvers;
+  IoRestorecommerceFilterFilterOperation?: IoRestorecommerceFilterFilterOperationResolvers;
+  IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
+  IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
+  IoRestorecommerceResourcebaseFilterOpOperator?: IoRestorecommerceResourcebaseFilterOpOperatorResolvers;
   Upload?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   InvoicingMutation?: InvoicingMutationResolvers<ContextType>;
   InvoicingInvoiceMutation?: InvoicingInvoiceMutationResolvers<ContextType>;
-  ProtoIoRestorecommerceStatusStatusArray?: ProtoIoRestorecommerceStatusStatusArrayResolvers<ContextType>;
-  IoRestorecommerceStatusStatusArray?: IoRestorecommerceStatusStatusArrayResolvers<ContextType>;
+  ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
+  IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
 }>;
 
 

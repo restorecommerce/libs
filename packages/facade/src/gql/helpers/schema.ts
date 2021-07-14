@@ -1,5 +1,5 @@
 import { GraphQLBoolean, GraphQLFieldConfig, GraphQLFloat, GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLOutputType } from 'graphql';
-import { StatusType, FilterOptionsInputType, SortInputType, ScopeInputType } from '../types/index';
+import { OperationStatusType, FilterOptionsInputType, SortInputType, ScopeInputType } from '../types/index';
 
 const capitalize = (s: string) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
@@ -19,8 +19,8 @@ export function createSchemaOutputWithStatusType({ name, description, payloadTyp
       payload: {
         type: payloadType,
       },
-      status: {
-        type: new GraphQLNonNull(StatusType),
+      operationStatus: {
+        type: new GraphQLNonNull(OperationStatusType),
       },
     }),
   });

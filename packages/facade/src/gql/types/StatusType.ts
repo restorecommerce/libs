@@ -1,13 +1,9 @@
 import { GraphQLObjectType, GraphQLString, GraphQLNonNull, GraphQLInt } from 'graphql';
 
-export const StatusType = new GraphQLObjectType({
+export const OperationStatusType = new GraphQLObjectType({
   name: 'StatusType',
   description: 'Objects with error returned for GraphQL operations',
   fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLString),
-      description: 'Status ID',
-    },
     code: {
       type: new GraphQLNonNull(GraphQLInt),
       description: 'Status code',

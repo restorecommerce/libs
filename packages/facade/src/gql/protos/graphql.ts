@@ -13,7 +13,7 @@ import {
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
   Thunk
 } from "graphql/type/definition";
-import { StatusType } from "../";
+import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping } from "./registry";
 import { capitalizeProtoName, convertyCamelToSnakeCase } from "./utils";
@@ -30,8 +30,8 @@ const Mutate = ['Create', 'Update', 'Upsert'];
 export const getGQLSchema = <TSource, TContext>
   (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
   const fields: any = {
-    status: {
-      type: new GraphQLNonNull(StatusType),
+    operationStatus: {
+      type: new GraphQLNonNull(OperationStatusType),
     },
   }
 
@@ -197,19 +197,18 @@ export const getGQLResolverFunctions =
           return {
             details: {
               items: result.items, // items includes both payload and individual status
+              operationStatus: result.operationStatus // overall status
             },
-            status: result.status // overall status
           };
         } catch (error) {
           console.error(error);
           return {
             details: {
-              items: []
-            },
-            status: {
-              code: error.code,
-              id: '',
-              message: error.message
+              items: [],
+              operationStatus: {
+                code: error.code,
+                message: error.message
+              }
             }
           }
         }
@@ -280,19 +279,18 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     return {
       details: {
         items: result.items, // items includes both payload and individual status
-      },
-      status: result.status // overall status
+        operationStatus: result.operationStatus // overall status
+      }
     };
   } catch (error) {
     console.error(error);
     return {
       details: {
-        items: []
-      },
-      status: {
-        code: error.code,
-        id: '',
-        message: error.message
+        items: [],
+        operation_status: {
+          code: error.code,
+          message: error.message
+        }
       }
     }
   }

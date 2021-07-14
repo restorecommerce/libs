@@ -96,7 +96,7 @@ export class GrpcClient {
     if (!grpcCientConfig) {
       throw new Error('Grpc client configuration missing');
     }
-    address = grpcCientConfig.address ? grpcCientConfig.address : undefined;
+    address = grpcCientConfig.address;
     proto = grpcCientConfig.proto ? grpcCientConfig.proto : undefined;
     timeout = grpcCientConfig.timeout ? grpcCientConfig.timeout : undefined;
     bufferFields = grpcCientConfig.bufferFields ? grpcCientConfig.bufferFields : undefined;
@@ -146,7 +146,7 @@ export class GrpcClient {
             this.logger.error('Error serving unary request', { message: err.message });
             this.logger.error('Error stack', { stack: err.stack });
             return resolve({
-              status: {
+              operation_status: {
                 code: err.code,
                 message: err.message
               }
@@ -217,7 +217,7 @@ export class GrpcClient {
               this.logger.error('Error client stream request', { message: err.message });
               this.logger.error('Error stack', { stack: err.stack });
               return resolve({
-                status: {
+                operation_status: {
                     code: err.code,
                     message: err.message
                 }

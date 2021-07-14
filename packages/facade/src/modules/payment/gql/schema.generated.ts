@@ -60,15 +60,13 @@ export type PaymentServiceMutationCaptureArgs = {
 
 export type ProtoIoRestorecommercePaymentSetupResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentSetupResponse';
-  status: StatusType;
+  operationStatus: StatusType;
   details?: Maybe<IoRestorecommercePaymentSetupResponse>;
 };
 
 /** Objects with error returned for GraphQL operations */
 export type StatusType = {
   __typename?: 'StatusType';
-  /** Status ID */
-  id: Scalars['String'];
   /** Status code */
   code: Scalars['Int'];
   /** Status message description */
@@ -127,7 +125,7 @@ export enum IoRestorecommercePaymentProvider {
 
 export type ProtoIoRestorecommercePaymentPaymentResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentPaymentResponse';
-  status: StatusType;
+  operationStatus: StatusType;
   details?: Maybe<IoRestorecommercePaymentPaymentResponse>;
 };
 
@@ -225,8 +223,8 @@ export type ResolversTypes = ResolversObject<{
   PaymentServiceMutation: ResolverTypeWrapper<PaymentServiceMutation>;
   ProtoIoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentSetupResponse>;
   StatusType: ResolverTypeWrapper<StatusType>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<IoRestorecommercePaymentSetupResponse>;
   IoRestorecommercePaymentPaymentError: ResolverTypeWrapper<IoRestorecommercePaymentPaymentError>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -247,8 +245,8 @@ export type ResolversParentTypes = ResolversObject<{
   PaymentServiceMutation: PaymentServiceMutation;
   ProtoIoRestorecommercePaymentSetupResponse: ProtoIoRestorecommercePaymentSetupResponse;
   StatusType: StatusType;
-  String: Scalars['String'];
   Int: Scalars['Int'];
+  String: Scalars['String'];
   IoRestorecommercePaymentSetupResponse: IoRestorecommercePaymentSetupResponse;
   IoRestorecommercePaymentPaymentError: IoRestorecommercePaymentPaymentError;
   Boolean: Scalars['Boolean'];
@@ -280,13 +278,12 @@ export type PaymentServiceMutationResolvers<ContextType = PaymentContext, Parent
 }>;
 
 export type ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentSetupResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type StatusTypeResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -318,7 +315,7 @@ export type GoogleProtobufStringValueResolvers<ContextType = PaymentContext, Par
 export type IoRestorecommercePaymentProviderResolvers = { NO_PROVIDER: 'undefined', PaypalExpressGateway: 1, AuthorizeNetGateway: 2 };
 
 export type ProtoIoRestorecommercePaymentPaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse']> = ResolversObject<{
-  status?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
+  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

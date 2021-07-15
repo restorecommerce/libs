@@ -25,7 +25,7 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     if (splat) {
       object = JSON.stringify(splat);
     }
-    if (Object.entries(message).length !== 0 && message.constructor === Object) {
+    if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
       message = JSON.stringify(message);
     }
     let ret: string[] = [];

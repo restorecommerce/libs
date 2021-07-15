@@ -32,17 +32,7 @@ export type IndexingQuerySearchArgs = {
 
 export type ProtoIoRestorecommerceSearchSearchResponse = {
   __typename?: 'ProtoIoRestorecommerceSearchSearchResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceSearchSearchResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceSearchSearchResponse = {
@@ -132,11 +122,9 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   IndexingQuery: ResolverTypeWrapper<IndexingQuery>;
   ProtoIoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<ProtoIoRestorecommerceSearchSearchResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<IoRestorecommerceSearchSearchResponse>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
@@ -147,11 +135,9 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   IndexingQuery: IndexingQuery;
   ProtoIoRestorecommerceSearchSearchResponse: ProtoIoRestorecommerceSearchSearchResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceSearchSearchResponse: IoRestorecommerceSearchSearchResponse;
   GoogleProtobufAny: GoogleProtobufAny;
+  String: Scalars['String'];
   TodoScalar: Scalars['TodoScalar'];
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
   Boolean: Scalars['Boolean'];
@@ -167,14 +153,7 @@ export type IndexingQueryResolvers<ContextType = IndexingContext, ParentType ext
 }>;
 
 export type ProtoIoRestorecommerceSearchSearchResponseResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceSearchSearchResponse'] = ResolversParentTypes['ProtoIoRestorecommerceSearchSearchResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceSearchSearchResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -197,7 +176,6 @@ export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   IndexingQuery?: IndexingQueryResolvers<ContextType>;
   ProtoIoRestorecommerceSearchSearchResponse?: ProtoIoRestorecommerceSearchSearchResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceSearchSearchResponse?: IoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   TodoScalar?: GraphQLScalarType;

@@ -31,10 +31,36 @@ export interface SortOptions {
   order?: Maybe<SortOrder>;
 }
 
+// export enum FilterValueType {
+//   STRING = 0,
+//   NUMBER = 1,
+//   BOOLEAN = 2,
+//   DATE = 3,
+//   ARRAY = 4,
+// };
+
+export enum OperatorType {
+  and = 0,
+  or = 1,
+};
+
+export interface Filter {
+  field: string;
+  operation: FilterOperation;
+  value: string;
+  type?: FilterType; // defaults to string data type if not provided
+  filters?: FilterOp [];
+}
+
+export interface FilterOp {
+  filter?: Filter[];
+  operator?: OperatorType;
+}
+
 export type ReadResourcesInputType = {
   limit?: Maybe<number>;
   offset?: Maybe<number>;
-  filter?: Maybe<Array<FilterOptions>>;
+  filters?: Maybe<Array<FilterOp>>;
   sort?: Maybe<SortOptions>;
   /** A role scope */
   scope?: Maybe<{
@@ -57,15 +83,15 @@ export type DeleteResourcesInputType = {
 };
 
 export type BaseOutputType<T> = {
-  payload: Maybe<T>;
+  details: {
+    items: Maybe<T>;
+  };
   /** Objects with status returned for GraphQL operations */
-  status: {
-    /** Status key */
-    key: string;
+  operationStatus: {
     /** Status code */
     code: number;
     /** Status message description */
-    message?: Maybe<string>;
+    message: Maybe<string>;
   };
 };
 
@@ -86,18 +112,20 @@ export async function resolveCRUDReadResources<TGqlType = unknown, TGrpcType = u
           result.items as unknown as TGqlType[];
 
     return {
-      payload,
-      status: {
-        code: 1,
-        key: ''
+      details: {
+        items: payload
+      },
+      operationStatus: {
+        code: 200,
+        message: 'success'
       }
     }
   } catch (error) {
     return {
-      payload: undefined,
-      status: {
-        code: 99,
-        key: ''
+      details: undefined,
+      operationStatus: {
+        code: error.code,
+        message: error.message
       }
     }
   }
@@ -119,8 +147,8 @@ export function convertReadResouecesInputToReadRequest(input?: Maybe<ReadResourc
     readRequest.offset = input.offset;
   }
 
-  if (input.filter) {
-    const length = input.filter.length;
+  if (input.filters) {
+    const length = input.filters.length;
     const buildFilter = ({field, operation, value, type}: FilterOptions) => {
       let filterValue: any = value;
 
@@ -150,20 +178,20 @@ export function convertReadResouecesInputToReadRequest(input?: Maybe<ReadResourc
       return {[field]: {['$' + operation]: filterValue}};
     };
 
-    if (length > 0) {
-      if (length === 1) {
-        readRequest.filter = buildFilter(input.filter[0]) as any;
-      } else {
-        readRequest.filter = {
-          $and: input.filter.reduce((convertedFilters, filter) => {
-            return [
-              ...convertedFilters,
-              buildFilter(filter)
-            ]
-          }, [] as any[])
-        } as any;
-      }
-    }
+    // if (length > 0) {
+    //   if (length === 1) {
+    //     readRequest.filters = buildFilter(input.filters[0].filter[0]) as any;
+    //   } else {
+    //     readRequest.filters = {
+    //       $and: input.filters.reduce((convertedFilters, filter) => {
+    //         return [
+    //           ...convertedFilters,
+    //           buildFilter(filter[0])
+    //         ]
+    //       }, [] as any[])
+    //     } as any;
+    //   }
+    // }
     if (input.sort && (input.sort.field || input.sort.order)) {
       const field = input.sort.field;
 
@@ -214,20 +242,22 @@ export async function resolveCRUDCreateResources<TGqlType, TGrpcType>({service, 
     const payload: TGqlType[] = mapResponseItem ?
           result.items.map((_item) => mapResponseItem(_item)) :
           result.items as unknown as TGqlType[];
-
+          
     return {
-      payload,
-      status: {
-        code: 1,
-        key: ''
+      details: {
+        items: payload
+      },
+      operationStatus: {
+        code: 200,
+        message: 'success'
       }
     };
   } catch (error) {
     return {
-      payload: undefined,
-      status: {
-        code: 99,
-        key: ''
+      details: undefined,
+      operationStatus: {
+        code: error.code,
+        message: error.message
       }
     }
   }
@@ -242,24 +272,30 @@ export interface ResolveCRUDDeleteResourcesArgs< TGrpcType> {
 export async function resolveCRUDDeleteResources<TGrpcType>({service, input}: ResolveCRUDDeleteResourcesArgs<TGrpcType>): Promise<BaseOutputType<boolean>> {
 
   try {
-    await service.Delete({
+    const deleteResponse = await service.Delete({
       ids: input.ids,
       collection: input.collection ?? false
     });
 
     return {
-      payload: true,
-      status: {
-        code: 1,
-        key: ''
+      details: {
+        items: deleteResponse.
+      },
+      operationStatus: {
+        code: deleteResponse.opeerationStatus.code,
+        message: deleteResponse.opeerationStatus.message
       }
+      // opeerationStatus: {
+      //   code: 1,
+      //   message: ''
+      // }
     };
   } catch (error) {
     return {
       payload: undefined,
-      status: {
-        code: 99,
-        key: ''
+      operationStatus: {
+        code: error.code,
+        message: error.message
       }
     }
   }
@@ -288,10 +324,12 @@ export async function resolveCRUDUpdateResources<TGqlType, TGrpcType>({service, 
           result.items as unknown as TGqlType[];
 
     return {
-      payload,
-      status: {
-        code: 1,
-        key: ''
+      details: {
+        items: payload
+      },
+      operationStatus: {
+        code: 200,
+        message: 'success'
       }
     };
   } catch (error) {

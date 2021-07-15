@@ -38,17 +38,7 @@ export type SchedulingJobQueryReadArgs = {
 
 export type ProtoIoRestorecommerceJobJobListResponse = {
   __typename?: 'ProtoIoRestorecommerceJobJobListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceJobJobListResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceJobJobListResponse = {
@@ -275,7 +265,6 @@ export enum ModeType {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -360,12 +349,10 @@ export type ResolversTypes = ResolversObject<{
   SchedulingQuery: ResolverTypeWrapper<SchedulingQuery>;
   SchedulingJobQuery: ResolverTypeWrapper<SchedulingJobQuery>;
   ProtoIoRestorecommerceJobJobListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceJobJobListResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceJobJobListResponse: ResolverTypeWrapper<IoRestorecommerceJobJobListResponse>;
   IoRestorecommerceJobJobResponse: ResolverTypeWrapper<IoRestorecommerceJobJobResponse>;
   IoRestorecommerceJobJob: ResolverTypeWrapper<IoRestorecommerceJobJob>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceJobData: ResolverTypeWrapper<IoRestorecommerceJobData>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
@@ -374,6 +361,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceJobJobOptions: ResolverTypeWrapper<IoRestorecommerceJobJobOptions>;
   IoRestorecommerceJobJobOptionsPriority: IoRestorecommerceJobJobOptionsPriority;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceJobBackoff: ResolverTypeWrapper<IoRestorecommerceJobBackoff>;
   IoRestorecommerceJobBackoffType: IoRestorecommerceJobBackoffType;
   IoRestorecommerceJobRepeat: ResolverTypeWrapper<IoRestorecommerceJobRepeat>;
@@ -409,12 +397,10 @@ export type ResolversParentTypes = ResolversObject<{
   SchedulingQuery: SchedulingQuery;
   SchedulingJobQuery: SchedulingJobQuery;
   ProtoIoRestorecommerceJobJobListResponse: ProtoIoRestorecommerceJobJobListResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceJobJobListResponse: IoRestorecommerceJobJobListResponse;
   IoRestorecommerceJobJobResponse: IoRestorecommerceJobJobResponse;
   IoRestorecommerceJobJob: IoRestorecommerceJobJob;
+  String: Scalars['String'];
   IoRestorecommerceJobData: IoRestorecommerceJobData;
   GoogleProtobufAny: GoogleProtobufAny;
   TodoScalar: Scalars['TodoScalar'];
@@ -422,6 +408,7 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceJobJobOptions: IoRestorecommerceJobJobOptions;
+  Int: Scalars['Int'];
   IoRestorecommerceJobBackoff: IoRestorecommerceJobBackoff;
   IoRestorecommerceJobRepeat: IoRestorecommerceJobRepeat;
   Boolean: Scalars['Boolean'];
@@ -463,14 +450,7 @@ export type SchedulingJobQueryResolvers<ContextType = SchedulingContext, ParentT
 }>;
 
 export type ProtoIoRestorecommerceJobJobListResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceJobJobListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceJobJobListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobJobListResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -594,7 +574,6 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -610,7 +589,6 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   SchedulingQuery?: SchedulingQueryResolvers<ContextType>;
   SchedulingJobQuery?: SchedulingJobQueryResolvers<ContextType>;
   ProtoIoRestorecommerceJobJobListResponse?: ProtoIoRestorecommerceJobJobListResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceJobJobListResponse?: IoRestorecommerceJobJobListResponseResolvers<ContextType>;
   IoRestorecommerceJobJobResponse?: IoRestorecommerceJobJobResponseResolvers<ContextType>;
   IoRestorecommerceJobJob?: IoRestorecommerceJobJobResolvers<ContextType>;

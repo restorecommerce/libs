@@ -60,17 +60,7 @@ export type PaymentServiceMutationCaptureArgs = {
 
 export type ProtoIoRestorecommercePaymentSetupResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentSetupResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommercePaymentSetupResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommercePaymentSetupResponse = {
@@ -125,7 +115,6 @@ export enum IoRestorecommercePaymentProvider {
 
 export type ProtoIoRestorecommercePaymentPaymentResponse = {
   __typename?: 'ProtoIoRestorecommercePaymentPaymentResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommercePaymentPaymentResponse>;
 };
 
@@ -222,13 +211,12 @@ export type ResolversTypes = ResolversObject<{
   PaymentMutation: ResolverTypeWrapper<PaymentMutation>;
   PaymentServiceMutation: ResolverTypeWrapper<PaymentServiceMutation>;
   ProtoIoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentSetupResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<IoRestorecommercePaymentSetupResponse>;
   IoRestorecommercePaymentPaymentError: ResolverTypeWrapper<IoRestorecommercePaymentPaymentError>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   GoogleProtobufStringValue: ResolverTypeWrapper<GoogleProtobufStringValue>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
   IoRestorecommercePaymentProvider: IoRestorecommercePaymentProvider;
@@ -244,13 +232,12 @@ export type ResolversParentTypes = ResolversObject<{
   PaymentMutation: PaymentMutation;
   PaymentServiceMutation: PaymentServiceMutation;
   ProtoIoRestorecommercePaymentSetupResponse: ProtoIoRestorecommercePaymentSetupResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommercePaymentSetupResponse: IoRestorecommercePaymentSetupResponse;
   IoRestorecommercePaymentPaymentError: IoRestorecommercePaymentPaymentError;
   Boolean: Scalars['Boolean'];
+  Int: Scalars['Int'];
   GoogleProtobufStringValue: GoogleProtobufStringValue;
+  String: Scalars['String'];
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
   ProtoIoRestorecommercePaymentPaymentResponse: ProtoIoRestorecommercePaymentPaymentResponse;
@@ -278,14 +265,7 @@ export type PaymentServiceMutationResolvers<ContextType = PaymentContext, Parent
 }>;
 
 export type ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentSetupResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentSetupResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -315,7 +295,6 @@ export type GoogleProtobufStringValueResolvers<ContextType = PaymentContext, Par
 export type IoRestorecommercePaymentProviderResolvers = { NO_PROVIDER: 'undefined', PaypalExpressGateway: 1, AuthorizeNetGateway: 2 };
 
 export type ProtoIoRestorecommercePaymentPaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -332,7 +311,6 @@ export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   PaymentMutation?: PaymentMutationResolvers<ContextType>;
   PaymentServiceMutation?: PaymentServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommercePaymentSetupResponse?: ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommercePaymentSetupResponse?: IoRestorecommercePaymentSetupResponseResolvers<ContextType>;
   IoRestorecommercePaymentPaymentError?: IoRestorecommercePaymentPaymentErrorResolvers<ContextType>;
   GoogleProtobufStringValue?: GoogleProtobufStringValueResolvers<ContextType>;

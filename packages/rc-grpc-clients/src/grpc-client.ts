@@ -12,6 +12,24 @@ interface ResourceList<TResourceType> {
   totalCount: number;
 }
 
+interface TResourceResponseType<TResourceType> {
+  payload: TResourceType;
+  status: {
+    id: string,
+    code: number,
+    message: string
+  }
+}
+
+interface ResourceListResponse<TResourceResponseType> {
+  items: TResourceResponseType[];
+  totalCount: number;
+  operation_status: {
+    code: number,
+    message: string
+  }
+}
+
 interface ResourceEncoder<TType> {
   encode(message: TType, writer: Writer): Writer;
   decode(input: Uint8Array | Reader, length?: number): TType;
@@ -20,11 +38,11 @@ interface ResourceEncoder<TType> {
 type ExtractResourceType<TResourceList> = TResourceList extends ResourceList<infer TResourceType> ? TResourceType : never;
 
 export interface CRUDService<T> extends Record<string, any> {
-  Create(request: ResourceList<T>): Promise<ResourceList<T>>;
-  Read(request: ReadRequest): Promise<ResourceList<T>>;
-  Update(request: ResourceList<T>): Promise<ResourceList<T>>;
+  Create(request: ResourceList<T>): Promise<ResourceListResponse<T>>;
+  Read(request: ReadRequest): Promise<ResourceListResponse<T>>;
+  Update(request: ResourceList<T>): Promise<ResourceListResponse<T>>;
   Delete(request: DeleteRequest): Promise<Empty>;
-  Upsert(request: ResourceList<T>): Promise<ResourceList<T>>;
+  Upsert(request: ResourceList<T>): Promise<ResourceListResponse<T>>;
 }
 
 export function isCRUDService<TType extends object = any>(service: CRUDService<TType>): service is CRUDService<TType> {

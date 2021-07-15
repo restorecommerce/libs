@@ -49,17 +49,7 @@ export type ResourceAddressQueryReadArgs = {
 
 export type ProtoIoRestorecommerceAddressAddressListResponse = {
   __typename?: 'ProtoIoRestorecommerceAddressAddressListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceAddressAddressListResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceAddressAddressListResponse = {
@@ -251,7 +241,6 @@ export type ResourceCountryQueryReadArgs = {
 
 export type ProtoIoRestorecommerceCountryCountryListResponse = {
   __typename?: 'ProtoIoRestorecommerceCountryCountryListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceCountryCountryListResponse>;
 };
 
@@ -290,7 +279,6 @@ export type ResourceTimezoneQueryReadArgs = {
 
 export type ProtoIoRestorecommerceTimezoneTimezoneListResponse = {
   __typename?: 'ProtoIoRestorecommerceTimezoneTimezoneListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceTimezoneTimezoneListResponse>;
 };
 
@@ -326,7 +314,6 @@ export type ResourceContactPointTypeQueryReadArgs = {
 
 export type ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse = {
   __typename?: 'ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceContactPointTypeContactPointTypeListResponse>;
 };
 
@@ -362,7 +349,6 @@ export type ResourceCustomerQueryReadArgs = {
 
 export type ProtoIoRestorecommerceCustomerCustomerListResponse = {
   __typename?: 'ProtoIoRestorecommerceCustomerCustomerListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceCustomerCustomerListResponse>;
 };
 
@@ -420,7 +406,6 @@ export type ResourceContactPointQueryReadArgs = {
 
 export type ProtoIoRestorecommerceContactPointContactPointListResponse = {
   __typename?: 'ProtoIoRestorecommerceContactPointContactPointListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceContactPointContactPointListResponse>;
 };
 
@@ -462,7 +447,6 @@ export type ResourceLocaleQueryReadArgs = {
 
 export type ProtoIoRestorecommerceLocaleLocaleListResponse = {
   __typename?: 'ProtoIoRestorecommerceLocaleLocaleListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceLocaleLocaleListResponse>;
 };
 
@@ -499,7 +483,6 @@ export type ResourceLocationQueryReadArgs = {
 
 export type ProtoIoRestorecommerceLocationLocationListResponse = {
   __typename?: 'ProtoIoRestorecommerceLocationLocationListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceLocationLocationListResponse>;
 };
 
@@ -548,7 +531,6 @@ export type ResourceOrganizationQueryReadArgs = {
 
 export type ProtoIoRestorecommerceOrganizationOrganizationListResponse = {
   __typename?: 'ProtoIoRestorecommerceOrganizationOrganizationListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOrganizationOrganizationListResponse>;
 };
 
@@ -597,7 +579,6 @@ export type ResourceTaxQueryReadArgs = {
 
 export type ProtoIoRestorecommerceTaxTaxListResponse = {
   __typename?: 'ProtoIoRestorecommerceTaxTaxListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceTaxTaxListResponse>;
 };
 
@@ -636,7 +617,6 @@ export type ResourceTaxTypeQueryReadArgs = {
 
 export type ProtoIoRestorecommerceTaxTypeTaxTypeListResponse = {
   __typename?: 'ProtoIoRestorecommerceTaxTypeTaxTypeListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceTaxTypeTaxTypeListResponse>;
 };
 
@@ -673,7 +653,6 @@ export type ResourceCommandQueryReadArgs = {
 
 export type ProtoIoRestorecommerceCommandCommandListResponse = {
   __typename?: 'ProtoIoRestorecommerceCommandCommandListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceCommandCommandListResponse>;
 };
 
@@ -802,7 +781,6 @@ export enum ModeType {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -1256,18 +1234,17 @@ export type ResolversTypes = ResolversObject<{
   ResourceQuery: ResolverTypeWrapper<ResourceQuery>;
   ResourceAddressQuery: ResolverTypeWrapper<ResourceAddressQuery>;
   ProtoIoRestorecommerceAddressAddressListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceAddressAddressListResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceAddressAddressListResponse: ResolverTypeWrapper<IoRestorecommerceAddressAddressListResponse>;
   IoRestorecommerceAddressAddressResponse: ResolverTypeWrapper<IoRestorecommerceAddressAddressResponse>;
   IoRestorecommerceAddressAddress: ResolverTypeWrapper<IoRestorecommerceAddressAddress>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAddressAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressAddressGeoPoint>;
   IoRestorecommerceAddressAddressAddition: ResolverTypeWrapper<IoRestorecommerceAddressAddressAddition>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -1406,18 +1383,17 @@ export type ResolversParentTypes = ResolversObject<{
   ResourceQuery: ResourceQuery;
   ResourceAddressQuery: ResourceAddressQuery;
   ProtoIoRestorecommerceAddressAddressListResponse: ProtoIoRestorecommerceAddressAddressListResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceAddressAddressListResponse: IoRestorecommerceAddressAddressListResponse;
   IoRestorecommerceAddressAddressResponse: IoRestorecommerceAddressAddressResponse;
   IoRestorecommerceAddressAddress: IoRestorecommerceAddressAddress;
+  String: Scalars['String'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAddressAddressGeoPoint: IoRestorecommerceAddressAddressGeoPoint;
   IoRestorecommerceAddressAddressAddition: IoRestorecommerceAddressAddressAddition;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
+  Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -1567,14 +1543,7 @@ export type ResourceAddressQueryResolvers<ContextType = ResourceContext, ParentT
 }>;
 
 export type ProtoIoRestorecommerceAddressAddressListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceAddressAddressListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceAddressAddressListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressListResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1669,7 +1638,6 @@ export type ResourceCountryQueryResolvers<ContextType = ResourceContext, ParentT
 }>;
 
 export type ProtoIoRestorecommerceCountryCountryListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCountryCountryListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCountryCountryListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountryListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1703,7 +1671,6 @@ export type ResourceTimezoneQueryResolvers<ContextType = ResourceContext, Parent
 }>;
 
 export type ProtoIoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTimezoneTimezoneListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezoneListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1734,7 +1701,6 @@ export type ResourceContactPointTypeQueryResolvers<ContextType = ResourceContext
 }>;
 
 export type ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointTypeListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1765,7 +1731,6 @@ export type ResourceCustomerQueryResolvers<ContextType = ResourceContext, Parent
 }>;
 
 export type ProtoIoRestorecommerceCustomerCustomerListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCustomerCustomerListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomerListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1818,7 +1783,6 @@ export type ResourceContactPointQueryResolvers<ContextType = ResourceContext, Pa
 }>;
 
 export type ProtoIoRestorecommerceContactPointContactPointListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceContactPointContactPointListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPointListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1855,7 +1819,6 @@ export type ResourceLocaleQueryResolvers<ContextType = ResourceContext, ParentTy
 }>;
 
 export type ProtoIoRestorecommerceLocaleLocaleListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceLocaleLocaleListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocaleListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1887,7 +1850,6 @@ export type ResourceLocationQueryResolvers<ContextType = ResourceContext, Parent
 }>;
 
 export type ProtoIoRestorecommerceLocationLocationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceLocationLocationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceLocationLocationListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocationLocationListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1934,7 +1896,6 @@ export type ResourceOrganizationQueryResolvers<ContextType = ResourceContext, Pa
 }>;
 
 export type ProtoIoRestorecommerceOrganizationOrganizationListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOrganizationOrganizationListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganizationListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1978,7 +1939,6 @@ export type ResourceTaxQueryResolvers<ContextType = ResourceContext, ParentType 
 }>;
 
 export type ProtoIoRestorecommerceTaxTaxListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTaxListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTaxListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2012,7 +1972,6 @@ export type ResourceTaxTypeQueryResolvers<ContextType = ResourceContext, ParentT
 }>;
 
 export type ProtoIoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceTaxTypeTaxTypeListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxTypeListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2044,7 +2003,6 @@ export type ResourceCommandQueryResolvers<ContextType = ResourceContext, ParentT
 }>;
 
 export type ProtoIoRestorecommerceCommandCommandListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceCommandCommandListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceCommandCommandListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCommandCommandListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2108,7 +2066,6 @@ export type ResourceAddressMutationResolvers<ContextType = ResourceContext, Pare
 }>;
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2190,7 +2147,6 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   ResourceQuery?: ResourceQueryResolvers<ContextType>;
   ResourceAddressQuery?: ResourceAddressQueryResolvers<ContextType>;
   ProtoIoRestorecommerceAddressAddressListResponse?: ProtoIoRestorecommerceAddressAddressListResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceAddressAddressListResponse?: IoRestorecommerceAddressAddressListResponseResolvers<ContextType>;
   IoRestorecommerceAddressAddressResponse?: IoRestorecommerceAddressAddressResponseResolvers<ContextType>;
   IoRestorecommerceAddressAddress?: IoRestorecommerceAddressAddressResolvers<ContextType>;

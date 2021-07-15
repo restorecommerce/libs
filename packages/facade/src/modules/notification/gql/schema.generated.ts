@@ -49,17 +49,7 @@ export type NotificationServiceMutationDeleteArgs = {
 
 export type ProtoIoRestorecommerceNotificationNotificationListResponse = {
   __typename?: 'ProtoIoRestorecommerceNotificationNotificationListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceNotificationNotificationListResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceNotificationNotificationListResponse = {
@@ -263,7 +253,6 @@ export enum ModeType {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -348,16 +337,15 @@ export type ResolversTypes = ResolversObject<{
   NotificationMutation: ResolverTypeWrapper<NotificationMutation>;
   NotificationServiceMutation: ResolverTypeWrapper<NotificationServiceMutation>;
   ProtoIoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceNotificationNotificationListResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationListResponse>;
   IoRestorecommerceNotificationNotificationResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationResponse>;
   IoRestorecommerceNotificationNotification: ResolverTypeWrapper<IoRestorecommerceNotificationNotification>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -392,16 +380,15 @@ export type ResolversParentTypes = ResolversObject<{
   NotificationMutation: NotificationMutation;
   NotificationServiceMutation: NotificationServiceMutation;
   ProtoIoRestorecommerceNotificationNotificationListResponse: ProtoIoRestorecommerceNotificationNotificationListResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceNotificationNotificationListResponse: IoRestorecommerceNotificationNotificationListResponse;
   IoRestorecommerceNotificationNotificationResponse: IoRestorecommerceNotificationNotificationResponse;
   IoRestorecommerceNotificationNotification: IoRestorecommerceNotificationNotification;
+  String: Scalars['String'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
+  Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -439,14 +426,7 @@ export type NotificationServiceMutationResolvers<ContextType = NotificationConte
 }>;
 
 export type ProtoIoRestorecommerceNotificationNotificationListResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceNotificationNotificationListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -522,7 +502,6 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -538,7 +517,6 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
   NotificationServiceMutation?: NotificationServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommerceNotificationNotificationListResponse?: ProtoIoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceNotificationNotificationListResponse?: IoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
   IoRestorecommerceNotificationNotificationResponse?: IoRestorecommerceNotificationNotificationResponseResolvers<ContextType>;
   IoRestorecommerceNotificationNotification?: IoRestorecommerceNotificationNotificationResolvers<ContextType>;

@@ -30,9 +30,9 @@ const Mutate = ['Create', 'Update', 'Upsert'];
 export const getGQLSchema = <TSource, TContext>
   (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
   const fields: any = {
-    operationStatus: {
-      type: new GraphQLNonNull(OperationStatusType),
-    },
+    // operationStatus: {
+    //   type: new GraphQLNonNull(OperationStatusType),
+    // },
   }
 
   const responseTyping = getTyping(method.outputType!);

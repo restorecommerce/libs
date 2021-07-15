@@ -37,17 +37,7 @@ export type OrderingOrderQueryReadArgs = {
 
 export type ProtoIoRestorecommerceOrderOrderListResponse = {
   __typename?: 'ProtoIoRestorecommerceOrderOrderListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOrderOrderListResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceOrderOrderListResponse = {
@@ -337,7 +327,6 @@ export enum ModeType {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -354,7 +343,6 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 
 export type ProtoIoRestorecommerceOrderFulfillmentResults = {
   __typename?: 'ProtoIoRestorecommerceOrderFulfillmentResults';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOrderFulfillmentResults>;
 };
 
@@ -472,17 +460,16 @@ export type ResolversTypes = ResolversObject<{
   OrderingQuery: ResolverTypeWrapper<OrderingQuery>;
   OrderingOrderQuery: ResolverTypeWrapper<OrderingOrderQuery>;
   ProtoIoRestorecommerceOrderOrderListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOrderOrderListResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceOrderOrderListResponse: ResolverTypeWrapper<IoRestorecommerceOrderOrderListResponse>;
   IoRestorecommerceOrderOrderResponse: ResolverTypeWrapper<IoRestorecommerceOrderOrderResponse>;
   IoRestorecommerceOrderOrder: ResolverTypeWrapper<IoRestorecommerceOrderOrder>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceOrderItems: ResolverTypeWrapper<IoRestorecommerceOrderItems>;
   IoRestorecommerceOrderItem: ResolverTypeWrapper<IoRestorecommerceOrderItem>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -531,17 +518,16 @@ export type ResolversParentTypes = ResolversObject<{
   OrderingQuery: OrderingQuery;
   OrderingOrderQuery: OrderingOrderQuery;
   ProtoIoRestorecommerceOrderOrderListResponse: ProtoIoRestorecommerceOrderOrderListResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceOrderOrderListResponse: IoRestorecommerceOrderOrderListResponse;
   IoRestorecommerceOrderOrderResponse: IoRestorecommerceOrderOrderResponse;
   IoRestorecommerceOrderOrder: IoRestorecommerceOrderOrder;
+  String: Scalars['String'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceOrderItems: IoRestorecommerceOrderItems;
   IoRestorecommerceOrderItem: IoRestorecommerceOrderItem;
+  Int: Scalars['Int'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -591,14 +577,7 @@ export type OrderingOrderQueryResolvers<ContextType = OrderingContext, ParentTyp
 }>;
 
 export type ProtoIoRestorecommerceOrderOrderListResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrderOrderListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOrderOrderListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -718,7 +697,6 @@ export type OrderingOrderMutationResolvers<ContextType = OrderingContext, Parent
 }>;
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -730,7 +708,6 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = O
 }>;
 
 export type ProtoIoRestorecommerceOrderFulfillmentResultsResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOrderFulfillmentResults'] = ResolversParentTypes['ProtoIoRestorecommerceOrderFulfillmentResults']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrderFulfillmentResults']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -763,7 +740,6 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   OrderingQuery?: OrderingQueryResolvers<ContextType>;
   OrderingOrderQuery?: OrderingOrderQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOrderOrderListResponse?: ProtoIoRestorecommerceOrderOrderListResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceOrderOrderListResponse?: IoRestorecommerceOrderOrderListResponseResolvers<ContextType>;
   IoRestorecommerceOrderOrderResponse?: IoRestorecommerceOrderOrderResponseResolvers<ContextType>;
   IoRestorecommerceOrderOrder?: IoRestorecommerceOrderOrderResolvers<ContextType>;

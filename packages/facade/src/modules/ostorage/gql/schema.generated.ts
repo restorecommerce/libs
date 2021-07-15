@@ -44,17 +44,7 @@ export type OstorageObjectQueryListArgs = {
 
 export type ProtoIoRestorecommerceOstorageObjectResponse = {
   __typename?: 'ProtoIoRestorecommerceOstorageObjectResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOstorageObjectResponse>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceOstorageObjectResponse = {
@@ -121,7 +111,6 @@ export type IIoRestorecommerceOstorageGetRequest = {
 
 export type ProtoIoRestorecommerceOstorageListResponse = {
   __typename?: 'ProtoIoRestorecommerceOstorageListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOstorageListResponse>;
 };
 
@@ -208,7 +197,6 @@ export type OstorageObjectMutationCopyArgs = {
 
 export type ProtoIoRestorecommerceOstoragePutResponse = {
   __typename?: 'ProtoIoRestorecommerceOstoragePutResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOstoragePutResponse>;
 };
 
@@ -269,7 +257,6 @@ export type IGoogleProtobufAny = {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -293,7 +280,6 @@ export type IIoRestorecommerceOstorageDeleteRequest = {
 
 export type ProtoIoRestorecommerceOstorageCopyResponse = {
   __typename?: 'ProtoIoRestorecommerceOstorageCopyResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceOstorageCopyResponse>;
 };
 
@@ -400,16 +386,15 @@ export type ResolversTypes = ResolversObject<{
   OstorageQuery: ResolverTypeWrapper<OstorageQuery>;
   OstorageObjectQuery: ResolverTypeWrapper<OstorageObjectQuery>;
   ProtoIoRestorecommerceOstorageObjectResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageObjectResponse>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceOstorageObjectResponse: ResolverTypeWrapper<IoRestorecommerceOstorageObjectResponse>;
   IoRestorecommerceOstorageObjectResponsePayload: ResolverTypeWrapper<IoRestorecommerceOstorageObjectResponsePayload>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceOstorageOptions: ResolverTypeWrapper<IoRestorecommerceOstorageOptions>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
@@ -454,16 +439,15 @@ export type ResolversParentTypes = ResolversObject<{
   OstorageQuery: OstorageQuery;
   OstorageObjectQuery: OstorageObjectQuery;
   ProtoIoRestorecommerceOstorageObjectResponse: ProtoIoRestorecommerceOstorageObjectResponse;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceOstorageObjectResponse: IoRestorecommerceOstorageObjectResponse;
   IoRestorecommerceOstorageObjectResponsePayload: IoRestorecommerceOstorageObjectResponsePayload;
+  String: Scalars['String'];
   TodoScalar: Scalars['TodoScalar'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceOstorageOptions: IoRestorecommerceOstorageOptions;
+  Int: Scalars['Int'];
   GoogleProtobufAny: GoogleProtobufAny;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
@@ -517,14 +501,7 @@ export type OstorageObjectQueryResolvers<ContextType = OstorageContext, ParentTy
 }>;
 
 export type ProtoIoRestorecommerceOstorageObjectResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOstorageObjectResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOstorageObjectResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -588,7 +565,6 @@ export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = Ostora
 }>;
 
 export type ProtoIoRestorecommerceOstorageListResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOstorageListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOstorageListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -628,7 +604,6 @@ export type OstorageObjectMutationResolvers<ContextType = OstorageContext, Paren
 }>;
 
 export type ProtoIoRestorecommerceOstoragePutResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOstoragePutResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOstoragePutResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstoragePutResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -654,7 +629,6 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -673,7 +647,6 @@ export type IoRestorecommerceStatusStatusResolvers<ContextType = OstorageContext
 }>;
 
 export type ProtoIoRestorecommerceOstorageCopyResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOstorageCopyResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOstorageCopyResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageCopyResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -704,7 +677,6 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   OstorageQuery?: OstorageQueryResolvers<ContextType>;
   OstorageObjectQuery?: OstorageObjectQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageObjectResponse?: ProtoIoRestorecommerceOstorageObjectResponseResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceOstorageObjectResponse?: IoRestorecommerceOstorageObjectResponseResolvers<ContextType>;
   IoRestorecommerceOstorageObjectResponsePayload?: IoRestorecommerceOstorageObjectResponsePayloadResolvers<ContextType>;
   TodoScalar?: GraphQLScalarType;

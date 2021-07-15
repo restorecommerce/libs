@@ -50,17 +50,7 @@ export type FulfillmentFulfillmentQueryGetAllFulfillmentsArgs = {
 
 export type ProtoIoRestorecommerceFulfillmentLabelResult = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentLabelResult';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentLabelResult>;
-};
-
-/** Objects with error returned for GraphQL operations */
-export type StatusType = {
-  __typename?: 'StatusType';
-  /** Status code */
-  code: Scalars['Int'];
-  /** Status message description */
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceFulfillmentLabelResult = {
@@ -88,7 +78,6 @@ export type IIoRestorecommerceFulfillmentOrderId = {
 
 export type ProtoIoRestorecommerceFulfillmentStatus = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentStatus';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentStatus>;
 };
 
@@ -132,7 +121,6 @@ export type IIoRestorecommerceFulfillmentTrackingNumber = {
 
 export type ProtoIoRestorecommerceFulfillmentAllFulfillments = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentAllFulfillments';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentAllFulfillments>;
 };
 
@@ -166,7 +154,6 @@ export type FulfillmentFulfillmentCourierQueryReadArgs = {
 
 export type ProtoIoRestorecommerceFulfillmentCourierCourierListResponse = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentCourierCourierListResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentCourierCourierListResponse>;
 };
 
@@ -357,7 +344,6 @@ export type FulfillmentFulfillmentMutationDeleteFulfillmentArgs = {
 
 export type ProtoIoRestorecommerceFulfillmentFulfillmentResults = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentFulfillmentResults';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentFulfillmentResults>;
 };
 
@@ -518,7 +504,6 @@ export type IIoRestorecommerceAttributeAttribute = {
 
 export type ProtoIoRestorecommerceFulfillmentDeleteStatus = {
   __typename?: 'ProtoIoRestorecommerceFulfillmentDeleteStatus';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceFulfillmentDeleteStatus>;
 };
 
@@ -565,7 +550,6 @@ export enum ModeType {
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'ProtoIoRestorecommerceResourcebaseDeleteResponse';
-  operationStatus: StatusType;
   details?: Maybe<IoRestorecommerceResourcebaseDeleteResponse>;
 };
 
@@ -650,11 +634,9 @@ export type ResolversTypes = ResolversObject<{
   FulfillmentQuery: ResolverTypeWrapper<FulfillmentQuery>;
   FulfillmentFulfillmentQuery: ResolverTypeWrapper<FulfillmentFulfillmentQuery>;
   ProtoIoRestorecommerceFulfillmentLabelResult: ResolverTypeWrapper<ProtoIoRestorecommerceFulfillmentLabelResult>;
-  StatusType: ResolverTypeWrapper<StatusType>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceFulfillmentLabelResult: ResolverTypeWrapper<IoRestorecommerceFulfillmentLabelResult>;
   IoRestorecommerceFulfillmentLabels: ResolverTypeWrapper<IoRestorecommerceFulfillmentLabels>;
+  String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceFulfillmentError: ResolverTypeWrapper<IoRestorecommerceFulfillmentError>;
   IIoRestorecommerceFulfillmentOrderId: IIoRestorecommerceFulfillmentOrderId;
   ProtoIoRestorecommerceFulfillmentStatus: ResolverTypeWrapper<ProtoIoRestorecommerceFulfillmentStatus>;
@@ -676,6 +658,7 @@ export type ResolversTypes = ResolversObject<{
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -739,11 +722,9 @@ export type ResolversParentTypes = ResolversObject<{
   FulfillmentQuery: FulfillmentQuery;
   FulfillmentFulfillmentQuery: FulfillmentFulfillmentQuery;
   ProtoIoRestorecommerceFulfillmentLabelResult: ProtoIoRestorecommerceFulfillmentLabelResult;
-  StatusType: StatusType;
-  Int: Scalars['Int'];
-  String: Scalars['String'];
   IoRestorecommerceFulfillmentLabelResult: IoRestorecommerceFulfillmentLabelResult;
   IoRestorecommerceFulfillmentLabels: IoRestorecommerceFulfillmentLabels;
+  String: Scalars['String'];
   IoRestorecommerceFulfillmentError: IoRestorecommerceFulfillmentError;
   IIoRestorecommerceFulfillmentOrderId: IIoRestorecommerceFulfillmentOrderId;
   ProtoIoRestorecommerceFulfillmentStatus: ProtoIoRestorecommerceFulfillmentStatus;
@@ -765,6 +746,7 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
+  Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
   IIoRestorecommerceResourcebaseSort: IIoRestorecommerceResourcebaseSort;
@@ -832,14 +814,7 @@ export type FulfillmentFulfillmentQueryResolvers<ContextType = FulfillmentContex
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentLabelResultResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentLabelResult'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentLabelResult']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentLabelResult']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type StatusTypeResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['StatusType'] = ResolversParentTypes['StatusType']> = ResolversObject<{
-  code?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -863,7 +838,6 @@ export type IoRestorecommerceFulfillmentErrorResolvers<ContextType = Fulfillment
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentStatusResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentStatus'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentStatus']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -902,7 +876,6 @@ export type IoRestorecommerceFulfillmentEventDetailsResolvers<ContextType = Fulf
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentAllFulfillmentsResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentAllFulfillments'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentAllFulfillments']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentAllFulfillments']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -926,7 +899,6 @@ export type FulfillmentFulfillmentCourierQueryResolvers<ContextType = Fulfillmen
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentCourierCourierListResponseResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentCourierCourierListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentCourierCourierListResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentCourierCourierListResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1014,7 +986,6 @@ export type FulfillmentFulfillmentMutationResolvers<ContextType = FulfillmentCon
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentFulfillmentResultsResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentFulfillmentResults'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentFulfillmentResults']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentFulfillmentResults']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1068,7 +1039,6 @@ export type IoRestorecommerceFulfillmentErrorListResolvers<ContextType = Fulfill
 }>;
 
 export type ProtoIoRestorecommerceFulfillmentDeleteStatusResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceFulfillmentDeleteStatus'] = ResolversParentTypes['ProtoIoRestorecommerceFulfillmentDeleteStatus']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentDeleteStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1086,7 +1056,6 @@ export type FulfillmentFulfillmentCourierMutationResolvers<ContextType = Fulfill
 }>;
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
-  operationStatus?: Resolver<ResolversTypes['StatusType'], ParentType, ContextType>;
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1102,7 +1071,6 @@ export type Resolvers<ContextType = FulfillmentContext> = ResolversObject<{
   FulfillmentQuery?: FulfillmentQueryResolvers<ContextType>;
   FulfillmentFulfillmentQuery?: FulfillmentFulfillmentQueryResolvers<ContextType>;
   ProtoIoRestorecommerceFulfillmentLabelResult?: ProtoIoRestorecommerceFulfillmentLabelResultResolvers<ContextType>;
-  StatusType?: StatusTypeResolvers<ContextType>;
   IoRestorecommerceFulfillmentLabelResult?: IoRestorecommerceFulfillmentLabelResultResolvers<ContextType>;
   IoRestorecommerceFulfillmentLabels?: IoRestorecommerceFulfillmentLabelsResolvers<ContextType>;
   IoRestorecommerceFulfillmentError?: IoRestorecommerceFulfillmentErrorResolvers<ContextType>;

@@ -35,7 +35,11 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    transports.push(createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer }));
+    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer });
+    esTransport.on('error', (error) => {
+      console.error('Elasticsearch indexing error', error);
+    });
+    transports.push(esTransport);
   }
   if (transports.length === 0) {
     transports.push(createConsoleTransport());
@@ -44,6 +48,10 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
   const logger = createWinsonLogger({
     transports,
     ...opts
+  });
+
+  logger.on('error', (error) => {
+    console.error('Logger error', error);
   });
 
   return logger;

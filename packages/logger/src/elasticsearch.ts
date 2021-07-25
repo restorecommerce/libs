@@ -49,12 +49,29 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     if (typeof transformed.fields !== 'object') {
       transformed.fields = { 0: transformed.fields };
     }
+
+    if (opts.esTransformer && typeof opts.esTransformer === 'function') {
+      opts.esTransformer(transformed);
+    }
+
     return transformed;
   };
 }
 
+// Fields transformer to convert all values into strings
+// function toString(o: any) {
+//   Object.keys(o).forEach(k => {
+//     if (typeof o[k] === 'object') {
+//       return toString(o[k]);
+//     }
+//     o[k] = '' + o[k];
+//   });
+//   return o;
+// }
+
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
+  esTransformer?: Function;
 }
 
 export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {

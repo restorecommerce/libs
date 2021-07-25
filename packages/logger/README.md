@@ -12,7 +12,7 @@ Opinionated wrapper and configurator for the
 
 The following transports are supported:
 
-- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a [specific transformer](https://github.com/restorecommerce/winston-elasticsearch-transformer) and ES data streams.
+- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a local transformer function and ES data streams.
 - Console (Winston built-in transport).
 - File (Winston built-in transport).
 
@@ -20,8 +20,10 @@ These transports can be added and configured with a corresponding property in
 the options hash:
 
 ```json
-  "loggerName": "somelogger",   // Optional name
-  "sourcePointer": true,        // Whether the source file and line where the log statement was issued should be logged [default: `false`]
+{
+  "loggerName": "somelogger",        // Optional name
+  "sourcePointer": true,             // Whether the source file and line where the log statement was issued should be logged [default: `false`]
+  "esTransformer": function()  //
   "console": {
     "handleExceptions": false,
     "level": "silly",
@@ -34,6 +36,7 @@ the options hash:
   "elasticsearch": {
     ...
   }
+}
 ```
 
 The logger returns a Winston logger instance which has methods that correspond
@@ -54,6 +57,7 @@ In addition there is a generic `log()` function.
 - Source pointer logging -- show the source code file and line where the log statement was issued.
 - Implicit Request ID logging based on [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer).
 - Logger `AsyncLocalStorage` logger context to log implicit context information.
+- Supports local transformer function for the `fields`.
 
 An example how to use the `AsyncLocalStorage` logger context can be found [here](test/test.js#L4-L11).
 

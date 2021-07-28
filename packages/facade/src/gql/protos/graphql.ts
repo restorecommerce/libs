@@ -287,7 +287,7 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     return {
       details: {
         items: [],
-        operation_status: {
+        operationStatus: {
           code: error.code,
           message: error.message
         }

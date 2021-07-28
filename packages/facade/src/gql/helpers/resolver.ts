@@ -95,6 +95,23 @@ export type BaseOutputType<T> = {
   };
 };
 
+interface Status {
+  id: string,
+  code: number,
+  message: string
+}
+
+export type DeleteOutputType = {
+  status: Status[];
+  /** Objects with status returned for GraphQL operations */
+  operationStatus: {
+    /** Status code */
+    code: number;
+    /** Status message description */
+    message: Maybe<string>;
+  };
+};
+
 export type ResolveCRUDReadResourcesArgsInput = Maybe<RequireFields<ReadResourcesInputType, never>> | undefined;
 
 export interface ResolveCRUDReadResourcesArgs<TGqlType, TGrpcType> {
@@ -108,7 +125,7 @@ export async function resolveCRUDReadResources<TGqlType = unknown, TGrpcType = u
     const readRequest = convertReadResouecesInputToReadRequest(input);
     const result = await service.Read(readRequest);
     const payload: TGqlType[] = mapResponseItem ?
-          result.items.map((_item) => mapResponseItem(_item)) :
+          result.items.map((_item) => mapResponseItem(_item.payload)) :
           result.items as unknown as TGqlType[];
 
     return {
@@ -122,7 +139,9 @@ export async function resolveCRUDReadResources<TGqlType = unknown, TGrpcType = u
     }
   } catch (error) {
     return {
-      details: undefined,
+      details: {
+        items: []
+      },
       operationStatus: {
         code: error.code,
         message: error.message
@@ -240,7 +259,7 @@ export async function resolveCRUDCreateResources<TGqlType, TGrpcType>({service, 
     });
 
     const payload: TGqlType[] = mapResponseItem ?
-          result.items.map((_item) => mapResponseItem(_item)) :
+          result.items.map((_item) => mapResponseItem(_item.payload)) :
           result.items as unknown as TGqlType[];
           
     return {
@@ -254,7 +273,9 @@ export async function resolveCRUDCreateResources<TGqlType, TGrpcType>({service, 
     };
   } catch (error) {
     return {
-      details: undefined,
+      details: {
+        items: []
+      },
       operationStatus: {
         code: error.code,
         message: error.message
@@ -269,30 +290,17 @@ export interface ResolveCRUDDeleteResourcesArgs< TGrpcType> {
   input: DeleteResourcesInputType;
 }
 
-export async function resolveCRUDDeleteResources<TGrpcType>({service, input}: ResolveCRUDDeleteResourcesArgs<TGrpcType>): Promise<BaseOutputType<boolean>> {
+export async function resolveCRUDDeleteResources<TGrpcType>({service, input}: ResolveCRUDDeleteResourcesArgs<TGrpcType>): Promise<DeleteOutputType> {
 
   try {
     const deleteResponse = await service.Delete({
       ids: input.ids,
       collection: input.collection ?? false
     });
-
-    return {
-      details: {
-        items: deleteResponse.
-      },
-      operationStatus: {
-        code: deleteResponse.opeerationStatus.code,
-        message: deleteResponse.opeerationStatus.message
-      }
-      // opeerationStatus: {
-      //   code: 1,
-      //   message: ''
-      // }
-    };
+    return deleteResponse;
   } catch (error) {
     return {
-      payload: undefined,
+      status: [],
       operationStatus: {
         code: error.code,
         message: error.message
@@ -320,7 +328,7 @@ export async function resolveCRUDUpdateResources<TGqlType, TGrpcType>({service, 
     });
 
     const payload: TGqlType[] = mapResponseItem ?
-          result.items.map((_item) => mapResponseItem(_item)) :
+          result.items.map((_item) => mapResponseItem(_item.payload)) :
           result.items as unknown as TGqlType[];
 
     return {
@@ -334,10 +342,12 @@ export async function resolveCRUDUpdateResources<TGqlType, TGrpcType>({service, 
     };
   } catch (error) {
     return {
-      payload: undefined,
-      status: {
-        code: 99,
-        key: ''
+      details: {
+        items: []
+      },
+      operationStatus: {
+        code: error.code,
+        message: error.message
       }
     }
   }

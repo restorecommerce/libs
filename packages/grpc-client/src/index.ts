@@ -146,7 +146,7 @@ export class GrpcClient {
             this.logger.error('Error serving unary request', { message: err.message });
             this.logger.error('Error stack', { stack: err.stack });
             return resolve({
-              operation_status: {
+              operationStatus: {
                 code: err.code,
                 message: err.message
               }
@@ -217,7 +217,7 @@ export class GrpcClient {
               this.logger.error('Error client stream request', { message: err.message });
               this.logger.error('Error stack', { stack: err.stack });
               return resolve({
-                operation_status: {
+                operationStatus: {
                     code: err.code,
                     message: err.message
                 }

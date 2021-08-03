@@ -6,7 +6,7 @@
   "author": "Invend GmbH",
   "repository": {
     "type": "git",
-    "url": "https://github.com/restorecommerce/mailer.git"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "license": "MIT",
   "keywords": [

@@ -1,11 +1,11 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "0.3.6",
+  "version": "0.3.12",
   "description": "Access Control Service Client",
   "author": "Invend GmbH",
   "repository": {
     "type": "git",
-    "url": "https://github.com/restorecommerce/acs-client"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "license": "MIT",
   "keywords": [
@@ -17,12 +17,12 @@
   ],
   "main": "./lib/index.js",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^0.2.4",
-    "@restorecommerce/kafka-client": "^0.2.7",
-    "@restorecommerce/logger": "^0.7.2",
-    "@restorecommerce/protos": "^0.4.1",
-    "@restorecommerce/service-config": "^0.4.4",
-    "ioredis": "^4.27.3",
+    "@restorecommerce/grpc-client": "0.0.9",
+    "@restorecommerce/kafka-client": "^0.2.15",
+    "@restorecommerce/logger": "^0.10.2",
+    "@restorecommerce/protos": "^0.0.22",
+    "@restorecommerce/service-config": "^0.4.12",
+    "ioredis": "^4.24.3",
     "lodash": "^4.17.21",
     "node-eval": "^2.0.0"
   },

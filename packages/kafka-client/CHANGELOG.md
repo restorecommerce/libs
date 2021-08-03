@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.15](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.14...@restorecommerce/kafka-client@0.2.15) (2021-07-29)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
+## [0.2.14](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.13...@restorecommerce/kafka-client@0.2.14) (2021-07-29)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
+## [0.2.13](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.12...@restorecommerce/kafka-client@0.2.13) (2021-07-25)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
+## [0.2.12](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.11...@restorecommerce/kafka-client@0.2.12) (2021-07-15)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
+## [0.2.11](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.10...@restorecommerce/kafka-client@0.2.11) (2021-07-01)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
+## [0.2.10](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.9...@restorecommerce/kafka-client@0.2.10) (2021-06-26)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
 ## [0.2.9](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.8...@restorecommerce/kafka-client@0.2.9) (2021-06-02)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

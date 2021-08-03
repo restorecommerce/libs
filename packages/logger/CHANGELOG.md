@@ -3,6 +3,68 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.1...@restorecommerce/logger@0.10.2) (2021-07-29)
+
+**Note:** Version bump only for package @restorecommerce/logger
+
+
+
+
+
+## [0.10.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.0...@restorecommerce/logger@0.10.1) (2021-07-29)
+
+
+### Bug Fixes
+
+* **logger:** make sure stack trace is available when logging ([b59f940](https://github.com/restorecommerce/libs/commit/b59f9402c828b3b81d1c2eac5e3c55a9b33e3df0))
+
+
+
+
+
+# [0.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.9.1...@restorecommerce/logger@0.10.0) (2021-07-25)
+
+
+### Bug Fixes
+
+* **logger:** package.json ([917b7e5](https://github.com/restorecommerce/libs/commit/917b7e5ba8112e64d740e88d19cf94cf54ea68ff))
+
+
+### Features
+
+* **logger:** new feature esTransformer ([682c118](https://github.com/restorecommerce/libs/commit/682c11853185e441d41eb6483f62b3987191c16d))
+
+
+
+
+
+## [0.9.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.9.0...@restorecommerce/logger@0.9.1) (2021-07-15)
+
+**Note:** Version bump only for package @restorecommerce/logger
+
+
+
+
+
+# [0.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.1...@restorecommerce/logger@0.9.0) (2021-07-01)
+
+
+### Features
+
+* **logger:** support asynclocalstorage logger context ([d71b30e](https://github.com/restorecommerce/libs/commit/d71b30e7b9321ad4d43a8f66c010cf108380b7b5))
+
+
+
+
+
+## [0.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.0...@restorecommerce/logger@0.8.1) (2021-06-26)
+
+**Note:** Version bump only for package @restorecommerce/logger
+
+
+
+
+
 # [0.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.3...@restorecommerce/logger@0.8.0) (2021-06-02)
 
 

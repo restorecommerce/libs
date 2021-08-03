@@ -1,7 +1,7 @@
-import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from "winston-elasticsearch";
+import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from 'winston-elasticsearch';
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
-import { getRealTrace } from "./utils";
+import { globalLoggerCtxKey, getRealTrace } from './utils';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
@@ -17,8 +17,18 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
   @returns {Object} transformed message
   */
   return (logData: any) => {
-    const source = opts.source; // will be read internally
+    const source = opts.source; // needed, as it will be read internally
     const transformed: any = {};
+
+    if (global[globalLoggerCtxKey]) {
+      const store = global[globalLoggerCtxKey].getStore();
+      if (store && store.size > 0) {
+        for (let [key, value] of store.entries()) {
+          transformed[key] = value;
+        }
+      }
+    }
+
     // set rid if it exists
     if (rTracer.id()) {
       transformed.rid = rTracer.id();
@@ -39,12 +49,29 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     if (typeof transformed.fields !== 'object') {
       transformed.fields = { 0: transformed.fields };
     }
+
+    if (opts.esTransformer && typeof opts.esTransformer === 'function') {
+      opts.esTransformer(transformed);
+    }
+
     return transformed;
   };
 }
 
+// Fields transformer to convert all values into strings
+// function toString(o: any) {
+//   Object.keys(o).forEach(k => {
+//     if (typeof o[k] === 'object') {
+//       return toString(o[k]);
+//     }
+//     o[k] = '' + o[k];
+//   });
+//   return o;
+// }
+
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
+  esTransformer?: Function;
 }
 
 export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {

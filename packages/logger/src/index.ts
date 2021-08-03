@@ -3,6 +3,7 @@ import { createLogger as createWinsonLogger, LoggerOptions as WinstonLoggerOptio
 import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './console';
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';
 import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport } from './elasticsearch';
+import { globalLoggerCtxKey } from './utils';
 
 export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
@@ -34,15 +35,26 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    transports.push(createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer }));
+    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer });
+    esTransport.on('error', (error) => {
+      console.error('Elasticsearch indexing error', error);
+    });
+    transports.push(esTransport);
   }
   if (transports.length === 0) {
     transports.push(createConsoleTransport());
   }
 
-  return createWinsonLogger({
+  const logger = createWinsonLogger({
     transports,
     ...opts
   });
+
+  logger.on('error', (error) => {
+    console.error('Logger error', error);
+  });
+
+  return logger;
 };
 
+export { globalLoggerCtxKey };

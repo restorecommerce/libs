@@ -3,6 +3,54 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.11...@restorecommerce/acs-client@0.3.12) (2021-07-29)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [0.3.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.10...@restorecommerce/acs-client@0.3.11) (2021-07-29)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [0.3.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.9...@restorecommerce/acs-client@0.3.10) (2021-07-25)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [0.3.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.8...@restorecommerce/acs-client@0.3.9) (2021-07-15)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [0.3.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.7...@restorecommerce/acs-client@0.3.8) (2021-07-01)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [0.3.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.6...@restorecommerce/acs-client@0.3.7) (2021-06-26)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
 ## [0.3.6](https://github.com/restorecommerce/acs-client/compare/@restorecommerce/acs-client@0.3.5...@restorecommerce/acs-client@0.3.6) (2021-06-02)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

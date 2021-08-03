@@ -1,12 +1,12 @@
 {
   "name": "@restorecommerce/cluster-service",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Launch clustered services using node clustering and monitor them",
   "main": "index",
   "author": "Invend GmbH",
   "repository": {
     "type": "git",
-    "url": "https://github.com/restorecommerce/cluster-service.git"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "license": "MIT",
   "keywords": [

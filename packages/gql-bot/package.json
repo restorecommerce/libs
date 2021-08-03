@@ -2,10 +2,10 @@
   "name": "@restorecommerce/gql-bot",
   "description": "GraphQL Client Automated Task Processor",
   "main": "lib/index",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "repository": {
     "type": "git",
-    "url": "http://github.com/restorecommerce/gql-bot.git"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "license": "MIT",
   "keywords": [
@@ -51,7 +51,6 @@
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
-    "postinstall": "tsc -d",
     "mocha": "mocha --timeout 5000 ./test/*.js --trace-warnings",
     "mocha-debug": "mocha -R spec test/*.js --full-trace --inspect-brk",
     "lcov-report": "nyc report --reporter=lcov",

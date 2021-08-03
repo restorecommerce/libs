@@ -12,16 +12,18 @@ Opinionated wrapper and configurator for the
 
 The following transports are supported:
 
-- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a [specific transformer](https://github.com/restorecommerce/winston-elasticsearch-transformer)
-- Console (Winston built-in transport)
-- File (Winston built-in transport)
+- [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a local transformer function and ES data streams.
+- Console (Winston built-in transport).
+- File (Winston built-in transport).
 
 These transports can be added and configured with a corresponding property in
 the options hash:
 
 ```json
-  "loggerName": "somelogger",   // Optional name
-  "sourcePointer": true,        // Whether the source file and line where the log statement was issued should be logged [default: `false`]
+{
+  "loggerName": "somelogger",        // Optional name
+  "sourcePointer": true,             // Whether the source file and line where the log statement was issued should be logged [default: `false`]
+  "esTransformer": function()  //
   "console": {
     "handleExceptions": false,
     "level": "silly",
@@ -34,6 +36,7 @@ the options hash:
   "elasticsearch": {
     ...
   }
+}
 ```
 
 The logger returns a Winston logger instance which has methods that correspond
@@ -49,11 +52,19 @@ to the following levels:
 
 In addition there is a generic `log()` function.
 
-## Notes
+## Features
+
+- Source pointer logging -- show the source code file and line where the log statement was issued.
+- Implicit Request ID logging based on [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer).
+- Logger `AsyncLocalStorage` logger context to log implicit context information.
+- Supports local transformer function for the `fields`.
+
+An example how to use the `AsyncLocalStorage` logger context can be found [here](test/test.js#L4-L11).
 
 ### Console logger
 
-A custom format is defined that outputs the rid (request-id) if it is set using [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer) module.
+A custom format is defined that outputs the rid (request-id) if it is set
+and the contents of the `AsyncLocalStorage` context.
 
 ### Elastichsearch logger
 
@@ -61,10 +72,10 @@ The following changes and transformations are applied to log messages:
 
 - Adds a `@timestamp` field with the current date/ time
 - Adds a `host` property with the current host name
-- Adds a `rid` (request-id) based on [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer)
+- Adds a `rid` request-id
+- Grabs all key/ values from the the current `AsyncLocalStorage` and merges them to the logged message
 
 This module also comes with a suitable
-[mapping template](elasticsearch-template-mapping.json) and an
 [index pattern](kibana/Logs-Index-Pattern.ndjson) that can be imported in Kibana.
 
 ## Usage

@@ -1,12 +1,12 @@
 {
   "name": "@restorecommerce/oidc-id-srv-integration",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/restorecommerce/oidc-id-srv-integration.git"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
   "author": "",
   "license": "MIT",

@@ -15,6 +15,9 @@ service Test {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TestBufferedDataListResponse);
 }
 
+/**
+* Stream test service
+*/
 service Stream {
   rpc BiStream (stream TestRequest) returns (stream StreamTestResponse);
   rpc ResponseStream (TestRequest) returns (stream StreamTestResponse);

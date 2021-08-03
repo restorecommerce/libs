@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.2...@restorecommerce/logger@0.10.3) (2021-08-03)
+
+
+### Bug Fixes
+
+* **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/libs/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
+
+
+
+
+
 ## [0.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.1...@restorecommerce/logger@0.10.2) (2021-07-29)
 
 **Note:** Version bump only for package @restorecommerce/logger

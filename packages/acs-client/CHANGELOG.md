@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.12...@restorecommerce/acs-client@0.4.0) (2021-08-03)
+
+
+### Bug Fixes
+
+* **acs-client:** made operation_status mandatory ([f6d84af](https://github.com/restorecommerce/libs/commit/f6d84afdd072028abb1a00dea71593febac8b552))
+* **acs-client:** return operation_status for read operations ([32b96fb](https://github.com/restorecommerce/libs/commit/32b96fb4a809a14eca8020553baec4ba348841c8))
+* **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/libs/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
+
+
+### Features
+
+* **acs-client:** added operation_status to response and modified isAllowed and WhatIsAllowed to return response as is from acs-srv, fix not to throw errors and return operation_status ([7265fdb](https://github.com/restorecommerce/libs/commit/7265fdb737cb0c2980185c4f565180ab8144f1aa))
+
+
+
+
+
 ## [0.3.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.3.11...@restorecommerce/acs-client@0.3.12) (2021-07-29)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

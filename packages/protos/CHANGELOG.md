@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.1...@restorecommerce/protos@0.4.2) (2021-08-03)
+
+
+### Bug Fixes
+
+* **acs-client:** return operation_status for read operations ([32b96fb](https://github.com/restorecommerce/libs/commit/32b96fb4a809a14eca8020553baec4ba348841c8))
+* **protos:** fix find and findByRole for user proto ([e0cebb3](https://github.com/restorecommerce/libs/commit/e0cebb321e3660c3a0c6211350f174d0ecf1503c))
+* **protos:** fix Register, login and findByToken response message ([472d878](https://github.com/restorecommerce/libs/commit/472d878ac0152b8a42201951401300a82f4f5fc4))
+* **protos:** removed unused protos ([c3b54c0](https://github.com/restorecommerce/libs/commit/c3b54c0c0208da448cc11b728fcfb7307cccfd3f))
+* **protos:** up IDS RPC's to include status response and added statusObj ([5b525ab](https://github.com/restorecommerce/libs/commit/5b525ab4b5c04913f153ae3fc666936b593e520a))
+* **rc-grpc-clients:** generated grpc-clients for updated protos ([0fdf4bb](https://github.com/restorecommerce/libs/commit/0fdf4bb627fe2ebaf53f19041ebf7ae522e6cc2a))
+
+
+
+
+
 ## [0.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.0...@restorecommerce/protos@0.4.1) (2021-05-31)
 
 **Note:** Version bump only for package @restorecommerce/protos

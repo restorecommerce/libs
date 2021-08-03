@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/cluster-service",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Launch clustered services using node clustering and monitor them",
   "main": "index",
   "author": "Invend GmbH",

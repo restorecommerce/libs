@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/handlebars-helperized",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Opinionated handlebars based templating engine for rendering e-mail like content",
   "main": "index",
   "author": "Invend GmbH",

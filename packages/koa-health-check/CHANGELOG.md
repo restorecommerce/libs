@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.6](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@0.1.5...@restorecommerce/koa-health-check@0.1.6) (2021-08-03)
+
+
+### Bug Fixes
+
+* **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/koa-cloud-health/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
+
+
+
+
+
 ## 0.1.5 (2021-06-26)
 
 **Note:** Version bump only for package @restorecommerce/koa-health-check

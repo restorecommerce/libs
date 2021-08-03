@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.16](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.15...@restorecommerce/kafka-client@0.2.16) (2021-08-03)
+
+
+### Bug Fixes
+
+* **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/kafka-client/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
+
+
+
+
+
 ## [0.2.15](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.14...@restorecommerce/kafka-client@0.2.15) (2021-07-29)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

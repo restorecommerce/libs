@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.13...@restorecommerce/mailer@0.1.14) (2021-08-03)
+
+
+### Bug Fixes
+
+* up pkg locks ([8ed92d6](https://github.com/restorecommerce/libs/commit/8ed92d613b9a095e4b5066056ac566e5dbcf1472))
+* updated githead ([2904d30](https://github.com/restorecommerce/libs/commit/2904d30e5773dc8a87c01a08ff6481f99d692354))
+
+
+
+
+
 ## [0.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.12...@restorecommerce/mailer@0.1.13) (2021-08-03)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.4.13...@restorecommerce/service-config@0.4.14) (2021-08-03)
+
+
+### Bug Fixes
+
+* up pkg locks ([8ed92d6](https://github.com/restorecommerce/libs/commit/8ed92d613b9a095e4b5066056ac566e5dbcf1472))
+* updated githead ([2904d30](https://github.com/restorecommerce/libs/commit/2904d30e5773dc8a87c01a08ff6481f99d692354))
+
+
+
+
+
 ## [0.4.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@0.4.12...@restorecommerce/service-config@0.4.13) (2021-08-03)
 
 

@@ -1,3 +1,12 @@
+### 0.2.0 (August 4th, 2021)
+
+- updated create (to remove edgeDef creation) and delete method to match new proto structure response
+- generate status array for create and update operations and up tests
+- generate status array for upsert and improve error handling
+- added status array for delete response
+- filter structure changes
+- updated grpc-client for tests, fix for filter handling (enum mapping), added error array to all tests
+
 ### 0.1.1 (May 18th, 2021)
 
 - improved logging

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",
@@ -17,11 +17,19 @@
     "interface"
   ],
   "dependencies": {
+<<<<<<< HEAD
     "@restorecommerce/chassis-srv": "^0.3.0",
     "@restorecommerce/grpc-client": "^0.2.6",
     "@restorecommerce/kafka-client": "^0.2.17",
     "@restorecommerce/protos": "^0.4.3",
     "@restorecommerce/service-config": "^0.4.14",
+=======
+    "@restorecommerce/chassis-srv": "^0.2.3",
+    "@restorecommerce/grpc-client": "0.0.9",
+    "@restorecommerce/kafka-client": "^0.2.1",
+    "@restorecommerce/protos": "^0.0.22",
+    "@restorecommerce/service-config": "^0.4.1",
+>>>>>>> master
     "bluebird": "^3.7.2",
     "lodash": "^4.17.21",
     "redis": "^3.1.2"

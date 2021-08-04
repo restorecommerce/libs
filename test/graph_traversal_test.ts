@@ -8,6 +8,7 @@ import * as chassis from '@restorecommerce/chassis-srv';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { Database } from 'arangojs';
 import { createServiceConfig } from '@restorecommerce/service-config';
+import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
 
@@ -32,7 +33,7 @@ const testProvider = (providerCfg) => {
       db = await providerCfg.init();
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
-        cfg.get('fieldHandlers:bufferFields'));
+        cfg.get('fieldHandlers:bufferFields'), createLogger(cfg.get('server:logger')));
       await server.bind('graphsTestService', graphAPIService);
 
       await server.start();
@@ -136,6 +137,19 @@ const testProvider = (providerCfg) => {
               resolve(traversalResponse);
             });
           });
+
+          // compare data
+          should.exist(traversalResponse.paths);
+          should.exist(traversalResponse.data);
+          traversalResponse.paths.should.have.size(3);
+          traversalResponse.data.should.have.size(3);
+          let finalVertices: any = [];
+          for (let eachVertice of traversalResponse.data) {
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+          }
+          finalVertices =
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
+          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by excluding specified vertices using filter in the graph',
@@ -176,6 +190,16 @@ const testProvider = (providerCfg) => {
               resolve(traversalResponse);
             });
           });
+          // compare data
+          traversalResponse.paths.should.have.size(2);
+          traversalResponse.data.should.have.size(2);
+          let finalVertices = [];
+          for (let eachVertice of traversalResponse.data) {
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+          }
+          finalVertices =
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
+          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('should traverse by including only specified edges using expander in the graph',
@@ -215,6 +239,16 @@ const testProvider = (providerCfg) => {
               resolve(traversalResponse);
             });
           });
+          // compare data
+          traversalResponse.paths.should.have.size(2);
+          traversalResponse.data.should.have.size(2);
+          let finalVertices = [];
+          for (let eachVertice of traversalResponse.data) {
+            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+          }
+          finalVertices =
+            _.sortBy(finalVertices, [(o) => { return o.id; }]);
+          finalVertices.should.deepEqual(expectedVertices);
         });
 
       it('delete vertices, should delete the edges associated as well',

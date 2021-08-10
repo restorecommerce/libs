@@ -58,7 +58,7 @@
     "test": "npm run lint",
     "build:tsc": "tsc --strict",
     "build:clean": "rimraf lib",
-    "build": "cp -r ./src/views ./lib/views && npm-run-all lint build:clean build:tsc"
+    "build": "npm-run-all lint build:clean build:tsc && cp -r ./src/views ./lib/views"
   },
   "gitHead": "0a6f7c94bfb1811c5dd60ab8c4912a41299b3717"
 }

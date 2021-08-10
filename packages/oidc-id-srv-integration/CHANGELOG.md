@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@0.0.6...@restorecommerce/oidc-id-srv-integration@0.0.7) (2021-08-10)
+
+
+### Bug Fixes
+
+* **oid-srv-integration:** move copy after build ([cf31465](https://github.com/restorecommerce/libs/commit/cf3146500825b211bc0fad5e57560a70d922ce30))
+* **oidc-srv-integration:** removed postinstall ([401d790](https://github.com/restorecommerce/libs/commit/401d790f7c667ea188749f7e8bdf8aab4a413279))
+* **rc-grpc-clients, oidc-srv-integration:** added typeroots and skiplibcheck to fix building facade-srv ([b78abcd](https://github.com/restorecommerce/libs/commit/b78abcd08c8f429bda2baa3931c6acf62eeaef06))
+
+
+
+
+
 ## [0.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@0.0.5...@restorecommerce/oidc-id-srv-integration@0.0.6) (2021-08-03)
 
 

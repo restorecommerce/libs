@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.2...@restorecommerce/rc-grpc-clients@0.2.3) (2021-08-10)
+
+
+### Bug Fixes
+
+* **rc-grpc-clients, oidc-srv-integration:** added typeroots and skiplibcheck to fix building facade-srv ([b78abcd](https://github.com/restorecommerce/libs/commit/b78abcd08c8f429bda2baa3931c6acf62eeaef06))
+
+
+
+
+
 ## [0.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.1...@restorecommerce/rc-grpc-clients@0.2.2) (2021-08-03)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

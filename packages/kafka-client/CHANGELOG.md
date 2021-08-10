@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.18](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.17...@restorecommerce/kafka-client@0.2.18) (2021-08-10)
+
+
+### Bug Fixes
+
+* **acs-client, gql-bot, kafka-client, koa-health-check:** eslintrc added root to uniquely identify eslint plugin package to avoid error building facade-srv ([c2e446b](https://github.com/restorecommerce/kafka-client/commit/c2e446bf0f09d7fa4f000da3bb09fd612cb9526c))
+
+
+
+
+
 ## [0.2.17](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.16...@restorecommerce/kafka-client@0.2.17) (2021-08-03)
 
 

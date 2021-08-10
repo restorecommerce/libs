@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.1.13...@restorecommerce/gql-bot@0.1.14) (2021-08-10)
+
+
+### Bug Fixes
+
+* **acs-client, gql-bot, kafka-client, koa-health-check:** eslintrc added root to uniquely identify eslint plugin package to avoid error building facade-srv ([c2e446b](https://github.com/restorecommerce/libs/commit/c2e446bf0f09d7fa4f000da3bb09fd612cb9526c))
+
+
+
+
+
 ## [0.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.1.12...@restorecommerce/gql-bot@0.1.13) (2021-08-03)
 
 

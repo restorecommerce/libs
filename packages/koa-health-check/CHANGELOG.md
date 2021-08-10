@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.8](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@0.1.7...@restorecommerce/koa-health-check@0.1.8) (2021-08-10)
+
+
+### Bug Fixes
+
+* **acs-client, gql-bot, kafka-client, koa-health-check:** eslintrc added root to uniquely identify eslint plugin package to avoid error building facade-srv ([c2e446b](https://github.com/restorecommerce/koa-cloud-health/commit/c2e446bf0f09d7fa4f000da3bb09fd612cb9526c))
+
+
+
+
+
 ## [0.1.7](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@0.1.6...@restorecommerce/koa-health-check@0.1.7) (2021-08-03)
 
 

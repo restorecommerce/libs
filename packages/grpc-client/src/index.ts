@@ -4,6 +4,8 @@ import { loadSync as protoLoaderLoadSync } from '@grpc/proto-loader';
 import { Writer } from 'protobufjs/minimal';
 import { Logger } from 'winston';
 import * as rTracer from 'cls-rtracer';
+import * as _ from 'lodash';
+import { Stream } from 'stream';
 
 export interface GrpcClientLoadProtoConfig {
   protoRoot?: string;
@@ -23,6 +25,7 @@ export interface GrpcClientConfig {
   timeout?: number;
   proto?: GrpcClientLoadProtoConfig;
   bufferFields?: any;
+  observable?: boolean;
 }
 
 // A service must only have functions that that take an argument and return a Promise or Observable
@@ -51,15 +54,15 @@ export interface UnaryArgs<TArguments, TResponse> extends RequestArgs<TArguments
 }
 
 export interface ServerStreamArgs<TArguments = any, TResponse = any> extends RequestArgs<TArguments, TResponse> {
-  data: TArguments
+  data: TArguments;
 }
 
 export interface ClientStreamArgs<TArguments = any, TResponse = any> extends RequestArgs<TArguments, TResponse> {
-  data: Observable<TArguments>
+  data: Stream | Observable<TArguments>;
 }
 
 export interface BidiStreamArgs<TArguments = any, TResponse = any> extends RequestArgs<TArguments, TResponse> {
-  data: Observable<TArguments>
+  data: Observable<TArguments>;
 }
 
 export interface GrpcClientRpcMethodDefinition<TArguments extends Object, TResponse extends Object> {
@@ -90,12 +93,14 @@ export class GrpcClient {
   readonly [key: string]: any;
   readonly logger: Logger;
   readonly bufferFields: any;
+  readonly grpcCientConfig: any;
 
   constructor(grpcCientConfig: GrpcClientConfig, logger: Logger) {
     let address, timeout, proto, bufferFields;
     if (!grpcCientConfig) {
       throw new Error('Grpc client configuration missing');
     }
+    this.grpcCientConfig = grpcCientConfig;
     address = grpcCientConfig.address;
     proto = grpcCientConfig.proto ? grpcCientConfig.proto : undefined;
     timeout = grpcCientConfig.timeout ? grpcCientConfig.timeout : undefined;
@@ -161,6 +166,31 @@ export class GrpcClient {
 
   serverStream<TArguments = any, TResponse = any>(
     { methodPath, serialize, deserialize, data }: ServerStreamArgs<TArguments, TResponse>
+  ): any {
+    this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
+    this.logRequestMessage(data, methodPath);
+    const options = {
+      deadline: Date.now() + this.timeout
+    };
+    const meta = new Metadata();
+    const rid: any = rTracer.id();
+    if (rid) {
+      meta.add('rid', rid);
+    }
+    const serverStream =
+      this.client.makeServerStreamRequest<TArguments, TResponse>(
+        methodPath,
+        serialize,
+        deserialize,
+        data,
+        meta,
+        options
+      );
+    return serverStream;
+  }
+
+  serverStreamOB<TArguments = any, TResponse = any>(
+    { methodPath, serialize, deserialize, data }: ServerStreamArgs<TArguments, TResponse>
   ): Observable<TResponse> {
     return new Observable<TResponse>((subscriber) => {
       this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
@@ -214,6 +244,53 @@ export class GrpcClient {
           options,
           (err, value) => {
             if (err) {
+              this.logger.error('Error client stream request', err);
+              return resolve({
+                operationStatus: {
+                  code: err.code,
+                  message: err.message
+                }
+              } as any);
+            } else {
+              return resolve(value!)
+            }
+          }
+        );
+      (data as Stream).on('error', (err) => {
+        this.logger.error('Error on client streaming', err);
+      });
+      (data as Stream).on('data', (data) => {
+        clientStream.write(data);
+      });
+      (data as Stream).on('end', () => {
+        clientStream.end();
+      });
+    });
+  }
+
+  async clientStreamOB<TArguments = any, TResponse = any>(
+    { methodPath, serialize, deserialize, data }: ClientStreamArgs<TArguments, TResponse>
+  ): Promise<TResponse> {
+    return new Promise<TResponse>((resolve, reject) => {
+      this.logger.info(`Invoking Client Stream endpoint ${methodPath}`);
+      this.logRequestMessage(data, methodPath);
+      const options = {
+        deadline: Date.now() + this.timeout
+      };
+      const meta = new Metadata();
+      const rid: any = rTracer.id();
+      if (rid) {
+        meta.add('rid', rid);
+      }
+      const clientStream =
+        this.client.makeClientStreamRequest<TArguments, TResponse>(
+          methodPath,
+          serialize,
+          deserialize,
+          meta,
+          options,
+          (err, value) => {
+            if (err) {
               this.logger.error('Error client stream request', { message: err.message });
               this.logger.error('Error stack', { stack: err.stack });
               return resolve({
@@ -227,7 +304,7 @@ export class GrpcClient {
             }
           }
         );
-      const sub = data?.subscribe(_data => {
+      const sub = (data as Observable<TArguments>)?.subscribe(_data => {
         clientStream.write(_data);
       }, undefined, () => clientStream.end());
 
@@ -319,12 +396,24 @@ export class GrpcClient {
         } else if (methodDefinition.requestStream && !methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.clientStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
+            [method]: (data: any) => {
+              if (this.grpcCientConfig.observable) {
+                return this.clientStreamOB({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data });
+              } else {
+                return this.clientStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data });
+              }
+            }
           }
         } else if (!methodDefinition.requestStream && methodDefinition.responseStream) {
           return {
             ...service,
-            [method]: (data: any) => this.serverStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data })
+            [method]: (data: any) => {
+              if(this.grpcCientConfig.observable) {
+                return this.serverStreamOB({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data });
+              } else {
+                return this.serverStream({ methodPath: methodDefinition.path, deserialize: methodDefinition.responseDeserialize, serialize: methodDefinition.requestSerialize, data });
+              }
+            }
           }
         } else if (methodDefinition.requestStream && methodDefinition.responseStream) {
           return {
@@ -356,12 +445,24 @@ export class GrpcClient {
       } else if (methodDefinition.type === 'clientStream') {
         return {
           ...service,
-          [method]: (data: any) => this.clientStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
+          [method]: (data: any) => {
+            if (this.grpcCientConfig.observable) {
+              return this.clientStreamOB({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data });
+            } else {
+              return this.clientStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data });
+            }
+          }
         }
       } else if (methodDefinition.type === 'serverStream') {
         return {
           ...service,
-          [method]: (data: any) => this.serverStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data })
+          [method]: (data: any) => {
+            if (this.grpcCientConfig.observable) {
+              return this.serverStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data });
+            } else {
+              return this.serverStream({ methodPath, deserialize: methodDefinition.deserialize, serialize: (value) => Buffer.from(methodDefinition.serialize(value).finish()), data });
+            }
+          }
         }
       } else if (methodDefinition.type === 'bidiStream') {
         return {
@@ -375,8 +476,8 @@ export class GrpcClient {
   }
 
   private logRequestMessage(data: any, method: string) {
-    let cloned = Object.assign({}, data);
-    if (this.bufferFields) {
+    const cloned = _.cloneDeep(data);
+    if (this.bufferFields && !_.isEmpty(cloned)) {
       const keys = Object.keys(this.bufferFields);
       for (let key of keys) {
         const bufferField = this.bufferFields[key];

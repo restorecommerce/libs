@@ -3,6 +3,7 @@ import { createMockServer } from './mock/index'
 import { randomBytes } from 'crypto';
 import { Observable } from 'rxjs';
 import { createLogger } from '@restorecommerce/logger';
+import { Readable, Transform } from 'stream';
 
 const ADDRESS = '127.0.0.1:50001';
 const mockServer = createMockServer(ADDRESS)
@@ -69,7 +70,26 @@ describe('grpc client', () => {
     }
   }, logger);
 
-  it('should send and receive a unary request', async () => {
+  // observable config set to true
+  const observableGrpcClient = new GrpcClient({
+    address: ADDRESS,
+    proto: {
+      protoRoot: './tests/protos',
+      protoPath: './echo/echo.proto',
+      services: {
+        echo: {
+          packageName: 'echo',
+          serviceName: 'EchoService',
+        }
+      }
+    },
+    bufferFields: {
+      EchoRequest: ['message', 'test']
+    },
+    observable: true,
+  }, logger);
+
+  it('should send a unary request and receive response', async () => {
     const data = 'Test String message';
 
     const result = await grpcClient.echo.echoUnary({
@@ -83,10 +103,57 @@ describe('grpc client', () => {
     expect(decodedAnyData.testAny).toEqual('testMessage');
   });
 
-  it('should send and receive a server-stream request', async (done) => {
+  it('should send a client-stream request and receive response', async () => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+    const transformBuffObj = () => {
+      return new Transform({
+        objectMode: true,
+        transform: (chunk, _, done) => {
+          const data = {
+            message: chunk,
+          };
+          done(null, data);
+        }
+      });
+    };
+    const clientStream = Readable.from(buffer.toString());
+    const result = await grpcClient.echo.echoClientStream(clientStream.pipe(transformBuffObj()));
+
+    expect(result).toHaveProperty('message');
+    expect(result.message).toEqual(buffer.toString('utf-8'));
+  });
+
+  it('should send request and receive a server-stream response', async () => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+    const result = await grpcClient.echo.echoServerStream({
+      message: buffer
+    });
+    let response = '';
+    result.on('data', (data) => {
+      response += data.message;
+    });
+
+    await new Promise((resolve, reject) => {
+      result.on('end', () => {
+        resolve(0);
+      });
+    });
+    expect(response).toEqual(buffer.toString('utf-8'));
+  });
+
+  it('should send observable client-stream request and receive response', async () => {
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
 
-    const result = await grpcClient.echo.echoServerStream({
+    const result = await observableGrpcClient.echo.echoClientStream(bufferToObservable(buffer));
+
+    expect(result).toHaveProperty('message');
+    expect(result.message).toEqual(buffer.toString('utf-8'));
+  });
+
+  it('should send request and receive a observable server-stream response', async (done) => {
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
+
+    const result = await observableGrpcClient.echo.echoServerStream({
       message: buffer
     });
 
@@ -97,16 +164,7 @@ describe('grpc client', () => {
     }, undefined, () => {
       expect(response).toEqual(buffer.toString('utf-8'));
       done();
-    })
-  });
-
-  it('should send and receive a client-stream request', async () => {
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-
-    const result = await grpcClient.echo.echoClientStream(bufferToObservable(buffer));
-
-    expect(result).toHaveProperty('message');
-    expect(result.message).toEqual(buffer.toString('utf-8'));
+    });
   });
 
   it('should send and receive a bidi-stream request', async (done) => {

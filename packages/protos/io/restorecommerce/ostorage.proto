@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package io.restorecommerce.ostorage;
 
-import "google/protobuf/struct.proto";
+import "io/restorecommerce/filter.proto";
 import "google/protobuf/any.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
@@ -72,8 +72,13 @@ message Object {
 }
 
 message ObjectResponse {
-  ObjectResponsePayload payload = 1;
+  ObjectResponsePayloadWithStatus response = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message ObjectResponsePayloadWithStatus {
+  ObjectResponsePayload payload = 1;
+  io.restorecommerce.status.Status status = 3;
 }
 
 message ObjectResponsePayload {
@@ -93,12 +98,13 @@ message GetRequest {
 }
 
 message ListResponse {
-  ObjectsData payload = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  repeated ObjectsDataWithPayloadStatus response = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
-message ObjectsData {
-  repeated ObjectData object_data = 1;
+message ObjectsDataWithPayloadStatus {
+ ObjectData payload = 1;
+ io.restorecommerce.status.Status status = 2;
 }
 
 message ObjectData {
@@ -114,8 +120,13 @@ message DeleteRequest {
 }
 
 message PutResponse {
-  Response payload = 1;
+  PutResponseWithPayloadStatus response = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message PutResponseWithPayloadStatus {
+  Response payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Response {
@@ -129,7 +140,7 @@ message Response {
 
 message ListRequest {
   string bucket = 1;
-  google.protobuf.Struct filter = 2; /// Filter based on fieldName|operation, value|list
+  io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
   io.restorecommerce.auth.Subject subject = 3;
 }
 

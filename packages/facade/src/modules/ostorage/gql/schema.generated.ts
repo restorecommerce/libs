@@ -49,8 +49,14 @@ export type ProtoIoRestorecommerceOstorageObjectResponse = {
 
 export type IoRestorecommerceOstorageObjectResponse = {
   __typename?: 'IoRestorecommerceOstorageObjectResponse';
-  payload?: Maybe<IoRestorecommerceOstorageObjectResponsePayload>;
+  response?: Maybe<IoRestorecommerceOstorageObjectResponsePayloadWithStatus>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
+};
+
+export type IoRestorecommerceOstorageObjectResponsePayloadWithStatus = {
+  __typename?: 'IoRestorecommerceOstorageObjectResponsePayloadWithStatus';
+  payload?: Maybe<IoRestorecommerceOstorageObjectResponsePayload>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceOstorageObjectResponsePayload = {
@@ -97,6 +103,13 @@ export type GoogleProtobufAny = {
   value?: Maybe<Scalars['TodoScalar']>;
 };
 
+export type IoRestorecommerceStatusStatus = {
+  __typename?: 'IoRestorecommerceStatusStatus';
+  id?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
+};
+
 export type IoRestorecommerceStatusOperationStatus = {
   __typename?: 'IoRestorecommerceStatusOperationStatus';
   code?: Maybe<Scalars['Int']>;
@@ -116,13 +129,14 @@ export type ProtoIoRestorecommerceOstorageListResponse = {
 
 export type IoRestorecommerceOstorageListResponse = {
   __typename?: 'IoRestorecommerceOstorageListResponse';
-  payload?: Maybe<IoRestorecommerceOstorageObjectsData>;
+  response?: Maybe<Array<IoRestorecommerceOstorageObjectsDataWithPayloadStatus>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
-export type IoRestorecommerceOstorageObjectsData = {
-  __typename?: 'IoRestorecommerceOstorageObjectsData';
-  objectData?: Maybe<Array<IoRestorecommerceOstorageObjectData>>;
+export type IoRestorecommerceOstorageObjectsDataWithPayloadStatus = {
+  __typename?: 'IoRestorecommerceOstorageObjectsDataWithPayloadStatus';
+  payload?: Maybe<IoRestorecommerceOstorageObjectData>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceOstorageObjectData = {
@@ -134,34 +148,46 @@ export type IoRestorecommerceOstorageObjectData = {
 
 export type IIoRestorecommerceOstorageListRequest = {
   bucket?: Maybe<Scalars['String']>;
-  filter?: Maybe<IGoogleProtobufStruct>;
+  filters?: Maybe<IIoRestorecommerceFilterFilterOp>;
 };
 
-export type IGoogleProtobufStruct = {
-  fields?: Maybe<Array<IGoogleProtobufStructFieldsEntry>>;
+export type IIoRestorecommerceFilterFilterOp = {
+  filter?: Maybe<Array<IIoRestorecommerceFilterFilter>>;
+  operator?: Maybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
-export type IGoogleProtobufStructFieldsEntry = {
-  key?: Maybe<Scalars['String']>;
-  value?: Maybe<IGoogleProtobufValue>;
+export type IIoRestorecommerceFilterFilter = {
+  field?: Maybe<Scalars['String']>;
+  operation?: Maybe<IoRestorecommerceFilterFilterOperation>;
+  value?: Maybe<Scalars['String']>;
+  type?: Maybe<IoRestorecommerceFilterFilterValueType>;
+  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
-export type IGoogleProtobufValue = {
-  nullValue?: Maybe<GoogleProtobufNullValue>;
-  numberValue?: Maybe<Scalars['Float']>;
-  stringValue?: Maybe<Scalars['String']>;
-  boolValue?: Maybe<Scalars['Boolean']>;
-  structValue?: Maybe<IGoogleProtobufStruct>;
-  listValue?: Maybe<IGoogleProtobufListValue>;
-};
-
-export enum GoogleProtobufNullValue {
-  NullValue = 0
+export enum IoRestorecommerceFilterFilterOperation {
+  Eq = 0,
+  Lt = 1,
+  Lte = 2,
+  Gt = 3,
+  Gte = 4,
+  IsEmpty = 5,
+  ILike = 6,
+  In = 7,
+  Neq = 8
 }
 
-export type IGoogleProtobufListValue = {
-  values?: Maybe<Array<IGoogleProtobufValue>>;
-};
+export enum IoRestorecommerceFilterFilterValueType {
+  String = 0,
+  Number = 1,
+  Boolean = 2,
+  Date = 3,
+  Array = 4
+}
+
+export enum IoRestorecommerceFilterFilterOpOperator {
+  And = 0,
+  Or = 1
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -202,8 +228,14 @@ export type ProtoIoRestorecommerceOstoragePutResponse = {
 
 export type IoRestorecommerceOstoragePutResponse = {
   __typename?: 'IoRestorecommerceOstoragePutResponse';
-  payload?: Maybe<IoRestorecommerceOstorageResponse>;
+  response?: Maybe<IoRestorecommerceOstoragePutResponseWithPayloadStatus>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
+};
+
+export type IoRestorecommerceOstoragePutResponseWithPayloadStatus = {
+  __typename?: 'IoRestorecommerceOstoragePutResponseWithPayloadStatus';
+  payload?: Maybe<IoRestorecommerceOstorageResponse>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
 export type IoRestorecommerceOstorageResponse = {
@@ -264,13 +296,6 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
   __typename?: 'IoRestorecommerceResourcebaseDeleteResponse';
   status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
-};
-
-export type IoRestorecommerceStatusStatus = {
-  __typename?: 'IoRestorecommerceStatusStatus';
-  id?: Maybe<Scalars['String']>;
-  code?: Maybe<Scalars['Int']>;
-  message?: Maybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceOstorageDeleteRequest = {
@@ -387,6 +412,7 @@ export type ResolversTypes = ResolversObject<{
   OstorageObjectQuery: ResolverTypeWrapper<OstorageObjectQuery>;
   ProtoIoRestorecommerceOstorageObjectResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageObjectResponse>;
   IoRestorecommerceOstorageObjectResponse: ResolverTypeWrapper<IoRestorecommerceOstorageObjectResponse>;
+  IoRestorecommerceOstorageObjectResponsePayloadWithStatus: ResolverTypeWrapper<IoRestorecommerceOstorageObjectResponsePayloadWithStatus>;
   IoRestorecommerceOstorageObjectResponsePayload: ResolverTypeWrapper<IoRestorecommerceOstorageObjectResponsePayload>;
   String: ResolverTypeWrapper<Scalars['String']>;
   TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
@@ -396,24 +422,26 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceOstorageOptions: ResolverTypeWrapper<IoRestorecommerceOstorageOptions>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
+  IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ProtoIoRestorecommerceOstorageListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageListResponse>;
   IoRestorecommerceOstorageListResponse: ResolverTypeWrapper<IoRestorecommerceOstorageListResponse>;
-  IoRestorecommerceOstorageObjectsData: ResolverTypeWrapper<IoRestorecommerceOstorageObjectsData>;
+  IoRestorecommerceOstorageObjectsDataWithPayloadStatus: ResolverTypeWrapper<IoRestorecommerceOstorageObjectsDataWithPayloadStatus>;
   IoRestorecommerceOstorageObjectData: ResolverTypeWrapper<IoRestorecommerceOstorageObjectData>;
   IIoRestorecommerceOstorageListRequest: IIoRestorecommerceOstorageListRequest;
-  IGoogleProtobufStruct: IGoogleProtobufStruct;
-  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
-  IGoogleProtobufValue: IGoogleProtobufValue;
-  GoogleProtobufNullValue: GoogleProtobufNullValue;
-  IGoogleProtobufListValue: IGoogleProtobufListValue;
+  IIoRestorecommerceFilterFilterOp: IIoRestorecommerceFilterFilterOp;
+  IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
+  IoRestorecommerceFilterFilterOperation: IoRestorecommerceFilterFilterOperation;
+  IoRestorecommerceFilterFilterValueType: IoRestorecommerceFilterFilterValueType;
+  IoRestorecommerceFilterFilterOpOperator: IoRestorecommerceFilterFilterOpOperator;
   Mutation: ResolverTypeWrapper<{}>;
   OstorageMutation: ResolverTypeWrapper<OstorageMutation>;
   OstorageObjectMutation: ResolverTypeWrapper<OstorageObjectMutation>;
   ProtoIoRestorecommerceOstoragePutResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstoragePutResponse>;
   IoRestorecommerceOstoragePutResponse: ResolverTypeWrapper<IoRestorecommerceOstoragePutResponse>;
+  IoRestorecommerceOstoragePutResponseWithPayloadStatus: ResolverTypeWrapper<IoRestorecommerceOstoragePutResponseWithPayloadStatus>;
   IoRestorecommerceOstorageResponse: ResolverTypeWrapper<IoRestorecommerceOstorageResponse>;
   IIoRestorecommerceOstorageObject: IIoRestorecommerceOstorageObject;
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
@@ -423,7 +451,6 @@ export type ResolversTypes = ResolversObject<{
   IGoogleProtobufAny: IGoogleProtobufAny;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
-  IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IIoRestorecommerceOstorageDeleteRequest: IIoRestorecommerceOstorageDeleteRequest;
   ProtoIoRestorecommerceOstorageCopyResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOstorageCopyResponse>;
   IoRestorecommerceOstorageCopyResponse: ResolverTypeWrapper<IoRestorecommerceOstorageCopyResponse>;
@@ -440,6 +467,7 @@ export type ResolversParentTypes = ResolversObject<{
   OstorageObjectQuery: OstorageObjectQuery;
   ProtoIoRestorecommerceOstorageObjectResponse: ProtoIoRestorecommerceOstorageObjectResponse;
   IoRestorecommerceOstorageObjectResponse: IoRestorecommerceOstorageObjectResponse;
+  IoRestorecommerceOstorageObjectResponsePayloadWithStatus: IoRestorecommerceOstorageObjectResponsePayloadWithStatus;
   IoRestorecommerceOstorageObjectResponsePayload: IoRestorecommerceOstorageObjectResponsePayload;
   String: Scalars['String'];
   TodoScalar: Scalars['TodoScalar'];
@@ -449,23 +477,23 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceOstorageOptions: IoRestorecommerceOstorageOptions;
   Int: Scalars['Int'];
   GoogleProtobufAny: GoogleProtobufAny;
+  IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
   Boolean: Scalars['Boolean'];
   ProtoIoRestorecommerceOstorageListResponse: ProtoIoRestorecommerceOstorageListResponse;
   IoRestorecommerceOstorageListResponse: IoRestorecommerceOstorageListResponse;
-  IoRestorecommerceOstorageObjectsData: IoRestorecommerceOstorageObjectsData;
+  IoRestorecommerceOstorageObjectsDataWithPayloadStatus: IoRestorecommerceOstorageObjectsDataWithPayloadStatus;
   IoRestorecommerceOstorageObjectData: IoRestorecommerceOstorageObjectData;
   IIoRestorecommerceOstorageListRequest: IIoRestorecommerceOstorageListRequest;
-  IGoogleProtobufStruct: IGoogleProtobufStruct;
-  IGoogleProtobufStructFieldsEntry: IGoogleProtobufStructFieldsEntry;
-  IGoogleProtobufValue: IGoogleProtobufValue;
-  IGoogleProtobufListValue: IGoogleProtobufListValue;
+  IIoRestorecommerceFilterFilterOp: IIoRestorecommerceFilterFilterOp;
+  IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   Mutation: {};
   OstorageMutation: OstorageMutation;
   OstorageObjectMutation: OstorageObjectMutation;
   ProtoIoRestorecommerceOstoragePutResponse: ProtoIoRestorecommerceOstoragePutResponse;
   IoRestorecommerceOstoragePutResponse: IoRestorecommerceOstoragePutResponse;
+  IoRestorecommerceOstoragePutResponseWithPayloadStatus: IoRestorecommerceOstoragePutResponseWithPayloadStatus;
   IoRestorecommerceOstorageResponse: IoRestorecommerceOstorageResponse;
   IIoRestorecommerceOstorageObject: IIoRestorecommerceOstorageObject;
   Upload: Scalars['Upload'];
@@ -475,7 +503,6 @@ export type ResolversParentTypes = ResolversObject<{
   IGoogleProtobufAny: IGoogleProtobufAny;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
-  IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IIoRestorecommerceOstorageDeleteRequest: IIoRestorecommerceOstorageDeleteRequest;
   ProtoIoRestorecommerceOstorageCopyResponse: ProtoIoRestorecommerceOstorageCopyResponse;
   IoRestorecommerceOstorageCopyResponse: IoRestorecommerceOstorageCopyResponse;
@@ -506,8 +533,14 @@ export type ProtoIoRestorecommerceOstorageObjectResponseResolvers<ContextType = 
 }>;
 
 export type IoRestorecommerceOstorageObjectResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageObjectResponse'] = ResolversParentTypes['IoRestorecommerceOstorageObjectResponse']> = ResolversObject<{
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectResponsePayload']>, ParentType, ContextType>;
+  response?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectResponsePayloadWithStatus']>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceOstorageObjectResponsePayloadWithStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageObjectResponsePayloadWithStatus'] = ResolversParentTypes['IoRestorecommerceOstorageObjectResponsePayloadWithStatus']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectResponsePayload']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -558,6 +591,13 @@ export type GoogleProtobufAnyResolvers<ContextType = OstorageContext, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IoRestorecommerceStatusStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusOperationStatus'] = ResolversParentTypes['IoRestorecommerceStatusOperationStatus']> = ResolversObject<{
   code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -570,13 +610,14 @@ export type ProtoIoRestorecommerceOstorageListResponseResolvers<ContextType = Os
 }>;
 
 export type IoRestorecommerceOstorageListResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageListResponse'] = ResolversParentTypes['IoRestorecommerceOstorageListResponse']> = ResolversObject<{
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectsData']>, ParentType, ContextType>;
+  response?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageObjectsDataWithPayloadStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceOstorageObjectsDataResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageObjectsData'] = ResolversParentTypes['IoRestorecommerceOstorageObjectsData']> = ResolversObject<{
-  objectData?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageObjectData']>>, ParentType, ContextType>;
+export type IoRestorecommerceOstorageObjectsDataWithPayloadStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageObjectsDataWithPayloadStatus'] = ResolversParentTypes['IoRestorecommerceOstorageObjectsDataWithPayloadStatus']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageObjectData']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -586,6 +627,12 @@ export type IoRestorecommerceOstorageObjectDataResolvers<ContextType = OstorageC
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+
+export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+
+export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
 
 export type MutationResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   ostorage?: Resolver<ResolversTypes['OstorageMutation'], ParentType, ContextType>;
@@ -609,8 +656,14 @@ export type ProtoIoRestorecommerceOstoragePutResponseResolvers<ContextType = Ost
 }>;
 
 export type IoRestorecommerceOstoragePutResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstoragePutResponse'] = ResolversParentTypes['IoRestorecommerceOstoragePutResponse']> = ResolversObject<{
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageResponse']>, ParentType, ContextType>;
+  response?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstoragePutResponseWithPayloadStatus']>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceOstoragePutResponseWithPayloadStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstoragePutResponseWithPayloadStatus'] = ResolversParentTypes['IoRestorecommerceOstoragePutResponseWithPayloadStatus']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOstorageResponse']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -636,13 +689,6 @@ export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextTyp
 export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceStatusStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -678,27 +724,32 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   OstorageObjectQuery?: OstorageObjectQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageObjectResponse?: ProtoIoRestorecommerceOstorageObjectResponseResolvers<ContextType>;
   IoRestorecommerceOstorageObjectResponse?: IoRestorecommerceOstorageObjectResponseResolvers<ContextType>;
+  IoRestorecommerceOstorageObjectResponsePayloadWithStatus?: IoRestorecommerceOstorageObjectResponsePayloadWithStatusResolvers<ContextType>;
   IoRestorecommerceOstorageObjectResponsePayload?: IoRestorecommerceOstorageObjectResponsePayloadResolvers<ContextType>;
   TodoScalar?: GraphQLScalarType;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceOstorageOptions?: IoRestorecommerceOstorageOptionsResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
+  IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageListResponse?: ProtoIoRestorecommerceOstorageListResponseResolvers<ContextType>;
   IoRestorecommerceOstorageListResponse?: IoRestorecommerceOstorageListResponseResolvers<ContextType>;
-  IoRestorecommerceOstorageObjectsData?: IoRestorecommerceOstorageObjectsDataResolvers<ContextType>;
+  IoRestorecommerceOstorageObjectsDataWithPayloadStatus?: IoRestorecommerceOstorageObjectsDataWithPayloadStatusResolvers<ContextType>;
   IoRestorecommerceOstorageObjectData?: IoRestorecommerceOstorageObjectDataResolvers<ContextType>;
+  IoRestorecommerceFilterFilterOperation?: IoRestorecommerceFilterFilterOperationResolvers;
+  IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
+  IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
   Mutation?: MutationResolvers<ContextType>;
   OstorageMutation?: OstorageMutationResolvers<ContextType>;
   OstorageObjectMutation?: OstorageObjectMutationResolvers<ContextType>;
   ProtoIoRestorecommerceOstoragePutResponse?: ProtoIoRestorecommerceOstoragePutResponseResolvers<ContextType>;
   IoRestorecommerceOstoragePutResponse?: IoRestorecommerceOstoragePutResponseResolvers<ContextType>;
+  IoRestorecommerceOstoragePutResponseWithPayloadStatus?: IoRestorecommerceOstoragePutResponseWithPayloadStatusResolvers<ContextType>;
   IoRestorecommerceOstorageResponse?: IoRestorecommerceOstorageResponseResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
-  IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageCopyResponse?: ProtoIoRestorecommerceOstorageCopyResponseResolvers<ContextType>;
   IoRestorecommerceOstorageCopyResponse?: IoRestorecommerceOstorageCopyResponseResolvers<ContextType>;
   IoRestorecommerceOstorageCopyResponsePayloadWithStatus?: IoRestorecommerceOstorageCopyResponsePayloadWithStatusResolvers<ContextType>;

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.19](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.18...@restorecommerce/kafka-client@0.2.19) (2021-08-23)
+
+
+### Bug Fixes
+
+* **version:** up version to be in sync in package-lock ([b8f22c1](https://github.com/restorecommerce/kafka-client/commit/b8f22c1268ee2af4beff7d88bda30f197896e3d2))
+
+
+
+
+
 ## [0.2.18](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.17...@restorecommerce/kafka-client@0.2.18) (2021-08-10)
 
 

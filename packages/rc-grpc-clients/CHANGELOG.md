@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.3...@restorecommerce/rc-grpc-clients@0.2.4) (2021-08-23)
+
+
+### Bug Fixes
+
+* **rc-grpc-clients:** update for changes in ostorage proto ([94b6f8c](https://github.com/restorecommerce/libs/commit/94b6f8c5e0a7a8da5e8d1429772694b5c4c2d42b))
+* **version:** up version to be in sync in package-lock ([b8f22c1](https://github.com/restorecommerce/libs/commit/b8f22c1268ee2af4beff7d88bda30f197896e3d2))
+
+
+
+
+
 ## [0.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.2...@restorecommerce/rc-grpc-clients@0.2.3) (2021-08-10)
 
 

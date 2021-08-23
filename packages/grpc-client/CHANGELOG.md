@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.6...@restorecommerce/grpc-client@0.2.7) (2021-08-23)
+
+
+### Bug Fixes
+
+* **grpc-client:** added support for streaming requests and response along with making Observable configurable ([895e650](https://github.com/restorecommerce/libs/commit/895e650702ec31075bff7d71a8595241bf6aa439))
+
+
+
+
+
 ## [0.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.5...@restorecommerce/grpc-client@0.2.6) (2021-08-03)
 
 

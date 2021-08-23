@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.3...@restorecommerce/protos@0.4.4) (2021-08-23)
+
+
+### Bug Fixes
+
+* **protos:** updated ostorage protos with status and operation_status ([cc48214](https://github.com/restorecommerce/libs/commit/cc48214f21b83d42fb9cd1f1e9713c8fa6005ac2))
+
+
+
+
+
 ## [0.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.2...@restorecommerce/protos@0.4.3) (2021-08-03)
 
 

@@ -112,17 +112,15 @@ const testProvider = (providerCfg) => {
           let traversalResponse = { data: [], paths: [] };
           // let traversalResponseStream = call.getResponseStream();
           await new Promise((resolve, reject) => {
-            result.subscribe(partResp => {
-              {
-                if ((partResp && partResp.data && partResp.data.value)) {
-                  Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
-                }
-                if ((partResp && partResp.paths && partResp.paths.value)) {
-                  Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
-                }
+            result.on('data', (partResp) => {
+              if ((partResp && partResp.data && partResp.data.value)) {
+                Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
               }
-            }, undefined, () => {
-              // compare data
+              if ((partResp && partResp.paths && partResp.paths.value)) {
+                Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              }
+            });
+            result.on('end', () => {
               should.exist(traversalResponse.paths);
               should.exist(traversalResponse.data);
               traversalResponse.paths.should.have.size(3);
@@ -169,14 +167,15 @@ const testProvider = (providerCfg) => {
           let traversalResponse = { data: [], paths: [] };
 
           await new Promise((resolve, reject) => {
-            call.subscribe(partResp => {
+            call.on('data', (partResp) => {
               if (partResp && partResp.data && partResp.data.value) {
                 traversalResponse.data = JSON.parse(partResp.data.value.toString());
               }
               if (partResp && partResp.paths && partResp.paths.value) {
                 traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
               }
-            }, undefined, () => {
+            });
+            call.on('end', () => {
               // compare data
               traversalResponse.paths.should.have.size(2);
               traversalResponse.data.should.have.size(2);
@@ -218,14 +217,15 @@ const testProvider = (providerCfg) => {
           let call = await testService.traversal(traversalRequest);
           // let traversalResponseStream = call.getResponseStream();
           await new Promise((resolve, reject) => {
-            call.subscribe(partResp => {
+            call.on('data', (partResp) => {
               if (partResp && partResp.data && partResp.data.value) {
                 traversalResponse.data = JSON.parse(partResp.data.value.toString());
               }
               if (partResp && partResp.paths && partResp.paths.value) {
                 traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
               }
-            }, undefined, () => {
+            });
+            call.on('end', () => {
               // compare data
               traversalResponse.paths.should.have.size(2);
               traversalResponse.data.should.have.size(2);

@@ -12,16 +12,14 @@ import { createIdentityServiceAdapterClass } from './tokenservice-adapter';
 import logger from './logger';
 import { cfg } from './config';
 import { getRedisInstance } from './redis';
-import { Client } from '@restorecommerce/grpc-client';
+import { GrpcClient } from '@restorecommerce/grpc-client';
 
 // TODO add authEP handler
 // const authEPHandler = new EndpointHandler('authentication_log');
 
 const grpcTokenConfig = cfg.get('client:token');
-const tokenClient = new Client(grpcTokenConfig, logger);
-const tokenService: any = tokenClient.connect().then((service) => {
-  return service;
-});
+const tokenClient = new GrpcClient(grpcTokenConfig, logger);
+const tokenService = tokenClient.token;
 const adapter = createIdentityServiceAdapterClass(tokenService, logger, getRedisInstance(cfg.get('redis:db-indexes:db-findByToken')));
 
 

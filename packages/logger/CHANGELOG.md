@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.5...@restorecommerce/logger@0.10.6) (2021-09-09)
+
+
+### Bug Fixes
+
+* **logger:** check if file exists on trace line ([059b1cd](https://github.com/restorecommerce/libs/commit/059b1cd51ad1d1dba5a82898e93de58573ab2986))
+
+
+
+
+
 ## [0.10.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.4...@restorecommerce/logger@0.10.5) (2021-08-23)
 
 

@@ -634,9 +634,9 @@ export class Kafka {
         });
       }
       for (let msg of messages) {
-        if (this.config && this.config[eventName].bufferFields) {
-          const keys = this.config[eventName].bufferFields;
-          this.deleteBufferFields(keys, msg, this.config[eventName].enableLogging);
+        if (this.config && this.config[eventName].omittedFields) {
+          const keys = this.config[eventName].omittedFields;
+          this.omitFields(keys, msg, this.config[eventName].enableLogging);
         }
       }
       this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, {messages});
@@ -660,7 +660,7 @@ export class Kafka {
     }
   }
 
-  private deleteBufferFields(keys: string | string[], msg: any, enableLogging?: boolean): void {
+  private omitFields(keys: string | string[], msg: any, enableLogging?: boolean): void {
     let msgs;
     if (!_.isArray(msg)) {
       msgs = [msg];
@@ -681,7 +681,7 @@ export class Kafka {
           }
         } else if (typeof key === 'object') {
           const prefixKey = Object.keys(key)[0];
-          this.deleteBufferFields(key[prefixKey], msg[prefixKey], enableLogging);
+          this.omitFields(key[prefixKey], msg[prefixKey], enableLogging);
         }
       }
     }

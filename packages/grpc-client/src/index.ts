@@ -24,7 +24,7 @@ export interface GrpcClientConfig {
   address: string;
   timeout?: number;
   proto?: GrpcClientLoadProtoConfig;
-  bufferFields?: any;
+  omittedFields?: any;
   observable?: boolean;
 }
 
@@ -92,11 +92,11 @@ export class GrpcClient {
   readonly client: Client;
   readonly [key: string]: any;
   readonly logger: Logger;
-  readonly bufferFields: any;
+  readonly omittedFields: any;
   readonly grpcCientConfig: any;
 
   constructor(grpcCientConfig: GrpcClientConfig, logger: Logger) {
-    let address, timeout, proto, bufferFields;
+    let address, timeout, proto, omittedFields;
     if (!grpcCientConfig) {
       throw new Error('Grpc client configuration missing');
     }
@@ -104,7 +104,7 @@ export class GrpcClient {
     address = grpcCientConfig.address;
     proto = grpcCientConfig.proto ? grpcCientConfig.proto : undefined;
     timeout = grpcCientConfig.timeout ? grpcCientConfig.timeout : undefined;
-    bufferFields = grpcCientConfig.bufferFields ? grpcCientConfig.bufferFields : undefined;
+    omittedFields = grpcCientConfig.omittedFields ? grpcCientConfig.omittedFields : undefined;
     // address and proto are generated dynamically, so its not initialized in config
     // if (!address) {
     //   throw new Error('endpoint configuration missing');
@@ -122,7 +122,7 @@ export class GrpcClient {
       Object.assign(this, protoServices);
     }
     this.logger = logger;
-    this.bufferFields = bufferFields;
+    this.omittedFields = omittedFields;
   }
 
   async unary<TArguments = any, TResponse = any>(
@@ -477,10 +477,10 @@ export class GrpcClient {
 
   private logRequestMessage(data: any, method: string) {
     const cloned = _.cloneDeep(data);
-    if (this.bufferFields && !_.isEmpty(cloned)) {
-      const keys = Object.keys(this.bufferFields);
+    if (this.omittedFields && !_.isEmpty(cloned)) {
+      const keys = Object.keys(this.omittedFields);
       for (let key of keys) {
-        const bufferField = this.bufferFields[key];
+        const bufferField = this.omittedFields[key];
         if (Array.isArray(bufferField)) {
           for (let eachBufField of bufferField) {
             delete cloned[eachBufField];

@@ -65,7 +65,7 @@ describe('grpc client', () => {
         }
       }
     },
-    bufferFields: {
+    omittedFields: {
       EchoRequest: ['message', 'test']
     }
   }, logger);
@@ -83,7 +83,7 @@ describe('grpc client', () => {
         }
       }
     },
-    bufferFields: {
+    omittedFields: {
       EchoRequest: ['message', 'test']
     },
     observable: true,

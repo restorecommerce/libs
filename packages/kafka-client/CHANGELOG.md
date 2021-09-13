@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.22](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.21...@restorecommerce/kafka-client@0.2.22) (2021-09-13)
+
+
+### Bug Fixes
+
+* **kafka-client:** rename bufferFields to omittedFields config ([d4678da](https://github.com/restorecommerce/kafka-client/commit/d4678dad1d782724004929116d5770b993b057c6))
+
+
+
+
+
 ## [0.2.21](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.20...@restorecommerce/kafka-client@0.2.21) (2021-09-09)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

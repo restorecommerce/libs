@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.10.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.7...@restorecommerce/logger@0.10.8) (2021-09-15)
+
+
+### Bug Fixes
+
+* **logger:** check if filtered trace exists ([4292b04](https://github.com/restorecommerce/libs/commit/4292b04eaa3664f940e43f5bed44fb19260b0d69))
+
+
+
+
+
 ## [0.10.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.6...@restorecommerce/logger@0.10.7) (2021-09-09)
 
 **Note:** Version bump only for package @restorecommerce/logger

@@ -98,7 +98,7 @@ const ignoredList = ['node:events', 'events.js'];
 export const getRealTrace = (): any => {
   const stackTrace = parse(getStackTrace());
 
-  if (stackTrace.length == 0) {
+  if (!stackTrace || stackTrace.length == 0) {
     return {
       file: null,
       line: null
@@ -107,8 +107,19 @@ export const getRealTrace = (): any => {
 
   let sourceTrace = stackTrace[stackTrace.length - 1];
   if (stackTrace.length > 4) {
-    sourceTrace = stackTrace.slice(4)
+    const potentialTrace = stackTrace.slice(4)
       .find(t => !t['native'] && t.file && t.file.indexOf('/') >= 0 && !t.file.match(ignoredRegex) && ignoredList.indexOf(t.file) < 0);
+
+    if (potentialTrace) {
+      sourceTrace = potentialTrace;
+    }
+  }
+
+  if (!sourceTrace) {
+    return {
+      file: null,
+      line: null
+    }
   }
 
   const resultTrace: any = {

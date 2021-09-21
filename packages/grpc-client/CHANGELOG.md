@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.9...@restorecommerce/grpc-client@0.2.10) (2021-09-21)
+
+
+### Bug Fixes
+
+* **grpc-client:** added else block for error handler ([03aa7fc](https://github.com/restorecommerce/libs/commit/03aa7fc66e973a02ed63e35e1d2f02da4bb9dc7c))
+
+
+
+
+
 ## [0.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.8...@restorecommerce/grpc-client@0.2.9) (2021-09-21)
 
 

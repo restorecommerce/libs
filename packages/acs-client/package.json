@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "description": "Access Control Service Client",
   "author": "Invend GmbH",
   "repository": {
@@ -17,7 +17,7 @@
   ],
   "main": "./lib/index.js",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^0.2.9",
+    "@restorecommerce/grpc-client": "^0.2.10",
     "@restorecommerce/kafka-client": "^0.2.23",
     "@restorecommerce/logger": "^0.7.2",
     "@restorecommerce/protos": "^0.4.4",

@@ -23,7 +23,8 @@
     "lodash": "^4.17.21",
     "protobufjs": "^6.11.2",
     "retry": "^0.13.1",
-    "rxjs": "^7.3.0"
+    "rxjs": "^7.3.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -40,7 +41,7 @@
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
-    "test": "jest --detectOpenHandles",
+    "test": "jest",
     "prepublishOnly": "npm run build"
   },
   "engines": {

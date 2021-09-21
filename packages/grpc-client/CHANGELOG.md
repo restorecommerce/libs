@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.8...@restorecommerce/grpc-client@0.2.9) (2021-09-21)
+
+
+### Bug Fixes
+
+* **grpc-client:** added retry mechanism for 4 grpc client requests ([cbd8bdc](https://github.com/restorecommerce/libs/commit/cbd8bdc5ca16ca85c2964d4b4061ec1deb06a569))
+* **grpc-client:** deps build ([c4fd5d8](https://github.com/restorecommerce/libs/commit/c4fd5d8f507298a0c8b0f84763d131b8a4b4e011))
+
+
+
+
+
 ## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.7...@restorecommerce/grpc-client@0.2.8) (2021-09-13)
 
 

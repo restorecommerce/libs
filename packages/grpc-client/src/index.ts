@@ -157,15 +157,16 @@ export class GrpcClient {
                 const attemptNo = (operation.attempts as () => number)();
                 this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
                 operation.retry(err);
+              } else {
+                this.logger.error('Error serving unary request', { message: err.message });
+                this.logger.error('Error stack', { stack: err.stack });
+                return resolve({
+                  operationStatus: {
+                    code: err.code,
+                    message: err.message
+                  }
+                } as any);
               }
-              this.logger.error('Error serving unary request', { message: err.message });
-              this.logger.error('Error stack', { stack: err.stack });
-              return resolve({
-                operationStatus: {
-                  code: err.code,
-                  message: err.message
-                }
-              } as any);
             } else {
               return resolve(value!)
             }
@@ -243,8 +244,9 @@ export class GrpcClient {
             const attemptNo = (operation.attempts as () => number)();
             this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
             operation.retry(err);
+          } else {
+            subscriber.error(err);
           }
-          subscriber.error(err)
         });
         serverStream.on('end', () => subscriber.complete());
         return () => {
@@ -283,14 +285,15 @@ export class GrpcClient {
                   const attemptNo = (operation.attempts as () => number)();
                   this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
                   operation.retry(err);
+                } else {
+                  this.logger.error('Error client stream request', err);
+                  return resolve({
+                    operationStatus: {
+                      code: err.code,
+                      message: err.message
+                    }
+                  } as any);
                 }
-                this.logger.error('Error client stream request', err);
-                return resolve({
-                  operationStatus: {
-                    code: err.code,
-                    message: err.message
-                  }
-                } as any);
               } else {
                 return resolve(value!)
               }
@@ -338,15 +341,16 @@ export class GrpcClient {
                   const attemptNo = (operation.attempts as () => number)();
                   this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
                   operation.retry(err);
+                } else {
+                  this.logger.error('Error client stream request', { message: err.message });
+                  this.logger.error('Error stack', { stack: err.stack });
+                  return resolve({
+                    operationStatus: {
+                      code: err.code,
+                      message: err.message
+                    }
+                  } as any);
                 }
-                this.logger.error('Error client stream request', { message: err.message });
-                this.logger.error('Error stack', { stack: err.stack });
-                return resolve({
-                  operationStatus: {
-                    code: err.code,
-                    message: err.message
-                  }
-                } as any);
               } else {
                 return resolve(value!)
               }

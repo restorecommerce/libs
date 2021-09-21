@@ -16,8 +16,8 @@ beforeAll(async () => {
   }
 });
 
-afterAll(() => {
-  return mockServer.stop();
+afterAll(async () => {
+  return await mockServer.stop();
 });
 
 const chunkSize = 1 << 10;
@@ -103,7 +103,7 @@ describe('grpc client', () => {
     expect(decodedAnyData.testAny).toEqual('testMessage');
   });
 
-  it('should send a client-stream request and receive response', async () => {
+  it('should send a client-stream request and receive response', async (done) => {
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
     const transformBuffObj = () => {
       return new Transform({
@@ -121,9 +121,10 @@ describe('grpc client', () => {
 
     expect(result).toHaveProperty('message');
     expect(result.message).toEqual(buffer.toString('utf-8'));
+    done();
   });
 
-  it('should send request and receive a server-stream response', async () => {
+  it('should send request and receive a server-stream response', async (done) => {
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
     const result = await grpcClient.echo.echoServerStream({
       message: buffer
@@ -139,6 +140,7 @@ describe('grpc client', () => {
       });
     });
     expect(response).toEqual(buffer.toString('utf-8'));
+    done();
   });
 
   it('should send observable client-stream request and receive response', async () => {

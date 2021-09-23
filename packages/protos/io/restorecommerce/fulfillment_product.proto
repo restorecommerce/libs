@@ -14,40 +14,35 @@ Microservice defination
 
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListResponse);
-  rpc Create (CourierList) returns (CourierListResponse);
+  rpc Create (ProductList) returns (ProductListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc Update (CourierList) returns (CourierListResponse);
-  rpc Upsert (CourierList) returns (CourierListResponse);
+  rpc Update (ProductList) returns (ProductListResponse);
+  rpc Upsert (ProductList) returns (ProductListResponse);
 }
 
-enum CourierType {
-  DHL = 0;
-}
-
-message Courier {
+message Product {
   string id = 1;
-  CourierType type = 2;
-  string name = 3;
-  string description = 4;
-  string logo = 5;
-  string website = 6;
+  string name = 2;
+  string description = 3;
+  string uks = 5;
+  string account_number = 6;
   google.protobuf.Any optionals = 7;
-  io.restorecommerce.meta.Meta meta = 8;
+  io.restorecommerce.meta.Meta meta = 4;
 }
 
-message CourierList  {
-  repeated Courier items = 1;
+message ProductList {
+  repeated Product items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message CourierResponse  {
-  Courier payload = 1;
+message ProductResponse {
+  Product payload = 1;
   io.restorecommerce.status.Status status = 2;
 }
 
-message CourierListResponse  {
-  repeated CourierResponse items = 1;
+message ProductListResponse {
+  repeated ProductResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }

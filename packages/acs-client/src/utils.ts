@@ -193,12 +193,25 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       // special filter added to filter user read for his own entity
       if (typeof filterId === 'string') {
         if (filterId && !scopingUpdated) {
-          userCondition = true;
-          filter.push({
-            field: 'id',
-            operation: FilterOperation.eq,
-            value: filterId
-          });
+          // verify if the returned filterId is same as the targetID
+          if (reqResources && reqResources[0] && reqResources[0].filters && reqResources[0].filters.length > 0) {
+            const targetId = reqResources[0]?.filters[0]?.filter[0]?.value;
+            if (targetId && targetId === filterId) {
+              userCondition = true;
+              filter.push({
+                field: 'id',
+                operation: FilterOperation.eq,
+                value: filterId
+              });
+            }
+          } else {
+            userCondition = true;
+            filter.push({
+              field: 'id',
+              operation: FilterOperation.eq,
+              value: filterId
+            });
+          }
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
         filter.push(filterId);
@@ -283,6 +296,10 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     query.filters = { filter: query['filter'] };
     query.filters.operator = key;
     delete query['filter'];
+  } else if (!_.isEmpty(filter)) {
+    query['filters'] = {
+      filter
+    };
   }
   query.scopingUpdated = scopingUpdated;
   query.userCondition = userCondition;
@@ -410,7 +427,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     for (let filter of filterList) {
       query.filters.filter.push(filter);
     }
-    if(_.isArray(filterList) && filterList.length > 0) {
+    if (_.isArray(filterList) && filterList.length > 0) {
       query.filters.operator = key;
     }
     if (policy.scope && applicable == Effect.PERMIT && !query['custom_query']) {
@@ -448,6 +465,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
 interface QueryParams {
   scope?: any;
   filter?: any;
+  filters?: any;
   field?: any[];
   scopingUpdated?: boolean;
   userCondition?: boolean;

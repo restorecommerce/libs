@@ -13,11 +13,11 @@ Microservice defination
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListResponse);
-  rpc Create (CourierList) returns (CourierListResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierResponseList);
+  rpc Create (CourierList) returns (CourierResponseList);
+  rpc Update (CourierList) returns (CourierResponseList);
+  rpc Upsert (CourierList) returns (CourierResponseList);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc Update (CourierList) returns (CourierListResponse);
-  rpc Upsert (CourierList) returns (CourierListResponse);
 }
 
 enum CourierType {
@@ -26,13 +26,14 @@ enum CourierType {
 
 message Courier {
   string id = 1;
-  CourierType type = 2;
-  string name = 3;
-  string description = 4;
-  string logo = 5;
-  string website = 6;
-  google.protobuf.Any optionals = 7;
-  io.restorecommerce.meta.Meta meta = 8;
+  string uks_id = 2;
+  CourierType type = 3;
+  string name = 4;
+  string description = 5;
+  string logo = 6;
+  string website = 7;
+  google.protobuf.Any optionals = 8;
+  io.restorecommerce.meta.Meta meta = 9;
 }
 
 message CourierList  {
@@ -46,7 +47,7 @@ message CourierResponse  {
   io.restorecommerce.status.Status status = 2;
 }
 
-message CourierListResponse  {
+message CourierResponseList  {
   repeated CourierResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;

@@ -13,21 +13,22 @@ Microservice defination
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierListResponse);
-  rpc Create (ProductList) returns (ProductListResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductResponseList);
+  rpc Create (ProductList) returns (ProductResponseList);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc Update (ProductList) returns (ProductListResponse);
-  rpc Upsert (ProductList) returns (ProductListResponse);
+  rpc Update (ProductList) returns (ProductResponseList);
+  rpc Upsert (ProductList) returns (ProductResponseList);
 }
 
 message Product {
   string id = 1;
-  string name = 2;
-  string description = 3;
-  string uks = 5;
+  string uks_id = 2;
+  string courier_id = 3;
+  string name = 4;
+  string description = 5;
   string account_number = 6;
-  google.protobuf.Any optionals = 7;
-  io.restorecommerce.meta.Meta meta = 4;
+  io.restorecommerce.meta.Meta meta = 7;
+  google.protobuf.Any options = 8;
 }
 
 message ProductList {
@@ -41,7 +42,7 @@ message ProductResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message ProductListResponse {
+message ProductResponseList {
   repeated ProductResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;

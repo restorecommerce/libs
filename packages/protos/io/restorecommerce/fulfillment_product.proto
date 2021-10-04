@@ -13,42 +13,37 @@ Microservice defination
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CourierResponseList);
-  rpc Create (CourierList) returns (CourierResponseList);
-  rpc Update (CourierList) returns (CourierResponseList);
-  rpc Upsert (CourierList) returns (CourierResponseList);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductResponseList);
+  rpc Create (ProductList) returns (ProductResponseList);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (ProductList) returns (ProductResponseList);
+  rpc Upsert (ProductList) returns (ProductResponseList);
 }
 
-enum CourierType {
-  DHL = 0;
-}
-
-message Courier {
+message Product {
   string id = 1;
   string uks_id = 2;
-  CourierType type = 3;
+  string courier_id = 3;
   string name = 4;
   string description = 5;
-  string logo = 6;
-  string website = 7;
-  google.protobuf.Any optionals = 8;
-  io.restorecommerce.meta.Meta meta = 9;
+  string account_number = 6;
+  io.restorecommerce.meta.Meta meta = 7;
+  google.protobuf.Any options = 8;
 }
 
-message CourierList  {
-  repeated Courier items = 1;
+message ProductList {
+  repeated Product items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message CourierResponse  {
-  Courier payload = 1;
+message ProductResponse {
+  Product payload = 1;
   io.restorecommerce.status.Status status = 2;
 }
 
-message CourierResponseList  {
-  repeated CourierResponse items = 1;
+message ProductResponseList {
+  repeated ProductResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }

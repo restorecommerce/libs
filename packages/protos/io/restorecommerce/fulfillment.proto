@@ -2,205 +2,198 @@ syntax = "proto3";
 
 package io.restorecommerce.fulfillment;
 
-import "io/restorecommerce/meta.proto";
+import "google/protobuf/any.proto";
+import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/fulfillment_courier";
+import "io/restorecommerce/fulfillment_product";
+import "io/restorecommerce/attribute";
 
-/*
-* Microservice definition.
+/**
+Microservice definition.
 */
 service Service {
-  rpc CreateFulfillment (shipmentOrderLists) returns (FulfillmentResults);
-  rpc getLabels (OrderId) returns (LabelResult);
-  rpc trackFulfillment(TrackingNumber) returns ( Status);
-  rpc deleteFulfillment (OrderId) returns (DeleteStatus);
-  rpc getAllFulfillments(FulfillmentStatus) returns (AllFulfillments);
+  /**
+  Returns a list of shipment IDs.
+  */
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentResponseList);
+
+  /**
+  Creates but does not execute fulfillment orders
+  */
+  rpc Create (FulfillmentRequest) returns (FulfillmentResponseList);
+
+  /**
+  Updates but does not execute fulfillment orders
+  */
+  rpc Update (FulfillmentRequest) returns (FulfillmentResponseList);
+
+  /**
+  Upserts but does not execute fulfillment orders
+  */
+  rpc Upsert (FulfillmentRequest) returns (FulfillmentResponseList);
+
+  /**
+  Executes and Upserts fulfillment orders
+  */
+  rpc Order (FulfillmentRequest) returns (FulfillmentResponseList);
+
+  /**
+  Track a batch of fulfillment orders
+  */
+  rpc Track (TrackingRequest) returns (TrackingResults);
+
+  /**
+  Cancel a batch of fulfillment orders
+  */
+  rpc Cancel (CancelRequest) returns (CancelResults);
+
+  /**
+  Delete a batch of fulfillments from the database
+  */
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
-message OrderId {
-  string orderId = 1;
-io.restorecommerce.auth.Subject subject = 2;
+enum AddressType {
+  Standard = 0;
+  DHL_Packstation = 1;
+  DHL_Postfiliale = 2;
+  //UPS_Whatever
 }
 
-message TrackingNumber {
-  string orderId = 1;
-  string shipmentType = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+enum LabelTypes {
+  Default = 0;
+  URL = 1;
+  PDF = 2;
+  Image = 3;
 }
 
-message Status {
-  string Status = 1;
-  repeated shipmentStatus shipmentStatus = 2;
-  string OrderId = 3;
-
-}
-
-message AllFulfillments {
-  repeated Items items = 1;
-}
-
-message Items {
-  string fulfillment_status = 1;
-  string order_id = 2;
-  string serviceType =3 ;
-  repeated string shipment_number = 4;
-}
-
-message DeleteStatus {
-  string deleteStatus = 1;
-  Error error = 2;
-}
-
-message shipmentStatus {
-  repeated ShipmentData ShipmentData = 1;
-}
-
-message ShipmentData {
-  string ShipmentNumber = 1;
-  string Status = 2;
-  string ShortStatus = 3;
-  string TimeStamp = 4;
-  string Receiver = 5;
-  string ReceipientName = 6;
-  string Recepientemail = 7;
-  repeated EventDetails EventDetails = 8;
-  string Customer_Reference = 9;
-}
-
-message  EventDetails {
-  string Status = 1;
-  string Location = 2;
-  string Time = 3;
-  string Coutnry = 4;
-}
-
-message  LabelResult{
-  repeated Labels labels  = 1;
-  Error error = 2;
-}
-
-message Labels {
-  string labelUrl = 1;
-  string shipmentNumber= 2;
-  string exportLabelUrl = 3;
-}
-
-message shipmentOrderLists {
-  ShipmentOrder  ShipmentOrder = 1;
-io.restorecommerce.auth.Subject subject = 2;
-}
-
-message ShipmentOrder {
-  repeated FulfillmentList fulfillmentList = 1;
-  io.restorecommerce.meta.Meta meta = 3;
-}
-
-message FulfillmentList {
-  Shipment Shipment = 1;
-  string OrderId = 2;
-  string fulFillmentService = 4;
-}
-
-message Shipment {
-  repeated ShipmentDetails ShipmentDetails = 1;
-  string customerReference = 2;
-  Receiver Receiver = 3;
-  Shipper Shipper = 4;
-  string returnShipmentAccountNumber = 5;
-  string returnShipmentReference = 6;
-  Notification Notification = 7;
-}
-
-message ShipmentDetails {
-  ShipmentItem ShipmentItem = 1;
-}
-
-message ShipmentItem {
-  double weightInKG = 1;
-  string lengthInCM = 2;
-  string widthInCM = 3;
-  string heightInCM = 4;
-  ExportDocument ExportDocument = 5;
-}
-
-message Notification {
-  string recipientEmailAddress =1;
-}
-
-message Address {
-  string streetName = 1;
-  string streetNumber = 2;
-  string addressAddition = 3;
-  string zip = 4;
-  string city = 5;
-  Origin Origin = 6;
+enum State {
+  Incomplete = 0;
+  Ordered = 1;
+  Processing = 2;
+  Done=3;
+  Cancelled = 4;
+  Failed = 5;
 }
 
 message Origin {
   string country = 1;
-  string countryISOCode = 2;
+  string iso_code = 2;
 }
 
-message Shipper {
-  Name Name = 1;
-  Address Address = 2;
-  Communication Communication = 3;
-}
-
-message Name {
-  string name1 = 1;
-}
-
-message Receiver {
-  string name1 = 1;
-  Address Address = 2;
-  Communication Communication = 3;
-}
-
-message Communication{
-  string phone = 1;
+message Contact {
+  string name = 1;
   string email = 2;
+  string phone = 3;
 }
 
-message ExportDocument {
-  string invoiceNumber = 1;
-  string exportType = 2;
-  string exportTypeDescription = 3;
-  string termsOfTrade = 4;
-  string placeOfCommital = 5;
-  double additionalFee = 6;
-  ExportDocPosition ExportDocPosition = 7;
+message Address {
+  AddressType address_type = 1;
+  repeated string name = 2;
+  string street = 3;
+  string number = 4;
+  string addition = 5;
+  string zip = 6;
+  string city = 7;
+  Origin origin = 8;
+  Contact contact = 9;
+  google.protobuf.Any optionals = 10;
 }
 
-message ExportDocPosition{
-  string description = 1 ;
-  string countryCodeOrigin = 2;
-  string customsTariffNumber = 3;
-  uint32 amount = 4;
-  uint32 netWeightInKG = 5;
-  double customsValue = 6;
+message Parcel {
+  float weight = 1;
+  float width = 2;
+  float length = 3;
+  float height = 4;
 }
 
-message FulfillmentResults {
-  repeated ResponseDetailsList fulfillmentResults =1;
+message Order {
+  string uks_id = 1; //id from external services for reference
+  repeated Parcel parcels = 4;
+  Address sender = 6;
+  Address receiver = 7;
+  string notify = 8;
+  google.protobuf.Any options = 9;
 }
 
-message ResponseDetailsList {
-  FulfillmentStatus Status  = 1;
-  ErrorList error = 2;
+message Label {
+  LabelType type = 1;
+  string data = 2; //Could be an URL, base64 or bytes of i.e. a PDF or PNG...
 }
 
-message FulfillmentStatus {
-  string OrderId = 1;
-  string OrderStatus =2;
+message Event {
+  io.restorecommerce.status.Status status = 1;
+  string timestamp = 2;
+  string location = 3;
+  google.protobuf.Any details = 4;
+}
+
+message FulfillmentOrder {
+  string id = 1;
+  string product_id = 3;
+  Order order = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+}
+
+message FulfillmentOrderList {
+  repeated FulfillmentOrder items = 1;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message Error {
-  string code = 1;
-  string message = 2;
+/**
+This is the message how it get stored to the database
+*/
+message Fulfillment {
+  string id = 1;
+  string product_id = 2;
+  Order order = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  string shipment_id = 5; //filled on Order
+  Label label = 6; //filled on Order
+  State state = 7; //update by Track
 }
 
-message ErrorList {
-  repeated string code = 1;
-  repeated string message = 2;
+message FulfillmentResponse {
+  Fulfillment payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message FulfillmentResponseList {
+  repeated Fulfillment items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message TrackingQuery {
+  string order_id = 1;
+  google.protobuf.Any options = 4;
+}
+
+message TrackingQueryList {
+  repeated TrackingQuery items = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+message Tracking {
+  string fulfillment_id = 1;
+  repeated Event events = 2;
+  google.protobuf.Any details = 3;
+  io.restorecommerce.status.Status status = 4;
+}
+
+message TrackingResults {
+  repeated Tracking items = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message CancelRequest {
+  repeated string ids = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+message CancelResults {
+  repeated io.restorecommerce.status.Status items = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
 }

@@ -11,4 +11,5 @@ message Meta {
     double modified = 2; // timestamp
     string modified_by = 3; // ID from last User who modified it
     repeated io.restorecommerce.attribute.Attribute owner = 4;
+    repeated io.restorecommerce.attribute.AttributeObj acl = 5;
 }

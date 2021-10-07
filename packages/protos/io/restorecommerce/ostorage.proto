@@ -150,4 +150,5 @@ message OstorageMessage {
   string key = 1;
   string bucket = 2;
   google.protobuf.Any metadata = 3;
+  io.restorecommerce.auth.Subject subject = 4;
 }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.4...@restorecommerce/protos@0.4.5) (2021-10-07)
+
+
+### Bug Fixes
+
+* **protos:** Added ACL property for meta object and subject for OStorage Message ([d97b2f3](https://github.com/restorecommerce/libs/commit/d97b2f37f741d70bb808b93571e5088cf8ebddd7))
+
+
+
+
+
 ## [0.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.3...@restorecommerce/protos@0.4.4) (2021-08-23)
 
 

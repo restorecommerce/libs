@@ -73,8 +73,8 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
       if (reply && useCache) {
         const response = JSON.parse(reply);
         let evaluation_cacheable = response.evaluation_cacheable;
-        if (response && response.data && !_.isEmpty(response.data.policy_sets)) {
-          const policies = response.data.policy_sets[0].policies;
+        if (response && !_.isEmpty(response.policy_sets)) {
+          const policies = response.policy_sets[0].policies;
           if (policies && policies.length > 0) {
             for (let policy of policies) {
               for (let rule of policy.rules) {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.4.13...@restorecommerce/acs-client@0.4.14) (2021-10-07)
+
+
+### Bug Fixes
+
+* **acs-client:** remove data property for validating evaluation_cacheable ([06fb3a1](https://github.com/restorecommerce/libs/commit/06fb3a1b056ecf51609fa32489f0f862eda4dba2))
+
+
+
+
+
 ## [0.4.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.4.12...@restorecommerce/acs-client@0.4.13) (2021-10-07)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

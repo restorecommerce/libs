@@ -1,9 +1,13 @@
 import { Gram, PackageType, Decimal, IItems } from '../primitives';
 import { IShippingMethod } from '../IShippingMethod';
 import { IAddress } from '../IAddress';
-import { Bin } from './Bin';
-import { Item } from './Item';
-import { Packer } from './Packer';
+import { Container } from './bin/Container';
+import { LargestAreaFitFirstPackager } from './bin/LAFFPackager';
+import { BoxItem } from './bin/BoxItem';
+import { Box } from './bin/Box';
+import { Placement } from './bin/Placement';
+import { IShippingMethodResult } from '../IShippingMethodResult';
+const fs = require('fs');
 
 
 export type AdditionalRule = {
@@ -83,48 +87,87 @@ export class Courier implements IShippingMethod {
     return theType.charAt(0).toUpperCase() + theType.slice(1) + ' up to ' + weight;
   }
 
-  canFit(offer: Offer, products: IItems): boolean {
-    let packer = new Packer();
-    if (!isNaN(offer.additionalRule?.maxTotalDimension)) {
-      let maxHeight = 0;
-      let maxWidth = 0;
-      let maxDepth = 0;
-      products.forEach(element => {
-        let array = [element.height, element.width, element.depth];
-        let height = Math.max.apply(null, array);
-        array.splice(array.indexOf(height), 1);
-        let width = Math.max.apply(null, array);
-        maxHeight = height > maxHeight ? height : maxHeight;
-        maxWidth = width > maxWidth ? width : maxWidth;
-      });
-      if (offer.additionalRule.ruleType === 'L+W+H') {
-        if (maxHeight > offer.additionalRule.maxSide) return false;
-        maxDepth = offer.additionalRule.maxTotalDimension - maxHeight - maxWidth;
-        if (maxDepth <= 0) return false;
+  canFit(offers: Offer[], products: IItems): Container[] {
+    const containers: Container[] = [];
+    let hasVolumeRestrictions = false;
+
+    offers.forEach(offer => {
+      if (offer.width || offer.depth || offer.height) {
+        hasVolumeRestrictions = true;
       }
-      else if (offer.additionalRule.ruleType === 'L+2xW+2xH') {
-        if (maxHeight > offer.additionalRule.maxHeight) return false;
-        if (maxWidth > offer.additionalRule.maxWidth) return false;
-        maxDepth = offer.additionalRule.maxTotalDimension - maxHeight - 2 * maxWidth;
-        if (maxDepth <= 0) return false;
-        maxDepth = maxDepth / 2;
-        if (maxDepth > offer.additionalRule.maxDepth) return false;
-      }
-      offer.height = maxHeight;
-      offer.width = maxWidth;
-      offer.depth = maxDepth;
-    }
-    let bin = new Bin(offer.name, offer.width, offer.height, offer.depth, offer.maxWeight);
-    packer.addBin(bin);
-    products.forEach(element => {
-      for(let i = 1; i <= element.quantity; i++) {
-        packer.addItem(new Item(element.sku + ' (' + i.toString() + ')', element.width, element.height, element.depth, element.weight));
-      }
+
+      containers.push(new Container(
+        offer.name || this.stringifyOffer(offer.type, offer.maxWeight),
+        offer.width || Number.MAX_SAFE_INTEGER,
+        offer.depth || Number.MAX_SAFE_INTEGER,
+        offer.height || Number.MAX_SAFE_INTEGER,
+        offer.maxWeight,
+        offer
+      ));
     });
-    return packer.pack().length == 0;
+
+    containers.sort((a, b) => a.getOffer().price - b.getOffer().price);
+
+    // Use basic packer if no volume restrictions exist
+    if (!hasVolumeRestrictions) {
+      const sortedContainers = containers.sort((a, b) => a.weight - b.weight);
+      const sortedProducts = products.sort((a, b) => b.weight - a.weight)
+        .map(a => (Array(a.quantity) as IItems).fill({
+          ...a,
+          quantity: 1
+        }))
+        .flat();
+
+      const result: Container[] = [];
+      while (sortedProducts.length > 0) {
+        const totalWeight = sortedProducts.reduce((sum, item) => sum + item.weight, 0);
+
+        let container = sortedContainers.find(c => c.weight > totalWeight);
+        if (!container) {
+          container = sortedContainers[sortedContainers.length - 1];
+        }
+
+        container = container.clone();
+        container.addLevel();
+
+        let currentWeight = 0;
+        let count = 0;
+        for (let i = 0; i < sortedProducts.length; i++) {
+          const p = sortedProducts[i];
+          if (currentWeight + p.weight > container.weight) {
+            if (currentWeight == 0) {
+              // Item too heavy for any container
+              return [];
+            }
+            break;
+          }
+
+          container.addPlacement(new Placement(null, new Box(p.sku, p.width, p.depth, p.height, p.weight)));
+          currentWeight += p.weight;
+          count++;
+        }
+
+        sortedProducts.splice(0, count);
+        result.push(container);
+      }
+
+      return result;
+    }
+
+    // Only rotate if working with a small order
+    const rotate3D = products.reduce((sum, item) => sum + item.quantity, 0) < 300;
+    const packager = new LargestAreaFitFirstPackager(containers, rotate3D, true, true);
+
+    const items = products.map(p => new BoxItem(new Box(p.sku, p.width, p.depth, p.height, p.weight), p.quantity));
+    const match = packager.packList(items, Number.MAX_SAFE_INTEGER);
+    if (match) {
+      return match;
+    }
+
+    return [];
   }
 
-  get(products: IItems) {
+  get(products: IItems): IShippingMethodResult {
     // Compute total weight of products; Find zone containing shipping country
     const weight: Gram = products.reduce((a, p) => a + p.quantity * p.weight, 0);
     const [zoneName, zone] = Object.entries(this._source.zones)
@@ -132,28 +175,31 @@ export class Courier implements IShippingMethod {
 
     if (Array.isArray(zone.offers)) {
       const offers: OfferArray = zone.offers;
-      let offer: Offer = null;
-      offers.forEach(element => {
-        if (offer === null && this.canFit(element, products)) {
-          offer = element;
-        }
-      });
-      if (!offer) {
+
+      const containers = this.canFit(offers.filter(o => !!o), products);
+      if (containers.length == 0) {
         throw new Error('Too Heavy! ' + weight + ' > ' + Math.max(...offers.map(o => o.maxWeight)) + '; weight > maxWeight');
       }
 
       return {
-        price: new Decimal(offer.price),
-        maxWeight: offer.maxWeight,
         zone: zoneName,
-        type: offer.type,
-        height: offer.height,
-        width: offer.width,
-        depth: offer.depth,
         human: {
           zone: zone.name || zoneName,
-          offer: offer.name || this.stringifyOffer(offer.type, offer.maxWeight)
-        }
+        },
+        offers: containers.map(container => {
+          const offer = container.getOffer();
+          return {
+            price: new Decimal(offer.price),
+            maxWeight: offer.maxWeight,
+            type: offer.type,
+            height: offer.height,
+            width: offer.width,
+            depth: offer.depth,
+            human: {
+              offer: offer.name || this.stringifyOffer(offer.type, offer.maxWeight)
+            }
+          };
+        }),
       };
 
     } else {
@@ -164,14 +210,18 @@ export class Courier implements IShippingMethod {
       const offerWeight = Math.min(Math.ceil(weight / rules.stepWeight) * rules.stepWeight, rules.maxWeight);
 
       return {
-        price: new Decimal(offerWeight).div(rules.stepWeight).mul(rules.stepPrice).plus(rules.basePrice),
-        maxWeight: offerWeight,
         zone: zoneName,
-        type: rules.type,
         human: {
           zone: zone.name || zoneName,
-          offer: this.stringifyOffer(rules.type, offerWeight)
-        }
+        },
+        offers: [{
+          price: new Decimal(offerWeight).div(rules.stepWeight).mul(rules.stepPrice).plus(rules.basePrice),
+          maxWeight: offerWeight,
+          type: rules.type,
+          human: {
+            offer: this.stringifyOffer(rules.type, offerWeight)
+          }
+        }]
       };
     }
   }

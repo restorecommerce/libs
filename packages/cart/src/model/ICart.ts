@@ -51,7 +51,7 @@ export interface ICart {
 
   getTotalNet(): Decimal;   // net = item * qty
   getTotalGross(): Decimal; // gross = net * tax_rate
-  getShipping(): { price: Money;[prop: string]: any };
+  getShipping(): { price: Money; [prop: string]: any };
 
   /** @static function */
   round(money: Money): string;

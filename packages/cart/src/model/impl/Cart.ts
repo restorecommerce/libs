@@ -5,6 +5,7 @@ import { Money, Decimal, IItems, TaxRates, euList, nonEuList } from '../primitiv
 import { ICartCtor } from '../ICartCtor';
 import { ISerializer } from '../ISerializer';
 import { IItem } from '../IItem';
+import { IShippingMethodResult } from '../IShippingMethodResult';
 
 export class Cart implements ICart {
   private _items: IItems = [];
@@ -13,6 +14,7 @@ export class Cart implements ICart {
   private _serializer: ISerializer;
   private _taxOriginCountry: string;
   private _taxRates: TaxRates;
+  private cachedResult?: IShippingMethodResult;
 
   version = '0.1.0';
 
@@ -23,6 +25,7 @@ export class Cart implements ICart {
   /** @private function */
   setItems(items: IItem[]) {
     this._items = items;
+    this.cachedResult = undefined;
   }
 
   getCustomer(): ICustomer {
@@ -31,6 +34,7 @@ export class Cart implements ICart {
 
   setCustomer(customer: ICustomer) {
     this._customer = customer;
+    this.cachedResult = undefined;
   }
 
   getShippingMethod(): IShippingMethod {
@@ -39,6 +43,7 @@ export class Cart implements ICart {
 
   setShippingMethod(shippingMethod: IShippingMethod) {
     this._shippingMethod = shippingMethod;
+    this.cachedResult = undefined;
   }
 
   getSerializer(): ISerializer {
@@ -47,6 +52,7 @@ export class Cart implements ICart {
 
   setSerializer(serializer: ISerializer) {
     this._serializer = serializer;
+    this.cachedResult = undefined;
   }
 
   getTaxRates(): TaxRates {
@@ -56,16 +62,19 @@ export class Cart implements ICart {
   /** @private function */
   setTaxRates(taxRates: TaxRates) {
     this._taxRates = taxRates;
+    this.cachedResult = undefined;
   }
 
   setCustomerType(type: CustomerType) {
     this._customer.type = type;
+    this.cachedResult = undefined;
   }
 
   setDestinationCountry(country: string): void {
     if (this._shippingMethod) {
       this._shippingMethod.setDestinationCountry(country);
     }
+    this.cachedResult = undefined;
   }
 
   constructor(args: ICartCtor) {
@@ -101,6 +110,7 @@ export class Cart implements ICart {
     if (this._serializer) {
       this._serializer.save(this);
     }
+    this.cachedResult = undefined;
   }
 
   remItem(sku: string) {
@@ -111,6 +121,7 @@ export class Cart implements ICart {
         this._serializer.save(this);
       }
     }
+    this.cachedResult = undefined;
   }
 
   modifyItem(item: any) {
@@ -121,6 +132,7 @@ export class Cart implements ICart {
         this._serializer.save(this);
       }
     }
+    this.cachedResult = undefined;
   }
 
   modifyItemQuantity(sku: string, quantity: number) {
@@ -131,6 +143,7 @@ export class Cart implements ICart {
         this._serializer.save(this);
       }
     }
+    this.cachedResult = undefined;
   }
 
   getItemCount() {
@@ -146,16 +159,30 @@ export class Cart implements ICart {
     return this._items.map(e => e.quantity).reduce((a, b) => a + b, 0);
   }
 
-  getShipping(): { price: Money; [prop: string]: any } {
+  getShipping(): { price: Money; taxType: string; result?: IShippingMethodResult } {
     if (this._shippingMethod) {
-      return Object.assign(this._shippingMethod.get(this._items), {taxType: 'vat_standard'});
+      const shipping = this.cachedResult || this._shippingMethod.get(this._items);
+      this.cachedResult = shipping;
+
+      let price: Money = 0;
+      if ('price' in shipping) {
+        price = shipping.price;
+      } else {
+        price = shipping.offers.reduce((sum, offer) => offer.price.plus(sum), new Decimal(0));
+      }
+
+      return {
+        result: shipping,
+        taxType: 'vat_standard',
+        price
+      };
     } else {
       return {price: new Decimal(0), taxType: 'vat_standard'};
     }
   }
 
   getTaxes(keepOriginalTaxType?: boolean): { [taxType: string]: { netPrice: Decimal; rate: Decimal; desc: string; price: Decimal } } {
-    let taxes = Object.assign(<any> {}, this._taxRates);
+    let taxes = Object.assign(<any>{}, this._taxRates);
 
     // Iterate over items & shipping costs, and produce net prices indexed by taxType
 

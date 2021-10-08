@@ -16,3 +16,5 @@ npm-debug.log
 test/*.js
 test/*.d.ts
 !.eslintrc.js
+!jest.config.js
+/coverage

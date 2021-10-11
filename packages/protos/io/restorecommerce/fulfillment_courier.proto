@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package io.restorecommerce.fulfillment_courier;
 
-import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/fulfillment_courier_dhl.proto";
 
 /**
 Microservice defination   
@@ -20,20 +20,18 @@ service Service {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
-enum CourierType {
-  DHL = 0;
-}
-
 message Courier {
   string id = 1;
   string uks_id = 2;
-  CourierType type = 3;
   string name = 4;
   string description = 5;
   string logo = 6;
   string website = 7;
-  google.protobuf.Any optionals = 8;
-  io.restorecommerce.meta.Meta meta = 9;
+  //google.protobuf.Any data = 8;
+  oneof type {
+    io.restorecommerce.fulfillment_courier_dhl.Setting DHL = 8;
+  }
+  io.restorecommerce.meta.Meta meta = 10;
 }
 
 message CourierList  {

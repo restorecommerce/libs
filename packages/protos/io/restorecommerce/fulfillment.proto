@@ -6,9 +6,6 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
-import "io/restorecommerce/fulfillment_courier";
-import "io/restorecommerce/fulfillment_product";
-import "io/restorecommerce/attribute";
 
 /**
 Microservice definition.
@@ -22,32 +19,32 @@ service Service {
   /**
   Creates but does not execute fulfillment orders
   */
-  rpc Create (FulfillmentRequest) returns (FulfillmentResponseList);
+  rpc Create (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Updates but does not execute fulfillment orders
   */
-  rpc Update (FulfillmentRequest) returns (FulfillmentResponseList);
+  rpc Update (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Upserts but does not execute fulfillment orders
   */
-  rpc Upsert (FulfillmentRequest) returns (FulfillmentResponseList);
+  rpc Upsert (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Executes and Upserts fulfillment orders
   */
-  rpc Order (FulfillmentRequest) returns (FulfillmentResponseList);
+  rpc Order (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders
   */
-  rpc Track (TrackingRequest) returns (TrackingResults);
+  rpc Track (TrackingRequestList) returns (TrackingResultList);
 
   /**
   Cancel a batch of fulfillment orders
   */
-  rpc Cancel (CancelRequest) returns (CancelResults);
+  rpc Cancel (CancelRequestList) returns (CancelResultList);
 
   /**
   Delete a batch of fulfillments from the database
@@ -62,7 +59,7 @@ enum AddressType {
   //UPS_Whatever
 }
 
-enum LabelTypes {
+enum LabelType {
   Default = 0;
   URL = 1;
   PDF = 2;
@@ -99,7 +96,6 @@ message Address {
   string city = 7;
   Origin origin = 8;
   Contact contact = 9;
-  google.protobuf.Any optionals = 10;
 }
 
 message Parcel {
@@ -115,7 +111,6 @@ message Order {
   Address sender = 6;
   Address receiver = 7;
   string notify = 8;
-  google.protobuf.Any options = 9;
 }
 
 message Label {
@@ -130,15 +125,17 @@ message Event {
   google.protobuf.Any details = 4;
 }
 
-message FulfillmentOrder {
+message FulfillmentRequest {
   string id = 1;
+  string courier_id = 2;
   string product_id = 3;
-  Order order = 2;
-  io.restorecommerce.meta.Meta meta = 3;
+  Order order = 4;
+  io.restorecommerce.meta.Meta meta = 5;
 }
 
-message FulfillmentOrderList {
-  repeated FulfillmentOrder items = 1;
+message FulfillmentRequestList {
+  repeated FulfillmentRequest items = 1;
+  uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -147,12 +144,14 @@ This is the message how it get stored to the database
 */
 message Fulfillment {
   string id = 1;
-  string product_id = 2;
-  Order order = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  string shipment_id = 5; //filled on Order
-  Label label = 6; //filled on Order
-  State state = 7; //update by Track
+  string courier_id = 2;
+  string product_id = 3;
+  Order order = 4;
+  io.restorecommerce.meta.Meta meta = 5;
+  string shipment_id = 6; //filled on Order
+  Label label = 7; //filled on Order
+  State state = 8; //update by Track
+  io.restorecommerce.status.Status status = 9; //API status
 }
 
 message FulfillmentResponse {
@@ -161,18 +160,18 @@ message FulfillmentResponse {
 }
 
 message FulfillmentResponseList {
-  repeated Fulfillment items = 1;
+  repeated FulfillmentResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
-message TrackingQuery {
+message TrackingRequest {
   string order_id = 1;
-  google.protobuf.Any options = 4;
+  google.protobuf.Any options = 2;
 }
 
-message TrackingQueryList {
-  repeated TrackingQuery items = 1;
+message TrackingRequestList {
+  repeated TrackingRequest items = 1;
   io.restorecommerce.auth.Subject subject = 2;
 }
 
@@ -183,17 +182,17 @@ message Tracking {
   io.restorecommerce.status.Status status = 4;
 }
 
-message TrackingResults {
+message TrackingResultList {
   repeated Tracking items = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
-message CancelRequest {
+message CancelRequestList {
   repeated string ids = 1;
   io.restorecommerce.auth.Subject subject = 2;
 }
 
-message CancelResults {
+message CancelResultList {
   repeated io.restorecommerce.status.Status items = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }

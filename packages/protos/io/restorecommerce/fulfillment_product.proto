@@ -1,23 +1,23 @@
 syntax = "proto3";
 
-package io.restorecommerce.fulfillment_courier;
+package io.restorecommerce.fulfillment_product;
 
-import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/fulfillment_courier_dhl.proto";
 
 /**
-Microservice defination   
+Microservice defination
 */
 
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductResponseList);
   rpc Create (ProductList) returns (ProductResponseList);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductList) returns (ProductResponseList);
   rpc Upsert (ProductList) returns (ProductResponseList);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
 message Product {
@@ -26,9 +26,10 @@ message Product {
   string courier_id = 3;
   string name = 4;
   string description = 5;
-  string account_number = 6;
-  io.restorecommerce.meta.Meta meta = 7;
-  google.protobuf.Any options = 8;
+  io.restorecommerce.meta.Meta meta = 6;
+  oneof type {
+    io.restorecommerce.fulfillment_courier_dhl.Product DHL = 7;
+  }
 }
 
 message ProductList {

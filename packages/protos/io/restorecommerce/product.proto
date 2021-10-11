@@ -95,7 +95,6 @@ message BundleProduct {
   uint32 quantity = 2;
 }
 
-
 message Deleted {
   string id = 1;
 }

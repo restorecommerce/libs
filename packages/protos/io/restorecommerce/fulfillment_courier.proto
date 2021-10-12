@@ -22,15 +22,11 @@ service Service {
 
 message Courier {
   string id = 1;
-  string uks_id = 2;
   string name = 4;
   string description = 5;
   string logo = 6;
   string website = 7;
-  //google.protobuf.Any data = 8;
-  oneof type {
-    io.restorecommerce.fulfillment_courier_dhl.Setting DHL = 8;
-  }
+  google.protobuf.Any configuration = 8;
   io.restorecommerce.meta.Meta meta = 10;
 }
 

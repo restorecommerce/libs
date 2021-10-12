@@ -7,6 +7,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/image.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/attribute.proto";
 
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse);
@@ -73,12 +74,8 @@ message Variant {
   double sale_price = 7;
   repeated io.restorecommerce.image.Image image = 8;
   string stock_keeping_unit = 9;
-  repeated VariantAttribute attributes = 10;
-}
-
-message VariantAttribute {
-  string key = 1;
-  repeated string values = 2;
+  string template_variant = 10;
+  repeated Attribute attributes = 11;
 }
 
 message Bundle {

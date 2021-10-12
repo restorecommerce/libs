@@ -22,14 +22,20 @@ service Service {
 
 message Product {
   string id = 1;
-  string uks_id = 2;
-  string courier_id = 3;
-  string name = 4;
-  string description = 5;
-  io.restorecommerce.meta.Meta meta = 6;
-  oneof type {
-    io.restorecommerce.fulfillment_courier_dhl.Product DHL = 7;
-  }
+  string name = 2;
+  string description = 3;
+  string courier_id = 4;
+  repeated string tax_type_id = 8;
+  repeated Variant variants = 9;
+  repeated Attribute attributes = 10;
+}
+
+message Variant {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 5;
+  repeated Attribute attributes = 11;
 }
 
 message ProductList {

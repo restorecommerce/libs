@@ -7,6 +7,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/filter.proto";
 
 
 /**
@@ -68,12 +69,7 @@ message RuleResponse {
 //  and append them to the request's context.
 // The retrieved data can then be passed onto the request's context
 message ContextQuery {
-  message Filter {
-    string field = 1;
-    string operation = 2;
-    string value = 3;
-  }
-  repeated Filter filters = 1;
+  repeated io.restorecommerce.filter.FilterOp filters = 1;
   string query = 2;
 }
 

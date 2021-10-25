@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.5...@restorecommerce/protos@0.4.6) (2021-10-19)
+
+
+### Bug Fixes
+
+* **protos:** updated context query filters ([0ae3bd8](https://github.com/restorecommerce/libs/commit/0ae3bd8e385c1f3dedb2be1587c678ada7151ec5))
+
+
+
+
+
 ## [0.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.4...@restorecommerce/protos@0.4.5) (2021-10-07)
 
 

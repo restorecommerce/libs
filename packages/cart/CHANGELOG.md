@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@0.2.8...@restorecommerce/cart@0.3.0) (2021-10-19)
+
+
+### Features
+
+* **cart:** replace bin packing with more optimized solution ([4833438](https://github.com/restorecommerce/libs/commit/4833438da8d61a2222c81fcc51f3a6cb908833ea))
+
+
+
+
+
 ## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@0.2.7...@restorecommerce/cart@0.2.8) (2021-08-23)
 
 

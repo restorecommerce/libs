@@ -296,7 +296,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     query.filters = { filter: query['filter'] };
     query.filters.operator = key;
     delete query['filter'];
-  } else if (!_.isEmpty(filter)) {
+  } else if (!_.isEmpty(filter) || key == OperatorType.or) {
     query['filters'] = {
       filter
     };

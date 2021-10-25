@@ -6,7 +6,7 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
-import "io/restorecommerce/fulfillment_courier_dhl.proto";
+import "io/restorecommerce/fulfillment.proto";
 
 /**
 Microservice defination
@@ -14,10 +14,40 @@ Microservice defination
 
 service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductResponseList);
+  rpc Find (QueryList) returns (ProductResponseList);
+/*      - start_address
+      - destination_address
+      - good[]:
+        - quantity
+        - weight
+        - height
+        - width
+        - depth*/
+
   rpc Create (ProductList) returns (ProductResponseList);
   rpc Update (ProductList) returns (ProductResponseList);
   rpc Upsert (ProductList) returns (ProductResponseList);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+}
+
+message Goods {
+  double quantity = 1;
+  double weight = 2;
+  double height = 3;
+  double width = 4;
+  double length = 5;
+}
+
+message Query {
+  io.restorecommerce.fulfillment.Address sender = 1;
+  io.restorecommerce.fulfillment.Address receiver  = 2;
+  repeated Goods goods = 3;
+}
+
+message QueryList {
+  repeated Query items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Product {
@@ -25,17 +55,25 @@ message Product {
   string name = 2;
   string description = 3;
   string courier_id = 4;
-  repeated string tax_type_id = 8;
+  io.restorecommerce.country.Country country = 5;
+  repeated string start_zone = 6;
+  repeated string tax_type_id = 7;
+  repeated io.restorecommerce.attribute.Attribute attributes = 8;
   repeated Variant variants = 9;
-  repeated Attribute attributes = 10;
+  io.restorecommerce.meta.Meta meta = 10;
 }
 
 message Variant {
   string id = 1;
   string name = 2;
   string description = 3;
-  double price = 5;
-  repeated Attribute attributes = 11;
+  double price = 4;
+  double max_weight = 5;
+  double max_width = 6;
+  double max_height = 7;
+  double max_length = 8;
+  double max_volume = 9;
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message ProductList {
@@ -53,4 +91,8 @@ message ProductResponseList {
   repeated ProductResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message Deleted {
+  string id = 1;
 }

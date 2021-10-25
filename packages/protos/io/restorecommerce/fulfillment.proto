@@ -6,6 +6,8 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/address.proto";
+import "io/restorecommerce/country.proto";
 
 /**
 Microservice definition.
@@ -52,20 +54,6 @@ service Service {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
-enum AddressType {
-  Standard = 0;
-  DHL_Packstation = 1;
-  DHL_Postfiliale = 2;
-  //UPS_Whatever
-}
-
-enum LabelType {
-  Default = 0;
-  URL = 1;
-  PDF = 2;
-  Image = 3;
-}
-
 enum State {
   Incomplete = 0;
   Ordered = 1;
@@ -86,36 +74,52 @@ message Contact {
   string phone = 3;
 }
 
+message Branch {
+  string branch_number = 1;
+  string post_number = 2;
+}
+
+message Packstation {
+  string station_number = 1;
+  string post_number = 2;
+}
+
 message Address {
-  AddressType address_type = 1;
+  string title = 1;
   repeated string name = 2;
-  string street = 3;
-  string number = 4;
-  string addition = 5;
-  string zip = 6;
-  string city = 7;
-  Origin origin = 8;
-  Contact contact = 9;
+  oneof type {
+    io.restorecommerce.address address = 3;
+    Packstation packstation = 4;
+    Branch branch = 5;
+  };
+  io.restorecommerce.counrty country = 6;
+  Contact contact = 7;
 }
 
 message Parcel {
-  float weight = 1;
-  float width = 2;
-  float length = 3;
-  float height = 4;
+  int32 quantity = 1;
+  float weight = 2;
+  float height = 3;
+  float width = 4;
+  float length = 5;
 }
 
 message Order {
-  string uks_id = 1; //id from external services for reference
-  repeated Parcel parcels = 4;
-  Address sender = 6;
-  Address receiver = 7;
-  string notify = 8;
+  repeated Parcel parcels = 1;
+  Address sender = 2;
+  Address receiver = 3;
+  string notify = 5;
 }
 
 message Label {
-  LabelType type = 1;
-  string data = 2; //Could be an URL, base64 or bytes of i.e. a PDF or PNG...
+  oneof type {
+    string url = 1;
+    string pdf = 2;
+    string png = 3;
+  }
+  string shipment_id = 4; //filled on Order
+  State state = 5; //update by Track
+  io.restorecommerce.status.Status status = 6; //API status
 }
 
 message Event {
@@ -148,10 +152,7 @@ message Fulfillment {
   string product_id = 3;
   Order order = 4;
   io.restorecommerce.meta.Meta meta = 5;
-  string shipment_id = 6; //filled on Order
-  Label label = 7; //filled on Order
-  State state = 8; //update by Track
-  io.restorecommerce.status.Status status = 9; //API status
+  Label label = 6; //filled on Order
 }
 
 message FulfillmentResponse {
@@ -195,4 +196,8 @@ message CancelRequestList {
 message CancelResultList {
   repeated io.restorecommerce.status.Status items = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message Deleted {
+  string id = 1;
 }

@@ -6,7 +6,6 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
-import "io/restorecommerce/fulfillment_courier_dhl.proto";
 
 /**
 Microservice defination   
@@ -26,7 +25,8 @@ message Courier {
   string description = 5;
   string logo = 6;
   string website = 7;
-  google.protobuf.Any configuration = 8;
+  string stub_type = 8;
+  google.protobuf.Any configuration = 9;
   io.restorecommerce.meta.Meta meta = 10;
 }
 
@@ -45,4 +45,8 @@ message CourierResponseList  {
   repeated CourierResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message Deleted {
+  string id = 1;
 }

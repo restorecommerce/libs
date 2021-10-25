@@ -38,7 +38,7 @@ message Product {
     Identifier prototype = 6;
     Identifier category = 7;
   }
-  repeated string tax_type_id = 8;
+  repeated string tax_id = 8;
   repeated Variant variants = 9;
   string gtin = 10;
 }

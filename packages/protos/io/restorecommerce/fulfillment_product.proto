@@ -30,7 +30,7 @@ service Service {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
-message Goods {
+message Good {
   double quantity = 1;
   double weight = 2;
   double height = 3;
@@ -41,7 +41,7 @@ message Goods {
 message Query {
   io.restorecommerce.fulfillment.Address sender = 1;
   io.restorecommerce.fulfillment.Address receiver  = 2;
-  repeated Goods goods = 3;
+  repeated Good good = 3;
 }
 
 message QueryList {
@@ -55,9 +55,11 @@ message Product {
   string name = 2;
   string description = 3;
   string courier_id = 4;
-  io.restorecommerce.country.Country country = 5;
+  repeated io.restorecommerce.country.Country start_country = 5;
   repeated string start_zone = 6;
-  repeated string tax_type_id = 7;
+  repeated io.restorecommerce.country.Country destination_country = 5;
+  repeated string destination_zone = 6;
+  repeated string tax_id = 7;
   repeated io.restorecommerce.attribute.Attribute attributes = 8;
   repeated Variant variants = 9;
   io.restorecommerce.meta.Meta meta = 10;
@@ -73,7 +75,6 @@ message Variant {
   double max_height = 7;
   double max_length = 8;
   double max_volume = 9;
-  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message ProductList {

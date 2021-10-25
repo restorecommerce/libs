@@ -88,7 +88,7 @@ message Address {
   string title = 1;
   repeated string name = 2;
   oneof type {
-    io.restorecommerce.address address = 3;
+    io.restorecommerce.address.Address address = 3;
     Packstation packstation = 4;
     Branch branch = 5;
   };

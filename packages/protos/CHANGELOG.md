@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.6...@restorecommerce/protos@0.4.7) (2021-10-25)
+
+
+### Bug Fixes
+
+* **protos:** restructured payment proto ([b5a8703](https://github.com/restorecommerce/libs/commit/b5a8703a7818cc233e579fa9bb0e5f0bba8b0492))
+
+
+
+
+
 ## [0.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.5...@restorecommerce/protos@0.4.6) (2021-10-19)
 
 

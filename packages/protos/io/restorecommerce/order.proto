@@ -40,13 +40,14 @@ message Order {
   string name = 3;
   string description = 4;
   string status = 5;
-  repeated Items items = 6;
+  string customer_reference = 6;
+  repeated Items items = 7;
   // sum of all the quantity_price will be total_price
-  double total_price = 7;
+  double total_price = 8;
   // shipping address
-  string shipping_contact_point_id = 8;
-  string billing_contact_point_id = 9;
-  double total_weight_in_kg = 10;
+  string shipping_contact_point_id = 9;
+  string billing_contact_point_id = 10;
+  double total_weight_in_kg = 11;
 }
 
 message Items {

@@ -15,15 +15,16 @@ service Service {
   rpc Put (stream Object) returns (PutResponse);
   rpc Delete (DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc List (ListRequest) returns (ListResponse);
-  rpc Copy (CopyRequest) returns (CopyResponse);
+  rpc Copy (CopyRequestList) returns (CopyResponseList);
+  rpc Move (MoveRequestList) returns (MoveResponseList);
 }
 
-message CopyRequest {
+message CopyRequestList {
   repeated CopyRequestItem items = 1;
   io.restorecommerce.auth.Subject subject = 2;
 }
 
-message CopyResponse {
+message CopyResponseList {
   repeated copyResponsePayloadWithStatus response = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
@@ -142,6 +143,8 @@ message ListRequest {
   string bucket = 1;
   io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
   io.restorecommerce.auth.Subject subject = 3;
+  int32 max_keys = 4;
+  string prefix = 5;
 }
 
 // OstorageMessage is used for emitting
@@ -151,4 +154,35 @@ message OstorageMessage {
   string bucket = 2;
   google.protobuf.Any metadata = 3;
   io.restorecommerce.auth.Subject subject = 4;
+}
+
+message MoveRequestList {
+  repeated MoveRequestItem items = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
+message MoveRequestItem {
+  string bucket = 1;
+  string sourcePath = 2;
+  string key = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  Options options = 5;
+}
+
+message MoveResponseList {
+  repeated MoveResponsePayloadWithStatus response = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message MoveResponsePayloadWithStatus {
+  MoveResponseItem payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message MoveResponseItem {
+  string bucket = 1;
+  string moveSource = 2;
+  string key = 3;
+  io.restorecommerce.meta.Meta meta = 4;
+  Options options = 5;
 }

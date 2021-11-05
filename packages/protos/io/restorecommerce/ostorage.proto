@@ -181,7 +181,7 @@ message MoveResponsePayloadWithStatus {
 
 message MoveResponseItem {
   string bucket = 1;
-  string moveSource = 2;
+  string sourcePath = 2;
   string key = 3;
   io.restorecommerce.meta.Meta meta = 4;
   Options options = 5;

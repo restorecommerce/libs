@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.7...@restorecommerce/protos@0.4.8) (2021-11-05)
+
+
+### Bug Fixes
+
+* **protos:** fix move response ([c6c16c1](https://github.com/restorecommerce/libs/commit/c6c16c1b0f86656fc29a240876fde9207debd335))
+* **protos:** updated ostorage protos listRequest adding max_keys and prefix, added move api ([9854365](https://github.com/restorecommerce/libs/commit/9854365e7ba486edce922704af7539a5ba9a1095))
+
+
+
+
+
 ## [0.4.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.6...@restorecommerce/protos@0.4.7) (2021-10-25)
 
 

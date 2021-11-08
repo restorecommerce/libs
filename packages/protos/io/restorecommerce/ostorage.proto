@@ -162,9 +162,9 @@ message MoveRequestList {
 }
 
 message MoveRequestItem {
-  string bucket = 1;
-  string sourcePath = 2;
-  string key = 3;
+  string bucket = 1; // destination bucket name
+  string sourceObject = 2; // source object with bucket name
+  string key = 3; // destination key name
   io.restorecommerce.meta.Meta meta = 4;
   Options options = 5;
 }
@@ -181,7 +181,7 @@ message MoveResponsePayloadWithStatus {
 
 message MoveResponseItem {
   string bucket = 1;
-  string sourcePath = 2;
+  string sourceObject = 2;
   string key = 3;
   io.restorecommerce.meta.Meta meta = 4;
   Options options = 5;

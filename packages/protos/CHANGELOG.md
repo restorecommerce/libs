@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.8...@restorecommerce/protos@0.4.9) (2021-11-08)
+
+
+### Bug Fixes
+
+* **protos:** rename sourcePath to sourceObject for Move api ([11c5049](https://github.com/restorecommerce/libs/commit/11c504939fc22005c22dc28b3b6886684a1224c3))
+
+
+
+
+
 ## [0.4.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.7...@restorecommerce/protos@0.4.8) (2021-11-05)
 
 

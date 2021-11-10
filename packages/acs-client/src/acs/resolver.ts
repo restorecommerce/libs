@@ -6,9 +6,9 @@ import {
 import { AuthZAction } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
-import { buildFilterPermissions, generateOperationStatus } from '../utils';
+import { buildFilterPermissions, generateOperationStatus, attributesMatch } from '../utils';
 import { GrpcClient } from '@restorecommerce/grpc-client';
-import { UnAuthZ, ACSAuthZ, authZ } from './authz';
+import { UnAuthZ, ACSAuthZ, authZ, formatResourceType } from './authz';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
@@ -138,6 +138,10 @@ export async function accessRequest(subject: Subject, entity: Entity[],
     subjectID = subject.id;
   }
 
+  if (!_.isArray(entity)) {
+    entity = [entity];
+  }
+
   // default ACS operation is isAllowed
   if (!operation) {
     operation = Operation.isAllowed;
@@ -178,39 +182,74 @@ export async function accessRequest(subject: Subject, entity: Entity[],
         `as no matching policy/rule could be found, but since ACS enforcement ` +
         `config is disabled overriding the ACS result`);
     }
-    // extend input filter to enforce applicable policies
-    let permissionArguments = await buildFilterPermissions(policySetResponse.policy_sets[0], subClone, resource, authZ, database);
-    if (!permissionArguments && authzEnforced) {
-      const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was DENY`;
-      const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
-      logger.verbose(msg);
-      logger.verbose('Details:', { details });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
-    }
 
-    if (!permissionArguments && !authzEnforced) {
-      logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
-        `resource:${entity}, action:${action}, target_scope:${targetScope}, ` +
-        `but since ACS enforcement config is disabled overriding the ACS result`);
-    }
+    let entityFilterMap = [];
+    // create filters to enforce applicable policies
+    // Iterate through each entity and filter the applicable policies and provide them to buildFilterPermissions
+    // to create filters for each of the entities requested
+    entity.forEach(async (entityObj) => {
+      let entityName = entityObj.entity;
+      let entityNameSpace;
 
-    if (resource && resource.filters && !_.isEmpty(resource.filters)) {
-      if (_.isArray(resource.filters)) {
-        for (let filter of resource.filters) {
-          if (!_.isArray(permissionArguments.filters)) {
-            permissionArguments.filters = [filter];
-          }
-          permissionArguments.filters.push(filter);
-        }
-      } else {
-        if (!_.isArray(permissionArguments.filters)) {
-          permissionArguments.filters = [permissionArguments.filters];
-        }
-        permissionArguments.filters.push(resource.filters);
+      if (entityName.indexOf('.') > -1) {
+        entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
       }
-    }
-    Object.assign(resource, { filters: permissionArguments.filters });
+      const entityType = formatResourceType(entityName, entityNameSpace);
+      const urns = cfg.get('authorization:urns');
+      const entityValueURN = urns?.model + `:${entityType}`;
+      let entityPolicies = { policy_sets: [{ policies: [] }] };
+      const entityAttributes = [{ id: urns?.entity, value: entityValueURN }];
+      if (policySetResponse && policySetResponse.policy_sets && policySetResponse.policy_sets.length > 0) {
+        policySetResponse.policy_sets.forEach((policySet) => {
+          const policies = policySet.policies;
+          // check if the policy and rule set is applicable to the enitity
+          if (policies && policies.length > 0) {
+            for (let policy of policies) {
+              const policyTargetResources = policy?.target?.resources;
+              if (policyTargetResources) {
+                const policyMatch = attributesMatch(policyTargetResources, entityAttributes);
+                if (policyMatch && policy.rules && policy.rules.length > 0) {
+                  for (let rule of policy.rules) {
+                    const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                    if (ruleMatch) {
+                      entityPolicies.policy_sets[0].policies.push(policy);
+                      break;
+                    }
+                  }
+                }
+
+              } else if(policy?.rules) {
+                // check for rule
+                for (let rule of policy.rules) {
+                  const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                  if (ruleMatch) {
+                    entityPolicies.policy_sets[0].policies.push(policy);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+      let permissionArguments = await buildFilterPermissions(entityPolicies.policy_sets[0], subClone, ctx.resources, database);
+      if (!permissionArguments && authzEnforced) {
+        const msg = `Access not allowed for request with subject:${subjectID}, ` +
+          `resource:${entityName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
+        const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
+        logger.verbose(msg);
+        logger.verbose('Details:', { details });
+        return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      }
+
+      if (!permissionArguments && !authzEnforced) {
+        logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
+          `resource:${entityName}, action:${action}, target_scope:${targetScope}, ` +
+          `but since ACS enforcement config is disabled overriding the ACS result`);
+      }
+      entityFilterMap.push({entity: entityName, filters: permissionArguments.filters });
+    });
+    policySetResponse.filters = entityFilterMap;
     policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
     policySetResponse.operation_status = generateOperationStatus(200, 'success');
     return policySetResponse;

@@ -196,10 +196,15 @@ export interface PolicySetRQ extends AccessControlObjectInterface {
   policies?: PolicyRQ[];
 }
 
+export interface EnityFilterMap {
+  entity: string;
+  filters: any; // TODO add typing
+}
+
 // Reverse query response
 export interface PolicySetRQResponse extends AccessControlObjectInterface {
-  // policies?: PolicyRQ[];
   policy_sets?: PolicySetRQ[];
+  filters?: EnityFilterMap[]; // TODO add custom query Args
   decision: Decision;
   operation_status: {
     code: number;

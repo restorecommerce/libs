@@ -307,7 +307,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
 };
 
 export const buildFilterPermissions = async (policySet: PolicySetRQ,
-  subject: Subject, reqResources: any, authZ: ACSAuthZ, database?: string): Promise<QueryArguments | UserQueryArguments> => {
+  subject: Subject, reqResources: any, database: string): Promise<QueryArguments | UserQueryArguments> => {
   let hierarchical_scopes = subject && subject.hierarchical_scopes ? subject.hierarchical_scopes : [];
   let role_associations = subject && subject.role_associations ? subject.role_associations : [];
   if (_.isEmpty(role_associations) || _.isEmpty(hierarchical_scopes)) {
@@ -480,3 +480,69 @@ export const generateOperationStatus = (code?: number, message?: string) => {
     message
   };
 };
+
+  /**
+   * Check if the attributes of a resources from a rule, policy
+   * or policy set match the attributes from a request.
+   *
+   * @param ruleAttributes
+   * @param requestAttributes
+   */
+  export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[],
+    regexMatch?: boolean): boolean => {
+    for (let attribute of ruleAttributes) {
+      const id = attribute.id;
+      const value = attribute.value;
+      const match = !!requestAttributes.find((requestAttribute) => {
+        // return requestAttribute.id == id && requestAttribute.value == value;
+        if (requestAttribute.id == id && requestAttribute.value == value) {
+          return true;
+        } else if (regexMatch && requestAttribute.id == id) {
+          // rule entity
+          let pattern = value.substring(value.lastIndexOf(':') + 1);
+          let nsEntityArray = pattern.split('.');
+          // firstElement could be either entity or namespace
+          let nsOrEntity = nsEntityArray[0];
+          let entityRegexValue = nsEntityArray[nsEntityArray.length - 1];
+          let reqNS, ruleNS;
+          if (nsOrEntity.toUpperCase() != entityRegexValue.toUpperCase()) {
+            // rule name space is present
+            ruleNS = nsOrEntity.toUpperCase();
+          }
+
+          // request entity
+          let reqValue = requestAttribute.value;
+          const reqAttributeNS = reqValue.substring(0, reqValue.lastIndexOf(':'));
+          const ruleAttributeNS = value.substring(0, value.lastIndexOf(':'));
+          // verify namespace before entity name
+          if (reqAttributeNS != ruleAttributeNS) {
+            return false;
+          }
+          let reqPattern = reqValue.substring(reqValue.lastIndexOf(':') + 1);
+          let reqNSEntityArray = reqPattern.split('.');
+          // firstElement could be either entity or namespace
+          let reqNSOrEntity = reqNSEntityArray[0];
+          let requestEntityValue = reqNSEntityArray[reqNSEntityArray.length - 1];
+          if (reqNSOrEntity.toUpperCase() != requestEntityValue.toUpperCase()) {
+            // request name space is present
+            reqNS = reqNSOrEntity.toUpperCase();
+          }
+
+          if ((reqNS && ruleNS && (reqNS === ruleNS)) || (!reqNS && !ruleNS)) {
+            const reExp = new RegExp(entityRegexValue);
+            if (requestEntityValue.match(reExp)) {
+              return true;
+            }
+          }
+        } else {
+          return false;
+        }
+      });
+
+      if (!match) {
+        return false;
+      }
+    }
+
+    return true;
+  };

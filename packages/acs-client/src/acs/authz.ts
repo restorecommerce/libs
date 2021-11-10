@@ -63,7 +63,7 @@ export const createSubjectTarget = (subject: Subject): Attribute[] => {
   return flattened;
 };
 
-const formatResourceType = (type: string, namespacePrefix?: string): string => {
+export const formatResourceType = (type: string, namespacePrefix?: string): string => {
   // e.g: contact_point -> contact_point.ContactPoint
   const prefix = type;
   const suffixArray = type.split('_').map((word) => {

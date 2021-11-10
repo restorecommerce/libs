@@ -144,14 +144,27 @@ export class UnAuthZ implements IAuthZ {
     this.acs = acs;
   }
 
-  async isAllowed(request: Request<NoAuthTarget, AuthZContext>, useCache): Promise<DecisionResponse> {
+  private encode(object: any): any {
+    if (_.isArray(object)) {
+      return _.map(object, this.encode.bind(this));
+    } else {
+      return {
+        value: Buffer.from(JSON.stringify(object))
+      };
+    }
+  }
+
+  async isAllowed(request: Request<NoAuthTarget, AuthZContext>, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> {
     const authZRequest = {
       target: {
         action: createActionTarget(request.target.action),
         subject: createSubjectTarget(request.target.subject),
         resources: createResourceTarget(request.target.entity, request.target.action)
       },
-      context: request.context
+      context: {
+        subject: this.encode(request.target.subject),
+        resources: this.encode(ctx.resources)
+      }
     };
 
     let response: DecisionResponse;
@@ -190,7 +203,10 @@ export class UnAuthZ implements IAuthZ {
         subject: createSubjectTarget(request.target.subject),
         resources: createResourceTarget(request.target.entity, request.target.action)
       },
-      context: request.context
+      context: {
+        subject: this.encode(request.target.subject),
+        resources: this.encode(ctx.resources)
+      }
     };
     let response: PolicySetRQResponse;
     try {
@@ -240,14 +256,13 @@ export class ACSAuthZ implements IAuthZ {
    * @param useCache
    * @returns {DecisionResponse}
    */
-  async isAllowed(request: Request<AuthZTarget, AuthZContext>, useCache): Promise<DecisionResponse> {
+  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache): Promise<DecisionResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
       resources: [],
       security: this.encode(request.context.security)
     };
-    let resources = request.target.entity;
     const subject = { token: request.target.subject.token };
     let cachePrefix = 'ACSAuthZ';
 
@@ -256,7 +271,7 @@ export class ACSAuthZ implements IAuthZ {
     }
 
     authZRequest.context.subject = this.encode(subject);
-    authZRequest.context.resources = this.encode(resources);
+    authZRequest.context.resources = this.encode(ctx.resources);
 
     // for isAllowed we use the subject, action and resource fields .i.e. reqeust Target
     // since the context resources contains the values which would change for each

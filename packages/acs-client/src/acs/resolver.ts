@@ -44,8 +44,8 @@ const whatIsAllowedRequest = async (subject: Subject, entity: Entity[],
   }
 };
 
-export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
-  entity: Entity[], action: AuthZAction, useCache: boolean): Promise<DecisionResponse> => {
+export const isAllowedRequest = async (subject: Subject,
+  entity: Entity[], action: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
     const acsClient = new GrpcClient(grpcConfig, logger);
@@ -57,7 +57,7 @@ export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
       context: {
         security: {}
       }
-    }, useCache);
+    }, ctx, useCache);
   } else {
     return await authZ.isAllowed({
       context: {
@@ -68,7 +68,7 @@ export const isAllowedRequest = async (subject: Subject | UnauthenticatedData,
         entity,
         action
       }
-    }, useCache);
+    }, ctx, useCache);
   }
 };
 
@@ -216,28 +216,13 @@ export async function accessRequest(subject: Subject, entity: Entity[],
     return policySetResponse;
   }
 
-  // if (!_.isArray(resource)) {
-  //   resources = [resource];
-  // } else {
-  //   resources = resource;
-  // }
-
   // default deny
   let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
-  let resourceList = [];
   // for write operations
   if (operation === Operation.isAllowed) {
-    // add type and namespace
-    for (let resourceObj of resource) {
-      resourceList.push({
-        fields: _.keys(resourceObj),
-        instance: resourceObj,
-        type: entity
-      });
-    }
     // authorization
     try {
-      decisionResponse = await isAllowedRequest(subClone as Subject, resourceList, action, authZ, useCache);
+      decisionResponse = await isAllowedRequest(subClone as Subject, entity, action, ctx, useCache);
     } catch (err) {
       return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }

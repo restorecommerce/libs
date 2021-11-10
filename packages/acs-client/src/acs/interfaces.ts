@@ -8,6 +8,28 @@ export enum AuthZAction {
   ALL = '*'
 }
 
+export enum Operation {
+  isAllowed = 'isAllowed',
+  whatIsAllowed = 'whatIsAllowed'
+}
+
+export interface Entity {
+  entity: string,
+  id?: string | string[], // for what is allowed operation id is not mandatory
+  property?: string[]
+}
+
+export interface ACSClientContext {
+  subject: Subject;
+  resources?: {
+    [key: string]: any;
+  };
+}
+
+export interface Database {
+ database: 'arangoDB' | 'postgres'
+};
+
 export interface AuthZSubject {
   id: string; // entity ('user', 'service', etc) ID
   role_associations: RoleAssociation[];
@@ -51,9 +73,9 @@ export interface Resource {
   namespace?: string;
 }
 
-export interface Target<TSubject, TResource, TAction> {
+export interface Target<TSubject, TEntity, TAction> {
   subject: TSubject;
-  resources: TResource[];
+  entity: TEntity;
   action: TAction;
 }
 
@@ -69,11 +91,11 @@ export interface Response {
 /**
  * isAllowed Authorization interface
  */
-export interface AuthZ<TSubject, TContext = any, TResource = Resource, TAction = AuthZAction> {
+export interface AuthZ<TSubject, TContext = any, TEntity = Entity, TAction = AuthZAction> {
   /**
    * Check is the subject is allowed to do an action on a specific resource
    */
-  isAllowed(request: Request<Target<TSubject, TResource, TAction>, TContext>,
+  isAllowed(request: Request<Target<TSubject, TEntity, TAction>, TContext>,
     useCache: boolean): Promise<DecisionResponse>;
 }
 
@@ -82,11 +104,11 @@ export interface Credentials {
   [key: string]: any;
 }
 
-export type AuthZTarget = Target<Subject, Resource, AuthZAction>;
-export type NoAuthTarget = Target<UnauthenticatedData, Resource, AuthZAction>;
+export type AuthZTarget = Target<Subject, Entity[], AuthZAction>;
+export type NoAuthTarget = Target<UnauthenticatedData, Entity[], AuthZAction>;
 
-export type AuthZWhatIsAllowedTarget = Target<Subject, Resource, AuthZAction[]>;
-export type NoAuthWhatIsAllowedTarget = Target<UnauthenticatedData, Resource, AuthZAction[]>;
+export type AuthZWhatIsAllowedTarget = Target<Subject, Entity[], AuthZAction>;
+export type NoAuthWhatIsAllowedTarget = Target<UnauthenticatedData, Entity[], AuthZAction>;
 
 export interface AuthZContext {
   // session-related tokens

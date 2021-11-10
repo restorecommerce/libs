@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {
   AuthZContext, Attribute, AuthZAction, AuthZTarget, AuthZWhatIsAllowedTarget,
   IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
-  Resource, Decision, Subject, DecisionResponse, PolicySetRQResponse
+  Decision, Subject, DecisionResponse, PolicySetRQResponse, ACSClientContext, Entity
 } from './interfaces';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
@@ -77,62 +77,56 @@ const formatResourceType = (type: string, namespacePrefix?: string): string => {
   }
 };
 
-export const createResourceTarget = (resources: Resource[], action: AuthZAction | AuthZAction[]) => {
+export const createResourceTarget = (entity: Entity[], action: AuthZAction) => {
   const flattened: Attribute[] = [];
-  resources.forEach((resource) => {
+  entity.forEach((entityObj) => {
     if (action != AuthZAction.EXECUTE) {
-      const resourceType = formatResourceType(resource.type, resource.namespace);
-      if (resourceType) {
+      let entityName = entityObj.entity;
+      let entityInstance = entityObj.id;
+      let entityProperty = entityObj.property;
+      let entityNameSpace;
+
+      if (entityName.indexOf('.') > -1) {
+        entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
+      }
+
+      // entity - urn:restorecommerce:acs:names:model:entity
+      const entityType = formatResourceType(entityName, entityNameSpace);
+      if (entityType) {
         flattened.push({
           id: urns.entity,
-          value: urns.model + `:${resourceType}`
-        });
-      }
-      if (resource.instance && resource.instance.id) {
-        flattened.push({
-          id: urns.resourceID,
-          value: resource.instance.id
+          value: urns.model + `:${entityType}`
         });
       }
 
-      if (resource.fields) {
-        resource.fields.forEach((field) => {
+      // resource-id - urn:oasis:names:tc:xacml:1.0:resource:resource-id
+      if (entityInstance && typeof entityInstance === 'string') {
+        flattened.push({
+          id: urns.resourceID,
+          value: entityInstance
+        });
+      } else if (entityInstance && _.isArray(entityInstance) && entityInstance.length > 0) {
+        entityInstance.forEach((instance) => {
+          flattened.push({
+            id: urns.resourceID,
+            value: instance
+          });
+        });
+      }
+
+      // property - urn:restorecommerce:acs:names:model:property
+      if (entityProperty && _.isArray(entityProperty) && entityProperty.length > 0) {
+        entityProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
-            value: urns.model + `:${resourceType}#${field}`
+            value: urns.model + `:${entityType}#${property}`
           });
         });
       }
     } else {
-      resources.forEach((resource) => {
-        flattened.push({
-          id: urns.operation,
-          value: resource.type
-        });
-      });
-    }
-  });
-
-  return flattened;
-};
-
-export const createResourceTargetWhatIsAllowed = (resources: Resource[]) => {
-  const flattened: Attribute[] = [];
-  resources.forEach((resource) => {
-    const resourceType = formatResourceType(resource.type, resource.namespace);
-
-    if (resource.type.startsWith('mutation') || resource.type.startsWith('query')) {
-      resources.forEach((resource) => {
-        flattened.push({
-          id: urns.operation,
-          value: resource.type
-        });
-      });
-    }
-    else {
       flattened.push({
-        id: urns.entity,
-        value: urns.model + `:${resourceType}`
+        id: urns.operation,
+        value: entityObj.entity
       });
     }
   });
@@ -155,7 +149,7 @@ export class UnAuthZ implements IAuthZ {
       target: {
         action: createActionTarget(request.target.action),
         subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.resources, request.target.action)
+        resources: createResourceTarget(request.target.entity, request.target.action)
       },
       context: request.context
     };
@@ -189,12 +183,12 @@ export class UnAuthZ implements IAuthZ {
   }
 
   async whatIsAllowed(request: Request<NoAuthWhatIsAllowedTarget, AuthZContext>,
-    useCache): Promise<PolicySetRQResponse> {
+    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
         action: createActionTarget(request.target.action),
         subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.resources, request.target.action)
+        resources: createResourceTarget(request.target.entity, request.target.action)
       },
       context: request.context
     };
@@ -253,7 +247,7 @@ export class ACSAuthZ implements IAuthZ {
       resources: [],
       security: this.encode(request.context.security)
     };
-    let resources = request.target.resources;
+    let resources = request.target.entity;
     const subject = { token: request.target.subject.token };
     let cachePrefix = 'ACSAuthZ';
 
@@ -261,17 +255,6 @@ export class ACSAuthZ implements IAuthZ {
       cachePrefix = request.target.subject.id + ':' + cachePrefix;
     }
 
-    if (request.target.action == 'CREATE' || request.target.action == 'MODIFY' || request.target.action == 'DELETE') {
-      // insert temporary IDs into resources which are yet to be created if not present in input
-      let counter = 0;
-      resources = _.cloneDeep(request.target.resources).map((resource) => {
-        if (_.isEmpty(resource.instance.id)) {
-          resource.instance.id = String(counter++);
-          resource.fields.push('id');
-        }
-        return resource;
-      });
-    }
     authZRequest.context.subject = this.encode(subject);
     authZRequest.context.resources = this.encode(resources);
 
@@ -315,14 +298,13 @@ export class ACSAuthZ implements IAuthZ {
   * @param resource
   */
   async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
-    useCache): Promise<PolicySetRQResponse> {
+    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
       resources: [],
       security: this.encode(request.context.security)
     };
-    let resources = request.target.resources;
     const subject = { token: request.target.subject.token };
 
     let cachePrefix = 'ACSAuthZ';
@@ -332,14 +314,14 @@ export class ACSAuthZ implements IAuthZ {
     }
 
     authZRequest.context.subject = this.encode(subject);
-    authZRequest.context.resources = this.encode(resources);
+    authZRequest.context.resources = this.encode(ctx.resources);
 
     let response: PolicySetRQResponse;
     try {
       response = await getOrFill(authZRequest, async (req) => {
         return await this.acs.whatIsAllowed(authZRequest);
       }, useCache, cachePrefix + ':whatIsAllowed');
-    } catch(err) {
+    } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation', err);
       logger.error('error stack', err.stack);
       if (!err.code) {
@@ -372,36 +354,14 @@ export class ACSAuthZ implements IAuthZ {
   }
 
   prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
-    let { subject, resources, action } = request.target;
-    // this.reduceUserScope(subject);
-
+    let { subject, entity, action } = request.target;
     const authZRequest: any = {
       target: {
         action: createActionTarget(action),
         subject: createSubjectTarget(subject),
       },
     };
-    if (_.isArray(action)) {
-      // whatIsAllowed
-      authZRequest.target.resources = createResourceTargetWhatIsAllowed(resources);
-    } else {
-      // isAllowed
-      if (request.target.action == 'CREATE' || request.target.action == 'MODIFY'
-        || request.target.action == 'DELETE') {
-        // insert temporary IDs into resources which are yet to be created
-        let counter = 0;
-        resources = _.cloneDeep(request.target.resources).map((resource) => {
-          if (_.isEmpty(resource.instance.id)) {
-            resource.instance.id = String(counter++);
-            resource.fields.push('id');
-          }
-          return resource;
-        });
-      }
-
-      authZRequest.target.resources = createResourceTarget(resources, action);
-    }
-
+    authZRequest.target.resources = createResourceTarget(entity, action);
     return authZRequest;
   }
 }

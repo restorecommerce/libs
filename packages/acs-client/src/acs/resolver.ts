@@ -149,6 +149,11 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
     database = 'arangoDB';
   }
 
+  // ctx.resources
+  if (ctx.resources && !_.isArray(ctx.resources)) {
+    ctx.resources = [ctx.resources];
+  }
+
   // whatIsAllowed Operation
   if (operation === Operation.whatIsAllowed) {
     // const resourceName = request.entity;
@@ -203,7 +208,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
   if (entityList.length === 1) {
     entityString = entityList[0];
   } else {
-    entityString = JSON.stringify(entityList); 
+    entityString = JSON.stringify(entityList);
   }
   // default deny
   let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
@@ -318,7 +323,7 @@ export interface LoginError {
 }
 
 export interface QueryArguments {
-  filters?: Filters;
+  filters?: Filters[];
   limit?: any;
   sort?: any;
   offset?: any;

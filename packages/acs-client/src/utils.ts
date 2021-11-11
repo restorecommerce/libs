@@ -1,7 +1,7 @@
 import {
   RoleAssociation, UserScope, Subject, PolicySetRQ, Effect, PolicySetRQResponse,
   AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType,
-  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, AuthZAction
+  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, AuthZAction, ResolvedSubject
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -87,7 +87,7 @@ const checkTargetScopeExists = (hrScope: HierarchicalScope, targetScope: string,
   return false;
 };
 
-const checkSubjectMatch = (user: Subject, ruleSubjectAttributes: Attribute[],
+const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribute[],
   reducedUserScope?: string[]): boolean => {
   // 1) Iterate through ruleSubjectAttributes and check if the roleScopingEntity URN and
   // role URN exists
@@ -308,7 +308,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
 };
 
 export const buildFilterPermissions = async (policySet: PolicySetRQ,
-  subject: Subject, reqResources: any, database: string): Promise<QueryArguments | UserQueryArguments> => {
+  subject: ResolvedSubject, reqResources: any, database: string): Promise<QueryArguments | UserQueryArguments> => {
   let hierarchical_scopes = subject && subject.hierarchical_scopes ? subject.hierarchical_scopes : [];
   let role_associations = subject && subject.role_associations ? subject.role_associations : [];
   if (_.isEmpty(role_associations) || _.isEmpty(hierarchical_scopes)) {
@@ -576,7 +576,7 @@ export const createEntityFilterMap = async (entity: Entity[],
   targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
   let entityFilterMap = [];
   let customQueryArgs = [];
-  entity.forEach(async (entityObj) => {
+  for (let entityObj of entity) {
     let entityName = entityObj.entity;
     let entityNameSpace;
 
@@ -621,7 +621,7 @@ export const createEntityFilterMap = async (entity: Entity[],
         }
       });
     }
-    let permissionArguments = await buildFilterPermissions(entityPolicies.policy_sets[0], subject, resources, database);
+    let permissionArguments = await buildFilterPermissions(entityPolicies.policy_sets[0], subject as ResolvedSubject, resources, database);
     if (!permissionArguments && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
         `resource:${entityName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
@@ -636,6 +636,9 @@ export const createEntityFilterMap = async (entity: Entity[],
         `resource:${entityName}, action:${action}, target_scope:${targetScope}, ` +
         `but since ACS enforcement config is disabled overriding the ACS result`);
     }
+    if (!_.isArray(permissionArguments.filters)) {
+      permissionArguments.filters = [permissionArguments.filters];
+    }
     entityFilterMap.push({ entity: entityName, filters: permissionArguments.filters });
     if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
       customQueryArgs.push({
@@ -644,7 +647,7 @@ export const createEntityFilterMap = async (entity: Entity[],
         custom_arguments: permissionArguments.custom_arguments
       });
     }
-  });
+  }
   return {
     entityFilterMap, customQueryArgs
   };

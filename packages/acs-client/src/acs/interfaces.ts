@@ -42,7 +42,16 @@ export interface HierarchicalScope {
   children?: HierarchicalScope[];
 }
 
+export interface ResolvedSubject {
+  id: string;
+  scope: string; // target scope
+  token: string;
+  role_associations?: RoleAssociation[];
+  hierarchical_scopes?: HierarchicalScope[]; // HR scope for user
+}
+
 export interface Subject {
+  id?: string;
   scope?: string; // target scope
   unauthenticated?: boolean;
   token?: string;

@@ -1,6 +1,7 @@
 import {
-  RoleAssociation, UserScope, Subject, PolicySetRQ, Effect,
-  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType, EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, PolicySetRQResponse, AuthZAction
+  RoleAssociation, UserScope, Subject, PolicySetRQ, Effect, PolicySetRQResponse,
+  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType,
+  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, AuthZAction
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -8,7 +9,7 @@ import { errors, cfg } from './config';
 import * as nodeEval from 'node-eval';
 import logger from './logger';
 import { get } from './acs/cache';
-import { ACSAuthZ, formatResourceType } from './acs/authz';
+import { formatResourceType } from './acs/authz';
 
 export const reduceRoleAssociations = async (roleAssociations: RoleAssociation[],
   scopeID: string): Promise<UserScope> => {
@@ -556,7 +557,7 @@ export interface FilterMapResponse {
  * creates entity filters and custom query / arguments for the entity list provided
  * It iterates through each entity and filter the applicable policies and
  * provide them to buildFilterPermissions to create filters for each of the entities requested
- * 
+ *
  * @param {Entity[]} entity Contains entity name, entity instance and optional entity properties
  * @param {PolicSetResponse} policySetResponse contains set of applicable policies for entities list
  * @param {any} resources context resources
@@ -567,7 +568,7 @@ export interface FilterMapResponse {
  * @param {string} targetScope target scope
  * @param {Database} database database used either `arangoDB` or `postgres`,
  * if this param is missing defaults to `arangoDB`
- * 
+ *
  */
 export const createEntityFilterMap = async (entity: Entity[],
   policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,

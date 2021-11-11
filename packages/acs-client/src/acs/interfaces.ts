@@ -14,9 +14,9 @@ export enum Operation {
 }
 
 export interface Entity {
-  entity: string,
-  id?: string | string[], // for what is allowed operation id is not mandatory
-  property?: string[]
+  entity: string;
+  id?: string | string[]; // for what is allowed operation id is not mandatory
+  property?: string[];
 }
 
 export interface ACSClientContext {
@@ -27,7 +27,7 @@ export interface ACSClientContext {
 }
 
 export interface Database {
-  database: 'arangoDB' | 'postgres'
+  database: 'arangoDB' | 'postgres';
 };
 
 export interface AuthZSubject {
@@ -195,7 +195,6 @@ export interface PolicySetRQ extends AccessControlObjectInterface {
   combining_algorithm?: string;
   policies?: PolicyRQ[];
 }
-
 
 export enum FilterValueType {
   STRING = 0,

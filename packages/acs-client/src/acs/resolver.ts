@@ -72,9 +72,6 @@ export const isAllowedRequest = async (subject: Subject,
   }
 };
 
-export async function accessRequest(subject: Subject, entity: Entity[], action: AuthZAction, ctx: ACSClientContext, operation: Operation.isAllowed): Promise<DecisionResponse | PolicySetRQResponse>;
-export async function accessRequest(subject: Subject, entity: Entity[], action: AuthZAction, ctx: ACSClientContext, operation: Operation.whatIsAllowed, database: 'arangoDB' | 'postgres'): Promise<DecisionResponse | PolicySetRQResponse>;
-
 /**
  * It turns an API request as can be found in typical Web frameworks like express, koa etc.
  * into a proper ACS request. For `whatIsAllowed` operation it returns the filters
@@ -93,9 +90,9 @@ export async function accessRequest(subject: Subject, entity: Entity[], action: 
  * is not used and ACS request is made to `access-control-srv`
  * @returns {DecisionResponse | PolicySetRQResponse}
  */
-export async function accessRequest(subject: Subject, entity: Entity[],
+export const accessRequest = async (subject: Subject, entity: Entity[],
   action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
-  database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> {
+  database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
   // when subject is not passed (if auth header is not set)
   if (_.isEmpty(subject)) {
     subject = { unauthenticated: true };
@@ -161,7 +158,7 @@ export async function accessRequest(subject: Subject, entity: Entity[],
       // Note: it is assumed that there is only one policy set
       policySetResponse = await whatIsAllowedRequest(subClone, entity, action, ctx, useCache);
     } catch (err) {
-      logger.error('Error calling whatIsAllowed:', { message: err.message });
+      logger.error('Error calling whatIsAllowed operation', { message: err.message });
       logger.error('Error stack', err.stack);
       return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
@@ -187,7 +184,7 @@ export async function accessRequest(subject: Subject, entity: Entity[],
     const entityFilters = await createEntityFilterMap(entity, policySetResponse,
       ctx.resources, action, subClone, subjectID, authzEnforced, targetScope, database);
 
-    if((entityFilters as DecisionResponse).decision) {
+    if ((entityFilters as DecisionResponse).decision) {
       return entityFilters as DecisionResponse;
     }
 
@@ -198,14 +195,26 @@ export async function accessRequest(subject: Subject, entity: Entity[],
     return policySetResponse;
   }
 
+  let entityList = [];
+  entity.forEach((entityObj) => {
+    entityList.push(entityObj.entity);
+  });
+  let entityString;
+  if (entityList.length === 1) {
+    entityString = entityList[0];
+  } else {
+    entityString = JSON.stringify(entityList); 
+  }
   // default deny
   let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
-  // for write operations
+  // isAllowed operation
   if (operation === Operation.isAllowed) {
     // authorization
     try {
       decisionResponse = await isAllowedRequest(subClone as Subject, entity, action, ctx, useCache);
     } catch (err) {
+      logger.error('Error calling isAllowed operation', { message: err.message });
+      logger.error('Error stack', err.stack);
       return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -217,7 +226,7 @@ export async function accessRequest(subject: Subject, entity: Entity[],
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
+        `resource:${entityString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
       return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
@@ -231,7 +240,7 @@ export async function accessRequest(subject: Subject, entity: Entity[],
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
     logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
+      `resource:${entityString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Decision.PERMIT;
   }

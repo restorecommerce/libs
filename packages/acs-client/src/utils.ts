@@ -1,6 +1,6 @@
 import {
   RoleAssociation, UserScope, Subject, PolicySetRQ, Effect,
-  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType
+  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType, EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, PolicySetRQResponse, AuthZAction
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -8,7 +8,7 @@ import { errors, cfg } from './config';
 import * as nodeEval from 'node-eval';
 import logger from './logger';
 import { get } from './acs/cache';
-import { ACSAuthZ } from './acs/authz';
+import { ACSAuthZ, formatResourceType } from './acs/authz';
 
 export const reduceRoleAssociations = async (roleAssociations: RoleAssociation[],
   scopeID: string): Promise<UserScope> => {
@@ -481,68 +481,170 @@ export const generateOperationStatus = (code?: number, message?: string) => {
   };
 };
 
-  /**
-   * Check if the attributes of a resources from a rule, policy
-   * or policy set match the attributes from a request.
-   *
-   * @param ruleAttributes
-   * @param requestAttributes
-   */
-  export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[],
-    regexMatch?: boolean): boolean => {
-    for (let attribute of ruleAttributes) {
-      const id = attribute.id;
-      const value = attribute.value;
-      const match = !!requestAttributes.find((requestAttribute) => {
-        // return requestAttribute.id == id && requestAttribute.value == value;
-        if (requestAttribute.id == id && requestAttribute.value == value) {
-          return true;
-        } else if (regexMatch && requestAttribute.id == id) {
-          // rule entity
-          let pattern = value.substring(value.lastIndexOf(':') + 1);
-          let nsEntityArray = pattern.split('.');
-          // firstElement could be either entity or namespace
-          let nsOrEntity = nsEntityArray[0];
-          let entityRegexValue = nsEntityArray[nsEntityArray.length - 1];
-          let reqNS, ruleNS;
-          if (nsOrEntity.toUpperCase() != entityRegexValue.toUpperCase()) {
-            // rule name space is present
-            ruleNS = nsOrEntity.toUpperCase();
-          }
+/**
+ * Check if the attributes of a resources from a rule, policy
+ * or policy set match the attributes from a request.
+ *
+ * @param ruleAttributes
+ * @param requestAttributes
+ */
+export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[],
+  regexMatch?: boolean): boolean => {
+  for (let attribute of ruleAttributes) {
+    const id = attribute.id;
+    const value = attribute.value;
+    const match = !!requestAttributes.find((requestAttribute) => {
+      // return requestAttribute.id == id && requestAttribute.value == value;
+      if (requestAttribute.id == id && requestAttribute.value == value) {
+        return true;
+      } else if (regexMatch && requestAttribute.id == id) {
+        // rule entity
+        let pattern = value.substring(value.lastIndexOf(':') + 1);
+        let nsEntityArray = pattern.split('.');
+        // firstElement could be either entity or namespace
+        let nsOrEntity = nsEntityArray[0];
+        let entityRegexValue = nsEntityArray[nsEntityArray.length - 1];
+        let reqNS, ruleNS;
+        if (nsOrEntity.toUpperCase() != entityRegexValue.toUpperCase()) {
+          // rule name space is present
+          ruleNS = nsOrEntity.toUpperCase();
+        }
 
-          // request entity
-          let reqValue = requestAttribute.value;
-          const reqAttributeNS = reqValue.substring(0, reqValue.lastIndexOf(':'));
-          const ruleAttributeNS = value.substring(0, value.lastIndexOf(':'));
-          // verify namespace before entity name
-          if (reqAttributeNS != ruleAttributeNS) {
-            return false;
-          }
-          let reqPattern = reqValue.substring(reqValue.lastIndexOf(':') + 1);
-          let reqNSEntityArray = reqPattern.split('.');
-          // firstElement could be either entity or namespace
-          let reqNSOrEntity = reqNSEntityArray[0];
-          let requestEntityValue = reqNSEntityArray[reqNSEntityArray.length - 1];
-          if (reqNSOrEntity.toUpperCase() != requestEntityValue.toUpperCase()) {
-            // request name space is present
-            reqNS = reqNSOrEntity.toUpperCase();
-          }
-
-          if ((reqNS && ruleNS && (reqNS === ruleNS)) || (!reqNS && !ruleNS)) {
-            const reExp = new RegExp(entityRegexValue);
-            if (requestEntityValue.match(reExp)) {
-              return true;
-            }
-          }
-        } else {
+        // request entity
+        let reqValue = requestAttribute.value;
+        const reqAttributeNS = reqValue.substring(0, reqValue.lastIndexOf(':'));
+        const ruleAttributeNS = value.substring(0, value.lastIndexOf(':'));
+        // verify namespace before entity name
+        if (reqAttributeNS != ruleAttributeNS) {
           return false;
         }
-      });
+        let reqPattern = reqValue.substring(reqValue.lastIndexOf(':') + 1);
+        let reqNSEntityArray = reqPattern.split('.');
+        // firstElement could be either entity or namespace
+        let reqNSOrEntity = reqNSEntityArray[0];
+        let requestEntityValue = reqNSEntityArray[reqNSEntityArray.length - 1];
+        if (reqNSOrEntity.toUpperCase() != requestEntityValue.toUpperCase()) {
+          // request name space is present
+          reqNS = reqNSOrEntity.toUpperCase();
+        }
 
-      if (!match) {
+        if ((reqNS && ruleNS && (reqNS === ruleNS)) || (!reqNS && !ruleNS)) {
+          const reExp = new RegExp(entityRegexValue);
+          if (requestEntityValue.match(reExp)) {
+            return true;
+          }
+        }
+      } else {
         return false;
       }
+    });
+
+    if (!match) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+export interface FilterMapResponse {
+  entityFilterMap: EnityFilterMap[];
+  customQueryArgs: CustomQueryArgs[];
+}
+
+/**
+ * creates entity filters and custom query / arguments for the entity list provided
+ * It iterates through each entity and filter the applicable policies and
+ * provide them to buildFilterPermissions to create filters for each of the entities requested
+ * 
+ * @param {Entity[]} entity Contains entity name, entity instance and optional entity properties
+ * @param {PolicSetResponse} policySetResponse contains set of applicable policies for entities list
+ * @param {any} resources context resources
+ * @param {AuthZAction} action Action to be performed on resource
+ * @param {Subject} subject Contains subject information or ApiKey
+ * @param {string} subjectID resolved subject identifier from token
+ * @param {boolean} authzEnforced authorization enforcement flag
+ * @param {string} targetScope target scope
+ * @param {Database} database database used either `arangoDB` or `postgres`,
+ * if this param is missing defaults to `arangoDB`
+ * 
+ */
+export const createEntityFilterMap = async (entity: Entity[],
+  policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,
+  subject: Subject, subjectID: string, authzEnforced: boolean,
+  targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
+  let entityFilterMap = [];
+  let customQueryArgs = [];
+  entity.forEach(async (entityObj) => {
+    let entityName = entityObj.entity;
+    let entityNameSpace;
+
+    if (entityName.indexOf('.') > -1) {
+      entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
+    }
+    const entityType = formatResourceType(entityName, entityNameSpace);
+    const urns = cfg.get('authorization:urns');
+    const entityValueURN = urns?.model + `:${entityType}`;
+    let entityPolicies = { policy_sets: [{ policies: [] }] };
+    const entityAttributes = [{ id: urns?.entity, value: entityValueURN }];
+    if (policySetResponse && policySetResponse.policy_sets && policySetResponse.policy_sets.length > 0) {
+      policySetResponse.policy_sets.forEach((policySet) => {
+        const policies = policySet.policies;
+        // check if the policy and rule set is applicable to the enitity
+        if (policies && policies.length > 0) {
+          for (let policy of policies) {
+            const policyTargetResources = policy?.target?.resources;
+            if (policyTargetResources) {
+              const policyMatch = attributesMatch(policyTargetResources, entityAttributes);
+              if (policyMatch && policy.rules && policy.rules.length > 0) {
+                for (let rule of policy.rules) {
+                  const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                  if (ruleMatch) {
+                    entityPolicies.policy_sets[0].policies.push(policy);
+                    break;
+                  }
+                }
+              }
+
+            } else if (policy?.rules) {
+              // check for rule
+              for (let rule of policy.rules) {
+                const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                if (ruleMatch) {
+                  entityPolicies.policy_sets[0].policies.push(policy);
+                  break;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    let permissionArguments = await buildFilterPermissions(entityPolicies.policy_sets[0], subject, resources, database);
+    if (!permissionArguments && authzEnforced) {
+      const msg = `Access not allowed for request with subject:${subjectID}, ` +
+        `resource:${entityName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
+      const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
+      logger.verbose(msg);
+      logger.verbose('Details:', { details });
+      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
 
-    return true;
+    if (!permissionArguments && !authzEnforced) {
+      logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
+        `resource:${entityName}, action:${action}, target_scope:${targetScope}, ` +
+        `but since ACS enforcement config is disabled overriding the ACS result`);
+    }
+    entityFilterMap.push({ entity: entityName, filters: permissionArguments.filters });
+    if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
+      customQueryArgs.push({
+        entity: entityName,
+        custom_queries: permissionArguments.custom_queries,
+        custom_arguments: permissionArguments.custom_arguments
+      });
+    }
+  });
+  return {
+    entityFilterMap, customQueryArgs
   };
+};

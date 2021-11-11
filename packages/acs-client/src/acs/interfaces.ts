@@ -27,7 +27,7 @@ export interface ACSClientContext {
 }
 
 export interface Database {
- database: 'arangoDB' | 'postgres'
+  database: 'arangoDB' | 'postgres'
 };
 
 export interface AuthZSubject {
@@ -196,15 +196,44 @@ export interface PolicySetRQ extends AccessControlObjectInterface {
   policies?: PolicyRQ[];
 }
 
+
+export enum FilterValueType {
+  STRING = 0,
+  NUMBER = 1,
+  BOOLEAN = 2,
+  DATE = 3,
+  ARRAY = 4,
+};
+
+export interface Filter {
+  field: string;
+  operation: FilterOperation;
+  value: string;
+  type?: FilterValueType; // defaults to string data type if not provided
+  filters?: Filters[];
+}
+
+export interface Filters {
+  filter?: Filter[];
+  operator?: OperatorType;
+}
+
 export interface EnityFilterMap {
   entity: string;
-  filters: any; // TODO add typing
+  filters: Filters[];
+}
+
+export interface CustomQueryArgs {
+  entity: string;
+  custom_queries: string[];
+  custom_arguments: any;
 }
 
 // Reverse query response
 export interface PolicySetRQResponse extends AccessControlObjectInterface {
   policy_sets?: PolicySetRQ[];
-  filters?: EnityFilterMap[]; // TODO add custom query Args
+  filters?: EnityFilterMap[];
+  custom_query_args?: CustomQueryArgs[];
   decision: Decision;
   operation_status: {
     code: number;

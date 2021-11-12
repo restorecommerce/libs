@@ -246,7 +246,7 @@ let subject = {
   }]
 };
 
-describe('testing acs-client', () => {
+describe('testing acs-client with multiple entities', () => {
   before(async function startServer(): Promise<void> {
     this.timeout(60000);
     const cacheEnabled = process.env.CACHE_ENABLED;

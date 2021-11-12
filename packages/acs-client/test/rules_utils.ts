@@ -137,7 +137,7 @@ export const unauthenticatedSubject = [
     id: 'urn:restorecommerce:acs:names:unauthenticated-user',
     value: 'true'
   }];
-  export const authenticatedSubject = [
+export const authenticatedSubject = [
   { // authenticated user
     id: "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
     value: "test_user_id"
@@ -151,11 +151,13 @@ export const unauthenticatedSubject = [
     value: "targetScope"
   }
 ];
-export const resources = [
-  // Location resource
+export const locationAddressResources = [
+  // Location and Address resource resource
   { id: 'urn:restorecommerce:acs:names:model:entity', value: 'urn:test:acs:model:Location.Location' },
-  { id: 'urn:oasis:names:tc:xacml:1.0:resource:resource-id', value: 'location_id' }];
-  export const createAction = [
+  { id: 'urn:oasis:names:tc:xacml:1.0:resource:resource-id', value: 'location_id' },
+  { id: 'urn:restorecommerce:acs:names:model:entity', value: 'urn:test:acs:model:Address.Address' },
+  { id: 'urn:oasis:names:tc:xacml:1.0:resource:resource-id', value: 'address_id' }];
+export const createAction = [
   { // action create
     id: 'urn:oasis:names:tc:xacml:1.0:action:action-id',
     value: 'urn:restorecommerce:acs:names:action:create'

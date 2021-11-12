@@ -2,12 +2,18 @@ import * as should from 'should';
 import { accessRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
 import { flushCache, initializeCache } from '../lib/acs/cache';
 import { createMockServer } from 'grpc-mock';
-import { AuthZAction, Decision, DecisionResponse, PolicySetRQResponse, Operation, ACSClientContext, ACSRequest } from '../lib/acs/interfaces';
+import {
+  AuthZAction, DecisionResponse, PolicySetRQResponse,
+  Operation, ACSClientContext, ACSRequest
+} from '../lib/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
-import { cfg } from '../lib';
-import { permitLocationRule, policySetRQ, fallbackRule, permitAddressRule, permitLocationRuleProperty } from './rules_utils';
+import {
+  permitLocationRule, policySetRQ, fallbackRule, permitAddressRule,
+  permitLocationRuleProperty, createAction, unauthenticatedSubject,
+  locationAddressResources, authenticatedSubject, readAction
+} from './rules_utils';
 
 let authZ: ACSAuthZ;
 let mockServer: any;
@@ -453,7 +459,6 @@ describe('testing acs-client with multiple entities', () => {
       should.exist(response);
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);
-      // response.operation_status.message.should.equal('success');
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:["Location","Address"], action:CREATE, target_scope:targetScope; the response was DENY');
       stopGrpcMockServer();
     });
@@ -488,6 +493,86 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.code.should.equal(403);
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Address, action:READ, target_scope:targetScope; the response was DENY');
       stopGrpcMockServer();
+    });
+
+    describe('Test isAllowed', () => {
+      it('Should DENY creating Location and Address resource with unauthenticated context', async () => {
+        startGrpcMockServer([{
+          method: 'isAllowed', input: '.*',
+          output: { decision: 'DENY', operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY' } }
+        },
+        { method: 'WhatIsAllowed', input: '.*', output: {} }]);
+        const isAllowedReqUnauth = {
+          target:
+          {
+            subject: unauthenticatedSubject,
+            action: createAction,
+            resources: locationAddressResources
+          },
+          context: {}
+        } as ACSRequest;
+        const response = await isAllowed(isAllowedReqUnauth, authZ);
+        should.exist(response.decision);
+        response.decision.should.equal('DENY');
+        response.operation_status.code.should.equal(403);
+        response.operation_status.message.should.equal('Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY');
+        stopGrpcMockServer();
+      });
+      it('Should PERMIT creating Location and Address resource with valid Auth context', async () => {
+        startGrpcMockServer([{ method: 'isAllowed', input: '.*', output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } } },
+        { method: 'WhatIsAllowed', input: '.*', output: {} }]);
+        const isAllowedReqAuth = {
+          target:
+          {
+            subject: authenticatedSubject,
+            resources: locationAddressResources,
+            action: createAction
+          },
+          context: {
+            // Need to send encoded subject and resources in context
+            subject: encode(JSON.stringify(authenticatedSubject)),
+            resources: [encode(JSON.stringify(locationAddressResources))]
+          }
+        } as ACSRequest;
+        const response = await isAllowed(isAllowedReqAuth, authZ);
+        should.exist(response);
+        response.decision.should.equal('PERMIT');
+        response.operation_status.code.should.equal(200);
+        response.operation_status.message.should.equal('success');
+        stopGrpcMockServer();
+      });
+    });
+    describe('Test whatIsAllowed', () => {
+      it('Should return applicable policy set and filters for read operation', async () => {
+        // Location permit and fallback rule
+        policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
+        // Address permit and fallback rule
+        policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRule, fallbackRule];
+        startGrpcMockServer([{ method: 'WhatIsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: policySetRQ },
+        { method: 'IsAllowed', input: '.*', output: {} }]);
+        const whatIsAllowedReqAuth = {
+          target:
+          {
+            subject: authenticatedSubject,
+            resources: locationAddressResources,
+            action: readAction
+          },
+          context: {
+            // Need to send encoded subject and resources in context
+            subject: encode(JSON.stringify(authenticatedSubject)),
+            resources: [encode(JSON.stringify(locationAddressResources))]
+          }
+        } as ACSRequest;
+        // call accessRequest(), the response is from mock ACS
+        const policySetRQResponse = await whatIsAllowed(whatIsAllowedReqAuth, authZ);
+        should.exist(policySetRQResponse.policy_sets);
+        policySetRQResponse.policy_sets.length.should.equal(1);
+        policySetRQResponse.policy_sets[0].id.should.equal('test_policy_set_id');
+        policySetRQResponse.policy_sets[0].policies.length.should.equal(2); // Location and Address policy
+        policySetRQResponse.policy_sets[0].policies[0].rules.length.should.equal(2); // Location permit and Deny Rule
+        policySetRQResponse.policy_sets[0].policies[1].rules.length.should.equal(2); // Address permit and Deny Rule
+        stopGrpcMockServer();
+      });
     });
   });
 });

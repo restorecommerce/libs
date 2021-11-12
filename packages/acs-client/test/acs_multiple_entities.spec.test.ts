@@ -269,7 +269,8 @@ describe('testing acs-client with multiple entities', () => {
   });
 
   describe('Test accessRequest', () => {
-    it('Should PERMIT creating Location and Address resource with isAllowed operation', async () => {
+    // PERMIT tests
+    it('Should PERMIT creating Location and Address resource for isAllowed operation with valid user ctx', async () => {
       startGrpcMockServer([{
         method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
         output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } }
@@ -298,7 +299,7 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.message.should.equal('success');
       stopGrpcMockServer();
     });
-    it('Should PERMIT Reading Location and Address resource with isAllowed Operation', async () => {
+    it('Should PERMIT Reading Location and Address resource for isAllowed Operation with valid user ctx', async () => {
       startGrpcMockServer([{
         method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
         output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } }
@@ -327,8 +328,8 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.message.should.equal('success');
       stopGrpcMockServer();
     });
-    it(`postgres DB - Should PERMIT Reading Location and Address resource with 
-      whatIsAllowed operation and return applicable filters for Location and Address`, async () => {
+    it(`postgres DB - Should PERMIT Reading Location and Address resource for 
+      whatIsAllowed operation and return applicable filters for Location and Address with valid user ctx`, async () => {
       // Location Permit Rule with fallback rule
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Permit Rule with fallback rule
@@ -369,9 +370,9 @@ describe('testing acs-client with multiple entities', () => {
       entityFilters[1].filters[0].filter[1].value.should.equal('targetSubScope');
       stopGrpcMockServer();
     });
-    it(`ArangoDB - Should PERMIT Reading Location and Address resource with 
+    it(`ArangoDB - Should PERMIT Reading Location and Address resource for 
       whatIsAllowed operation and return applicable custom query and arguments
-      for Location and Address`, async () => {
+      for Location and Address with valid user ctx`, async () => {
       // Location Permit Rule with fallback rule
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Permit Rule with fallback rule
@@ -397,7 +398,7 @@ describe('testing acs-client with multiple entities', () => {
       const response = await accessRequest(subject,
         [{ entity: 'Location' }, { entity: 'Address' }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'arangoDB') as PolicySetRQResponse;
-      const expectedCustomArgs = {entity:'urn:test:acs:model:organization.Organization',instance:['targetScope','targetSubScope']};
+      const expectedCustomArgs = { entity: 'urn:test:acs:model:organization.Organization', instance: ['targetScope', 'targetSubScope'] };
       // validate custom query args for Location
       response.custom_query_args[0].entity.should.equal('Location');
       response.custom_query_args[0].custom_queries[0].should.equal('filterByOwnership');
@@ -408,6 +409,135 @@ describe('testing acs-client with multiple entities', () => {
       response.custom_query_args[1].custom_queries[0].should.equal('filterByOwnership');
       const addressCustomArgs = JSON.parse(response.custom_query_args[1].custom_arguments.value.toString());
       addressCustomArgs.should.deepEqual(expectedCustomArgs);
+      stopGrpcMockServer();
+    });
+
+    // DENY tests
+    it('Should DENY creating Location and Address resource for isAllowed operation with invalid user ctx', async () => {
+      startGrpcMockServer([{
+        method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
+        output: { decision: 'DENY', operation_status: { code: 200, message: 'success' } }
+      },
+      { method: 'WhatIsAllowed', input: '.*', output: {} }]);
+      // test resource to be created
+      let testResource = [{
+        id: 'location_id',
+        name: 'Location',
+        description: 'Location description'
+      }, {
+        id: 'address_id',
+        name: 'Address',
+        description: 'Address description'
+      }];
+      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      testResource = updateMetaData(testResource);
+      let ctx: ACSClientContext = { subject };
+      ctx.resources = testResource;
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(subject,
+        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
+      should.exist(response);
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:["Location","Address"], action:CREATE, target_scope:invalidTargetScope; the response was DENY');
+      stopGrpcMockServer();
+    });
+    it('Should DENY Reading Location and Address resource for isAllowed Operation with invalid user ctx', async () => {
+      startGrpcMockServer([{
+        method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
+        output: { decision: 'DENY', operation_status: { code: 200, message: 'success' } }
+      },
+      { method: 'WhatIsAllowed', input: '.*', output: {} }]);
+      // test resource to be created
+      let testResource = [{
+        id: 'location_id',
+        name: 'Location',
+        description: 'Location description'
+      }, {
+        id: 'address_id',
+        name: 'Address',
+        description: 'Address description'
+      }];
+      testResource = updateMetaData(testResource);
+      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      let ctx: ACSClientContext = { subject };
+      ctx.resources = testResource;
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(subject,
+        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        AuthZAction.READ, ctx, Operation.isAllowed) as DecisionResponse;
+      should.exist(response);
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:["Location","Address"], action:READ, target_scope:invalidTargetScope; the response was DENY');
+      stopGrpcMockServer();
+    });
+    it(`postgres DB - Should DENY Reading Location and Address resource for 
+      whatIsAllowed operation with invalid user ctx`, async () => {
+      // Location Deny fallback rule
+      policySetRQ.policy_sets[0].policies[0].rules = [fallbackRule];
+      // Address Deny fallback rule
+      policySetRQ.policy_sets[0].policies[1].rules = [fallbackRule];
+      startGrpcMockServer([{
+        method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
+        output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } }
+      },
+      { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
+      // test resource to be created
+      let testResource = [{
+        id: 'location_id',
+        name: 'Location',
+        description: 'Location description'
+      }, {
+        id: 'address_id',
+        name: 'Address',
+        description: 'Address description'
+      }];
+      testResource = updateMetaData(testResource);
+      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      let ctx: ACSClientContext = { subject };
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(subject,
+        [{ entity: 'Location' }, { entity: 'Address' }],
+        AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Location, action:READ, target_scope:invalidTargetScope; the response was DENY');
+      stopGrpcMockServer();
+    });
+    it(`ArangoDB - Should PERMIT Reading Location and Address resource for 
+      whatIsAllowed operation and return applicable custom query and arguments
+      for Location and Address with valid user ctx`, async () => {
+      // Location Deny fallback rule
+      policySetRQ.policy_sets[0].policies[0].rules = [fallbackRule];
+      // Address Deny fallback rule
+      policySetRQ.policy_sets[0].policies[1].rules = [fallbackRule];
+      startGrpcMockServer([{
+        method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
+        output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } }
+      },
+      { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
+      // test resource to be created
+      let testResource = [{
+        id: 'location_id',
+        name: 'Location',
+        description: 'Location description'
+      }, {
+        id: 'address_id',
+        name: 'Address',
+        description: 'Address description'
+      }];
+      testResource = updateMetaData(testResource);
+      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      let ctx: ACSClientContext = { subject };
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(subject,
+        [{ entity: 'Location' }, { entity: 'Address' }],
+        AuthZAction.READ, ctx, Operation.whatIsAllowed, 'arangoDB') as PolicySetRQResponse;
+      response.decision.should.equal('DENY');
+      response.operation_status.code.should.equal(403);
+      response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Location, action:READ, target_scope:invalidTargetScope; the response was DENY');
       stopGrpcMockServer();
     });
   });

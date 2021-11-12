@@ -1,0 +1,6 @@
+{
+    "extension": ["ts"],
+    "spec": "test/**/acs_multiple_entities_test.ts",
+    "require": "ts-node/register"
+  }
+  

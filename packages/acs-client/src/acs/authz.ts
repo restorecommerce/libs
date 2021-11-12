@@ -86,7 +86,7 @@ export const createResourceTarget = (entity: Entity[], action: AuthZAction) => {
       let entityProperty = entityObj.property;
       let entityNameSpace;
 
-      if (entityName.indexOf('.') > -1) {
+      if (entityName && entityName.indexOf('.') > -1) {
         entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
       }
 
@@ -145,12 +145,14 @@ export class UnAuthZ implements IAuthZ {
   }
 
   private encode(object: any): any {
-    if (_.isArray(object)) {
-      return _.map(object, this.encode.bind(this));
-    } else {
-      return {
-        value: Buffer.from(JSON.stringify(object))
-      };
+    if (object) {
+      if (_.isArray(object)) {
+        return _.map(object, this.encode.bind(this));
+      } else {
+        return {
+          value: Buffer.from(JSON.stringify(object))
+        };
+      }
     }
   }
 
@@ -359,12 +361,14 @@ export class ACSAuthZ implements IAuthZ {
   }
 
   private encode(object: any): any {
-    if (_.isArray(object)) {
-      return _.map(object, this.encode.bind(this));
-    } else {
-      return {
-        value: Buffer.from(JSON.stringify(object))
-      };
+    if (object) {
+      if (_.isArray(object)) {
+        return _.map(object, this.encode.bind(this));
+      } else {
+        return {
+          value: Buffer.from(JSON.stringify(object))
+        };
+      }
     }
   }
 

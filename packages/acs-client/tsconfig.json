@@ -6,7 +6,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": true,
     "skipLibCheck": true,
     "outDir": "lib",
     "typeRoots": [

@@ -235,7 +235,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   }
   const scopingAttribute = _.find(subject, (attribute: Attribute) =>
     attribute.id == urns.roleScopingEntity);
-  if (!!scopingAttribute && effect == Effect.PERMIT && !database) { // note: there is currently no query to exclude scopes
+  if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB') { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
     if (userCondition) {
       filter = [];

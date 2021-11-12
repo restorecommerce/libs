@@ -139,6 +139,15 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
     entity = [entity];
   }
 
+  if (_.isEmpty(entity)) {
+    const msg = `Access not allowed for request with subject:${subjectID}, ` +
+      `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+    const details = 'Entity missing';
+    logger.verbose(msg);
+    logger.verbose('Details:', { details });
+    return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+  }
+
   // default ACS operation is isAllowed
   if (!operation) {
     operation = Operation.isAllowed;

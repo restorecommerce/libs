@@ -20,7 +20,7 @@ export interface Entity {
 }
 
 export interface ACSClientContext {
-  subject: Subject;
+  subject?: Subject;
   resources?: {
     [key: string]: any;
   };

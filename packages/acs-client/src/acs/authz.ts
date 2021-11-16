@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import {
   AuthZContext, Attribute, AuthZAction, AuthZTarget, AuthZWhatIsAllowedTarget,
   IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
-  Decision, Subject, DecisionResponse, PolicySetRQResponse, ACSClientContext, Entity
+  Decision, Subject, DecisionResponse, PolicySetRQResponse, ACSClientContext, Resource
 } from './interfaces';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
@@ -77,36 +77,36 @@ export const formatResourceType = (type: string, namespacePrefix?: string): stri
   }
 };
 
-export const createResourceTarget = (entity: Entity[], action: AuthZAction) => {
+export const createResourceTarget = (resource: Resource[], action: AuthZAction) => {
   const flattened: Attribute[] = [];
-  entity.forEach((entityObj) => {
+  resource.forEach((resourceObj) => {
     if (action != AuthZAction.EXECUTE) {
-      let entityName = entityObj.entity;
-      let entityInstance = entityObj.id;
-      let entityProperty = entityObj.property;
-      let entityNameSpace;
+      let resourceName = resourceObj.resource;
+      let resourceInstance = resourceObj.id;
+      let resourceProperty = resourceObj.property;
+      let resourceNameSpace;
 
-      if (entityName && entityName.indexOf('.') > -1) {
-        entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
+      if (resourceName && resourceName.indexOf('.') > -1) {
+        resourceNameSpace = resourceName.slice(0, resourceName.lastIndexOf('.'));
       }
 
       // entity - urn:restorecommerce:acs:names:model:entity
-      const entityType = formatResourceType(entityName, entityNameSpace);
-      if (entityType) {
+      const resourceType = formatResourceType(resourceName, resourceNameSpace);
+      if (resourceType) {
         flattened.push({
           id: urns.entity,
-          value: urns.model + `:${entityType}`
+          value: urns.model + `:${resourceType}`
         });
       }
 
       // resource-id - urn:oasis:names:tc:xacml:1.0:resource:resource-id
-      if (entityInstance && typeof entityInstance === 'string') {
+      if (resourceInstance && typeof resourceInstance === 'string') {
         flattened.push({
           id: urns.resourceID,
-          value: entityInstance
+          value: resourceInstance
         });
-      } else if (entityInstance && _.isArray(entityInstance) && entityInstance.length > 0) {
-        entityInstance.forEach((instance) => {
+      } else if (resourceInstance && _.isArray(resourceInstance) && resourceInstance.length > 0) {
+        resourceInstance.forEach((instance) => {
           flattened.push({
             id: urns.resourceID,
             value: instance
@@ -115,18 +115,18 @@ export const createResourceTarget = (entity: Entity[], action: AuthZAction) => {
       }
 
       // property - urn:restorecommerce:acs:names:model:property
-      if (entityProperty && _.isArray(entityProperty) && entityProperty.length > 0) {
-        entityProperty.forEach((property) => {
+      if (resourceProperty && _.isArray(resourceProperty) && resourceProperty.length > 0) {
+        resourceProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
-            value: urns.model + `:${entityType}#${property}`
+            value: urns.model + `:${resourceType}#${property}`
           });
         });
       }
     } else {
       flattened.push({
         id: urns.operation,
-        value: entityObj.entity
+        value: resourceObj.resource
       });
     }
   });
@@ -161,7 +161,7 @@ export class UnAuthZ implements IAuthZ {
       target: {
         action: createActionTarget(request.target.action),
         subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.entity, request.target.action)
+        resources: createResourceTarget(request.target.resource, request.target.action)
       },
       context: {
         subject: this.encode(request.target.subject),
@@ -203,7 +203,7 @@ export class UnAuthZ implements IAuthZ {
       target: {
         action: createActionTarget(request.target.action),
         subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.entity, request.target.action)
+        resources: createResourceTarget(request.target.resource, request.target.action)
       },
       context: {
         subject: this.encode(request.target.subject),
@@ -373,14 +373,14 @@ export class ACSAuthZ implements IAuthZ {
   }
 
   prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
-    let { subject, entity, action } = request.target;
+    let { subject, resource, action } = request.target;
     const authZRequest: any = {
       target: {
         action: createActionTarget(action),
         subject: createSubjectTarget(subject),
       },
     };
-    authZRequest.target.resources = createResourceTarget(entity, action);
+    authZRequest.target.resources = createResourceTarget(resource, action);
     return authZRequest;
   }
 }

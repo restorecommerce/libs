@@ -1,7 +1,7 @@
 import {
   RoleAssociation, UserScope, Subject, PolicySetRQ, Effect, PolicySetRQResponse,
   AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType,
-  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Entity, AuthZAction, ResolvedSubject
+  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Resource, AuthZAction, ResolvedSubject
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -570,24 +570,24 @@ export interface FilterMapResponse {
  * if this param is missing defaults to `arangoDB`
  *
  */
-export const createEntityFilterMap = async (entity: Entity[],
+export const createEntityFilterMap = async (resource: Resource[],
   policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,
   subject: Subject, subjectID: string, authzEnforced: boolean,
   targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
   let entityFilterMap = [];
   let customQueryArgs = [];
-  for (let entityObj of entity) {
-    let entityName = entityObj.entity;
-    let entityNameSpace;
+  for (let resourceObj of resource) {
+    let resourceName = resourceObj.resource;
+    let resourceNameSpace;
 
-    if (entityName.indexOf('.') > -1) {
-      entityNameSpace = entityName.slice(0, entityName.lastIndexOf('.'));
+    if (resourceName.indexOf('.') > -1) {
+      resourceNameSpace = resourceName.slice(0, resourceName.lastIndexOf('.'));
     }
-    const entityType = formatResourceType(entityName, entityNameSpace);
+    const resourceType = formatResourceType(resourceName, resourceNameSpace);
     const urns = cfg.get('authorization:urns');
-    const entityValueURN = urns?.model + `:${entityType}`;
-    let entityPolicies = { policy_sets: [{ policies: [] }] };
-    const entityAttributes = [{ id: urns?.entity, value: entityValueURN }];
+    const resourceValueURN = urns?.model + `:${resourceType}`;
+    let resourcePolicies = { policy_sets: [{ policies: [] }] };
+    const resourceAttributes = [{ id: urns?.entity, value: resourceValueURN }];
     if (policySetResponse && policySetResponse.policy_sets && policySetResponse.policy_sets.length > 0) {
       policySetResponse.policy_sets.forEach((policySet) => {
         const policies = policySet.policies;
@@ -596,12 +596,12 @@ export const createEntityFilterMap = async (entity: Entity[],
           for (let policy of policies) {
             const policyTargetResources = policy?.target?.resources;
             if (policyTargetResources) {
-              const policyMatch = attributesMatch(policyTargetResources, entityAttributes);
+              const policyMatch = attributesMatch(policyTargetResources, resourceAttributes);
               if (policyMatch && policy.rules && policy.rules.length > 0) {
                 for (let rule of policy.rules) {
-                  const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                  const ruleMatch = attributesMatch(rule?.target?.resources, resourceAttributes);
                   if (ruleMatch) {
-                    entityPolicies.policy_sets[0].policies.push(policy);
+                    resourcePolicies.policy_sets[0].policies.push(policy);
                     break;
                   }
                 }
@@ -610,9 +610,9 @@ export const createEntityFilterMap = async (entity: Entity[],
             } else if (policy?.rules) {
               // check for rule
               for (let rule of policy.rules) {
-                const ruleMatch = attributesMatch(rule?.target?.resources, entityAttributes);
+                const ruleMatch = attributesMatch(rule?.target?.resources, resourceAttributes);
                 if (ruleMatch) {
-                  entityPolicies.policy_sets[0].policies.push(policy);
+                  resourcePolicies.policy_sets[0].policies.push(policy);
                   break;
                 }
               }
@@ -621,10 +621,10 @@ export const createEntityFilterMap = async (entity: Entity[],
         }
       });
     }
-    let permissionArguments = await buildFilterPermissions(entityPolicies.policy_sets[0], subject as ResolvedSubject, resources, database);
+    let permissionArguments = await buildFilterPermissions(resourcePolicies.policy_sets[0], subject as ResolvedSubject, resources, database);
     if (!permissionArguments && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${entityName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
+        `resource:${resourceName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
@@ -633,16 +633,16 @@ export const createEntityFilterMap = async (entity: Entity[],
 
     if (!permissionArguments && !authzEnforced) {
       logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
-        `resource:${entityName}, action:${action}, target_scope:${targetScope}, ` +
+        `resource:${resourceName}, action:${action}, target_scope:${targetScope}, ` +
         `but since ACS enforcement config is disabled overriding the ACS result`);
     }
     if (!_.isArray(permissionArguments.filters)) {
       permissionArguments.filters = [permissionArguments.filters];
     }
-    entityFilterMap.push({ entity: entityName, filters: permissionArguments.filters });
+    entityFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
     if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
       customQueryArgs.push({
-        entity: entityName,
+        resource: resourceName,
         custom_queries: permissionArguments.custom_queries,
         custom_arguments: permissionArguments.custom_arguments
       });

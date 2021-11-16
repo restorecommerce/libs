@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import {
   UnauthenticatedContext, Decision, ACSRequest, Subject, ACSClientContext, Filters,
-  UnauthenticatedData, DecisionResponse, PolicySetRQResponse, Operation, Entity
+  UnauthenticatedData, DecisionResponse, PolicySetRQResponse, Operation, Resource
 } from './interfaces';
 import { AuthZAction } from './interfaces';
 import logger from '../logger';
@@ -16,7 +16,7 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
     && 'unauthenticated' in subject && subject['unauthenticated'];
 };
 
-const whatIsAllowedRequest = async (subject: Subject, entity: Entity[],
+const whatIsAllowedRequest = async (subject: Subject, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
@@ -24,7 +24,7 @@ const whatIsAllowedRequest = async (subject: Subject, entity: Entity[],
     const acs = acsClient['acs-srv'];
     return await new UnAuthZ(acs).whatIsAllowed({
       target: {
-        subject: (subject as UnauthenticatedData), entity, action
+        subject: (subject as UnauthenticatedData), resource, action
       },
       context: {
         security: {}
@@ -37,7 +37,7 @@ const whatIsAllowedRequest = async (subject: Subject, entity: Entity[],
       },
       target: {
         subject,
-        entity,
+        resource,
         action
       }
     }, ctx, useCache);
@@ -45,14 +45,14 @@ const whatIsAllowedRequest = async (subject: Subject, entity: Entity[],
 };
 
 export const isAllowedRequest = async (subject: Subject,
-  entity: Entity[], action: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
+  resource: Resource[], action: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
     const acsClient = new GrpcClient(grpcConfig, logger);
     const acs = acsClient['acs-srv'];
     return await new UnAuthZ(acs).isAllowed({
       target: {
-        subject: (subject as UnauthenticatedData), entity, action
+        subject: (subject as UnauthenticatedData), resource, action
       },
       context: {
         security: {}
@@ -65,7 +65,7 @@ export const isAllowedRequest = async (subject: Subject,
       },
       target: {
         subject,
-        entity,
+        resource,
         action
       }
     }, ctx, useCache);
@@ -79,7 +79,7 @@ export const isAllowedRequest = async (subject: Subject,
  * or policy set reverse query `PolicySetRQ` depending on the requeste operation `isAllowed()` or
  * `whatIsAllowed()` respectively.
  * @param {Subject} subject Contains subject information or ApiKey
- * @param {Entity[]} entity Contains entity name, entity instance and optional entity properties
+ * @param {Resource[]} resource Contains resource name, resource instance and optional resource properties
  * @param {AuthZAction} action Action to be performed on resource
  * @param {ACSClientContext} ctx Context containing Subject and Context Resources for ACS
  * @param {Operation} operation Operation to perform `isAllowed` or `whatIsAllowed`,
@@ -90,7 +90,7 @@ export const isAllowedRequest = async (subject: Subject,
  * is not used and ACS request is made to `access-control-srv`
  * @returns {DecisionResponse | PolicySetRQResponse}
  */
-export const accessRequest = async (subject: Subject, entity: Entity[],
+export const accessRequest = async (subject: Subject, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
   database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
   // when subject is not passed (if auth header is not set)
@@ -135,13 +135,13 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
     subjectID = subject.id;
   }
 
-  if (!_.isArray(entity)) {
-    entity = [entity];
+  if (!_.isArray(resource)) {
+    resource = [resource];
   }
 
-  if (_.isEmpty(entity)) {
+  if (_.isEmpty(resource)) {
     const msg = `Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+      `resource:${resource}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
     const details = 'Entity missing';
     logger.verbose(msg);
     logger.verbose('Details:', { details });
@@ -170,7 +170,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
     try {
       // retrieving set of applicable policies/rules from ACS
       // Note: it is assumed that there is only one policy set
-      policySetResponse = await whatIsAllowedRequest(subClone, entity, action, ctx, useCache);
+      policySetResponse = await whatIsAllowedRequest(subClone, resource, action, ctx, useCache);
     } catch (err) {
       logger.error('Error calling whatIsAllowed operation', { message: err.message });
       logger.error('Error stack', err.stack);
@@ -180,7 +180,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
     // handle case if policySet is empty
     if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && authzEnforced) {
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${entity}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+        `resource:${resource}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
@@ -189,35 +189,35 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
 
     if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && !authzEnforced) {
       logger.verbose(`The Access response was INDETERMIATE for a request with subject:` +
-        `${subjectID}, resource:${entity}, action:${action}, target_scope:${targetScope} ` +
+        `${subjectID}, resource:${resource}, action:${action}, target_scope:${targetScope} ` +
         `as no matching policy/rule could be found, but since ACS enforcement ` +
         `config is disabled overriding the ACS result`);
     }
 
     // create filters to enforce applicable policies and custom query / args if applicable
-    const entityFilters = await createEntityFilterMap(entity, policySetResponse,
+    const resourceFilters = await createEntityFilterMap(resource, policySetResponse,
       ctx.resources, action, subClone, subjectID, authzEnforced, targetScope, database);
 
-    if ((entityFilters as DecisionResponse).decision) {
-      return entityFilters as DecisionResponse;
+    if ((resourceFilters as DecisionResponse).decision) {
+      return resourceFilters as DecisionResponse;
     }
 
-    policySetResponse.filters = (entityFilters as FilterMapResponse).entityFilterMap;
-    policySetResponse.custom_query_args = (entityFilters as FilterMapResponse).customQueryArgs;
+    policySetResponse.filters = (resourceFilters as FilterMapResponse).entityFilterMap;
+    policySetResponse.custom_query_args = (resourceFilters as FilterMapResponse).customQueryArgs;
     policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
     policySetResponse.operation_status = generateOperationStatus(200, 'success');
     return policySetResponse;
   }
 
-  let entityList = [];
-  entity.forEach((entityObj) => {
-    entityList.push(entityObj.entity);
+  let resourceList = [];
+  resource.forEach((resourceObj) => {
+    resourceList.push(resourceObj.resource);
   });
-  let entityString;
-  if (entityList.length === 1) {
-    entityString = entityList[0];
+  let resourceString;
+  if (resourceList.length === 1) {
+    resourceString = resourceList[0];
   } else {
-    entityString = JSON.stringify(entityList);
+    resourceString = JSON.stringify(resourceList);
   }
   // default deny
   let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
@@ -225,7 +225,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
   if (operation === Operation.isAllowed) {
     // authorization
     try {
-      decisionResponse = await isAllowedRequest(subClone as Subject, entity, action, ctx, useCache);
+      decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err) {
       logger.error('Error calling isAllowed operation', { message: err.message });
       logger.error('Error stack', err.stack);
@@ -240,7 +240,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${entityString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
+        `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
       return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
@@ -254,7 +254,7 @@ export const accessRequest = async (subject: Subject, entity: Entity[],
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
     logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${entityString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
+      `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Decision.PERMIT;
   }

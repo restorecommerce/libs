@@ -159,7 +159,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        [{ resource: 'Location', id: 'location_id' }, { resource: 'Address', id: 'address_id' }],
         AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('PERMIT');
@@ -188,7 +188,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        [{ resource: 'Location', id: 'location_id' }, { resource: 'Address', id: 'address_id' }],
         AuthZAction.READ, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('PERMIT');
@@ -220,7 +220,7 @@ describe('testing acs-client with multiple entities', () => {
       let ctx: ACSClientContext = { subject };
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location' }, { entity: 'Address' }],
+        [{ resource: 'Location' }, { resource: 'Address' }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       response.decision.should.equal('PERMIT');
       response.policy_sets[0].policies[0].rules[0].id.should.equal('location_rule_id');
@@ -228,11 +228,11 @@ describe('testing acs-client with multiple entities', () => {
       response.custom_query_args.should.be.empty();
       const entityFilters = response.filters;
       // validate location filters
-      entityFilters[0].entity.should.equal('Location');
+      entityFilters[0].resource.should.equal('Location');
       entityFilters[0].filters[0].filter[0].value.should.equal('targetScope');
       entityFilters[0].filters[0].filter[1].value.should.equal('targetSubScope');
       // validate address filters
-      entityFilters[1].entity.should.equal('Address');
+      entityFilters[1].resource.should.equal('Address');
       entityFilters[1].filters[0].filter[0].value.should.equal('targetScope');
       entityFilters[1].filters[0].filter[1].value.should.equal('targetSubScope');
       stopGrpcMockServer();
@@ -263,16 +263,16 @@ describe('testing acs-client with multiple entities', () => {
       let ctx: ACSClientContext = { subject };
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location' }, { entity: 'Address' }],
+        [{ resource: 'Location' }, { resource: 'Address' }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'arangoDB') as PolicySetRQResponse;
       const expectedCustomArgs = { entity: 'urn:test:acs:model:organization.Organization', instance: ['targetScope', 'targetSubScope'] };
       // validate custom query args for Location
-      response.custom_query_args[0].entity.should.equal('Location');
+      response.custom_query_args[0].resource.should.equal('Location');
       response.custom_query_args[0].custom_queries[0].should.equal('filterByOwnership');
       const locationCustomArgs = JSON.parse(response.custom_query_args[0].custom_arguments.value.toString());
       locationCustomArgs.should.deepEqual(expectedCustomArgs);
       // validate custom query args for Address
-      response.custom_query_args[1].entity.should.equal('Address');
+      response.custom_query_args[1].resource.should.equal('Address');
       response.custom_query_args[1].custom_queries[0].should.equal('filterByOwnership');
       const addressCustomArgs = JSON.parse(response.custom_query_args[1].custom_arguments.value.toString());
       addressCustomArgs.should.deepEqual(expectedCustomArgs);
@@ -302,7 +302,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        [{ resource: 'Location', id: 'location_id' }, { resource: 'Address', id: 'address_id' }],
         AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('DENY');
@@ -332,7 +332,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id' }, { entity: 'Address', id: 'address_id' }],
+        [{ resource: 'Location', id: 'location_id' }, { resource: 'Address', id: 'address_id' }],
         AuthZAction.READ, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('DENY');
@@ -365,7 +365,7 @@ describe('testing acs-client with multiple entities', () => {
       let ctx: ACSClientContext = { subject };
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location' }, { entity: 'Address' }],
+        [{ resource: 'Location' }, { resource: 'Address' }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);
@@ -397,7 +397,7 @@ describe('testing acs-client with multiple entities', () => {
       let ctx: ACSClientContext = { subject };
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location' }, { entity: 'Address' }],
+        [{ resource: 'Location' }, { resource: 'Address' }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'arangoDB') as PolicySetRQResponse;
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);
@@ -425,7 +425,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id', property: ['name'] }, { entity: 'Address', id: 'address_id', property: ['name'] }],
+        [{ resource: 'Location', id: 'location_id', property: ['name'] }, { resource: 'Address', id: 'address_id', property: ['name'] }],
         AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('PERMIT');
@@ -454,7 +454,7 @@ describe('testing acs-client with multiple entities', () => {
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id', property: ['name', 'description'] }, { entity: 'Address', id: 'address_id', property: ['name', 'description'] }],
+        [{ resource: 'Location', id: 'location_id', property: ['name', 'description'] }, { resource: 'Address', id: 'address_id', property: ['name', 'description'] }],
         AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('DENY');
@@ -487,7 +487,7 @@ describe('testing acs-client with multiple entities', () => {
       let ctx: ACSClientContext = { subject };
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(subject,
-        [{ entity: 'Location', id: 'location_id', property: ['name', 'description'] }, { entity: 'Address', id: 'address_id', property: ['name', 'description'] }],
+        [{ resource: 'Location', id: 'location_id', property: ['name', 'description'] }, { resource: 'Address', id: 'address_id', property: ['name', 'description'] }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);

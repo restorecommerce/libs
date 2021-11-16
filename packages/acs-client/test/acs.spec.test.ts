@@ -221,7 +221,7 @@ describe('testing acs-client', () => {
       let response: DecisionResponse;
       let ctx: ACSClientContext = { subject: { id: '' } };
       ctx.resources = testResource;
-      response = await accessRequest(subject, [{ entity: 'Test', id: testResource[0].id }], AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
+      response = await accessRequest(subject, [{ resource: 'Test', id: testResource[0].id }], AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       should.exist(response.operation_status);
       response.decision.should.equal(Decision.DENY);
@@ -253,7 +253,7 @@ describe('testing acs-client', () => {
       let ctx: ACSClientContext = { subject };
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
-      const response = await accessRequest(subject, [{ entity: 'Test', id: testResource[0].id }], AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
+      const response = await accessRequest(subject, [{ resource: 'Test', id: testResource[0].id }], AuthZAction.CREATE, ctx, Operation.isAllowed) as DecisionResponse;
       should.exist(response);
       response.decision.should.equal('PERMIT');
       response.operation_status.code.should.equal(200);
@@ -281,7 +281,7 @@ describe('testing acs-client', () => {
       let ctx: ACSClientContext = { subject };
       ctx.resources = input;
       // call accessRequest(), the response is from mock ACS
-      let response = await accessRequest(subject, [{ entity: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+      let response = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetScope; the response was DENY');
@@ -326,7 +326,7 @@ describe('testing acs-client', () => {
         let ctx: ACSClientContext = { subject };
         ctx.resources = input;
         // call accessRequest(), the response is from mock ACS
-        const readResponse = await accessRequest(subject, [{ entity: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
         should.exist(readResponse.decision);
         readResponse.decision.should.equal('PERMIT');
         readResponse.operation_status.code.should.equal(200);
@@ -334,7 +334,7 @@ describe('testing acs-client', () => {
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
         const expectedFilterResponse = [{ field: filterParamKey, operation: 'eq', value: 'targetScope' }, { field: filterParamKey, operation: 'eq', value: 'targetSubScope' }];
-        readResponse.filters[0].entity.should.equal('Test');
+        readResponse.filters[0].resource.should.equal('Test');
         const filterEntityMap = readResponse.filters;
         const filters = filterEntityMap[0].filters;
         filters[0].filter[0].should.deepEqual(expectedFilterResponse[0]);
@@ -382,7 +382,7 @@ describe('testing acs-client', () => {
         let ctx: ACSClientContext = { subject };
         ctx.resources = input;
         // call accessRequest(), the response is from mock ACS
-        const readResponse = await accessRequest(subject, [{ entity: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
         should.exist(readResponse.decision);
         readResponse.decision.should.equal('PERMIT');
         readResponse.operation_status.code.should.equal(200);
@@ -390,7 +390,7 @@ describe('testing acs-client', () => {
         // verify input is modified to enforce the applicapble poilicies
         const filterParamKey = cfg.get('authorization:filterParamKey');
         const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
-        readResponse.filters[0].entity.should.equal('Test');
+        readResponse.filters[0].resource.should.equal('Test');
         const filterEntityMap = readResponse.filters;
         const filters = filterEntityMap[0].filters;
         filters[0].filter[0].should.deepEqual(expectedFilterResponse);
@@ -442,7 +442,7 @@ describe('testing acs-client', () => {
       let ctx: ACSClientContext = { subject };
       ctx.resources = input;
       // call accessRequest(), the response is from mock ACS
-      let readResponse = await accessRequest(subject, [{ entity: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+      let readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       should.exist(readResponse.decision);
       readResponse.decision.should.equal(Decision.DENY);
       readResponse.operation_status.code.should.equal(403);

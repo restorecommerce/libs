@@ -19,11 +19,20 @@ export interface Resource {
   property?: string[];
 }
 
+export interface CtxResource {
+  id: string;
+  meta: {
+    created?: number;
+    modified?: number;
+    modified_by?: string;
+    owner: Attribute[]; // id owner is mandatory in resource others are optional
+  };
+  [key: string]: any;
+}
+
 export interface ACSClientContext {
   subject?: Subject;
-  resources?: {
-    [key: string]: any;
-  };
+  resources?: CtxResource[];
 }
 
 export interface Database {

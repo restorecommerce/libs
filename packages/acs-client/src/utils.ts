@@ -489,8 +489,7 @@ export const generateOperationStatus = (code?: number, message?: string) => {
  * @param ruleAttributes
  * @param requestAttributes
  */
-export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[],
-  regexMatch?: boolean): boolean => {
+export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[]): boolean => {
   for (let attribute of ruleAttributes) {
     const id = attribute.id;
     const value = attribute.value;
@@ -498,7 +497,7 @@ export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: 
       // return requestAttribute.id == id && requestAttribute.value == value;
       if (requestAttribute.id == id && requestAttribute.value == value) {
         return true;
-      } else if (regexMatch && requestAttribute.id == id) {
+      } else if (requestAttribute.id == id) {
         // rule entity
         let pattern = value.substring(value.lastIndexOf(':') + 1);
         let nsEntityArray = pattern.split('.');

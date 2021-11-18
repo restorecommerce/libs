@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.5.0 (November 18th, 2020)
+
+- modified accessRequest to match the ABAC doc with subject, resource and action
+- added support for multiple entities for both isAllowed and whatIsAllowed
+
 ## [0.4.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.4.18...@restorecommerce/acs-client@0.4.19) (2021-11-08)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

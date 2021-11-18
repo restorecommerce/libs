@@ -2,7 +2,7 @@ import * as should from 'should';
 import { accessRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
 import { flushCache, initializeCache } from '../lib/acs/cache';
 import { createMockServer } from 'grpc-mock';
-import { AuthZAction, Decision, DecisionResponse, PolicySetRQResponse, Operation, ACSClientContext, ACSRequest } from '../lib/acs/interfaces';
+import { AuthZAction, Decision, DecisionResponse, PolicySetRQResponse, Operation, ACSClientContext, ACSRequest, CtxResource } from '../lib/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
@@ -127,7 +127,7 @@ interface serverRule {
   output: any
 }
 
-const updateMetaData = (resourceList: Array<any>) => {
+const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   if (!_.isArray(resourceList)) {
     resourceList = [resourceList];
   }
@@ -207,15 +207,21 @@ describe('testing acs-client', () => {
       { method: 'WhatIsAllowed', input: '.*', output: {} }
       ]);
       // test resrouce to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'test_id',
         name: 'Test',
-        description: 'This is a test description'
+        description: 'This is a test description',
+        meta: {
+          owner: []
+        }
       }];
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
-        unauthenticated: true
+        unauthenticated: true,
+        meta: {
+          owner: []
+        }
       };
       testResource = updateMetaData(testResource);
       let response: DecisionResponse;
@@ -233,10 +239,13 @@ describe('testing acs-client', () => {
       startGrpcMockServer([{ method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } } },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'test_id',
         name: 'Test',
-        description: 'This is a test description'
+        description: 'This is a test description',
+        meta: {
+          owner: []
+        }
       }];
       // user ctx data updated in session
       let subject = {
@@ -266,9 +275,12 @@ describe('testing acs-client', () => {
       startGrpcMockServer([{ method: 'WhatIsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: policySetRQ },
       { method: 'IsAllowed', input: '.*', output: {} }]);
       // test resource to be read of type 'ReadRequest'
-      let input = {
-        id: 'test_id'
-      };
+      let input: CtxResource[] = [{
+        id: 'test_id',
+        meta: {
+          owner: []
+        }
+      }];
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
@@ -281,7 +293,7 @@ describe('testing acs-client', () => {
       let ctx: ACSClientContext = { subject };
       ctx.resources = input;
       // call accessRequest(), the response is from mock ACS
-      let response = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+      let response = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       response.decision.should.equal('DENY');
       response.operation_status.code.should.equal(403);
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetScope; the response was DENY');
@@ -294,9 +306,12 @@ describe('testing acs-client', () => {
         startGrpcMockServer([{ method: 'WhatIsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: policySetRQ },
         { method: 'IsAllowed', input: '.*', output: {} }]);
         // test resource to be read of type 'ReadRequest'
-        let input = {
-          id: 'test_id'
-        };
+        let input: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owner: []
+          }
+        }];
         // user ctx data updated in session
         let subject = {
           id: 'test_user_id',
@@ -326,7 +341,7 @@ describe('testing acs-client', () => {
         let ctx: ACSClientContext = { subject };
         ctx.resources = input;
         // call accessRequest(), the response is from mock ACS
-        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
         should.exist(readResponse.decision);
         readResponse.decision.should.equal('PERMIT');
         readResponse.operation_status.code.should.equal(200);
@@ -348,9 +363,12 @@ describe('testing acs-client', () => {
         startGrpcMockServer([{ method: 'WhatIsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: policySetRQ },
         { method: 'IsAllowed', input: '.*', output: {} }]);
         // test resource to be read of type 'ReadRequest'
-        let input = {
-          id: 'test_id'
-        };
+        let input: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owner: []
+          }
+        }];
         // user ctx data updated in session
         let subject = {
           id: 'test_user_id',
@@ -382,7 +400,7 @@ describe('testing acs-client', () => {
         let ctx: ACSClientContext = { subject };
         ctx.resources = input;
         // call accessRequest(), the response is from mock ACS
-        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
         should.exist(readResponse.decision);
         readResponse.decision.should.equal('PERMIT');
         readResponse.operation_status.code.should.equal(200);
@@ -408,9 +426,12 @@ describe('testing acs-client', () => {
       startGrpcMockServer([{ method: 'WhatIsAllowed', input: '\{.*\:\{.*\:.*\}\}', output: policySetRQ },
       { method: 'IsAllowed', input: '.*', output: {} }]);
       // test resource to be read of type 'ReadRequest'
-      let input = {
-        id: 'test_id'
-      };
+      let input: CtxResource[] = [{
+        id: 'test_id',
+        meta: {
+          owner: []
+        }
+      }];
       // user ctx data updated in session
       let subject = {
         id: 'test_user_id',
@@ -442,7 +463,7 @@ describe('testing acs-client', () => {
       let ctx: ACSClientContext = { subject };
       ctx.resources = input;
       // call accessRequest(), the response is from mock ACS
-      let readResponse = await accessRequest(subject, [{ resource: 'Test', id: input.id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+      let readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
       should.exist(readResponse.decision);
       readResponse.decision.should.equal(Decision.DENY);
       readResponse.operation_status.code.should.equal(403);

@@ -4,7 +4,7 @@ import { flushCache, initializeCache } from '../lib/acs/cache';
 import { createMockServer } from 'grpc-mock';
 import {
   AuthZAction, DecisionResponse, PolicySetRQResponse,
-  Operation, ACSClientContext, ACSRequest
+  Operation, ACSClientContext, ACSRequest, CtxResource
 } from '../lib/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
@@ -34,7 +34,7 @@ interface serverRule {
   output: any
 }
 
-const updateMetaData = (resourceList: Array<any>) => {
+const updateMetaData = (resourceList: Array<any>): Array<CtxResource>  => {
   if (!_.isArray(resourceList)) {
     resourceList = [resourceList];
   }
@@ -145,14 +145,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -174,14 +180,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -207,14 +219,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -250,14 +268,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -287,14 +311,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       subject.scope = 'invalidTargetScope'; // set invalid target scope
       testResource = updateMetaData(testResource);
@@ -317,14 +347,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       subject.scope = 'invalidTargetScope'; // set invalid target scope
@@ -351,14 +387,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       subject.scope = 'targetScope'; // set valid targetScope so that Location is PERMIT, but Address is Deny based on fallback rule
@@ -383,14 +425,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       subject.scope = 'targetScope'; // set valid targetScope so that Location is PERMIT, but Address is Deny based on fallback rule
@@ -413,12 +461,18 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
-        name: 'Location'
+        name: 'Location',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
-        name: 'Address'
+        name: 'Address',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -440,14 +494,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: {} }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
@@ -473,14 +533,20 @@ describe('testing acs-client with multiple entities', () => {
       },
       { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
       // test resource to be created
-      let testResource = [{
+      let testResource: CtxResource[] = [{
         id: 'location_id',
         name: 'Location',
-        description: 'Location description'
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
       }, {
         id: 'address_id',
         name: 'Address',
-        description: 'Address description'
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
       }];
       testResource = updateMetaData(testResource);
       subject.scope = 'targetScope'; // set valid targetScope so that Location is PERMIT, but Address is Deny based on fallback rule (description not allowed for Address resource)

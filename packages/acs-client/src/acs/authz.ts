@@ -81,13 +81,18 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
   const flattened: Attribute[] = [];
   resource.forEach((resourceObj) => {
     if (action != AuthZAction.EXECUTE) {
-      let resourceName = resourceObj.resource;
+      let resourcenameNameSpace = resourceObj.resource;
       let resourceInstance = resourceObj.id;
       let resourceProperty = resourceObj.property;
-      let resourceNameSpace;
+      let resourceNameSpace, resourceName;
 
-      if (resourceName && resourceName.indexOf('.') > -1) {
-        resourceNameSpace = resourceName.slice(0, resourceName.lastIndexOf('.'));
+      if (resourcenameNameSpace && resourcenameNameSpace.indexOf('.') > -1) {
+        resourceNameSpace = resourcenameNameSpace.slice(0, resourcenameNameSpace.lastIndexOf('.'));
+        // resource name from `.` till end, when no end index is specified for
+        // slice api it returns till end of string
+        resourceName = resourcenameNameSpace.slice(resourcenameNameSpace.lastIndexOf('.') + 1);
+      } else {
+        resourceName = resourcenameNameSpace;
       }
 
       // entity - urn:restorecommerce:acs:names:model:entity

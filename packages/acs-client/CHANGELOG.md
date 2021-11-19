@@ -3,7 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 0.5.0 (November 18th, 2020)
+## 0.5.1 (November 19th, 2021)
+
+- fix for resource namespace when creating request target resources
+
+## 0.5.0 (November 18th, 2021)
 
 - modified accessRequest to match the ABAC doc with subject, resource and action
 - added support for multiple entities for both isAllowed and whatIsAllowed

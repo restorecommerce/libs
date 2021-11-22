@@ -576,11 +576,16 @@ export const createEntityFilterMap = async (resource: Resource[],
   let entityFilterMap = [];
   let customQueryArgs = [];
   for (let resourceObj of resource) {
-    let resourceName = resourceObj.resource;
-    let resourceNameSpace;
+    let resourcenameNameSpace = resourceObj.resource;
+    let resourceNameSpace, resourceName;
 
-    if (resourceName.indexOf('.') > -1) {
-      resourceNameSpace = resourceName.slice(0, resourceName.lastIndexOf('.'));
+    if (resourcenameNameSpace && resourcenameNameSpace.indexOf('.') > -1) {
+      resourceNameSpace = resourcenameNameSpace.slice(0, resourcenameNameSpace.lastIndexOf('.'));
+      // resource name from `.` till end, when no end index is specified for
+      // slice api it returns till end of string
+      resourceName = resourcenameNameSpace.slice(resourcenameNameSpace.lastIndexOf('.') + 1);
+    } else {
+      resourceName = resourcenameNameSpace;
     }
     const resourceType = formatResourceType(resourceName, resourceNameSpace);
     const urns = cfg.get('authorization:urns');

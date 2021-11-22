@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 0.5.1 (November 22nd, 2021)
+
+- fix for resource namespace for filter mapping
+
 ## 0.5.1 (November 19th, 2021)
 
 - fix for resource namespace when creating request target resources

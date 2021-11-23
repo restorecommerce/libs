@@ -3,7 +3,11 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## 0.5.1 (November 22nd, 2021)
+## 0.5.3 (November 23rd, 2021)
+
+- fix filter value from condition for postgres DB
+
+## 0.5.2 (November 22nd, 2021)
 
 - fix for resource namespace for filter mapping
 

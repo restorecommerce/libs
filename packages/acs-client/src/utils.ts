@@ -257,8 +257,8 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     }
     // apply filter from condition
     for (let eachFilter of filter) {
-      if (eachFilter.id && eachFilter.id.$eq) {
-        query['filter'].push({ field: filterParamKey, operation: 'eq', value: eachFilter.id.$eq });
+      if (eachFilter) {
+        query['filter'].push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
         filter = [];
       }
     }

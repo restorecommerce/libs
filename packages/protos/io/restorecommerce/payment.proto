@@ -1,6 +1,5 @@
 syntax = "proto3";
 package io.restorecommerce.payment;
-import "google/protobuf/wrappers.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
  

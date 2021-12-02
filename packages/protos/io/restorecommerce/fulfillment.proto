@@ -8,6 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
+import "io/restorecommerce/meta.proto";
 
 /**
 Microservice definition.
@@ -92,7 +93,7 @@ message Address {
     Packstation packstation = 4;
     Branch branch = 5;
   };
-  io.restorecommerce.counrty country = 6;
+  io.restorecommerce.country.Country country = 6;
   Contact contact = 7;
 }
 

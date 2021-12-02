@@ -75,7 +75,7 @@ message Variant {
   repeated io.restorecommerce.image.Image image = 8;
   string stock_keeping_unit = 9;
   string template_variant = 10;
-  repeated Attribute attributes = 11;
+  repeated io.restorecommerce.attribute.Attribute attributes = 11;
 }
 
 message Bundle {

@@ -7,6 +7,8 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/fulfillment.proto";
+import "io/restorecommerce/country.proto";
+import "io/restorecommerce/attribute.proto";
 
 /**
 Microservice defination
@@ -57,12 +59,12 @@ message Product {
   string courier_id = 4;
   repeated io.restorecommerce.country.Country start_country = 5;
   repeated string start_zone = 6;
-  repeated io.restorecommerce.country.Country destination_country = 5;
-  repeated string destination_zone = 6;
-  repeated string tax_id = 7;
-  repeated io.restorecommerce.attribute.Attribute attributes = 8;
-  repeated Variant variants = 9;
-  io.restorecommerce.meta.Meta meta = 10;
+  repeated io.restorecommerce.country.Country destination_country = 7;
+  repeated string destination_zone = 8;
+  repeated string tax_id = 9;
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
+  repeated Variant variants = 11;
+  io.restorecommerce.meta.Meta meta = 12;
 }
 
 message Variant {

@@ -2,12 +2,13 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Subject,
-  protoMetadata as protoMetadata2,
+  protoMetadata as protoMetadata1,
 } from "../../io/restorecommerce/auth";
 import {
-  protoMetadata as protoMetadata1,
-  StringValue,
-} from "../../google/protobuf/wrappers";
+  Status,
+  OperationStatus,
+  protoMetadata as protoMetadata2,
+} from "../../io/restorecommerce/status";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment";
@@ -15,8 +16,152 @@ export const protobufPackage = "io.restorecommerce.payment";
 /** Possible service providers. Provider names must be exactly as in config.yml. */
 export enum Provider {
   NO_PROVIDER = 0,
-  PaypalExpressGateway = 1,
-  AuthorizeNetGateway = 2,
+  Adyen = 1,
+  AuthorizeNetCIM = 2,
+  AuthorizeNet = 3,
+  AxcessMS = 4,
+  Balanced = 5,
+  BamboraAsiaPacific = 6,
+  BankFrick = 7,
+  Banwire = 8,
+  BarclaysePDQExtraPlus = 9,
+  Be2Bill = 10,
+  Beanstreamcom = 11,
+  BluePay = 12,
+  Borgun = 13,
+  Braintree = 14,
+  BridgePay = 15,
+  Cardknox = 16,
+  CardSave = 17,
+  CardStream = 18,
+  Cashnet = 19,
+  Cecabank = 20,
+  Cenpos = 21,
+  CAMSCentralAccountManagementSystem = 22,
+  Checkoutcom = 23,
+  Clearhaus = 24,
+  Commercegate = 25,
+  Conekta = 26,
+  CyberSource = 27,
+  DIBS = 28,
+  DataCash = 29,
+  Efsnet = 30,
+  ElavonMyVirtualMerchant = 31,
+  ePay = 32,
+  EVOCanada = 33,
+  eWAY = 34,
+  eWAYRapid = 35,
+  Exact = 36,
+  Ezic = 37,
+  FatZebra = 38,
+  FederatedCanada = 39,
+  FinansbankWebPOS = 40,
+  Flo2Cash = 41,
+  stPayGatewayNet = 42,
+  FirstDataGlobalGatewaye4 = 43,
+  FirstGiving = 44,
+  GarantiSanalPOS = 45,
+  GlobalTransport = 46,
+  HDFC = 47,
+  HeartlandPaymentSystems = 48,
+  iATSPayments = 49,
+  InspireCommerce = 50,
+  InstaPay = 51,
+  IPP = 52,
+  Iridium = 53,
+  iTransact = 54,
+  JetPay = 55,
+  Komoju = 56,
+  LinkPoint = 57,
+  LitleCo = 58,
+  maxiPago = 59,
+  MerchanteSolutions = 60,
+  MerchantOneGateway = 61,
+  MerchantWARE = 62,
+  MerchantWarrior = 63,
+  Mercury = 64,
+  MetricsGlobal = 65,
+  MasterCardInternetGatewayServiceMiGS = 66,
+  ModernPayments = 67,
+  MONEI = 68,
+  Moneris = 69,
+  MoneyMovers = 70,
+  NABTransact = 71,
+  NELiXTransaX = 72,
+  NetRegistry = 73,
+  BBSNetaxept = 74,
+  NETbilling = 75,
+  NETPAYGateway = 76,
+  NMI = 77,
+  Ogone = 78,
+  Omise = 79,
+  Openpay = 80,
+  OptimalPayments = 81,
+  OrbitalPaymentech = 82,
+  Pagarme = 83,
+  PagoFacil = 84,
+  PayConex = 85,
+  PayGatePayXML = 86,
+  PayHub = 87,
+  PayJunction = 89,
+  PaySecure = 90,
+  PayboxDirect = 91,
+  Payeezy = 92,
+  Payex = 93,
+  PaymentExpress = 94,
+  PAYMILL = 95,
+  PayPalExpressCheckout = 96,
+  PayPalExpressCheckoutUK = 97,
+  PayPalPayflowPro = 98,
+  PayPalPaymentsProUS = 99,
+  PayPalPaymentsProUK = 100,
+  PayPalWebsitePaymentsProCA = 101,
+  PayPalExpressCheckoutforDigitalGoods = 102,
+  Payscout = 103,
+  Paystation = 104,
+  PayWay = 105,
+  PayUIndia = 106,
+  PinPayments = 107,
+  PlugnPay = 108,
+  Psigate = 109,
+  PSLPaymentSolutions = 110,
+  QuickBooksMerchantServices = 111,
+  QuickBooksPayments = 112,
+  QuantumGateway = 113,
+  QuickPay = 114,
+  Qvalent = 115,
+  Raven = 116,
+  Realex = 117,
+  Redsys = 118,
+  S5 = 119,
+  SagePay = 120,
+  SagePaymentSolutions = 121,
+  SallieMae = 122,
+  SecureNet = 123,
+  SecurePay = 124,
+  SecurePayTech = 125,
+  SecurionPay = 126,
+  SkipJack = 127,
+  SoEasyPay = 128,
+  Spreedly = 129,
+  Stripe = 130,
+  Swipe = 131,
+  TNS = 132,
+  TransactPro = 133,
+  TransFirst = 134,
+  Transnational = 135,
+  Trexle = 136,
+  TrustCommerce = 137,
+  USAePay = 138,
+  VancoPaymentSolutions = 139,
+  Verifi = 140,
+  ViaKLIX = 141,
+  WebPay = 142,
+  WePay = 143,
+  Wirecard = 144,
+  WorldpayGlobal = 145,
+  WorldpayOnline = 146,
+  WorldpayUS = 147,
   UNRECOGNIZED = -1,
 }
 
@@ -26,11 +171,443 @@ export function providerFromJSON(object: any): Provider {
     case "NO_PROVIDER":
       return Provider.NO_PROVIDER;
     case 1:
-    case "PaypalExpressGateway":
-      return Provider.PaypalExpressGateway;
+    case "Adyen":
+      return Provider.Adyen;
     case 2:
-    case "AuthorizeNetGateway":
-      return Provider.AuthorizeNetGateway;
+    case "AuthorizeNetCIM":
+      return Provider.AuthorizeNetCIM;
+    case 3:
+    case "AuthorizeNet":
+      return Provider.AuthorizeNet;
+    case 4:
+    case "AxcessMS":
+      return Provider.AxcessMS;
+    case 5:
+    case "Balanced":
+      return Provider.Balanced;
+    case 6:
+    case "BamboraAsiaPacific":
+      return Provider.BamboraAsiaPacific;
+    case 7:
+    case "BankFrick":
+      return Provider.BankFrick;
+    case 8:
+    case "Banwire":
+      return Provider.Banwire;
+    case 9:
+    case "BarclaysePDQExtraPlus":
+      return Provider.BarclaysePDQExtraPlus;
+    case 10:
+    case "Be2Bill":
+      return Provider.Be2Bill;
+    case 11:
+    case "Beanstreamcom":
+      return Provider.Beanstreamcom;
+    case 12:
+    case "BluePay":
+      return Provider.BluePay;
+    case 13:
+    case "Borgun":
+      return Provider.Borgun;
+    case 14:
+    case "Braintree":
+      return Provider.Braintree;
+    case 15:
+    case "BridgePay":
+      return Provider.BridgePay;
+    case 16:
+    case "Cardknox":
+      return Provider.Cardknox;
+    case 17:
+    case "CardSave":
+      return Provider.CardSave;
+    case 18:
+    case "CardStream":
+      return Provider.CardStream;
+    case 19:
+    case "Cashnet":
+      return Provider.Cashnet;
+    case 20:
+    case "Cecabank":
+      return Provider.Cecabank;
+    case 21:
+    case "Cenpos":
+      return Provider.Cenpos;
+    case 22:
+    case "CAMSCentralAccountManagementSystem":
+      return Provider.CAMSCentralAccountManagementSystem;
+    case 23:
+    case "Checkoutcom":
+      return Provider.Checkoutcom;
+    case 24:
+    case "Clearhaus":
+      return Provider.Clearhaus;
+    case 25:
+    case "Commercegate":
+      return Provider.Commercegate;
+    case 26:
+    case "Conekta":
+      return Provider.Conekta;
+    case 27:
+    case "CyberSource":
+      return Provider.CyberSource;
+    case 28:
+    case "DIBS":
+      return Provider.DIBS;
+    case 29:
+    case "DataCash":
+      return Provider.DataCash;
+    case 30:
+    case "Efsnet":
+      return Provider.Efsnet;
+    case 31:
+    case "ElavonMyVirtualMerchant":
+      return Provider.ElavonMyVirtualMerchant;
+    case 32:
+    case "ePay":
+      return Provider.ePay;
+    case 33:
+    case "EVOCanada":
+      return Provider.EVOCanada;
+    case 34:
+    case "eWAY":
+      return Provider.eWAY;
+    case 35:
+    case "eWAYRapid":
+      return Provider.eWAYRapid;
+    case 36:
+    case "Exact":
+      return Provider.Exact;
+    case 37:
+    case "Ezic":
+      return Provider.Ezic;
+    case 38:
+    case "FatZebra":
+      return Provider.FatZebra;
+    case 39:
+    case "FederatedCanada":
+      return Provider.FederatedCanada;
+    case 40:
+    case "FinansbankWebPOS":
+      return Provider.FinansbankWebPOS;
+    case 41:
+    case "Flo2Cash":
+      return Provider.Flo2Cash;
+    case 42:
+    case "stPayGatewayNet":
+      return Provider.stPayGatewayNet;
+    case 43:
+    case "FirstDataGlobalGatewaye4":
+      return Provider.FirstDataGlobalGatewaye4;
+    case 44:
+    case "FirstGiving":
+      return Provider.FirstGiving;
+    case 45:
+    case "GarantiSanalPOS":
+      return Provider.GarantiSanalPOS;
+    case 46:
+    case "GlobalTransport":
+      return Provider.GlobalTransport;
+    case 47:
+    case "HDFC":
+      return Provider.HDFC;
+    case 48:
+    case "HeartlandPaymentSystems":
+      return Provider.HeartlandPaymentSystems;
+    case 49:
+    case "iATSPayments":
+      return Provider.iATSPayments;
+    case 50:
+    case "InspireCommerce":
+      return Provider.InspireCommerce;
+    case 51:
+    case "InstaPay":
+      return Provider.InstaPay;
+    case 52:
+    case "IPP":
+      return Provider.IPP;
+    case 53:
+    case "Iridium":
+      return Provider.Iridium;
+    case 54:
+    case "iTransact":
+      return Provider.iTransact;
+    case 55:
+    case "JetPay":
+      return Provider.JetPay;
+    case 56:
+    case "Komoju":
+      return Provider.Komoju;
+    case 57:
+    case "LinkPoint":
+      return Provider.LinkPoint;
+    case 58:
+    case "LitleCo":
+      return Provider.LitleCo;
+    case 59:
+    case "maxiPago":
+      return Provider.maxiPago;
+    case 60:
+    case "MerchanteSolutions":
+      return Provider.MerchanteSolutions;
+    case 61:
+    case "MerchantOneGateway":
+      return Provider.MerchantOneGateway;
+    case 62:
+    case "MerchantWARE":
+      return Provider.MerchantWARE;
+    case 63:
+    case "MerchantWarrior":
+      return Provider.MerchantWarrior;
+    case 64:
+    case "Mercury":
+      return Provider.Mercury;
+    case 65:
+    case "MetricsGlobal":
+      return Provider.MetricsGlobal;
+    case 66:
+    case "MasterCardInternetGatewayServiceMiGS":
+      return Provider.MasterCardInternetGatewayServiceMiGS;
+    case 67:
+    case "ModernPayments":
+      return Provider.ModernPayments;
+    case 68:
+    case "MONEI":
+      return Provider.MONEI;
+    case 69:
+    case "Moneris":
+      return Provider.Moneris;
+    case 70:
+    case "MoneyMovers":
+      return Provider.MoneyMovers;
+    case 71:
+    case "NABTransact":
+      return Provider.NABTransact;
+    case 72:
+    case "NELiXTransaX":
+      return Provider.NELiXTransaX;
+    case 73:
+    case "NetRegistry":
+      return Provider.NetRegistry;
+    case 74:
+    case "BBSNetaxept":
+      return Provider.BBSNetaxept;
+    case 75:
+    case "NETbilling":
+      return Provider.NETbilling;
+    case 76:
+    case "NETPAYGateway":
+      return Provider.NETPAYGateway;
+    case 77:
+    case "NMI":
+      return Provider.NMI;
+    case 78:
+    case "Ogone":
+      return Provider.Ogone;
+    case 79:
+    case "Omise":
+      return Provider.Omise;
+    case 80:
+    case "Openpay":
+      return Provider.Openpay;
+    case 81:
+    case "OptimalPayments":
+      return Provider.OptimalPayments;
+    case 82:
+    case "OrbitalPaymentech":
+      return Provider.OrbitalPaymentech;
+    case 83:
+    case "Pagarme":
+      return Provider.Pagarme;
+    case 84:
+    case "PagoFacil":
+      return Provider.PagoFacil;
+    case 85:
+    case "PayConex":
+      return Provider.PayConex;
+    case 86:
+    case "PayGatePayXML":
+      return Provider.PayGatePayXML;
+    case 87:
+    case "PayHub":
+      return Provider.PayHub;
+    case 89:
+    case "PayJunction":
+      return Provider.PayJunction;
+    case 90:
+    case "PaySecure":
+      return Provider.PaySecure;
+    case 91:
+    case "PayboxDirect":
+      return Provider.PayboxDirect;
+    case 92:
+    case "Payeezy":
+      return Provider.Payeezy;
+    case 93:
+    case "Payex":
+      return Provider.Payex;
+    case 94:
+    case "PaymentExpress":
+      return Provider.PaymentExpress;
+    case 95:
+    case "PAYMILL":
+      return Provider.PAYMILL;
+    case 96:
+    case "PayPalExpressCheckout":
+      return Provider.PayPalExpressCheckout;
+    case 97:
+    case "PayPalExpressCheckoutUK":
+      return Provider.PayPalExpressCheckoutUK;
+    case 98:
+    case "PayPalPayflowPro":
+      return Provider.PayPalPayflowPro;
+    case 99:
+    case "PayPalPaymentsProUS":
+      return Provider.PayPalPaymentsProUS;
+    case 100:
+    case "PayPalPaymentsProUK":
+      return Provider.PayPalPaymentsProUK;
+    case 101:
+    case "PayPalWebsitePaymentsProCA":
+      return Provider.PayPalWebsitePaymentsProCA;
+    case 102:
+    case "PayPalExpressCheckoutforDigitalGoods":
+      return Provider.PayPalExpressCheckoutforDigitalGoods;
+    case 103:
+    case "Payscout":
+      return Provider.Payscout;
+    case 104:
+    case "Paystation":
+      return Provider.Paystation;
+    case 105:
+    case "PayWay":
+      return Provider.PayWay;
+    case 106:
+    case "PayUIndia":
+      return Provider.PayUIndia;
+    case 107:
+    case "PinPayments":
+      return Provider.PinPayments;
+    case 108:
+    case "PlugnPay":
+      return Provider.PlugnPay;
+    case 109:
+    case "Psigate":
+      return Provider.Psigate;
+    case 110:
+    case "PSLPaymentSolutions":
+      return Provider.PSLPaymentSolutions;
+    case 111:
+    case "QuickBooksMerchantServices":
+      return Provider.QuickBooksMerchantServices;
+    case 112:
+    case "QuickBooksPayments":
+      return Provider.QuickBooksPayments;
+    case 113:
+    case "QuantumGateway":
+      return Provider.QuantumGateway;
+    case 114:
+    case "QuickPay":
+      return Provider.QuickPay;
+    case 115:
+    case "Qvalent":
+      return Provider.Qvalent;
+    case 116:
+    case "Raven":
+      return Provider.Raven;
+    case 117:
+    case "Realex":
+      return Provider.Realex;
+    case 118:
+    case "Redsys":
+      return Provider.Redsys;
+    case 119:
+    case "S5":
+      return Provider.S5;
+    case 120:
+    case "SagePay":
+      return Provider.SagePay;
+    case 121:
+    case "SagePaymentSolutions":
+      return Provider.SagePaymentSolutions;
+    case 122:
+    case "SallieMae":
+      return Provider.SallieMae;
+    case 123:
+    case "SecureNet":
+      return Provider.SecureNet;
+    case 124:
+    case "SecurePay":
+      return Provider.SecurePay;
+    case 125:
+    case "SecurePayTech":
+      return Provider.SecurePayTech;
+    case 126:
+    case "SecurionPay":
+      return Provider.SecurionPay;
+    case 127:
+    case "SkipJack":
+      return Provider.SkipJack;
+    case 128:
+    case "SoEasyPay":
+      return Provider.SoEasyPay;
+    case 129:
+    case "Spreedly":
+      return Provider.Spreedly;
+    case 130:
+    case "Stripe":
+      return Provider.Stripe;
+    case 131:
+    case "Swipe":
+      return Provider.Swipe;
+    case 132:
+    case "TNS":
+      return Provider.TNS;
+    case 133:
+    case "TransactPro":
+      return Provider.TransactPro;
+    case 134:
+    case "TransFirst":
+      return Provider.TransFirst;
+    case 135:
+    case "Transnational":
+      return Provider.Transnational;
+    case 136:
+    case "Trexle":
+      return Provider.Trexle;
+    case 137:
+    case "TrustCommerce":
+      return Provider.TrustCommerce;
+    case 138:
+    case "USAePay":
+      return Provider.USAePay;
+    case 139:
+    case "VancoPaymentSolutions":
+      return Provider.VancoPaymentSolutions;
+    case 140:
+    case "Verifi":
+      return Provider.Verifi;
+    case 141:
+    case "ViaKLIX":
+      return Provider.ViaKLIX;
+    case 142:
+    case "WebPay":
+      return Provider.WebPay;
+    case 143:
+    case "WePay":
+      return Provider.WePay;
+    case 144:
+    case "Wirecard":
+      return Provider.Wirecard;
+    case 145:
+    case "WorldpayGlobal":
+      return Provider.WorldpayGlobal;
+    case 146:
+    case "WorldpayOnline":
+      return Provider.WorldpayOnline;
+    case 147:
+    case "WorldpayUS":
+      return Provider.WorldpayUS;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -42,10 +619,298 @@ export function providerToJSON(object: Provider): string {
   switch (object) {
     case Provider.NO_PROVIDER:
       return "NO_PROVIDER";
-    case Provider.PaypalExpressGateway:
-      return "PaypalExpressGateway";
-    case Provider.AuthorizeNetGateway:
-      return "AuthorizeNetGateway";
+    case Provider.Adyen:
+      return "Adyen";
+    case Provider.AuthorizeNetCIM:
+      return "AuthorizeNetCIM";
+    case Provider.AuthorizeNet:
+      return "AuthorizeNet";
+    case Provider.AxcessMS:
+      return "AxcessMS";
+    case Provider.Balanced:
+      return "Balanced";
+    case Provider.BamboraAsiaPacific:
+      return "BamboraAsiaPacific";
+    case Provider.BankFrick:
+      return "BankFrick";
+    case Provider.Banwire:
+      return "Banwire";
+    case Provider.BarclaysePDQExtraPlus:
+      return "BarclaysePDQExtraPlus";
+    case Provider.Be2Bill:
+      return "Be2Bill";
+    case Provider.Beanstreamcom:
+      return "Beanstreamcom";
+    case Provider.BluePay:
+      return "BluePay";
+    case Provider.Borgun:
+      return "Borgun";
+    case Provider.Braintree:
+      return "Braintree";
+    case Provider.BridgePay:
+      return "BridgePay";
+    case Provider.Cardknox:
+      return "Cardknox";
+    case Provider.CardSave:
+      return "CardSave";
+    case Provider.CardStream:
+      return "CardStream";
+    case Provider.Cashnet:
+      return "Cashnet";
+    case Provider.Cecabank:
+      return "Cecabank";
+    case Provider.Cenpos:
+      return "Cenpos";
+    case Provider.CAMSCentralAccountManagementSystem:
+      return "CAMSCentralAccountManagementSystem";
+    case Provider.Checkoutcom:
+      return "Checkoutcom";
+    case Provider.Clearhaus:
+      return "Clearhaus";
+    case Provider.Commercegate:
+      return "Commercegate";
+    case Provider.Conekta:
+      return "Conekta";
+    case Provider.CyberSource:
+      return "CyberSource";
+    case Provider.DIBS:
+      return "DIBS";
+    case Provider.DataCash:
+      return "DataCash";
+    case Provider.Efsnet:
+      return "Efsnet";
+    case Provider.ElavonMyVirtualMerchant:
+      return "ElavonMyVirtualMerchant";
+    case Provider.ePay:
+      return "ePay";
+    case Provider.EVOCanada:
+      return "EVOCanada";
+    case Provider.eWAY:
+      return "eWAY";
+    case Provider.eWAYRapid:
+      return "eWAYRapid";
+    case Provider.Exact:
+      return "Exact";
+    case Provider.Ezic:
+      return "Ezic";
+    case Provider.FatZebra:
+      return "FatZebra";
+    case Provider.FederatedCanada:
+      return "FederatedCanada";
+    case Provider.FinansbankWebPOS:
+      return "FinansbankWebPOS";
+    case Provider.Flo2Cash:
+      return "Flo2Cash";
+    case Provider.stPayGatewayNet:
+      return "stPayGatewayNet";
+    case Provider.FirstDataGlobalGatewaye4:
+      return "FirstDataGlobalGatewaye4";
+    case Provider.FirstGiving:
+      return "FirstGiving";
+    case Provider.GarantiSanalPOS:
+      return "GarantiSanalPOS";
+    case Provider.GlobalTransport:
+      return "GlobalTransport";
+    case Provider.HDFC:
+      return "HDFC";
+    case Provider.HeartlandPaymentSystems:
+      return "HeartlandPaymentSystems";
+    case Provider.iATSPayments:
+      return "iATSPayments";
+    case Provider.InspireCommerce:
+      return "InspireCommerce";
+    case Provider.InstaPay:
+      return "InstaPay";
+    case Provider.IPP:
+      return "IPP";
+    case Provider.Iridium:
+      return "Iridium";
+    case Provider.iTransact:
+      return "iTransact";
+    case Provider.JetPay:
+      return "JetPay";
+    case Provider.Komoju:
+      return "Komoju";
+    case Provider.LinkPoint:
+      return "LinkPoint";
+    case Provider.LitleCo:
+      return "LitleCo";
+    case Provider.maxiPago:
+      return "maxiPago";
+    case Provider.MerchanteSolutions:
+      return "MerchanteSolutions";
+    case Provider.MerchantOneGateway:
+      return "MerchantOneGateway";
+    case Provider.MerchantWARE:
+      return "MerchantWARE";
+    case Provider.MerchantWarrior:
+      return "MerchantWarrior";
+    case Provider.Mercury:
+      return "Mercury";
+    case Provider.MetricsGlobal:
+      return "MetricsGlobal";
+    case Provider.MasterCardInternetGatewayServiceMiGS:
+      return "MasterCardInternetGatewayServiceMiGS";
+    case Provider.ModernPayments:
+      return "ModernPayments";
+    case Provider.MONEI:
+      return "MONEI";
+    case Provider.Moneris:
+      return "Moneris";
+    case Provider.MoneyMovers:
+      return "MoneyMovers";
+    case Provider.NABTransact:
+      return "NABTransact";
+    case Provider.NELiXTransaX:
+      return "NELiXTransaX";
+    case Provider.NetRegistry:
+      return "NetRegistry";
+    case Provider.BBSNetaxept:
+      return "BBSNetaxept";
+    case Provider.NETbilling:
+      return "NETbilling";
+    case Provider.NETPAYGateway:
+      return "NETPAYGateway";
+    case Provider.NMI:
+      return "NMI";
+    case Provider.Ogone:
+      return "Ogone";
+    case Provider.Omise:
+      return "Omise";
+    case Provider.Openpay:
+      return "Openpay";
+    case Provider.OptimalPayments:
+      return "OptimalPayments";
+    case Provider.OrbitalPaymentech:
+      return "OrbitalPaymentech";
+    case Provider.Pagarme:
+      return "Pagarme";
+    case Provider.PagoFacil:
+      return "PagoFacil";
+    case Provider.PayConex:
+      return "PayConex";
+    case Provider.PayGatePayXML:
+      return "PayGatePayXML";
+    case Provider.PayHub:
+      return "PayHub";
+    case Provider.PayJunction:
+      return "PayJunction";
+    case Provider.PaySecure:
+      return "PaySecure";
+    case Provider.PayboxDirect:
+      return "PayboxDirect";
+    case Provider.Payeezy:
+      return "Payeezy";
+    case Provider.Payex:
+      return "Payex";
+    case Provider.PaymentExpress:
+      return "PaymentExpress";
+    case Provider.PAYMILL:
+      return "PAYMILL";
+    case Provider.PayPalExpressCheckout:
+      return "PayPalExpressCheckout";
+    case Provider.PayPalExpressCheckoutUK:
+      return "PayPalExpressCheckoutUK";
+    case Provider.PayPalPayflowPro:
+      return "PayPalPayflowPro";
+    case Provider.PayPalPaymentsProUS:
+      return "PayPalPaymentsProUS";
+    case Provider.PayPalPaymentsProUK:
+      return "PayPalPaymentsProUK";
+    case Provider.PayPalWebsitePaymentsProCA:
+      return "PayPalWebsitePaymentsProCA";
+    case Provider.PayPalExpressCheckoutforDigitalGoods:
+      return "PayPalExpressCheckoutforDigitalGoods";
+    case Provider.Payscout:
+      return "Payscout";
+    case Provider.Paystation:
+      return "Paystation";
+    case Provider.PayWay:
+      return "PayWay";
+    case Provider.PayUIndia:
+      return "PayUIndia";
+    case Provider.PinPayments:
+      return "PinPayments";
+    case Provider.PlugnPay:
+      return "PlugnPay";
+    case Provider.Psigate:
+      return "Psigate";
+    case Provider.PSLPaymentSolutions:
+      return "PSLPaymentSolutions";
+    case Provider.QuickBooksMerchantServices:
+      return "QuickBooksMerchantServices";
+    case Provider.QuickBooksPayments:
+      return "QuickBooksPayments";
+    case Provider.QuantumGateway:
+      return "QuantumGateway";
+    case Provider.QuickPay:
+      return "QuickPay";
+    case Provider.Qvalent:
+      return "Qvalent";
+    case Provider.Raven:
+      return "Raven";
+    case Provider.Realex:
+      return "Realex";
+    case Provider.Redsys:
+      return "Redsys";
+    case Provider.S5:
+      return "S5";
+    case Provider.SagePay:
+      return "SagePay";
+    case Provider.SagePaymentSolutions:
+      return "SagePaymentSolutions";
+    case Provider.SallieMae:
+      return "SallieMae";
+    case Provider.SecureNet:
+      return "SecureNet";
+    case Provider.SecurePay:
+      return "SecurePay";
+    case Provider.SecurePayTech:
+      return "SecurePayTech";
+    case Provider.SecurionPay:
+      return "SecurionPay";
+    case Provider.SkipJack:
+      return "SkipJack";
+    case Provider.SoEasyPay:
+      return "SoEasyPay";
+    case Provider.Spreedly:
+      return "Spreedly";
+    case Provider.Stripe:
+      return "Stripe";
+    case Provider.Swipe:
+      return "Swipe";
+    case Provider.TNS:
+      return "TNS";
+    case Provider.TransactPro:
+      return "TransactPro";
+    case Provider.TransFirst:
+      return "TransFirst";
+    case Provider.Transnational:
+      return "Transnational";
+    case Provider.Trexle:
+      return "Trexle";
+    case Provider.TrustCommerce:
+      return "TrustCommerce";
+    case Provider.USAePay:
+      return "USAePay";
+    case Provider.VancoPaymentSolutions:
+      return "VancoPaymentSolutions";
+    case Provider.Verifi:
+      return "Verifi";
+    case Provider.ViaKLIX:
+      return "ViaKLIX";
+    case Provider.WebPay:
+      return "WebPay";
+    case Provider.WePay:
+      return "WePay";
+    case Provider.Wirecard:
+      return "Wirecard";
+    case Provider.WorldpayGlobal:
+      return "WorldpayGlobal";
+    case Provider.WorldpayOnline:
+      return "WorldpayOnline";
+    case Provider.WorldpayUS:
+      return "WorldpayUS";
     default:
       return "UNKNOWN";
   }
@@ -106,12 +971,21 @@ export interface SetupRequest {
   subject?: Subject;
 }
 
-/** Response object for setup calls. */
-export interface SetupResponse {
-  paymentErrors: PaymentError[];
+export interface SetupPayload {
   token: string;
   confirmInitiationUrl: string;
   initiatedOn: string;
+}
+
+export interface SetupPayloadStatus {
+  payload?: SetupPayload;
+  status?: Status;
+}
+
+/** Response object for setup calls. */
+export interface SetupResponse {
+  item?: SetupPayloadStatus;
+  operationStatus?: OperationStatus;
 }
 
 /** Request object for authorization or purchase call for cardless payment. */
@@ -134,14 +1008,23 @@ export interface CaptureRequest {
   subject?: Subject;
 }
 
+export interface PaymentPayload {
+  paymentId: string;
+  executedOn: string;
+}
+
+export interface PaymentPayloadStatus {
+  payload?: PaymentPayload;
+  status?: Status;
+}
+
 /**
  * Unified response object for authorization, purchase and capture calls
  * for both standard and cardless payments.
  */
 export interface PaymentResponse {
-  paymentErrors: PaymentError[];
-  paymentId: string;
-  executedOn: string;
+  item?: PaymentPayloadStatus;
+  operationStatus?: OperationStatus;
 }
 
 /** Used for building ActiveMerchant::Billing::CreditCard instance. */
@@ -160,16 +1043,6 @@ export interface Item {
   description: string;
   quantity: number;
   amount: number;
-}
-
-/** Error details. */
-export interface PaymentError {
-  killed: boolean;
-  code: number;
-  signal?: string;
-  cmd: string;
-  stdout: string;
-  stderr: string;
 }
 
 const baseSetupRequest: object = {
@@ -450,51 +1323,40 @@ export const SetupRequest = {
   },
 };
 
-const baseSetupResponse: object = {
+const baseSetupPayload: object = {
   token: "",
   confirmInitiationUrl: "",
   initiatedOn: "",
 };
 
-export const SetupResponse = {
-  encode(message: SetupResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.paymentErrors) {
-      PaymentError.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
+export const SetupPayload = {
+  encode(message: SetupPayload, writer: Writer = Writer.create()): Writer {
     if (message.token !== "") {
-      writer.uint32(18).string(message.token);
+      writer.uint32(10).string(message.token);
     }
     if (message.confirmInitiationUrl !== "") {
-      writer.uint32(26).string(message.confirmInitiationUrl);
+      writer.uint32(18).string(message.confirmInitiationUrl);
     }
     if (message.initiatedOn !== "") {
-      writer.uint32(34).string(message.initiatedOn);
+      writer.uint32(26).string(message.initiatedOn);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SetupResponse {
+  decode(input: Reader | Uint8Array, length?: number): SetupPayload {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseSetupResponse
-    ) as SetupResponse;
-    message.paymentErrors = [];
+    const message = globalThis.Object.create(baseSetupPayload) as SetupPayload;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.paymentErrors.push(
-            PaymentError.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
           message.token = reader.string();
           break;
-        case 3:
+        case 2:
           message.confirmInitiationUrl = reader.string();
           break;
-        case 4:
+        case 3:
           message.initiatedOn = reader.string();
           break;
         default:
@@ -505,16 +1367,8 @@ export const SetupResponse = {
     return message;
   },
 
-  fromJSON(object: any): SetupResponse {
-    const message = globalThis.Object.create(
-      baseSetupResponse
-    ) as SetupResponse;
-    message.paymentErrors = [];
-    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
-      for (const e of object.paymentErrors) {
-        message.paymentErrors.push(PaymentError.fromJSON(e));
-      }
-    }
+  fromJSON(object: any): SetupPayload {
+    const message = globalThis.Object.create(baseSetupPayload) as SetupPayload;
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
     } else {
@@ -536,14 +1390,8 @@ export const SetupResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<SetupResponse>): SetupResponse {
-    const message = { ...baseSetupResponse } as SetupResponse;
-    message.paymentErrors = [];
-    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
-      for (const e of object.paymentErrors) {
-        message.paymentErrors.push(PaymentError.fromPartial(e));
-      }
-    }
+  fromPartial(object: DeepPartial<SetupPayload>): SetupPayload {
+    const message = { ...baseSetupPayload } as SetupPayload;
     if (object.token !== undefined && object.token !== null) {
       message.token = object.token;
     } else {
@@ -565,20 +1413,197 @@ export const SetupResponse = {
     return message;
   },
 
-  toJSON(message: SetupResponse): unknown {
+  toJSON(message: SetupPayload): unknown {
     const obj: any = {};
-    if (message.paymentErrors) {
-      obj.paymentErrors = message.paymentErrors.map((e) =>
-        e ? PaymentError.toJSON(e) : undefined
-      );
-    } else {
-      obj.paymentErrors = [];
-    }
     message.token !== undefined && (obj.token = message.token);
     message.confirmInitiationUrl !== undefined &&
       (obj.confirmInitiationUrl = message.confirmInitiationUrl);
     message.initiatedOn !== undefined &&
       (obj.initiatedOn = message.initiatedOn);
+    return obj;
+  },
+};
+
+const baseSetupPayloadStatus: object = {};
+
+export const SetupPayloadStatus = {
+  encode(
+    message: SetupPayloadStatus,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      SetupPayload.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): SetupPayloadStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseSetupPayloadStatus
+    ) as SetupPayloadStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = SetupPayload.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SetupPayloadStatus {
+    const message = globalThis.Object.create(
+      baseSetupPayloadStatus
+    ) as SetupPayloadStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = SetupPayload.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<SetupPayloadStatus>): SetupPayloadStatus {
+    const message = { ...baseSetupPayloadStatus } as SetupPayloadStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = SetupPayload.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: SetupPayloadStatus): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? SetupPayload.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const baseSetupResponse: object = {};
+
+export const SetupResponse = {
+  encode(message: SetupResponse, writer: Writer = Writer.create()): Writer {
+    if (message.item !== undefined) {
+      SetupPayloadStatus.encode(
+        message.item,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): SetupResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseSetupResponse
+    ) as SetupResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.item = SetupPayloadStatus.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SetupResponse {
+    const message = globalThis.Object.create(
+      baseSetupResponse
+    ) as SetupResponse;
+    if (object.item !== undefined && object.item !== null) {
+      message.item = SetupPayloadStatus.fromJSON(object.item);
+    } else {
+      message.item = undefined;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<SetupResponse>): SetupResponse {
+    const message = { ...baseSetupResponse } as SetupResponse;
+    if (object.item !== undefined && object.item !== null) {
+      message.item = SetupPayloadStatus.fromPartial(object.item);
+    } else {
+      message.item = undefined;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: SetupResponse): unknown {
+    const obj: any = {};
+    message.item !== undefined &&
+      (obj.item = message.item
+        ? SetupPayloadStatus.toJSON(message.item)
+        : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -891,41 +1916,32 @@ export const CaptureRequest = {
   },
 };
 
-const basePaymentResponse: object = { paymentId: "", executedOn: "" };
+const basePaymentPayload: object = { paymentId: "", executedOn: "" };
 
-export const PaymentResponse = {
-  encode(message: PaymentResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.paymentErrors) {
-      PaymentError.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
+export const PaymentPayload = {
+  encode(message: PaymentPayload, writer: Writer = Writer.create()): Writer {
     if (message.paymentId !== "") {
-      writer.uint32(18).string(message.paymentId);
+      writer.uint32(10).string(message.paymentId);
     }
     if (message.executedOn !== "") {
-      writer.uint32(26).string(message.executedOn);
+      writer.uint32(18).string(message.executedOn);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PaymentResponse {
+  decode(input: Reader | Uint8Array, length?: number): PaymentPayload {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      basePaymentResponse
-    ) as PaymentResponse;
-    message.paymentErrors = [];
+      basePaymentPayload
+    ) as PaymentPayload;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.paymentErrors.push(
-            PaymentError.decode(reader, reader.uint32())
-          );
-          break;
-        case 2:
           message.paymentId = reader.string();
           break;
-        case 3:
+        case 2:
           message.executedOn = reader.string();
           break;
         default:
@@ -936,16 +1952,10 @@ export const PaymentResponse = {
     return message;
   },
 
-  fromJSON(object: any): PaymentResponse {
+  fromJSON(object: any): PaymentPayload {
     const message = globalThis.Object.create(
-      basePaymentResponse
-    ) as PaymentResponse;
-    message.paymentErrors = [];
-    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
-      for (const e of object.paymentErrors) {
-        message.paymentErrors.push(PaymentError.fromJSON(e));
-      }
-    }
+      basePaymentPayload
+    ) as PaymentPayload;
     if (object.paymentId !== undefined && object.paymentId !== null) {
       message.paymentId = String(object.paymentId);
     } else {
@@ -959,14 +1969,8 @@ export const PaymentResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<PaymentResponse>): PaymentResponse {
-    const message = { ...basePaymentResponse } as PaymentResponse;
-    message.paymentErrors = [];
-    if (object.paymentErrors !== undefined && object.paymentErrors !== null) {
-      for (const e of object.paymentErrors) {
-        message.paymentErrors.push(PaymentError.fromPartial(e));
-      }
-    }
+  fromPartial(object: DeepPartial<PaymentPayload>): PaymentPayload {
+    const message = { ...basePaymentPayload } as PaymentPayload;
     if (object.paymentId !== undefined && object.paymentId !== null) {
       message.paymentId = object.paymentId;
     } else {
@@ -980,17 +1984,194 @@ export const PaymentResponse = {
     return message;
   },
 
-  toJSON(message: PaymentResponse): unknown {
+  toJSON(message: PaymentPayload): unknown {
     const obj: any = {};
-    if (message.paymentErrors) {
-      obj.paymentErrors = message.paymentErrors.map((e) =>
-        e ? PaymentError.toJSON(e) : undefined
-      );
-    } else {
-      obj.paymentErrors = [];
-    }
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
     message.executedOn !== undefined && (obj.executedOn = message.executedOn);
+    return obj;
+  },
+};
+
+const basePaymentPayloadStatus: object = {};
+
+export const PaymentPayloadStatus = {
+  encode(
+    message: PaymentPayloadStatus,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.payload !== undefined) {
+      PaymentPayload.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentPayloadStatus {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePaymentPayloadStatus
+    ) as PaymentPayloadStatus;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = PaymentPayload.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PaymentPayloadStatus {
+    const message = globalThis.Object.create(
+      basePaymentPayloadStatus
+    ) as PaymentPayloadStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PaymentPayload.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PaymentPayloadStatus>): PaymentPayloadStatus {
+    const message = { ...basePaymentPayloadStatus } as PaymentPayloadStatus;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = PaymentPayload.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PaymentPayloadStatus): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? PaymentPayload.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basePaymentResponse: object = {};
+
+export const PaymentResponse = {
+  encode(message: PaymentResponse, writer: Writer = Writer.create()): Writer {
+    if (message.item !== undefined) {
+      PaymentPayloadStatus.encode(
+        message.item,
+        writer.uint32(10).fork()
+      ).ldelim();
+    }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(18).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PaymentResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePaymentResponse
+    ) as PaymentResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.item = PaymentPayloadStatus.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PaymentResponse {
+    const message = globalThis.Object.create(
+      basePaymentResponse
+    ) as PaymentResponse;
+    if (object.item !== undefined && object.item !== null) {
+      message.item = PaymentPayloadStatus.fromJSON(object.item);
+    } else {
+      message.item = undefined;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PaymentResponse>): PaymentResponse {
+    const message = { ...basePaymentResponse } as PaymentResponse;
+    if (object.item !== undefined && object.item !== null) {
+      message.item = PaymentPayloadStatus.fromPartial(object.item);
+    } else {
+      message.item = undefined;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PaymentResponse): unknown {
+    const obj: any = {};
+    message.item !== undefined &&
+      (obj.item = message.item
+        ? PaymentPayloadStatus.toJSON(message.item)
+        : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -1257,155 +2438,6 @@ export const Item = {
   },
 };
 
-const basePaymentError: object = {
-  killed: false,
-  code: 0,
-  cmd: "",
-  stdout: "",
-  stderr: "",
-};
-
-export const PaymentError = {
-  encode(message: PaymentError, writer: Writer = Writer.create()): Writer {
-    if (message.killed === true) {
-      writer.uint32(8).bool(message.killed);
-    }
-    if (message.code !== 0) {
-      writer.uint32(16).int32(message.code);
-    }
-    if (message.signal !== undefined) {
-      StringValue.encode(
-        { value: message.signal! },
-        writer.uint32(26).fork()
-      ).ldelim();
-    }
-    if (message.cmd !== "") {
-      writer.uint32(34).string(message.cmd);
-    }
-    if (message.stdout !== "") {
-      writer.uint32(42).string(message.stdout);
-    }
-    if (message.stderr !== "") {
-      writer.uint32(50).string(message.stderr);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): PaymentError {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(basePaymentError) as PaymentError;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.killed = reader.bool();
-          break;
-        case 2:
-          message.code = reader.int32();
-          break;
-        case 3:
-          message.signal = StringValue.decode(reader, reader.uint32()).value;
-          break;
-        case 4:
-          message.cmd = reader.string();
-          break;
-        case 5:
-          message.stdout = reader.string();
-          break;
-        case 6:
-          message.stderr = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PaymentError {
-    const message = globalThis.Object.create(basePaymentError) as PaymentError;
-    if (object.killed !== undefined && object.killed !== null) {
-      message.killed = Boolean(object.killed);
-    } else {
-      message.killed = false;
-    }
-    if (object.code !== undefined && object.code !== null) {
-      message.code = Number(object.code);
-    } else {
-      message.code = 0;
-    }
-    if (object.signal !== undefined && object.signal !== null) {
-      message.signal = String(object.signal);
-    } else {
-      message.signal = undefined;
-    }
-    if (object.cmd !== undefined && object.cmd !== null) {
-      message.cmd = String(object.cmd);
-    } else {
-      message.cmd = "";
-    }
-    if (object.stdout !== undefined && object.stdout !== null) {
-      message.stdout = String(object.stdout);
-    } else {
-      message.stdout = "";
-    }
-    if (object.stderr !== undefined && object.stderr !== null) {
-      message.stderr = String(object.stderr);
-    } else {
-      message.stderr = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<PaymentError>): PaymentError {
-    const message = { ...basePaymentError } as PaymentError;
-    if (object.killed !== undefined && object.killed !== null) {
-      message.killed = object.killed;
-    } else {
-      message.killed = false;
-    }
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = 0;
-    }
-    if (object.signal !== undefined && object.signal !== null) {
-      message.signal = object.signal;
-    } else {
-      message.signal = undefined;
-    }
-    if (object.cmd !== undefined && object.cmd !== null) {
-      message.cmd = object.cmd;
-    } else {
-      message.cmd = "";
-    }
-    if (object.stdout !== undefined && object.stdout !== null) {
-      message.stdout = object.stdout;
-    } else {
-      message.stdout = "";
-    }
-    if (object.stderr !== undefined && object.stderr !== null) {
-      message.stderr = object.stderr;
-    } else {
-      message.stderr = "";
-    }
-    return message;
-  },
-
-  toJSON(message: PaymentError): unknown {
-    const obj: any = {};
-    message.killed !== undefined && (obj.killed = message.killed);
-    message.code !== undefined && (obj.code = message.code);
-    message.signal !== undefined && (obj.signal = message.signal);
-    message.cmd !== undefined && (obj.cmd = message.cmd);
-    message.stdout !== undefined && (obj.stdout = message.stdout);
-    message.stderr !== undefined && (obj.stderr = message.stderr);
-    return obj;
-  },
-};
-
 export interface Service {
   /** Wrapper for setup_authorization in ActiveMerchant */
   SetupAuthorization(request: SetupRequest): Promise<SetupResponse>;
@@ -1428,8 +2460,8 @@ export interface ProtoMetadata {
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
-      "google/protobuf/wrappers.proto",
       "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1523,28 +2555,76 @@ export const protoMetadata: ProtoMetadata = {
       },
       {
         field: [
-          {
-            name: "payment_errors",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.payment.PaymentError",
-            jsonName: "paymentErrors",
-          },
-          { name: "token", number: 2, label: 1, type: 9, jsonName: "token" },
+          { name: "token", number: 1, label: 1, type: 9, jsonName: "token" },
           {
             name: "confirm_initiation_url",
-            number: 3,
+            number: 2,
             label: 1,
             type: 9,
             jsonName: "confirmInitiationUrl",
           },
           {
             name: "initiated_on",
-            number: 4,
+            number: 3,
             label: 1,
             type: 9,
             jsonName: "initiatedOn",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SetupPayload",
+      },
+      {
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.payment.SetupPayload",
+            jsonName: "payload",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "SetupPayloadStatus",
+      },
+      {
+        field: [
+          {
+            name: "item",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.payment.SetupPayloadStatus",
+            jsonName: "item",
+          },
+          {
+            name: "operation_status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -1665,26 +2745,74 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "payment_errors",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.payment.PaymentError",
-            jsonName: "paymentErrors",
-          },
-          {
             name: "payment_id",
-            number: 2,
+            number: 1,
             label: 1,
             type: 9,
             jsonName: "paymentId",
           },
           {
             name: "executed_on",
-            number: 3,
+            number: 2,
             label: 1,
             type: 9,
             jsonName: "executedOn",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentPayload",
+      },
+      {
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.payment.PaymentPayload",
+            jsonName: "payload",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PaymentPayloadStatus",
+      },
+      {
+        field: [
+          {
+            name: "item",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.payment.PaymentPayloadStatus",
+            jsonName: "item",
+          },
+          {
+            name: "operation_status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -1766,38 +2894,157 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "Item",
       },
-      {
-        field: [
-          { name: "killed", number: 1, label: 1, type: 8, jsonName: "killed" },
-          { name: "code", number: 2, label: 1, type: 5, jsonName: "code" },
-          {
-            name: "signal",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.StringValue",
-            jsonName: "signal",
-          },
-          { name: "cmd", number: 4, label: 1, type: 9, jsonName: "cmd" },
-          { name: "stdout", number: 5, label: 1, type: 9, jsonName: "stdout" },
-          { name: "stderr", number: 6, label: 1, type: 9, jsonName: "stderr" },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "PaymentError",
-      },
     ],
     enumType: [
       {
         value: [
           { name: "NO_PROVIDER", number: 0 },
-          { name: "PaypalExpressGateway", number: 1 },
-          { name: "AuthorizeNetGateway", number: 2 },
+          { name: "Adyen", number: 1 },
+          { name: "AuthorizeNetCIM", number: 2 },
+          { name: "AuthorizeNet", number: 3 },
+          { name: "AxcessMS", number: 4 },
+          { name: "Balanced", number: 5 },
+          { name: "BamboraAsiaPacific", number: 6 },
+          { name: "BankFrick", number: 7 },
+          { name: "Banwire", number: 8 },
+          { name: "BarclaysePDQExtraPlus", number: 9 },
+          { name: "Be2Bill", number: 10 },
+          { name: "Beanstreamcom", number: 11 },
+          { name: "BluePay", number: 12 },
+          { name: "Borgun", number: 13 },
+          { name: "Braintree", number: 14 },
+          { name: "BridgePay", number: 15 },
+          { name: "Cardknox", number: 16 },
+          { name: "CardSave", number: 17 },
+          { name: "CardStream", number: 18 },
+          { name: "Cashnet", number: 19 },
+          { name: "Cecabank", number: 20 },
+          { name: "Cenpos", number: 21 },
+          { name: "CAMSCentralAccountManagementSystem", number: 22 },
+          { name: "Checkoutcom", number: 23 },
+          { name: "Clearhaus", number: 24 },
+          { name: "Commercegate", number: 25 },
+          { name: "Conekta", number: 26 },
+          { name: "CyberSource", number: 27 },
+          { name: "DIBS", number: 28 },
+          { name: "DataCash", number: 29 },
+          { name: "Efsnet", number: 30 },
+          { name: "ElavonMyVirtualMerchant", number: 31 },
+          { name: "ePay", number: 32 },
+          { name: "EVOCanada", number: 33 },
+          { name: "eWAY", number: 34 },
+          { name: "eWAYRapid", number: 35 },
+          { name: "Exact", number: 36 },
+          { name: "Ezic", number: 37 },
+          { name: "FatZebra", number: 38 },
+          { name: "FederatedCanada", number: 39 },
+          { name: "FinansbankWebPOS", number: 40 },
+          { name: "Flo2Cash", number: 41 },
+          { name: "stPayGatewayNet", number: 42 },
+          { name: "FirstDataGlobalGatewaye4", number: 43 },
+          { name: "FirstGiving", number: 44 },
+          { name: "GarantiSanalPOS", number: 45 },
+          { name: "GlobalTransport", number: 46 },
+          { name: "HDFC", number: 47 },
+          { name: "HeartlandPaymentSystems", number: 48 },
+          { name: "iATSPayments", number: 49 },
+          { name: "InspireCommerce", number: 50 },
+          { name: "InstaPay", number: 51 },
+          { name: "IPP", number: 52 },
+          { name: "Iridium", number: 53 },
+          { name: "iTransact", number: 54 },
+          { name: "JetPay", number: 55 },
+          { name: "Komoju", number: 56 },
+          { name: "LinkPoint", number: 57 },
+          { name: "LitleCo", number: 58 },
+          { name: "maxiPago", number: 59 },
+          { name: "MerchanteSolutions", number: 60 },
+          { name: "MerchantOneGateway", number: 61 },
+          { name: "MerchantWARE", number: 62 },
+          { name: "MerchantWarrior", number: 63 },
+          { name: "Mercury", number: 64 },
+          { name: "MetricsGlobal", number: 65 },
+          { name: "MasterCardInternetGatewayServiceMiGS", number: 66 },
+          { name: "ModernPayments", number: 67 },
+          { name: "MONEI", number: 68 },
+          { name: "Moneris", number: 69 },
+          { name: "MoneyMovers", number: 70 },
+          { name: "NABTransact", number: 71 },
+          { name: "NELiXTransaX", number: 72 },
+          { name: "NetRegistry", number: 73 },
+          { name: "BBSNetaxept", number: 74 },
+          { name: "NETbilling", number: 75 },
+          { name: "NETPAYGateway", number: 76 },
+          { name: "NMI", number: 77 },
+          { name: "Ogone", number: 78 },
+          { name: "Omise", number: 79 },
+          { name: "Openpay", number: 80 },
+          { name: "OptimalPayments", number: 81 },
+          { name: "OrbitalPaymentech", number: 82 },
+          { name: "Pagarme", number: 83 },
+          { name: "PagoFacil", number: 84 },
+          { name: "PayConex", number: 85 },
+          { name: "PayGatePayXML", number: 86 },
+          { name: "PayHub", number: 87 },
+          { name: "PayJunction", number: 89 },
+          { name: "PaySecure", number: 90 },
+          { name: "PayboxDirect", number: 91 },
+          { name: "Payeezy", number: 92 },
+          { name: "Payex", number: 93 },
+          { name: "PaymentExpress", number: 94 },
+          { name: "PAYMILL", number: 95 },
+          { name: "PayPalExpressCheckout", number: 96 },
+          { name: "PayPalExpressCheckoutUK", number: 97 },
+          { name: "PayPalPayflowPro", number: 98 },
+          { name: "PayPalPaymentsProUS", number: 99 },
+          { name: "PayPalPaymentsProUK", number: 100 },
+          { name: "PayPalWebsitePaymentsProCA", number: 101 },
+          { name: "PayPalExpressCheckoutforDigitalGoods", number: 102 },
+          { name: "Payscout", number: 103 },
+          { name: "Paystation", number: 104 },
+          { name: "PayWay", number: 105 },
+          { name: "PayUIndia", number: 106 },
+          { name: "PinPayments", number: 107 },
+          { name: "PlugnPay", number: 108 },
+          { name: "Psigate", number: 109 },
+          { name: "PSLPaymentSolutions", number: 110 },
+          { name: "QuickBooksMerchantServices", number: 111 },
+          { name: "QuickBooksPayments", number: 112 },
+          { name: "QuantumGateway", number: 113 },
+          { name: "QuickPay", number: 114 },
+          { name: "Qvalent", number: 115 },
+          { name: "Raven", number: 116 },
+          { name: "Realex", number: 117 },
+          { name: "Redsys", number: 118 },
+          { name: "S5", number: 119 },
+          { name: "SagePay", number: 120 },
+          { name: "SagePaymentSolutions", number: 121 },
+          { name: "SallieMae", number: 122 },
+          { name: "SecureNet", number: 123 },
+          { name: "SecurePay", number: 124 },
+          { name: "SecurePayTech", number: 125 },
+          { name: "SecurionPay", number: 126 },
+          { name: "SkipJack", number: 127 },
+          { name: "SoEasyPay", number: 128 },
+          { name: "Spreedly", number: 129 },
+          { name: "Stripe", number: 130 },
+          { name: "Swipe", number: 131 },
+          { name: "TNS", number: 132 },
+          { name: "TransactPro", number: 133 },
+          { name: "TransFirst", number: 134 },
+          { name: "Transnational", number: 135 },
+          { name: "Trexle", number: 136 },
+          { name: "TrustCommerce", number: 137 },
+          { name: "USAePay", number: 138 },
+          { name: "VancoPaymentSolutions", number: 139 },
+          { name: "Verifi", number: 140 },
+          { name: "ViaKLIX", number: 141 },
+          { name: "WebPay", number: 142 },
+          { name: "WePay", number: 143 },
+          { name: "Wirecard", number: 144 },
+          { name: "WorldpayGlobal", number: 145 },
+          { name: "WorldpayOnline", number: 146 },
+          { name: "WorldpayUS", number: 147 },
         ],
         reservedRange: [],
         reservedName: [],
@@ -1892,62 +3139,56 @@ export const protoMetadata: ProtoMetadata = {
           leadingComments: " Request object for setup calls\n",
         },
         {
-          path: [4, 1],
-          span: [39, 0, 44, 1],
+          path: [4, 3],
+          span: [50, 0, 53, 1],
           leadingDetachedComments: [],
           leadingComments: " Response object for setup calls.\n",
         },
         {
-          path: [4, 2],
-          span: [47, 0, 55, 1],
+          path: [4, 4],
+          span: [56, 0, 64, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Request object for authorization or purchase call for cardless payment.\n",
         },
         {
-          path: [4, 3],
-          span: [58, 0, 64, 1],
+          path: [4, 5],
+          span: [67, 0, 73, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Request object for capture call for both standard and cardless payments.\n",
         },
         {
-          path: [4, 4],
-          span: [68, 0, 72, 1],
+          path: [4, 8],
+          span: [87, 0, 90, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Unified response object for authorization, purchase and capture calls\n for both standard and cardless payments.\n",
         },
         {
-          path: [4, 5],
-          span: [75, 0, 82, 1],
+          path: [4, 9],
+          span: [93, 0, 100, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Used for building ActiveMerchant::Billing::CreditCard instance.\n",
         },
         {
-          path: [4, 6],
-          span: [85, 0, 90, 1],
+          path: [4, 10],
+          span: [103, 0, 108, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Represents purchased item. Not all providers support this.\n",
         },
         {
-          path: [4, 7],
-          span: [93, 0, 100, 1],
-          leadingDetachedComments: [],
-          leadingComments: " Error details.\n",
-        },
-        {
           path: [5, 0],
-          span: [103, 0, 107, 1],
+          span: [111, 0, 259, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Possible service providers. Provider names must be exactly as in config.yml.\n",
         },
         {
           path: [5, 1],
-          span: [110, 0, 114, 1],
+          span: [262, 0, 266, 1],
           leadingDetachedComments: [],
           leadingComments: " Possible payment identifiers.\n",
         },
@@ -1959,13 +3200,16 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.payment.Provider": Provider,
     ".io.restorecommerce.payment.PaymentIdType": PaymentIdType,
     ".io.restorecommerce.payment.SetupRequest": SetupRequest,
+    ".io.restorecommerce.payment.SetupPayload": SetupPayload,
+    ".io.restorecommerce.payment.SetupPayloadStatus": SetupPayloadStatus,
     ".io.restorecommerce.payment.SetupResponse": SetupResponse,
     ".io.restorecommerce.payment.PaymentRequest": PaymentRequest,
     ".io.restorecommerce.payment.CaptureRequest": CaptureRequest,
+    ".io.restorecommerce.payment.PaymentPayload": PaymentPayload,
+    ".io.restorecommerce.payment.PaymentPayloadStatus": PaymentPayloadStatus,
     ".io.restorecommerce.payment.PaymentResponse": PaymentResponse,
     ".io.restorecommerce.payment.PaymentCard": PaymentCard,
     ".io.restorecommerce.payment.Item": Item,
-    ".io.restorecommerce.payment.PaymentError": PaymentError,
   },
   dependencies: [protoMetadata1, protoMetadata2],
 };

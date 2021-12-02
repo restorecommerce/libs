@@ -8,6 +8,10 @@ import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
+import {
+  OperationStatus,
+  protoMetadata as protoMetadata3,
+} from "../../io/restorecommerce/status";
 import { Observable } from "rxjs";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -34,6 +38,7 @@ export interface TraversalResponse {
   vertexFields: VertexFields[];
   paths?: Any;
   data?: Any;
+  operationStatus?: OperationStatus;
 }
 
 export interface VertexFields {
@@ -405,6 +410,12 @@ export const TraversalResponse = {
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(26).fork()).ldelim();
     }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(34).fork()
+      ).ldelim();
+    }
     return writer;
   },
 
@@ -428,6 +439,12 @@ export const TraversalResponse = {
           break;
         case 3:
           message.data = Any.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -457,6 +474,16 @@ export const TraversalResponse = {
     } else {
       message.data = undefined;
     }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
     return message;
   },
 
@@ -478,6 +505,16 @@ export const TraversalResponse = {
     } else {
       message.data = undefined;
     }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
     return message;
   },
 
@@ -494,6 +531,10 @@ export const TraversalResponse = {
       (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 };
@@ -1172,7 +1213,11 @@ export interface ProtoMetadata {
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
+    dependency: [
+      "google/protobuf/any.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/status.proto",
+    ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
@@ -1284,6 +1329,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".google.protobuf.Any",
             jsonName: "data",
+          },
+          {
+            name: "operation_status",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
           },
         ],
         extension: [],
@@ -1501,145 +1554,145 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [6, 0, 8, 1],
+          span: [7, 0, 9, 1],
           leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
           path: [4, 0, 8, 0],
-          span: [16, 2, 19, 3],
+          span: [17, 2, 20, 3],
           leadingDetachedComments: [],
           leadingComments: " Document handle either _id or _key value\n",
         },
         {
           path: [4, 0, 2, 2],
-          span: [22, 2, 19],
+          span: [23, 2, 19],
           leadingDetachedComments: [],
           leadingComments: " Filter based on fieldName|operation, value|list\n",
         },
         {
           path: [4, 3, 2, 0],
-          span: [44, 1, 17],
+          span: [46, 1, 17],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 1],
-          span: [45, 1, 22],
+          span: [47, 1, 22],
           leadingDetachedComments: [],
           trailingComments: " either inbound or outbound\n",
         },
         {
           path: [4, 3, 2, 2],
-          span: [46, 1, 22],
+          span: [48, 1, 22],
           leadingDetachedComments: [],
           trailingComments:
             " ANDed with any existing filters): visits only nodes in at least the given depth\n",
         },
         {
           path: [4, 3, 2, 3],
-          span: [47, 1, 25],
+          span: [49, 1, 25],
           leadingDetachedComments: [],
           trailingComments: " id of the startVertex\n",
         },
         {
           path: [4, 3, 2, 4],
-          span: [48, 1, 20],
+          span: [50, 1, 20],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 5],
-          span: [49, 1, 23],
+          span: [51, 1, 23],
           leadingDetachedComments: [],
           trailingComments:
             ' item iteration order can be "forward" or "backward"\n',
         },
         {
           path: [4, 3, 2, 6],
-          span: [50, 1, 21],
+          span: [52, 1, 21],
           leadingDetachedComments: [],
           trailingComments:
             ' traversal strategy can be "depthfirst" or "breadthfirst"\n',
         },
         {
           path: [4, 3, 2, 7],
-          span: [51, 1, 28],
+          span: [53, 1, 28],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 8],
-          span: [52, 1, 17],
+          span: [54, 1, 17],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 9],
-          span: [53, 1, 28],
+          span: [55, 1, 28],
           leadingDetachedComments: [],
           trailingComments: " maximum number of iterations in each traversal\n",
         },
         {
           path: [4, 3, 2, 10],
-          span: [54, 1, 23],
+          span: [56, 1, 23],
           leadingDetachedComments: [],
           trailingComments:
             " ANDed with any existing filters visits only nodes in at most the given depth\n",
         },
         {
           path: [4, 3, 2, 11],
-          span: [55, 1, 28],
+          span: [57, 1, 28],
           leadingDetachedComments: [],
           trailingComments:
             " specifies uniqueness for vertices and edges visited\n",
         },
         {
           path: [4, 3, 2, 12],
-          span: [56, 1, 19],
+          span: [58, 1, 19],
           leadingDetachedComments: [],
           trailingComments:
             '  "preorder", "postorder" or "preorder-expander"\n',
         },
         {
           path: [4, 3, 2, 13],
-          span: [57, 1, 24],
+          span: [59, 1, 24],
           leadingDetachedComments: [],
           trailingComments: " name of graph that contains the edges\n",
         },
         {
           path: [4, 3, 2, 14],
-          span: [58, 1, 33],
+          span: [60, 1, 33],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 3, 2, 15],
-          span: [59, 1, 29],
+          span: [61, 1, 29],
           leadingDetachedComments: [],
           trailingComments: " name of the collection that contains the edges\n",
         },
         {
           path: [4, 4, 2, 0],
-          span: [64, 2, 20],
+          span: [66, 2, 20],
           leadingDetachedComments: [],
           trailingComments: " exclude these vertices\n",
         },
         {
           path: [4, 5, 2, 0],
-          span: [68, 2, 18],
+          span: [70, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " expand these edges\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [73, 2, 22],
+          span: [75, 2, 22],
           leadingDetachedComments: [],
           trailingComments: ' "none"|"global"|"path" for unique vertices\n',
         },
         {
           path: [4, 6, 2, 1],
-          span: [74, 2, 19],
+          span: [76, 2, 19],
           leadingDetachedComments: [],
           trailingComments: ' "none"|"global"|"path" for unique edges\n',
         },
@@ -1657,7 +1710,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.graph.Expander": Expander,
     ".io.restorecommerce.graph.Uniqueness": Uniqueness,
   },
-  dependencies: [protoMetadata1, protoMetadata2],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
 };
 
 declare var self: any | undefined;

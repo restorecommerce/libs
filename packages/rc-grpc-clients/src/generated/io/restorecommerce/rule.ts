@@ -23,6 +23,10 @@ import {
   protoMetadata as protoMetadata4,
   Attribute,
 } from "../../io/restorecommerce/attribute";
+import {
+  protoMetadata as protoMetadata6,
+  FilterOp,
+} from "../../io/restorecommerce/filter";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.rule";
@@ -113,14 +117,8 @@ export interface RuleResponse {
  * The retrieved data can then be passed onto the request's context
  */
 export interface ContextQuery {
-  filters: ContextQuery_Filter[];
+  filters: FilterOp[];
   query: string;
-}
-
-export interface ContextQuery_Filter {
-  field: string;
-  operation: string;
-  value: string;
 }
 
 const baseTarget: object = {};
@@ -913,7 +911,7 @@ const baseContextQuery: object = { query: "" };
 export const ContextQuery = {
   encode(message: ContextQuery, writer: Writer = Writer.create()): Writer {
     for (const v of message.filters) {
-      ContextQuery_Filter.encode(v!, writer.uint32(10).fork()).ldelim();
+      FilterOp.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.query !== "") {
       writer.uint32(18).string(message.query);
@@ -930,9 +928,7 @@ export const ContextQuery = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.filters.push(
-            ContextQuery_Filter.decode(reader, reader.uint32())
-          );
+          message.filters.push(FilterOp.decode(reader, reader.uint32()));
           break;
         case 2:
           message.query = reader.string();
@@ -950,7 +946,7 @@ export const ContextQuery = {
     message.filters = [];
     if (object.filters !== undefined && object.filters !== null) {
       for (const e of object.filters) {
-        message.filters.push(ContextQuery_Filter.fromJSON(e));
+        message.filters.push(FilterOp.fromJSON(e));
       }
     }
     if (object.query !== undefined && object.query !== null) {
@@ -966,7 +962,7 @@ export const ContextQuery = {
     message.filters = [];
     if (object.filters !== undefined && object.filters !== null) {
       for (const e of object.filters) {
-        message.filters.push(ContextQuery_Filter.fromPartial(e));
+        message.filters.push(FilterOp.fromPartial(e));
       }
     }
     if (object.query !== undefined && object.query !== null) {
@@ -981,108 +977,12 @@ export const ContextQuery = {
     const obj: any = {};
     if (message.filters) {
       obj.filters = message.filters.map((e) =>
-        e ? ContextQuery_Filter.toJSON(e) : undefined
+        e ? FilterOp.toJSON(e) : undefined
       );
     } else {
       obj.filters = [];
     }
     message.query !== undefined && (obj.query = message.query);
-    return obj;
-  },
-};
-
-const baseContextQuery_Filter: object = { field: "", operation: "", value: "" };
-
-export const ContextQuery_Filter = {
-  encode(
-    message: ContextQuery_Filter,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.field !== "") {
-      writer.uint32(10).string(message.field);
-    }
-    if (message.operation !== "") {
-      writer.uint32(18).string(message.operation);
-    }
-    if (message.value !== "") {
-      writer.uint32(26).string(message.value);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): ContextQuery_Filter {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContextQuery_Filter
-    ) as ContextQuery_Filter;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.field = reader.string();
-          break;
-        case 2:
-          message.operation = reader.string();
-          break;
-        case 3:
-          message.value = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ContextQuery_Filter {
-    const message = globalThis.Object.create(
-      baseContextQuery_Filter
-    ) as ContextQuery_Filter;
-    if (object.field !== undefined && object.field !== null) {
-      message.field = String(object.field);
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = String(object.operation);
-    } else {
-      message.operation = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ContextQuery_Filter>): ContextQuery_Filter {
-    const message = { ...baseContextQuery_Filter } as ContextQuery_Filter;
-    if (object.field !== undefined && object.field !== null) {
-      message.field = object.field;
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = object.operation;
-    } else {
-      message.operation = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
-    return message;
-  },
-
-  toJSON(message: ContextQuery_Filter): unknown {
-    const obj: any = {};
-    message.field !== undefined && (obj.field = message.field);
-    message.operation !== undefined && (obj.operation = message.operation);
-    message.value !== undefined && (obj.value = message.value);
     return obj;
   },
 };
@@ -1109,6 +1009,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/filter.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1372,47 +1273,13 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.rule.ContextQuery.Filter",
+            typeName: ".io.restorecommerce.filter.FilterOp",
             jsonName: "filters",
           },
           { name: "query", number: 2, label: 1, type: 9, jsonName: "query" },
         ],
         extension: [],
-        nestedType: [
-          {
-            field: [
-              {
-                name: "field",
-                number: 1,
-                label: 1,
-                type: 9,
-                jsonName: "field",
-              },
-              {
-                name: "operation",
-                number: 2,
-                label: 1,
-                type: 9,
-                jsonName: "operation",
-              },
-              {
-                name: "value",
-                number: 3,
-                label: 1,
-                type: 9,
-                jsonName: "value",
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            reservedRange: [],
-            reservedName: [],
-            name: "Filter",
-          },
-        ],
+        nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
@@ -1471,31 +1338,31 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [14, 0, 18, 1],
+          span: [15, 0, 19, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Target specified by a Rule or a Request.\n",
         },
         {
           path: [5, 0],
-          span: [23, 0, 26, 1],
+          span: [24, 0, 27, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n Resulting effect from a Policy or Rule.\n",
         },
         {
           path: [4, 1, 2, 6],
-          span: [35, 2, 23],
+          span: [36, 2, 23],
           leadingDetachedComments: [],
           trailingComments: " JS code\n",
         },
         {
           path: [4, 2],
-          span: [40, 0, 47, 1],
+          span: [41, 0, 48, 1],
           leadingDetachedComments: [],
           trailingComments: " used for `whatIsAllowed` / reverse queries\n",
         },
         {
           path: [4, 6],
-          span: [69, 0, 77, 1],
+          span: [70, 0, 73, 1],
           leadingDetachedComments: [],
           leadingComments:
             " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
@@ -1513,7 +1380,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.rule.RuleListResponse": RuleListResponse,
     ".io.restorecommerce.rule.RuleResponse": RuleResponse,
     ".io.restorecommerce.rule.ContextQuery": ContextQuery,
-    ".io.restorecommerce.rule.ContextQuery.Filter": ContextQuery_Filter,
   },
   dependencies: [
     protoMetadata1,
@@ -1521,6 +1387,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
 };
 

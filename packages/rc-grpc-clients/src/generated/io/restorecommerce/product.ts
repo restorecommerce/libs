@@ -23,6 +23,10 @@ import {
   protoMetadata as protoMetadata3,
   Image,
 } from "../../io/restorecommerce/image";
+import {
+  protoMetadata as protoMetadata6,
+  Attribute,
+} from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product";
@@ -44,7 +48,7 @@ export interface Product {
   taricCode: string;
   prototype?: Identifier | undefined;
   category?: Identifier | undefined;
-  taxTypeId: string[];
+  taxId: string[];
   variants: Variant[];
   gtin: string;
 }
@@ -80,12 +84,8 @@ export interface Variant {
   salePrice: number;
   image: Image[];
   stockKeepingUnit: string;
-  attributes: VariantAttribute[];
-}
-
-export interface VariantAttribute {
-  key: string;
-  values: string[];
+  templateVariant: string;
+  attributes: Attribute[];
 }
 
 export interface Bundle {
@@ -240,7 +240,7 @@ const baseProduct: object = {
   description: "",
   manufacturerId: "",
   taricCode: "",
-  taxTypeId: "",
+  taxId: "",
   gtin: "",
 };
 
@@ -267,7 +267,7 @@ export const Product = {
     if (message.category !== undefined) {
       Identifier.encode(message.category, writer.uint32(58).fork()).ldelim();
     }
-    for (const v of message.taxTypeId) {
+    for (const v of message.taxId) {
       writer.uint32(66).string(v!);
     }
     for (const v of message.variants) {
@@ -283,7 +283,7 @@ export const Product = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseProduct) as Product;
-    message.taxTypeId = [];
+    message.taxId = [];
     message.variants = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -310,7 +310,7 @@ export const Product = {
           message.category = Identifier.decode(reader, reader.uint32());
           break;
         case 8:
-          message.taxTypeId.push(reader.string());
+          message.taxId.push(reader.string());
           break;
         case 9:
           message.variants.push(Variant.decode(reader, reader.uint32()));
@@ -328,7 +328,7 @@ export const Product = {
 
   fromJSON(object: any): Product {
     const message = globalThis.Object.create(baseProduct) as Product;
-    message.taxTypeId = [];
+    message.taxId = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -365,9 +365,9 @@ export const Product = {
     } else {
       message.category = undefined;
     }
-    if (object.taxTypeId !== undefined && object.taxTypeId !== null) {
-      for (const e of object.taxTypeId) {
-        message.taxTypeId.push(String(e));
+    if (object.taxId !== undefined && object.taxId !== null) {
+      for (const e of object.taxId) {
+        message.taxId.push(String(e));
       }
     }
     if (object.variants !== undefined && object.variants !== null) {
@@ -385,7 +385,7 @@ export const Product = {
 
   fromPartial(object: DeepPartial<Product>): Product {
     const message = { ...baseProduct } as Product;
-    message.taxTypeId = [];
+    message.taxId = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
@@ -422,9 +422,9 @@ export const Product = {
     } else {
       message.category = undefined;
     }
-    if (object.taxTypeId !== undefined && object.taxTypeId !== null) {
-      for (const e of object.taxTypeId) {
-        message.taxTypeId.push(e);
+    if (object.taxId !== undefined && object.taxId !== null) {
+      for (const e of object.taxId) {
+        message.taxId.push(e);
       }
     }
     if (object.variants !== undefined && object.variants !== null) {
@@ -457,10 +457,10 @@ export const Product = {
       (obj.category = message.category
         ? Identifier.toJSON(message.category)
         : undefined);
-    if (message.taxTypeId) {
-      obj.taxTypeId = message.taxTypeId.map((e) => e);
+    if (message.taxId) {
+      obj.taxId = message.taxId.map((e) => e);
     } else {
-      obj.taxTypeId = [];
+      obj.taxId = [];
     }
     if (message.variants) {
       obj.variants = message.variants.map((e) =>
@@ -843,6 +843,7 @@ const baseVariant: object = {
   sale: false,
   salePrice: 0,
   stockKeepingUnit: "",
+  templateVariant: "",
 };
 
 export const Variant = {
@@ -874,8 +875,11 @@ export const Variant = {
     if (message.stockKeepingUnit !== "") {
       writer.uint32(74).string(message.stockKeepingUnit);
     }
+    if (message.templateVariant !== "") {
+      writer.uint32(82).string(message.templateVariant);
+    }
     for (const v of message.attributes) {
-      VariantAttribute.encode(v!, writer.uint32(82).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -917,9 +921,10 @@ export const Variant = {
           message.stockKeepingUnit = reader.string();
           break;
         case 10:
-          message.attributes.push(
-            VariantAttribute.decode(reader, reader.uint32())
-          );
+          message.templateVariant = reader.string();
+          break;
+        case 11:
+          message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -981,9 +986,17 @@ export const Variant = {
     } else {
       message.stockKeepingUnit = "";
     }
+    if (
+      object.templateVariant !== undefined &&
+      object.templateVariant !== null
+    ) {
+      message.templateVariant = String(object.templateVariant);
+    } else {
+      message.templateVariant = "";
+    }
     if (object.attributes !== undefined && object.attributes !== null) {
       for (const e of object.attributes) {
-        message.attributes.push(VariantAttribute.fromJSON(e));
+        message.attributes.push(Attribute.fromJSON(e));
       }
     }
     return message;
@@ -1041,9 +1054,17 @@ export const Variant = {
     } else {
       message.stockKeepingUnit = "";
     }
+    if (
+      object.templateVariant !== undefined &&
+      object.templateVariant !== null
+    ) {
+      message.templateVariant = object.templateVariant;
+    } else {
+      message.templateVariant = "";
+    }
     if (object.attributes !== undefined && object.attributes !== null) {
       for (const e of object.attributes) {
-        message.attributes.push(VariantAttribute.fromPartial(e));
+        message.attributes.push(Attribute.fromPartial(e));
       }
     }
     return message;
@@ -1066,95 +1087,14 @@ export const Variant = {
     }
     message.stockKeepingUnit !== undefined &&
       (obj.stockKeepingUnit = message.stockKeepingUnit);
+    message.templateVariant !== undefined &&
+      (obj.templateVariant = message.templateVariant);
     if (message.attributes) {
       obj.attributes = message.attributes.map((e) =>
-        e ? VariantAttribute.toJSON(e) : undefined
+        e ? Attribute.toJSON(e) : undefined
       );
     } else {
       obj.attributes = [];
-    }
-    return obj;
-  },
-};
-
-const baseVariantAttribute: object = { key: "", values: "" };
-
-export const VariantAttribute = {
-  encode(message: VariantAttribute, writer: Writer = Writer.create()): Writer {
-    if (message.key !== "") {
-      writer.uint32(10).string(message.key);
-    }
-    for (const v of message.values) {
-      writer.uint32(18).string(v!);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): VariantAttribute {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseVariantAttribute
-    ) as VariantAttribute;
-    message.values = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.key = reader.string();
-          break;
-        case 2:
-          message.values.push(reader.string());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): VariantAttribute {
-    const message = globalThis.Object.create(
-      baseVariantAttribute
-    ) as VariantAttribute;
-    message.values = [];
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.values !== undefined && object.values !== null) {
-      for (const e of object.values) {
-        message.values.push(String(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<VariantAttribute>): VariantAttribute {
-    const message = { ...baseVariantAttribute } as VariantAttribute;
-    message.values = [];
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.values !== undefined && object.values !== null) {
-      for (const e of object.values) {
-        message.values.push(e);
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: VariantAttribute): unknown {
-    const obj: any = {};
-    message.key !== undefined && (obj.key = message.key);
-    if (message.values) {
-      obj.values = message.values.map((e) => e);
-    } else {
-      obj.values = [];
     }
     return obj;
   },
@@ -1470,6 +1410,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/image.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/attribute.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1557,13 +1498,7 @@ export const protoMetadata: ProtoMetadata = {
             oneofIndex: 0,
             jsonName: "category",
           },
-          {
-            name: "tax_type_id",
-            number: 8,
-            label: 3,
-            type: 9,
-            jsonName: "taxTypeId",
-          },
+          { name: "tax_id", number: 8, label: 3, type: 9, jsonName: "taxId" },
           {
             name: "variants",
             number: 9,
@@ -1735,11 +1670,18 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "stockKeepingUnit",
           },
           {
-            name: "attributes",
+            name: "template_variant",
             number: 10,
+            label: 1,
+            type: 9,
+            jsonName: "templateVariant",
+          },
+          {
+            name: "attributes",
+            number: 11,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.product.VariantAttribute",
+            typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "attributes",
           },
         ],
@@ -1751,20 +1693,6 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "Variant",
-      },
-      {
-        field: [
-          { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
-          { name: "values", number: 2, label: 3, type: 9, jsonName: "values" },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "VariantAttribute",
       },
       {
         field: [
@@ -1882,7 +1810,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [19, 0, 27, 1],
+          span: [20, 0, 28, 1],
           leadingDetachedComments: [],
           leadingComments: " Product resource\n",
         },
@@ -1898,7 +1826,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product.ProductListResponse": ProductListResponse,
     ".io.restorecommerce.product.ProductResponse": ProductResponse,
     ".io.restorecommerce.product.Variant": Variant,
-    ".io.restorecommerce.product.VariantAttribute": VariantAttribute,
     ".io.restorecommerce.product.Bundle": Bundle,
     ".io.restorecommerce.product.BundleProduct": BundleProduct,
     ".io.restorecommerce.product.Deleted": Deleted,
@@ -1909,6 +1836,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
 };
 

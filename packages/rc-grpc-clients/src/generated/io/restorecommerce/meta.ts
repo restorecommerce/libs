@@ -3,6 +3,7 @@ import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descri
 import {
   protoMetadata as protoMetadata1,
   Attribute,
+  AttributeObj,
 } from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
 
@@ -16,6 +17,7 @@ export interface Meta {
   /** ID from last User who modified it */
   modifiedBy: string;
   owner: Attribute[];
+  acl: AttributeObj[];
 }
 
 const baseMeta: object = { created: 0, modified: 0, modifiedBy: "" };
@@ -34,6 +36,9 @@ export const Meta = {
     for (const v of message.owner) {
       Attribute.encode(v!, writer.uint32(34).fork()).ldelim();
     }
+    for (const v of message.acl) {
+      AttributeObj.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -42,6 +47,7 @@ export const Meta = {
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseMeta) as Meta;
     message.owner = [];
+    message.acl = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -57,6 +63,9 @@ export const Meta = {
         case 4:
           message.owner.push(Attribute.decode(reader, reader.uint32()));
           break;
+        case 5:
+          message.acl.push(AttributeObj.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -68,6 +77,7 @@ export const Meta = {
   fromJSON(object: any): Meta {
     const message = globalThis.Object.create(baseMeta) as Meta;
     message.owner = [];
+    message.acl = [];
     if (object.created !== undefined && object.created !== null) {
       message.created = Number(object.created);
     } else {
@@ -88,12 +98,18 @@ export const Meta = {
         message.owner.push(Attribute.fromJSON(e));
       }
     }
+    if (object.acl !== undefined && object.acl !== null) {
+      for (const e of object.acl) {
+        message.acl.push(AttributeObj.fromJSON(e));
+      }
+    }
     return message;
   },
 
   fromPartial(object: DeepPartial<Meta>): Meta {
     const message = { ...baseMeta } as Meta;
     message.owner = [];
+    message.acl = [];
     if (object.created !== undefined && object.created !== null) {
       message.created = object.created;
     } else {
@@ -114,6 +130,11 @@ export const Meta = {
         message.owner.push(Attribute.fromPartial(e));
       }
     }
+    if (object.acl !== undefined && object.acl !== null) {
+      for (const e of object.acl) {
+        message.acl.push(AttributeObj.fromPartial(e));
+      }
+    }
     return message;
   },
 
@@ -128,6 +149,13 @@ export const Meta = {
       );
     } else {
       obj.owner = [];
+    }
+    if (message.acl) {
+      obj.acl = message.acl.map((e) =>
+        e ? AttributeObj.toJSON(e) : undefined
+      );
+    } else {
+      obj.acl = [];
     }
     return obj;
   },
@@ -175,6 +203,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "owner",
+          },
+          {
+            name: "acl",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.AttributeObj",
+            jsonName: "acl",
           },
         ],
         extension: [],

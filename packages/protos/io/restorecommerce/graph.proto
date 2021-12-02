@@ -2,6 +2,7 @@ syntax = "proto3";
 package io.restorecommerce.graph;
 import "google/protobuf/any.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
 
 // Service provides the CRUD operations
 service Service {
@@ -33,6 +34,7 @@ message TraversalResponse {
   repeated VertexFields vertex_fields = 1;
   google.protobuf.Any paths = 2;
   google.protobuf.Any data = 3;
+  io.restorecommerce.status.OperationStatus operation_status = 4;
 }
 
 message VertexFields {

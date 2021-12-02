@@ -27,6 +27,7 @@ export interface GrpcClientConfig {
   proto?: GrpcClientLoadProtoConfig;
   omittedFields?: any;
   observable?: boolean;
+  bufferFields?: any;
 }
 
 // to handle dropping client connection errors - https://github.com/grpc/grpc-node/issues/1907

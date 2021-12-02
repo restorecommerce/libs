@@ -16,13 +16,16 @@ import {
 import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping } from "./registry";
-import { capitalizeProtoName, convertyCamelToSnakeCase } from "./utils";
+import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields } from "./utils";
 import { Readable } from "stream";
 import {
   DescriptorProto,
   MethodDescriptorProto,
   ServiceDescriptorProto
 } from "ts-proto-descriptors/google/protobuf/descriptor";
+import * as stream from "stream";
+import * as _ from 'lodash';
+import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 const Mutate = ['Create', 'Update', 'Upsert'];
@@ -142,7 +145,7 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, key: NS, serviceKey: B): { [key in keyof SRV]: R } => {
+    (service: ServiceDescriptorProto, key: NS, serviceKey: B, grpcClientConfig: GrpcClientConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -192,11 +195,55 @@ export const getGQLResolverFunctions =
             }
           }
 
-          // TODO Handle client-stream methods
           const result = await service[method.name!](req);
+          const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
+          if (result instanceof stream.Readable) {
+            let operationStatus = { code: 0, message: '' };
+            let aggregatedResponse = await new Promise((resolve, reject) => {
+              let response: any = {};
+              result.on('data', (chunk) => {
+                const chunkObj = _.cloneDeep(chunk);
+                if (!response) {
+                  response = chunk;
+                } else {
+                  Object.assign(response, chunk);
+                }
+                const existingBufferFields = _.intersection(Object.keys(chunk), bufferFields);
+                for (let bufferField of existingBufferFields) {
+                  if (chunkObj[bufferField] && chunkObj[bufferField].value) {
+                    if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
+                      response[bufferField].value = [];
+                    }
+                    let data = JSON.parse(chunkObj[bufferField].value.toString());
+                    if (_.isArray(data)) {
+                      for (let dataObj of data) {
+                        response[bufferField].value.push(dataObj);
+                      }
+                    } else {
+                      response[bufferField].value.push(data);
+                    }
+                  }
+                }
+              });
+              result.on('error', (err) => {
+                console.error(err);
+                operationStatus.code = (err as any).code ? (err as any).code : 500;
+                operationStatus.message = err.message;
+              });
+              result.on('end', () => {
+                if (_.isEmpty(operationStatus.message)) {
+                  operationStatus.code = 200;
+                  operationStatus.message = 'success';
+                }
+                resolve(response);
+              });
+            });
+            return { details: aggregatedResponse, operationStatus };
+          }
+          let items = decodeBufferFields(result.items, bufferFields);
           return {
             details: {
-              items: result.items, // items includes both payload and individual status
+              items: items, // items includes both payload and individual status
               operationStatus: result.operationStatus // overall status
             },
           };
@@ -272,10 +319,80 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     if (authToken && authToken.startsWith('Bearer ')) {
       subject.token = authToken.split(' ')[1];
     }
+
+    // TODO identify google.protobufAny from config
+    for (let item of input.items) {
+      let keys = Object.keys(item);
+      for (let key of keys) {
+        if (item[key] && item[key].value) {
+          item[key] = { typeUrl: '', value: Buffer.from(JSON.stringify(item.data.value)) };
+        }
+      }
+    }
+
     const result = await service[method]({
       items: input?.items,
       subject
     });
+    // TODO read from grpcClientConfig
+    // const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
+    const bufferFields: any = [];
+    if (result instanceof stream.Readable) {
+      let operationStatus = { code: 0, message: '' };
+      let aggregatedResponse = await new Promise((resolve, reject) => {
+        let response: any = {};
+        result.on('data', (chunk) => {
+          const chunkObj = _.cloneDeep(chunk);
+          if (!response) {
+            response = chunk;
+          } else {
+            Object.assign(response, chunk);
+          }
+          const existingBufferFields = _.intersection(Object.keys(chunk), bufferFields);
+          for (let bufferField of existingBufferFields) {
+            if (chunkObj[bufferField] && chunkObj[bufferField].value) {
+              if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
+                response[bufferField].value = [];
+              }
+              let data = JSON.parse(chunkObj[bufferField].value.toString());
+              if (_.isArray(data)) {
+                for (let dataObj of data) {
+                  response[bufferField].value.push(dataObj);
+                }
+              } else {
+                response[bufferField].value.push(data);
+              }
+            }
+          }
+        });
+        result.on('error', (err) => {
+          console.error(err);
+          operationStatus.code = (err as any).code ? (err as any).code : 500;
+          operationStatus.message = err.message;
+        });
+        result.on('end', () => {
+          if (_.isEmpty(operationStatus.message)) {
+            operationStatus.code = 200;
+            operationStatus.message = 'success';
+          }
+          resolve(response);
+        });
+      });
+      return { details: { items: aggregatedResponse, operationStatus } };
+    }
+    // TODO identify google.protobufAny from config
+    // let items = decodeBufferFields(result.items, bufferFields);
+    for (let item of result.items) {
+      if (item && item.payload) {
+        const keys = Object.keys(item.payload);
+        for (let bufferField of keys) {
+          if (item.payload[bufferField] && item.payload[bufferField].value) {
+            item.payload[bufferField].value = JSON.parse(item.payload[bufferField].value.toString());
+          }
+        }
+      }
+    }
+
     return {
       details: {
         items: result.items, // items includes both payload and individual status
@@ -297,7 +414,8 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
 };
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, mutation: boolean = false, subspace: string | undefined = undefined) => {
+  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+    mutation: boolean = false, subspace: string | undefined = undefined) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -569,7 +687,7 @@ export const getAndGenerateResolvers =
     (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
     const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg);
 
-    const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace);
+    const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg.client);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace);
@@ -604,7 +722,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
   subServices.forEach((sub) => {
     const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config);
 
-    const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace);
+    const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config.client);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(config.root ? sub.name : namespace, k, func[k], !queries.has(k) && mutations.has(k), config.root ? undefined : sub.name);

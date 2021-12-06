@@ -9,6 +9,7 @@ export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
   file?: RestoreLoggerFileTransportOptions;
   elasticsearch?: RestoreLoggerElasticsearchTransportOptions;
+  esTransformer?: Function,
   loggerName?: string;
   sourcePointer?: boolean;
 }
@@ -35,7 +36,7 @@ export function createLogger(opts: RestoreLoggerOptions = {}) {
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer });
+    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer, esTransformer: opts.esTransformer });
     esTransport.on('error', (error) => {
       console.error('Elasticsearch indexing error', error);
     });

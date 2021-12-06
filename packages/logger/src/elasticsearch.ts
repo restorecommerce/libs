@@ -18,7 +18,7 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
   */
   return (logData: any) => {
     const source = opts.source; // needed, as it will be read internally
-    const transformed: any = {};
+    let transformed: any = {};
 
     if (global[globalLoggerCtxKey]) {
       const store = global[globalLoggerCtxKey].getStore();
@@ -47,11 +47,11 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     transformed.severity = logData.level;
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
-      transformed.fields = { 0: transformed.fields };
+      transformed.fields ={ message: transformed.fields };
     }
 
     if (opts.esTransformer && typeof opts.esTransformer === 'function') {
-      opts.esTransformer(transformed);
+      transformed = opts.esTransformer(transformed);
     }
 
     return transformed;

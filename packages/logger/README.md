@@ -13,6 +13,7 @@ Opinionated wrapper and configurator for the
 The following transports are supported:
 
 - [Elasticsearch transport](https://github.com/vanthome/winston-elasticsearch) using a local transformer function and ES data streams.
+- [index template](elasticsearch-index-template.json) which is applied automatically.
 - Console (Winston built-in transport).
 - File (Winston built-in transport).
 

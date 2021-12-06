@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.9...@restorecommerce/protos@0.4.10) (2021-12-06)
+
+
+### Bug Fixes
+
+* **protos:** fixed import and reference errors ([6efb6b1](https://github.com/restorecommerce/libs/commit/6efb6b1954bf6449f8c58e267f959b22c45e8066))
+* **protos:** updated graph proto to include operation status ([dcf0a39](https://github.com/restorecommerce/libs/commit/dcf0a3920bcfd098efdd42d6186864359025b1fd))
+
+
+
+
+
 ## [0.4.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.8...@restorecommerce/protos@0.4.9) (2021-11-08)
 
 

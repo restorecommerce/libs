@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.34](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.33...@restorecommerce/facade@0.1.34) (2021-12-06)
+
+
+### Bug Fixes
+
+* **facade:** Added streaming response handling for mutations and queries. ([199db2d](https://github.com/restorecommerce/libs/commit/199db2d51f5a1d08ec2af09579df9c742ae0bbb1))
+
+
+
+
+
 ## [0.1.33](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.32...@restorecommerce/facade@0.1.33) (2021-11-08)
 
 **Note:** Version bump only for package @restorecommerce/facade

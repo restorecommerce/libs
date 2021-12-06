@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.10...@restorecommerce/grpc-client@0.2.11) (2021-12-06)
+
+
+### Bug Fixes
+
+* **grpc-client:** make bufferFields in client config configurable ([7050e0b](https://github.com/restorecommerce/libs/commit/7050e0b2cc0ef9c6909c59b17da32349a6a4fea8))
+
+
+
+
+
 ## [0.2.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.9...@restorecommerce/grpc-client@0.2.10) (2021-09-21)
 
 

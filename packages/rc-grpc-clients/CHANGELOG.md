@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.12...@restorecommerce/rc-grpc-clients@0.2.13) (2021-12-06)
+
+
+### Bug Fixes
+
+* **rc-grpc-clients:** regenrated typings for updated protos ([09c5244](https://github.com/restorecommerce/libs/commit/09c52447f98d84a8d7c2f655e311cd577eb3b0a7))
+
+
+
+
+
 ## [0.2.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.2.11...@restorecommerce/rc-grpc-clients@0.2.12) (2021-11-08)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.4.19...@restorecommerce/acs-client@0.6.0) (2021-12-06)
+
+
+### Bug Fixes
+
+* **acs-client:** fix typings for acs-client ([5aff215](https://github.com/restorecommerce/libs/commit/5aff215db38af54f92eee2f2072a5878aa3cc346))
+
+
+### Features
+
+* **acs-client:** making subject optional in ACSClientContext as it will be set to unauthenticated if its not passed (restructured acs-client to support multiple entities) ([0d97241](https://github.com/restorecommerce/libs/commit/0d97241ae21a0860fc850cc61b21e378db974cfe))
+
+
+
+
+
 ## 0.5.3 (November 23rd, 2021)
 
 - fix filter value from condition for postgres DB

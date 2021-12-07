@@ -6,6 +6,7 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/rule.proto";
 import "io/restorecommerce/policy_set.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/attribute.proto";
 
 /**
 * Access control service interface.
@@ -32,14 +33,15 @@ message Response {
     INDETERMINATE = 3;
   }
   Decision decision = 1;
-  string obligation = 2;
+  repeated io.restorecommerce.attribute.Attribute obligation = 2;
   bool evaluation_cacheable = 3;
   io.restorecommerce.status.OperationStatus operation_status = 4;
 }
 
 message ReverseQuery {
   repeated io.restorecommerce.policy_set.PolicySetRQ policy_sets = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  repeated io.restorecommerce.attribute.Attribute obligation = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 service Service {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.0...@restorecommerce/acs-client@0.6.1) (2021-12-09)
+
+
+### Bug Fixes
+
+* **acs-client:** added obligation response mapping ([3cff491](https://github.com/restorecommerce/libs/commit/3cff491f004ae4324ba5cf9d1d2eef5bef1016df))
+
+
+
+
+
 # [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.4.19...@restorecommerce/acs-client@0.6.0) (2021-12-06)
 
 

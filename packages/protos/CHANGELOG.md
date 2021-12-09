@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.10...@restorecommerce/protos@0.4.11) (2021-12-09)
+
+
+### Bug Fixes
+
+* **protos:** updated access_control proto to include `obligation` in isAllowed and whatIsAllowed response. ([c2af601](https://github.com/restorecommerce/libs/commit/c2af60104bf8cbcde9296ee99a374b6bdddb132a))
+
+
+
+
+
 ## [0.4.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.9...@restorecommerce/protos@0.4.10) (2021-12-06)
 
 

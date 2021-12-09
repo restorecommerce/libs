@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.35](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.34...@restorecommerce/facade@0.1.35) (2021-12-09)
+
+
+### Bug Fixes
+
+* **facade:** updated generated schema for facade module due to changes in proto files. ([c57d5fa](https://github.com/restorecommerce/libs/commit/c57d5faaea1dbd287727f7c7678e6cfe34dba92d))
+
+
+
+
+
 ## [0.1.34](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.33...@restorecommerce/facade@0.1.34) (2021-12-06)
 
 

@@ -89,6 +89,67 @@ export const permitAddressRule = {
   effect: 'PERMIT'
 };
 
+export const permitAddressRuleProperty = {
+  id: 'address_rule_id',
+  target: {
+    subject: [
+      {
+        'id': 'urn:restorecommerce:acs:names:role',
+        'value': 'test-role'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+        value: 'urn:test:acs:model:organization.Organization'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',
+        value: 'true'
+      }],
+    resources: [{
+      id: 'urn:restorecommerce:acs:names:model:entity',
+      'value': 'urn:test:acs:model:Address.Address'
+    }, {
+      id: 'urn:restorecommerce:acs:names:model:property',
+      value: 'urn:test:acs:model:Address.Address#name'
+    }, {
+      id: 'urn:restorecommerce:acs:names:model:property',
+      value: 'urn:test:acs:model:Address.Address#description'
+    }],
+    action: []
+  },
+  effect: 'PERMIT'
+};
+
+export const addressAndLocationObligation = [{
+  id: 'urn:restorecommerce:acs:names:model:entity',
+  value: 'urn:restorecommerce:acs:model:Location.Location',
+  attribute: [
+    {
+      id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
+      value: 'urn:restorecommerce:acs:model:Location.Location#name'
+    },
+    {
+      id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
+      value: 'urn:restorecommerce:acs:model:Location.Location#description'
+    }
+  ]
+},
+{
+  id: 'urn:restorecommerce:acs:names:model:entity',
+  value: 'urn:restorecommerce:acs:model:Address.Address',
+  attribute: [
+    {
+      id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
+      value: 'urn:restorecommerce:acs:model:Address.Address#name'
+    },
+    {
+      id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
+      value: 'urn:restorecommerce:acs:model:Address.Address#description'
+    }
+  ]
+}
+];
+
 export let policySetRQ = {
   policy_sets:
     [{
@@ -126,6 +187,7 @@ export let policySetRQ = {
           has_rules: true
         }]
     }],
+  obligation: [],
   operation_status: {
     code: 200,
     message: 'success'

@@ -6,7 +6,7 @@ import {
 import { AuthZAction } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
-import { generateOperationStatus, createEntityFilterMap, FilterMapResponse } from '../utils';
+import { generateOperationStatus, createResourceFilterMap, FilterMapResponse, mapResourceURNObligationProperties } from '../utils';
 import { GrpcClient } from '@restorecommerce/grpc-client';
 import { UnAuthZ, ACSAuthZ, authZ } from './authz';
 
@@ -195,14 +195,14 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
     }
 
     // create filters to enforce applicable policies and custom query / args if applicable
-    const resourceFilters = await createEntityFilterMap(resource, policySetResponse,
+    const resourceFilters = await createResourceFilterMap(resource, policySetResponse,
       ctx.resources, action, subClone, subjectID, authzEnforced, targetScope, database);
 
     if ((resourceFilters as DecisionResponse).decision) {
       return resourceFilters as DecisionResponse;
     }
 
-    policySetResponse.filters = (resourceFilters as FilterMapResponse).entityFilterMap;
+    policySetResponse.filters = (resourceFilters as FilterMapResponse).resourceFilterMap;
     policySetResponse.custom_query_args = (resourceFilters as FilterMapResponse).customQueryArgs;
     policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
     policySetResponse.operation_status = generateOperationStatus(200, 'success');
@@ -273,6 +273,9 @@ export const isAllowed = async (request: ACSRequest,
   let isAllowedResponse: DecisionResponse;
   try {
     isAllowedResponse = await authZ.acs.isAllowed(request);
+    if(isAllowedResponse && isAllowedResponse.obligation && isAllowedResponse.obligation.length >0) {
+      isAllowedResponse.obligation = mapResourceURNObligationProperties(isAllowedResponse.obligation);
+    }
   } catch (err) {
     logger.error('Error invoking acs-srv isAllowed method', err.message);
     logger.error('Error Stack', err.stack);
@@ -294,6 +297,9 @@ export const whatIsAllowed = async (request: ACSRequest,
   let whatIsAllowedResponse: PolicySetRQResponse;
   try {
     whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
+    if(whatIsAllowedResponse && whatIsAllowedResponse.obligation && whatIsAllowedResponse.obligation.length >0) {
+      whatIsAllowedResponse.obligation = mapResourceURNObligationProperties(whatIsAllowedResponse.obligation);
+    }
   } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method', err.message);
     logger.error('Error Stack', err.stack);

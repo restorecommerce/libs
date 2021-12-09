@@ -42,7 +42,7 @@ message Response {
     INDETERMINATE = 3;
   }
   Decision decision = 1;
-  string obligation = 2;
+  repeated Attribute obligation = 2;
   bool evaluation_cacheable = 3;
   OperationStatus operation_status = 4;
 }
@@ -62,6 +62,7 @@ message Target {
 message Attribute {
   string id = 1;
   string value = 2;
+  repeated Attribute attribute = 3;
 }
 
 /**
@@ -74,7 +75,8 @@ enum Effect {
 
 message ReverseQuery {
  repeated PolicySetRQ policy_sets = 1;
- OperationStatus operation_status = 2;
+ repeated Attribute obligation = 2;
+ OperationStatus operation_status = 3;
 }
 
 message PolicySetRQ {

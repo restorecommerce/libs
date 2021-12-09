@@ -188,7 +188,11 @@
       "read": "urn:restorecommerce:acs:names:action:read",
       "modify": "urn:restorecommerce:acs:names:action:modify",
       "delete": "urn:restorecommerce:acs:names:action:delete",
-      "organization": "urn:test:acs:model:organization.Organization"
+      "organization": "urn:test:acs:model:organization.Organization",
+      "aclIndicatoryEntity": "urn:restorecommerce:acs:names:aclIndicatoryEntity",
+      "aclInstance": "urn:restorecommerce:acs:names:aclInstance",
+      "skipACL": "urn:restorecommerce:acs:names:skipACL",
+      "maskedProperty": "urn:restorecommerce:acs:names:obligation:maskedProperty"
     },
     "filterParamKey": "orgKey",
     "hierarchicalResources": [

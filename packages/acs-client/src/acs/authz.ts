@@ -9,6 +9,7 @@ import { cfg, updateConfig } from '../config';
 import logger from '../logger';
 import { getOrFill, flushCache } from './cache';
 import { Events } from '@restorecommerce/kafka-client';
+import { mapResourceURNObligationProperties } from '../utils';
 
 export declare type Authorizer = ACSAuthZ;
 export let authZ: Authorizer;
@@ -198,6 +199,10 @@ export class UnAuthZ implements IAuthZ {
       logger.error('Unexpected empty response from ACS');
     }
 
+    if(response.obligation && response.obligation.length >0) {
+      response.obligation = mapResourceURNObligationProperties(response.obligation);
+    }
+
     return response;
 
   }
@@ -237,6 +242,10 @@ export class UnAuthZ implements IAuthZ {
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
+    }
+
+    if(response.obligation && response.obligation.length >0) {
+      response.obligation = mapResourceURNObligationProperties(response.obligation);
     }
 
     return response;
@@ -310,6 +319,9 @@ export class ACSAuthZ implements IAuthZ {
       logger.error('Unexpected empty response from ACS');
     }
 
+    if(response.obligation && response.obligation.length >0) {
+      response.obligation = mapResourceURNObligationProperties(response.obligation);
+    }
     return response;
   }
 
@@ -360,6 +372,10 @@ export class ACSAuthZ implements IAuthZ {
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
+    }
+
+    if(response.obligation && response.obligation.length >0) {
+      response.obligation = mapResourceURNObligationProperties(response.obligation);
     }
 
     return response;

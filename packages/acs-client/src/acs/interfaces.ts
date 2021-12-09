@@ -72,9 +72,14 @@ export enum Decision {
   INDETERMINATE = 'INDETERMINATE'
 }
 
+export interface Obligation {
+  resource: string;
+  property: string[];
+}
+
 export interface DecisionResponse {
   decision: Decision;
-  obligation?: string;
+  obligation?: Obligation[];
   operation_status: {
     code: number;
     message: string;
@@ -225,7 +230,7 @@ export interface Filters {
   operator?: OperatorType;
 }
 
-export interface EnityFilterMap {
+export interface ResourceFilterMap {
   resource: string;
   filters: Filters[];
 }
@@ -239,8 +244,9 @@ export interface CustomQueryArgs {
 // Reverse query response
 export interface PolicySetRQResponse extends AccessControlObjectInterface {
   policy_sets?: PolicySetRQ[];
-  filters?: EnityFilterMap[];
+  filters?: ResourceFilterMap[];
   custom_query_args?: CustomQueryArgs[];
+  obligation?: Obligation[];
   decision: Decision;
   operation_status: {
     code: number;

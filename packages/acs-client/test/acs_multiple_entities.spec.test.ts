@@ -10,9 +10,9 @@ import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
 import {
-  permitLocationRule, policySetRQ, fallbackRule, permitAddressRule,
-  permitLocationRuleProperty, createAction, unauthenticatedSubject,
-  locationAddressResources, authenticatedSubject, readAction
+  permitLocationRule, policySetRQ, fallbackRule, permitAddressRule, readAction,
+  permitLocationRuleProperty, permitAddressRuleProperty, createAction,
+  unauthenticatedSubject, locationAddressResources, authenticatedSubject, addressAndLocationObligation
 } from './rules_utils';
 
 let authZ: ACSAuthZ;
@@ -34,7 +34,7 @@ interface serverRule {
   output: any
 }
 
-const updateMetaData = (resourceList: Array<any>): Array<CtxResource>  => {
+const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   if (!_.isArray(resourceList)) {
     resourceList = [resourceList];
   }
@@ -522,6 +522,54 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:["Location","Address"], action:CREATE, target_scope:targetScope; the response was DENY');
       stopGrpcMockServer();
     });
+    // TODO add read test here - PERMIT with properties
+    it('Validate Obligation - Should PERMIT reading Location and Address resource with name and description property with Obligation for whatIsAllowed operation with valid user ctx (obligation for description)', async () => {
+      // Location permit and fallback rule
+      policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRuleProperty, fallbackRule];
+      // Address permit and fallback rule
+      policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRuleProperty, fallbackRule];
+      // Add Obligation to mock response
+      policySetRQ.obligation = addressAndLocationObligation;
+      startGrpcMockServer([{
+        method: 'IsAllowed', input: '\{.*\:\{.*\:.*\}\}',
+        output: { decision: 'PERMIT', operation_status: { code: 200, message: 'success' } }
+      },
+      { method: 'WhatIsAllowed', input: '.*', output: policySetRQ }]);
+      // test resource to be created
+      let testResource: CtxResource[] = [{
+        id: 'location_id',
+        name: 'Location',
+        description: 'Location description',
+        meta: {
+          owner: []
+        }
+      }, {
+        id: 'address_id',
+        name: 'Address',
+        description: 'Address description',
+        meta: {
+          owner: []
+        }
+      }];
+      testResource = updateMetaData(testResource);
+      subject.scope = 'targetScope'; // set valid targetScope so that Location is PERMIT, but Address is Deny based on fallback rule (description not allowed for Address resource)
+      let ctx: ACSClientContext = { subject };
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(subject,
+        [{ resource: 'Location', id: 'location_id', property: ['name', 'description'] }, { resource: 'Address', id: 'address_id', property: ['name', 'description'] }],
+        AuthZAction.READ, ctx, Operation.whatIsAllowed) as PolicySetRQResponse;
+      // validate mapped obligation object from acs-client
+      should.exist(response.obligation);
+      response.obligation.should.be.length(2);
+      response.obligation[0].resource.should.equal('Location');
+      response.obligation[0].property[0].should.equal('name');
+      response.obligation[0].property[1].should.equal('description');
+      response.obligation[1].resource.should.equal('Address');
+      response.obligation[1].property[0].should.equal('name');
+      response.obligation[1].property[1].should.equal('description');
+      stopGrpcMockServer();
+    });
+
     it(`postgres DB - Should DENY Reading Location and Address resource for whatIsAllowed operation, due to description property`, async () => {
       // Location permit and fallback rule
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRuleProperty, fallbackRule];

@@ -1,7 +1,7 @@
 import {
   RoleAssociation, UserScope, Subject, PolicySetRQ, Effect, PolicySetRQResponse,
   AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType,
-  EnityFilterMap, CustomQueryArgs, Decision, DecisionResponse, Resource, AuthZAction, ResolvedSubject
+  ResourceFilterMap, CustomQueryArgs, Decision, DecisionResponse, Resource, AuthZAction, ResolvedSubject, Obligation
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -548,16 +548,16 @@ export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: 
 };
 
 export interface FilterMapResponse {
-  entityFilterMap: EnityFilterMap[];
+  resourceFilterMap: ResourceFilterMap[];
   customQueryArgs: CustomQueryArgs[];
 }
 
 /**
- * creates entity filters and custom query / arguments for the entity list provided
- * It iterates through each entity and filter the applicable policies and
- * provide them to buildFilterPermissions to create filters for each of the entities requested
+ * creates resource filters and custom query / arguments for the resource list provided
+ * It iterates through each resource and filter the applicable policies and
+ * provide them to buildFilterPermissions to create filters for each of the resource requested
  *
- * @param {Entity[]} entity Contains entity name, entity instance and optional entity properties
+ * @param {Resource[]} resource Contains resource name, resource instance and optional resource properties
  * @param {PolicSetResponse} policySetResponse contains set of applicable policies for entities list
  * @param {any} resources context resources
  * @param {AuthZAction} action Action to be performed on resource
@@ -569,11 +569,11 @@ export interface FilterMapResponse {
  * if this param is missing defaults to `arangoDB`
  *
  */
-export const createEntityFilterMap = async (resource: Resource[],
+export const createResourceFilterMap = async (resource: Resource[],
   policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,
   subject: Subject, subjectID: string, authzEnforced: boolean,
   targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
-  let entityFilterMap = [];
+  let resourceFilterMap = [];
   let customQueryArgs = [];
   for (let resourceObj of resource) {
     let resourcenameNameSpace = resourceObj.resource;
@@ -643,7 +643,7 @@ export const createEntityFilterMap = async (resource: Resource[],
     if (!_.isArray(permissionArguments.filters)) {
       permissionArguments.filters = [permissionArguments.filters];
     }
-    entityFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
+    resourceFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
     if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
       customQueryArgs.push({
         resource: resourceName,
@@ -653,6 +653,35 @@ export const createEntityFilterMap = async (resource: Resource[],
     }
   }
   return {
-    entityFilterMap, customQueryArgs
+    resourceFilterMap, customQueryArgs
   };
+};
+
+/**
+ * converts the Objligation Attribute[] to Obligation[] object
+ *
+ * @param {Attribute[]} obligation contains list of obligations
+ * @returns {Obligation[]} maps the URNS of the entity to resource and obligation attributes
+ * to property[].
+ *
+ */
+export const mapResourceURNObligationProperties = (obligation: any): Obligation[] => {
+  let mappedResourceObligation: Obligation[] = [];
+  const urns = cfg.get('authorization:urns');
+  for (let obligationObj of obligation) {
+    if (obligationObj.id === urns.entity) {
+      const resourceValueURN = obligationObj.value;
+      const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);
+      const resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
+      const obligationAttributes = obligationObj.attribute;
+      let property = new Set<string>();
+      for (let obligationAttribute of obligationAttributes) {
+        if (obligationAttribute.id === urns.maskedProperty) {
+          property.add(obligationAttribute.value.substring(obligationAttribute.value.lastIndexOf('#') + 1));
+        }
+      }
+      mappedResourceObligation.push({ resource, property: Array.from(property) });
+    }
+  }
+  return mappedResourceObligation;
 };

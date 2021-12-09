@@ -75,7 +75,7 @@ export type IoRestorecommerceProductProduct = {
   taricCode?: Maybe<Scalars['String']>;
   prototype?: Maybe<IoRestorecommerceProductIdentifier>;
   category?: Maybe<IoRestorecommerceProductIdentifier>;
-  taxTypeId?: Maybe<Array<Scalars['String']>>;
+  taxId?: Maybe<Array<Scalars['String']>>;
   variants?: Maybe<Array<IoRestorecommerceProductVariant>>;
   gtin?: Maybe<Scalars['String']>;
 };
@@ -96,7 +96,8 @@ export type IoRestorecommerceProductVariant = {
   salePrice?: Maybe<Scalars['Float']>;
   image?: Maybe<Array<IoRestorecommerceImageImage>>;
   stockKeepingUnit?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IoRestorecommerceProductVariantAttribute>>;
+  templateVariant?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceImageImage = {
@@ -111,10 +112,11 @@ export type IoRestorecommerceImageImage = {
   length?: Maybe<Scalars['Float']>;
 };
 
-export type IoRestorecommerceProductVariantAttribute = {
-  __typename?: 'IoRestorecommerceProductVariantAttribute';
-  key?: Maybe<Scalars['String']>;
-  values?: Maybe<Array<Scalars['String']>>;
+export type IoRestorecommerceAttributeAttribute = {
+  __typename?: 'IoRestorecommerceAttributeAttribute';
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceProductBundle = {
@@ -139,12 +141,12 @@ export type IoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
   owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  acl?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
 };
 
-export type IoRestorecommerceAttributeAttribute = {
-  __typename?: 'IoRestorecommerceAttributeAttribute';
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
+export type IoRestorecommerceAttributeAttributeObj = {
+  __typename?: 'IoRestorecommerceAttributeAttributeObj';
+  attribute?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -476,7 +478,7 @@ export type IIoRestorecommerceProductProduct = {
   taricCode?: Maybe<Scalars['String']>;
   prototype?: Maybe<IIoRestorecommerceProductIdentifier>;
   category?: Maybe<IIoRestorecommerceProductIdentifier>;
-  taxTypeId?: Maybe<Array<Scalars['String']>>;
+  taxId?: Maybe<Array<Scalars['String']>>;
   variants?: Maybe<Array<IIoRestorecommerceProductVariant>>;
   gtin?: Maybe<Scalars['String']>;
 };
@@ -495,7 +497,8 @@ export type IIoRestorecommerceProductVariant = {
   salePrice?: Maybe<Scalars['Float']>;
   image?: Maybe<Array<IIoRestorecommerceImageImage>>;
   stockKeepingUnit?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceProductVariantAttribute>>;
+  templateVariant?: Maybe<Scalars['String']>;
+  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceImageImage = {
@@ -509,9 +512,10 @@ export type IIoRestorecommerceImageImage = {
   length?: Maybe<Scalars['Float']>;
 };
 
-export type IIoRestorecommerceProductVariantAttribute = {
-  key?: Maybe<Scalars['String']>;
-  values?: Maybe<Array<Scalars['String']>>;
+export type IIoRestorecommerceAttributeAttribute = {
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  attribute?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceProductBundle = {
@@ -533,11 +537,11 @@ export type IIoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
   owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acl?: Maybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
-export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
+export type IIoRestorecommerceAttributeAttributeObj = {
+  attribute?: Maybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export enum ModeType {
@@ -768,11 +772,11 @@ export type ResolversTypes = ResolversObject<{
   Float: ResolverTypeWrapper<Scalars['Float']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IoRestorecommerceImageImage: ResolverTypeWrapper<IoRestorecommerceImageImage>;
-  IoRestorecommerceProductVariantAttribute: ResolverTypeWrapper<IoRestorecommerceProductVariantAttribute>;
+  IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceProductBundle: ResolverTypeWrapper<IoRestorecommerceProductBundle>;
   IoRestorecommerceProductBundleProduct: ResolverTypeWrapper<IoRestorecommerceProductBundleProduct>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
-  IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
+  IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -821,11 +825,11 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceProductIdentifier: IIoRestorecommerceProductIdentifier;
   IIoRestorecommerceProductVariant: IIoRestorecommerceProductVariant;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
-  IIoRestorecommerceProductVariantAttribute: IIoRestorecommerceProductVariantAttribute;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceProductBundle: IIoRestorecommerceProductBundle;
   IIoRestorecommerceProductBundleProduct: IIoRestorecommerceProductBundleProduct;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ModeType: ModeType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
@@ -862,11 +866,11 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float'];
   Boolean: Scalars['Boolean'];
   IoRestorecommerceImageImage: IoRestorecommerceImageImage;
-  IoRestorecommerceProductVariantAttribute: IoRestorecommerceProductVariantAttribute;
+  IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceProductBundle: IoRestorecommerceProductBundle;
   IoRestorecommerceProductBundleProduct: IoRestorecommerceProductBundleProduct;
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
-  IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
+  IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -908,11 +912,11 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceProductIdentifier: IIoRestorecommerceProductIdentifier;
   IIoRestorecommerceProductVariant: IIoRestorecommerceProductVariant;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
-  IIoRestorecommerceProductVariantAttribute: IIoRestorecommerceProductVariantAttribute;
+  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceProductBundle: IIoRestorecommerceProductBundle;
   IIoRestorecommerceProductBundleProduct: IIoRestorecommerceProductBundleProduct;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
-  IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
+  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
@@ -984,7 +988,7 @@ export type IoRestorecommerceProductProductResolvers<ContextType = CatalogContex
   taricCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   prototype?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductIdentifier']>, ParentType, ContextType>;
   category?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductIdentifier']>, ParentType, ContextType>;
-  taxTypeId?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  taxId?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   variants?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductVariant']>>, ParentType, ContextType>;
   gtin?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1005,7 +1009,8 @@ export type IoRestorecommerceProductVariantResolvers<ContextType = CatalogContex
   salePrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   image?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceImageImage']>>, ParentType, ContextType>;
   stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductVariantAttribute']>>, ParentType, ContextType>;
+  templateVariant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1021,9 +1026,10 @@ export type IoRestorecommerceImageImageResolvers<ContextType = CatalogContext, P
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceProductVariantAttributeResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductVariantAttribute'] = ResolversParentTypes['IoRestorecommerceProductVariantAttribute']> = ResolversObject<{
-  key?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  values?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+export type IoRestorecommerceAttributeAttributeResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1048,12 +1054,12 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = CatalogContext, Par
   modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  acl?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAttributeAttributeResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
+  attribute?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1288,11 +1294,11 @@ export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   IoRestorecommerceProductIdentifier?: IoRestorecommerceProductIdentifierResolvers<ContextType>;
   IoRestorecommerceProductVariant?: IoRestorecommerceProductVariantResolvers<ContextType>;
   IoRestorecommerceImageImage?: IoRestorecommerceImageImageResolvers<ContextType>;
-  IoRestorecommerceProductVariantAttribute?: IoRestorecommerceProductVariantAttributeResolvers<ContextType>;
+  IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceProductBundle?: IoRestorecommerceProductBundleResolvers<ContextType>;
   IoRestorecommerceProductBundleProduct?: IoRestorecommerceProductBundleProductResolvers<ContextType>;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
-  IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
+  IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.1...@restorecommerce/acs-client@0.6.2) (2021-12-09)
+
+
+### Bug Fixes
+
+* **acs-client:** stringify logger fields ([b8f77f3](https://github.com/restorecommerce/libs/commit/b8f77f3a9ceb76a1b66b93f1a4aba9e0207caefc))
+
+
+
+
+
 ## [0.6.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.0...@restorecommerce/acs-client@0.6.1) (2021-12-09)
 
 

@@ -72,14 +72,17 @@ describe('converting to filter to object', () => {
 
 const now = Date.now();
 let meta = {
+  acl: [],
   created: now,
   modified: now,
   modified_by: 'Admin',
   owner: [{
+    attribute: [],
     id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
     value: 'urn:restorecommerce:acs:model:user.User'
   },
   {
+    attribute: [],
     id: 'urn:restorecommerce:acs:names:ownerInstance',
     value: 'Admin'
   }]
@@ -446,12 +449,15 @@ describe('ServiceBase', () => {
     describe('create', () => {
       it('should create new documents and validate duplicate element error', async () => {
         const meta = {
+          acl: [],
           modified_by: 'Admin',
           owner: [{
+            attribute: [],
             id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
             value: 'urn:restorecommerce:acs:model:user.User'
           },
           {
+            attribute: [],
             id: 'urn:restorecommerce:acs:names:ownerInstance',
             value: 'Admin'
           }]

@@ -51,7 +51,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   private startFns: Array<(() => Promise<void>)> = [];
   private stopFns: Array<(() => Promise<void>)> = [];
 
-  constructor({koa, logger, port, hostname, env}: RestoreCommerceFacadeImplConfig) {
+  constructor({ koa, logger, port, hostname, env }: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
@@ -92,7 +92,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     return this.modules.some(m => module.moduleName === m.moduleName);
   }
 
-  addApolloService({name, schema, url}: {name: string, schema: any, url: string}) {
+  addApolloService({ name, schema, url }: { name: string, schema: any, url: string }) {
     this.apolloServices[name] = { schema, url };
   }
 
@@ -128,9 +128,9 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     }
     return new Promise<void>((resolve, reject) => {
       try {
-        this._server = this.koa.listen(this.port, this.hostname , () => {
+        this._server = this.koa.listen(this.port, this.hostname, () => {
           const address = this.address;
-          if(address) {
+          if (address) {
             this.logger.info(`Service is listening on ${address.address}:${address.port}`);
           } else {
             this.logger.info(`Service is listening`);
@@ -171,7 +171,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const gateway = new ApolloGateway({
       logger: this.logger,
       serviceList,
-      buildService: ({name, url}) => {
+      buildService: ({ name, url }) => {
         if (url !== 'local') {
           return new RemoteGraphQLDataSource({
             url,
@@ -202,7 +202,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           stack: error.stack,
         };
       },
-      context: ({ctx}) => ctx
+      context: ({ ctx }) => ctx
     });
 
     const middleware = gqlServer.getMiddleware({
@@ -235,7 +235,16 @@ export function createFacade(config: FacadeConfig): Facade<[]> {
     koa.keys = config.keys;
   }
 
-  const logger = config.logger ?? createLogger(config.logger);
+  let loggerCfg: any;
+  if (config.logger) {
+    loggerCfg = config.logger;
+    loggerCfg.esTransformer = (msg: any) => {
+      msg.fields = JSON.stringify(msg.fields);
+      return msg;
+    };
+  }
+
+  const logger = loggerCfg ?? createLogger(loggerCfg);
   koa.context.logger = logger;
 
   return new RestoreCommerceFacade({

@@ -1,6 +1,6 @@
 import _debug from 'debug';
 import * as koa from 'koa';
-import { createLogger } from '@restorecommerce/logger';
+import { createLogger, RestoreLoggerOptions } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 
 const debug = _debug('@restorecommerce/koa-req-res-logger');
@@ -18,7 +18,17 @@ export interface ReqResLoggerOptions {
  @returns {Middleware}
  */
 export const reqResLogger = (opts: ReqResLoggerOptions) => {
-  const logger = opts.logger ?? createLogger();
+
+  let loggerCfg: any;
+  if (opts.logger) {
+    loggerCfg = opts.logger;
+    loggerCfg.esTransformer = (msg: any) => {
+      msg.fields = JSON.stringify(msg.fields);
+      return msg;
+    };
+  }
+
+  const logger = loggerCfg ?? createLogger(loggerCfg);
 
   const fn: koa.Middleware = async (ctx, next) => {
 

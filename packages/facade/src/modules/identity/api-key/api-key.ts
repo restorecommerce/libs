@@ -56,7 +56,7 @@ const exectueSetAPIKeyCommand = async (apiKey: string, logger: Logger): Promise<
       }
     };
 
-    const commandTopic = events.topic(COMMAND_TOPIC_NAME);
+    const commandTopic = await events.topic(COMMAND_TOPIC_NAME);
     await commandTopic.on(API_KEY_COMMAND_RESPONSE, responseListener);
     await commandTopic.emit(API_KEY_COMMAND_EVENT, eventObject);
     let resp = await new Promise((resolve, reject) => {

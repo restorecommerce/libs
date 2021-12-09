@@ -1,3 +1,7 @@
+### 0.2.1 (December 9th, 2021)
+
+- updated dependencies
+
 ### 0.2.0 (August 4th, 2021)
 
 - updated create (to remove edgeDef creation) and delete method to match new proto structure response

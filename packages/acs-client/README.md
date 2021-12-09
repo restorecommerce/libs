@@ -37,54 +37,76 @@ The client exposes the following API:
 
 ### `accessRequest`
 
-It turns an API request as can be found in typical Web frameworks like [express](https://expressjs.com/), [koa](https://koajs.com/#introduction) etc. into a proper ACS request. For write operations it uses [isAllowed](https://github.com/restorecommerce/access-control-srv#isallowed) and for read operations it uses [whatIsAllowed](https://github.com/restorecommerce/access-control-srv#whatisallowed) operation from [access-control-srv](https://github.com/restorecommerce/access-control-srv). 
-Requests are performed providing `Request` message as input and response is `Response` message type. For the read operations it extends the filter provided in the `ReadRequst` of the input message to enforce the applicapble poilicies. The response is `Decision` or policy set reverse query `PolicySetRQ` depending on the requeste operation `isAllowed()` or `whatIsAllowed()` respectively.
+It turns an API request as can be found in typical Web frameworks like [express](https://expressjs.com/), [koa](https://koajs.com/#introduction) etc. into a proper ACS request. Depending on `Operation` respective api's [isAllowed](https://github.com/restorecommerce/access-control-srv#isallowed) and [whatIsAllowed](https://github.com/restorecommerce/access-control-srv#whatisallowed) are invoked from [access-control-srv](https://github.com/restorecommerce/access-control-srv).
+Requests are performed providing `Request` message as input and response is `Response` message type. For the read operations it extends the filter provided in the `ReadRequst` of the input message to enforce the applicapble poilicies. The response is `DecisionResponse` or policy set reverse query `PolicySetRQResponse` depending on the requeste operation `isAllowed()` or `whatIsAllowed()` respectively.
 
 `Request`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| subject | `io.restorecommerce.user.Subject` or `io.restorecommerce.user.ApiKey` | required | User Subject [user](https://github.com/restorecommerce/identity-srv#user) details (ID, role-associations and hierarchical scopes) or ApiKey |
-| request | `Resource` or `Resource [ ]` or `ReadRequest` | required | list of target resources or read request|
+| subject | `io.restorecommerce.user.Subject` | required | Subject [user](https://github.com/restorecommerce/identity-srv#user) details (ID, token, role-associations and hierarchical scopes) |
+| resource | `Resource [ ]` | required | contains resource name, resource instance and optional resource properties |
 | action | `Enum` | required | action to be performed on the resource (`CREATE`, `READ`, `MODIFY`, `DELETE` or `ALL`) |
+| ctx | `ACSClientContext` | required | context containing subject and context resources for ACS |
+| opeation | `Operation` | required | operation to perform either `isAllowed` or `whatIsAllowed` |
+| database | string | optional | database used, currently 'arangoDB' and 'postgres' are supported |
 | useCache | `boolean` | optional | defaults to `true`, if set to false then ACS cache is not used and ACS request is made to `access-control-srv` |
- 
+
  `Response`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Decision | `Decision` | optional | Access decision; possible values are `PERMIT`, `DENY` or `INDETERMINATE` |
-| PolicySetRQ | `PolicySetRQ [ ]` | optional | List of applicable policy sets |
+| DecisionResponse | `DecisionResponse` | optional | Access decision; possible values are `PERMIT`, `DENY` or `INDETERMINATE` |
+| PolicySetRQResponse | `PolicySetRQResponse [ ]` | optional | List of applicable policy sets along with obligations if any |
 
 `Resource`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| type | string | requried | resource entity name |
-| fields | string [ ] | optional | list of fields for accessing or modifying resource |
-| instance | string | optional | instance identifier of the resource |
-| namespace | string | optional | namespace prefix for resource entity |
+| resource | string | requried | resource entity or operation name |
+| id | string | optional | instance identifier of the resource |
+| property | string [ ] | optional | list of fields for accessing or modifying resource |
 
-`ReadRequest`
+`ACSClientContext`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| entity | string | requried | resource entity name to be read |
-| args | [io.restorecommerce.resourcebase.ReadRequest](https://github.com/restorecommerce/resource-base-interface#read) | optional | query arguments |
-| database | string | optional | database for read request, currently `arangodb` and `postgres` are supported |
-| namespace | string | optional | namespace prefix for resource entity |
+| subject | `io.restorecommerce.user.Subject` | required | Subject [user](https://github.com/restorecommerce/identity-srv#user) details (ID, token, role-associations and hierarchical scopes) |
+| resources | `CtxResource [ ]` | optional | context resources |
 
-`Decision`
+`CtxResource`
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| id | string | required | resource identifier |
+| meta | [`io.restorecommerce.meta.Meta`](https://github.com/restorecommerce/libs/blob/master/packages/protos/io/restorecommerce/meta.proto#L9) | required | meta object containing owner information |
+| [key] | any | optional | optional resource properties |
+
+`Operation`
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| operation | string | required | operation to perform `isAllowed` or `whatIsAllowed` |
+
+`DecisionResponse`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | decision | `io.restorecommerce.access_control.Decision` | required | Access decision; possible values are `PERMIT`, `DENY` or `INDETERMINATE` |
+| obligation | `Obligation [ ]` | optional | list of obligations |
+| operation_status | [`io.restorecommerce.status.OperationStatus`](https://github.com/restorecommerce/libs/blob/master/packages/protos/io/restorecommerce/status.proto#L23) | required | operation status code and message |
 
-`PolicySetRQ`
+`Obligation`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| resource | string | required | resource name |
+| property | string [ ] | required | list of resource properties |
+
+`PolicySetRQResponse`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | policy_sets | [ ] [`io.restorecommerce.policy_set.PolicySetRQ`](https://github.com/restorecommerce/access-control-srv#whatisallowed) | required | List of applicable policy sets |
+| obligation | `Obligation [ ]` | optional | list of obligations |
 
 ### `isAllowed`
 

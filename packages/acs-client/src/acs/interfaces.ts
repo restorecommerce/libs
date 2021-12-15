@@ -174,6 +174,7 @@ export interface UnauthenticatedData {
 export interface Attribute {
   id: string;
   value: string;
+  attribute?: Attribute[];
 }
 
 export interface RoleAssociation {

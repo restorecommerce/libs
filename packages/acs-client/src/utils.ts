@@ -382,19 +382,17 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
               continue;
             }
           }
-          if (rule.effect == effect) {
-            const filterPermissions = buildQueryFromTarget(rule.target, effect,
-              reducedUserScope, urns, userCondition, scopingUpdated, reqResources,
-              rule.condition, subject, database);
-            if (!_.isEmpty(filterPermissions)) {
-              scopingUpdated = filterPermissions.scopingUpdated;
-              userCondition = filterPermissions.userCondition;
-              delete filterPermissions.scopingUpdated;
-              delete filterPermissions.userCondition;
-            }
-            if (!_.isEmpty(filterPermissions)) {
-              policyFiltersArr.push(filterPermissions);
-            }
+          const filterPermissions = buildQueryFromTarget(rule.target, rule.effect,
+            reducedUserScope, urns, userCondition, scopingUpdated, reqResources,
+            rule.condition, subject, database);
+          if (!_.isEmpty(filterPermissions)) {
+            scopingUpdated = filterPermissions.scopingUpdated;
+            userCondition = filterPermissions.userCondition;
+            delete filterPermissions.scopingUpdated;
+            delete filterPermissions.userCondition;
+          }
+          if (!_.isEmpty(filterPermissions)) {
+            policyFiltersArr.push(filterPermissions);
           }
         }
         policyEffects.push(effect);

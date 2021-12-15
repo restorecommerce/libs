@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.3...@restorecommerce/acs-client@0.6.4) (2021-12-15)
+
+
+### Bug Fixes
+
+* **acs-client:** apply filters for all rules (including deny) ([3ea3c37](https://github.com/restorecommerce/libs/commit/3ea3c37b4142aad76563a19b1503f27cc0cc456c))
+
+
+
+
+
 ## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.2...@restorecommerce/acs-client@0.6.3) (2021-12-09)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.26](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.25...@restorecommerce/kafka-client@0.2.26) (2021-12-20)
+
+
+### Bug Fixes
+
+* **kafka-client:** Fix logger to stringify fields ([436be48](https://github.com/restorecommerce/kafka-client/commit/436be486f4bf3d9a5aa21f63030341cfbc8640d7))
+
+
+
+
+
 ## [0.2.25](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.24...@restorecommerce/kafka-client@0.2.25) (2021-12-09)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

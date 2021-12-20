@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.4...@restorecommerce/acs-client@0.6.5) (2021-12-20)
+
+
+### Bug Fixes
+
+* **acs-client:** fix to include resource name space when converting the Obligation Attribute[] to Obligation[] Object ([46aa293](https://github.com/restorecommerce/libs/commit/46aa293dfea5b234cadf59daeb89aa3e12b67125))
+
+
+
+
+
 ## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.3...@restorecommerce/acs-client@0.6.4) (2021-12-15)
 
 

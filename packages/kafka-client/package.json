@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/kafka-client",
-  "version": "0.2.25",
+  "version": "0.2.26",
   "description": "Opinionated Kafka Client for Microservices",
   "main": "./lib/index.js",
   "author": "Invend GmbH",

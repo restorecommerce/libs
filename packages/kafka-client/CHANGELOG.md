@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.27](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.26...@restorecommerce/kafka-client@0.2.27) (2021-12-20)
+
+
+### Bug Fixes
+
+* **acs-client:** logger config ([c1096ba](https://github.com/restorecommerce/kafka-client/commit/c1096ba1c9aed509ce92bec8e269bb5bc45ed188))
+
+
+
+
+
 ## [0.2.26](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.25...@restorecommerce/kafka-client@0.2.26) (2021-12-20)
 
 

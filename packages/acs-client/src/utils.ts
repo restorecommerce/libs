@@ -656,7 +656,7 @@ export const createResourceFilterMap = async (resource: Resource[],
 };
 
 /**
- * converts the Objligation Attribute[] to Obligation[] object
+ * converts the Obligation Attribute[] to Obligation[] object
  *
  * @param {Attribute[]} obligation contains list of obligations
  * @returns {Obligation[]} maps the URNS of the entity to resource and obligation attributes
@@ -670,7 +670,12 @@ export const mapResourceURNObligationProperties = (obligation: any): Obligation[
     if (obligationObj.id === urns.entity) {
       const resourceValueURN = obligationObj.value;
       const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);
-      const resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
+      let resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
+      let resourceWithNameSpace = resourceNameSpace.substring(0, resourceNameSpace.lastIndexOf('.'));
+      if(resource != resourceWithNameSpace) {
+        // name space exists add the entity name to obligation as well with name space
+        resource = resourceWithNameSpace;
+      }
       const obligationAttributes = obligationObj.attribute;
       let property = new Set<string>();
       for (let obligationAttribute of obligationAttributes) {

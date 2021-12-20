@@ -43,10 +43,12 @@ export class Events {
     this.config = config;
 
     const loggerCfg = this.config.logger;
-    loggerCfg.esTransformer = (msg) => {
-      msg.fields = JSON.stringify(msg.fields);
-      return msg;
-    };
+    if (loggerCfg) {
+      loggerCfg.esTransformer = (msg) => {
+        msg.fields = JSON.stringify(msg.fields);
+        return msg;
+      };
+    }
 
     // logger
     if (_.isNil(logger)) {

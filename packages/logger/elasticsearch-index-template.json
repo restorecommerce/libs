@@ -49,8 +49,8 @@
           "index": true
         },
         "fields": {
-          "type": "object",
-          "dynamic": true
+          "type": "text",
+          "index": true
         },
         "subject": {
           "type": "keyword",

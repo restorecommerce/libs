@@ -15,7 +15,7 @@ export const protobufPackage = "io.restorecommerce.token";
 export interface TokenData {
   id: string;
   payload?: Any;
-  expiresIn: number;
+  expires_in: number;
   type: string;
   subject?: Subject;
 }
@@ -27,11 +27,11 @@ export interface Identifier {
 }
 
 export interface GrantId {
-  grantId: string;
+  grant_id: string;
   subject?: Subject;
 }
 
-const baseTokenData: object = { id: "", expiresIn: 0, type: "" };
+const baseTokenData: object = { id: "", expires_in: 0, type: "" };
 
 export const TokenData = {
   encode(message: TokenData, writer: Writer = Writer.create()): Writer {
@@ -41,8 +41,8 @@ export const TokenData = {
     if (message.payload !== undefined) {
       Any.encode(message.payload, writer.uint32(18).fork()).ldelim();
     }
-    if (message.expiresIn !== 0) {
-      writer.uint32(25).double(message.expiresIn);
+    if (message.expires_in !== 0) {
+      writer.uint32(25).double(message.expires_in);
     }
     if (message.type !== "") {
       writer.uint32(34).string(message.type);
@@ -67,7 +67,7 @@ export const TokenData = {
           message.payload = Any.decode(reader, reader.uint32());
           break;
         case 3:
-          message.expiresIn = reader.double();
+          message.expires_in = reader.double();
           break;
         case 4:
           message.type = reader.string();
@@ -95,10 +95,10 @@ export const TokenData = {
     } else {
       message.payload = undefined;
     }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = Number(object.expiresIn);
+    if (object.expires_in !== undefined && object.expires_in !== null) {
+      message.expires_in = Number(object.expires_in);
     } else {
-      message.expiresIn = 0;
+      message.expires_in = 0;
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = String(object.type);
@@ -125,10 +125,10 @@ export const TokenData = {
     } else {
       message.payload = undefined;
     }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = object.expiresIn;
+    if (object.expires_in !== undefined && object.expires_in !== null) {
+      message.expires_in = object.expires_in;
     } else {
-      message.expiresIn = 0;
+      message.expires_in = 0;
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
@@ -148,7 +148,7 @@ export const TokenData = {
     message.id !== undefined && (obj.id = message.id);
     message.payload !== undefined &&
       (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
-    message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn);
+    message.expires_in !== undefined && (obj.expires_in = message.expires_in);
     message.type !== undefined && (obj.type = message.type);
     message.subject !== undefined &&
       (obj.subject = message.subject
@@ -250,12 +250,12 @@ export const Identifier = {
   },
 };
 
-const baseGrantId: object = { grantId: "" };
+const baseGrantId: object = { grant_id: "" };
 
 export const GrantId = {
   encode(message: GrantId, writer: Writer = Writer.create()): Writer {
-    if (message.grantId !== "") {
-      writer.uint32(10).string(message.grantId);
+    if (message.grant_id !== "") {
+      writer.uint32(10).string(message.grant_id);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
@@ -271,7 +271,7 @@ export const GrantId = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.grantId = reader.string();
+          message.grant_id = reader.string();
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -286,10 +286,10 @@ export const GrantId = {
 
   fromJSON(object: any): GrantId {
     const message = globalThis.Object.create(baseGrantId) as GrantId;
-    if (object.grantId !== undefined && object.grantId !== null) {
-      message.grantId = String(object.grantId);
+    if (object.grant_id !== undefined && object.grant_id !== null) {
+      message.grant_id = String(object.grant_id);
     } else {
-      message.grantId = "";
+      message.grant_id = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -301,10 +301,10 @@ export const GrantId = {
 
   fromPartial(object: DeepPartial<GrantId>): GrantId {
     const message = { ...baseGrantId } as GrantId;
-    if (object.grantId !== undefined && object.grantId !== null) {
-      message.grantId = object.grantId;
+    if (object.grant_id !== undefined && object.grant_id !== null) {
+      message.grant_id = object.grant_id;
     } else {
-      message.grantId = "";
+      message.grant_id = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -316,7 +316,7 @@ export const GrantId = {
 
   toJSON(message: GrantId): unknown {
     const obj: any = {};
-    message.grantId !== undefined && (obj.grantId = message.grantId);
+    message.grant_id !== undefined && (obj.grant_id = message.grant_id);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)

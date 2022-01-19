@@ -29,14 +29,14 @@ export interface Deleted {
 
 export interface NotificationList {
   items: Notification[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface NotificationListResponse {
   items: NotificationResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface NotificationResponse {
@@ -49,11 +49,11 @@ export interface Notification {
   meta?: Meta;
   name: string;
   description: string;
-  notificationChannelIds: string[];
+  notification_channel_ids: string[];
   email: string | undefined;
-  telephoneNumber: string | undefined;
-  subjectTemplate: string;
-  bodyTemplate: string;
+  telephone_number: string | undefined;
+  subject_template: string;
+  body_template: string;
 }
 
 const baseDeleted: object = { id: "" };
@@ -111,15 +111,15 @@ export const Deleted = {
   },
 };
 
-const baseNotificationList: object = { totalCount: 0 };
+const baseNotificationList: object = { total_count: 0 };
 
 export const NotificationList = {
   encode(message: NotificationList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Notification.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -141,7 +141,7 @@ export const NotificationList = {
           message.items.push(Notification.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -164,10 +164,10 @@ export const NotificationList = {
         message.items.push(Notification.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -185,10 +185,10 @@ export const NotificationList = {
         message.items.push(Notification.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -207,7 +207,8 @@ export const NotificationList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -216,7 +217,7 @@ export const NotificationList = {
   },
 };
 
-const baseNotificationListResponse: object = { totalCount: 0 };
+const baseNotificationListResponse: object = { total_count: 0 };
 
 export const NotificationListResponse = {
   encode(
@@ -226,12 +227,12 @@ export const NotificationListResponse = {
     for (const v of message.items) {
       NotificationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -257,10 +258,10 @@ export const NotificationListResponse = {
           );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -283,20 +284,20 @@ export const NotificationListResponse = {
         message.items.push(NotificationResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -313,20 +314,20 @@ export const NotificationListResponse = {
         message.items.push(NotificationResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -340,10 +341,11 @@ export const NotificationListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -436,9 +438,9 @@ const baseNotification: object = {
   id: "",
   name: "",
   description: "",
-  notificationChannelIds: "",
-  subjectTemplate: "",
-  bodyTemplate: "",
+  notification_channel_ids: "",
+  subject_template: "",
+  body_template: "",
 };
 
 export const Notification = {
@@ -455,20 +457,20 @@ export const Notification = {
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
     }
-    for (const v of message.notificationChannelIds) {
+    for (const v of message.notification_channel_ids) {
       writer.uint32(42).string(v!);
     }
     if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.telephoneNumber !== undefined) {
-      writer.uint32(58).string(message.telephoneNumber);
+    if (message.telephone_number !== undefined) {
+      writer.uint32(58).string(message.telephone_number);
     }
-    if (message.subjectTemplate !== "") {
-      writer.uint32(66).string(message.subjectTemplate);
+    if (message.subject_template !== "") {
+      writer.uint32(66).string(message.subject_template);
     }
-    if (message.bodyTemplate !== "") {
-      writer.uint32(74).string(message.bodyTemplate);
+    if (message.body_template !== "") {
+      writer.uint32(74).string(message.body_template);
     }
     return writer;
   },
@@ -477,7 +479,7 @@ export const Notification = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseNotification) as Notification;
-    message.notificationChannelIds = [];
+    message.notification_channel_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -494,19 +496,19 @@ export const Notification = {
           message.description = reader.string();
           break;
         case 5:
-          message.notificationChannelIds.push(reader.string());
+          message.notification_channel_ids.push(reader.string());
           break;
         case 6:
           message.email = reader.string();
           break;
         case 7:
-          message.telephoneNumber = reader.string();
+          message.telephone_number = reader.string();
           break;
         case 8:
-          message.subjectTemplate = reader.string();
+          message.subject_template = reader.string();
           break;
         case 9:
-          message.bodyTemplate = reader.string();
+          message.body_template = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -518,7 +520,7 @@ export const Notification = {
 
   fromJSON(object: any): Notification {
     const message = globalThis.Object.create(baseNotification) as Notification;
-    message.notificationChannelIds = [];
+    message.notification_channel_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -540,11 +542,11 @@ export const Notification = {
       message.description = "";
     }
     if (
-      object.notificationChannelIds !== undefined &&
-      object.notificationChannelIds !== null
+      object.notification_channel_ids !== undefined &&
+      object.notification_channel_ids !== null
     ) {
-      for (const e of object.notificationChannelIds) {
-        message.notificationChannelIds.push(String(e));
+      for (const e of object.notification_channel_ids) {
+        message.notification_channel_ids.push(String(e));
       }
     }
     if (object.email !== undefined && object.email !== null) {
@@ -553,32 +555,32 @@ export const Notification = {
       message.email = undefined;
     }
     if (
-      object.telephoneNumber !== undefined &&
-      object.telephoneNumber !== null
+      object.telephone_number !== undefined &&
+      object.telephone_number !== null
     ) {
-      message.telephoneNumber = String(object.telephoneNumber);
+      message.telephone_number = String(object.telephone_number);
     } else {
-      message.telephoneNumber = undefined;
+      message.telephone_number = undefined;
     }
     if (
-      object.subjectTemplate !== undefined &&
-      object.subjectTemplate !== null
+      object.subject_template !== undefined &&
+      object.subject_template !== null
     ) {
-      message.subjectTemplate = String(object.subjectTemplate);
+      message.subject_template = String(object.subject_template);
     } else {
-      message.subjectTemplate = "";
+      message.subject_template = "";
     }
-    if (object.bodyTemplate !== undefined && object.bodyTemplate !== null) {
-      message.bodyTemplate = String(object.bodyTemplate);
+    if (object.body_template !== undefined && object.body_template !== null) {
+      message.body_template = String(object.body_template);
     } else {
-      message.bodyTemplate = "";
+      message.body_template = "";
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<Notification>): Notification {
     const message = { ...baseNotification } as Notification;
-    message.notificationChannelIds = [];
+    message.notification_channel_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -600,11 +602,11 @@ export const Notification = {
       message.description = "";
     }
     if (
-      object.notificationChannelIds !== undefined &&
-      object.notificationChannelIds !== null
+      object.notification_channel_ids !== undefined &&
+      object.notification_channel_ids !== null
     ) {
-      for (const e of object.notificationChannelIds) {
-        message.notificationChannelIds.push(e);
+      for (const e of object.notification_channel_ids) {
+        message.notification_channel_ids.push(e);
       }
     }
     if (object.email !== undefined && object.email !== null) {
@@ -613,25 +615,25 @@ export const Notification = {
       message.email = undefined;
     }
     if (
-      object.telephoneNumber !== undefined &&
-      object.telephoneNumber !== null
+      object.telephone_number !== undefined &&
+      object.telephone_number !== null
     ) {
-      message.telephoneNumber = object.telephoneNumber;
+      message.telephone_number = object.telephone_number;
     } else {
-      message.telephoneNumber = undefined;
+      message.telephone_number = undefined;
     }
     if (
-      object.subjectTemplate !== undefined &&
-      object.subjectTemplate !== null
+      object.subject_template !== undefined &&
+      object.subject_template !== null
     ) {
-      message.subjectTemplate = object.subjectTemplate;
+      message.subject_template = object.subject_template;
     } else {
-      message.subjectTemplate = "";
+      message.subject_template = "";
     }
-    if (object.bodyTemplate !== undefined && object.bodyTemplate !== null) {
-      message.bodyTemplate = object.bodyTemplate;
+    if (object.body_template !== undefined && object.body_template !== null) {
+      message.body_template = object.body_template;
     } else {
-      message.bodyTemplate = "";
+      message.body_template = "";
     }
     return message;
   },
@@ -644,18 +646,20 @@ export const Notification = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
-    if (message.notificationChannelIds) {
-      obj.notificationChannelIds = message.notificationChannelIds.map((e) => e);
+    if (message.notification_channel_ids) {
+      obj.notification_channel_ids = message.notification_channel_ids.map(
+        (e) => e
+      );
     } else {
-      obj.notificationChannelIds = [];
+      obj.notification_channel_ids = [];
     }
     message.email !== undefined && (obj.email = message.email);
-    message.telephoneNumber !== undefined &&
-      (obj.telephoneNumber = message.telephoneNumber);
-    message.subjectTemplate !== undefined &&
-      (obj.subjectTemplate = message.subjectTemplate);
-    message.bodyTemplate !== undefined &&
-      (obj.bodyTemplate = message.bodyTemplate);
+    message.telephone_number !== undefined &&
+      (obj.telephone_number = message.telephone_number);
+    message.subject_template !== undefined &&
+      (obj.subject_template = message.subject_template);
+    message.body_template !== undefined &&
+      (obj.body_template = message.body_template);
     return obj;
   },
 };

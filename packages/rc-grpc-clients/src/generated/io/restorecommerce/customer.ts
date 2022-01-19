@@ -25,14 +25,14 @@ export const protobufPackage = "io.restorecommerce.customer";
 
 export interface CustomerList {
   items: Customer[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface CustomerListResponse {
   items: CustomerResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface CustomerResponse {
@@ -43,37 +43,37 @@ export interface CustomerResponse {
 export interface Customer {
   id: string;
   meta?: Meta;
-  individualUser?: IndividualUser | undefined;
-  orgUser?: OrgUser | undefined;
+  individual_user?: IndividualUser | undefined;
+  org_user?: OrgUser | undefined;
   guest?: Guest | undefined;
 }
 
 export interface IndividualUser {
-  userId: string;
-  addressId: string;
-  contactPointIds: string[];
+  user_id: string;
+  address_id: string;
+  contact_point_ids: string[];
 }
 
 export interface OrgUser {
-  userId: string;
-  organizationId: string;
+  user_id: string;
+  organization_id: string;
 }
 
 export interface Guest {
   guest: boolean;
-  addressId: string;
-  contactPointIds: string[];
+  address_id: string;
+  contact_point_ids: string[];
 }
 
-const baseCustomerList: object = { totalCount: 0 };
+const baseCustomerList: object = { total_count: 0 };
 
 export const CustomerList = {
   encode(message: CustomerList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Customer.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -93,7 +93,7 @@ export const CustomerList = {
           message.items.push(Customer.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -114,10 +114,10 @@ export const CustomerList = {
         message.items.push(Customer.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -135,10 +135,10 @@ export const CustomerList = {
         message.items.push(Customer.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -157,7 +157,8 @@ export const CustomerList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -166,7 +167,7 @@ export const CustomerList = {
   },
 };
 
-const baseCustomerListResponse: object = { totalCount: 0 };
+const baseCustomerListResponse: object = { total_count: 0 };
 
 export const CustomerListResponse = {
   encode(
@@ -176,12 +177,12 @@ export const CustomerListResponse = {
     for (const v of message.items) {
       CustomerResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -202,10 +203,10 @@ export const CustomerListResponse = {
           message.items.push(CustomerResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -228,20 +229,20 @@ export const CustomerListResponse = {
         message.items.push(CustomerResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -254,20 +255,20 @@ export const CustomerListResponse = {
         message.items.push(CustomerResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -281,10 +282,11 @@ export const CustomerListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -380,14 +382,14 @@ export const Customer = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.individualUser !== undefined) {
+    if (message.individual_user !== undefined) {
       IndividualUser.encode(
-        message.individualUser,
+        message.individual_user,
         writer.uint32(26).fork()
       ).ldelim();
     }
-    if (message.orgUser !== undefined) {
-      OrgUser.encode(message.orgUser, writer.uint32(34).fork()).ldelim();
+    if (message.org_user !== undefined) {
+      OrgUser.encode(message.org_user, writer.uint32(34).fork()).ldelim();
     }
     if (message.guest !== undefined) {
       Guest.encode(message.guest, writer.uint32(42).fork()).ldelim();
@@ -409,13 +411,13 @@ export const Customer = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.individualUser = IndividualUser.decode(
+          message.individual_user = IndividualUser.decode(
             reader,
             reader.uint32()
           );
           break;
         case 4:
-          message.orgUser = OrgUser.decode(reader, reader.uint32());
+          message.org_user = OrgUser.decode(reader, reader.uint32());
           break;
         case 5:
           message.guest = Guest.decode(reader, reader.uint32());
@@ -440,15 +442,18 @@ export const Customer = {
     } else {
       message.meta = undefined;
     }
-    if (object.individualUser !== undefined && object.individualUser !== null) {
-      message.individualUser = IndividualUser.fromJSON(object.individualUser);
+    if (
+      object.individual_user !== undefined &&
+      object.individual_user !== null
+    ) {
+      message.individual_user = IndividualUser.fromJSON(object.individual_user);
     } else {
-      message.individualUser = undefined;
+      message.individual_user = undefined;
     }
-    if (object.orgUser !== undefined && object.orgUser !== null) {
-      message.orgUser = OrgUser.fromJSON(object.orgUser);
+    if (object.org_user !== undefined && object.org_user !== null) {
+      message.org_user = OrgUser.fromJSON(object.org_user);
     } else {
-      message.orgUser = undefined;
+      message.org_user = undefined;
     }
     if (object.guest !== undefined && object.guest !== null) {
       message.guest = Guest.fromJSON(object.guest);
@@ -470,17 +475,20 @@ export const Customer = {
     } else {
       message.meta = undefined;
     }
-    if (object.individualUser !== undefined && object.individualUser !== null) {
-      message.individualUser = IndividualUser.fromPartial(
-        object.individualUser
+    if (
+      object.individual_user !== undefined &&
+      object.individual_user !== null
+    ) {
+      message.individual_user = IndividualUser.fromPartial(
+        object.individual_user
       );
     } else {
-      message.individualUser = undefined;
+      message.individual_user = undefined;
     }
-    if (object.orgUser !== undefined && object.orgUser !== null) {
-      message.orgUser = OrgUser.fromPartial(object.orgUser);
+    if (object.org_user !== undefined && object.org_user !== null) {
+      message.org_user = OrgUser.fromPartial(object.org_user);
     } else {
-      message.orgUser = undefined;
+      message.org_user = undefined;
     }
     if (object.guest !== undefined && object.guest !== null) {
       message.guest = Guest.fromPartial(object.guest);
@@ -495,13 +503,13 @@ export const Customer = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.individualUser !== undefined &&
-      (obj.individualUser = message.individualUser
-        ? IndividualUser.toJSON(message.individualUser)
+    message.individual_user !== undefined &&
+      (obj.individual_user = message.individual_user
+        ? IndividualUser.toJSON(message.individual_user)
         : undefined);
-    message.orgUser !== undefined &&
-      (obj.orgUser = message.orgUser
-        ? OrgUser.toJSON(message.orgUser)
+    message.org_user !== undefined &&
+      (obj.org_user = message.org_user
+        ? OrgUser.toJSON(message.org_user)
         : undefined);
     message.guest !== undefined &&
       (obj.guest = message.guest ? Guest.toJSON(message.guest) : undefined);
@@ -510,20 +518,20 @@ export const Customer = {
 };
 
 const baseIndividualUser: object = {
-  userId: "",
-  addressId: "",
-  contactPointIds: "",
+  user_id: "",
+  address_id: "",
+  contact_point_ids: "",
 };
 
 export const IndividualUser = {
   encode(message: IndividualUser, writer: Writer = Writer.create()): Writer {
-    if (message.userId !== "") {
-      writer.uint32(10).string(message.userId);
+    if (message.user_id !== "") {
+      writer.uint32(10).string(message.user_id);
     }
-    if (message.addressId !== "") {
-      writer.uint32(18).string(message.addressId);
+    if (message.address_id !== "") {
+      writer.uint32(18).string(message.address_id);
     }
-    for (const v of message.contactPointIds) {
+    for (const v of message.contact_point_ids) {
       writer.uint32(26).string(v!);
     }
     return writer;
@@ -535,18 +543,18 @@ export const IndividualUser = {
     const message = globalThis.Object.create(
       baseIndividualUser
     ) as IndividualUser;
-    message.contactPointIds = [];
+    message.contact_point_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userId = reader.string();
+          message.user_id = reader.string();
           break;
         case 2:
-          message.addressId = reader.string();
+          message.address_id = reader.string();
           break;
         case 3:
-          message.contactPointIds.push(reader.string());
+          message.contact_point_ids.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -560,23 +568,23 @@ export const IndividualUser = {
     const message = globalThis.Object.create(
       baseIndividualUser
     ) as IndividualUser;
-    message.contactPointIds = [];
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = String(object.userId);
+    message.contact_point_ids = [];
+    if (object.user_id !== undefined && object.user_id !== null) {
+      message.user_id = String(object.user_id);
     } else {
-      message.userId = "";
+      message.user_id = "";
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = String(object.addressId);
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = String(object.address_id);
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(String(e));
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(String(e));
       }
     }
     return message;
@@ -584,23 +592,23 @@ export const IndividualUser = {
 
   fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
     const message = { ...baseIndividualUser } as IndividualUser;
-    message.contactPointIds = [];
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = object.userId;
+    message.contact_point_ids = [];
+    if (object.user_id !== undefined && object.user_id !== null) {
+      message.user_id = object.user_id;
     } else {
-      message.userId = "";
+      message.user_id = "";
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = object.addressId;
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = object.address_id;
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(e);
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(e);
       }
     }
     return message;
@@ -608,26 +616,26 @@ export const IndividualUser = {
 
   toJSON(message: IndividualUser): unknown {
     const obj: any = {};
-    message.userId !== undefined && (obj.userId = message.userId);
-    message.addressId !== undefined && (obj.addressId = message.addressId);
-    if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map((e) => e);
+    message.user_id !== undefined && (obj.user_id = message.user_id);
+    message.address_id !== undefined && (obj.address_id = message.address_id);
+    if (message.contact_point_ids) {
+      obj.contact_point_ids = message.contact_point_ids.map((e) => e);
     } else {
-      obj.contactPointIds = [];
+      obj.contact_point_ids = [];
     }
     return obj;
   },
 };
 
-const baseOrgUser: object = { userId: "", organizationId: "" };
+const baseOrgUser: object = { user_id: "", organization_id: "" };
 
 export const OrgUser = {
   encode(message: OrgUser, writer: Writer = Writer.create()): Writer {
-    if (message.userId !== "") {
-      writer.uint32(10).string(message.userId);
+    if (message.user_id !== "") {
+      writer.uint32(10).string(message.user_id);
     }
-    if (message.organizationId !== "") {
-      writer.uint32(18).string(message.organizationId);
+    if (message.organization_id !== "") {
+      writer.uint32(18).string(message.organization_id);
     }
     return writer;
   },
@@ -640,10 +648,10 @@ export const OrgUser = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.userId = reader.string();
+          message.user_id = reader.string();
           break;
         case 2:
-          message.organizationId = reader.string();
+          message.organization_id = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -655,54 +663,64 @@ export const OrgUser = {
 
   fromJSON(object: any): OrgUser {
     const message = globalThis.Object.create(baseOrgUser) as OrgUser;
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = String(object.userId);
+    if (object.user_id !== undefined && object.user_id !== null) {
+      message.user_id = String(object.user_id);
     } else {
-      message.userId = "";
+      message.user_id = "";
     }
-    if (object.organizationId !== undefined && object.organizationId !== null) {
-      message.organizationId = String(object.organizationId);
+    if (
+      object.organization_id !== undefined &&
+      object.organization_id !== null
+    ) {
+      message.organization_id = String(object.organization_id);
     } else {
-      message.organizationId = "";
+      message.organization_id = "";
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<OrgUser>): OrgUser {
     const message = { ...baseOrgUser } as OrgUser;
-    if (object.userId !== undefined && object.userId !== null) {
-      message.userId = object.userId;
+    if (object.user_id !== undefined && object.user_id !== null) {
+      message.user_id = object.user_id;
     } else {
-      message.userId = "";
+      message.user_id = "";
     }
-    if (object.organizationId !== undefined && object.organizationId !== null) {
-      message.organizationId = object.organizationId;
+    if (
+      object.organization_id !== undefined &&
+      object.organization_id !== null
+    ) {
+      message.organization_id = object.organization_id;
     } else {
-      message.organizationId = "";
+      message.organization_id = "";
     }
     return message;
   },
 
   toJSON(message: OrgUser): unknown {
     const obj: any = {};
-    message.userId !== undefined && (obj.userId = message.userId);
-    message.organizationId !== undefined &&
-      (obj.organizationId = message.organizationId);
+    message.user_id !== undefined && (obj.user_id = message.user_id);
+    message.organization_id !== undefined &&
+      (obj.organization_id = message.organization_id);
     return obj;
   },
 };
 
-const baseGuest: object = { guest: false, addressId: "", contactPointIds: "" };
+const baseGuest: object = {
+  guest: false,
+  address_id: "",
+  contact_point_ids: "",
+};
 
 export const Guest = {
   encode(message: Guest, writer: Writer = Writer.create()): Writer {
     if (message.guest === true) {
       writer.uint32(8).bool(message.guest);
     }
-    if (message.addressId !== "") {
-      writer.uint32(18).string(message.addressId);
+    if (message.address_id !== "") {
+      writer.uint32(18).string(message.address_id);
     }
-    for (const v of message.contactPointIds) {
+    for (const v of message.contact_point_ids) {
       writer.uint32(26).string(v!);
     }
     return writer;
@@ -712,7 +730,7 @@ export const Guest = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseGuest) as Guest;
-    message.contactPointIds = [];
+    message.contact_point_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -720,10 +738,10 @@ export const Guest = {
           message.guest = reader.bool();
           break;
         case 2:
-          message.addressId = reader.string();
+          message.address_id = reader.string();
           break;
         case 3:
-          message.contactPointIds.push(reader.string());
+          message.contact_point_ids.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -735,23 +753,23 @@ export const Guest = {
 
   fromJSON(object: any): Guest {
     const message = globalThis.Object.create(baseGuest) as Guest;
-    message.contactPointIds = [];
+    message.contact_point_ids = [];
     if (object.guest !== undefined && object.guest !== null) {
       message.guest = Boolean(object.guest);
     } else {
       message.guest = false;
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = String(object.addressId);
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = String(object.address_id);
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(String(e));
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(String(e));
       }
     }
     return message;
@@ -759,23 +777,23 @@ export const Guest = {
 
   fromPartial(object: DeepPartial<Guest>): Guest {
     const message = { ...baseGuest } as Guest;
-    message.contactPointIds = [];
+    message.contact_point_ids = [];
     if (object.guest !== undefined && object.guest !== null) {
       message.guest = object.guest;
     } else {
       message.guest = false;
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = object.addressId;
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = object.address_id;
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(e);
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(e);
       }
     }
     return message;
@@ -784,11 +802,11 @@ export const Guest = {
   toJSON(message: Guest): unknown {
     const obj: any = {};
     message.guest !== undefined && (obj.guest = message.guest);
-    message.addressId !== undefined && (obj.addressId = message.addressId);
-    if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map((e) => e);
+    message.address_id !== undefined && (obj.address_id = message.address_id);
+    if (message.contact_point_ids) {
+      obj.contact_point_ids = message.contact_point_ids.map((e) => e);
     } else {
-      obj.contactPointIds = [];
+      obj.contact_point_ids = [];
     }
     return obj;
   },

@@ -32,21 +32,21 @@ export interface Deleted {
 }
 
 export interface DeleteOrgData {
-  orgIds: string[];
-  userIds: string[];
+  org_ids: string[];
+  user_ids: string[];
   subject?: Subject;
 }
 
 export interface OrganizationList {
   items: Organization[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface OrganizationListResponse {
   items: OrganizationResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface OrganizationResponse {
@@ -59,23 +59,23 @@ export interface Organization {
   id: string;
   meta?: Meta;
   /** / Address for the organization */
-  addressId: string;
+  address_id: string;
   /** Hierarchically superior organization; may be null */
-  parentId: string;
+  parent_id: string;
   /** Hierarchically inferior organizations; may be null/empty */
-  childrenIds: string[];
+  children_ids: string[];
   /** list of possible legal addresses of different types */
-  contactPointIds: string[];
+  contact_point_ids: string[];
   website: string;
   email: string;
   /** base64; arangoDB does not support blob storage */
   logo: string;
-  vatId: string;
-  isicV4: string;
+  vat_id: string;
+  isic_v4: string;
   registration: string;
-  registrationCourt: string;
+  registration_court: string;
   name: string;
-  paymentMethodIds: string[];
+  payment_method_ids: string[];
   /** / additional data */
   data?: Any;
 }
@@ -135,14 +135,14 @@ export const Deleted = {
   },
 };
 
-const baseDeleteOrgData: object = { orgIds: "", userIds: "" };
+const baseDeleteOrgData: object = { org_ids: "", user_ids: "" };
 
 export const DeleteOrgData = {
   encode(message: DeleteOrgData, writer: Writer = Writer.create()): Writer {
-    for (const v of message.orgIds) {
+    for (const v of message.org_ids) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.userIds) {
+    for (const v of message.user_ids) {
       writer.uint32(18).string(v!);
     }
     if (message.subject !== undefined) {
@@ -157,16 +157,16 @@ export const DeleteOrgData = {
     const message = globalThis.Object.create(
       baseDeleteOrgData
     ) as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
+    message.org_ids = [];
+    message.user_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.orgIds.push(reader.string());
+          message.org_ids.push(reader.string());
           break;
         case 2:
-          message.userIds.push(reader.string());
+          message.user_ids.push(reader.string());
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -183,16 +183,16 @@ export const DeleteOrgData = {
     const message = globalThis.Object.create(
       baseDeleteOrgData
     ) as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
-    if (object.orgIds !== undefined && object.orgIds !== null) {
-      for (const e of object.orgIds) {
-        message.orgIds.push(String(e));
+    message.org_ids = [];
+    message.user_ids = [];
+    if (object.org_ids !== undefined && object.org_ids !== null) {
+      for (const e of object.org_ids) {
+        message.org_ids.push(String(e));
       }
     }
-    if (object.userIds !== undefined && object.userIds !== null) {
-      for (const e of object.userIds) {
-        message.userIds.push(String(e));
+    if (object.user_ids !== undefined && object.user_ids !== null) {
+      for (const e of object.user_ids) {
+        message.user_ids.push(String(e));
       }
     }
     if (object.subject !== undefined && object.subject !== null) {
@@ -205,16 +205,16 @@ export const DeleteOrgData = {
 
   fromPartial(object: DeepPartial<DeleteOrgData>): DeleteOrgData {
     const message = { ...baseDeleteOrgData } as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
-    if (object.orgIds !== undefined && object.orgIds !== null) {
-      for (const e of object.orgIds) {
-        message.orgIds.push(e);
+    message.org_ids = [];
+    message.user_ids = [];
+    if (object.org_ids !== undefined && object.org_ids !== null) {
+      for (const e of object.org_ids) {
+        message.org_ids.push(e);
       }
     }
-    if (object.userIds !== undefined && object.userIds !== null) {
-      for (const e of object.userIds) {
-        message.userIds.push(e);
+    if (object.user_ids !== undefined && object.user_ids !== null) {
+      for (const e of object.user_ids) {
+        message.user_ids.push(e);
       }
     }
     if (object.subject !== undefined && object.subject !== null) {
@@ -227,15 +227,15 @@ export const DeleteOrgData = {
 
   toJSON(message: DeleteOrgData): unknown {
     const obj: any = {};
-    if (message.orgIds) {
-      obj.orgIds = message.orgIds.map((e) => e);
+    if (message.org_ids) {
+      obj.org_ids = message.org_ids.map((e) => e);
     } else {
-      obj.orgIds = [];
+      obj.org_ids = [];
     }
-    if (message.userIds) {
-      obj.userIds = message.userIds.map((e) => e);
+    if (message.user_ids) {
+      obj.user_ids = message.user_ids.map((e) => e);
     } else {
-      obj.userIds = [];
+      obj.user_ids = [];
     }
     message.subject !== undefined &&
       (obj.subject = message.subject
@@ -245,15 +245,15 @@ export const DeleteOrgData = {
   },
 };
 
-const baseOrganizationList: object = { totalCount: 0 };
+const baseOrganizationList: object = { total_count: 0 };
 
 export const OrganizationList = {
   encode(message: OrganizationList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Organization.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -275,7 +275,7 @@ export const OrganizationList = {
           message.items.push(Organization.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -298,10 +298,10 @@ export const OrganizationList = {
         message.items.push(Organization.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -319,10 +319,10 @@ export const OrganizationList = {
         message.items.push(Organization.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -341,7 +341,8 @@ export const OrganizationList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -350,7 +351,7 @@ export const OrganizationList = {
   },
 };
 
-const baseOrganizationListResponse: object = { totalCount: 0 };
+const baseOrganizationListResponse: object = { total_count: 0 };
 
 export const OrganizationListResponse = {
   encode(
@@ -360,12 +361,12 @@ export const OrganizationListResponse = {
     for (const v of message.items) {
       OrganizationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -391,10 +392,10 @@ export const OrganizationListResponse = {
           );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -417,20 +418,20 @@ export const OrganizationListResponse = {
         message.items.push(OrganizationResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -447,20 +448,20 @@ export const OrganizationListResponse = {
         message.items.push(OrganizationResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -474,10 +475,11 @@ export const OrganizationListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -568,19 +570,19 @@ export const OrganizationResponse = {
 
 const baseOrganization: object = {
   id: "",
-  addressId: "",
-  parentId: "",
-  childrenIds: "",
-  contactPointIds: "",
+  address_id: "",
+  parent_id: "",
+  children_ids: "",
+  contact_point_ids: "",
   website: "",
   email: "",
   logo: "",
-  vatId: "",
-  isicV4: "",
+  vat_id: "",
+  isic_v4: "",
   registration: "",
-  registrationCourt: "",
+  registration_court: "",
   name: "",
-  paymentMethodIds: "",
+  payment_method_ids: "",
 };
 
 export const Organization = {
@@ -591,16 +593,16 @@ export const Organization = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.addressId !== "") {
-      writer.uint32(26).string(message.addressId);
+    if (message.address_id !== "") {
+      writer.uint32(26).string(message.address_id);
     }
-    if (message.parentId !== "") {
-      writer.uint32(34).string(message.parentId);
+    if (message.parent_id !== "") {
+      writer.uint32(34).string(message.parent_id);
     }
-    for (const v of message.childrenIds) {
+    for (const v of message.children_ids) {
       writer.uint32(42).string(v!);
     }
-    for (const v of message.contactPointIds) {
+    for (const v of message.contact_point_ids) {
       writer.uint32(50).string(v!);
     }
     if (message.website !== "") {
@@ -612,22 +614,22 @@ export const Organization = {
     if (message.logo !== "") {
       writer.uint32(74).string(message.logo);
     }
-    if (message.vatId !== "") {
-      writer.uint32(82).string(message.vatId);
+    if (message.vat_id !== "") {
+      writer.uint32(82).string(message.vat_id);
     }
-    if (message.isicV4 !== "") {
-      writer.uint32(90).string(message.isicV4);
+    if (message.isic_v4 !== "") {
+      writer.uint32(90).string(message.isic_v4);
     }
     if (message.registration !== "") {
       writer.uint32(98).string(message.registration);
     }
-    if (message.registrationCourt !== "") {
-      writer.uint32(106).string(message.registrationCourt);
+    if (message.registration_court !== "") {
+      writer.uint32(106).string(message.registration_court);
     }
     if (message.name !== "") {
       writer.uint32(114).string(message.name);
     }
-    for (const v of message.paymentMethodIds) {
+    for (const v of message.payment_method_ids) {
       writer.uint32(122).string(v!);
     }
     if (message.data !== undefined) {
@@ -640,9 +642,9 @@ export const Organization = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.childrenIds = [];
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
+    message.children_ids = [];
+    message.contact_point_ids = [];
+    message.payment_method_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -653,16 +655,16 @@ export const Organization = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.addressId = reader.string();
+          message.address_id = reader.string();
           break;
         case 4:
-          message.parentId = reader.string();
+          message.parent_id = reader.string();
           break;
         case 5:
-          message.childrenIds.push(reader.string());
+          message.children_ids.push(reader.string());
           break;
         case 6:
-          message.contactPointIds.push(reader.string());
+          message.contact_point_ids.push(reader.string());
           break;
         case 7:
           message.website = reader.string();
@@ -674,22 +676,22 @@ export const Organization = {
           message.logo = reader.string();
           break;
         case 10:
-          message.vatId = reader.string();
+          message.vat_id = reader.string();
           break;
         case 11:
-          message.isicV4 = reader.string();
+          message.isic_v4 = reader.string();
           break;
         case 12:
           message.registration = reader.string();
           break;
         case 13:
-          message.registrationCourt = reader.string();
+          message.registration_court = reader.string();
           break;
         case 14:
           message.name = reader.string();
           break;
         case 15:
-          message.paymentMethodIds.push(reader.string());
+          message.payment_method_ids.push(reader.string());
           break;
         case 16:
           message.data = Any.decode(reader, reader.uint32());
@@ -704,9 +706,9 @@ export const Organization = {
 
   fromJSON(object: any): Organization {
     const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.childrenIds = [];
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
+    message.children_ids = [];
+    message.contact_point_ids = [];
+    message.payment_method_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -717,27 +719,27 @@ export const Organization = {
     } else {
       message.meta = undefined;
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = String(object.addressId);
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = String(object.address_id);
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = String(object.parentId);
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = String(object.parent_id);
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(String(e));
+    if (object.children_ids !== undefined && object.children_ids !== null) {
+      for (const e of object.children_ids) {
+        message.children_ids.push(String(e));
       }
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(String(e));
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(String(e));
       }
     }
     if (object.website !== undefined && object.website !== null) {
@@ -755,15 +757,15 @@ export const Organization = {
     } else {
       message.logo = "";
     }
-    if (object.vatId !== undefined && object.vatId !== null) {
-      message.vatId = String(object.vatId);
+    if (object.vat_id !== undefined && object.vat_id !== null) {
+      message.vat_id = String(object.vat_id);
     } else {
-      message.vatId = "";
+      message.vat_id = "";
     }
-    if (object.isicV4 !== undefined && object.isicV4 !== null) {
-      message.isicV4 = String(object.isicV4);
+    if (object.isic_v4 !== undefined && object.isic_v4 !== null) {
+      message.isic_v4 = String(object.isic_v4);
     } else {
-      message.isicV4 = "";
+      message.isic_v4 = "";
     }
     if (object.registration !== undefined && object.registration !== null) {
       message.registration = String(object.registration);
@@ -771,12 +773,12 @@ export const Organization = {
       message.registration = "";
     }
     if (
-      object.registrationCourt !== undefined &&
-      object.registrationCourt !== null
+      object.registration_court !== undefined &&
+      object.registration_court !== null
     ) {
-      message.registrationCourt = String(object.registrationCourt);
+      message.registration_court = String(object.registration_court);
     } else {
-      message.registrationCourt = "";
+      message.registration_court = "";
     }
     if (object.name !== undefined && object.name !== null) {
       message.name = String(object.name);
@@ -784,11 +786,11 @@ export const Organization = {
       message.name = "";
     }
     if (
-      object.paymentMethodIds !== undefined &&
-      object.paymentMethodIds !== null
+      object.payment_method_ids !== undefined &&
+      object.payment_method_ids !== null
     ) {
-      for (const e of object.paymentMethodIds) {
-        message.paymentMethodIds.push(String(e));
+      for (const e of object.payment_method_ids) {
+        message.payment_method_ids.push(String(e));
       }
     }
     if (object.data !== undefined && object.data !== null) {
@@ -801,9 +803,9 @@ export const Organization = {
 
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = { ...baseOrganization } as Organization;
-    message.childrenIds = [];
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
+    message.children_ids = [];
+    message.contact_point_ids = [];
+    message.payment_method_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -814,27 +816,27 @@ export const Organization = {
     } else {
       message.meta = undefined;
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = object.addressId;
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = object.address_id;
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = object.parentId;
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = object.parent_id;
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(e);
+    if (object.children_ids !== undefined && object.children_ids !== null) {
+      for (const e of object.children_ids) {
+        message.children_ids.push(e);
       }
     }
     if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
+      object.contact_point_ids !== undefined &&
+      object.contact_point_ids !== null
     ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(e);
+      for (const e of object.contact_point_ids) {
+        message.contact_point_ids.push(e);
       }
     }
     if (object.website !== undefined && object.website !== null) {
@@ -852,15 +854,15 @@ export const Organization = {
     } else {
       message.logo = "";
     }
-    if (object.vatId !== undefined && object.vatId !== null) {
-      message.vatId = object.vatId;
+    if (object.vat_id !== undefined && object.vat_id !== null) {
+      message.vat_id = object.vat_id;
     } else {
-      message.vatId = "";
+      message.vat_id = "";
     }
-    if (object.isicV4 !== undefined && object.isicV4 !== null) {
-      message.isicV4 = object.isicV4;
+    if (object.isic_v4 !== undefined && object.isic_v4 !== null) {
+      message.isic_v4 = object.isic_v4;
     } else {
-      message.isicV4 = "";
+      message.isic_v4 = "";
     }
     if (object.registration !== undefined && object.registration !== null) {
       message.registration = object.registration;
@@ -868,12 +870,12 @@ export const Organization = {
       message.registration = "";
     }
     if (
-      object.registrationCourt !== undefined &&
-      object.registrationCourt !== null
+      object.registration_court !== undefined &&
+      object.registration_court !== null
     ) {
-      message.registrationCourt = object.registrationCourt;
+      message.registration_court = object.registration_court;
     } else {
-      message.registrationCourt = "";
+      message.registration_court = "";
     }
     if (object.name !== undefined && object.name !== null) {
       message.name = object.name;
@@ -881,11 +883,11 @@ export const Organization = {
       message.name = "";
     }
     if (
-      object.paymentMethodIds !== undefined &&
-      object.paymentMethodIds !== null
+      object.payment_method_ids !== undefined &&
+      object.payment_method_ids !== null
     ) {
-      for (const e of object.paymentMethodIds) {
-        message.paymentMethodIds.push(e);
+      for (const e of object.payment_method_ids) {
+        message.payment_method_ids.push(e);
       }
     }
     if (object.data !== undefined && object.data !== null) {
@@ -901,32 +903,32 @@ export const Organization = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.addressId !== undefined && (obj.addressId = message.addressId);
-    message.parentId !== undefined && (obj.parentId = message.parentId);
-    if (message.childrenIds) {
-      obj.childrenIds = message.childrenIds.map((e) => e);
+    message.address_id !== undefined && (obj.address_id = message.address_id);
+    message.parent_id !== undefined && (obj.parent_id = message.parent_id);
+    if (message.children_ids) {
+      obj.children_ids = message.children_ids.map((e) => e);
     } else {
-      obj.childrenIds = [];
+      obj.children_ids = [];
     }
-    if (message.contactPointIds) {
-      obj.contactPointIds = message.contactPointIds.map((e) => e);
+    if (message.contact_point_ids) {
+      obj.contact_point_ids = message.contact_point_ids.map((e) => e);
     } else {
-      obj.contactPointIds = [];
+      obj.contact_point_ids = [];
     }
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
     message.logo !== undefined && (obj.logo = message.logo);
-    message.vatId !== undefined && (obj.vatId = message.vatId);
-    message.isicV4 !== undefined && (obj.isicV4 = message.isicV4);
+    message.vat_id !== undefined && (obj.vat_id = message.vat_id);
+    message.isic_v4 !== undefined && (obj.isic_v4 = message.isic_v4);
     message.registration !== undefined &&
       (obj.registration = message.registration);
-    message.registrationCourt !== undefined &&
-      (obj.registrationCourt = message.registrationCourt);
+    message.registration_court !== undefined &&
+      (obj.registration_court = message.registration_court);
     message.name !== undefined && (obj.name = message.name);
-    if (message.paymentMethodIds) {
-      obj.paymentMethodIds = message.paymentMethodIds.map((e) => e);
+    if (message.payment_method_ids) {
+      obj.payment_method_ids = message.payment_method_ids.map((e) => e);
     } else {
-      obj.paymentMethodIds = [];
+      obj.payment_method_ids = [];
     }
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);

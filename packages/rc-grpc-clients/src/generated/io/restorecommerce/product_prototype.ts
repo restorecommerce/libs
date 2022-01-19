@@ -30,19 +30,19 @@ export interface ProductPrototype {
   name: string;
   version: string;
   description: string;
-  categoryId: string;
+  category_id: string;
 }
 
 export interface ProductPrototypeList {
   items: ProductPrototype[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface ProductPrototypeListResponse {
   items: ProductPrototypeResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface ProductPrototypeResponse {
@@ -59,7 +59,7 @@ const baseProductPrototype: object = {
   name: "",
   version: "",
   description: "",
-  categoryId: "",
+  category_id: "",
 };
 
 export const ProductPrototype = {
@@ -79,8 +79,8 @@ export const ProductPrototype = {
     if (message.description !== "") {
       writer.uint32(42).string(message.description);
     }
-    if (message.categoryId !== "") {
-      writer.uint32(50).string(message.categoryId);
+    if (message.category_id !== "") {
+      writer.uint32(50).string(message.category_id);
     }
     return writer;
   },
@@ -110,7 +110,7 @@ export const ProductPrototype = {
           message.description = reader.string();
           break;
         case 6:
-          message.categoryId = reader.string();
+          message.category_id = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -149,10 +149,10 @@ export const ProductPrototype = {
     } else {
       message.description = "";
     }
-    if (object.categoryId !== undefined && object.categoryId !== null) {
-      message.categoryId = String(object.categoryId);
+    if (object.category_id !== undefined && object.category_id !== null) {
+      message.category_id = String(object.category_id);
     } else {
-      message.categoryId = "";
+      message.category_id = "";
     }
     return message;
   },
@@ -184,10 +184,10 @@ export const ProductPrototype = {
     } else {
       message.description = "";
     }
-    if (object.categoryId !== undefined && object.categoryId !== null) {
-      message.categoryId = object.categoryId;
+    if (object.category_id !== undefined && object.category_id !== null) {
+      message.category_id = object.category_id;
     } else {
-      message.categoryId = "";
+      message.category_id = "";
     }
     return message;
   },
@@ -201,12 +201,13 @@ export const ProductPrototype = {
     message.version !== undefined && (obj.version = message.version);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.categoryId !== undefined && (obj.categoryId = message.categoryId);
+    message.category_id !== undefined &&
+      (obj.category_id = message.category_id);
     return obj;
   },
 };
 
-const baseProductPrototypeList: object = { totalCount: 0 };
+const baseProductPrototypeList: object = { total_count: 0 };
 
 export const ProductPrototypeList = {
   encode(
@@ -216,8 +217,8 @@ export const ProductPrototypeList = {
     for (const v of message.items) {
       ProductPrototype.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -239,7 +240,7 @@ export const ProductPrototypeList = {
           message.items.push(ProductPrototype.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -262,10 +263,10 @@ export const ProductPrototypeList = {
         message.items.push(ProductPrototype.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -283,10 +284,10 @@ export const ProductPrototypeList = {
         message.items.push(ProductPrototype.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -305,7 +306,8 @@ export const ProductPrototypeList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -314,7 +316,7 @@ export const ProductPrototypeList = {
   },
 };
 
-const baseProductPrototypeListResponse: object = { totalCount: 0 };
+const baseProductPrototypeListResponse: object = { total_count: 0 };
 
 export const ProductPrototypeListResponse = {
   encode(
@@ -324,12 +326,12 @@ export const ProductPrototypeListResponse = {
     for (const v of message.items) {
       ProductPrototypeResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -355,10 +357,10 @@ export const ProductPrototypeListResponse = {
           );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -381,20 +383,20 @@ export const ProductPrototypeListResponse = {
         message.items.push(ProductPrototypeResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -411,20 +413,20 @@ export const ProductPrototypeListResponse = {
         message.items.push(ProductPrototypeResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -438,10 +440,11 @@ export const ProductPrototypeListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },

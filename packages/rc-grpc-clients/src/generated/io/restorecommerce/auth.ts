@@ -15,9 +15,9 @@ export interface Subject {
   /** target scope */
   scope: string;
   /** role_associations of user creating the user */
-  roleAssociations: RoleAssociation[];
+  role_associations: RoleAssociation[];
   /** HR scope of user creating the User */
-  hierarchicalScopes: HierarchicalScope[];
+  hierarchical_scopes: HierarchicalScope[];
   /** for unauthenticated context */
   unauthenticated: boolean;
   token: string;
@@ -27,7 +27,7 @@ export interface Tokens {
   /** token name */
   name: string;
   /** expiration date for token */
-  expiresIn: number;
+  expires_in: number;
   /** token */
   token: string;
   /** identifier for role_association */
@@ -35,7 +35,7 @@ export interface Tokens {
   /** type of token eg: access_token, refresh_token */
   type: string;
   interactive: boolean;
-  lastLogin: number;
+  last_login: number;
 }
 
 export interface HierarchicalScope {
@@ -61,8 +61,8 @@ export interface HierarchicalScopesRequest {
 }
 
 export interface HierarchicalScopesResponse {
-  subjectId: string;
-  hierarchicalScopes: HierarchicalScope[];
+  subject_id: string;
+  hierarchical_scopes: HierarchicalScope[];
   token: string;
 }
 
@@ -81,10 +81,10 @@ export const Subject = {
     if (message.scope !== "") {
       writer.uint32(18).string(message.scope);
     }
-    for (const v of message.roleAssociations) {
+    for (const v of message.role_associations) {
       RoleAssociation.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    for (const v of message.hierarchicalScopes) {
+    for (const v of message.hierarchical_scopes) {
       HierarchicalScope.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.unauthenticated === true) {
@@ -100,8 +100,8 @@ export const Subject = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseSubject) as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
+    message.role_associations = [];
+    message.hierarchical_scopes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -112,12 +112,12 @@ export const Subject = {
           message.scope = reader.string();
           break;
         case 3:
-          message.roleAssociations.push(
+          message.role_associations.push(
             RoleAssociation.decode(reader, reader.uint32())
           );
           break;
         case 4:
-          message.hierarchicalScopes.push(
+          message.hierarchical_scopes.push(
             HierarchicalScope.decode(reader, reader.uint32())
           );
           break;
@@ -137,8 +137,8 @@ export const Subject = {
 
   fromJSON(object: any): Subject {
     const message = globalThis.Object.create(baseSubject) as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
+    message.role_associations = [];
+    message.hierarchical_scopes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -150,19 +150,19 @@ export const Subject = {
       message.scope = "";
     }
     if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
+      object.role_associations !== undefined &&
+      object.role_associations !== null
     ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromJSON(e));
+      for (const e of object.role_associations) {
+        message.role_associations.push(RoleAssociation.fromJSON(e));
       }
     }
     if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
+      object.hierarchical_scopes !== undefined &&
+      object.hierarchical_scopes !== null
     ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
+      for (const e of object.hierarchical_scopes) {
+        message.hierarchical_scopes.push(HierarchicalScope.fromJSON(e));
       }
     }
     if (
@@ -183,8 +183,8 @@ export const Subject = {
 
   fromPartial(object: DeepPartial<Subject>): Subject {
     const message = { ...baseSubject } as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
+    message.role_associations = [];
+    message.hierarchical_scopes = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -196,19 +196,19 @@ export const Subject = {
       message.scope = "";
     }
     if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
+      object.role_associations !== undefined &&
+      object.role_associations !== null
     ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromPartial(e));
+      for (const e of object.role_associations) {
+        message.role_associations.push(RoleAssociation.fromPartial(e));
       }
     }
     if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
+      object.hierarchical_scopes !== undefined &&
+      object.hierarchical_scopes !== null
     ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
+      for (const e of object.hierarchical_scopes) {
+        message.hierarchical_scopes.push(HierarchicalScope.fromPartial(e));
       }
     }
     if (
@@ -231,19 +231,19 @@ export const Subject = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.scope !== undefined && (obj.scope = message.scope);
-    if (message.roleAssociations) {
-      obj.roleAssociations = message.roleAssociations.map((e) =>
+    if (message.role_associations) {
+      obj.role_associations = message.role_associations.map((e) =>
         e ? RoleAssociation.toJSON(e) : undefined
       );
     } else {
-      obj.roleAssociations = [];
+      obj.role_associations = [];
     }
-    if (message.hierarchicalScopes) {
-      obj.hierarchicalScopes = message.hierarchicalScopes.map((e) =>
+    if (message.hierarchical_scopes) {
+      obj.hierarchical_scopes = message.hierarchical_scopes.map((e) =>
         e ? HierarchicalScope.toJSON(e) : undefined
       );
     } else {
-      obj.hierarchicalScopes = [];
+      obj.hierarchical_scopes = [];
     }
     message.unauthenticated !== undefined &&
       (obj.unauthenticated = message.unauthenticated);
@@ -254,12 +254,12 @@ export const Subject = {
 
 const baseTokens: object = {
   name: "",
-  expiresIn: 0,
+  expires_in: 0,
   token: "",
   scopes: "",
   type: "",
   interactive: false,
-  lastLogin: 0,
+  last_login: 0,
 };
 
 export const Tokens = {
@@ -267,8 +267,8 @@ export const Tokens = {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
-    if (message.expiresIn !== 0) {
-      writer.uint32(17).double(message.expiresIn);
+    if (message.expires_in !== 0) {
+      writer.uint32(17).double(message.expires_in);
     }
     if (message.token !== "") {
       writer.uint32(26).string(message.token);
@@ -282,8 +282,8 @@ export const Tokens = {
     if (message.interactive === true) {
       writer.uint32(48).bool(message.interactive);
     }
-    if (message.lastLogin !== 0) {
-      writer.uint32(57).double(message.lastLogin);
+    if (message.last_login !== 0) {
+      writer.uint32(57).double(message.last_login);
     }
     return writer;
   },
@@ -300,7 +300,7 @@ export const Tokens = {
           message.name = reader.string();
           break;
         case 2:
-          message.expiresIn = reader.double();
+          message.expires_in = reader.double();
           break;
         case 3:
           message.token = reader.string();
@@ -315,7 +315,7 @@ export const Tokens = {
           message.interactive = reader.bool();
           break;
         case 7:
-          message.lastLogin = reader.double();
+          message.last_login = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -333,10 +333,10 @@ export const Tokens = {
     } else {
       message.name = "";
     }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = Number(object.expiresIn);
+    if (object.expires_in !== undefined && object.expires_in !== null) {
+      message.expires_in = Number(object.expires_in);
     } else {
-      message.expiresIn = 0;
+      message.expires_in = 0;
     }
     if (object.token !== undefined && object.token !== null) {
       message.token = String(object.token);
@@ -358,10 +358,10 @@ export const Tokens = {
     } else {
       message.interactive = false;
     }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = Number(object.lastLogin);
+    if (object.last_login !== undefined && object.last_login !== null) {
+      message.last_login = Number(object.last_login);
     } else {
-      message.lastLogin = 0;
+      message.last_login = 0;
     }
     return message;
   },
@@ -374,10 +374,10 @@ export const Tokens = {
     } else {
       message.name = "";
     }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = object.expiresIn;
+    if (object.expires_in !== undefined && object.expires_in !== null) {
+      message.expires_in = object.expires_in;
     } else {
-      message.expiresIn = 0;
+      message.expires_in = 0;
     }
     if (object.token !== undefined && object.token !== null) {
       message.token = object.token;
@@ -399,10 +399,10 @@ export const Tokens = {
     } else {
       message.interactive = false;
     }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = object.lastLogin;
+    if (object.last_login !== undefined && object.last_login !== null) {
+      message.last_login = object.last_login;
     } else {
-      message.lastLogin = 0;
+      message.last_login = 0;
     }
     return message;
   },
@@ -410,7 +410,7 @@ export const Tokens = {
   toJSON(message: Tokens): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn);
+    message.expires_in !== undefined && (obj.expires_in = message.expires_in);
     message.token !== undefined && (obj.token = message.token);
     if (message.scopes) {
       obj.scopes = message.scopes.map((e) => e);
@@ -420,7 +420,7 @@ export const Tokens = {
     message.type !== undefined && (obj.type = message.type);
     message.interactive !== undefined &&
       (obj.interactive = message.interactive);
-    message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin);
+    message.last_login !== undefined && (obj.last_login = message.last_login);
     return obj;
   },
 };
@@ -700,17 +700,17 @@ export const HierarchicalScopesRequest = {
   },
 };
 
-const baseHierarchicalScopesResponse: object = { subjectId: "", token: "" };
+const baseHierarchicalScopesResponse: object = { subject_id: "", token: "" };
 
 export const HierarchicalScopesResponse = {
   encode(
     message: HierarchicalScopesResponse,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.subjectId !== "") {
-      writer.uint32(10).string(message.subjectId);
+    if (message.subject_id !== "") {
+      writer.uint32(10).string(message.subject_id);
     }
-    for (const v of message.hierarchicalScopes) {
+    for (const v of message.hierarchical_scopes) {
       HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.token !== "") {
@@ -728,15 +728,15 @@ export const HierarchicalScopesResponse = {
     const message = globalThis.Object.create(
       baseHierarchicalScopesResponse
     ) as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
+    message.hierarchical_scopes = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subjectId = reader.string();
+          message.subject_id = reader.string();
           break;
         case 2:
-          message.hierarchicalScopes.push(
+          message.hierarchical_scopes.push(
             HierarchicalScope.decode(reader, reader.uint32())
           );
           break;
@@ -755,18 +755,18 @@ export const HierarchicalScopesResponse = {
     const message = globalThis.Object.create(
       baseHierarchicalScopesResponse
     ) as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
+    message.hierarchical_scopes = [];
+    if (object.subject_id !== undefined && object.subject_id !== null) {
+      message.subject_id = String(object.subject_id);
     } else {
-      message.subjectId = "";
+      message.subject_id = "";
     }
     if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
+      object.hierarchical_scopes !== undefined &&
+      object.hierarchical_scopes !== null
     ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
+      for (const e of object.hierarchical_scopes) {
+        message.hierarchical_scopes.push(HierarchicalScope.fromJSON(e));
       }
     }
     if (object.token !== undefined && object.token !== null) {
@@ -783,18 +783,18 @@ export const HierarchicalScopesResponse = {
     const message = {
       ...baseHierarchicalScopesResponse,
     } as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
+    message.hierarchical_scopes = [];
+    if (object.subject_id !== undefined && object.subject_id !== null) {
+      message.subject_id = object.subject_id;
     } else {
-      message.subjectId = "";
+      message.subject_id = "";
     }
     if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
+      object.hierarchical_scopes !== undefined &&
+      object.hierarchical_scopes !== null
     ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
+      for (const e of object.hierarchical_scopes) {
+        message.hierarchical_scopes.push(HierarchicalScope.fromPartial(e));
       }
     }
     if (object.token !== undefined && object.token !== null) {
@@ -807,13 +807,13 @@ export const HierarchicalScopesResponse = {
 
   toJSON(message: HierarchicalScopesResponse): unknown {
     const obj: any = {};
-    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
-    if (message.hierarchicalScopes) {
-      obj.hierarchicalScopes = message.hierarchicalScopes.map((e) =>
+    message.subject_id !== undefined && (obj.subject_id = message.subject_id);
+    if (message.hierarchical_scopes) {
+      obj.hierarchical_scopes = message.hierarchical_scopes.map((e) =>
         e ? HierarchicalScope.toJSON(e) : undefined
       );
     } else {
-      obj.hierarchicalScopes = [];
+      obj.hierarchical_scopes = [];
     }
     message.token !== undefined && (obj.token = message.token);
     return obj;

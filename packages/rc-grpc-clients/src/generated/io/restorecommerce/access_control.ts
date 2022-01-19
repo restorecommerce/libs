@@ -38,8 +38,8 @@ export interface Context {
 export interface Response {
   decision: Response_Decision;
   obligation: string;
-  evaluationCacheable: boolean;
-  operationStatus?: OperationStatus;
+  evaluation_cacheable: boolean;
+  operation_status?: OperationStatus;
 }
 
 export enum Response_Decision {
@@ -87,8 +87,8 @@ export function response_DecisionToJSON(object: Response_Decision): string {
 }
 
 export interface ReverseQuery {
-  policySets: PolicySetRQ[];
-  operationStatus?: OperationStatus;
+  policy_sets: PolicySetRQ[];
+  operation_status?: OperationStatus;
 }
 
 const baseRequest: object = {};
@@ -272,7 +272,7 @@ export const Context = {
 const baseResponse: object = {
   decision: 0,
   obligation: "",
-  evaluationCacheable: false,
+  evaluation_cacheable: false,
 };
 
 export const Response = {
@@ -283,12 +283,12 @@ export const Response = {
     if (message.obligation !== "") {
       writer.uint32(18).string(message.obligation);
     }
-    if (message.evaluationCacheable === true) {
-      writer.uint32(24).bool(message.evaluationCacheable);
+    if (message.evaluation_cacheable === true) {
+      writer.uint32(24).bool(message.evaluation_cacheable);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(34).fork()
       ).ldelim();
     }
@@ -309,10 +309,10 @@ export const Response = {
           message.obligation = reader.string();
           break;
         case 3:
-          message.evaluationCacheable = reader.bool();
+          message.evaluation_cacheable = reader.bool();
           break;
         case 4:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -338,22 +338,22 @@ export const Response = {
       message.obligation = "";
     }
     if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
+      object.evaluation_cacheable !== undefined &&
+      object.evaluation_cacheable !== null
     ) {
-      message.evaluationCacheable = Boolean(object.evaluationCacheable);
+      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
     } else {
-      message.evaluationCacheable = false;
+      message.evaluation_cacheable = false;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -371,22 +371,22 @@ export const Response = {
       message.obligation = "";
     }
     if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
+      object.evaluation_cacheable !== undefined &&
+      object.evaluation_cacheable !== null
     ) {
-      message.evaluationCacheable = object.evaluationCacheable;
+      message.evaluation_cacheable = object.evaluation_cacheable;
     } else {
-      message.evaluationCacheable = false;
+      message.evaluation_cacheable = false;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -396,11 +396,11 @@ export const Response = {
     message.decision !== undefined &&
       (obj.decision = response_DecisionToJSON(message.decision));
     message.obligation !== undefined && (obj.obligation = message.obligation);
-    message.evaluationCacheable !== undefined &&
-      (obj.evaluationCacheable = message.evaluationCacheable);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.evaluation_cacheable !== undefined &&
+      (obj.evaluation_cacheable = message.evaluation_cacheable);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -410,12 +410,12 @@ const baseReverseQuery: object = {};
 
 export const ReverseQuery = {
   encode(message: ReverseQuery, writer: Writer = Writer.create()): Writer {
-    for (const v of message.policySets) {
+    for (const v of message.policy_sets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(18).fork()
       ).ldelim();
     }
@@ -426,15 +426,15 @@ export const ReverseQuery = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policySets = [];
+    message.policy_sets = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.policySets.push(PolicySetRQ.decode(reader, reader.uint32()));
+          message.policy_sets.push(PolicySetRQ.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -449,58 +449,58 @@ export const ReverseQuery = {
 
   fromJSON(object: any): ReverseQuery {
     const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policySets = [];
-    if (object.policySets !== undefined && object.policySets !== null) {
-      for (const e of object.policySets) {
-        message.policySets.push(PolicySetRQ.fromJSON(e));
+    message.policy_sets = [];
+    if (object.policy_sets !== undefined && object.policy_sets !== null) {
+      for (const e of object.policy_sets) {
+        message.policy_sets.push(PolicySetRQ.fromJSON(e));
       }
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
     const message = { ...baseReverseQuery } as ReverseQuery;
-    message.policySets = [];
-    if (object.policySets !== undefined && object.policySets !== null) {
-      for (const e of object.policySets) {
-        message.policySets.push(PolicySetRQ.fromPartial(e));
+    message.policy_sets = [];
+    if (object.policy_sets !== undefined && object.policy_sets !== null) {
+      for (const e of object.policy_sets) {
+        message.policy_sets.push(PolicySetRQ.fromPartial(e));
       }
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
 
   toJSON(message: ReverseQuery): unknown {
     const obj: any = {};
-    if (message.policySets) {
-      obj.policySets = message.policySets.map((e) =>
+    if (message.policy_sets) {
+      obj.policy_sets = message.policy_sets.map((e) =>
         e ? PolicySetRQ.toJSON(e) : undefined
       );
     } else {
-      obj.policySets = [];
+      obj.policy_sets = [];
     }
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },

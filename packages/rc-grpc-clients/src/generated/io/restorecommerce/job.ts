@@ -38,14 +38,14 @@ export interface Deleted {
 /** A list of jobs. */
 export interface JobList {
   items: Job[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface JobListResponse {
   items: JobResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface JobResponse {
@@ -152,7 +152,7 @@ export interface Data {
   payload?: Any;
   meta?: Meta;
   /** id of job creator */
-  subjectId: string;
+  subject_id: string;
 }
 
 /**
@@ -166,7 +166,7 @@ export interface ScheduledJob {
   /** Job-specific data with variable payload */
   data?: Data;
   /** Type of schedule (ONCE, RECURR, etc) */
-  scheduleType: string;
+  schedule_type: string;
 }
 
 /**
@@ -177,9 +177,9 @@ export interface JobDone {
   /** Job instance ID */
   id: string;
   /** Type of schedule (ONCE, RECURR, etc) */
-  scheduleType: string;
+  schedule_type: string;
   /** Whether to delete scheduled job */
-  deleteScheduled: boolean;
+  delete_scheduled: boolean;
   /** Job type */
   type: string;
   result?: Any;
@@ -195,7 +195,7 @@ export interface JobFailed {
   /** Error message */
   error: string;
   /** Type of job ex: ONCE, RECURR etc. */
-  scheduleType: string;
+  schedule_type: string;
   /** Job type */
   type: string;
 }
@@ -298,7 +298,7 @@ export function jobReadRequest_SortOrderToJSON(
 
 /** filter */
 export interface JobFilter {
-  jobIds: string[];
+  job_ids: string[];
   type: string;
 }
 
@@ -357,15 +357,15 @@ export const Deleted = {
   },
 };
 
-const baseJobList: object = { totalCount: 0 };
+const baseJobList: object = { total_count: 0 };
 
 export const JobList = {
   encode(message: JobList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Job.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -385,7 +385,7 @@ export const JobList = {
           message.items.push(Job.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -406,10 +406,10 @@ export const JobList = {
         message.items.push(Job.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -427,10 +427,10 @@ export const JobList = {
         message.items.push(Job.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -447,7 +447,8 @@ export const JobList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -456,19 +457,19 @@ export const JobList = {
   },
 };
 
-const baseJobListResponse: object = { totalCount: 0 };
+const baseJobListResponse: object = { total_count: 0 };
 
 export const JobListResponse = {
   encode(message: JobListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       JobResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -489,10 +490,10 @@ export const JobListResponse = {
           message.items.push(JobResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -515,20 +516,20 @@ export const JobListResponse = {
         message.items.push(JobResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -541,20 +542,20 @@ export const JobListResponse = {
         message.items.push(JobResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -568,10 +569,11 @@ export const JobListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -1100,7 +1102,7 @@ export const Repeat = {
   },
 };
 
-const baseData: object = { timezone: "", subjectId: "" };
+const baseData: object = { timezone: "", subject_id: "" };
 
 export const Data = {
   encode(message: Data, writer: Writer = Writer.create()): Writer {
@@ -1113,8 +1115,8 @@ export const Data = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    if (message.subjectId !== "") {
-      writer.uint32(34).string(message.subjectId);
+    if (message.subject_id !== "") {
+      writer.uint32(34).string(message.subject_id);
     }
     return writer;
   },
@@ -1136,7 +1138,7 @@ export const Data = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 4:
-          message.subjectId = reader.string();
+          message.subject_id = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1163,10 +1165,10 @@ export const Data = {
     } else {
       message.meta = undefined;
     }
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
+    if (object.subject_id !== undefined && object.subject_id !== null) {
+      message.subject_id = String(object.subject_id);
     } else {
-      message.subjectId = "";
+      message.subject_id = "";
     }
     return message;
   },
@@ -1188,10 +1190,10 @@ export const Data = {
     } else {
       message.meta = undefined;
     }
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
+    if (object.subject_id !== undefined && object.subject_id !== null) {
+      message.subject_id = object.subject_id;
     } else {
-      message.subjectId = "";
+      message.subject_id = "";
     }
     return message;
   },
@@ -1203,12 +1205,12 @@ export const Data = {
       (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    message.subject_id !== undefined && (obj.subject_id = message.subject_id);
     return obj;
   },
 };
 
-const baseScheduledJob: object = { id: "", type: "", scheduleType: "" };
+const baseScheduledJob: object = { id: "", type: "", schedule_type: "" };
 
 export const ScheduledJob = {
   encode(message: ScheduledJob, writer: Writer = Writer.create()): Writer {
@@ -1221,8 +1223,8 @@ export const ScheduledJob = {
     if (message.data !== undefined) {
       Data.encode(message.data, writer.uint32(26).fork()).ldelim();
     }
-    if (message.scheduleType !== "") {
-      writer.uint32(34).string(message.scheduleType);
+    if (message.schedule_type !== "") {
+      writer.uint32(34).string(message.schedule_type);
     }
     return writer;
   },
@@ -1244,7 +1246,7 @@ export const ScheduledJob = {
           message.data = Data.decode(reader, reader.uint32());
           break;
         case 4:
-          message.scheduleType = reader.string();
+          message.schedule_type = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1271,10 +1273,10 @@ export const ScheduledJob = {
     } else {
       message.data = undefined;
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = String(object.scheduleType);
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = String(object.schedule_type);
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     return message;
   },
@@ -1296,10 +1298,10 @@ export const ScheduledJob = {
     } else {
       message.data = undefined;
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = object.scheduleType;
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = object.schedule_type;
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     return message;
   },
@@ -1310,16 +1312,16 @@ export const ScheduledJob = {
     message.type !== undefined && (obj.type = message.type);
     message.data !== undefined &&
       (obj.data = message.data ? Data.toJSON(message.data) : undefined);
-    message.scheduleType !== undefined &&
-      (obj.scheduleType = message.scheduleType);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
     return obj;
   },
 };
 
 const baseJobDone: object = {
   id: "",
-  scheduleType: "",
-  deleteScheduled: false,
+  schedule_type: "",
+  delete_scheduled: false,
   type: "",
 };
 
@@ -1328,11 +1330,11 @@ export const JobDone = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.scheduleType !== "") {
-      writer.uint32(18).string(message.scheduleType);
+    if (message.schedule_type !== "") {
+      writer.uint32(18).string(message.schedule_type);
     }
-    if (message.deleteScheduled === true) {
-      writer.uint32(24).bool(message.deleteScheduled);
+    if (message.delete_scheduled === true) {
+      writer.uint32(24).bool(message.delete_scheduled);
     }
     if (message.type !== "") {
       writer.uint32(34).string(message.type);
@@ -1354,10 +1356,10 @@ export const JobDone = {
           message.id = reader.string();
           break;
         case 2:
-          message.scheduleType = reader.string();
+          message.schedule_type = reader.string();
           break;
         case 3:
-          message.deleteScheduled = reader.bool();
+          message.delete_scheduled = reader.bool();
           break;
         case 4:
           message.type = reader.string();
@@ -1380,18 +1382,18 @@ export const JobDone = {
     } else {
       message.id = "";
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = String(object.scheduleType);
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = String(object.schedule_type);
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     if (
-      object.deleteScheduled !== undefined &&
-      object.deleteScheduled !== null
+      object.delete_scheduled !== undefined &&
+      object.delete_scheduled !== null
     ) {
-      message.deleteScheduled = Boolean(object.deleteScheduled);
+      message.delete_scheduled = Boolean(object.delete_scheduled);
     } else {
-      message.deleteScheduled = false;
+      message.delete_scheduled = false;
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = String(object.type);
@@ -1413,18 +1415,18 @@ export const JobDone = {
     } else {
       message.id = "";
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = object.scheduleType;
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = object.schedule_type;
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     if (
-      object.deleteScheduled !== undefined &&
-      object.deleteScheduled !== null
+      object.delete_scheduled !== undefined &&
+      object.delete_scheduled !== null
     ) {
-      message.deleteScheduled = object.deleteScheduled;
+      message.delete_scheduled = object.delete_scheduled;
     } else {
-      message.deleteScheduled = false;
+      message.delete_scheduled = false;
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
@@ -1442,10 +1444,10 @@ export const JobDone = {
   toJSON(message: JobDone): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.scheduleType !== undefined &&
-      (obj.scheduleType = message.scheduleType);
-    message.deleteScheduled !== undefined &&
-      (obj.deleteScheduled = message.deleteScheduled);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
+    message.delete_scheduled !== undefined &&
+      (obj.delete_scheduled = message.delete_scheduled);
     message.type !== undefined && (obj.type = message.type);
     message.result !== undefined &&
       (obj.result = message.result ? Any.toJSON(message.result) : undefined);
@@ -1453,7 +1455,12 @@ export const JobDone = {
   },
 };
 
-const baseJobFailed: object = { id: "", error: "", scheduleType: "", type: "" };
+const baseJobFailed: object = {
+  id: "",
+  error: "",
+  schedule_type: "",
+  type: "",
+};
 
 export const JobFailed = {
   encode(message: JobFailed, writer: Writer = Writer.create()): Writer {
@@ -1463,8 +1470,8 @@ export const JobFailed = {
     if (message.error !== "") {
       writer.uint32(18).string(message.error);
     }
-    if (message.scheduleType !== "") {
-      writer.uint32(26).string(message.scheduleType);
+    if (message.schedule_type !== "") {
+      writer.uint32(26).string(message.schedule_type);
     }
     if (message.type !== "") {
       writer.uint32(34).string(message.type);
@@ -1486,7 +1493,7 @@ export const JobFailed = {
           message.error = reader.string();
           break;
         case 3:
-          message.scheduleType = reader.string();
+          message.schedule_type = reader.string();
           break;
         case 4:
           message.type = reader.string();
@@ -1511,10 +1518,10 @@ export const JobFailed = {
     } else {
       message.error = "";
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = String(object.scheduleType);
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = String(object.schedule_type);
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = String(object.type);
@@ -1536,10 +1543,10 @@ export const JobFailed = {
     } else {
       message.error = "";
     }
-    if (object.scheduleType !== undefined && object.scheduleType !== null) {
-      message.scheduleType = object.scheduleType;
+    if (object.schedule_type !== undefined && object.schedule_type !== null) {
+      message.schedule_type = object.schedule_type;
     } else {
-      message.scheduleType = "";
+      message.schedule_type = "";
     }
     if (object.type !== undefined && object.type !== null) {
       message.type = object.type;
@@ -1553,8 +1560,8 @@ export const JobFailed = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.error !== undefined && (obj.error = message.error);
-    message.scheduleType !== undefined &&
-      (obj.scheduleType = message.scheduleType);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
     message.type !== undefined && (obj.type = message.type);
     return obj;
   },
@@ -1775,11 +1782,11 @@ export const JobReadRequest = {
   },
 };
 
-const baseJobFilter: object = { jobIds: "", type: "" };
+const baseJobFilter: object = { job_ids: "", type: "" };
 
 export const JobFilter = {
   encode(message: JobFilter, writer: Writer = Writer.create()): Writer {
-    for (const v of message.jobIds) {
+    for (const v of message.job_ids) {
       writer.uint32(10).string(v!);
     }
     if (message.type !== "") {
@@ -1792,12 +1799,12 @@ export const JobFilter = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseJobFilter) as JobFilter;
-    message.jobIds = [];
+    message.job_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.jobIds.push(reader.string());
+          message.job_ids.push(reader.string());
           break;
         case 2:
           message.type = reader.string();
@@ -1812,10 +1819,10 @@ export const JobFilter = {
 
   fromJSON(object: any): JobFilter {
     const message = globalThis.Object.create(baseJobFilter) as JobFilter;
-    message.jobIds = [];
-    if (object.jobIds !== undefined && object.jobIds !== null) {
-      for (const e of object.jobIds) {
-        message.jobIds.push(String(e));
+    message.job_ids = [];
+    if (object.job_ids !== undefined && object.job_ids !== null) {
+      for (const e of object.job_ids) {
+        message.job_ids.push(String(e));
       }
     }
     if (object.type !== undefined && object.type !== null) {
@@ -1828,10 +1835,10 @@ export const JobFilter = {
 
   fromPartial(object: DeepPartial<JobFilter>): JobFilter {
     const message = { ...baseJobFilter } as JobFilter;
-    message.jobIds = [];
-    if (object.jobIds !== undefined && object.jobIds !== null) {
-      for (const e of object.jobIds) {
-        message.jobIds.push(e);
+    message.job_ids = [];
+    if (object.job_ids !== undefined && object.job_ids !== null) {
+      for (const e of object.job_ids) {
+        message.job_ids.push(e);
       }
     }
     if (object.type !== undefined && object.type !== null) {
@@ -1844,10 +1851,10 @@ export const JobFilter = {
 
   toJSON(message: JobFilter): unknown {
     const obj: any = {};
-    if (message.jobIds) {
-      obj.jobIds = message.jobIds.map((e) => e);
+    if (message.job_ids) {
+      obj.job_ids = message.job_ids.map((e) => e);
     } else {
-      obj.jobIds = [];
+      obj.job_ids = [];
     }
     message.type !== undefined && (obj.type = message.type);
     return obj;

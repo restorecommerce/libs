@@ -2,7 +2,8 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   Address,
-  protoMetadata as protoMetadata5,
+  protoMetadata as protoMetadata7,
+  Parcel,
 } from "../../io/restorecommerce/fulfillment";
 import {
   Subject,
@@ -24,47 +25,49 @@ import {
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
 import {
-  protoMetadata as protoMetadata6,
-  Country,
-} from "../../io/restorecommerce/country";
-import {
-  protoMetadata as protoMetadata7,
+  protoMetadata as protoMetadata5,
   Attribute,
 } from "../../io/restorecommerce/attribute";
+import {
+  protoMetadata as protoMetadata6,
+  Item,
+} from "../../io/restorecommerce/order";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
 
-export interface Good {
-  quantity: number;
-  weight: number;
-  height: number;
-  width: number;
-  length: number;
+export interface Preferences {
+  /** ID, name or type */
+  couriers: Attribute[];
+  pricing: number;
+  compactness: number;
+  homogeneity: number;
 }
 
 export interface Query {
   sender?: Address;
   receiver?: Address;
-  good: Good[];
+  goods: Item[];
+  preferences?: Preferences;
+  reference_id: string;
 }
 
 export interface QueryList {
   items: Query[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
-export interface Product {
+export interface FulfillmentProduct {
   id: string;
   name: string;
   description: string;
-  courierId: string;
-  startCountry: Country[];
-  startZone: string[];
-  destinationCountry: Country[];
-  destinationZone: string[];
-  taxId: string[];
+  courier_id: string;
+  /** repeated io.restorecommerce.country.Country start_country = 5; */
+  start_zones: string[];
+  /** repeated io.restorecommerce.country.Country destination_country = 7; */
+  destination_zones: string[];
+  tax_ids: string[];
   attributes: Attribute[];
   variants: Variant[];
   meta?: Meta;
@@ -75,83 +78,92 @@ export interface Variant {
   name: string;
   description: string;
   price: number;
-  maxWeight: number;
-  maxWidth: number;
-  maxHeight: number;
-  maxLength: number;
-  maxVolume: number;
+  max_weight: number;
+  max_width: number;
+  max_height: number;
+  max_length: number;
+  max_volume: number;
 }
 
-export interface ProductList {
-  items: Product[];
-  totalCount: number;
+export interface FulfillmentProductList {
+  items: FulfillmentProduct[];
+  total_count: number;
   subject?: Subject;
 }
 
-export interface ProductResponse {
-  payload?: Product;
+export interface FulfillmentProductResponse {
+  payload?: FulfillmentProduct;
   status?: Status;
 }
 
-export interface ProductResponseList {
-  items: ProductResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+export interface FulfillmentProductResponseList {
+  items: FulfillmentProductResponse[];
+  total_count: number;
+  operation_status?: OperationStatus;
+}
+
+export interface PackingSolution {
+  reference_id: string;
+  price: number;
+  compactness: number;
+  homogeneity: number;
+  score: number;
+  parcels: Parcel[];
+}
+
+export interface PackingSolutionResponse {
+  solutions: PackingSolution[];
+  status?: Status;
+}
+
+export interface PackingSolutionResponseList {
+  items: PackingSolutionResponse[];
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface Deleted {
   id: string;
 }
 
-const baseGood: object = {
-  quantity: 0,
-  weight: 0,
-  height: 0,
-  width: 0,
-  length: 0,
-};
+const basePreferences: object = { pricing: 0, compactness: 0, homogeneity: 0 };
 
-export const Good = {
-  encode(message: Good, writer: Writer = Writer.create()): Writer {
-    if (message.quantity !== 0) {
-      writer.uint32(9).double(message.quantity);
+export const Preferences = {
+  encode(message: Preferences, writer: Writer = Writer.create()): Writer {
+    for (const v of message.couriers) {
+      Attribute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.weight !== 0) {
-      writer.uint32(17).double(message.weight);
+    if (message.pricing !== 0) {
+      writer.uint32(21).float(message.pricing);
     }
-    if (message.height !== 0) {
-      writer.uint32(25).double(message.height);
+    if (message.compactness !== 0) {
+      writer.uint32(29).float(message.compactness);
     }
-    if (message.width !== 0) {
-      writer.uint32(33).double(message.width);
-    }
-    if (message.length !== 0) {
-      writer.uint32(41).double(message.length);
+    if (message.homogeneity !== 0) {
+      writer.uint32(37).float(message.homogeneity);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Good {
+  decode(input: Reader | Uint8Array, length?: number): Preferences {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseGood) as Good;
+    const message = globalThis.Object.create(basePreferences) as Preferences;
+    message.couriers = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.quantity = reader.double();
+          message.couriers.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.weight = reader.double();
+          message.pricing = reader.float();
           break;
         case 3:
-          message.height = reader.double();
+          message.compactness = reader.float();
           break;
         case 4:
-          message.width = reader.double();
-          break;
-        case 5:
-          message.length = reader.double();
+          message.homogeneity = reader.float();
           break;
         default:
           reader.skipType(tag & 7);
@@ -161,78 +173,77 @@ export const Good = {
     return message;
   },
 
-  fromJSON(object: any): Good {
-    const message = globalThis.Object.create(baseGood) as Good;
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = Number(object.quantity);
-    } else {
-      message.quantity = 0;
+  fromJSON(object: any): Preferences {
+    const message = globalThis.Object.create(basePreferences) as Preferences;
+    message.couriers = [];
+    if (object.couriers !== undefined && object.couriers !== null) {
+      for (const e of object.couriers) {
+        message.couriers.push(Attribute.fromJSON(e));
+      }
     }
-    if (object.weight !== undefined && object.weight !== null) {
-      message.weight = Number(object.weight);
+    if (object.pricing !== undefined && object.pricing !== null) {
+      message.pricing = Number(object.pricing);
     } else {
-      message.weight = 0;
+      message.pricing = 0;
     }
-    if (object.height !== undefined && object.height !== null) {
-      message.height = Number(object.height);
+    if (object.compactness !== undefined && object.compactness !== null) {
+      message.compactness = Number(object.compactness);
     } else {
-      message.height = 0;
+      message.compactness = 0;
     }
-    if (object.width !== undefined && object.width !== null) {
-      message.width = Number(object.width);
+    if (object.homogeneity !== undefined && object.homogeneity !== null) {
+      message.homogeneity = Number(object.homogeneity);
     } else {
-      message.width = 0;
-    }
-    if (object.length !== undefined && object.length !== null) {
-      message.length = Number(object.length);
-    } else {
-      message.length = 0;
+      message.homogeneity = 0;
     }
     return message;
   },
 
-  fromPartial(object: DeepPartial<Good>): Good {
-    const message = { ...baseGood } as Good;
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = object.quantity;
-    } else {
-      message.quantity = 0;
+  fromPartial(object: DeepPartial<Preferences>): Preferences {
+    const message = { ...basePreferences } as Preferences;
+    message.couriers = [];
+    if (object.couriers !== undefined && object.couriers !== null) {
+      for (const e of object.couriers) {
+        message.couriers.push(Attribute.fromPartial(e));
+      }
     }
-    if (object.weight !== undefined && object.weight !== null) {
-      message.weight = object.weight;
+    if (object.pricing !== undefined && object.pricing !== null) {
+      message.pricing = object.pricing;
     } else {
-      message.weight = 0;
+      message.pricing = 0;
     }
-    if (object.height !== undefined && object.height !== null) {
-      message.height = object.height;
+    if (object.compactness !== undefined && object.compactness !== null) {
+      message.compactness = object.compactness;
     } else {
-      message.height = 0;
+      message.compactness = 0;
     }
-    if (object.width !== undefined && object.width !== null) {
-      message.width = object.width;
+    if (object.homogeneity !== undefined && object.homogeneity !== null) {
+      message.homogeneity = object.homogeneity;
     } else {
-      message.width = 0;
-    }
-    if (object.length !== undefined && object.length !== null) {
-      message.length = object.length;
-    } else {
-      message.length = 0;
+      message.homogeneity = 0;
     }
     return message;
   },
 
-  toJSON(message: Good): unknown {
+  toJSON(message: Preferences): unknown {
     const obj: any = {};
-    message.quantity !== undefined && (obj.quantity = message.quantity);
-    message.weight !== undefined && (obj.weight = message.weight);
-    message.height !== undefined && (obj.height = message.height);
-    message.width !== undefined && (obj.width = message.width);
-    message.length !== undefined && (obj.length = message.length);
+    if (message.couriers) {
+      obj.couriers = message.couriers.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.couriers = [];
+    }
+    message.pricing !== undefined && (obj.pricing = message.pricing);
+    message.compactness !== undefined &&
+      (obj.compactness = message.compactness);
+    message.homogeneity !== undefined &&
+      (obj.homogeneity = message.homogeneity);
     return obj;
   },
 };
 
-const baseQuery: object = {};
+const baseQuery: object = { reference_id: "" };
 
 export const Query = {
   encode(message: Query, writer: Writer = Writer.create()): Writer {
@@ -242,8 +253,17 @@ export const Query = {
     if (message.receiver !== undefined) {
       Address.encode(message.receiver, writer.uint32(18).fork()).ldelim();
     }
-    for (const v of message.good) {
-      Good.encode(v!, writer.uint32(26).fork()).ldelim();
+    for (const v of message.goods) {
+      Item.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.preferences !== undefined) {
+      Preferences.encode(
+        message.preferences,
+        writer.uint32(34).fork()
+      ).ldelim();
+    }
+    if (message.reference_id !== "") {
+      writer.uint32(42).string(message.reference_id);
     }
     return writer;
   },
@@ -252,7 +272,7 @@ export const Query = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseQuery) as Query;
-    message.good = [];
+    message.goods = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -263,7 +283,13 @@ export const Query = {
           message.receiver = Address.decode(reader, reader.uint32());
           break;
         case 3:
-          message.good.push(Good.decode(reader, reader.uint32()));
+          message.goods.push(Item.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.preferences = Preferences.decode(reader, reader.uint32());
+          break;
+        case 5:
+          message.reference_id = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -275,7 +301,7 @@ export const Query = {
 
   fromJSON(object: any): Query {
     const message = globalThis.Object.create(baseQuery) as Query;
-    message.good = [];
+    message.goods = [];
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = Address.fromJSON(object.sender);
     } else {
@@ -286,17 +312,27 @@ export const Query = {
     } else {
       message.receiver = undefined;
     }
-    if (object.good !== undefined && object.good !== null) {
-      for (const e of object.good) {
-        message.good.push(Good.fromJSON(e));
+    if (object.goods !== undefined && object.goods !== null) {
+      for (const e of object.goods) {
+        message.goods.push(Item.fromJSON(e));
       }
+    }
+    if (object.preferences !== undefined && object.preferences !== null) {
+      message.preferences = Preferences.fromJSON(object.preferences);
+    } else {
+      message.preferences = undefined;
+    }
+    if (object.reference_id !== undefined && object.reference_id !== null) {
+      message.reference_id = String(object.reference_id);
+    } else {
+      message.reference_id = "";
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<Query>): Query {
     const message = { ...baseQuery } as Query;
-    message.good = [];
+    message.goods = [];
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = Address.fromPartial(object.sender);
     } else {
@@ -307,10 +343,20 @@ export const Query = {
     } else {
       message.receiver = undefined;
     }
-    if (object.good !== undefined && object.good !== null) {
-      for (const e of object.good) {
-        message.good.push(Good.fromPartial(e));
+    if (object.goods !== undefined && object.goods !== null) {
+      for (const e of object.goods) {
+        message.goods.push(Item.fromPartial(e));
       }
+    }
+    if (object.preferences !== undefined && object.preferences !== null) {
+      message.preferences = Preferences.fromPartial(object.preferences);
+    } else {
+      message.preferences = undefined;
+    }
+    if (object.reference_id !== undefined && object.reference_id !== null) {
+      message.reference_id = object.reference_id;
+    } else {
+      message.reference_id = "";
     }
     return message;
   },
@@ -325,24 +371,30 @@ export const Query = {
       (obj.receiver = message.receiver
         ? Address.toJSON(message.receiver)
         : undefined);
-    if (message.good) {
-      obj.good = message.good.map((e) => (e ? Good.toJSON(e) : undefined));
+    if (message.goods) {
+      obj.goods = message.goods.map((e) => (e ? Item.toJSON(e) : undefined));
     } else {
-      obj.good = [];
+      obj.goods = [];
     }
+    message.preferences !== undefined &&
+      (obj.preferences = message.preferences
+        ? Preferences.toJSON(message.preferences)
+        : undefined);
+    message.reference_id !== undefined &&
+      (obj.reference_id = message.reference_id);
     return obj;
   },
 };
 
-const baseQueryList: object = { totalCount: 0 };
+const baseQueryList: object = { total_count: 0 };
 
 export const QueryList = {
   encode(message: QueryList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Query.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -362,7 +414,7 @@ export const QueryList = {
           message.items.push(Query.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -383,10 +435,10 @@ export const QueryList = {
         message.items.push(Query.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -404,10 +456,10 @@ export const QueryList = {
         message.items.push(Query.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -424,7 +476,8 @@ export const QueryList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -433,18 +486,21 @@ export const QueryList = {
   },
 };
 
-const baseProduct: object = {
+const baseFulfillmentProduct: object = {
   id: "",
   name: "",
   description: "",
-  courierId: "",
-  startZone: "",
-  destinationZone: "",
-  taxId: "",
+  courier_id: "",
+  start_zones: "",
+  destination_zones: "",
+  tax_ids: "",
 };
 
-export const Product = {
-  encode(message: Product, writer: Writer = Writer.create()): Writer {
+export const FulfillmentProduct = {
+  encode(
+    message: FulfillmentProduct,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -454,22 +510,16 @@ export const Product = {
     if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-    if (message.courierId !== "") {
-      writer.uint32(34).string(message.courierId);
+    if (message.courier_id !== "") {
+      writer.uint32(34).string(message.courier_id);
     }
-    for (const v of message.startCountry) {
-      Country.encode(v!, writer.uint32(42).fork()).ldelim();
-    }
-    for (const v of message.startZone) {
+    for (const v of message.start_zones) {
       writer.uint32(50).string(v!);
     }
-    for (const v of message.destinationCountry) {
-      Country.encode(v!, writer.uint32(58).fork()).ldelim();
-    }
-    for (const v of message.destinationZone) {
+    for (const v of message.destination_zones) {
       writer.uint32(66).string(v!);
     }
-    for (const v of message.taxId) {
+    for (const v of message.tax_ids) {
       writer.uint32(74).string(v!);
     }
     for (const v of message.attributes) {
@@ -484,15 +534,15 @@ export const Product = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Product {
+  decode(input: Reader | Uint8Array, length?: number): FulfillmentProduct {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseProduct) as Product;
-    message.startCountry = [];
-    message.startZone = [];
-    message.destinationCountry = [];
-    message.destinationZone = [];
-    message.taxId = [];
+    const message = globalThis.Object.create(
+      baseFulfillmentProduct
+    ) as FulfillmentProduct;
+    message.start_zones = [];
+    message.destination_zones = [];
+    message.tax_ids = [];
     message.attributes = [];
     message.variants = [];
     while (reader.pos < end) {
@@ -508,24 +558,16 @@ export const Product = {
           message.description = reader.string();
           break;
         case 4:
-          message.courierId = reader.string();
-          break;
-        case 5:
-          message.startCountry.push(Country.decode(reader, reader.uint32()));
+          message.courier_id = reader.string();
           break;
         case 6:
-          message.startZone.push(reader.string());
-          break;
-        case 7:
-          message.destinationCountry.push(
-            Country.decode(reader, reader.uint32())
-          );
+          message.start_zones.push(reader.string());
           break;
         case 8:
-          message.destinationZone.push(reader.string());
+          message.destination_zones.push(reader.string());
           break;
         case 9:
-          message.taxId.push(reader.string());
+          message.tax_ids.push(reader.string());
           break;
         case 10:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
@@ -544,13 +586,13 @@ export const Product = {
     return message;
   },
 
-  fromJSON(object: any): Product {
-    const message = globalThis.Object.create(baseProduct) as Product;
-    message.startCountry = [];
-    message.startZone = [];
-    message.destinationCountry = [];
-    message.destinationZone = [];
-    message.taxId = [];
+  fromJSON(object: any): FulfillmentProduct {
+    const message = globalThis.Object.create(
+      baseFulfillmentProduct
+    ) as FulfillmentProduct;
+    message.start_zones = [];
+    message.destination_zones = [];
+    message.tax_ids = [];
     message.attributes = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
@@ -568,40 +610,27 @@ export const Product = {
     } else {
       message.description = "";
     }
-    if (object.courierId !== undefined && object.courierId !== null) {
-      message.courierId = String(object.courierId);
+    if (object.courier_id !== undefined && object.courier_id !== null) {
+      message.courier_id = String(object.courier_id);
     } else {
-      message.courierId = "";
+      message.courier_id = "";
     }
-    if (object.startCountry !== undefined && object.startCountry !== null) {
-      for (const e of object.startCountry) {
-        message.startCountry.push(Country.fromJSON(e));
-      }
-    }
-    if (object.startZone !== undefined && object.startZone !== null) {
-      for (const e of object.startZone) {
-        message.startZone.push(String(e));
+    if (object.start_zones !== undefined && object.start_zones !== null) {
+      for (const e of object.start_zones) {
+        message.start_zones.push(String(e));
       }
     }
     if (
-      object.destinationCountry !== undefined &&
-      object.destinationCountry !== null
+      object.destination_zones !== undefined &&
+      object.destination_zones !== null
     ) {
-      for (const e of object.destinationCountry) {
-        message.destinationCountry.push(Country.fromJSON(e));
+      for (const e of object.destination_zones) {
+        message.destination_zones.push(String(e));
       }
     }
-    if (
-      object.destinationZone !== undefined &&
-      object.destinationZone !== null
-    ) {
-      for (const e of object.destinationZone) {
-        message.destinationZone.push(String(e));
-      }
-    }
-    if (object.taxId !== undefined && object.taxId !== null) {
-      for (const e of object.taxId) {
-        message.taxId.push(String(e));
+    if (object.tax_ids !== undefined && object.tax_ids !== null) {
+      for (const e of object.tax_ids) {
+        message.tax_ids.push(String(e));
       }
     }
     if (object.attributes !== undefined && object.attributes !== null) {
@@ -622,13 +651,11 @@ export const Product = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<Product>): Product {
-    const message = { ...baseProduct } as Product;
-    message.startCountry = [];
-    message.startZone = [];
-    message.destinationCountry = [];
-    message.destinationZone = [];
-    message.taxId = [];
+  fromPartial(object: DeepPartial<FulfillmentProduct>): FulfillmentProduct {
+    const message = { ...baseFulfillmentProduct } as FulfillmentProduct;
+    message.start_zones = [];
+    message.destination_zones = [];
+    message.tax_ids = [];
     message.attributes = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
@@ -646,40 +673,27 @@ export const Product = {
     } else {
       message.description = "";
     }
-    if (object.courierId !== undefined && object.courierId !== null) {
-      message.courierId = object.courierId;
+    if (object.courier_id !== undefined && object.courier_id !== null) {
+      message.courier_id = object.courier_id;
     } else {
-      message.courierId = "";
+      message.courier_id = "";
     }
-    if (object.startCountry !== undefined && object.startCountry !== null) {
-      for (const e of object.startCountry) {
-        message.startCountry.push(Country.fromPartial(e));
-      }
-    }
-    if (object.startZone !== undefined && object.startZone !== null) {
-      for (const e of object.startZone) {
-        message.startZone.push(e);
+    if (object.start_zones !== undefined && object.start_zones !== null) {
+      for (const e of object.start_zones) {
+        message.start_zones.push(e);
       }
     }
     if (
-      object.destinationCountry !== undefined &&
-      object.destinationCountry !== null
+      object.destination_zones !== undefined &&
+      object.destination_zones !== null
     ) {
-      for (const e of object.destinationCountry) {
-        message.destinationCountry.push(Country.fromPartial(e));
+      for (const e of object.destination_zones) {
+        message.destination_zones.push(e);
       }
     }
-    if (
-      object.destinationZone !== undefined &&
-      object.destinationZone !== null
-    ) {
-      for (const e of object.destinationZone) {
-        message.destinationZone.push(e);
-      }
-    }
-    if (object.taxId !== undefined && object.taxId !== null) {
-      for (const e of object.taxId) {
-        message.taxId.push(e);
+    if (object.tax_ids !== undefined && object.tax_ids !== null) {
+      for (const e of object.tax_ids) {
+        message.tax_ids.push(e);
       }
     }
     if (object.attributes !== undefined && object.attributes !== null) {
@@ -700,41 +714,27 @@ export const Product = {
     return message;
   },
 
-  toJSON(message: Product): unknown {
+  toJSON(message: FulfillmentProduct): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.courierId !== undefined && (obj.courierId = message.courierId);
-    if (message.startCountry) {
-      obj.startCountry = message.startCountry.map((e) =>
-        e ? Country.toJSON(e) : undefined
-      );
+    message.courier_id !== undefined && (obj.courier_id = message.courier_id);
+    if (message.start_zones) {
+      obj.start_zones = message.start_zones.map((e) => e);
     } else {
-      obj.startCountry = [];
+      obj.start_zones = [];
     }
-    if (message.startZone) {
-      obj.startZone = message.startZone.map((e) => e);
+    if (message.destination_zones) {
+      obj.destination_zones = message.destination_zones.map((e) => e);
     } else {
-      obj.startZone = [];
+      obj.destination_zones = [];
     }
-    if (message.destinationCountry) {
-      obj.destinationCountry = message.destinationCountry.map((e) =>
-        e ? Country.toJSON(e) : undefined
-      );
+    if (message.tax_ids) {
+      obj.tax_ids = message.tax_ids.map((e) => e);
     } else {
-      obj.destinationCountry = [];
-    }
-    if (message.destinationZone) {
-      obj.destinationZone = message.destinationZone.map((e) => e);
-    } else {
-      obj.destinationZone = [];
-    }
-    if (message.taxId) {
-      obj.taxId = message.taxId.map((e) => e);
-    } else {
-      obj.taxId = [];
+      obj.tax_ids = [];
     }
     if (message.attributes) {
       obj.attributes = message.attributes.map((e) =>
@@ -761,11 +761,11 @@ const baseVariant: object = {
   name: "",
   description: "",
   price: 0,
-  maxWeight: 0,
-  maxWidth: 0,
-  maxHeight: 0,
-  maxLength: 0,
-  maxVolume: 0,
+  max_weight: 0,
+  max_width: 0,
+  max_height: 0,
+  max_length: 0,
+  max_volume: 0,
 };
 
 export const Variant = {
@@ -782,20 +782,20 @@ export const Variant = {
     if (message.price !== 0) {
       writer.uint32(33).double(message.price);
     }
-    if (message.maxWeight !== 0) {
-      writer.uint32(41).double(message.maxWeight);
+    if (message.max_weight !== 0) {
+      writer.uint32(41).double(message.max_weight);
     }
-    if (message.maxWidth !== 0) {
-      writer.uint32(49).double(message.maxWidth);
+    if (message.max_width !== 0) {
+      writer.uint32(49).double(message.max_width);
     }
-    if (message.maxHeight !== 0) {
-      writer.uint32(57).double(message.maxHeight);
+    if (message.max_height !== 0) {
+      writer.uint32(57).double(message.max_height);
     }
-    if (message.maxLength !== 0) {
-      writer.uint32(65).double(message.maxLength);
+    if (message.max_length !== 0) {
+      writer.uint32(65).double(message.max_length);
     }
-    if (message.maxVolume !== 0) {
-      writer.uint32(73).double(message.maxVolume);
+    if (message.max_volume !== 0) {
+      writer.uint32(73).double(message.max_volume);
     }
     return writer;
   },
@@ -820,19 +820,19 @@ export const Variant = {
           message.price = reader.double();
           break;
         case 5:
-          message.maxWeight = reader.double();
+          message.max_weight = reader.double();
           break;
         case 6:
-          message.maxWidth = reader.double();
+          message.max_width = reader.double();
           break;
         case 7:
-          message.maxHeight = reader.double();
+          message.max_height = reader.double();
           break;
         case 8:
-          message.maxLength = reader.double();
+          message.max_length = reader.double();
           break;
         case 9:
-          message.maxVolume = reader.double();
+          message.max_volume = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -864,30 +864,30 @@ export const Variant = {
     } else {
       message.price = 0;
     }
-    if (object.maxWeight !== undefined && object.maxWeight !== null) {
-      message.maxWeight = Number(object.maxWeight);
+    if (object.max_weight !== undefined && object.max_weight !== null) {
+      message.max_weight = Number(object.max_weight);
     } else {
-      message.maxWeight = 0;
+      message.max_weight = 0;
     }
-    if (object.maxWidth !== undefined && object.maxWidth !== null) {
-      message.maxWidth = Number(object.maxWidth);
+    if (object.max_width !== undefined && object.max_width !== null) {
+      message.max_width = Number(object.max_width);
     } else {
-      message.maxWidth = 0;
+      message.max_width = 0;
     }
-    if (object.maxHeight !== undefined && object.maxHeight !== null) {
-      message.maxHeight = Number(object.maxHeight);
+    if (object.max_height !== undefined && object.max_height !== null) {
+      message.max_height = Number(object.max_height);
     } else {
-      message.maxHeight = 0;
+      message.max_height = 0;
     }
-    if (object.maxLength !== undefined && object.maxLength !== null) {
-      message.maxLength = Number(object.maxLength);
+    if (object.max_length !== undefined && object.max_length !== null) {
+      message.max_length = Number(object.max_length);
     } else {
-      message.maxLength = 0;
+      message.max_length = 0;
     }
-    if (object.maxVolume !== undefined && object.maxVolume !== null) {
-      message.maxVolume = Number(object.maxVolume);
+    if (object.max_volume !== undefined && object.max_volume !== null) {
+      message.max_volume = Number(object.max_volume);
     } else {
-      message.maxVolume = 0;
+      message.max_volume = 0;
     }
     return message;
   },
@@ -914,30 +914,30 @@ export const Variant = {
     } else {
       message.price = 0;
     }
-    if (object.maxWeight !== undefined && object.maxWeight !== null) {
-      message.maxWeight = object.maxWeight;
+    if (object.max_weight !== undefined && object.max_weight !== null) {
+      message.max_weight = object.max_weight;
     } else {
-      message.maxWeight = 0;
+      message.max_weight = 0;
     }
-    if (object.maxWidth !== undefined && object.maxWidth !== null) {
-      message.maxWidth = object.maxWidth;
+    if (object.max_width !== undefined && object.max_width !== null) {
+      message.max_width = object.max_width;
     } else {
-      message.maxWidth = 0;
+      message.max_width = 0;
     }
-    if (object.maxHeight !== undefined && object.maxHeight !== null) {
-      message.maxHeight = object.maxHeight;
+    if (object.max_height !== undefined && object.max_height !== null) {
+      message.max_height = object.max_height;
     } else {
-      message.maxHeight = 0;
+      message.max_height = 0;
     }
-    if (object.maxLength !== undefined && object.maxLength !== null) {
-      message.maxLength = object.maxLength;
+    if (object.max_length !== undefined && object.max_length !== null) {
+      message.max_length = object.max_length;
     } else {
-      message.maxLength = 0;
+      message.max_length = 0;
     }
-    if (object.maxVolume !== undefined && object.maxVolume !== null) {
-      message.maxVolume = object.maxVolume;
+    if (object.max_volume !== undefined && object.max_volume !== null) {
+      message.max_volume = object.max_volume;
     } else {
-      message.maxVolume = 0;
+      message.max_volume = 0;
     }
     return message;
   },
@@ -949,24 +949,27 @@ export const Variant = {
     message.description !== undefined &&
       (obj.description = message.description);
     message.price !== undefined && (obj.price = message.price);
-    message.maxWeight !== undefined && (obj.maxWeight = message.maxWeight);
-    message.maxWidth !== undefined && (obj.maxWidth = message.maxWidth);
-    message.maxHeight !== undefined && (obj.maxHeight = message.maxHeight);
-    message.maxLength !== undefined && (obj.maxLength = message.maxLength);
-    message.maxVolume !== undefined && (obj.maxVolume = message.maxVolume);
+    message.max_weight !== undefined && (obj.max_weight = message.max_weight);
+    message.max_width !== undefined && (obj.max_width = message.max_width);
+    message.max_height !== undefined && (obj.max_height = message.max_height);
+    message.max_length !== undefined && (obj.max_length = message.max_length);
+    message.max_volume !== undefined && (obj.max_volume = message.max_volume);
     return obj;
   },
 };
 
-const baseProductList: object = { totalCount: 0 };
+const baseFulfillmentProductList: object = { total_count: 0 };
 
-export const ProductList = {
-  encode(message: ProductList, writer: Writer = Writer.create()): Writer {
+export const FulfillmentProductList = {
+  encode(
+    message: FulfillmentProductList,
+    writer: Writer = Writer.create()
+  ): Writer {
     for (const v of message.items) {
-      Product.encode(v!, writer.uint32(10).fork()).ldelim();
+      FulfillmentProduct.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -974,19 +977,23 @@ export const ProductList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductList {
+  decode(input: Reader | Uint8Array, length?: number): FulfillmentProductList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseProductList) as ProductList;
+    const message = globalThis.Object.create(
+      baseFulfillmentProductList
+    ) as FulfillmentProductList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Product.decode(reader, reader.uint32()));
+          message.items.push(
+            FulfillmentProduct.decode(reader, reader.uint32())
+          );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -999,18 +1006,20 @@ export const ProductList = {
     return message;
   },
 
-  fromJSON(object: any): ProductList {
-    const message = globalThis.Object.create(baseProductList) as ProductList;
+  fromJSON(object: any): FulfillmentProductList {
+    const message = globalThis.Object.create(
+      baseFulfillmentProductList
+    ) as FulfillmentProductList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Product.fromJSON(e));
+        message.items.push(FulfillmentProduct.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1020,18 +1029,20 @@ export const ProductList = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<ProductList>): ProductList {
-    const message = { ...baseProductList } as ProductList;
+  fromPartial(
+    object: DeepPartial<FulfillmentProductList>
+  ): FulfillmentProductList {
+    const message = { ...baseFulfillmentProductList } as FulfillmentProductList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(Product.fromPartial(e));
+        message.items.push(FulfillmentProduct.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1041,14 +1052,17 @@ export const ProductList = {
     return message;
   },
 
-  toJSON(message: ProductList): unknown {
+  toJSON(message: FulfillmentProductList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Product.toJSON(e) : undefined));
+      obj.items = message.items.map((e) =>
+        e ? FulfillmentProduct.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1057,12 +1071,18 @@ export const ProductList = {
   },
 };
 
-const baseProductResponse: object = {};
+const baseFulfillmentProductResponse: object = {};
 
-export const ProductResponse = {
-  encode(message: ProductResponse, writer: Writer = Writer.create()): Writer {
+export const FulfillmentProductResponse = {
+  encode(
+    message: FulfillmentProductResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
     if (message.payload !== undefined) {
-      Product.encode(message.payload, writer.uint32(10).fork()).ldelim();
+      FulfillmentProduct.encode(
+        message.payload,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -1070,17 +1090,20 @@ export const ProductResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductResponse {
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): FulfillmentProductResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseProductResponse
-    ) as ProductResponse;
+      baseFulfillmentProductResponse
+    ) as FulfillmentProductResponse;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.payload = Product.decode(reader, reader.uint32());
+          message.payload = FulfillmentProduct.decode(reader, reader.uint32());
           break;
         case 2:
           message.status = Status.decode(reader, reader.uint32());
@@ -1093,12 +1116,12 @@ export const ProductResponse = {
     return message;
   },
 
-  fromJSON(object: any): ProductResponse {
+  fromJSON(object: any): FulfillmentProductResponse {
     const message = globalThis.Object.create(
-      baseProductResponse
-    ) as ProductResponse;
+      baseFulfillmentProductResponse
+    ) as FulfillmentProductResponse;
     if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Product.fromJSON(object.payload);
+      message.payload = FulfillmentProduct.fromJSON(object.payload);
     } else {
       message.payload = undefined;
     }
@@ -1110,10 +1133,14 @@ export const ProductResponse = {
     return message;
   },
 
-  fromPartial(object: DeepPartial<ProductResponse>): ProductResponse {
-    const message = { ...baseProductResponse } as ProductResponse;
+  fromPartial(
+    object: DeepPartial<FulfillmentProductResponse>
+  ): FulfillmentProductResponse {
+    const message = {
+      ...baseFulfillmentProductResponse,
+    } as FulfillmentProductResponse;
     if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Product.fromPartial(object.payload);
+      message.payload = FulfillmentProduct.fromPartial(object.payload);
     } else {
       message.payload = undefined;
     }
@@ -1125,11 +1152,11 @@ export const ProductResponse = {
     return message;
   },
 
-  toJSON(message: ProductResponse): unknown {
+  toJSON(message: FulfillmentProductResponse): unknown {
     const obj: any = {};
     message.payload !== undefined &&
       (obj.payload = message.payload
-        ? Product.toJSON(message.payload)
+        ? FulfillmentProduct.toJSON(message.payload)
         : undefined);
     message.status !== undefined &&
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
@@ -1137,46 +1164,51 @@ export const ProductResponse = {
   },
 };
 
-const baseProductResponseList: object = { totalCount: 0 };
+const baseFulfillmentProductResponseList: object = { total_count: 0 };
 
-export const ProductResponseList = {
+export const FulfillmentProductResponseList = {
   encode(
-    message: ProductResponseList,
+    message: FulfillmentProductResponseList,
     writer: Writer = Writer.create()
   ): Writer {
     for (const v of message.items) {
-      ProductResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+      FulfillmentProductResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductResponseList {
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): FulfillmentProductResponseList {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(
-      baseProductResponseList
-    ) as ProductResponseList;
+      baseFulfillmentProductResponseList
+    ) as FulfillmentProductResponseList;
     message.items = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(ProductResponse.decode(reader, reader.uint32()));
+          message.items.push(
+            FulfillmentProductResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -1189,73 +1221,469 @@ export const ProductResponseList = {
     return message;
   },
 
-  fromJSON(object: any): ProductResponseList {
+  fromJSON(object: any): FulfillmentProductResponseList {
     const message = globalThis.Object.create(
-      baseProductResponseList
-    ) as ProductResponseList;
+      baseFulfillmentProductResponseList
+    ) as FulfillmentProductResponseList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(ProductResponse.fromJSON(e));
+        message.items.push(FulfillmentProductResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
 
-  fromPartial(object: DeepPartial<ProductResponseList>): ProductResponseList {
-    const message = { ...baseProductResponseList } as ProductResponseList;
+  fromPartial(
+    object: DeepPartial<FulfillmentProductResponseList>
+  ): FulfillmentProductResponseList {
+    const message = {
+      ...baseFulfillmentProductResponseList,
+    } as FulfillmentProductResponseList;
     message.items = [];
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
-        message.items.push(ProductResponse.fromPartial(e));
+        message.items.push(FulfillmentProductResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
 
-  toJSON(message: ProductResponseList): unknown {
+  toJSON(message: FulfillmentProductResponseList): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) =>
-        e ? ProductResponse.toJSON(e) : undefined
+        e ? FulfillmentProductResponse.toJSON(e) : undefined
       );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
+    return obj;
+  },
+};
+
+const basePackingSolution: object = {
+  reference_id: "",
+  price: 0,
+  compactness: 0,
+  homogeneity: 0,
+  score: 0,
+};
+
+export const PackingSolution = {
+  encode(message: PackingSolution, writer: Writer = Writer.create()): Writer {
+    if (message.reference_id !== "") {
+      writer.uint32(10).string(message.reference_id);
+    }
+    if (message.price !== 0) {
+      writer.uint32(21).float(message.price);
+    }
+    if (message.compactness !== 0) {
+      writer.uint32(29).float(message.compactness);
+    }
+    if (message.homogeneity !== 0) {
+      writer.uint32(37).float(message.homogeneity);
+    }
+    if (message.score !== 0) {
+      writer.uint32(45).float(message.score);
+    }
+    for (const v of message.parcels) {
+      Parcel.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PackingSolution {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePackingSolution
+    ) as PackingSolution;
+    message.parcels = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.reference_id = reader.string();
+          break;
+        case 2:
+          message.price = reader.float();
+          break;
+        case 3:
+          message.compactness = reader.float();
+          break;
+        case 4:
+          message.homogeneity = reader.float();
+          break;
+        case 5:
+          message.score = reader.float();
+          break;
+        case 6:
+          message.parcels.push(Parcel.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PackingSolution {
+    const message = globalThis.Object.create(
+      basePackingSolution
+    ) as PackingSolution;
+    message.parcels = [];
+    if (object.reference_id !== undefined && object.reference_id !== null) {
+      message.reference_id = String(object.reference_id);
+    } else {
+      message.reference_id = "";
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = Number(object.price);
+    } else {
+      message.price = 0;
+    }
+    if (object.compactness !== undefined && object.compactness !== null) {
+      message.compactness = Number(object.compactness);
+    } else {
+      message.compactness = 0;
+    }
+    if (object.homogeneity !== undefined && object.homogeneity !== null) {
+      message.homogeneity = Number(object.homogeneity);
+    } else {
+      message.homogeneity = 0;
+    }
+    if (object.score !== undefined && object.score !== null) {
+      message.score = Number(object.score);
+    } else {
+      message.score = 0;
+    }
+    if (object.parcels !== undefined && object.parcels !== null) {
+      for (const e of object.parcels) {
+        message.parcels.push(Parcel.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
+    const message = { ...basePackingSolution } as PackingSolution;
+    message.parcels = [];
+    if (object.reference_id !== undefined && object.reference_id !== null) {
+      message.reference_id = object.reference_id;
+    } else {
+      message.reference_id = "";
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    } else {
+      message.price = 0;
+    }
+    if (object.compactness !== undefined && object.compactness !== null) {
+      message.compactness = object.compactness;
+    } else {
+      message.compactness = 0;
+    }
+    if (object.homogeneity !== undefined && object.homogeneity !== null) {
+      message.homogeneity = object.homogeneity;
+    } else {
+      message.homogeneity = 0;
+    }
+    if (object.score !== undefined && object.score !== null) {
+      message.score = object.score;
+    } else {
+      message.score = 0;
+    }
+    if (object.parcels !== undefined && object.parcels !== null) {
+      for (const e of object.parcels) {
+        message.parcels.push(Parcel.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: PackingSolution): unknown {
+    const obj: any = {};
+    message.reference_id !== undefined &&
+      (obj.reference_id = message.reference_id);
+    message.price !== undefined && (obj.price = message.price);
+    message.compactness !== undefined &&
+      (obj.compactness = message.compactness);
+    message.homogeneity !== undefined &&
+      (obj.homogeneity = message.homogeneity);
+    message.score !== undefined && (obj.score = message.score);
+    if (message.parcels) {
+      obj.parcels = message.parcels.map((e) =>
+        e ? Parcel.toJSON(e) : undefined
+      );
+    } else {
+      obj.parcels = [];
+    }
+    return obj;
+  },
+};
+
+const basePackingSolutionResponse: object = {};
+
+export const PackingSolutionResponse = {
+  encode(
+    message: PackingSolutionResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.solutions) {
+      PackingSolution.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): PackingSolutionResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePackingSolutionResponse
+    ) as PackingSolutionResponse;
+    message.solutions = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.solutions.push(
+            PackingSolution.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PackingSolutionResponse {
+    const message = globalThis.Object.create(
+      basePackingSolutionResponse
+    ) as PackingSolutionResponse;
+    message.solutions = [];
+    if (object.solutions !== undefined && object.solutions !== null) {
+      for (const e of object.solutions) {
+        message.solutions.push(PackingSolution.fromJSON(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<PackingSolutionResponse>
+  ): PackingSolutionResponse {
+    const message = {
+      ...basePackingSolutionResponse,
+    } as PackingSolutionResponse;
+    message.solutions = [];
+    if (object.solutions !== undefined && object.solutions !== null) {
+      for (const e of object.solutions) {
+        message.solutions.push(PackingSolution.fromPartial(e));
+      }
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PackingSolutionResponse): unknown {
+    const obj: any = {};
+    if (message.solutions) {
+      obj.solutions = message.solutions.map((e) =>
+        e ? PackingSolution.toJSON(e) : undefined
+      );
+    } else {
+      obj.solutions = [];
+    }
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
+const basePackingSolutionResponseList: object = { total_count: 0 };
+
+export const PackingSolutionResponseList = {
+  encode(
+    message: PackingSolutionResponseList,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      PackingSolutionResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
+    }
+    if (message.operation_status !== undefined) {
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): PackingSolutionResponseList {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      basePackingSolutionResponseList
+    ) as PackingSolutionResponseList;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(
+            PackingSolutionResponse.decode(reader, reader.uint32())
+          );
+          break;
+        case 2:
+          message.total_count = reader.uint32();
+          break;
+        case 3:
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PackingSolutionResponseList {
+    const message = globalThis.Object.create(
+      basePackingSolutionResponseList
+    ) as PackingSolutionResponseList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(PackingSolutionResponse.fromJSON(e));
+      }
+    }
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
+    } else {
+      message.total_count = 0;
+    }
+    if (
+      object.operation_status !== undefined &&
+      object.operation_status !== null
+    ) {
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
+      );
+    } else {
+      message.operation_status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<PackingSolutionResponseList>
+  ): PackingSolutionResponseList {
+    const message = {
+      ...basePackingSolutionResponseList,
+    } as PackingSolutionResponseList;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(PackingSolutionResponse.fromPartial(e));
+      }
+    }
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
+    } else {
+      message.total_count = 0;
+    }
+    if (
+      object.operation_status !== undefined &&
+      object.operation_status !== null
+    ) {
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
+      );
+    } else {
+      message.operation_status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: PackingSolutionResponseList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? PackingSolutionResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -1317,21 +1745,17 @@ export const Deleted = {
 };
 
 export interface Service {
-  Read(request: ReadRequest): Promise<ProductResponseList>;
-  /**
-   * - start_address
-   * - destination_address
-   * - good[]:
-   * - quantity
-   * - weight
-   * - height
-   * - width
-   * - depth
-   */
-  Find(request: QueryList): Promise<ProductResponseList>;
-  Create(request: ProductList): Promise<ProductResponseList>;
-  Update(request: ProductList): Promise<ProductResponseList>;
-  Upsert(request: ProductList): Promise<ProductResponseList>;
+  Read(request: ReadRequest): Promise<FulfillmentProductResponseList>;
+  Find(request: QueryList): Promise<PackingSolutionResponseList>;
+  Create(
+    request: FulfillmentProductList
+  ): Promise<FulfillmentProductResponseList>;
+  Update(
+    request: FulfillmentProductList
+  ): Promise<FulfillmentProductResponseList>;
+  Upsert(
+    request: FulfillmentProductList
+  ): Promise<FulfillmentProductResponseList>;
   Delete(request: DeleteRequest): Promise<DeleteResponse>;
 }
 
@@ -1348,9 +1772,9 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
-      "io/restorecommerce/fulfillment.proto",
-      "io/restorecommerce/country.proto",
       "io/restorecommerce/attribute.proto",
+      "io/restorecommerce/order.proto",
+      "io/restorecommerce/fulfillment.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1358,16 +1782,34 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "quantity",
+            name: "couriers",
             number: 1,
-            label: 1,
-            type: 1,
-            jsonName: "quantity",
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            jsonName: "couriers",
           },
-          { name: "weight", number: 2, label: 1, type: 1, jsonName: "weight" },
-          { name: "height", number: 3, label: 1, type: 1, jsonName: "height" },
-          { name: "width", number: 4, label: 1, type: 1, jsonName: "width" },
-          { name: "length", number: 5, label: 1, type: 1, jsonName: "length" },
+          {
+            name: "pricing",
+            number: 2,
+            label: 1,
+            type: 2,
+            jsonName: "pricing",
+          },
+          {
+            name: "compactness",
+            number: 3,
+            label: 1,
+            type: 2,
+            jsonName: "compactness",
+          },
+          {
+            name: "homogeneity",
+            number: 4,
+            label: 1,
+            type: 2,
+            jsonName: "homogeneity",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1376,7 +1818,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "Good",
+        name: "Preferences",
       },
       {
         field: [
@@ -1397,12 +1839,27 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "receiver",
           },
           {
-            name: "good",
+            name: "goods",
             number: 3,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment_product.Good",
-            jsonName: "good",
+            typeName: ".io.restorecommerce.order.Item",
+            jsonName: "goods",
+          },
+          {
+            name: "preferences",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.fulfillment_product.Preferences",
+            jsonName: "preferences",
+          },
+          {
+            name: "reference_id",
+            number: 5,
+            label: 1,
+            type: 9,
+            jsonName: "referenceId",
           },
         ],
         extension: [],
@@ -1468,36 +1925,20 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "courierId",
           },
           {
-            name: "start_country",
-            number: 5,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.country.Country",
-            jsonName: "startCountry",
-          },
-          {
-            name: "start_zone",
+            name: "start_zones",
             number: 6,
             label: 3,
             type: 9,
-            jsonName: "startZone",
+            jsonName: "startZones",
           },
           {
-            name: "destination_country",
-            number: 7,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.country.Country",
-            jsonName: "destinationCountry",
-          },
-          {
-            name: "destination_zone",
+            name: "destination_zones",
             number: 8,
             label: 3,
             type: 9,
-            jsonName: "destinationZone",
+            jsonName: "destinationZones",
           },
-          { name: "tax_id", number: 9, label: 3, type: 9, jsonName: "taxId" },
+          { name: "tax_ids", number: 9, label: 3, type: 9, jsonName: "taxIds" },
           {
             name: "attributes",
             number: 10,
@@ -1530,7 +1971,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "Product",
+        name: "FulfillmentProduct",
       },
       {
         field: [
@@ -1596,7 +2037,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment_product.Product",
+            typeName:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
             jsonName: "items",
           },
           {
@@ -1622,7 +2064,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "ProductList",
+        name: "FulfillmentProductList",
       },
       {
         field: [
@@ -1631,7 +2073,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment_product.Product",
+            typeName:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
             jsonName: "payload",
           },
           {
@@ -1650,7 +2093,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "ProductResponse",
+        name: "FulfillmentProductResponse",
       },
       {
         field: [
@@ -1659,7 +2102,8 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment_product.ProductResponse",
+            typeName:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductResponse",
             jsonName: "items",
           },
           {
@@ -1685,7 +2129,114 @@ export const protoMetadata: ProtoMetadata = {
         oneofDecl: [],
         reservedRange: [],
         reservedName: [],
-        name: "ProductResponseList",
+        name: "FulfillmentProductResponseList",
+      },
+      {
+        field: [
+          {
+            name: "reference_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "referenceId",
+          },
+          { name: "price", number: 2, label: 1, type: 2, jsonName: "price" },
+          {
+            name: "compactness",
+            number: 3,
+            label: 1,
+            type: 2,
+            jsonName: "compactness",
+          },
+          {
+            name: "homogeneity",
+            number: 4,
+            label: 1,
+            type: 2,
+            jsonName: "homogeneity",
+          },
+          { name: "score", number: 5, label: 1, type: 2, jsonName: "score" },
+          {
+            name: "parcels",
+            number: 6,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.fulfillment.Parcel",
+            jsonName: "parcels",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PackingSolution",
+      },
+      {
+        field: [
+          {
+            name: "solutions",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.fulfillment_product.PackingSolution",
+            jsonName: "solutions",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PackingSolutionResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName:
+              ".io.restorecommerce.fulfillment_product.PackingSolutionResponse",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "PackingSolutionResponseList",
       },
       {
         field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
@@ -1707,31 +2258,34 @@ export const protoMetadata: ProtoMetadata = {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
-              ".io.restorecommerce.fulfillment_product.ProductResponseList",
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
           },
           {
             name: "Find",
             inputType: ".io.restorecommerce.fulfillment_product.QueryList",
             outputType:
-              ".io.restorecommerce.fulfillment_product.ProductResponseList",
+              ".io.restorecommerce.fulfillment_product.PackingSolutionResponseList",
           },
           {
             name: "Create",
-            inputType: ".io.restorecommerce.fulfillment_product.ProductList",
+            inputType:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
             outputType:
-              ".io.restorecommerce.fulfillment_product.ProductResponseList",
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
           },
           {
             name: "Update",
-            inputType: ".io.restorecommerce.fulfillment_product.ProductList",
+            inputType:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
             outputType:
-              ".io.restorecommerce.fulfillment_product.ProductResponseList",
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
           },
           {
             name: "Upsert",
-            inputType: ".io.restorecommerce.fulfillment_product.ProductList",
+            inputType:
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
             outputType:
-              ".io.restorecommerce.fulfillment_product.ProductResponseList",
+              ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
           },
           {
             name: "Delete",
@@ -1748,25 +2302,41 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
-          path: [6, 0, 2, 1],
-          span: [18, 2, 53],
+          path: [4, 0, 2, 0],
+          span: [27, 2, 63],
           leadingDetachedComments: [],
-          trailingComments:
-            "      - start_address\n- destination_address\n- good[]:\n- quantity\n- weight\n- height\n- width\n- depth",
+          trailingComments: "ID, name or type\n",
+        },
+        {
+          path: [4, 3, 2, 4],
+          span: [53, 2, 34],
+          leadingDetachedComments: [],
+          leadingComments:
+            "repeated io.restorecommerce.country.Country start_country = 5;\n",
+        },
+        {
+          path: [4, 3, 2, 5],
+          span: [55, 2, 40],
+          leadingDetachedComments: [],
+          leadingComments:
+            "repeated io.restorecommerce.country.Country destination_country = 7;\n",
         },
       ],
     },
     syntax: "proto3",
   }),
   references: {
-    ".io.restorecommerce.fulfillment_product.Good": Good,
+    ".io.restorecommerce.fulfillment_product.Preferences": Preferences,
     ".io.restorecommerce.fulfillment_product.Query": Query,
     ".io.restorecommerce.fulfillment_product.QueryList": QueryList,
-    ".io.restorecommerce.fulfillment_product.Product": Product,
+    ".io.restorecommerce.fulfillment_product.FulfillmentProduct": FulfillmentProduct,
     ".io.restorecommerce.fulfillment_product.Variant": Variant,
-    ".io.restorecommerce.fulfillment_product.ProductList": ProductList,
-    ".io.restorecommerce.fulfillment_product.ProductResponse": ProductResponse,
-    ".io.restorecommerce.fulfillment_product.ProductResponseList": ProductResponseList,
+    ".io.restorecommerce.fulfillment_product.FulfillmentProductList": FulfillmentProductList,
+    ".io.restorecommerce.fulfillment_product.FulfillmentProductResponse": FulfillmentProductResponse,
+    ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList": FulfillmentProductResponseList,
+    ".io.restorecommerce.fulfillment_product.PackingSolution": PackingSolution,
+    ".io.restorecommerce.fulfillment_product.PackingSolutionResponse": PackingSolutionResponse,
+    ".io.restorecommerce.fulfillment_product.PackingSolutionResponseList": PackingSolutionResponseList,
     ".io.restorecommerce.fulfillment_product.Deleted": Deleted,
   },
   dependencies: [

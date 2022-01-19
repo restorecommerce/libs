@@ -33,21 +33,21 @@ export interface ProductCategory {
   meta?: Meta;
   name: string;
   description: string;
-  priceGroupId: string;
+  price_group_id: string;
   image?: Image;
   parent?: Parent;
 }
 
 export interface ProductCategoryList {
   items: ProductCategory[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface ProductCategoryListResponse {
   items: ProductCategoryResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface ProductCategoryResponse {
@@ -60,14 +60,14 @@ export interface Deleted {
 }
 
 export interface Parent {
-  parentId: string;
+  parent_id: string;
 }
 
 const baseProductCategory: object = {
   id: "",
   name: "",
   description: "",
-  priceGroupId: "",
+  price_group_id: "",
 };
 
 export const ProductCategory = {
@@ -84,8 +84,8 @@ export const ProductCategory = {
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
     }
-    if (message.priceGroupId !== "") {
-      writer.uint32(42).string(message.priceGroupId);
+    if (message.price_group_id !== "") {
+      writer.uint32(42).string(message.price_group_id);
     }
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(50).fork()).ldelim();
@@ -118,7 +118,7 @@ export const ProductCategory = {
           message.description = reader.string();
           break;
         case 5:
-          message.priceGroupId = reader.string();
+          message.price_group_id = reader.string();
           break;
         case 6:
           message.image = Image.decode(reader, reader.uint32());
@@ -158,10 +158,10 @@ export const ProductCategory = {
     } else {
       message.description = "";
     }
-    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
-      message.priceGroupId = String(object.priceGroupId);
+    if (object.price_group_id !== undefined && object.price_group_id !== null) {
+      message.price_group_id = String(object.price_group_id);
     } else {
-      message.priceGroupId = "";
+      message.price_group_id = "";
     }
     if (object.image !== undefined && object.image !== null) {
       message.image = Image.fromJSON(object.image);
@@ -198,10 +198,10 @@ export const ProductCategory = {
     } else {
       message.description = "";
     }
-    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
-      message.priceGroupId = object.priceGroupId;
+    if (object.price_group_id !== undefined && object.price_group_id !== null) {
+      message.price_group_id = object.price_group_id;
     } else {
-      message.priceGroupId = "";
+      message.price_group_id = "";
     }
     if (object.image !== undefined && object.image !== null) {
       message.image = Image.fromPartial(object.image);
@@ -224,8 +224,8 @@ export const ProductCategory = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.priceGroupId !== undefined &&
-      (obj.priceGroupId = message.priceGroupId);
+    message.price_group_id !== undefined &&
+      (obj.price_group_id = message.price_group_id);
     message.image !== undefined &&
       (obj.image = message.image ? Image.toJSON(message.image) : undefined);
     message.parent !== undefined &&
@@ -234,7 +234,7 @@ export const ProductCategory = {
   },
 };
 
-const baseProductCategoryList: object = { totalCount: 0 };
+const baseProductCategoryList: object = { total_count: 0 };
 
 export const ProductCategoryList = {
   encode(
@@ -244,8 +244,8 @@ export const ProductCategoryList = {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -267,7 +267,7 @@ export const ProductCategoryList = {
           message.items.push(ProductCategory.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -290,10 +290,10 @@ export const ProductCategoryList = {
         message.items.push(ProductCategory.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -311,10 +311,10 @@ export const ProductCategoryList = {
         message.items.push(ProductCategory.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -333,7 +333,8 @@ export const ProductCategoryList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -342,7 +343,7 @@ export const ProductCategoryList = {
   },
 };
 
-const baseProductCategoryListResponse: object = { totalCount: 0 };
+const baseProductCategoryListResponse: object = { total_count: 0 };
 
 export const ProductCategoryListResponse = {
   encode(
@@ -352,12 +353,12 @@ export const ProductCategoryListResponse = {
     for (const v of message.items) {
       ProductCategoryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -383,10 +384,10 @@ export const ProductCategoryListResponse = {
           );
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -409,20 +410,20 @@ export const ProductCategoryListResponse = {
         message.items.push(ProductCategoryResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -439,20 +440,20 @@ export const ProductCategoryListResponse = {
         message.items.push(ProductCategoryResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -466,10 +467,11 @@ export const ProductCategoryListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -620,12 +622,12 @@ export const Deleted = {
   },
 };
 
-const baseParent: object = { parentId: "" };
+const baseParent: object = { parent_id: "" };
 
 export const Parent = {
   encode(message: Parent, writer: Writer = Writer.create()): Writer {
-    if (message.parentId !== "") {
-      writer.uint32(10).string(message.parentId);
+    if (message.parent_id !== "") {
+      writer.uint32(10).string(message.parent_id);
     }
     return writer;
   },
@@ -638,7 +640,7 @@ export const Parent = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.parentId = reader.string();
+          message.parent_id = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -650,27 +652,27 @@ export const Parent = {
 
   fromJSON(object: any): Parent {
     const message = globalThis.Object.create(baseParent) as Parent;
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = String(object.parentId);
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = String(object.parent_id);
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<Parent>): Parent {
     const message = { ...baseParent } as Parent;
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = object.parentId;
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = object.parent_id;
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
     return message;
   },
 
   toJSON(message: Parent): unknown {
     const obj: any = {};
-    message.parentId !== undefined && (obj.parentId = message.parentId);
+    message.parent_id !== undefined && (obj.parent_id = message.parent_id);
     return obj;
   },
 };

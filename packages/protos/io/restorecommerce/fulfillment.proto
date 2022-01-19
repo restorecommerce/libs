@@ -6,6 +6,7 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/meta.proto";
@@ -20,24 +21,9 @@ service Service {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentResponseList);
 
   /**
-  Creates but does not execute fulfillment orders
+  Creates and executes fulfillment orders
   */
   rpc Create (FulfillmentRequestList) returns (FulfillmentResponseList);
-
-  /**
-  Updates but does not execute fulfillment orders
-  */
-  rpc Update (FulfillmentRequestList) returns (FulfillmentResponseList);
-
-  /**
-  Upserts but does not execute fulfillment orders
-  */
-  rpc Upsert (FulfillmentRequestList) returns (FulfillmentResponseList);
-
-  /**
-  Executes and Upserts fulfillment orders
-  */
-  rpc Order (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders
@@ -47,7 +33,7 @@ service Service {
   /**
   Cancel a batch of fulfillment orders
   */
-  rpc Cancel (CancelRequestList) returns (CancelResultList);
+  rpc Cancel (CancelRequestList) returns (FulfillmentResponseList);
 
   /**
   Delete a batch of fulfillments from the database
@@ -56,17 +42,13 @@ service Service {
 }
 
 enum State {
-  Incomplete = 0;
-  Ordered = 1;
-  Processing = 2;
-  Done=3;
-  Cancelled = 4;
-  Failed = 5;
-}
-
-message Origin {
-  string country = 1;
-  string iso_code = 2;
+  Undefined = 0;
+  Invalid = 1;
+  Ordered = 2;
+  Shipping = 3;
+  Done= 4;
+  Cancelled = 5;
+  Failed = 6;
 }
 
 message Contact {
@@ -76,13 +58,15 @@ message Contact {
 }
 
 message Branch {
-  string branch_number = 1;
-  string post_number = 2;
+  string provider = 1;
+  string branch_number = 2;
+  string post_number = 3;
 }
 
 message Packstation {
-  string station_number = 1;
-  string post_number = 2;
+  string provider = 1;
+  string station_number = 2;
+  string post_number = 3;
 }
 
 message Address {
@@ -98,17 +82,25 @@ message Address {
 }
 
 message Parcel {
-  int32 quantity = 1;
-  float weight = 2;
-  float height = 3;
-  float width = 4;
-  float length = 5;
+  message Item {
+    string item_id = 1;
+    int32 quantity = 2;
+  }
+
+  string product_id = 1;
+  string product_variant_id = 2;
+  repeated Item items = 3;
+  float weight_in_kg = 4;
+  float height_in_cm = 5;
+  float width_in_cm = 6;
+  float length_in_cm = 7;
 }
 
 message Order {
-  repeated Parcel parcels = 1;
-  Address sender = 2;
-  Address receiver = 3;
+  string reference_id = 1;
+  repeated Parcel parcels = 2;
+  Address sender = 3;
+  Address receiver = 4;
   string notify = 5;
 }
 
@@ -118,24 +110,15 @@ message Label {
     string pdf = 2;
     string png = 3;
   }
-  string shipment_id = 4; //filled on Order
+  string shipment_number = 4; //filled on Order
   State state = 5; //update by Track
   io.restorecommerce.status.Status status = 6; //API status
 }
 
-message Event {
-  io.restorecommerce.status.Status status = 1;
-  string timestamp = 2;
-  string location = 3;
-  google.protobuf.Any details = 4;
-}
-
 message FulfillmentRequest {
   string id = 1;
-  string courier_id = 2;
-  string product_id = 3;
-  Order order = 4;
-  io.restorecommerce.meta.Meta meta = 5;
+  Order order = 2;
+  io.restorecommerce.meta.Meta meta = 3;
 }
 
 message FulfillmentRequestList {
@@ -149,11 +132,10 @@ This is the message how it get stored to the database
 */
 message Fulfillment {
   string id = 1;
-  string courier_id = 2;
-  string product_id = 3;
-  Order order = 4;
-  io.restorecommerce.meta.Meta meta = 5;
-  Label label = 6; //filled on Order
+  Order order = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+  repeated Label labels = 4; //filled by service
+  bool fulfilled = 5;
 }
 
 message FulfillmentResponse {
@@ -168,8 +150,9 @@ message FulfillmentResponseList {
 }
 
 message TrackingRequest {
-  string order_id = 1;
-  google.protobuf.Any options = 2;
+  string fulfillment_id = 1;
+  repeated string shipment_numbers = 2; //optional
+  google.protobuf.Any options = 3;
 }
 
 message TrackingRequestList {
@@ -177,26 +160,34 @@ message TrackingRequestList {
   io.restorecommerce.auth.Subject subject = 2;
 }
 
-message Tracking {
-  string fulfillment_id = 1;
-  repeated Event events = 2;
+message Event {
+  int64 timestamp = 1;
+  string location = 2;
   google.protobuf.Any details = 3;
   io.restorecommerce.status.Status status = 4;
 }
 
+message Tracking {
+  string shipment_number = 1;
+  repeated Event events = 3;
+  google.protobuf.Any details = 4;
+  io.restorecommerce.status.Status status = 5;
+}
+
+message TrackingResult {
+  Fulfillment fulfillment = 1;
+  repeated Tracking tracks = 2;
+  io.restorecommerce.status.Status status = 3;
+}
+
 message TrackingResultList {
-  repeated Tracking items = 1;
+  repeated TrackingResult items = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message CancelRequestList {
   repeated string ids = 1;
   io.restorecommerce.auth.Subject subject = 2;
-}
-
-message CancelResultList {
-  repeated io.restorecommerce.status.Status items = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message Deleted {

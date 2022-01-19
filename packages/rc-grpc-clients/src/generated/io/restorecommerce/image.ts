@@ -9,7 +9,7 @@ export interface Image {
   id: string;
   caption: string;
   filename: string;
-  contentType: string;
+  content_type: string;
   url: string;
   width: number;
   height: number;
@@ -18,7 +18,7 @@ export interface Image {
 
 export interface ImageList {
   items: Image[];
-  totalCount: number;
+  total_count: number;
 }
 
 export interface Deleted {
@@ -29,7 +29,7 @@ const baseImage: object = {
   id: "",
   caption: "",
   filename: "",
-  contentType: "",
+  content_type: "",
   url: "",
   width: 0,
   height: 0,
@@ -47,8 +47,8 @@ export const Image = {
     if (message.filename !== "") {
       writer.uint32(26).string(message.filename);
     }
-    if (message.contentType !== "") {
-      writer.uint32(34).string(message.contentType);
+    if (message.content_type !== "") {
+      writer.uint32(34).string(message.content_type);
     }
     if (message.url !== "") {
       writer.uint32(42).string(message.url);
@@ -82,7 +82,7 @@ export const Image = {
           message.filename = reader.string();
           break;
         case 4:
-          message.contentType = reader.string();
+          message.content_type = reader.string();
           break;
         case 5:
           message.url = reader.string();
@@ -121,10 +121,10 @@ export const Image = {
     } else {
       message.filename = "";
     }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = String(object.contentType);
+    if (object.content_type !== undefined && object.content_type !== null) {
+      message.content_type = String(object.content_type);
     } else {
-      message.contentType = "";
+      message.content_type = "";
     }
     if (object.url !== undefined && object.url !== null) {
       message.url = String(object.url);
@@ -166,10 +166,10 @@ export const Image = {
     } else {
       message.filename = "";
     }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = object.contentType;
+    if (object.content_type !== undefined && object.content_type !== null) {
+      message.content_type = object.content_type;
     } else {
-      message.contentType = "";
+      message.content_type = "";
     }
     if (object.url !== undefined && object.url !== null) {
       message.url = object.url;
@@ -199,8 +199,8 @@ export const Image = {
     message.id !== undefined && (obj.id = message.id);
     message.caption !== undefined && (obj.caption = message.caption);
     message.filename !== undefined && (obj.filename = message.filename);
-    message.contentType !== undefined &&
-      (obj.contentType = message.contentType);
+    message.content_type !== undefined &&
+      (obj.content_type = message.content_type);
     message.url !== undefined && (obj.url = message.url);
     message.width !== undefined && (obj.width = message.width);
     message.height !== undefined && (obj.height = message.height);
@@ -209,15 +209,15 @@ export const Image = {
   },
 };
 
-const baseImageList: object = { totalCount: 0 };
+const baseImageList: object = { total_count: 0 };
 
 export const ImageList = {
   encode(message: ImageList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Image.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     return writer;
   },
@@ -234,7 +234,7 @@ export const ImageList = {
           message.items.push(Image.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -252,10 +252,10 @@ export const ImageList = {
         message.items.push(Image.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     return message;
   },
@@ -268,10 +268,10 @@ export const ImageList = {
         message.items.push(Image.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     return message;
   },
@@ -283,7 +283,8 @@ export const ImageList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     return obj;
   },
 };

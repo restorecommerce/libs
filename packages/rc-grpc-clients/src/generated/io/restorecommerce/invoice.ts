@@ -38,14 +38,14 @@ export interface Deleted {
 /** For multiple invoices */
 export interface InvoiceList {
   items: Invoice[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface InvoiceListResponse {
   items: InvoiceResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface InvoiceResponse {
@@ -58,52 +58,52 @@ export interface Invoice {
   id: string;
   meta?: Meta;
   timestamp: string;
-  customerId: string;
-  paymentStatus: string;
-  totalAmount: number;
-  netAmount: number;
+  customer_id: string;
+  payment_status: string;
+  total_amount: number;
+  net_amount: number;
   /** difference between net and total */
-  vatAmount: number;
+  vat_amount: number;
   document: string;
-  invoiceNumber: string;
-  customerRemark: string;
+  invoice_number: string;
+  customer_remark: string;
 }
 
 /** List of Invoice Positions data */
 export interface InvoicesPositionsData {
-  invoicesPositionsData: InvoicePositions[];
+  invoices_positions_data: InvoicePositions[];
 }
 
 export interface InvoicePositions {
   /** contract or customer identifier */
   id: string;
-  invoicePositions: InvoicePosition[];
-  recipientCustomer?: RecipientCustomer;
-  recipientBillingAddress?: BillingAddress;
-  senderBillingAddress?: BillingAddress;
-  recipientOrganization?: Organization;
-  senderOrganization?: Organization;
-  paymentMethodDetails?: Any;
+  invoice_positions: InvoicePosition[];
+  recipient_customer?: RecipientCustomer;
+  recipient_billing_address?: BillingAddress;
+  sender_billing_address?: BillingAddress;
+  recipient_organization?: Organization;
+  sender_organization?: Organization;
+  payment_method_details?: Any;
 }
 
 export interface RecipientCustomer {
   /** customer id - used to store the resource in DB */
   id: string;
   /** displayed in invoice - auto generated per customer */
-  customerNumber: string;
+  customer_number: string;
 }
 
 export interface BillingAddress {
   email: string;
   website: string;
   street: string;
-  buildingNumber: string;
+  building_number: string;
   postcode: string;
   region: string;
-  countryName: string;
+  country_name: string;
   telephone: string;
   timezone: string;
-  economicArea: string;
+  economic_area: string;
 }
 
 export interface InvoicePosition {
@@ -185,15 +185,15 @@ export const Deleted = {
   },
 };
 
-const baseInvoiceList: object = { totalCount: 0 };
+const baseInvoiceList: object = { total_count: 0 };
 
 export const InvoiceList = {
   encode(message: InvoiceList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Invoice.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -213,7 +213,7 @@ export const InvoiceList = {
           message.items.push(Invoice.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -234,10 +234,10 @@ export const InvoiceList = {
         message.items.push(Invoice.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -255,10 +255,10 @@ export const InvoiceList = {
         message.items.push(Invoice.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -275,7 +275,8 @@ export const InvoiceList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -284,7 +285,7 @@ export const InvoiceList = {
   },
 };
 
-const baseInvoiceListResponse: object = { totalCount: 0 };
+const baseInvoiceListResponse: object = { total_count: 0 };
 
 export const InvoiceListResponse = {
   encode(
@@ -294,12 +295,12 @@ export const InvoiceListResponse = {
     for (const v of message.items) {
       InvoiceResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -320,10 +321,10 @@ export const InvoiceListResponse = {
           message.items.push(InvoiceResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -346,20 +347,20 @@ export const InvoiceListResponse = {
         message.items.push(InvoiceResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -372,20 +373,20 @@ export const InvoiceListResponse = {
         message.items.push(InvoiceResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -399,10 +400,11 @@ export const InvoiceListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -491,14 +493,14 @@ export const InvoiceResponse = {
 const baseInvoice: object = {
   id: "",
   timestamp: "",
-  customerId: "",
-  paymentStatus: "",
-  totalAmount: 0,
-  netAmount: 0,
-  vatAmount: 0,
+  customer_id: "",
+  payment_status: "",
+  total_amount: 0,
+  net_amount: 0,
+  vat_amount: 0,
   document: "",
-  invoiceNumber: "",
-  customerRemark: "",
+  invoice_number: "",
+  customer_remark: "",
 };
 
 export const Invoice = {
@@ -512,29 +514,29 @@ export const Invoice = {
     if (message.timestamp !== "") {
       writer.uint32(34).string(message.timestamp);
     }
-    if (message.customerId !== "") {
-      writer.uint32(42).string(message.customerId);
+    if (message.customer_id !== "") {
+      writer.uint32(42).string(message.customer_id);
     }
-    if (message.paymentStatus !== "") {
-      writer.uint32(50).string(message.paymentStatus);
+    if (message.payment_status !== "") {
+      writer.uint32(50).string(message.payment_status);
     }
-    if (message.totalAmount !== 0) {
-      writer.uint32(57).double(message.totalAmount);
+    if (message.total_amount !== 0) {
+      writer.uint32(57).double(message.total_amount);
     }
-    if (message.netAmount !== 0) {
-      writer.uint32(65).double(message.netAmount);
+    if (message.net_amount !== 0) {
+      writer.uint32(65).double(message.net_amount);
     }
-    if (message.vatAmount !== 0) {
-      writer.uint32(73).double(message.vatAmount);
+    if (message.vat_amount !== 0) {
+      writer.uint32(73).double(message.vat_amount);
     }
     if (message.document !== "") {
       writer.uint32(82).string(message.document);
     }
-    if (message.invoiceNumber !== "") {
-      writer.uint32(90).string(message.invoiceNumber);
+    if (message.invoice_number !== "") {
+      writer.uint32(90).string(message.invoice_number);
     }
-    if (message.customerRemark !== "") {
-      writer.uint32(98).string(message.customerRemark);
+    if (message.customer_remark !== "") {
+      writer.uint32(98).string(message.customer_remark);
     }
     return writer;
   },
@@ -556,28 +558,28 @@ export const Invoice = {
           message.timestamp = reader.string();
           break;
         case 5:
-          message.customerId = reader.string();
+          message.customer_id = reader.string();
           break;
         case 6:
-          message.paymentStatus = reader.string();
+          message.payment_status = reader.string();
           break;
         case 7:
-          message.totalAmount = reader.double();
+          message.total_amount = reader.double();
           break;
         case 8:
-          message.netAmount = reader.double();
+          message.net_amount = reader.double();
           break;
         case 9:
-          message.vatAmount = reader.double();
+          message.vat_amount = reader.double();
           break;
         case 10:
           message.document = reader.string();
           break;
         case 11:
-          message.invoiceNumber = reader.string();
+          message.invoice_number = reader.string();
           break;
         case 12:
-          message.customerRemark = reader.string();
+          message.customer_remark = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -604,45 +606,48 @@ export const Invoice = {
     } else {
       message.timestamp = "";
     }
-    if (object.customerId !== undefined && object.customerId !== null) {
-      message.customerId = String(object.customerId);
+    if (object.customer_id !== undefined && object.customer_id !== null) {
+      message.customer_id = String(object.customer_id);
     } else {
-      message.customerId = "";
+      message.customer_id = "";
     }
-    if (object.paymentStatus !== undefined && object.paymentStatus !== null) {
-      message.paymentStatus = String(object.paymentStatus);
+    if (object.payment_status !== undefined && object.payment_status !== null) {
+      message.payment_status = String(object.payment_status);
     } else {
-      message.paymentStatus = "";
+      message.payment_status = "";
     }
-    if (object.totalAmount !== undefined && object.totalAmount !== null) {
-      message.totalAmount = Number(object.totalAmount);
+    if (object.total_amount !== undefined && object.total_amount !== null) {
+      message.total_amount = Number(object.total_amount);
     } else {
-      message.totalAmount = 0;
+      message.total_amount = 0;
     }
-    if (object.netAmount !== undefined && object.netAmount !== null) {
-      message.netAmount = Number(object.netAmount);
+    if (object.net_amount !== undefined && object.net_amount !== null) {
+      message.net_amount = Number(object.net_amount);
     } else {
-      message.netAmount = 0;
+      message.net_amount = 0;
     }
-    if (object.vatAmount !== undefined && object.vatAmount !== null) {
-      message.vatAmount = Number(object.vatAmount);
+    if (object.vat_amount !== undefined && object.vat_amount !== null) {
+      message.vat_amount = Number(object.vat_amount);
     } else {
-      message.vatAmount = 0;
+      message.vat_amount = 0;
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = String(object.document);
     } else {
       message.document = "";
     }
-    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
-      message.invoiceNumber = String(object.invoiceNumber);
+    if (object.invoice_number !== undefined && object.invoice_number !== null) {
+      message.invoice_number = String(object.invoice_number);
     } else {
-      message.invoiceNumber = "";
+      message.invoice_number = "";
     }
-    if (object.customerRemark !== undefined && object.customerRemark !== null) {
-      message.customerRemark = String(object.customerRemark);
+    if (
+      object.customer_remark !== undefined &&
+      object.customer_remark !== null
+    ) {
+      message.customer_remark = String(object.customer_remark);
     } else {
-      message.customerRemark = "";
+      message.customer_remark = "";
     }
     return message;
   },
@@ -664,45 +669,48 @@ export const Invoice = {
     } else {
       message.timestamp = "";
     }
-    if (object.customerId !== undefined && object.customerId !== null) {
-      message.customerId = object.customerId;
+    if (object.customer_id !== undefined && object.customer_id !== null) {
+      message.customer_id = object.customer_id;
     } else {
-      message.customerId = "";
+      message.customer_id = "";
     }
-    if (object.paymentStatus !== undefined && object.paymentStatus !== null) {
-      message.paymentStatus = object.paymentStatus;
+    if (object.payment_status !== undefined && object.payment_status !== null) {
+      message.payment_status = object.payment_status;
     } else {
-      message.paymentStatus = "";
+      message.payment_status = "";
     }
-    if (object.totalAmount !== undefined && object.totalAmount !== null) {
-      message.totalAmount = object.totalAmount;
+    if (object.total_amount !== undefined && object.total_amount !== null) {
+      message.total_amount = object.total_amount;
     } else {
-      message.totalAmount = 0;
+      message.total_amount = 0;
     }
-    if (object.netAmount !== undefined && object.netAmount !== null) {
-      message.netAmount = object.netAmount;
+    if (object.net_amount !== undefined && object.net_amount !== null) {
+      message.net_amount = object.net_amount;
     } else {
-      message.netAmount = 0;
+      message.net_amount = 0;
     }
-    if (object.vatAmount !== undefined && object.vatAmount !== null) {
-      message.vatAmount = object.vatAmount;
+    if (object.vat_amount !== undefined && object.vat_amount !== null) {
+      message.vat_amount = object.vat_amount;
     } else {
-      message.vatAmount = 0;
+      message.vat_amount = 0;
     }
     if (object.document !== undefined && object.document !== null) {
       message.document = object.document;
     } else {
       message.document = "";
     }
-    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
-      message.invoiceNumber = object.invoiceNumber;
+    if (object.invoice_number !== undefined && object.invoice_number !== null) {
+      message.invoice_number = object.invoice_number;
     } else {
-      message.invoiceNumber = "";
+      message.invoice_number = "";
     }
-    if (object.customerRemark !== undefined && object.customerRemark !== null) {
-      message.customerRemark = object.customerRemark;
+    if (
+      object.customer_remark !== undefined &&
+      object.customer_remark !== null
+    ) {
+      message.customer_remark = object.customer_remark;
     } else {
-      message.customerRemark = "";
+      message.customer_remark = "";
     }
     return message;
   },
@@ -713,18 +721,19 @@ export const Invoice = {
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.timestamp !== undefined && (obj.timestamp = message.timestamp);
-    message.customerId !== undefined && (obj.customerId = message.customerId);
-    message.paymentStatus !== undefined &&
-      (obj.paymentStatus = message.paymentStatus);
-    message.totalAmount !== undefined &&
-      (obj.totalAmount = message.totalAmount);
-    message.netAmount !== undefined && (obj.netAmount = message.netAmount);
-    message.vatAmount !== undefined && (obj.vatAmount = message.vatAmount);
+    message.customer_id !== undefined &&
+      (obj.customer_id = message.customer_id);
+    message.payment_status !== undefined &&
+      (obj.payment_status = message.payment_status);
+    message.total_amount !== undefined &&
+      (obj.total_amount = message.total_amount);
+    message.net_amount !== undefined && (obj.net_amount = message.net_amount);
+    message.vat_amount !== undefined && (obj.vat_amount = message.vat_amount);
     message.document !== undefined && (obj.document = message.document);
-    message.invoiceNumber !== undefined &&
-      (obj.invoiceNumber = message.invoiceNumber);
-    message.customerRemark !== undefined &&
-      (obj.customerRemark = message.customerRemark);
+    message.invoice_number !== undefined &&
+      (obj.invoice_number = message.invoice_number);
+    message.customer_remark !== undefined &&
+      (obj.customer_remark = message.customer_remark);
     return obj;
   },
 };
@@ -736,7 +745,7 @@ export const InvoicesPositionsData = {
     message: InvoicesPositionsData,
     writer: Writer = Writer.create()
   ): Writer {
-    for (const v of message.invoicesPositionsData) {
+    for (const v of message.invoices_positions_data) {
       InvoicePositions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -748,12 +757,12 @@ export const InvoicesPositionsData = {
     const message = globalThis.Object.create(
       baseInvoicesPositionsData
     ) as InvoicesPositionsData;
-    message.invoicesPositionsData = [];
+    message.invoices_positions_data = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.invoicesPositionsData.push(
+          message.invoices_positions_data.push(
             InvoicePositions.decode(reader, reader.uint32())
           );
           break;
@@ -769,13 +778,13 @@ export const InvoicesPositionsData = {
     const message = globalThis.Object.create(
       baseInvoicesPositionsData
     ) as InvoicesPositionsData;
-    message.invoicesPositionsData = [];
+    message.invoices_positions_data = [];
     if (
-      object.invoicesPositionsData !== undefined &&
-      object.invoicesPositionsData !== null
+      object.invoices_positions_data !== undefined &&
+      object.invoices_positions_data !== null
     ) {
-      for (const e of object.invoicesPositionsData) {
-        message.invoicesPositionsData.push(InvoicePositions.fromJSON(e));
+      for (const e of object.invoices_positions_data) {
+        message.invoices_positions_data.push(InvoicePositions.fromJSON(e));
       }
     }
     return message;
@@ -785,13 +794,13 @@ export const InvoicesPositionsData = {
     object: DeepPartial<InvoicesPositionsData>
   ): InvoicesPositionsData {
     const message = { ...baseInvoicesPositionsData } as InvoicesPositionsData;
-    message.invoicesPositionsData = [];
+    message.invoices_positions_data = [];
     if (
-      object.invoicesPositionsData !== undefined &&
-      object.invoicesPositionsData !== null
+      object.invoices_positions_data !== undefined &&
+      object.invoices_positions_data !== null
     ) {
-      for (const e of object.invoicesPositionsData) {
-        message.invoicesPositionsData.push(InvoicePositions.fromPartial(e));
+      for (const e of object.invoices_positions_data) {
+        message.invoices_positions_data.push(InvoicePositions.fromPartial(e));
       }
     }
     return message;
@@ -799,12 +808,12 @@ export const InvoicesPositionsData = {
 
   toJSON(message: InvoicesPositionsData): unknown {
     const obj: any = {};
-    if (message.invoicesPositionsData) {
-      obj.invoicesPositionsData = message.invoicesPositionsData.map((e) =>
+    if (message.invoices_positions_data) {
+      obj.invoices_positions_data = message.invoices_positions_data.map((e) =>
         e ? InvoicePositions.toJSON(e) : undefined
       );
     } else {
-      obj.invoicesPositionsData = [];
+      obj.invoices_positions_data = [];
     }
     return obj;
   },
@@ -817,42 +826,42 @@ export const InvoicePositions = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    for (const v of message.invoicePositions) {
+    for (const v of message.invoice_positions) {
       InvoicePosition.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.recipientCustomer !== undefined) {
+    if (message.recipient_customer !== undefined) {
       RecipientCustomer.encode(
-        message.recipientCustomer,
+        message.recipient_customer,
         writer.uint32(26).fork()
       ).ldelim();
     }
-    if (message.recipientBillingAddress !== undefined) {
+    if (message.recipient_billing_address !== undefined) {
       BillingAddress.encode(
-        message.recipientBillingAddress,
+        message.recipient_billing_address,
         writer.uint32(34).fork()
       ).ldelim();
     }
-    if (message.senderBillingAddress !== undefined) {
+    if (message.sender_billing_address !== undefined) {
       BillingAddress.encode(
-        message.senderBillingAddress,
+        message.sender_billing_address,
         writer.uint32(42).fork()
       ).ldelim();
     }
-    if (message.recipientOrganization !== undefined) {
+    if (message.recipient_organization !== undefined) {
       Organization.encode(
-        message.recipientOrganization,
+        message.recipient_organization,
         writer.uint32(50).fork()
       ).ldelim();
     }
-    if (message.senderOrganization !== undefined) {
+    if (message.sender_organization !== undefined) {
       Organization.encode(
-        message.senderOrganization,
+        message.sender_organization,
         writer.uint32(58).fork()
       ).ldelim();
     }
-    if (message.paymentMethodDetails !== undefined) {
+    if (message.payment_method_details !== undefined) {
       Any.encode(
-        message.paymentMethodDetails,
+        message.payment_method_details,
         writer.uint32(66).fork()
       ).ldelim();
     }
@@ -865,7 +874,7 @@ export const InvoicePositions = {
     const message = globalThis.Object.create(
       baseInvoicePositions
     ) as InvoicePositions;
-    message.invoicePositions = [];
+    message.invoice_positions = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -873,42 +882,42 @@ export const InvoicePositions = {
           message.id = reader.string();
           break;
         case 2:
-          message.invoicePositions.push(
+          message.invoice_positions.push(
             InvoicePosition.decode(reader, reader.uint32())
           );
           break;
         case 3:
-          message.recipientCustomer = RecipientCustomer.decode(
+          message.recipient_customer = RecipientCustomer.decode(
             reader,
             reader.uint32()
           );
           break;
         case 4:
-          message.recipientBillingAddress = BillingAddress.decode(
+          message.recipient_billing_address = BillingAddress.decode(
             reader,
             reader.uint32()
           );
           break;
         case 5:
-          message.senderBillingAddress = BillingAddress.decode(
+          message.sender_billing_address = BillingAddress.decode(
             reader,
             reader.uint32()
           );
           break;
         case 6:
-          message.recipientOrganization = Organization.decode(
+          message.recipient_organization = Organization.decode(
             reader,
             reader.uint32()
           );
           break;
         case 7:
-          message.senderOrganization = Organization.decode(
+          message.sender_organization = Organization.decode(
             reader,
             reader.uint32()
           );
           break;
         case 8:
-          message.paymentMethodDetails = Any.decode(reader, reader.uint32());
+          message.payment_method_details = Any.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -922,156 +931,158 @@ export const InvoicePositions = {
     const message = globalThis.Object.create(
       baseInvoicePositions
     ) as InvoicePositions;
-    message.invoicePositions = [];
+    message.invoice_positions = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
       message.id = "";
     }
     if (
-      object.invoicePositions !== undefined &&
-      object.invoicePositions !== null
+      object.invoice_positions !== undefined &&
+      object.invoice_positions !== null
     ) {
-      for (const e of object.invoicePositions) {
-        message.invoicePositions.push(InvoicePosition.fromJSON(e));
+      for (const e of object.invoice_positions) {
+        message.invoice_positions.push(InvoicePosition.fromJSON(e));
       }
     }
     if (
-      object.recipientCustomer !== undefined &&
-      object.recipientCustomer !== null
+      object.recipient_customer !== undefined &&
+      object.recipient_customer !== null
     ) {
-      message.recipientCustomer = RecipientCustomer.fromJSON(
-        object.recipientCustomer
+      message.recipient_customer = RecipientCustomer.fromJSON(
+        object.recipient_customer
       );
     } else {
-      message.recipientCustomer = undefined;
+      message.recipient_customer = undefined;
     }
     if (
-      object.recipientBillingAddress !== undefined &&
-      object.recipientBillingAddress !== null
+      object.recipient_billing_address !== undefined &&
+      object.recipient_billing_address !== null
     ) {
-      message.recipientBillingAddress = BillingAddress.fromJSON(
-        object.recipientBillingAddress
+      message.recipient_billing_address = BillingAddress.fromJSON(
+        object.recipient_billing_address
       );
     } else {
-      message.recipientBillingAddress = undefined;
+      message.recipient_billing_address = undefined;
     }
     if (
-      object.senderBillingAddress !== undefined &&
-      object.senderBillingAddress !== null
+      object.sender_billing_address !== undefined &&
+      object.sender_billing_address !== null
     ) {
-      message.senderBillingAddress = BillingAddress.fromJSON(
-        object.senderBillingAddress
+      message.sender_billing_address = BillingAddress.fromJSON(
+        object.sender_billing_address
       );
     } else {
-      message.senderBillingAddress = undefined;
+      message.sender_billing_address = undefined;
     }
     if (
-      object.recipientOrganization !== undefined &&
-      object.recipientOrganization !== null
+      object.recipient_organization !== undefined &&
+      object.recipient_organization !== null
     ) {
-      message.recipientOrganization = Organization.fromJSON(
-        object.recipientOrganization
+      message.recipient_organization = Organization.fromJSON(
+        object.recipient_organization
       );
     } else {
-      message.recipientOrganization = undefined;
+      message.recipient_organization = undefined;
     }
     if (
-      object.senderOrganization !== undefined &&
-      object.senderOrganization !== null
+      object.sender_organization !== undefined &&
+      object.sender_organization !== null
     ) {
-      message.senderOrganization = Organization.fromJSON(
-        object.senderOrganization
+      message.sender_organization = Organization.fromJSON(
+        object.sender_organization
       );
     } else {
-      message.senderOrganization = undefined;
+      message.sender_organization = undefined;
     }
     if (
-      object.paymentMethodDetails !== undefined &&
-      object.paymentMethodDetails !== null
+      object.payment_method_details !== undefined &&
+      object.payment_method_details !== null
     ) {
-      message.paymentMethodDetails = Any.fromJSON(object.paymentMethodDetails);
+      message.payment_method_details = Any.fromJSON(
+        object.payment_method_details
+      );
     } else {
-      message.paymentMethodDetails = undefined;
+      message.payment_method_details = undefined;
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
     const message = { ...baseInvoicePositions } as InvoicePositions;
-    message.invoicePositions = [];
+    message.invoice_positions = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
       message.id = "";
     }
     if (
-      object.invoicePositions !== undefined &&
-      object.invoicePositions !== null
+      object.invoice_positions !== undefined &&
+      object.invoice_positions !== null
     ) {
-      for (const e of object.invoicePositions) {
-        message.invoicePositions.push(InvoicePosition.fromPartial(e));
+      for (const e of object.invoice_positions) {
+        message.invoice_positions.push(InvoicePosition.fromPartial(e));
       }
     }
     if (
-      object.recipientCustomer !== undefined &&
-      object.recipientCustomer !== null
+      object.recipient_customer !== undefined &&
+      object.recipient_customer !== null
     ) {
-      message.recipientCustomer = RecipientCustomer.fromPartial(
-        object.recipientCustomer
+      message.recipient_customer = RecipientCustomer.fromPartial(
+        object.recipient_customer
       );
     } else {
-      message.recipientCustomer = undefined;
+      message.recipient_customer = undefined;
     }
     if (
-      object.recipientBillingAddress !== undefined &&
-      object.recipientBillingAddress !== null
+      object.recipient_billing_address !== undefined &&
+      object.recipient_billing_address !== null
     ) {
-      message.recipientBillingAddress = BillingAddress.fromPartial(
-        object.recipientBillingAddress
+      message.recipient_billing_address = BillingAddress.fromPartial(
+        object.recipient_billing_address
       );
     } else {
-      message.recipientBillingAddress = undefined;
+      message.recipient_billing_address = undefined;
     }
     if (
-      object.senderBillingAddress !== undefined &&
-      object.senderBillingAddress !== null
+      object.sender_billing_address !== undefined &&
+      object.sender_billing_address !== null
     ) {
-      message.senderBillingAddress = BillingAddress.fromPartial(
-        object.senderBillingAddress
+      message.sender_billing_address = BillingAddress.fromPartial(
+        object.sender_billing_address
       );
     } else {
-      message.senderBillingAddress = undefined;
+      message.sender_billing_address = undefined;
     }
     if (
-      object.recipientOrganization !== undefined &&
-      object.recipientOrganization !== null
+      object.recipient_organization !== undefined &&
+      object.recipient_organization !== null
     ) {
-      message.recipientOrganization = Organization.fromPartial(
-        object.recipientOrganization
+      message.recipient_organization = Organization.fromPartial(
+        object.recipient_organization
       );
     } else {
-      message.recipientOrganization = undefined;
+      message.recipient_organization = undefined;
     }
     if (
-      object.senderOrganization !== undefined &&
-      object.senderOrganization !== null
+      object.sender_organization !== undefined &&
+      object.sender_organization !== null
     ) {
-      message.senderOrganization = Organization.fromPartial(
-        object.senderOrganization
+      message.sender_organization = Organization.fromPartial(
+        object.sender_organization
       );
     } else {
-      message.senderOrganization = undefined;
+      message.sender_organization = undefined;
     }
     if (
-      object.paymentMethodDetails !== undefined &&
-      object.paymentMethodDetails !== null
+      object.payment_method_details !== undefined &&
+      object.payment_method_details !== null
     ) {
-      message.paymentMethodDetails = Any.fromPartial(
-        object.paymentMethodDetails
+      message.payment_method_details = Any.fromPartial(
+        object.payment_method_details
       );
     } else {
-      message.paymentMethodDetails = undefined;
+      message.payment_method_details = undefined;
     }
     return message;
   },
@@ -1079,50 +1090,50 @@ export const InvoicePositions = {
   toJSON(message: InvoicePositions): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    if (message.invoicePositions) {
-      obj.invoicePositions = message.invoicePositions.map((e) =>
+    if (message.invoice_positions) {
+      obj.invoice_positions = message.invoice_positions.map((e) =>
         e ? InvoicePosition.toJSON(e) : undefined
       );
     } else {
-      obj.invoicePositions = [];
+      obj.invoice_positions = [];
     }
-    message.recipientCustomer !== undefined &&
-      (obj.recipientCustomer = message.recipientCustomer
-        ? RecipientCustomer.toJSON(message.recipientCustomer)
+    message.recipient_customer !== undefined &&
+      (obj.recipient_customer = message.recipient_customer
+        ? RecipientCustomer.toJSON(message.recipient_customer)
         : undefined);
-    message.recipientBillingAddress !== undefined &&
-      (obj.recipientBillingAddress = message.recipientBillingAddress
-        ? BillingAddress.toJSON(message.recipientBillingAddress)
+    message.recipient_billing_address !== undefined &&
+      (obj.recipient_billing_address = message.recipient_billing_address
+        ? BillingAddress.toJSON(message.recipient_billing_address)
         : undefined);
-    message.senderBillingAddress !== undefined &&
-      (obj.senderBillingAddress = message.senderBillingAddress
-        ? BillingAddress.toJSON(message.senderBillingAddress)
+    message.sender_billing_address !== undefined &&
+      (obj.sender_billing_address = message.sender_billing_address
+        ? BillingAddress.toJSON(message.sender_billing_address)
         : undefined);
-    message.recipientOrganization !== undefined &&
-      (obj.recipientOrganization = message.recipientOrganization
-        ? Organization.toJSON(message.recipientOrganization)
+    message.recipient_organization !== undefined &&
+      (obj.recipient_organization = message.recipient_organization
+        ? Organization.toJSON(message.recipient_organization)
         : undefined);
-    message.senderOrganization !== undefined &&
-      (obj.senderOrganization = message.senderOrganization
-        ? Organization.toJSON(message.senderOrganization)
+    message.sender_organization !== undefined &&
+      (obj.sender_organization = message.sender_organization
+        ? Organization.toJSON(message.sender_organization)
         : undefined);
-    message.paymentMethodDetails !== undefined &&
-      (obj.paymentMethodDetails = message.paymentMethodDetails
-        ? Any.toJSON(message.paymentMethodDetails)
+    message.payment_method_details !== undefined &&
+      (obj.payment_method_details = message.payment_method_details
+        ? Any.toJSON(message.payment_method_details)
         : undefined);
     return obj;
   },
 };
 
-const baseRecipientCustomer: object = { id: "", customerNumber: "" };
+const baseRecipientCustomer: object = { id: "", customer_number: "" };
 
 export const RecipientCustomer = {
   encode(message: RecipientCustomer, writer: Writer = Writer.create()): Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.customerNumber !== "") {
-      writer.uint32(18).string(message.customerNumber);
+    if (message.customer_number !== "") {
+      writer.uint32(18).string(message.customer_number);
     }
     return writer;
   },
@@ -1140,7 +1151,7 @@ export const RecipientCustomer = {
           message.id = reader.string();
           break;
         case 2:
-          message.customerNumber = reader.string();
+          message.customer_number = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1159,10 +1170,13 @@ export const RecipientCustomer = {
     } else {
       message.id = "";
     }
-    if (object.customerNumber !== undefined && object.customerNumber !== null) {
-      message.customerNumber = String(object.customerNumber);
+    if (
+      object.customer_number !== undefined &&
+      object.customer_number !== null
+    ) {
+      message.customer_number = String(object.customer_number);
     } else {
-      message.customerNumber = "";
+      message.customer_number = "";
     }
     return message;
   },
@@ -1174,10 +1188,13 @@ export const RecipientCustomer = {
     } else {
       message.id = "";
     }
-    if (object.customerNumber !== undefined && object.customerNumber !== null) {
-      message.customerNumber = object.customerNumber;
+    if (
+      object.customer_number !== undefined &&
+      object.customer_number !== null
+    ) {
+      message.customer_number = object.customer_number;
     } else {
-      message.customerNumber = "";
+      message.customer_number = "";
     }
     return message;
   },
@@ -1185,8 +1202,8 @@ export const RecipientCustomer = {
   toJSON(message: RecipientCustomer): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.customerNumber !== undefined &&
-      (obj.customerNumber = message.customerNumber);
+    message.customer_number !== undefined &&
+      (obj.customer_number = message.customer_number);
     return obj;
   },
 };
@@ -1195,13 +1212,13 @@ const baseBillingAddress: object = {
   email: "",
   website: "",
   street: "",
-  buildingNumber: "",
+  building_number: "",
   postcode: "",
   region: "",
-  countryName: "",
+  country_name: "",
   telephone: "",
   timezone: "",
-  economicArea: "",
+  economic_area: "",
 };
 
 export const BillingAddress = {
@@ -1215,8 +1232,8 @@ export const BillingAddress = {
     if (message.street !== "") {
       writer.uint32(26).string(message.street);
     }
-    if (message.buildingNumber !== "") {
-      writer.uint32(34).string(message.buildingNumber);
+    if (message.building_number !== "") {
+      writer.uint32(34).string(message.building_number);
     }
     if (message.postcode !== "") {
       writer.uint32(42).string(message.postcode);
@@ -1224,8 +1241,8 @@ export const BillingAddress = {
     if (message.region !== "") {
       writer.uint32(50).string(message.region);
     }
-    if (message.countryName !== "") {
-      writer.uint32(58).string(message.countryName);
+    if (message.country_name !== "") {
+      writer.uint32(58).string(message.country_name);
     }
     if (message.telephone !== "") {
       writer.uint32(74).string(message.telephone);
@@ -1233,8 +1250,8 @@ export const BillingAddress = {
     if (message.timezone !== "") {
       writer.uint32(82).string(message.timezone);
     }
-    if (message.economicArea !== "") {
-      writer.uint32(90).string(message.economicArea);
+    if (message.economic_area !== "") {
+      writer.uint32(90).string(message.economic_area);
     }
     return writer;
   },
@@ -1258,7 +1275,7 @@ export const BillingAddress = {
           message.street = reader.string();
           break;
         case 4:
-          message.buildingNumber = reader.string();
+          message.building_number = reader.string();
           break;
         case 5:
           message.postcode = reader.string();
@@ -1267,7 +1284,7 @@ export const BillingAddress = {
           message.region = reader.string();
           break;
         case 7:
-          message.countryName = reader.string();
+          message.country_name = reader.string();
           break;
         case 9:
           message.telephone = reader.string();
@@ -1276,7 +1293,7 @@ export const BillingAddress = {
           message.timezone = reader.string();
           break;
         case 11:
-          message.economicArea = reader.string();
+          message.economic_area = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1305,10 +1322,13 @@ export const BillingAddress = {
     } else {
       message.street = "";
     }
-    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
-      message.buildingNumber = String(object.buildingNumber);
+    if (
+      object.building_number !== undefined &&
+      object.building_number !== null
+    ) {
+      message.building_number = String(object.building_number);
     } else {
-      message.buildingNumber = "";
+      message.building_number = "";
     }
     if (object.postcode !== undefined && object.postcode !== null) {
       message.postcode = String(object.postcode);
@@ -1320,10 +1340,10 @@ export const BillingAddress = {
     } else {
       message.region = "";
     }
-    if (object.countryName !== undefined && object.countryName !== null) {
-      message.countryName = String(object.countryName);
+    if (object.country_name !== undefined && object.country_name !== null) {
+      message.country_name = String(object.country_name);
     } else {
-      message.countryName = "";
+      message.country_name = "";
     }
     if (object.telephone !== undefined && object.telephone !== null) {
       message.telephone = String(object.telephone);
@@ -1335,10 +1355,10 @@ export const BillingAddress = {
     } else {
       message.timezone = "";
     }
-    if (object.economicArea !== undefined && object.economicArea !== null) {
-      message.economicArea = String(object.economicArea);
+    if (object.economic_area !== undefined && object.economic_area !== null) {
+      message.economic_area = String(object.economic_area);
     } else {
-      message.economicArea = "";
+      message.economic_area = "";
     }
     return message;
   },
@@ -1360,10 +1380,13 @@ export const BillingAddress = {
     } else {
       message.street = "";
     }
-    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
-      message.buildingNumber = object.buildingNumber;
+    if (
+      object.building_number !== undefined &&
+      object.building_number !== null
+    ) {
+      message.building_number = object.building_number;
     } else {
-      message.buildingNumber = "";
+      message.building_number = "";
     }
     if (object.postcode !== undefined && object.postcode !== null) {
       message.postcode = object.postcode;
@@ -1375,10 +1398,10 @@ export const BillingAddress = {
     } else {
       message.region = "";
     }
-    if (object.countryName !== undefined && object.countryName !== null) {
-      message.countryName = object.countryName;
+    if (object.country_name !== undefined && object.country_name !== null) {
+      message.country_name = object.country_name;
     } else {
-      message.countryName = "";
+      message.country_name = "";
     }
     if (object.telephone !== undefined && object.telephone !== null) {
       message.telephone = object.telephone;
@@ -1390,10 +1413,10 @@ export const BillingAddress = {
     } else {
       message.timezone = "";
     }
-    if (object.economicArea !== undefined && object.economicArea !== null) {
-      message.economicArea = object.economicArea;
+    if (object.economic_area !== undefined && object.economic_area !== null) {
+      message.economic_area = object.economic_area;
     } else {
-      message.economicArea = "";
+      message.economic_area = "";
     }
     return message;
   },
@@ -1403,16 +1426,16 @@ export const BillingAddress = {
     message.email !== undefined && (obj.email = message.email);
     message.website !== undefined && (obj.website = message.website);
     message.street !== undefined && (obj.street = message.street);
-    message.buildingNumber !== undefined &&
-      (obj.buildingNumber = message.buildingNumber);
+    message.building_number !== undefined &&
+      (obj.building_number = message.building_number);
     message.postcode !== undefined && (obj.postcode = message.postcode);
     message.region !== undefined && (obj.region = message.region);
-    message.countryName !== undefined &&
-      (obj.countryName = message.countryName);
+    message.country_name !== undefined &&
+      (obj.country_name = message.country_name);
     message.telephone !== undefined && (obj.telephone = message.telephone);
     message.timezone !== undefined && (obj.timezone = message.timezone);
-    message.economicArea !== undefined &&
-      (obj.economicArea = message.economicArea);
+    message.economic_area !== undefined &&
+      (obj.economic_area = message.economic_area);
     return obj;
   },
 };

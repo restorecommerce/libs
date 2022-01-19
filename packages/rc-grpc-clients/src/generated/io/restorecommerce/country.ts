@@ -29,14 +29,14 @@ export interface Deleted {
 
 export interface CountryList {
   items: Country[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface CountryListResponse {
   items: CountryResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface CountryResponse {
@@ -48,9 +48,9 @@ export interface Country {
   id: string;
   meta?: Meta;
   name: string;
-  countryCode: string;
-  geographicalName: string;
-  economicAreas: string[];
+  country_code: string;
+  geographical_name: string;
+  economic_areas: string[];
 }
 
 const baseDeleted: object = { id: "" };
@@ -108,15 +108,15 @@ export const Deleted = {
   },
 };
 
-const baseCountryList: object = { totalCount: 0 };
+const baseCountryList: object = { total_count: 0 };
 
 export const CountryList = {
   encode(message: CountryList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Country.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -136,7 +136,7 @@ export const CountryList = {
           message.items.push(Country.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -157,10 +157,10 @@ export const CountryList = {
         message.items.push(Country.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -178,10 +178,10 @@ export const CountryList = {
         message.items.push(Country.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -198,7 +198,8 @@ export const CountryList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -207,7 +208,7 @@ export const CountryList = {
   },
 };
 
-const baseCountryListResponse: object = { totalCount: 0 };
+const baseCountryListResponse: object = { total_count: 0 };
 
 export const CountryListResponse = {
   encode(
@@ -217,12 +218,12 @@ export const CountryListResponse = {
     for (const v of message.items) {
       CountryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -243,10 +244,10 @@ export const CountryListResponse = {
           message.items.push(CountryResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -269,20 +270,20 @@ export const CountryListResponse = {
         message.items.push(CountryResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -295,20 +296,20 @@ export const CountryListResponse = {
         message.items.push(CountryResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -322,10 +323,11 @@ export const CountryListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -414,9 +416,9 @@ export const CountryResponse = {
 const baseCountry: object = {
   id: "",
   name: "",
-  countryCode: "",
-  geographicalName: "",
-  economicAreas: "",
+  country_code: "",
+  geographical_name: "",
+  economic_areas: "",
 };
 
 export const Country = {
@@ -430,13 +432,13 @@ export const Country = {
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.countryCode !== "") {
-      writer.uint32(34).string(message.countryCode);
+    if (message.country_code !== "") {
+      writer.uint32(34).string(message.country_code);
     }
-    if (message.geographicalName !== "") {
-      writer.uint32(42).string(message.geographicalName);
+    if (message.geographical_name !== "") {
+      writer.uint32(42).string(message.geographical_name);
     }
-    for (const v of message.economicAreas) {
+    for (const v of message.economic_areas) {
       writer.uint32(50).string(v!);
     }
     return writer;
@@ -446,7 +448,7 @@ export const Country = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseCountry) as Country;
-    message.economicAreas = [];
+    message.economic_areas = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -460,13 +462,13 @@ export const Country = {
           message.name = reader.string();
           break;
         case 4:
-          message.countryCode = reader.string();
+          message.country_code = reader.string();
           break;
         case 5:
-          message.geographicalName = reader.string();
+          message.geographical_name = reader.string();
           break;
         case 6:
-          message.economicAreas.push(reader.string());
+          message.economic_areas.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -478,7 +480,7 @@ export const Country = {
 
   fromJSON(object: any): Country {
     const message = globalThis.Object.create(baseCountry) as Country;
-    message.economicAreas = [];
+    message.economic_areas = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -494,22 +496,22 @@ export const Country = {
     } else {
       message.name = "";
     }
-    if (object.countryCode !== undefined && object.countryCode !== null) {
-      message.countryCode = String(object.countryCode);
+    if (object.country_code !== undefined && object.country_code !== null) {
+      message.country_code = String(object.country_code);
     } else {
-      message.countryCode = "";
+      message.country_code = "";
     }
     if (
-      object.geographicalName !== undefined &&
-      object.geographicalName !== null
+      object.geographical_name !== undefined &&
+      object.geographical_name !== null
     ) {
-      message.geographicalName = String(object.geographicalName);
+      message.geographical_name = String(object.geographical_name);
     } else {
-      message.geographicalName = "";
+      message.geographical_name = "";
     }
-    if (object.economicAreas !== undefined && object.economicAreas !== null) {
-      for (const e of object.economicAreas) {
-        message.economicAreas.push(String(e));
+    if (object.economic_areas !== undefined && object.economic_areas !== null) {
+      for (const e of object.economic_areas) {
+        message.economic_areas.push(String(e));
       }
     }
     return message;
@@ -517,7 +519,7 @@ export const Country = {
 
   fromPartial(object: DeepPartial<Country>): Country {
     const message = { ...baseCountry } as Country;
-    message.economicAreas = [];
+    message.economic_areas = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -533,22 +535,22 @@ export const Country = {
     } else {
       message.name = "";
     }
-    if (object.countryCode !== undefined && object.countryCode !== null) {
-      message.countryCode = object.countryCode;
+    if (object.country_code !== undefined && object.country_code !== null) {
+      message.country_code = object.country_code;
     } else {
-      message.countryCode = "";
+      message.country_code = "";
     }
     if (
-      object.geographicalName !== undefined &&
-      object.geographicalName !== null
+      object.geographical_name !== undefined &&
+      object.geographical_name !== null
     ) {
-      message.geographicalName = object.geographicalName;
+      message.geographical_name = object.geographical_name;
     } else {
-      message.geographicalName = "";
+      message.geographical_name = "";
     }
-    if (object.economicAreas !== undefined && object.economicAreas !== null) {
-      for (const e of object.economicAreas) {
-        message.economicAreas.push(e);
+    if (object.economic_areas !== undefined && object.economic_areas !== null) {
+      for (const e of object.economic_areas) {
+        message.economic_areas.push(e);
       }
     }
     return message;
@@ -560,14 +562,14 @@ export const Country = {
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.countryCode !== undefined &&
-      (obj.countryCode = message.countryCode);
-    message.geographicalName !== undefined &&
-      (obj.geographicalName = message.geographicalName);
-    if (message.economicAreas) {
-      obj.economicAreas = message.economicAreas.map((e) => e);
+    message.country_code !== undefined &&
+      (obj.country_code = message.country_code);
+    message.geographical_name !== undefined &&
+      (obj.geographical_name = message.geographical_name);
+    if (message.economic_areas) {
+      obj.economic_areas = message.economic_areas.map((e) => e);
     } else {
-      obj.economicAreas = [];
+      obj.economic_areas = [];
     }
     return obj;
   },

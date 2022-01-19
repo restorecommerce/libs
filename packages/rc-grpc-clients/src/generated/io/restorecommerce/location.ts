@@ -33,14 +33,14 @@ export interface Deleted {
 
 export interface LocationList {
   items: Location[];
-  totalCount: number;
+  total_count: number;
   subject?: Subject;
 }
 
 export interface LocationListResponse {
   items: LocationResponse[];
-  totalCount: number;
-  operationStatus?: OperationStatus;
+  total_count: number;
+  operation_status?: OperationStatus;
 }
 
 export interface LocationResponse {
@@ -56,12 +56,12 @@ export interface Location {
   name: string;
   description: string;
   /** Organization to which this location is linked */
-  organizationId: string;
+  organization_id: string;
   /** Location which may contain this location; may be null */
-  parentId: string;
+  parent_id: string;
   /** Locations contained in this location */
-  childrenIds: string[];
-  addressId: string;
+  children_ids: string[];
+  address_id: string;
   /** / additional data */
   data?: Any;
 }
@@ -121,15 +121,15 @@ export const Deleted = {
   },
 };
 
-const baseLocationList: object = { totalCount: 0 };
+const baseLocationList: object = { total_count: 0 };
 
 export const LocationList = {
   encode(message: LocationList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Location.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -149,7 +149,7 @@ export const LocationList = {
           message.items.push(Location.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -170,10 +170,10 @@ export const LocationList = {
         message.items.push(Location.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -191,10 +191,10 @@ export const LocationList = {
         message.items.push(Location.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -213,7 +213,8 @@ export const LocationList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -222,7 +223,7 @@ export const LocationList = {
   },
 };
 
-const baseLocationListResponse: object = { totalCount: 0 };
+const baseLocationListResponse: object = { total_count: 0 };
 
 export const LocationListResponse = {
   encode(
@@ -232,12 +233,12 @@ export const LocationListResponse = {
     for (const v of message.items) {
       LocationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
     }
-    if (message.operationStatus !== undefined) {
+    if (message.operation_status !== undefined) {
       OperationStatus.encode(
-        message.operationStatus,
+        message.operation_status,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -258,10 +259,10 @@ export const LocationListResponse = {
           message.items.push(LocationResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
+          message.operation_status = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -284,20 +285,20 @@ export const LocationListResponse = {
         message.items.push(LocationResponse.fromJSON(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = Number(object.total_count);
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromJSON(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -310,20 +311,20 @@ export const LocationListResponse = {
         message.items.push(LocationResponse.fromPartial(e));
       }
     }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
+    if (object.total_count !== undefined && object.total_count !== null) {
+      message.total_count = object.total_count;
     } else {
-      message.totalCount = 0;
+      message.total_count = 0;
     }
     if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
+      object.operation_status !== undefined &&
+      object.operation_status !== null
     ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
+      message.operation_status = OperationStatus.fromPartial(
+        object.operation_status
       );
     } else {
-      message.operationStatus = undefined;
+      message.operation_status = undefined;
     }
     return message;
   },
@@ -337,10 +338,11 @@ export const LocationListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
-    message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
+    message.total_count !== undefined &&
+      (obj.total_count = message.total_count);
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
         : undefined);
     return obj;
   },
@@ -430,10 +432,10 @@ const baseLocation: object = {
   id: "",
   name: "",
   description: "",
-  organizationId: "",
-  parentId: "",
-  childrenIds: "",
-  addressId: "",
+  organization_id: "",
+  parent_id: "",
+  children_ids: "",
+  address_id: "",
 };
 
 export const Location = {
@@ -450,17 +452,17 @@ export const Location = {
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
     }
-    if (message.organizationId !== "") {
-      writer.uint32(42).string(message.organizationId);
+    if (message.organization_id !== "") {
+      writer.uint32(42).string(message.organization_id);
     }
-    if (message.parentId !== "") {
-      writer.uint32(50).string(message.parentId);
+    if (message.parent_id !== "") {
+      writer.uint32(50).string(message.parent_id);
     }
-    for (const v of message.childrenIds) {
+    for (const v of message.children_ids) {
       writer.uint32(58).string(v!);
     }
-    if (message.addressId !== "") {
-      writer.uint32(66).string(message.addressId);
+    if (message.address_id !== "") {
+      writer.uint32(66).string(message.address_id);
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(74).fork()).ldelim();
@@ -472,7 +474,7 @@ export const Location = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseLocation) as Location;
-    message.childrenIds = [];
+    message.children_ids = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -489,16 +491,16 @@ export const Location = {
           message.description = reader.string();
           break;
         case 5:
-          message.organizationId = reader.string();
+          message.organization_id = reader.string();
           break;
         case 6:
-          message.parentId = reader.string();
+          message.parent_id = reader.string();
           break;
         case 7:
-          message.childrenIds.push(reader.string());
+          message.children_ids.push(reader.string());
           break;
         case 8:
-          message.addressId = reader.string();
+          message.address_id = reader.string();
           break;
         case 9:
           message.data = Any.decode(reader, reader.uint32());
@@ -513,7 +515,7 @@ export const Location = {
 
   fromJSON(object: any): Location {
     const message = globalThis.Object.create(baseLocation) as Location;
-    message.childrenIds = [];
+    message.children_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -534,25 +536,28 @@ export const Location = {
     } else {
       message.description = "";
     }
-    if (object.organizationId !== undefined && object.organizationId !== null) {
-      message.organizationId = String(object.organizationId);
+    if (
+      object.organization_id !== undefined &&
+      object.organization_id !== null
+    ) {
+      message.organization_id = String(object.organization_id);
     } else {
-      message.organizationId = "";
+      message.organization_id = "";
     }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = String(object.parentId);
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = String(object.parent_id);
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(String(e));
+    if (object.children_ids !== undefined && object.children_ids !== null) {
+      for (const e of object.children_ids) {
+        message.children_ids.push(String(e));
       }
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = String(object.addressId);
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = String(object.address_id);
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromJSON(object.data);
@@ -564,7 +569,7 @@ export const Location = {
 
   fromPartial(object: DeepPartial<Location>): Location {
     const message = { ...baseLocation } as Location;
-    message.childrenIds = [];
+    message.children_ids = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -585,25 +590,28 @@ export const Location = {
     } else {
       message.description = "";
     }
-    if (object.organizationId !== undefined && object.organizationId !== null) {
-      message.organizationId = object.organizationId;
+    if (
+      object.organization_id !== undefined &&
+      object.organization_id !== null
+    ) {
+      message.organization_id = object.organization_id;
     } else {
-      message.organizationId = "";
+      message.organization_id = "";
     }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = object.parentId;
+    if (object.parent_id !== undefined && object.parent_id !== null) {
+      message.parent_id = object.parent_id;
     } else {
-      message.parentId = "";
+      message.parent_id = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(e);
+    if (object.children_ids !== undefined && object.children_ids !== null) {
+      for (const e of object.children_ids) {
+        message.children_ids.push(e);
       }
     }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = object.addressId;
+    if (object.address_id !== undefined && object.address_id !== null) {
+      message.address_id = object.address_id;
     } else {
-      message.addressId = "";
+      message.address_id = "";
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromPartial(object.data);
@@ -621,15 +629,15 @@ export const Location = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.organizationId !== undefined &&
-      (obj.organizationId = message.organizationId);
-    message.parentId !== undefined && (obj.parentId = message.parentId);
-    if (message.childrenIds) {
-      obj.childrenIds = message.childrenIds.map((e) => e);
+    message.organization_id !== undefined &&
+      (obj.organization_id = message.organization_id);
+    message.parent_id !== undefined && (obj.parent_id = message.parent_id);
+    if (message.children_ids) {
+      obj.children_ids = message.children_ids.map((e) => e);
     } else {
-      obj.childrenIds = [];
+      obj.children_ids = [];
     }
-    message.addressId !== undefined && (obj.addressId = message.addressId);
+    message.address_id !== undefined && (obj.address_id = message.address_id);
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;

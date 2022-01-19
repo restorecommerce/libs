@@ -18,12 +18,12 @@ import { Writer, Reader } from "protobufjs/minimal";
 export const protobufPackage = "io.restorecommerce.graph";
 
 export interface TraversalRequest {
-  startVertex: string | undefined;
-  startVertices?: TraversalRequest_StartVertices | undefined;
+  start_vertex: string | undefined;
+  start_vertices?: TraversalRequest_StartVertices | undefined;
   /** Filter based on fieldName|operation, value|list */
   opts?: Options;
-  collectionName: string;
-  edgeName: string;
+  collection_name: string;
+  edge_name: string;
   data: boolean;
   path: boolean;
   aql: boolean;
@@ -35,7 +35,7 @@ export interface TraversalRequest_StartVertices {
 }
 
 export interface TraversalResponse {
-  vertexFields: VertexFields[];
+  vertex_fields: VertexFields[];
   paths?: Any;
   data?: Any;
   operationStatus?: OperationStatus;
@@ -53,13 +53,13 @@ export interface Options {
   /** either inbound or outbound */
   direction: string;
   /** ANDed with any existing filters): visits only nodes in at least the given depth */
-  minDepth: number;
+  min_depth: number;
   /** id of the startVertex */
-  startVertex: string;
+  start_vertex: string;
   /** JS code */
   visitor: string;
   /** item iteration order can be "forward" or "backward" */
-  itemOrder: string;
+  item_order: string;
   /** traversal strategy can be "depthfirst" or "breadthfirst" */
   strategy: string;
   /** JS code */
@@ -67,20 +67,20 @@ export interface Options {
   /** JS code */
   init: string;
   /** maximum number of iterations in each traversal */
-  maxIterations: number;
+  max_iterations: number;
   /** ANDed with any existing filters visits only nodes in at most the given depth */
-  maxDepth: number;
+  max_depth: number;
   /** specifies uniqueness for vertices and edges visited */
   uniqueness?: Uniqueness;
   /** "preorder", "postorder" or "preorder-expander" */
   order: string;
   /** name of graph that contains the edges */
-  graphName: string;
+  graph_name: string;
   /** JS code */
   expander: Expander[];
   /** name of the collection that contains the edges */
-  edgeCollection: string;
-  lowestCommonAncestor: boolean;
+  edge_collection: string;
+  lowest_common_ancestor: boolean;
 }
 
 export interface Filter {
@@ -102,8 +102,8 @@ export interface Uniqueness {
 }
 
 const baseTraversalRequest: object = {
-  collectionName: "",
-  edgeName: "",
+  collection_name: "",
+  edge_name: "",
   data: false,
   path: false,
   aql: false,
@@ -111,23 +111,23 @@ const baseTraversalRequest: object = {
 
 export const TraversalRequest = {
   encode(message: TraversalRequest, writer: Writer = Writer.create()): Writer {
-    if (message.startVertex !== undefined) {
-      writer.uint32(10).string(message.startVertex);
+    if (message.start_vertex !== undefined) {
+      writer.uint32(10).string(message.start_vertex);
     }
-    if (message.startVertices !== undefined) {
+    if (message.start_vertices !== undefined) {
       TraversalRequest_StartVertices.encode(
-        message.startVertices,
+        message.start_vertices,
         writer.uint32(18).fork()
       ).ldelim();
     }
     if (message.opts !== undefined) {
       Options.encode(message.opts, writer.uint32(26).fork()).ldelim();
     }
-    if (message.collectionName !== "") {
-      writer.uint32(34).string(message.collectionName);
+    if (message.collection_name !== "") {
+      writer.uint32(34).string(message.collection_name);
     }
-    if (message.edgeName !== "") {
-      writer.uint32(42).string(message.edgeName);
+    if (message.edge_name !== "") {
+      writer.uint32(42).string(message.edge_name);
     }
     if (message.data === true) {
       writer.uint32(48).bool(message.data);
@@ -154,10 +154,10 @@ export const TraversalRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.startVertex = reader.string();
+          message.start_vertex = reader.string();
           break;
         case 2:
-          message.startVertices = TraversalRequest_StartVertices.decode(
+          message.start_vertices = TraversalRequest_StartVertices.decode(
             reader,
             reader.uint32()
           );
@@ -166,10 +166,10 @@ export const TraversalRequest = {
           message.opts = Options.decode(reader, reader.uint32());
           break;
         case 4:
-          message.collectionName = reader.string();
+          message.collection_name = reader.string();
           break;
         case 5:
-          message.edgeName = reader.string();
+          message.edge_name = reader.string();
           break;
         case 6:
           message.data = reader.bool();
@@ -195,32 +195,35 @@ export const TraversalRequest = {
     const message = globalThis.Object.create(
       baseTraversalRequest
     ) as TraversalRequest;
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = String(object.startVertex);
+    if (object.start_vertex !== undefined && object.start_vertex !== null) {
+      message.start_vertex = String(object.start_vertex);
     } else {
-      message.startVertex = undefined;
+      message.start_vertex = undefined;
     }
-    if (object.startVertices !== undefined && object.startVertices !== null) {
-      message.startVertices = TraversalRequest_StartVertices.fromJSON(
-        object.startVertices
+    if (object.start_vertices !== undefined && object.start_vertices !== null) {
+      message.start_vertices = TraversalRequest_StartVertices.fromJSON(
+        object.start_vertices
       );
     } else {
-      message.startVertices = undefined;
+      message.start_vertices = undefined;
     }
     if (object.opts !== undefined && object.opts !== null) {
       message.opts = Options.fromJSON(object.opts);
     } else {
       message.opts = undefined;
     }
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = String(object.collectionName);
+    if (
+      object.collection_name !== undefined &&
+      object.collection_name !== null
+    ) {
+      message.collection_name = String(object.collection_name);
     } else {
-      message.collectionName = "";
+      message.collection_name = "";
     }
-    if (object.edgeName !== undefined && object.edgeName !== null) {
-      message.edgeName = String(object.edgeName);
+    if (object.edge_name !== undefined && object.edge_name !== null) {
+      message.edge_name = String(object.edge_name);
     } else {
-      message.edgeName = "";
+      message.edge_name = "";
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Boolean(object.data);
@@ -247,32 +250,35 @@ export const TraversalRequest = {
 
   fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
     const message = { ...baseTraversalRequest } as TraversalRequest;
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = object.startVertex;
+    if (object.start_vertex !== undefined && object.start_vertex !== null) {
+      message.start_vertex = object.start_vertex;
     } else {
-      message.startVertex = undefined;
+      message.start_vertex = undefined;
     }
-    if (object.startVertices !== undefined && object.startVertices !== null) {
-      message.startVertices = TraversalRequest_StartVertices.fromPartial(
-        object.startVertices
+    if (object.start_vertices !== undefined && object.start_vertices !== null) {
+      message.start_vertices = TraversalRequest_StartVertices.fromPartial(
+        object.start_vertices
       );
     } else {
-      message.startVertices = undefined;
+      message.start_vertices = undefined;
     }
     if (object.opts !== undefined && object.opts !== null) {
       message.opts = Options.fromPartial(object.opts);
     } else {
       message.opts = undefined;
     }
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = object.collectionName;
+    if (
+      object.collection_name !== undefined &&
+      object.collection_name !== null
+    ) {
+      message.collection_name = object.collection_name;
     } else {
-      message.collectionName = "";
+      message.collection_name = "";
     }
-    if (object.edgeName !== undefined && object.edgeName !== null) {
-      message.edgeName = object.edgeName;
+    if (object.edge_name !== undefined && object.edge_name !== null) {
+      message.edge_name = object.edge_name;
     } else {
-      message.edgeName = "";
+      message.edge_name = "";
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = object.data;
@@ -299,17 +305,17 @@ export const TraversalRequest = {
 
   toJSON(message: TraversalRequest): unknown {
     const obj: any = {};
-    message.startVertex !== undefined &&
-      (obj.startVertex = message.startVertex);
-    message.startVertices !== undefined &&
-      (obj.startVertices = message.startVertices
-        ? TraversalRequest_StartVertices.toJSON(message.startVertices)
+    message.start_vertex !== undefined &&
+      (obj.start_vertex = message.start_vertex);
+    message.start_vertices !== undefined &&
+      (obj.start_vertices = message.start_vertices
+        ? TraversalRequest_StartVertices.toJSON(message.start_vertices)
         : undefined);
     message.opts !== undefined &&
       (obj.opts = message.opts ? Options.toJSON(message.opts) : undefined);
-    message.collectionName !== undefined &&
-      (obj.collectionName = message.collectionName);
-    message.edgeName !== undefined && (obj.edgeName = message.edgeName);
+    message.collection_name !== undefined &&
+      (obj.collection_name = message.collection_name);
+    message.edge_name !== undefined && (obj.edge_name = message.edge_name);
     message.data !== undefined && (obj.data = message.data);
     message.path !== undefined && (obj.path = message.path);
     message.aql !== undefined && (obj.aql = message.aql);
@@ -401,7 +407,7 @@ const baseTraversalResponse: object = {};
 
 export const TraversalResponse = {
   encode(message: TraversalResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.vertexFields) {
+    for (const v of message.vertex_fields) {
       VertexFields.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.paths !== undefined) {
@@ -425,12 +431,12 @@ export const TraversalResponse = {
     const message = globalThis.Object.create(
       baseTraversalResponse
     ) as TraversalResponse;
-    message.vertexFields = [];
+    message.vertex_fields = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vertexFields.push(
+          message.vertex_fields.push(
             VertexFields.decode(reader, reader.uint32())
           );
           break;
@@ -458,10 +464,10 @@ export const TraversalResponse = {
     const message = globalThis.Object.create(
       baseTraversalResponse
     ) as TraversalResponse;
-    message.vertexFields = [];
-    if (object.vertexFields !== undefined && object.vertexFields !== null) {
-      for (const e of object.vertexFields) {
-        message.vertexFields.push(VertexFields.fromJSON(e));
+    message.vertex_fields = [];
+    if (object.vertex_fields !== undefined && object.vertex_fields !== null) {
+      for (const e of object.vertex_fields) {
+        message.vertex_fields.push(VertexFields.fromJSON(e));
       }
     }
     if (object.paths !== undefined && object.paths !== null) {
@@ -489,10 +495,10 @@ export const TraversalResponse = {
 
   fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
     const message = { ...baseTraversalResponse } as TraversalResponse;
-    message.vertexFields = [];
-    if (object.vertexFields !== undefined && object.vertexFields !== null) {
-      for (const e of object.vertexFields) {
-        message.vertexFields.push(VertexFields.fromPartial(e));
+    message.vertex_fields = [];
+    if (object.vertex_fields !== undefined && object.vertex_fields !== null) {
+      for (const e of object.vertex_fields) {
+        message.vertex_fields.push(VertexFields.fromPartial(e));
       }
     }
     if (object.paths !== undefined && object.paths !== null) {
@@ -520,12 +526,12 @@ export const TraversalResponse = {
 
   toJSON(message: TraversalResponse): unknown {
     const obj: any = {};
-    if (message.vertexFields) {
-      obj.vertexFields = message.vertexFields.map((e) =>
+    if (message.vertex_fields) {
+      obj.vertex_fields = message.vertex_fields.map((e) =>
         e ? VertexFields.toJSON(e) : undefined
       );
     } else {
-      obj.vertexFields = [];
+      obj.vertex_fields = [];
     }
     message.paths !== undefined &&
       (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
@@ -631,18 +637,18 @@ export const VertexFields = {
 const baseOptions: object = {
   sort: "",
   direction: "",
-  minDepth: 0,
-  startVertex: "",
+  min_depth: 0,
+  start_vertex: "",
   visitor: "",
-  itemOrder: "",
+  item_order: "",
   strategy: "",
   init: "",
-  maxIterations: 0,
-  maxDepth: 0,
+  max_iterations: 0,
+  max_depth: 0,
   order: "",
-  graphName: "",
-  edgeCollection: "",
-  lowestCommonAncestor: false,
+  graph_name: "",
+  edge_collection: "",
+  lowest_common_ancestor: false,
 };
 
 export const Options = {
@@ -653,17 +659,17 @@ export const Options = {
     if (message.direction !== "") {
       writer.uint32(18).string(message.direction);
     }
-    if (message.minDepth !== 0) {
-      writer.uint32(24).uint32(message.minDepth);
+    if (message.min_depth !== 0) {
+      writer.uint32(24).uint32(message.min_depth);
     }
-    if (message.startVertex !== "") {
-      writer.uint32(34).string(message.startVertex);
+    if (message.start_vertex !== "") {
+      writer.uint32(34).string(message.start_vertex);
     }
     if (message.visitor !== "") {
       writer.uint32(42).string(message.visitor);
     }
-    if (message.itemOrder !== "") {
-      writer.uint32(50).string(message.itemOrder);
+    if (message.item_order !== "") {
+      writer.uint32(50).string(message.item_order);
     }
     if (message.strategy !== "") {
       writer.uint32(58).string(message.strategy);
@@ -674,11 +680,11 @@ export const Options = {
     if (message.init !== "") {
       writer.uint32(74).string(message.init);
     }
-    if (message.maxIterations !== 0) {
-      writer.uint32(80).uint32(message.maxIterations);
+    if (message.max_iterations !== 0) {
+      writer.uint32(80).uint32(message.max_iterations);
     }
-    if (message.maxDepth !== 0) {
-      writer.uint32(88).uint32(message.maxDepth);
+    if (message.max_depth !== 0) {
+      writer.uint32(88).uint32(message.max_depth);
     }
     if (message.uniqueness !== undefined) {
       Uniqueness.encode(message.uniqueness, writer.uint32(98).fork()).ldelim();
@@ -686,17 +692,17 @@ export const Options = {
     if (message.order !== "") {
       writer.uint32(106).string(message.order);
     }
-    if (message.graphName !== "") {
-      writer.uint32(114).string(message.graphName);
+    if (message.graph_name !== "") {
+      writer.uint32(114).string(message.graph_name);
     }
     for (const v of message.expander) {
       Expander.encode(v!, writer.uint32(122).fork()).ldelim();
     }
-    if (message.edgeCollection !== "") {
-      writer.uint32(130).string(message.edgeCollection);
+    if (message.edge_collection !== "") {
+      writer.uint32(130).string(message.edge_collection);
     }
-    if (message.lowestCommonAncestor === true) {
-      writer.uint32(136).bool(message.lowestCommonAncestor);
+    if (message.lowest_common_ancestor === true) {
+      writer.uint32(136).bool(message.lowest_common_ancestor);
     }
     return writer;
   },
@@ -717,16 +723,16 @@ export const Options = {
           message.direction = reader.string();
           break;
         case 3:
-          message.minDepth = reader.uint32();
+          message.min_depth = reader.uint32();
           break;
         case 4:
-          message.startVertex = reader.string();
+          message.start_vertex = reader.string();
           break;
         case 5:
           message.visitor = reader.string();
           break;
         case 6:
-          message.itemOrder = reader.string();
+          message.item_order = reader.string();
           break;
         case 7:
           message.strategy = reader.string();
@@ -738,10 +744,10 @@ export const Options = {
           message.init = reader.string();
           break;
         case 10:
-          message.maxIterations = reader.uint32();
+          message.max_iterations = reader.uint32();
           break;
         case 11:
-          message.maxDepth = reader.uint32();
+          message.max_depth = reader.uint32();
           break;
         case 12:
           message.uniqueness = Uniqueness.decode(reader, reader.uint32());
@@ -750,16 +756,16 @@ export const Options = {
           message.order = reader.string();
           break;
         case 14:
-          message.graphName = reader.string();
+          message.graph_name = reader.string();
           break;
         case 15:
           message.expander.push(Expander.decode(reader, reader.uint32()));
           break;
         case 16:
-          message.edgeCollection = reader.string();
+          message.edge_collection = reader.string();
           break;
         case 17:
-          message.lowestCommonAncestor = reader.bool();
+          message.lowest_common_ancestor = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -783,25 +789,25 @@ export const Options = {
     } else {
       message.direction = "";
     }
-    if (object.minDepth !== undefined && object.minDepth !== null) {
-      message.minDepth = Number(object.minDepth);
+    if (object.min_depth !== undefined && object.min_depth !== null) {
+      message.min_depth = Number(object.min_depth);
     } else {
-      message.minDepth = 0;
+      message.min_depth = 0;
     }
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = String(object.startVertex);
+    if (object.start_vertex !== undefined && object.start_vertex !== null) {
+      message.start_vertex = String(object.start_vertex);
     } else {
-      message.startVertex = "";
+      message.start_vertex = "";
     }
     if (object.visitor !== undefined && object.visitor !== null) {
       message.visitor = String(object.visitor);
     } else {
       message.visitor = "";
     }
-    if (object.itemOrder !== undefined && object.itemOrder !== null) {
-      message.itemOrder = String(object.itemOrder);
+    if (object.item_order !== undefined && object.item_order !== null) {
+      message.item_order = String(object.item_order);
     } else {
-      message.itemOrder = "";
+      message.item_order = "";
     }
     if (object.strategy !== undefined && object.strategy !== null) {
       message.strategy = String(object.strategy);
@@ -818,15 +824,15 @@ export const Options = {
     } else {
       message.init = "";
     }
-    if (object.maxIterations !== undefined && object.maxIterations !== null) {
-      message.maxIterations = Number(object.maxIterations);
+    if (object.max_iterations !== undefined && object.max_iterations !== null) {
+      message.max_iterations = Number(object.max_iterations);
     } else {
-      message.maxIterations = 0;
+      message.max_iterations = 0;
     }
-    if (object.maxDepth !== undefined && object.maxDepth !== null) {
-      message.maxDepth = Number(object.maxDepth);
+    if (object.max_depth !== undefined && object.max_depth !== null) {
+      message.max_depth = Number(object.max_depth);
     } else {
-      message.maxDepth = 0;
+      message.max_depth = 0;
     }
     if (object.uniqueness !== undefined && object.uniqueness !== null) {
       message.uniqueness = Uniqueness.fromJSON(object.uniqueness);
@@ -838,28 +844,31 @@ export const Options = {
     } else {
       message.order = "";
     }
-    if (object.graphName !== undefined && object.graphName !== null) {
-      message.graphName = String(object.graphName);
+    if (object.graph_name !== undefined && object.graph_name !== null) {
+      message.graph_name = String(object.graph_name);
     } else {
-      message.graphName = "";
+      message.graph_name = "";
     }
     if (object.expander !== undefined && object.expander !== null) {
       for (const e of object.expander) {
         message.expander.push(Expander.fromJSON(e));
       }
     }
-    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
-      message.edgeCollection = String(object.edgeCollection);
+    if (
+      object.edge_collection !== undefined &&
+      object.edge_collection !== null
+    ) {
+      message.edge_collection = String(object.edge_collection);
     } else {
-      message.edgeCollection = "";
+      message.edge_collection = "";
     }
     if (
-      object.lowestCommonAncestor !== undefined &&
-      object.lowestCommonAncestor !== null
+      object.lowest_common_ancestor !== undefined &&
+      object.lowest_common_ancestor !== null
     ) {
-      message.lowestCommonAncestor = Boolean(object.lowestCommonAncestor);
+      message.lowest_common_ancestor = Boolean(object.lowest_common_ancestor);
     } else {
-      message.lowestCommonAncestor = false;
+      message.lowest_common_ancestor = false;
     }
     return message;
   },
@@ -878,25 +887,25 @@ export const Options = {
     } else {
       message.direction = "";
     }
-    if (object.minDepth !== undefined && object.minDepth !== null) {
-      message.minDepth = object.minDepth;
+    if (object.min_depth !== undefined && object.min_depth !== null) {
+      message.min_depth = object.min_depth;
     } else {
-      message.minDepth = 0;
+      message.min_depth = 0;
     }
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = object.startVertex;
+    if (object.start_vertex !== undefined && object.start_vertex !== null) {
+      message.start_vertex = object.start_vertex;
     } else {
-      message.startVertex = "";
+      message.start_vertex = "";
     }
     if (object.visitor !== undefined && object.visitor !== null) {
       message.visitor = object.visitor;
     } else {
       message.visitor = "";
     }
-    if (object.itemOrder !== undefined && object.itemOrder !== null) {
-      message.itemOrder = object.itemOrder;
+    if (object.item_order !== undefined && object.item_order !== null) {
+      message.item_order = object.item_order;
     } else {
-      message.itemOrder = "";
+      message.item_order = "";
     }
     if (object.strategy !== undefined && object.strategy !== null) {
       message.strategy = object.strategy;
@@ -913,15 +922,15 @@ export const Options = {
     } else {
       message.init = "";
     }
-    if (object.maxIterations !== undefined && object.maxIterations !== null) {
-      message.maxIterations = object.maxIterations;
+    if (object.max_iterations !== undefined && object.max_iterations !== null) {
+      message.max_iterations = object.max_iterations;
     } else {
-      message.maxIterations = 0;
+      message.max_iterations = 0;
     }
-    if (object.maxDepth !== undefined && object.maxDepth !== null) {
-      message.maxDepth = object.maxDepth;
+    if (object.max_depth !== undefined && object.max_depth !== null) {
+      message.max_depth = object.max_depth;
     } else {
-      message.maxDepth = 0;
+      message.max_depth = 0;
     }
     if (object.uniqueness !== undefined && object.uniqueness !== null) {
       message.uniqueness = Uniqueness.fromPartial(object.uniqueness);
@@ -933,28 +942,31 @@ export const Options = {
     } else {
       message.order = "";
     }
-    if (object.graphName !== undefined && object.graphName !== null) {
-      message.graphName = object.graphName;
+    if (object.graph_name !== undefined && object.graph_name !== null) {
+      message.graph_name = object.graph_name;
     } else {
-      message.graphName = "";
+      message.graph_name = "";
     }
     if (object.expander !== undefined && object.expander !== null) {
       for (const e of object.expander) {
         message.expander.push(Expander.fromPartial(e));
       }
     }
-    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
-      message.edgeCollection = object.edgeCollection;
+    if (
+      object.edge_collection !== undefined &&
+      object.edge_collection !== null
+    ) {
+      message.edge_collection = object.edge_collection;
     } else {
-      message.edgeCollection = "";
+      message.edge_collection = "";
     }
     if (
-      object.lowestCommonAncestor !== undefined &&
-      object.lowestCommonAncestor !== null
+      object.lowest_common_ancestor !== undefined &&
+      object.lowest_common_ancestor !== null
     ) {
-      message.lowestCommonAncestor = object.lowestCommonAncestor;
+      message.lowest_common_ancestor = object.lowest_common_ancestor;
     } else {
-      message.lowestCommonAncestor = false;
+      message.lowest_common_ancestor = false;
     }
     return message;
   },
@@ -963,11 +975,11 @@ export const Options = {
     const obj: any = {};
     message.sort !== undefined && (obj.sort = message.sort);
     message.direction !== undefined && (obj.direction = message.direction);
-    message.minDepth !== undefined && (obj.minDepth = message.minDepth);
-    message.startVertex !== undefined &&
-      (obj.startVertex = message.startVertex);
+    message.min_depth !== undefined && (obj.min_depth = message.min_depth);
+    message.start_vertex !== undefined &&
+      (obj.start_vertex = message.start_vertex);
     message.visitor !== undefined && (obj.visitor = message.visitor);
-    message.itemOrder !== undefined && (obj.itemOrder = message.itemOrder);
+    message.item_order !== undefined && (obj.item_order = message.item_order);
     message.strategy !== undefined && (obj.strategy = message.strategy);
     if (message.filter) {
       obj.filter = message.filter.map((e) =>
@@ -977,15 +989,15 @@ export const Options = {
       obj.filter = [];
     }
     message.init !== undefined && (obj.init = message.init);
-    message.maxIterations !== undefined &&
-      (obj.maxIterations = message.maxIterations);
-    message.maxDepth !== undefined && (obj.maxDepth = message.maxDepth);
+    message.max_iterations !== undefined &&
+      (obj.max_iterations = message.max_iterations);
+    message.max_depth !== undefined && (obj.max_depth = message.max_depth);
     message.uniqueness !== undefined &&
       (obj.uniqueness = message.uniqueness
         ? Uniqueness.toJSON(message.uniqueness)
         : undefined);
     message.order !== undefined && (obj.order = message.order);
-    message.graphName !== undefined && (obj.graphName = message.graphName);
+    message.graph_name !== undefined && (obj.graph_name = message.graph_name);
     if (message.expander) {
       obj.expander = message.expander.map((e) =>
         e ? Expander.toJSON(e) : undefined
@@ -993,10 +1005,10 @@ export const Options = {
     } else {
       obj.expander = [];
     }
-    message.edgeCollection !== undefined &&
-      (obj.edgeCollection = message.edgeCollection);
-    message.lowestCommonAncestor !== undefined &&
-      (obj.lowestCommonAncestor = message.lowestCommonAncestor);
+    message.edge_collection !== undefined &&
+      (obj.edge_collection = message.edge_collection);
+    message.lowest_common_ancestor !== undefined &&
+      (obj.lowest_common_ancestor = message.lowest_common_ancestor);
     return obj;
   },
 };

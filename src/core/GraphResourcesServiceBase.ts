@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
+import { TraversalOptions } from './interfaces';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
@@ -56,40 +57,33 @@ export class GraphResourcesServiceBase {
       const request = call.request?.request;
       const collection_name = request.collection_name;
       let start_vertex = request.start_vertex;
-      if (_.isEmpty(start_vertex)) {
-        start_vertex = request?.start_vertices;
-        if (!_.isEmpty(start_vertex)) {
-          start_vertex = start_vertex.vertices;
-        }
+      const opts: TraversalOptions = request?.opts;
+      if (!start_vertex && !collection_name) {
+        const message = 'missing start vertex or collection_name for graph traversal';
+        this.logger.error(message);
+        return {
+          operation_status: { code: 400, message }
+        };
       }
-      const opts = request?.opts;
-      if (_.isEmpty(start_vertex)) {
-        throw new Error('missing start vertex');
-      }
-      const edge_name = request?.edge_name;
-      let data;
-      let path;
-      let aql;
-      if (request?.data) {
-        data = request?.data;
-      }
-      if (request?.path) {
-        path = request?.path;
-      }
-      if (request?.aql) {
-        aql = request?.aql;
-      }
+      const filters = request?.filters;
+      let path = request?.path ? request.path : false;
       let queryResult;
       try {
         this.logger.debug('Calling traversal', { start_vertex, collection_name });
-        queryResult = await this.db.traversal(start_vertex, opts,
-          collection_name, edge_name, data, path, aql);
+        queryResult = await this.db.traversal(start_vertex,
+          collection_name, opts, filters, path);
         this.logger.debug('Response from DB traversal', { response: queryResult });
       } catch (err) {
         this.logger.error('Error stack', err);
         this.logger.error('Error executing DB Traversal', { error: err.message });
-        throw err;
+        return {
+          operation_status: { code: err.code ? err.code : 500, message: err.message }
+        };
       }
+
+      // TODO queryResult has response data, paths and operation_status.
+      // convert this data to stream and return this as stream response directly
+
       let idPropertyMapping = new Map<String, String>();
       const vertexFields = queryResult.vertex_fields || [];
       let marshallRequired = false;
@@ -145,7 +139,9 @@ export class GraphResourcesServiceBase {
     } catch (err) {
       this.logger.error('Error caught executing traversal', { err: err.message });
       this.logger.error('Error stack', err);
-      throw err;
+      return {
+        operation_status: { code: err.code ? err.code : 500, message: err.message }
+      };
     }
   }
 

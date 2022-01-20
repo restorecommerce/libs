@@ -81,3 +81,26 @@ export interface UpsertRequest extends UpdateRequest { }
 export interface CreateRequest {
   items: BaseDocument[];
 }
+
+export interface TraversalOptions {
+  include_vertex?: string[];
+  exclude_vertex?: string[];
+  include_edge?: string[];
+  exclude_edge?: string[];
+  direction?: string;
+};
+
+export interface GraphFilter {
+  field: string;
+  operation: FilterOperation;
+  value: string;
+  type?: FilterValueType; // defaults to string data type if not provided
+  filters?: GraphFilters [];
+}
+
+export interface GraphFilters {
+  entity?: string;
+  edge?: string;
+  filter?: GraphFilter[];
+  operator?: OperatorType;
+}

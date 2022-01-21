@@ -373,6 +373,85 @@ const testProvider = (providerCfg) => {
         });
       });
 
+      // exclude one edge and include another edge of same entity
+      it('for 2 entities should exclude one entity edge and include another entity edge', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'OUTBOUND', exclude_edge: ['resides'], include_edge: ['lives'] },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "state": "BW", "id": "i" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(1);
+            traversalResponse.data.should.have.size(2);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // collection traversal
+      it('should traverse the entire collection and return data from all traversed entities', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND' },
+          path: true
+        };
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(8); // 8 edges
+            traversalResponse.data.should.have.size(10); // 10 vertices
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
       it('delete vertices, should delete the edges associated as well',
         async () => {
           // Deleting the ids of vertexCollection 'cars' should remove

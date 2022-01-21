@@ -110,10 +110,11 @@ const testProvider = (providerCfg) => {
         result_1 = await service_1.create({ request: { items: personsVertices } });
       });
 
+      // traversal without path flag
       it('should traverse the graph and return only vertices for Person A', async () => {
         const traversalRequest = {
           start_vertex: `persons/a`,
-          opts: { direction: 'outbound' },
+          opts: { direction: 'OUTBOUND' },
           path: false
         };
         const expectedVertices = [
@@ -155,10 +156,11 @@ const testProvider = (providerCfg) => {
         });
       });
 
+      // traversal with path flag
       it('should traverse the graph and return both vertices and paths when paths flag is set to true', async () => {
         const traversalRequest = {
           start_vertex: `persons/a`,
-          opts: { direction: 'outbound' },
+          opts: { direction: 'OUTBOUND' },
           path: true
         };
         const expectedVertices = [
@@ -188,6 +190,92 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(4);
             traversalResponse.data.should.have.size(5);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // include vertices
+      it('should traverse the graph with included vertices options and return only the included vertices', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(1);
+            traversalResponse.data.should.have.size(2);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // exclude vertices
+      it('should traverse the graph with excluded vertices options and return only traversed data with excluded vertices', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "BW", "id": "i" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(3);
+            traversalResponse.data.should.have.size(4);
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }

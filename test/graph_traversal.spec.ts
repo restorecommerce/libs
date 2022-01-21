@@ -423,6 +423,19 @@ const testProvider = (providerCfg) => {
           opts: { direction: 'OUTBOUND' },
           path: true
         };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "car": "vw", "id": "d", "place_id": "f" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "place": "wolfsburg", "id": "f", "state_id": "h" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "Saxony", "id": "h" },
+          { "state": "BW", "id": "i" },
+          { "state": "Hessen", "id": "j" }
+        ];
+
         // traverse graph
         let result = await testService.traversal(traversalRequest);
 
@@ -442,12 +455,13 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.paths);
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(8); // 8 edges
-            traversalResponse.data.should.have.size(10); // 10 vertices
+            traversalResponse.data.should.have.size(10); // 10 vertices - 2 persons, 2 cars, 2 places and 4 states
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }
             finalVertices =
               _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
             resolve(traversalResponse);
           });
         });
@@ -468,6 +482,15 @@ const testProvider = (providerCfg) => {
           }],
           path: true
         };
+        const expectedVertices = [{ "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+        { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+        { "car": "bmw", "id": "c", "place_id": "e" },
+        { "place": "Munich", "id": "e", "state_id": "g" },
+        { "state": "Bayern", "id": "g" },
+        { "state": "Saxony", "id": "h" },
+        { "state": "BW", "id": "i" },
+        { "state": "Hessen", "id": "j" }]
+
         // traverse graph
         let result = await testService.traversal(traversalRequest);
 
@@ -487,12 +510,13 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.paths);
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(6); // 8 edges
-            traversalResponse.data.should.have.size(8); // 8 vertices - from cars only bmw and places only Munich is returned
+            traversalResponse.data.should.have.size(8); // 8 vertices - 2 person, 1 car, 1 place, 4 states
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }
             finalVertices =
               _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
             resolve(traversalResponse);
           });
         });
@@ -510,6 +534,13 @@ const testProvider = (providerCfg) => {
           }],
           path: true
         };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "car": "vw", "id": "d", "place_id": "f" }
+        ];
+
         // traverse graph
         let result = await testService.traversal(traversalRequest);
 
@@ -535,6 +566,60 @@ const testProvider = (providerCfg) => {
             }
             finalVertices =
               _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // filter with exclude vertices
+      it('should traverse the graph with filters and excluded vertices options and return only the filtered and excluded vertices', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
+          filters: [{
+            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
+            operator: 'or', // Default is AND operation
+            entity: 'state'
+          }],
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "place": "wolfsburg", "id": "f", "state_id": "h" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "Saxony", "id": "h" },
+          { "state": "BW", "id": "i" },
+          { "state": "Hessen", "id": "j" }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(6); // 2 edges
+            traversalResponse.data.should.have.size(8); // 8 vertices - 2 persons, 2 places, 4 states
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
             resolve(traversalResponse);
           });
         });

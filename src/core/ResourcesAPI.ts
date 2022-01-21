@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as bluebird from 'bluebird';
+import bluebird from 'bluebird';
 import { errors } from '@restorecommerce/chassis-srv';
 import * as uuid from 'uuid';
 import * as redis from 'redis';

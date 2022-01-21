@@ -287,6 +287,92 @@ const testProvider = (providerCfg) => {
         });
       });
 
+      // include edges
+      it('should traverse the graph with included edges options and return vertices from included edges', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'OUTBOUND', include_edge: ['has'] },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(1);
+            traversalResponse.data.should.have.size(2);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // exclude edges
+      it('should traverse the graph with exclude edges options and return vertices from excluded edges', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'OUTBOUND', exclude_edge: ['belongs'] },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "BW", "id": "i" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(3);
+            traversalResponse.data.should.have.size(4);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
       it('delete vertices, should delete the edges associated as well',
         async () => {
           // Deleting the ids of vertexCollection 'cars' should remove

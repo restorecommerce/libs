@@ -54,6 +54,7 @@ const testProvider = (providerCfg) => {
     });
 
     describe('Graphs Collection API', () => {
+      //  STATE <-- lives PERSON has --> CAR belongsto --> PLACE resides --> STATE
       let result_1, result_2, result_3, result_4;
       let service_1, service_2, service_3, service_4;
       let meta;
@@ -442,6 +443,93 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(8); // 8 edges
             traversalResponse.data.should.have.size(10); // 10 vertices
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // Filter tests for collection traversal
+      it('with filters should traverse the collection and return data with filtering applied on respective entities', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND' },
+          filters: [{
+            filter: [{ field: 'car', operation: 'eq', value: 'bmw' }],
+            entity: 'cars'
+          }, {
+            filter: [{ field: 'place', operation: 'eq', value: 'Munich' }, {}],
+            operator: 'or',
+            entity: 'places'
+          }],
+          path: true
+        };
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(6); // 8 edges
+            traversalResponse.data.should.have.size(8); // 8 vertices - from cars only bmw and places only Munich is returned
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // filters with include vertices
+      it('should traverse the graph with filters and included vertices options and return only the filtered and included vertices', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
+          filters: [{
+            filter: [{ field: 'car', operation: 'eq', value: 'bmw' }, { field: 'car', operation: 'eq', value: 'vw' }],
+            operator: 'or',
+            entity: 'cars'
+          }],
+          path: true
+        };
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(2); // 2 edges
+            traversalResponse.data.should.have.size(4); // 4 vertices - 2 persons and 2 cars
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }

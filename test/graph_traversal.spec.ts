@@ -175,8 +175,8 @@ const testProvider = (providerCfg) => {
             });
             call.on('end', () => {
               // compare data
-              traversalResponse.paths.should.have.size(2);
-              traversalResponse.data.should.have.size(3);
+              traversalResponse.paths.should.have.size(1);
+              traversalResponse.data.should.have.size(2);
               let finalVertices = [];
               for (let eachVertice of traversalResponse.data) {
                 finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
@@ -188,7 +188,7 @@ const testProvider = (providerCfg) => {
             });
           });
           // compare data
-          traversalResponse.paths.should.have.size(2);
+          traversalResponse.paths.should.have.size(1);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {
@@ -225,7 +225,7 @@ const testProvider = (providerCfg) => {
             });
             call.on('end', () => {
               // compare data
-              traversalResponse.paths.should.have.size(2);
+              traversalResponse.paths.should.have.size(1);
               traversalResponse.data.should.have.size(2);
               let finalVertices = [];
               for (let eachVertice of traversalResponse.data) {
@@ -238,7 +238,7 @@ const testProvider = (providerCfg) => {
             });
           });
           // compare data
-          traversalResponse.paths.should.have.size(2);
+          traversalResponse.paths.should.have.size(1);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {

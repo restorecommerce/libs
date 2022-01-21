@@ -102,7 +102,6 @@ const testProvider = (providerCfg) => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: { direction: 'outbound' },
-            data: true,
             path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
@@ -123,7 +122,7 @@ const testProvider = (providerCfg) => {
             result.on('end', () => {
               should.exist(traversalResponse.paths);
               should.exist(traversalResponse.data);
-              traversalResponse.paths.should.have.size(3);
+              traversalResponse.paths.should.have.size(2);
               traversalResponse.data.should.have.size(3);
               let finalVertices: any = [];
               for (let eachVertice of traversalResponse.data) {
@@ -139,7 +138,7 @@ const testProvider = (providerCfg) => {
           // compare data
           should.exist(traversalResponse.paths);
           should.exist(traversalResponse.data);
-          traversalResponse.paths.should.have.size(3);
+          traversalResponse.paths.should.have.size(2);
           traversalResponse.data.should.have.size(3);
           let finalVertices: any = [];
           for (let eachVertice of traversalResponse.data) {
@@ -155,10 +154,9 @@ const testProvider = (providerCfg) => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: {
-              direction: 'outbound',
-              filter: [{ vertex: 'cars' }]
+              direction: 'OUTBOUND',
+              exclude_vertex: ['cars']
             },
-            data: true,
             path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
@@ -177,7 +175,7 @@ const testProvider = (providerCfg) => {
             });
             call.on('end', () => {
               // compare data
-              traversalResponse.paths.should.have.size(2);
+              traversalResponse.paths.should.have.size(1);
               traversalResponse.data.should.have.size(2);
               let finalVertices = [];
               for (let eachVertice of traversalResponse.data) {
@@ -190,7 +188,7 @@ const testProvider = (providerCfg) => {
             });
           });
           // compare data
-          traversalResponse.paths.should.have.size(2);
+          traversalResponse.paths.should.have.size(1);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {
@@ -206,10 +204,10 @@ const testProvider = (providerCfg) => {
           const traversalRequest = {
             start_vertex: `persons/${result_1.items[0].payload.id}`,
             opts: {
-              expander: [{ edge: 'has_car', direction: 'outbound' }]
+              direction: 'OUTBOUND',
+              include_edge: ['person_has_car']
             },
-            path: true,
-            data: true
+            path: true
           };
           const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
             { car: 'bmw', id: 'c', org_id: 'e' }];
@@ -227,7 +225,7 @@ const testProvider = (providerCfg) => {
             });
             call.on('end', () => {
               // compare data
-              traversalResponse.paths.should.have.size(2);
+              traversalResponse.paths.should.have.size(1);
               traversalResponse.data.should.have.size(2);
               let finalVertices = [];
               for (let eachVertice of traversalResponse.data) {
@@ -240,7 +238,7 @@ const testProvider = (providerCfg) => {
             });
           });
           // compare data
-          traversalResponse.paths.should.have.size(2);
+          traversalResponse.paths.should.have.size(1);
           traversalResponse.data.should.have.size(2);
           let finalVertices = [];
           for (let eachVertice of traversalResponse.data) {

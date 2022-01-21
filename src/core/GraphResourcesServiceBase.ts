@@ -3,6 +3,7 @@ import { GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { TraversalOptions } from './interfaces';
+import { Stream } from 'stream';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
@@ -81,61 +82,13 @@ export class GraphResourcesServiceBase {
         };
       }
 
-      // TODO queryResult has response data, paths and operation_status.
-      // convert this data to stream and return this as stream response directly
-
-      let idPropertyMapping = new Map<String, String>();
-      const vertexFields = queryResult.vertex_fields || [];
-      let marshallRequired = false;
-      for (let eachVertex of vertexFields) {
-        const collectionArray = eachVertex._id.split('/');
-        const resourceName = collectionArray[0].substring(0, collectionArray[0].length - 1);
-        marshallRequired = true;
-        if (this.bufferedCollections.indexOf(resourceName) > -1) {
-          // need to marshall this collection instance data
-          // map id to the actual key which needs to be marshelled
-          idPropertyMapping.set(collectionArray[1], this.bufferFiledCfg[resourceName]);
-          marshallRequired = true;
-        }
-        // sanitize fields to remove _key, _rev and rename _id to id field
-        delete eachVertex._key;
-        delete eachVertex._rev;
-        eachVertex['id'] = eachVertex._id;
-        delete eachVertex._id;
-      }
-      let completeDecodedData = [];
-      if (marshallRequired || (queryResult && queryResult.data && queryResult.data.value)) {
-        // get the decoded JSON list of resources.
-        const decodedData = JSON.parse(Buffer.from(queryResult.data.value).toString());
-        for (let doc of decodedData) {
-          if (idPropertyMapping.has(doc.id)) {
-            completeDecodedData.push(this.marshallData(doc, idPropertyMapping.get(doc.id)));
-          } else {
-            completeDecodedData.push(doc);
-          }
-        }
-      }
-      const size = 150;
-      const completeVertexFields = queryResult.vertex_fields;
-      while ((completeDecodedData && completeDecodedData.length > 0) ||
-        (completeVertexFields && completeVertexFields.length > 0)) {
-        if (completeDecodedData.length > 0) {
-          const partDoc = completeDecodedData.splice(0, 1000);
-          this.logger.debug('Writing Buffer Chunk', partDoc);
-          queryResult.data = { value: Buffer.from(JSON.stringify(partDoc)) };
-        }
-        if (completeVertexFields.length > 0) {
-          queryResult.vertex_fields = completeVertexFields.splice(0, size);
-        }
-        await call.write(queryResult);
-        this.logger.debug('Buffer chunk written successfully');
-      }
-      if (queryResult && queryResult.paths && queryResult.paths.value) {
-        await call.write(queryResult);
-      }
-      this.logger.debug('Invoking end from traversal');
-      await call.end();
+      // create stream from queryResult and pipe to response stream directly
+      const traversalStream = new Stream.Readable({ objectMode: true });
+      traversalStream.push(queryResult);
+      traversalStream.push(null);
+      traversalStream.pipe(call.request);
       this.logger.debug('Traversal request ended');
+      return;
     } catch (err) {
       this.logger.error('Error caught executing traversal', { err: err.message });
       this.logger.error('Error stack', err);

@@ -129,7 +129,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -175,7 +174,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -217,7 +215,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -261,7 +258,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -303,7 +299,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -347,7 +342,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -389,7 +383,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -440,7 +433,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -495,7 +487,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -545,7 +536,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -598,7 +588,6 @@ const testProvider = (providerCfg) => {
         let result = await testService.traversal(traversalRequest);
 
         let traversalResponse = { data: [], paths: [] };
-        // let traversalResponseStream = call.getResponseStream();
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
@@ -614,6 +603,108 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(6); // 2 edges
             traversalResponse.data.should.have.size(8); // 8 vertices - 2 persons, 2 places, 4 states
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // filter with exclude edges
+      it('for 2 entities should exclude one entity edge and include another entity edge with filtering enabled on second edge entity', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND', exclude_edge: ['resides'] },
+          filters: [{
+            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
+            operator: 'or', // Default is AND operation
+            edge: 'lives'
+          }],
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "car": "vw", "id": "d", "place_id": "f" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "place": "wolfsburg", "id": "f", "state_id": "h" },
+          { "state": "BW", "id": "i" },
+          { "state": "Hessen", "id": "j" }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(6); // 2 edges
+            traversalResponse.data.should.have.size(8); // 8 vertices - 2 persons, 2 cars, 2 places, 2 states
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // filter with include edges
+      it('should traverse the graph with filters and included edges and return only the filtered and included edge vertices data', async () => {
+        const traversalRequest = {
+          collection_name: 'persons',
+          opts: { direction: 'OUTBOUND', include_edge: ['has', 'lives'] },
+          filters: [{
+            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
+            operator: 'or', // Default is AND operation
+            edge: 'lives'
+          }],
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "car": "vw", "id": "d", "place_id": "f" },
+          { "state": "BW", "id": "i" },
+          { "state": "Hessen", "id": "j" }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(4); // 4 edges
+            traversalResponse.data.should.have.size(6); // 6 vertices - 2 persons, 2 cars, 2 states
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }

@@ -11,38 +11,64 @@
   "graph": {
     "graphName": "testGraph",
     "vertices": {
-      "organizations": [
-        {}
-      ],
       "persons": [
         {
-          "edgeName": "person_has_car",
+          "edgeName": "has",
           "from": "id",
           "to": "car_id",
           "direction": "outbound",
           "toVerticeName": "cars"
+        },
+        {
+          "edgeName": "lives",
+          "from": "id",
+          "to": "state_id",
+          "direction": "outbound",
+          "toVerticeName": "states"
         }
       ],
       "cars": [
         {
-          "edgeName": "car_has_org",
+          "edgeName": "belongs",
           "from": "id",
-          "to": "org_id",
+          "to": "place_id",
           "direction": "outbound",
-          "toVerticeName": "organizations"
+          "toVerticeName": "places"
         }
+      ],
+      "places": [
+        {
+          "edgeName": "resides",
+          "from": "id",
+          "to": "state_id",
+          "direction": "outbound",
+          "toVerticeName": "states"
+        }
+      ],
+      "states": [
+        {}
       ]
     },
     "edgeDefinitions": [
       {
-        "collection": "person_has_car",
+        "collection": "has",
         "from": "persons",
         "to": "cars"
       },
       {
-        "collection": "car_has_org",
+        "collection": "belongs",
         "from": "cars",
-        "to": "organizations"
+        "to": "places"
+      },
+      {
+        "collection": "resides",
+        "from": "places",
+        "to": "states"
+      },
+      {
+        "collection": "lives",
+        "from": "persons",
+        "to": "states"
       }
     ]
   },

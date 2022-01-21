@@ -54,200 +54,150 @@ const testProvider = (providerCfg) => {
     });
 
     describe('Graphs Collection API', () => {
-      let result_1, result_2, result_3;
-      let service_1, service_2, service_3;
+      let result_1, result_2, result_3, result_4;
+      let service_1, service_2, service_3, service_4;
       let meta;
       it('should create a vertex collection and insert data into it', async () => {
         let meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
         };
-        const personVertices = [
-          { name: 'Alice', id: 'a', car_id: 'c', meta },
-          { name: 'Bob', id: 'b', car_id: 'd', meta }
+        const personsVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i', meta },
+          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j', meta }
         ];
-        const carVertices = [
-          { car: 'bmw', id: 'c', org_id: 'e', meta },
-          { car: 'vw', id: 'd', org_id: 'f', meta }
+        const carsVertices = [
+          { car: 'bmw', id: 'c', place_id: 'e', meta },
+          { car: 'vw', id: 'd', place_id: 'f', meta }
         ];
-        const orgVertices = [
-          { org: 'Bayern', id: 'e', meta },
-          { org: 'wolfsburg', id: 'f', meta }
+        const placesVertices = [
+          { place: 'Munich', id: 'e', state_id: 'g', meta },
+          { place: 'wolfsburg', id: 'f', state_id: 'h', meta }
+        ];
+        const statesVertices = [
+          { state: 'Bayern', id: 'g', meta },
+          { state: 'Saxony', id: 'h', meta },
+          { state: 'BW', id: 'i', meta },
+          { state: 'Hessen', id: 'j', meta },
         ];
         const graphName = cfg.get('graph:graphName');
         const personCollection = 'persons';
-        const carsCollection = 'cars';
-        const orgCollection = 'organizations';
+        const carCollection = 'cars';
+        const placeCollection = 'places';
+        const stateCollection = 'states';
 
-        const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
-          orgCollection, null, graphCfg.vertices[orgCollection], graphName);
-        service_3 = new ServiceBase('organizations', null,
-          server.logger, resourceAPI1, false);
-        result_3 = await service_3.create({ request: { items: orgVertices } });
-
-        const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db,
-          carsCollection, null, graphCfg.vertices[carsCollection], graphName);
-        service_2 = new ServiceBase('cars', null,
-          server.logger, resourceAPI2, false);
-        result_2 = await service_2.create({ request: { items: carVertices } });
+        const resourceAPI4: ResourcesAPIBase = new ResourcesAPIBase(db,
+          stateCollection, null, graphCfg.vertices[stateCollection], graphName);
+        service_4 = new ServiceBase(stateCollection, null,
+          server.logger, resourceAPI4, false);
+        result_4 = await service_4.create({ request: { items: statesVertices } });
 
         const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db,
-          personCollection, null, graphCfg.vertices[personCollection], graphName);
-        service_1 = new ServiceBase('persons', null,
+          placeCollection, null, graphCfg.vertices[placeCollection], graphName);
+        service_3 = new ServiceBase(placeCollection, null,
           server.logger, resourceAPI3, false);
-        result_1 = await service_1.create({ request: { items: personVertices } });
+        result_3 = await service_3.create({ request: { items: placesVertices } });
+
+        const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db,
+          carCollection, null, graphCfg.vertices[carCollection], graphName);
+        service_2 = new ServiceBase(carCollection, null,
+          server.logger, resourceAPI2, false);
+        result_2 = await service_2.create({ request: { items: carsVertices } });
+
+        const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
+          personCollection, null, graphCfg.vertices[personCollection], graphName);
+        service_1 = new ServiceBase(personCollection, null,
+          server.logger, resourceAPI1, false);
+        result_1 = await service_1.create({ request: { items: personsVertices } });
       });
-      // Test for graph traversal
-      it('should traverse all vertices and edges in the graph',
-        async () => {
-          const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].payload.id}`,
-            opts: { direction: 'outbound' },
-            path: true
-          };
-          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-            { car: 'bmw', id: 'c', org_id: 'e' },
-            { org: 'Bayern', id: 'e' }];
-          let result = await testService.traversal(traversalRequest);
-          let traversalResponse = { data: [], paths: [] };
-          // let traversalResponseStream = call.getResponseStream();
-          await new Promise((resolve, reject) => {
-            result.on('data', (partResp) => {
-              if ((partResp && partResp.data && partResp.data.value)) {
-                Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
-              }
-              if ((partResp && partResp.paths && partResp.paths.value)) {
-                Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
-              }
-            });
-            result.on('end', () => {
-              should.exist(traversalResponse.paths);
-              should.exist(traversalResponse.data);
-              traversalResponse.paths.should.have.size(2);
-              traversalResponse.data.should.have.size(3);
-              let finalVertices: any = [];
-              for (let eachVertice of traversalResponse.data) {
-                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-              }
-              finalVertices =
-                _.sortBy(finalVertices, [(o) => { return o.id; }]);
-              finalVertices.should.deepEqual(expectedVertices);
-              resolve(traversalResponse);
-            });
-          });
 
-          // compare data
-          should.exist(traversalResponse.paths);
-          should.exist(traversalResponse.data);
-          traversalResponse.paths.should.have.size(2);
-          traversalResponse.data.should.have.size(3);
+      it('should traverse the graph and return only vertices for Person A', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'outbound' },
+          path: false
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "BW", "id": "i" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && !_.isEmpty(partResp.paths.value))) {
+              console.log('Paths are....', partResp.paths.value);
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
+          });
           let finalVertices: any = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
-        });
-
-      it('should traverse by excluding specified vertices using filter in the graph',
-        async () => {
-          const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].payload.id}`,
-            opts: {
-              direction: 'OUTBOUND',
-              exclude_vertex: ['cars']
-            },
-            path: true
-          };
-          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-            { org: 'Bayern', id: 'e' }];
-          let call = await testService.traversal(traversalRequest);
-          let traversalResponse = { data: [], paths: [] };
-
-          await new Promise((resolve, reject) => {
-            call.on('data', (partResp) => {
-              if (partResp && partResp.data && partResp.data.value) {
-                traversalResponse.data = JSON.parse(partResp.data.value.toString());
-              }
-              if (partResp && partResp.paths && partResp.paths.value) {
-                traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
-              }
-            });
-            call.on('end', () => {
-              // compare data
-              traversalResponse.paths.should.have.size(1);
-              traversalResponse.data.should.have.size(2);
-              let finalVertices = [];
-              for (let eachVertice of traversalResponse.data) {
-                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-              }
-              finalVertices =
-                _.sortBy(finalVertices, [(o) => { return o.id; }]);
-              finalVertices.should.deepEqual(expectedVertices);
-              resolve(traversalResponse);
-            });
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.be.empty();
+            traversalResponse.data.should.have.size(5);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
           });
-          // compare data
-          traversalResponse.paths.should.have.size(1);
-          traversalResponse.data.should.have.size(2);
-          let finalVertices = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
         });
+      });
 
-      it('should traverse by including only specified edges using expander in the graph',
-        async () => {
-          const traversalRequest = {
-            start_vertex: `persons/${result_1.items[0].payload.id}`,
-            opts: {
-              direction: 'OUTBOUND',
-              include_edge: ['person_has_car']
-            },
-            path: true
-          };
-          const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c' },
-            { car: 'bmw', id: 'c', org_id: 'e' }];
-          let traversalResponse = { data: [], paths: [] };
-          let call = await testService.traversal(traversalRequest);
-          // let traversalResponseStream = call.getResponseStream();
-          await new Promise((resolve, reject) => {
-            call.on('data', (partResp) => {
-              if (partResp && partResp.data && partResp.data.value) {
-                traversalResponse.data = JSON.parse(partResp.data.value.toString());
-              }
-              if (partResp && partResp.paths && partResp.paths.value) {
-                traversalResponse.paths = JSON.parse(partResp.paths.value.toString());
-              }
-            });
-            call.on('end', () => {
-              // compare data
-              traversalResponse.paths.should.have.size(1);
-              traversalResponse.data.should.have.size(2);
-              let finalVertices = [];
-              for (let eachVertice of traversalResponse.data) {
-                finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-              }
-              finalVertices =
-                _.sortBy(finalVertices, [(o) => { return o.id; }]);
-              finalVertices.should.deepEqual(expectedVertices);
-              resolve(traversalResponse);
-            });
+      it('should traverse the graph and return both vertices and paths when paths flag is set to true', async () => {
+        const traversalRequest = {
+          start_vertex: `persons/a`,
+          opts: { direction: 'outbound' },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "BW", "id": "i" }
+        ];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        // let traversalResponseStream = call.getResponseStream();
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+            }
           });
-          // compare data
-          traversalResponse.paths.should.have.size(1);
-          traversalResponse.data.should.have.size(2);
-          let finalVertices = [];
-          for (let eachVertice of traversalResponse.data) {
-            finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
-          }
-          finalVertices =
-            _.sortBy(finalVertices, [(o) => { return o.id; }]);
-          finalVertices.should.deepEqual(expectedVertices);
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(4);
+            traversalResponse.data.should.have.size(5);
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
         });
+      });
 
       it('delete vertices, should delete the edges associated as well',
         async () => {

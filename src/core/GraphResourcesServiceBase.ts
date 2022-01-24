@@ -62,9 +62,10 @@ export class GraphResourcesServiceBase {
       if (!start_vertex && !collection_name) {
         const message = 'missing start vertex or collection_name for graph traversal';
         this.logger.error(message);
-        return {
+        await call.write({
           operation_status: { code: 400, message }
-        };
+        });
+        return await call.end();
       }
       const filters = request?.filters;
       let path = request?.path ? request.path : false;
@@ -77,9 +78,10 @@ export class GraphResourcesServiceBase {
       } catch (err) {
         this.logger.error('Error stack', err);
         this.logger.error('Error executing DB Traversal', { error: err.message });
-        return {
+        await call.write({
           operation_status: { code: err.code ? err.code : 500, message: err.message }
-        };
+        });
+        return await call.end();
       }
 
       // create stream from queryResult and pipe to response stream directly

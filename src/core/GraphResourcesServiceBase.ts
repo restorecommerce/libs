@@ -74,7 +74,7 @@ export class GraphResourcesServiceBase {
         this.logger.debug('Calling traversal', { start_vertex, collection_name });
         queryResult = await this.db.traversal(start_vertex,
           collection_name, opts, filters, path);
-        this.logger.debug('Response from DB traversal', { response: queryResult });
+        this.logger.debug('Received traversal response from DB');
       } catch (err) {
         this.logger.error('Error stack', err);
         this.logger.error('Error executing DB Traversal', { error: err.message });

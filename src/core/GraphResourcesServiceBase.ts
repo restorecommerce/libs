@@ -84,9 +84,45 @@ export class GraphResourcesServiceBase {
         return await call.end();
       }
 
-      // create stream from queryResult and pipe to response stream directly
+      let decodedDBData = [];
+      let decodedDBPaths = [];
       const traversalStream = new Stream.Readable({ objectMode: true });
-      traversalStream.push(queryResult);
+      if ((queryResult && queryResult.data && queryResult.data.value)) {
+        // get the decoded JSON list of resources.
+        const decodedData = JSON.parse(Buffer.from(queryResult.data.value).toString());
+        for (let doc of decodedData) {
+          const resourceName = doc._id.substring(0, '/');
+          if (this.bufferedCollections.indexOf(resourceName) > -1) {
+            decodedDBData.push(this.marshallData(doc, this.bufferFiledCfg[resourceName]));
+          } else {
+            decodedDBData.push(doc);
+          }
+        }
+      }
+      if ((queryResult && queryResult.paths && queryResult.paths.value)) {
+        // get the decoded JSON list of resources.
+        const decodedData = JSON.parse(Buffer.from(queryResult.paths.value).toString());
+        for (let doc of decodedData) {
+          decodedDBPaths.push(doc);
+        }
+      }
+
+      queryResult = [];
+      while ((decodedDBData && decodedDBData.length > 0) ||
+        (decodedDBPaths && decodedDBPaths.length > 0)) {
+        if (decodedDBData.length > 0) {
+          const partDoc = decodedDBData.splice(0, 1000);
+          // this.logger.debug('Writing Buffer Chunk', partDoc);
+          traversalStream.push({ data: { value: Buffer.from(JSON.stringify(partDoc)) } });
+        }
+        if (decodedDBPaths.length > 0) {
+          const partDoc = decodedDBPaths.splice(0, 1000);
+          // this.logger.debug('Writing Buffer Chunk', partDoc);
+          traversalStream.push({ paths: { value: Buffer.from(JSON.stringify(partDoc)) } });
+        }
+      }
+
+      traversalStream.push({ operation_status: { code: 200, message: 'success' } });
       traversalStream.push(null);
       traversalStream.pipe(call.request);
       this.logger.debug('Traversal request ended');

@@ -42,30 +42,30 @@ export interface Policy {
   /** general policy target */
   target?: Target;
   effect: Effect;
-  combining_algorithm: string;
-  evaluation_cacheable: boolean;
+  combiningAlgorithm: string;
+  evaluationCacheable: boolean;
 }
 
 export interface PolicyRQ {
   id: string;
   target?: Target;
-  combining_algorithm: string;
+  combiningAlgorithm: string;
   rules: RuleRQ[];
   effect: Effect;
-  has_rules: boolean;
-  evaluation_cacheable: boolean;
+  hasRules: boolean;
+  evaluationCacheable: boolean;
 }
 
 export interface PolicyList {
   items: Policy[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface PolicyListResponse {
   items: PolicyResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface PolicyResponse {
@@ -79,8 +79,8 @@ const basePolicy: object = {
   description: "",
   rules: "",
   effect: 0,
-  combining_algorithm: "",
-  evaluation_cacheable: false,
+  combiningAlgorithm: "",
+  evaluationCacheable: false,
 };
 
 export const Policy = {
@@ -106,11 +106,11 @@ export const Policy = {
     if (message.effect !== 0) {
       writer.uint32(56).int32(message.effect);
     }
-    if (message.combining_algorithm !== "") {
-      writer.uint32(66).string(message.combining_algorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(66).string(message.combiningAlgorithm);
     }
-    if (message.evaluation_cacheable === true) {
-      writer.uint32(72).bool(message.evaluation_cacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(72).bool(message.evaluationCacheable);
     }
     return writer;
   },
@@ -145,10 +145,10 @@ export const Policy = {
           message.effect = reader.int32() as any;
           break;
         case 8:
-          message.combining_algorithm = reader.string();
+          message.combiningAlgorithm = reader.string();
           break;
         case 9:
-          message.evaluation_cacheable = reader.bool();
+          message.evaluationCacheable = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -197,20 +197,20 @@ export const Policy = {
       message.effect = 0;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = String(object.combining_algorithm);
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -254,20 +254,20 @@ export const Policy = {
       message.effect = 0;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = object.combining_algorithm;
+      message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = object.evaluation_cacheable;
+      message.evaluationCacheable = object.evaluationCacheable;
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -288,20 +288,20 @@ export const Policy = {
     message.target !== undefined &&
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
-    message.combining_algorithm !== undefined &&
-      (obj.combining_algorithm = message.combining_algorithm);
-    message.evaluation_cacheable !== undefined &&
-      (obj.evaluation_cacheable = message.evaluation_cacheable);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
 
 const basePolicyRQ: object = {
   id: "",
-  combining_algorithm: "",
+  combiningAlgorithm: "",
   effect: 0,
-  has_rules: false,
-  evaluation_cacheable: false,
+  hasRules: false,
+  evaluationCacheable: false,
 };
 
 export const PolicyRQ = {
@@ -312,8 +312,8 @@ export const PolicyRQ = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.combining_algorithm !== "") {
-      writer.uint32(26).string(message.combining_algorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(26).string(message.combiningAlgorithm);
     }
     for (const v of message.rules) {
       RuleRQ.encode(v!, writer.uint32(34).fork()).ldelim();
@@ -321,11 +321,11 @@ export const PolicyRQ = {
     if (message.effect !== 0) {
       writer.uint32(40).int32(message.effect);
     }
-    if (message.has_rules === true) {
-      writer.uint32(48).bool(message.has_rules);
+    if (message.hasRules === true) {
+      writer.uint32(48).bool(message.hasRules);
     }
-    if (message.evaluation_cacheable === true) {
-      writer.uint32(56).bool(message.evaluation_cacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(56).bool(message.evaluationCacheable);
     }
     return writer;
   },
@@ -345,7 +345,7 @@ export const PolicyRQ = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 3:
-          message.combining_algorithm = reader.string();
+          message.combiningAlgorithm = reader.string();
           break;
         case 4:
           message.rules.push(RuleRQ.decode(reader, reader.uint32()));
@@ -354,10 +354,10 @@ export const PolicyRQ = {
           message.effect = reader.int32() as any;
           break;
         case 6:
-          message.has_rules = reader.bool();
+          message.hasRules = reader.bool();
           break;
         case 7:
-          message.evaluation_cacheable = reader.bool();
+          message.evaluationCacheable = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -381,12 +381,12 @@ export const PolicyRQ = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = String(object.combining_algorithm);
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.rules !== undefined && object.rules !== null) {
       for (const e of object.rules) {
@@ -398,18 +398,18 @@ export const PolicyRQ = {
     } else {
       message.effect = 0;
     }
-    if (object.has_rules !== undefined && object.has_rules !== null) {
-      message.has_rules = Boolean(object.has_rules);
+    if (object.hasRules !== undefined && object.hasRules !== null) {
+      message.hasRules = Boolean(object.hasRules);
     } else {
-      message.has_rules = false;
+      message.hasRules = false;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -428,12 +428,12 @@ export const PolicyRQ = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = object.combining_algorithm;
+      message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.rules !== undefined && object.rules !== null) {
       for (const e of object.rules) {
@@ -445,18 +445,18 @@ export const PolicyRQ = {
     } else {
       message.effect = 0;
     }
-    if (object.has_rules !== undefined && object.has_rules !== null) {
-      message.has_rules = object.has_rules;
+    if (object.hasRules !== undefined && object.hasRules !== null) {
+      message.hasRules = object.hasRules;
     } else {
-      message.has_rules = false;
+      message.hasRules = false;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = object.evaluation_cacheable;
+      message.evaluationCacheable = object.evaluationCacheable;
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -466,30 +466,30 @@ export const PolicyRQ = {
     message.id !== undefined && (obj.id = message.id);
     message.target !== undefined &&
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combining_algorithm !== undefined &&
-      (obj.combining_algorithm = message.combining_algorithm);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.rules) {
       obj.rules = message.rules.map((e) => (e ? RuleRQ.toJSON(e) : undefined));
     } else {
       obj.rules = [];
     }
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
-    message.has_rules !== undefined && (obj.has_rules = message.has_rules);
-    message.evaluation_cacheable !== undefined &&
-      (obj.evaluation_cacheable = message.evaluation_cacheable);
+    message.hasRules !== undefined && (obj.hasRules = message.hasRules);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
 
-const basePolicyList: object = { total_count: 0 };
+const basePolicyList: object = { totalCount: 0 };
 
 export const PolicyList = {
   encode(message: PolicyList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Policy.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -509,7 +509,7 @@ export const PolicyList = {
           message.items.push(Policy.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -530,10 +530,10 @@ export const PolicyList = {
         message.items.push(Policy.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -551,10 +551,10 @@ export const PolicyList = {
         message.items.push(Policy.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -571,8 +571,7 @@ export const PolicyList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -581,7 +580,7 @@ export const PolicyList = {
   },
 };
 
-const basePolicyListResponse: object = { total_count: 0 };
+const basePolicyListResponse: object = { totalCount: 0 };
 
 export const PolicyListResponse = {
   encode(
@@ -591,12 +590,12 @@ export const PolicyListResponse = {
     for (const v of message.items) {
       PolicyResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -617,10 +616,10 @@ export const PolicyListResponse = {
           message.items.push(PolicyResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -643,20 +642,20 @@ export const PolicyListResponse = {
         message.items.push(PolicyResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -669,20 +668,20 @@ export const PolicyListResponse = {
         message.items.push(PolicyResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -696,11 +695,10 @@ export const PolicyListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

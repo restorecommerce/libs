@@ -49,12 +49,12 @@ export interface Query {
   receiver?: Address;
   goods: Item[];
   preferences?: Preferences;
-  reference_id: string;
+  referenceId: string;
 }
 
 export interface QueryList {
   items: Query[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
@@ -62,12 +62,12 @@ export interface FulfillmentProduct {
   id: string;
   name: string;
   description: string;
-  courier_id: string;
+  courierId: string;
   /** repeated io.restorecommerce.country.Country start_country = 5; */
-  start_zones: string[];
+  startZones: string[];
   /** repeated io.restorecommerce.country.Country destination_country = 7; */
-  destination_zones: string[];
-  tax_ids: string[];
+  destinationZones: string[];
+  taxIds: string[];
   attributes: Attribute[];
   variants: Variant[];
   meta?: Meta;
@@ -78,16 +78,16 @@ export interface Variant {
   name: string;
   description: string;
   price: number;
-  max_weight: number;
-  max_width: number;
-  max_height: number;
-  max_length: number;
-  max_volume: number;
+  maxWeight: number;
+  maxWidth: number;
+  maxHeight: number;
+  maxLength: number;
+  maxVolume: number;
 }
 
 export interface FulfillmentProductList {
   items: FulfillmentProduct[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
@@ -98,12 +98,12 @@ export interface FulfillmentProductResponse {
 
 export interface FulfillmentProductResponseList {
   items: FulfillmentProductResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface PackingSolution {
-  reference_id: string;
+  referenceId: string;
   price: number;
   compactness: number;
   homogeneity: number;
@@ -118,8 +118,8 @@ export interface PackingSolutionResponse {
 
 export interface PackingSolutionResponseList {
   items: PackingSolutionResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface Deleted {
@@ -243,7 +243,7 @@ export const Preferences = {
   },
 };
 
-const baseQuery: object = { reference_id: "" };
+const baseQuery: object = { referenceId: "" };
 
 export const Query = {
   encode(message: Query, writer: Writer = Writer.create()): Writer {
@@ -262,8 +262,8 @@ export const Query = {
         writer.uint32(34).fork()
       ).ldelim();
     }
-    if (message.reference_id !== "") {
-      writer.uint32(42).string(message.reference_id);
+    if (message.referenceId !== "") {
+      writer.uint32(42).string(message.referenceId);
     }
     return writer;
   },
@@ -289,7 +289,7 @@ export const Query = {
           message.preferences = Preferences.decode(reader, reader.uint32());
           break;
         case 5:
-          message.reference_id = reader.string();
+          message.referenceId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -322,10 +322,10 @@ export const Query = {
     } else {
       message.preferences = undefined;
     }
-    if (object.reference_id !== undefined && object.reference_id !== null) {
-      message.reference_id = String(object.reference_id);
+    if (object.referenceId !== undefined && object.referenceId !== null) {
+      message.referenceId = String(object.referenceId);
     } else {
-      message.reference_id = "";
+      message.referenceId = "";
     }
     return message;
   },
@@ -353,10 +353,10 @@ export const Query = {
     } else {
       message.preferences = undefined;
     }
-    if (object.reference_id !== undefined && object.reference_id !== null) {
-      message.reference_id = object.reference_id;
+    if (object.referenceId !== undefined && object.referenceId !== null) {
+      message.referenceId = object.referenceId;
     } else {
-      message.reference_id = "";
+      message.referenceId = "";
     }
     return message;
   },
@@ -380,21 +380,21 @@ export const Query = {
       (obj.preferences = message.preferences
         ? Preferences.toJSON(message.preferences)
         : undefined);
-    message.reference_id !== undefined &&
-      (obj.reference_id = message.reference_id);
+    message.referenceId !== undefined &&
+      (obj.referenceId = message.referenceId);
     return obj;
   },
 };
 
-const baseQueryList: object = { total_count: 0 };
+const baseQueryList: object = { totalCount: 0 };
 
 export const QueryList = {
   encode(message: QueryList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Query.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -414,7 +414,7 @@ export const QueryList = {
           message.items.push(Query.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -435,10 +435,10 @@ export const QueryList = {
         message.items.push(Query.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -456,10 +456,10 @@ export const QueryList = {
         message.items.push(Query.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -476,8 +476,7 @@ export const QueryList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -490,10 +489,10 @@ const baseFulfillmentProduct: object = {
   id: "",
   name: "",
   description: "",
-  courier_id: "",
-  start_zones: "",
-  destination_zones: "",
-  tax_ids: "",
+  courierId: "",
+  startZones: "",
+  destinationZones: "",
+  taxIds: "",
 };
 
 export const FulfillmentProduct = {
@@ -510,16 +509,16 @@ export const FulfillmentProduct = {
     if (message.description !== "") {
       writer.uint32(26).string(message.description);
     }
-    if (message.courier_id !== "") {
-      writer.uint32(34).string(message.courier_id);
+    if (message.courierId !== "") {
+      writer.uint32(34).string(message.courierId);
     }
-    for (const v of message.start_zones) {
+    for (const v of message.startZones) {
       writer.uint32(50).string(v!);
     }
-    for (const v of message.destination_zones) {
+    for (const v of message.destinationZones) {
       writer.uint32(66).string(v!);
     }
-    for (const v of message.tax_ids) {
+    for (const v of message.taxIds) {
       writer.uint32(74).string(v!);
     }
     for (const v of message.attributes) {
@@ -540,9 +539,9 @@ export const FulfillmentProduct = {
     const message = globalThis.Object.create(
       baseFulfillmentProduct
     ) as FulfillmentProduct;
-    message.start_zones = [];
-    message.destination_zones = [];
-    message.tax_ids = [];
+    message.startZones = [];
+    message.destinationZones = [];
+    message.taxIds = [];
     message.attributes = [];
     message.variants = [];
     while (reader.pos < end) {
@@ -558,16 +557,16 @@ export const FulfillmentProduct = {
           message.description = reader.string();
           break;
         case 4:
-          message.courier_id = reader.string();
+          message.courierId = reader.string();
           break;
         case 6:
-          message.start_zones.push(reader.string());
+          message.startZones.push(reader.string());
           break;
         case 8:
-          message.destination_zones.push(reader.string());
+          message.destinationZones.push(reader.string());
           break;
         case 9:
-          message.tax_ids.push(reader.string());
+          message.taxIds.push(reader.string());
           break;
         case 10:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
@@ -590,9 +589,9 @@ export const FulfillmentProduct = {
     const message = globalThis.Object.create(
       baseFulfillmentProduct
     ) as FulfillmentProduct;
-    message.start_zones = [];
-    message.destination_zones = [];
-    message.tax_ids = [];
+    message.startZones = [];
+    message.destinationZones = [];
+    message.taxIds = [];
     message.attributes = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
@@ -610,27 +609,27 @@ export const FulfillmentProduct = {
     } else {
       message.description = "";
     }
-    if (object.courier_id !== undefined && object.courier_id !== null) {
-      message.courier_id = String(object.courier_id);
+    if (object.courierId !== undefined && object.courierId !== null) {
+      message.courierId = String(object.courierId);
     } else {
-      message.courier_id = "";
+      message.courierId = "";
     }
-    if (object.start_zones !== undefined && object.start_zones !== null) {
-      for (const e of object.start_zones) {
-        message.start_zones.push(String(e));
+    if (object.startZones !== undefined && object.startZones !== null) {
+      for (const e of object.startZones) {
+        message.startZones.push(String(e));
       }
     }
     if (
-      object.destination_zones !== undefined &&
-      object.destination_zones !== null
+      object.destinationZones !== undefined &&
+      object.destinationZones !== null
     ) {
-      for (const e of object.destination_zones) {
-        message.destination_zones.push(String(e));
+      for (const e of object.destinationZones) {
+        message.destinationZones.push(String(e));
       }
     }
-    if (object.tax_ids !== undefined && object.tax_ids !== null) {
-      for (const e of object.tax_ids) {
-        message.tax_ids.push(String(e));
+    if (object.taxIds !== undefined && object.taxIds !== null) {
+      for (const e of object.taxIds) {
+        message.taxIds.push(String(e));
       }
     }
     if (object.attributes !== undefined && object.attributes !== null) {
@@ -653,9 +652,9 @@ export const FulfillmentProduct = {
 
   fromPartial(object: DeepPartial<FulfillmentProduct>): FulfillmentProduct {
     const message = { ...baseFulfillmentProduct } as FulfillmentProduct;
-    message.start_zones = [];
-    message.destination_zones = [];
-    message.tax_ids = [];
+    message.startZones = [];
+    message.destinationZones = [];
+    message.taxIds = [];
     message.attributes = [];
     message.variants = [];
     if (object.id !== undefined && object.id !== null) {
@@ -673,27 +672,27 @@ export const FulfillmentProduct = {
     } else {
       message.description = "";
     }
-    if (object.courier_id !== undefined && object.courier_id !== null) {
-      message.courier_id = object.courier_id;
+    if (object.courierId !== undefined && object.courierId !== null) {
+      message.courierId = object.courierId;
     } else {
-      message.courier_id = "";
+      message.courierId = "";
     }
-    if (object.start_zones !== undefined && object.start_zones !== null) {
-      for (const e of object.start_zones) {
-        message.start_zones.push(e);
+    if (object.startZones !== undefined && object.startZones !== null) {
+      for (const e of object.startZones) {
+        message.startZones.push(e);
       }
     }
     if (
-      object.destination_zones !== undefined &&
-      object.destination_zones !== null
+      object.destinationZones !== undefined &&
+      object.destinationZones !== null
     ) {
-      for (const e of object.destination_zones) {
-        message.destination_zones.push(e);
+      for (const e of object.destinationZones) {
+        message.destinationZones.push(e);
       }
     }
-    if (object.tax_ids !== undefined && object.tax_ids !== null) {
-      for (const e of object.tax_ids) {
-        message.tax_ids.push(e);
+    if (object.taxIds !== undefined && object.taxIds !== null) {
+      for (const e of object.taxIds) {
+        message.taxIds.push(e);
       }
     }
     if (object.attributes !== undefined && object.attributes !== null) {
@@ -720,21 +719,21 @@ export const FulfillmentProduct = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined &&
       (obj.description = message.description);
-    message.courier_id !== undefined && (obj.courier_id = message.courier_id);
-    if (message.start_zones) {
-      obj.start_zones = message.start_zones.map((e) => e);
+    message.courierId !== undefined && (obj.courierId = message.courierId);
+    if (message.startZones) {
+      obj.startZones = message.startZones.map((e) => e);
     } else {
-      obj.start_zones = [];
+      obj.startZones = [];
     }
-    if (message.destination_zones) {
-      obj.destination_zones = message.destination_zones.map((e) => e);
+    if (message.destinationZones) {
+      obj.destinationZones = message.destinationZones.map((e) => e);
     } else {
-      obj.destination_zones = [];
+      obj.destinationZones = [];
     }
-    if (message.tax_ids) {
-      obj.tax_ids = message.tax_ids.map((e) => e);
+    if (message.taxIds) {
+      obj.taxIds = message.taxIds.map((e) => e);
     } else {
-      obj.tax_ids = [];
+      obj.taxIds = [];
     }
     if (message.attributes) {
       obj.attributes = message.attributes.map((e) =>
@@ -761,11 +760,11 @@ const baseVariant: object = {
   name: "",
   description: "",
   price: 0,
-  max_weight: 0,
-  max_width: 0,
-  max_height: 0,
-  max_length: 0,
-  max_volume: 0,
+  maxWeight: 0,
+  maxWidth: 0,
+  maxHeight: 0,
+  maxLength: 0,
+  maxVolume: 0,
 };
 
 export const Variant = {
@@ -782,20 +781,20 @@ export const Variant = {
     if (message.price !== 0) {
       writer.uint32(33).double(message.price);
     }
-    if (message.max_weight !== 0) {
-      writer.uint32(41).double(message.max_weight);
+    if (message.maxWeight !== 0) {
+      writer.uint32(41).double(message.maxWeight);
     }
-    if (message.max_width !== 0) {
-      writer.uint32(49).double(message.max_width);
+    if (message.maxWidth !== 0) {
+      writer.uint32(49).double(message.maxWidth);
     }
-    if (message.max_height !== 0) {
-      writer.uint32(57).double(message.max_height);
+    if (message.maxHeight !== 0) {
+      writer.uint32(57).double(message.maxHeight);
     }
-    if (message.max_length !== 0) {
-      writer.uint32(65).double(message.max_length);
+    if (message.maxLength !== 0) {
+      writer.uint32(65).double(message.maxLength);
     }
-    if (message.max_volume !== 0) {
-      writer.uint32(73).double(message.max_volume);
+    if (message.maxVolume !== 0) {
+      writer.uint32(73).double(message.maxVolume);
     }
     return writer;
   },
@@ -820,19 +819,19 @@ export const Variant = {
           message.price = reader.double();
           break;
         case 5:
-          message.max_weight = reader.double();
+          message.maxWeight = reader.double();
           break;
         case 6:
-          message.max_width = reader.double();
+          message.maxWidth = reader.double();
           break;
         case 7:
-          message.max_height = reader.double();
+          message.maxHeight = reader.double();
           break;
         case 8:
-          message.max_length = reader.double();
+          message.maxLength = reader.double();
           break;
         case 9:
-          message.max_volume = reader.double();
+          message.maxVolume = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -864,30 +863,30 @@ export const Variant = {
     } else {
       message.price = 0;
     }
-    if (object.max_weight !== undefined && object.max_weight !== null) {
-      message.max_weight = Number(object.max_weight);
+    if (object.maxWeight !== undefined && object.maxWeight !== null) {
+      message.maxWeight = Number(object.maxWeight);
     } else {
-      message.max_weight = 0;
+      message.maxWeight = 0;
     }
-    if (object.max_width !== undefined && object.max_width !== null) {
-      message.max_width = Number(object.max_width);
+    if (object.maxWidth !== undefined && object.maxWidth !== null) {
+      message.maxWidth = Number(object.maxWidth);
     } else {
-      message.max_width = 0;
+      message.maxWidth = 0;
     }
-    if (object.max_height !== undefined && object.max_height !== null) {
-      message.max_height = Number(object.max_height);
+    if (object.maxHeight !== undefined && object.maxHeight !== null) {
+      message.maxHeight = Number(object.maxHeight);
     } else {
-      message.max_height = 0;
+      message.maxHeight = 0;
     }
-    if (object.max_length !== undefined && object.max_length !== null) {
-      message.max_length = Number(object.max_length);
+    if (object.maxLength !== undefined && object.maxLength !== null) {
+      message.maxLength = Number(object.maxLength);
     } else {
-      message.max_length = 0;
+      message.maxLength = 0;
     }
-    if (object.max_volume !== undefined && object.max_volume !== null) {
-      message.max_volume = Number(object.max_volume);
+    if (object.maxVolume !== undefined && object.maxVolume !== null) {
+      message.maxVolume = Number(object.maxVolume);
     } else {
-      message.max_volume = 0;
+      message.maxVolume = 0;
     }
     return message;
   },
@@ -914,30 +913,30 @@ export const Variant = {
     } else {
       message.price = 0;
     }
-    if (object.max_weight !== undefined && object.max_weight !== null) {
-      message.max_weight = object.max_weight;
+    if (object.maxWeight !== undefined && object.maxWeight !== null) {
+      message.maxWeight = object.maxWeight;
     } else {
-      message.max_weight = 0;
+      message.maxWeight = 0;
     }
-    if (object.max_width !== undefined && object.max_width !== null) {
-      message.max_width = object.max_width;
+    if (object.maxWidth !== undefined && object.maxWidth !== null) {
+      message.maxWidth = object.maxWidth;
     } else {
-      message.max_width = 0;
+      message.maxWidth = 0;
     }
-    if (object.max_height !== undefined && object.max_height !== null) {
-      message.max_height = object.max_height;
+    if (object.maxHeight !== undefined && object.maxHeight !== null) {
+      message.maxHeight = object.maxHeight;
     } else {
-      message.max_height = 0;
+      message.maxHeight = 0;
     }
-    if (object.max_length !== undefined && object.max_length !== null) {
-      message.max_length = object.max_length;
+    if (object.maxLength !== undefined && object.maxLength !== null) {
+      message.maxLength = object.maxLength;
     } else {
-      message.max_length = 0;
+      message.maxLength = 0;
     }
-    if (object.max_volume !== undefined && object.max_volume !== null) {
-      message.max_volume = object.max_volume;
+    if (object.maxVolume !== undefined && object.maxVolume !== null) {
+      message.maxVolume = object.maxVolume;
     } else {
-      message.max_volume = 0;
+      message.maxVolume = 0;
     }
     return message;
   },
@@ -949,16 +948,16 @@ export const Variant = {
     message.description !== undefined &&
       (obj.description = message.description);
     message.price !== undefined && (obj.price = message.price);
-    message.max_weight !== undefined && (obj.max_weight = message.max_weight);
-    message.max_width !== undefined && (obj.max_width = message.max_width);
-    message.max_height !== undefined && (obj.max_height = message.max_height);
-    message.max_length !== undefined && (obj.max_length = message.max_length);
-    message.max_volume !== undefined && (obj.max_volume = message.max_volume);
+    message.maxWeight !== undefined && (obj.maxWeight = message.maxWeight);
+    message.maxWidth !== undefined && (obj.maxWidth = message.maxWidth);
+    message.maxHeight !== undefined && (obj.maxHeight = message.maxHeight);
+    message.maxLength !== undefined && (obj.maxLength = message.maxLength);
+    message.maxVolume !== undefined && (obj.maxVolume = message.maxVolume);
     return obj;
   },
 };
 
-const baseFulfillmentProductList: object = { total_count: 0 };
+const baseFulfillmentProductList: object = { totalCount: 0 };
 
 export const FulfillmentProductList = {
   encode(
@@ -968,8 +967,8 @@ export const FulfillmentProductList = {
     for (const v of message.items) {
       FulfillmentProduct.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -993,7 +992,7 @@ export const FulfillmentProductList = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1016,10 +1015,10 @@ export const FulfillmentProductList = {
         message.items.push(FulfillmentProduct.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1039,10 +1038,10 @@ export const FulfillmentProductList = {
         message.items.push(FulfillmentProduct.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1061,8 +1060,7 @@ export const FulfillmentProductList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1164,7 +1162,7 @@ export const FulfillmentProductResponse = {
   },
 };
 
-const baseFulfillmentProductResponseList: object = { total_count: 0 };
+const baseFulfillmentProductResponseList: object = { totalCount: 0 };
 
 export const FulfillmentProductResponseList = {
   encode(
@@ -1174,12 +1172,12 @@ export const FulfillmentProductResponseList = {
     for (const v of message.items) {
       FulfillmentProductResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -1205,10 +1203,10 @@ export const FulfillmentProductResponseList = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -1231,20 +1229,20 @@ export const FulfillmentProductResponseList = {
         message.items.push(FulfillmentProductResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1261,20 +1259,20 @@ export const FulfillmentProductResponseList = {
         message.items.push(FulfillmentProductResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1288,18 +1286,17 @@ export const FulfillmentProductResponseList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
 };
 
 const basePackingSolution: object = {
-  reference_id: "",
+  referenceId: "",
   price: 0,
   compactness: 0,
   homogeneity: 0,
@@ -1308,8 +1305,8 @@ const basePackingSolution: object = {
 
 export const PackingSolution = {
   encode(message: PackingSolution, writer: Writer = Writer.create()): Writer {
-    if (message.reference_id !== "") {
-      writer.uint32(10).string(message.reference_id);
+    if (message.referenceId !== "") {
+      writer.uint32(10).string(message.referenceId);
     }
     if (message.price !== 0) {
       writer.uint32(21).float(message.price);
@@ -1340,7 +1337,7 @@ export const PackingSolution = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.reference_id = reader.string();
+          message.referenceId = reader.string();
           break;
         case 2:
           message.price = reader.float();
@@ -1370,10 +1367,10 @@ export const PackingSolution = {
       basePackingSolution
     ) as PackingSolution;
     message.parcels = [];
-    if (object.reference_id !== undefined && object.reference_id !== null) {
-      message.reference_id = String(object.reference_id);
+    if (object.referenceId !== undefined && object.referenceId !== null) {
+      message.referenceId = String(object.referenceId);
     } else {
-      message.reference_id = "";
+      message.referenceId = "";
     }
     if (object.price !== undefined && object.price !== null) {
       message.price = Number(object.price);
@@ -1406,10 +1403,10 @@ export const PackingSolution = {
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = { ...basePackingSolution } as PackingSolution;
     message.parcels = [];
-    if (object.reference_id !== undefined && object.reference_id !== null) {
-      message.reference_id = object.reference_id;
+    if (object.referenceId !== undefined && object.referenceId !== null) {
+      message.referenceId = object.referenceId;
     } else {
-      message.reference_id = "";
+      message.referenceId = "";
     }
     if (object.price !== undefined && object.price !== null) {
       message.price = object.price;
@@ -1441,8 +1438,8 @@ export const PackingSolution = {
 
   toJSON(message: PackingSolution): unknown {
     const obj: any = {};
-    message.reference_id !== undefined &&
-      (obj.reference_id = message.reference_id);
+    message.referenceId !== undefined &&
+      (obj.referenceId = message.referenceId);
     message.price !== undefined && (obj.price = message.price);
     message.compactness !== undefined &&
       (obj.compactness = message.compactness);
@@ -1555,7 +1552,7 @@ export const PackingSolutionResponse = {
   },
 };
 
-const basePackingSolutionResponseList: object = { total_count: 0 };
+const basePackingSolutionResponseList: object = { totalCount: 0 };
 
 export const PackingSolutionResponseList = {
   encode(
@@ -1565,12 +1562,12 @@ export const PackingSolutionResponseList = {
     for (const v of message.items) {
       PackingSolutionResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -1596,10 +1593,10 @@ export const PackingSolutionResponseList = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -1622,20 +1619,20 @@ export const PackingSolutionResponseList = {
         message.items.push(PackingSolutionResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1652,20 +1649,20 @@ export const PackingSolutionResponseList = {
         message.items.push(PackingSolutionResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1679,11 +1676,10 @@ export const PackingSolutionResponseList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

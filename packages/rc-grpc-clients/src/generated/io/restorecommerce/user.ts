@@ -91,13 +91,13 @@ export interface LoginRequest {
 }
 
 export interface OrgIDRequest {
-  org_ids: string[];
+  orgIds: string[];
   subject?: Subject;
 }
 
 export interface DeleteUsersByOrgResponse {
-  user_ids: string[];
-  operation_status?: OperationStatus;
+  userIds: string[];
+  operationStatus?: OperationStatus;
 }
 
 export interface FindRequest {
@@ -117,22 +117,22 @@ export interface RegisterRequest {
   guest: boolean;
   meta?: Meta;
   name: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  timezone_id: string;
-  locale_id: string;
+  timezoneId: string;
+  localeId: string;
   /** default hierarchical scope */
-  default_scope: string;
-  user_type: UserType;
-  captcha_code: string;
+  defaultScope: string;
+  userType: UserType;
+  captchaCode: string;
 }
 
 export interface ActivateRequest {
   /** / user name or email */
   identifier: string;
-  activation_code: string;
+  activationCode: string;
   subject?: Subject;
 }
 
@@ -140,14 +140,14 @@ export interface ConfirmUserInvitationRequest {
   /** user name or email */
   identifier: string;
   password: string;
-  activation_code: string;
+  activationCode: string;
   subject?: Subject;
 }
 
 export interface SendInvitationEmailRequest {
   /** user name or email */
   identifier: string;
-  invited_by_user_identifier: string;
+  invitedByUserIdentifier: string;
   subject?: Subject;
 }
 
@@ -155,7 +155,7 @@ export interface ChangePasswordRequest {
   /** / user name or email */
   identifier: string;
   password: string;
-  new_password: string;
+  newPassword: string;
   subject?: Subject;
 }
 
@@ -168,7 +168,7 @@ export interface RequestPasswordChangeRequest {
 export interface ConfirmPasswordChangeRequest {
   /** user name or email */
   identifier: string;
-  activation_code: string;
+  activationCode: string;
   password: string;
   subject?: Subject;
 }
@@ -176,14 +176,14 @@ export interface ConfirmPasswordChangeRequest {
 export interface ChangeEmailRequest {
   /** user name or email */
   identifier: string;
-  new_email: string;
+  newEmail: string;
   subject?: Subject;
 }
 
 export interface ConfirmEmailChangeRequest {
   /** user name or email */
   identifier: string;
-  activation_code: string;
+  activationCode: string;
   subject?: Subject;
 }
 
@@ -220,7 +220,7 @@ export interface Deleted {
 export interface PasswordChanged {
   /** / User ID */
   id: string;
-  password_hash: string;
+  passwordHash: string;
 }
 
 export interface PasswordChangeRequested {
@@ -231,8 +231,8 @@ export interface PasswordChangeRequested {
 /** User email id changed event. */
 export interface EmailChangeRequested {
   id: string;
-  activation_code: string;
-  new_email: string;
+  activationCode: string;
+  newEmail: string;
 }
 
 export interface EmailChangeConfirmed {
@@ -244,14 +244,14 @@ export interface EmailChangeConfirmed {
 /** A list of User. */
 export interface UserList {
   items: User[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface UserListResponse {
   items: UserResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface UserResponse {
@@ -278,44 +278,44 @@ export interface User {
   meta?: Meta;
   /** The name of the user, can be used for login */
   name: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   /** / Email address, can be used for login */
   email: string;
   /** / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange` */
-  new_email: string;
+  newEmail: string;
   /** / If the user was activated via the activation process */
   active: boolean;
   /** / Activation code used in the activation process */
-  activation_code: string;
+  activationCode: string;
   /** / Raw password, not stored */
   password: string;
   /** / Encrypted password, stored */
-  password_hash: string;
+  passwordHash: string;
   /** A user can have multiple roles and different attributes coupled with each role */
-  role_associations: RoleAssociation[];
+  roleAssociations: RoleAssociation[];
   /** timezone_id specifications */
-  timezone_id: string;
+  timezoneId: string;
   /** locale specifications */
-  locale_id: string;
+  localeId: string;
   /** default hierarchical scope */
-  default_scope: string;
+  defaultScope: string;
   /** true in case in case of `register`; set to false after activation */
   unauthenticated: boolean;
   /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
   guest: boolean;
   image?: Image;
-  user_type: UserType;
+  userType: UserType;
   /** For user invitation */
   invite: boolean;
   /** user who is inviting */
-  invited_by_user_name: string;
+  invitedByUserName: string;
   /** First name of user inviting */
-  invited_by_user_first_name: string;
+  invitedByUserFirstName: string;
   /** Last name of user inviting */
-  invited_by_user_last_name: string;
+  invitedByUserLastName: string;
   tokens: Tokens[];
-  last_access: number;
+  lastAccess: number;
 }
 
 const baseLoginRequest: object = { identifier: "", password: "", token: "" };
@@ -407,11 +407,11 @@ export const LoginRequest = {
   },
 };
 
-const baseOrgIDRequest: object = { org_ids: "" };
+const baseOrgIDRequest: object = { orgIds: "" };
 
 export const OrgIDRequest = {
   encode(message: OrgIDRequest, writer: Writer = Writer.create()): Writer {
-    for (const v of message.org_ids) {
+    for (const v of message.orgIds) {
       writer.uint32(10).string(v!);
     }
     if (message.subject !== undefined) {
@@ -424,12 +424,12 @@ export const OrgIDRequest = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseOrgIDRequest) as OrgIDRequest;
-    message.org_ids = [];
+    message.orgIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.org_ids.push(reader.string());
+          message.orgIds.push(reader.string());
           break;
         case 2:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -444,10 +444,10 @@ export const OrgIDRequest = {
 
   fromJSON(object: any): OrgIDRequest {
     const message = globalThis.Object.create(baseOrgIDRequest) as OrgIDRequest;
-    message.org_ids = [];
-    if (object.org_ids !== undefined && object.org_ids !== null) {
-      for (const e of object.org_ids) {
-        message.org_ids.push(String(e));
+    message.orgIds = [];
+    if (object.orgIds !== undefined && object.orgIds !== null) {
+      for (const e of object.orgIds) {
+        message.orgIds.push(String(e));
       }
     }
     if (object.subject !== undefined && object.subject !== null) {
@@ -460,10 +460,10 @@ export const OrgIDRequest = {
 
   fromPartial(object: DeepPartial<OrgIDRequest>): OrgIDRequest {
     const message = { ...baseOrgIDRequest } as OrgIDRequest;
-    message.org_ids = [];
-    if (object.org_ids !== undefined && object.org_ids !== null) {
-      for (const e of object.org_ids) {
-        message.org_ids.push(e);
+    message.orgIds = [];
+    if (object.orgIds !== undefined && object.orgIds !== null) {
+      for (const e of object.orgIds) {
+        message.orgIds.push(e);
       }
     }
     if (object.subject !== undefined && object.subject !== null) {
@@ -476,10 +476,10 @@ export const OrgIDRequest = {
 
   toJSON(message: OrgIDRequest): unknown {
     const obj: any = {};
-    if (message.org_ids) {
-      obj.org_ids = message.org_ids.map((e) => e);
+    if (message.orgIds) {
+      obj.orgIds = message.orgIds.map((e) => e);
     } else {
-      obj.org_ids = [];
+      obj.orgIds = [];
     }
     message.subject !== undefined &&
       (obj.subject = message.subject
@@ -489,19 +489,19 @@ export const OrgIDRequest = {
   },
 };
 
-const baseDeleteUsersByOrgResponse: object = { user_ids: "" };
+const baseDeleteUsersByOrgResponse: object = { userIds: "" };
 
 export const DeleteUsersByOrgResponse = {
   encode(
     message: DeleteUsersByOrgResponse,
     writer: Writer = Writer.create()
   ): Writer {
-    for (const v of message.user_ids) {
+    for (const v of message.userIds) {
       writer.uint32(10).string(v!);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(18).fork()
       ).ldelim();
     }
@@ -517,15 +517,15 @@ export const DeleteUsersByOrgResponse = {
     const message = globalThis.Object.create(
       baseDeleteUsersByOrgResponse
     ) as DeleteUsersByOrgResponse;
-    message.user_ids = [];
+    message.userIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.user_ids.push(reader.string());
+          message.userIds.push(reader.string());
           break;
         case 2:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -542,21 +542,21 @@ export const DeleteUsersByOrgResponse = {
     const message = globalThis.Object.create(
       baseDeleteUsersByOrgResponse
     ) as DeleteUsersByOrgResponse;
-    message.user_ids = [];
-    if (object.user_ids !== undefined && object.user_ids !== null) {
-      for (const e of object.user_ids) {
-        message.user_ids.push(String(e));
+    message.userIds = [];
+    if (object.userIds !== undefined && object.userIds !== null) {
+      for (const e of object.userIds) {
+        message.userIds.push(String(e));
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -567,35 +567,35 @@ export const DeleteUsersByOrgResponse = {
     const message = {
       ...baseDeleteUsersByOrgResponse,
     } as DeleteUsersByOrgResponse;
-    message.user_ids = [];
-    if (object.user_ids !== undefined && object.user_ids !== null) {
-      for (const e of object.user_ids) {
-        message.user_ids.push(e);
+    message.userIds = [];
+    if (object.userIds !== undefined && object.userIds !== null) {
+      for (const e of object.userIds) {
+        message.userIds.push(e);
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
 
   toJSON(message: DeleteUsersByOrgResponse): unknown {
     const obj: any = {};
-    if (message.user_ids) {
-      obj.user_ids = message.user_ids.map((e) => e);
+    if (message.userIds) {
+      obj.userIds = message.userIds.map((e) => e);
     } else {
-      obj.user_ids = [];
+      obj.userIds = [];
     }
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -776,15 +776,15 @@ const baseRegisterRequest: object = {
   id: "",
   guest: false,
   name: "",
-  first_name: "",
-  last_name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: "",
-  timezone_id: "",
-  locale_id: "",
-  default_scope: "",
-  user_type: 0,
-  captcha_code: "",
+  timezoneId: "",
+  localeId: "",
+  defaultScope: "",
+  userType: 0,
+  captchaCode: "",
 };
 
 export const RegisterRequest = {
@@ -801,11 +801,11 @@ export const RegisterRequest = {
     if (message.name !== "") {
       writer.uint32(34).string(message.name);
     }
-    if (message.first_name !== "") {
-      writer.uint32(42).string(message.first_name);
+    if (message.firstName !== "") {
+      writer.uint32(42).string(message.firstName);
     }
-    if (message.last_name !== "") {
-      writer.uint32(50).string(message.last_name);
+    if (message.lastName !== "") {
+      writer.uint32(50).string(message.lastName);
     }
     if (message.email !== "") {
       writer.uint32(58).string(message.email);
@@ -813,20 +813,20 @@ export const RegisterRequest = {
     if (message.password !== "") {
       writer.uint32(66).string(message.password);
     }
-    if (message.timezone_id !== "") {
-      writer.uint32(74).string(message.timezone_id);
+    if (message.timezoneId !== "") {
+      writer.uint32(74).string(message.timezoneId);
     }
-    if (message.locale_id !== "") {
-      writer.uint32(82).string(message.locale_id);
+    if (message.localeId !== "") {
+      writer.uint32(82).string(message.localeId);
     }
-    if (message.default_scope !== "") {
-      writer.uint32(90).string(message.default_scope);
+    if (message.defaultScope !== "") {
+      writer.uint32(90).string(message.defaultScope);
     }
-    if (message.user_type !== 0) {
-      writer.uint32(96).int32(message.user_type);
+    if (message.userType !== 0) {
+      writer.uint32(96).int32(message.userType);
     }
-    if (message.captcha_code !== "") {
-      writer.uint32(106).string(message.captcha_code);
+    if (message.captchaCode !== "") {
+      writer.uint32(106).string(message.captchaCode);
     }
     return writer;
   },
@@ -853,10 +853,10 @@ export const RegisterRequest = {
           message.name = reader.string();
           break;
         case 5:
-          message.first_name = reader.string();
+          message.firstName = reader.string();
           break;
         case 6:
-          message.last_name = reader.string();
+          message.lastName = reader.string();
           break;
         case 7:
           message.email = reader.string();
@@ -865,19 +865,19 @@ export const RegisterRequest = {
           message.password = reader.string();
           break;
         case 9:
-          message.timezone_id = reader.string();
+          message.timezoneId = reader.string();
           break;
         case 10:
-          message.locale_id = reader.string();
+          message.localeId = reader.string();
           break;
         case 11:
-          message.default_scope = reader.string();
+          message.defaultScope = reader.string();
           break;
         case 12:
-          message.user_type = reader.int32() as any;
+          message.userType = reader.int32() as any;
           break;
         case 13:
-          message.captcha_code = reader.string();
+          message.captchaCode = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -911,15 +911,15 @@ export const RegisterRequest = {
     } else {
       message.name = "";
     }
-    if (object.first_name !== undefined && object.first_name !== null) {
-      message.first_name = String(object.first_name);
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = String(object.firstName);
     } else {
-      message.first_name = "";
+      message.firstName = "";
     }
-    if (object.last_name !== undefined && object.last_name !== null) {
-      message.last_name = String(object.last_name);
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = String(object.lastName);
     } else {
-      message.last_name = "";
+      message.lastName = "";
     }
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
@@ -931,30 +931,30 @@ export const RegisterRequest = {
     } else {
       message.password = "";
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = String(object.timezone_id);
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = String(object.timezoneId);
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = String(object.locale_id);
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = String(object.localeId);
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
-    if (object.default_scope !== undefined && object.default_scope !== null) {
-      message.default_scope = String(object.default_scope);
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = String(object.defaultScope);
     } else {
-      message.default_scope = "";
+      message.defaultScope = "";
     }
-    if (object.user_type !== undefined && object.user_type !== null) {
-      message.user_type = userTypeFromJSON(object.user_type);
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = userTypeFromJSON(object.userType);
     } else {
-      message.user_type = 0;
+      message.userType = 0;
     }
-    if (object.captcha_code !== undefined && object.captcha_code !== null) {
-      message.captcha_code = String(object.captcha_code);
+    if (object.captchaCode !== undefined && object.captchaCode !== null) {
+      message.captchaCode = String(object.captchaCode);
     } else {
-      message.captcha_code = "";
+      message.captchaCode = "";
     }
     return message;
   },
@@ -981,15 +981,15 @@ export const RegisterRequest = {
     } else {
       message.name = "";
     }
-    if (object.first_name !== undefined && object.first_name !== null) {
-      message.first_name = object.first_name;
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = object.firstName;
     } else {
-      message.first_name = "";
+      message.firstName = "";
     }
-    if (object.last_name !== undefined && object.last_name !== null) {
-      message.last_name = object.last_name;
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = object.lastName;
     } else {
-      message.last_name = "";
+      message.lastName = "";
     }
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
@@ -1001,30 +1001,30 @@ export const RegisterRequest = {
     } else {
       message.password = "";
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = object.timezone_id;
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = object.timezoneId;
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = object.locale_id;
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = object.localeId;
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
-    if (object.default_scope !== undefined && object.default_scope !== null) {
-      message.default_scope = object.default_scope;
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = object.defaultScope;
     } else {
-      message.default_scope = "";
+      message.defaultScope = "";
     }
-    if (object.user_type !== undefined && object.user_type !== null) {
-      message.user_type = object.user_type;
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = object.userType;
     } else {
-      message.user_type = 0;
+      message.userType = 0;
     }
-    if (object.captcha_code !== undefined && object.captcha_code !== null) {
-      message.captcha_code = object.captcha_code;
+    if (object.captchaCode !== undefined && object.captchaCode !== null) {
+      message.captchaCode = object.captchaCode;
     } else {
-      message.captcha_code = "";
+      message.captchaCode = "";
     }
     return message;
   },
@@ -1036,32 +1036,31 @@ export const RegisterRequest = {
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.first_name !== undefined && (obj.first_name = message.first_name);
-    message.last_name !== undefined && (obj.last_name = message.last_name);
+    message.firstName !== undefined && (obj.firstName = message.firstName);
+    message.lastName !== undefined && (obj.lastName = message.lastName);
     message.email !== undefined && (obj.email = message.email);
     message.password !== undefined && (obj.password = message.password);
-    message.timezone_id !== undefined &&
-      (obj.timezone_id = message.timezone_id);
-    message.locale_id !== undefined && (obj.locale_id = message.locale_id);
-    message.default_scope !== undefined &&
-      (obj.default_scope = message.default_scope);
-    message.user_type !== undefined &&
-      (obj.user_type = userTypeToJSON(message.user_type));
-    message.captcha_code !== undefined &&
-      (obj.captcha_code = message.captcha_code);
+    message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
+    message.localeId !== undefined && (obj.localeId = message.localeId);
+    message.defaultScope !== undefined &&
+      (obj.defaultScope = message.defaultScope);
+    message.userType !== undefined &&
+      (obj.userType = userTypeToJSON(message.userType));
+    message.captchaCode !== undefined &&
+      (obj.captchaCode = message.captchaCode);
     return obj;
   },
 };
 
-const baseActivateRequest: object = { identifier: "", activation_code: "" };
+const baseActivateRequest: object = { identifier: "", activationCode: "" };
 
 export const ActivateRequest = {
   encode(message: ActivateRequest, writer: Writer = Writer.create()): Writer {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(18).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1082,7 +1081,7 @@ export const ActivateRequest = {
           message.identifier = reader.string();
           break;
         case 2:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1104,13 +1103,10 @@ export const ActivateRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1127,13 +1123,10 @@ export const ActivateRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1146,8 +1139,8 @@ export const ActivateRequest = {
   toJSON(message: ActivateRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1159,7 +1152,7 @@ export const ActivateRequest = {
 const baseConfirmUserInvitationRequest: object = {
   identifier: "",
   password: "",
-  activation_code: "",
+  activationCode: "",
 };
 
 export const ConfirmUserInvitationRequest = {
@@ -1173,8 +1166,8 @@ export const ConfirmUserInvitationRequest = {
     if (message.password !== "") {
       writer.uint32(18).string(message.password);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(26).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(26).string(message.activationCode);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
@@ -1201,7 +1194,7 @@ export const ConfirmUserInvitationRequest = {
           message.password = reader.string();
           break;
         case 3:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1228,13 +1221,10 @@ export const ConfirmUserInvitationRequest = {
     } else {
       message.password = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1260,13 +1250,10 @@ export const ConfirmUserInvitationRequest = {
     } else {
       message.password = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1280,8 +1267,8 @@ export const ConfirmUserInvitationRequest = {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
     message.password !== undefined && (obj.password = message.password);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1292,7 +1279,7 @@ export const ConfirmUserInvitationRequest = {
 
 const baseSendInvitationEmailRequest: object = {
   identifier: "",
-  invited_by_user_identifier: "",
+  invitedByUserIdentifier: "",
 };
 
 export const SendInvitationEmailRequest = {
@@ -1303,8 +1290,8 @@ export const SendInvitationEmailRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.invited_by_user_identifier !== "") {
-      writer.uint32(18).string(message.invited_by_user_identifier);
+    if (message.invitedByUserIdentifier !== "") {
+      writer.uint32(18).string(message.invitedByUserIdentifier);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1328,7 +1315,7 @@ export const SendInvitationEmailRequest = {
           message.identifier = reader.string();
           break;
         case 2:
-          message.invited_by_user_identifier = reader.string();
+          message.invitedByUserIdentifier = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1351,14 +1338,12 @@ export const SendInvitationEmailRequest = {
       message.identifier = "";
     }
     if (
-      object.invited_by_user_identifier !== undefined &&
-      object.invited_by_user_identifier !== null
+      object.invitedByUserIdentifier !== undefined &&
+      object.invitedByUserIdentifier !== null
     ) {
-      message.invited_by_user_identifier = String(
-        object.invited_by_user_identifier
-      );
+      message.invitedByUserIdentifier = String(object.invitedByUserIdentifier);
     } else {
-      message.invited_by_user_identifier = "";
+      message.invitedByUserIdentifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1380,12 +1365,12 @@ export const SendInvitationEmailRequest = {
       message.identifier = "";
     }
     if (
-      object.invited_by_user_identifier !== undefined &&
-      object.invited_by_user_identifier !== null
+      object.invitedByUserIdentifier !== undefined &&
+      object.invitedByUserIdentifier !== null
     ) {
-      message.invited_by_user_identifier = object.invited_by_user_identifier;
+      message.invitedByUserIdentifier = object.invitedByUserIdentifier;
     } else {
-      message.invited_by_user_identifier = "";
+      message.invitedByUserIdentifier = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1398,8 +1383,8 @@ export const SendInvitationEmailRequest = {
   toJSON(message: SendInvitationEmailRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
-    message.invited_by_user_identifier !== undefined &&
-      (obj.invited_by_user_identifier = message.invited_by_user_identifier);
+    message.invitedByUserIdentifier !== undefined &&
+      (obj.invitedByUserIdentifier = message.invitedByUserIdentifier);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1411,7 +1396,7 @@ export const SendInvitationEmailRequest = {
 const baseChangePasswordRequest: object = {
   identifier: "",
   password: "",
-  new_password: "",
+  newPassword: "",
 };
 
 export const ChangePasswordRequest = {
@@ -1425,8 +1410,8 @@ export const ChangePasswordRequest = {
     if (message.password !== "") {
       writer.uint32(18).string(message.password);
     }
-    if (message.new_password !== "") {
-      writer.uint32(26).string(message.new_password);
+    if (message.newPassword !== "") {
+      writer.uint32(26).string(message.newPassword);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
@@ -1450,7 +1435,7 @@ export const ChangePasswordRequest = {
           message.password = reader.string();
           break;
         case 3:
-          message.new_password = reader.string();
+          message.newPassword = reader.string();
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1477,10 +1462,10 @@ export const ChangePasswordRequest = {
     } else {
       message.password = "";
     }
-    if (object.new_password !== undefined && object.new_password !== null) {
-      message.new_password = String(object.new_password);
+    if (object.newPassword !== undefined && object.newPassword !== null) {
+      message.newPassword = String(object.newPassword);
     } else {
-      message.new_password = "";
+      message.newPassword = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1504,10 +1489,10 @@ export const ChangePasswordRequest = {
     } else {
       message.password = "";
     }
-    if (object.new_password !== undefined && object.new_password !== null) {
-      message.new_password = object.new_password;
+    if (object.newPassword !== undefined && object.newPassword !== null) {
+      message.newPassword = object.newPassword;
     } else {
-      message.new_password = "";
+      message.newPassword = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1521,8 +1506,8 @@ export const ChangePasswordRequest = {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
     message.password !== undefined && (obj.password = message.password);
-    message.new_password !== undefined &&
-      (obj.new_password = message.new_password);
+    message.newPassword !== undefined &&
+      (obj.newPassword = message.newPassword);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1622,7 +1607,7 @@ export const RequestPasswordChangeRequest = {
 
 const baseConfirmPasswordChangeRequest: object = {
   identifier: "",
-  activation_code: "",
+  activationCode: "",
   password: "",
 };
 
@@ -1634,8 +1619,8 @@ export const ConfirmPasswordChangeRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(18).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
     }
     if (message.password !== "") {
       writer.uint32(26).string(message.password);
@@ -1662,7 +1647,7 @@ export const ConfirmPasswordChangeRequest = {
           message.identifier = reader.string();
           break;
         case 2:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 3:
           message.password = reader.string();
@@ -1687,13 +1672,10 @@ export const ConfirmPasswordChangeRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = String(object.password);
@@ -1719,13 +1701,10 @@ export const ConfirmPasswordChangeRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = object.password;
@@ -1743,8 +1722,8 @@ export const ConfirmPasswordChangeRequest = {
   toJSON(message: ConfirmPasswordChangeRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
     message.subject !== undefined &&
       (obj.subject = message.subject
@@ -1754,7 +1733,7 @@ export const ConfirmPasswordChangeRequest = {
   },
 };
 
-const baseChangeEmailRequest: object = { identifier: "", new_email: "" };
+const baseChangeEmailRequest: object = { identifier: "", newEmail: "" };
 
 export const ChangeEmailRequest = {
   encode(
@@ -1764,8 +1743,8 @@ export const ChangeEmailRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.new_email !== "") {
-      writer.uint32(18).string(message.new_email);
+    if (message.newEmail !== "") {
+      writer.uint32(18).string(message.newEmail);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1786,7 +1765,7 @@ export const ChangeEmailRequest = {
           message.identifier = reader.string();
           break;
         case 2:
-          message.new_email = reader.string();
+          message.newEmail = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1808,10 +1787,10 @@ export const ChangeEmailRequest = {
     } else {
       message.identifier = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = String(object.new_email);
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = String(object.newEmail);
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1828,10 +1807,10 @@ export const ChangeEmailRequest = {
     } else {
       message.identifier = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = object.new_email;
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = object.newEmail;
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1844,7 +1823,7 @@ export const ChangeEmailRequest = {
   toJSON(message: ChangeEmailRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
-    message.new_email !== undefined && (obj.new_email = message.new_email);
+    message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1855,7 +1834,7 @@ export const ChangeEmailRequest = {
 
 const baseConfirmEmailChangeRequest: object = {
   identifier: "",
-  activation_code: "",
+  activationCode: "",
 };
 
 export const ConfirmEmailChangeRequest = {
@@ -1866,8 +1845,8 @@ export const ConfirmEmailChangeRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(18).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1891,7 +1870,7 @@ export const ConfirmEmailChangeRequest = {
           message.identifier = reader.string();
           break;
         case 2:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1913,13 +1892,10 @@ export const ConfirmEmailChangeRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1940,13 +1916,10 @@ export const ConfirmEmailChangeRequest = {
     } else {
       message.identifier = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1959,8 +1932,8 @@ export const ConfirmEmailChangeRequest = {
   toJSON(message: ConfirmEmailChangeRequest): unknown {
     const obj: any = {};
     message.identifier !== undefined && (obj.identifier = message.identifier);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -2192,15 +2165,15 @@ export const Deleted = {
   },
 };
 
-const basePasswordChanged: object = { id: "", password_hash: "" };
+const basePasswordChanged: object = { id: "", passwordHash: "" };
 
 export const PasswordChanged = {
   encode(message: PasswordChanged, writer: Writer = Writer.create()): Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.password_hash !== "") {
-      writer.uint32(18).string(message.password_hash);
+    if (message.passwordHash !== "") {
+      writer.uint32(18).string(message.passwordHash);
     }
     return writer;
   },
@@ -2218,7 +2191,7 @@ export const PasswordChanged = {
           message.id = reader.string();
           break;
         case 2:
-          message.password_hash = reader.string();
+          message.passwordHash = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2237,10 +2210,10 @@ export const PasswordChanged = {
     } else {
       message.id = "";
     }
-    if (object.password_hash !== undefined && object.password_hash !== null) {
-      message.password_hash = String(object.password_hash);
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = String(object.passwordHash);
     } else {
-      message.password_hash = "";
+      message.passwordHash = "";
     }
     return message;
   },
@@ -2252,10 +2225,10 @@ export const PasswordChanged = {
     } else {
       message.id = "";
     }
-    if (object.password_hash !== undefined && object.password_hash !== null) {
-      message.password_hash = object.password_hash;
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = object.passwordHash;
     } else {
-      message.password_hash = "";
+      message.passwordHash = "";
     }
     return message;
   },
@@ -2263,8 +2236,8 @@ export const PasswordChanged = {
   toJSON(message: PasswordChanged): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.password_hash !== undefined &&
-      (obj.password_hash = message.password_hash);
+    message.passwordHash !== undefined &&
+      (obj.passwordHash = message.passwordHash);
     return obj;
   },
 };
@@ -2337,8 +2310,8 @@ export const PasswordChangeRequested = {
 
 const baseEmailChangeRequested: object = {
   id: "",
-  activation_code: "",
-  new_email: "",
+  activationCode: "",
+  newEmail: "",
 };
 
 export const EmailChangeRequested = {
@@ -2349,11 +2322,11 @@ export const EmailChangeRequested = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(18).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(18).string(message.activationCode);
     }
-    if (message.new_email !== "") {
-      writer.uint32(26).string(message.new_email);
+    if (message.newEmail !== "") {
+      writer.uint32(26).string(message.newEmail);
     }
     return writer;
   },
@@ -2371,10 +2344,10 @@ export const EmailChangeRequested = {
           message.id = reader.string();
           break;
         case 2:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 3:
-          message.new_email = reader.string();
+          message.newEmail = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -2393,18 +2366,15 @@ export const EmailChangeRequested = {
     } else {
       message.id = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = String(object.new_email);
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = String(object.newEmail);
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     return message;
   },
@@ -2416,18 +2386,15 @@ export const EmailChangeRequested = {
     } else {
       message.id = "";
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = object.new_email;
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = object.newEmail;
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     return message;
   },
@@ -2435,9 +2402,9 @@ export const EmailChangeRequested = {
   toJSON(message: EmailChangeRequested): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
-    message.new_email !== undefined && (obj.new_email = message.new_email);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
+    message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     return obj;
   },
 };
@@ -2521,15 +2488,15 @@ export const EmailChangeConfirmed = {
   },
 };
 
-const baseUserList: object = { total_count: 0 };
+const baseUserList: object = { totalCount: 0 };
 
 export const UserList = {
   encode(message: UserList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       User.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -2549,7 +2516,7 @@ export const UserList = {
           message.items.push(User.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -2570,10 +2537,10 @@ export const UserList = {
         message.items.push(User.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -2591,10 +2558,10 @@ export const UserList = {
         message.items.push(User.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -2611,8 +2578,7 @@ export const UserList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -2621,19 +2587,19 @@ export const UserList = {
   },
 };
 
-const baseUserListResponse: object = { total_count: 0 };
+const baseUserListResponse: object = { totalCount: 0 };
 
 export const UserListResponse = {
   encode(message: UserListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       UserResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -2654,10 +2620,10 @@ export const UserListResponse = {
           message.items.push(UserResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -2680,20 +2646,20 @@ export const UserListResponse = {
         message.items.push(UserResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -2706,20 +2672,20 @@ export const UserListResponse = {
         message.items.push(UserResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -2733,11 +2699,10 @@ export const UserListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -2982,25 +2947,25 @@ export const FindByRoleRequest = {
 const baseUser: object = {
   id: "",
   name: "",
-  first_name: "",
-  last_name: "",
+  firstName: "",
+  lastName: "",
   email: "",
-  new_email: "",
+  newEmail: "",
   active: false,
-  activation_code: "",
+  activationCode: "",
   password: "",
-  password_hash: "",
-  timezone_id: "",
-  locale_id: "",
-  default_scope: "",
+  passwordHash: "",
+  timezoneId: "",
+  localeId: "",
+  defaultScope: "",
   unauthenticated: false,
   guest: false,
-  user_type: 0,
+  userType: 0,
   invite: false,
-  invited_by_user_name: "",
-  invited_by_user_first_name: "",
-  invited_by_user_last_name: "",
-  last_access: 0,
+  invitedByUserName: "",
+  invitedByUserFirstName: "",
+  invitedByUserLastName: "",
+  lastAccess: 0,
 };
 
 export const User = {
@@ -3014,41 +2979,41 @@ export const User = {
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
     }
-    if (message.first_name !== "") {
-      writer.uint32(34).string(message.first_name);
+    if (message.firstName !== "") {
+      writer.uint32(34).string(message.firstName);
     }
-    if (message.last_name !== "") {
-      writer.uint32(42).string(message.last_name);
+    if (message.lastName !== "") {
+      writer.uint32(42).string(message.lastName);
     }
     if (message.email !== "") {
       writer.uint32(50).string(message.email);
     }
-    if (message.new_email !== "") {
-      writer.uint32(58).string(message.new_email);
+    if (message.newEmail !== "") {
+      writer.uint32(58).string(message.newEmail);
     }
     if (message.active === true) {
       writer.uint32(64).bool(message.active);
     }
-    if (message.activation_code !== "") {
-      writer.uint32(74).string(message.activation_code);
+    if (message.activationCode !== "") {
+      writer.uint32(74).string(message.activationCode);
     }
     if (message.password !== "") {
       writer.uint32(82).string(message.password);
     }
-    if (message.password_hash !== "") {
-      writer.uint32(90).string(message.password_hash);
+    if (message.passwordHash !== "") {
+      writer.uint32(90).string(message.passwordHash);
     }
-    for (const v of message.role_associations) {
+    for (const v of message.roleAssociations) {
       RoleAssociation.encode(v!, writer.uint32(98).fork()).ldelim();
     }
-    if (message.timezone_id !== "") {
-      writer.uint32(106).string(message.timezone_id);
+    if (message.timezoneId !== "") {
+      writer.uint32(106).string(message.timezoneId);
     }
-    if (message.locale_id !== "") {
-      writer.uint32(114).string(message.locale_id);
+    if (message.localeId !== "") {
+      writer.uint32(114).string(message.localeId);
     }
-    if (message.default_scope !== "") {
-      writer.uint32(122).string(message.default_scope);
+    if (message.defaultScope !== "") {
+      writer.uint32(122).string(message.defaultScope);
     }
     if (message.unauthenticated === true) {
       writer.uint32(128).bool(message.unauthenticated);
@@ -3059,26 +3024,26 @@ export const User = {
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    if (message.user_type !== 0) {
-      writer.uint32(152).int32(message.user_type);
+    if (message.userType !== 0) {
+      writer.uint32(152).int32(message.userType);
     }
     if (message.invite === true) {
       writer.uint32(160).bool(message.invite);
     }
-    if (message.invited_by_user_name !== "") {
-      writer.uint32(170).string(message.invited_by_user_name);
+    if (message.invitedByUserName !== "") {
+      writer.uint32(170).string(message.invitedByUserName);
     }
-    if (message.invited_by_user_first_name !== "") {
-      writer.uint32(178).string(message.invited_by_user_first_name);
+    if (message.invitedByUserFirstName !== "") {
+      writer.uint32(178).string(message.invitedByUserFirstName);
     }
-    if (message.invited_by_user_last_name !== "") {
-      writer.uint32(186).string(message.invited_by_user_last_name);
+    if (message.invitedByUserLastName !== "") {
+      writer.uint32(186).string(message.invitedByUserLastName);
     }
     for (const v of message.tokens) {
       Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
     }
-    if (message.last_access !== 0) {
-      writer.uint32(201).double(message.last_access);
+    if (message.lastAccess !== 0) {
+      writer.uint32(201).double(message.lastAccess);
     }
     return writer;
   },
@@ -3087,7 +3052,7 @@ export const User = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseUser) as User;
-    message.role_associations = [];
+    message.roleAssociations = [];
     message.tokens = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
@@ -3102,42 +3067,42 @@ export const User = {
           message.name = reader.string();
           break;
         case 4:
-          message.first_name = reader.string();
+          message.firstName = reader.string();
           break;
         case 5:
-          message.last_name = reader.string();
+          message.lastName = reader.string();
           break;
         case 6:
           message.email = reader.string();
           break;
         case 7:
-          message.new_email = reader.string();
+          message.newEmail = reader.string();
           break;
         case 8:
           message.active = reader.bool();
           break;
         case 9:
-          message.activation_code = reader.string();
+          message.activationCode = reader.string();
           break;
         case 10:
           message.password = reader.string();
           break;
         case 11:
-          message.password_hash = reader.string();
+          message.passwordHash = reader.string();
           break;
         case 12:
-          message.role_associations.push(
+          message.roleAssociations.push(
             RoleAssociation.decode(reader, reader.uint32())
           );
           break;
         case 13:
-          message.timezone_id = reader.string();
+          message.timezoneId = reader.string();
           break;
         case 14:
-          message.locale_id = reader.string();
+          message.localeId = reader.string();
           break;
         case 15:
-          message.default_scope = reader.string();
+          message.defaultScope = reader.string();
           break;
         case 16:
           message.unauthenticated = reader.bool();
@@ -3149,25 +3114,25 @@ export const User = {
           message.image = Image.decode(reader, reader.uint32());
           break;
         case 19:
-          message.user_type = reader.int32() as any;
+          message.userType = reader.int32() as any;
           break;
         case 20:
           message.invite = reader.bool();
           break;
         case 21:
-          message.invited_by_user_name = reader.string();
+          message.invitedByUserName = reader.string();
           break;
         case 22:
-          message.invited_by_user_first_name = reader.string();
+          message.invitedByUserFirstName = reader.string();
           break;
         case 23:
-          message.invited_by_user_last_name = reader.string();
+          message.invitedByUserLastName = reader.string();
           break;
         case 24:
           message.tokens.push(Tokens.decode(reader, reader.uint32()));
           break;
         case 25:
-          message.last_access = reader.double();
+          message.lastAccess = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -3179,7 +3144,7 @@ export const User = {
 
   fromJSON(object: any): User {
     const message = globalThis.Object.create(baseUser) as User;
-    message.role_associations = [];
+    message.roleAssociations = [];
     message.tokens = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
@@ -3196,71 +3161,68 @@ export const User = {
     } else {
       message.name = "";
     }
-    if (object.first_name !== undefined && object.first_name !== null) {
-      message.first_name = String(object.first_name);
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = String(object.firstName);
     } else {
-      message.first_name = "";
+      message.firstName = "";
     }
-    if (object.last_name !== undefined && object.last_name !== null) {
-      message.last_name = String(object.last_name);
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = String(object.lastName);
     } else {
-      message.last_name = "";
+      message.lastName = "";
     }
     if (object.email !== undefined && object.email !== null) {
       message.email = String(object.email);
     } else {
       message.email = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = String(object.new_email);
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = String(object.newEmail);
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     if (object.active !== undefined && object.active !== null) {
       message.active = Boolean(object.active);
     } else {
       message.active = false;
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = String(object.activation_code);
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = String(object.password);
     } else {
       message.password = "";
     }
-    if (object.password_hash !== undefined && object.password_hash !== null) {
-      message.password_hash = String(object.password_hash);
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = String(object.passwordHash);
     } else {
-      message.password_hash = "";
+      message.passwordHash = "";
     }
     if (
-      object.role_associations !== undefined &&
-      object.role_associations !== null
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
     ) {
-      for (const e of object.role_associations) {
-        message.role_associations.push(RoleAssociation.fromJSON(e));
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromJSON(e));
       }
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = String(object.timezone_id);
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = String(object.timezoneId);
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = String(object.locale_id);
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = String(object.localeId);
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
-    if (object.default_scope !== undefined && object.default_scope !== null) {
-      message.default_scope = String(object.default_scope);
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = String(object.defaultScope);
     } else {
-      message.default_scope = "";
+      message.defaultScope = "";
     }
     if (
       object.unauthenticated !== undefined &&
@@ -3280,10 +3242,10 @@ export const User = {
     } else {
       message.image = undefined;
     }
-    if (object.user_type !== undefined && object.user_type !== null) {
-      message.user_type = userTypeFromJSON(object.user_type);
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = userTypeFromJSON(object.userType);
     } else {
-      message.user_type = 0;
+      message.userType = 0;
     }
     if (object.invite !== undefined && object.invite !== null) {
       message.invite = Boolean(object.invite);
@@ -3291,49 +3253,45 @@ export const User = {
       message.invite = false;
     }
     if (
-      object.invited_by_user_name !== undefined &&
-      object.invited_by_user_name !== null
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
     ) {
-      message.invited_by_user_name = String(object.invited_by_user_name);
+      message.invitedByUserName = String(object.invitedByUserName);
     } else {
-      message.invited_by_user_name = "";
+      message.invitedByUserName = "";
     }
     if (
-      object.invited_by_user_first_name !== undefined &&
-      object.invited_by_user_first_name !== null
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
     ) {
-      message.invited_by_user_first_name = String(
-        object.invited_by_user_first_name
-      );
+      message.invitedByUserFirstName = String(object.invitedByUserFirstName);
     } else {
-      message.invited_by_user_first_name = "";
+      message.invitedByUserFirstName = "";
     }
     if (
-      object.invited_by_user_last_name !== undefined &&
-      object.invited_by_user_last_name !== null
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
     ) {
-      message.invited_by_user_last_name = String(
-        object.invited_by_user_last_name
-      );
+      message.invitedByUserLastName = String(object.invitedByUserLastName);
     } else {
-      message.invited_by_user_last_name = "";
+      message.invitedByUserLastName = "";
     }
     if (object.tokens !== undefined && object.tokens !== null) {
       for (const e of object.tokens) {
         message.tokens.push(Tokens.fromJSON(e));
       }
     }
-    if (object.last_access !== undefined && object.last_access !== null) {
-      message.last_access = Number(object.last_access);
+    if (object.lastAccess !== undefined && object.lastAccess !== null) {
+      message.lastAccess = Number(object.lastAccess);
     } else {
-      message.last_access = 0;
+      message.lastAccess = 0;
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<User>): User {
     const message = { ...baseUser } as User;
-    message.role_associations = [];
+    message.roleAssociations = [];
     message.tokens = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
@@ -3350,71 +3308,68 @@ export const User = {
     } else {
       message.name = "";
     }
-    if (object.first_name !== undefined && object.first_name !== null) {
-      message.first_name = object.first_name;
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = object.firstName;
     } else {
-      message.first_name = "";
+      message.firstName = "";
     }
-    if (object.last_name !== undefined && object.last_name !== null) {
-      message.last_name = object.last_name;
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = object.lastName;
     } else {
-      message.last_name = "";
+      message.lastName = "";
     }
     if (object.email !== undefined && object.email !== null) {
       message.email = object.email;
     } else {
       message.email = "";
     }
-    if (object.new_email !== undefined && object.new_email !== null) {
-      message.new_email = object.new_email;
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = object.newEmail;
     } else {
-      message.new_email = "";
+      message.newEmail = "";
     }
     if (object.active !== undefined && object.active !== null) {
       message.active = object.active;
     } else {
       message.active = false;
     }
-    if (
-      object.activation_code !== undefined &&
-      object.activation_code !== null
-    ) {
-      message.activation_code = object.activation_code;
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
     } else {
-      message.activation_code = "";
+      message.activationCode = "";
     }
     if (object.password !== undefined && object.password !== null) {
       message.password = object.password;
     } else {
       message.password = "";
     }
-    if (object.password_hash !== undefined && object.password_hash !== null) {
-      message.password_hash = object.password_hash;
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = object.passwordHash;
     } else {
-      message.password_hash = "";
+      message.passwordHash = "";
     }
     if (
-      object.role_associations !== undefined &&
-      object.role_associations !== null
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
     ) {
-      for (const e of object.role_associations) {
-        message.role_associations.push(RoleAssociation.fromPartial(e));
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromPartial(e));
       }
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = object.timezone_id;
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = object.timezoneId;
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = object.locale_id;
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = object.localeId;
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
-    if (object.default_scope !== undefined && object.default_scope !== null) {
-      message.default_scope = object.default_scope;
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = object.defaultScope;
     } else {
-      message.default_scope = "";
+      message.defaultScope = "";
     }
     if (
       object.unauthenticated !== undefined &&
@@ -3434,10 +3389,10 @@ export const User = {
     } else {
       message.image = undefined;
     }
-    if (object.user_type !== undefined && object.user_type !== null) {
-      message.user_type = object.user_type;
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = object.userType;
     } else {
-      message.user_type = 0;
+      message.userType = 0;
     }
     if (object.invite !== undefined && object.invite !== null) {
       message.invite = object.invite;
@@ -3445,38 +3400,38 @@ export const User = {
       message.invite = false;
     }
     if (
-      object.invited_by_user_name !== undefined &&
-      object.invited_by_user_name !== null
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
     ) {
-      message.invited_by_user_name = object.invited_by_user_name;
+      message.invitedByUserName = object.invitedByUserName;
     } else {
-      message.invited_by_user_name = "";
+      message.invitedByUserName = "";
     }
     if (
-      object.invited_by_user_first_name !== undefined &&
-      object.invited_by_user_first_name !== null
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
     ) {
-      message.invited_by_user_first_name = object.invited_by_user_first_name;
+      message.invitedByUserFirstName = object.invitedByUserFirstName;
     } else {
-      message.invited_by_user_first_name = "";
+      message.invitedByUserFirstName = "";
     }
     if (
-      object.invited_by_user_last_name !== undefined &&
-      object.invited_by_user_last_name !== null
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
     ) {
-      message.invited_by_user_last_name = object.invited_by_user_last_name;
+      message.invitedByUserLastName = object.invitedByUserLastName;
     } else {
-      message.invited_by_user_last_name = "";
+      message.invitedByUserLastName = "";
     }
     if (object.tokens !== undefined && object.tokens !== null) {
       for (const e of object.tokens) {
         message.tokens.push(Tokens.fromPartial(e));
       }
     }
-    if (object.last_access !== undefined && object.last_access !== null) {
-      message.last_access = object.last_access;
+    if (object.lastAccess !== undefined && object.lastAccess !== null) {
+      message.lastAccess = object.lastAccess;
     } else {
-      message.last_access = 0;
+      message.lastAccess = 0;
     }
     return message;
   },
@@ -3487,42 +3442,41 @@ export const User = {
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.first_name !== undefined && (obj.first_name = message.first_name);
-    message.last_name !== undefined && (obj.last_name = message.last_name);
+    message.firstName !== undefined && (obj.firstName = message.firstName);
+    message.lastName !== undefined && (obj.lastName = message.lastName);
     message.email !== undefined && (obj.email = message.email);
-    message.new_email !== undefined && (obj.new_email = message.new_email);
+    message.newEmail !== undefined && (obj.newEmail = message.newEmail);
     message.active !== undefined && (obj.active = message.active);
-    message.activation_code !== undefined &&
-      (obj.activation_code = message.activation_code);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
     message.password !== undefined && (obj.password = message.password);
-    message.password_hash !== undefined &&
-      (obj.password_hash = message.password_hash);
-    if (message.role_associations) {
-      obj.role_associations = message.role_associations.map((e) =>
+    message.passwordHash !== undefined &&
+      (obj.passwordHash = message.passwordHash);
+    if (message.roleAssociations) {
+      obj.roleAssociations = message.roleAssociations.map((e) =>
         e ? RoleAssociation.toJSON(e) : undefined
       );
     } else {
-      obj.role_associations = [];
+      obj.roleAssociations = [];
     }
-    message.timezone_id !== undefined &&
-      (obj.timezone_id = message.timezone_id);
-    message.locale_id !== undefined && (obj.locale_id = message.locale_id);
-    message.default_scope !== undefined &&
-      (obj.default_scope = message.default_scope);
+    message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
+    message.localeId !== undefined && (obj.localeId = message.localeId);
+    message.defaultScope !== undefined &&
+      (obj.defaultScope = message.defaultScope);
     message.unauthenticated !== undefined &&
       (obj.unauthenticated = message.unauthenticated);
     message.guest !== undefined && (obj.guest = message.guest);
     message.image !== undefined &&
       (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.user_type !== undefined &&
-      (obj.user_type = userTypeToJSON(message.user_type));
+    message.userType !== undefined &&
+      (obj.userType = userTypeToJSON(message.userType));
     message.invite !== undefined && (obj.invite = message.invite);
-    message.invited_by_user_name !== undefined &&
-      (obj.invited_by_user_name = message.invited_by_user_name);
-    message.invited_by_user_first_name !== undefined &&
-      (obj.invited_by_user_first_name = message.invited_by_user_first_name);
-    message.invited_by_user_last_name !== undefined &&
-      (obj.invited_by_user_last_name = message.invited_by_user_last_name);
+    message.invitedByUserName !== undefined &&
+      (obj.invitedByUserName = message.invitedByUserName);
+    message.invitedByUserFirstName !== undefined &&
+      (obj.invitedByUserFirstName = message.invitedByUserFirstName);
+    message.invitedByUserLastName !== undefined &&
+      (obj.invitedByUserLastName = message.invitedByUserLastName);
     if (message.tokens) {
       obj.tokens = message.tokens.map((e) =>
         e ? Tokens.toJSON(e) : undefined
@@ -3530,8 +3484,7 @@ export const User = {
     } else {
       obj.tokens = [];
     }
-    message.last_access !== undefined &&
-      (obj.last_access = message.last_access);
+    message.lastAccess !== undefined && (obj.lastAccess = message.lastAccess);
     return obj;
   },
 };

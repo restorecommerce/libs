@@ -29,14 +29,14 @@ export interface Deleted {
 
 export interface ContactPointList {
   items: ContactPoint[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface ContactPointListResponse {
   items: ContactPointResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface ContactPointResponse {
@@ -47,13 +47,13 @@ export interface ContactPointResponse {
 export interface ContactPoint {
   id: string;
   meta?: Meta;
-  physical_address_id: string;
+  physicalAddressId: string;
   website: string;
   email: string;
-  contact_point_type_id: string;
+  contactPointTypeId: string;
   telephone: string;
-  timezone_id: string;
-  locale_id: string;
+  timezoneId: string;
+  localeId: string;
 }
 
 const baseDeleted: object = { id: "" };
@@ -111,15 +111,15 @@ export const Deleted = {
   },
 };
 
-const baseContactPointList: object = { total_count: 0 };
+const baseContactPointList: object = { totalCount: 0 };
 
 export const ContactPointList = {
   encode(message: ContactPointList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       ContactPoint.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -141,7 +141,7 @@ export const ContactPointList = {
           message.items.push(ContactPoint.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -164,10 +164,10 @@ export const ContactPointList = {
         message.items.push(ContactPoint.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -185,10 +185,10 @@ export const ContactPointList = {
         message.items.push(ContactPoint.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -207,8 +207,7 @@ export const ContactPointList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -217,7 +216,7 @@ export const ContactPointList = {
   },
 };
 
-const baseContactPointListResponse: object = { total_count: 0 };
+const baseContactPointListResponse: object = { totalCount: 0 };
 
 export const ContactPointListResponse = {
   encode(
@@ -227,12 +226,12 @@ export const ContactPointListResponse = {
     for (const v of message.items) {
       ContactPointResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -258,10 +257,10 @@ export const ContactPointListResponse = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -284,20 +283,20 @@ export const ContactPointListResponse = {
         message.items.push(ContactPointResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -314,20 +313,20 @@ export const ContactPointListResponse = {
         message.items.push(ContactPointResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -341,11 +340,10 @@ export const ContactPointListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -436,13 +434,13 @@ export const ContactPointResponse = {
 
 const baseContactPoint: object = {
   id: "",
-  physical_address_id: "",
+  physicalAddressId: "",
   website: "",
   email: "",
-  contact_point_type_id: "",
+  contactPointTypeId: "",
   telephone: "",
-  timezone_id: "",
-  locale_id: "",
+  timezoneId: "",
+  localeId: "",
 };
 
 export const ContactPoint = {
@@ -453,8 +451,8 @@ export const ContactPoint = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.physical_address_id !== "") {
-      writer.uint32(26).string(message.physical_address_id);
+    if (message.physicalAddressId !== "") {
+      writer.uint32(26).string(message.physicalAddressId);
     }
     if (message.website !== "") {
       writer.uint32(34).string(message.website);
@@ -462,17 +460,17 @@ export const ContactPoint = {
     if (message.email !== "") {
       writer.uint32(42).string(message.email);
     }
-    if (message.contact_point_type_id !== "") {
-      writer.uint32(50).string(message.contact_point_type_id);
+    if (message.contactPointTypeId !== "") {
+      writer.uint32(50).string(message.contactPointTypeId);
     }
     if (message.telephone !== "") {
       writer.uint32(66).string(message.telephone);
     }
-    if (message.timezone_id !== "") {
-      writer.uint32(74).string(message.timezone_id);
+    if (message.timezoneId !== "") {
+      writer.uint32(74).string(message.timezoneId);
     }
-    if (message.locale_id !== "") {
-      writer.uint32(82).string(message.locale_id);
+    if (message.localeId !== "") {
+      writer.uint32(82).string(message.localeId);
     }
     return writer;
   },
@@ -491,7 +489,7 @@ export const ContactPoint = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.physical_address_id = reader.string();
+          message.physicalAddressId = reader.string();
           break;
         case 4:
           message.website = reader.string();
@@ -500,16 +498,16 @@ export const ContactPoint = {
           message.email = reader.string();
           break;
         case 6:
-          message.contact_point_type_id = reader.string();
+          message.contactPointTypeId = reader.string();
           break;
         case 8:
           message.telephone = reader.string();
           break;
         case 9:
-          message.timezone_id = reader.string();
+          message.timezoneId = reader.string();
           break;
         case 10:
-          message.locale_id = reader.string();
+          message.localeId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -532,12 +530,12 @@ export const ContactPoint = {
       message.meta = undefined;
     }
     if (
-      object.physical_address_id !== undefined &&
-      object.physical_address_id !== null
+      object.physicalAddressId !== undefined &&
+      object.physicalAddressId !== null
     ) {
-      message.physical_address_id = String(object.physical_address_id);
+      message.physicalAddressId = String(object.physicalAddressId);
     } else {
-      message.physical_address_id = "";
+      message.physicalAddressId = "";
     }
     if (object.website !== undefined && object.website !== null) {
       message.website = String(object.website);
@@ -550,27 +548,27 @@ export const ContactPoint = {
       message.email = "";
     }
     if (
-      object.contact_point_type_id !== undefined &&
-      object.contact_point_type_id !== null
+      object.contactPointTypeId !== undefined &&
+      object.contactPointTypeId !== null
     ) {
-      message.contact_point_type_id = String(object.contact_point_type_id);
+      message.contactPointTypeId = String(object.contactPointTypeId);
     } else {
-      message.contact_point_type_id = "";
+      message.contactPointTypeId = "";
     }
     if (object.telephone !== undefined && object.telephone !== null) {
       message.telephone = String(object.telephone);
     } else {
       message.telephone = "";
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = String(object.timezone_id);
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = String(object.timezoneId);
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = String(object.locale_id);
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = String(object.localeId);
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
     return message;
   },
@@ -588,12 +586,12 @@ export const ContactPoint = {
       message.meta = undefined;
     }
     if (
-      object.physical_address_id !== undefined &&
-      object.physical_address_id !== null
+      object.physicalAddressId !== undefined &&
+      object.physicalAddressId !== null
     ) {
-      message.physical_address_id = object.physical_address_id;
+      message.physicalAddressId = object.physicalAddressId;
     } else {
-      message.physical_address_id = "";
+      message.physicalAddressId = "";
     }
     if (object.website !== undefined && object.website !== null) {
       message.website = object.website;
@@ -606,27 +604,27 @@ export const ContactPoint = {
       message.email = "";
     }
     if (
-      object.contact_point_type_id !== undefined &&
-      object.contact_point_type_id !== null
+      object.contactPointTypeId !== undefined &&
+      object.contactPointTypeId !== null
     ) {
-      message.contact_point_type_id = object.contact_point_type_id;
+      message.contactPointTypeId = object.contactPointTypeId;
     } else {
-      message.contact_point_type_id = "";
+      message.contactPointTypeId = "";
     }
     if (object.telephone !== undefined && object.telephone !== null) {
       message.telephone = object.telephone;
     } else {
       message.telephone = "";
     }
-    if (object.timezone_id !== undefined && object.timezone_id !== null) {
-      message.timezone_id = object.timezone_id;
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = object.timezoneId;
     } else {
-      message.timezone_id = "";
+      message.timezoneId = "";
     }
-    if (object.locale_id !== undefined && object.locale_id !== null) {
-      message.locale_id = object.locale_id;
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = object.localeId;
     } else {
-      message.locale_id = "";
+      message.localeId = "";
     }
     return message;
   },
@@ -636,16 +634,15 @@ export const ContactPoint = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.physical_address_id !== undefined &&
-      (obj.physical_address_id = message.physical_address_id);
+    message.physicalAddressId !== undefined &&
+      (obj.physicalAddressId = message.physicalAddressId);
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
-    message.contact_point_type_id !== undefined &&
-      (obj.contact_point_type_id = message.contact_point_type_id);
+    message.contactPointTypeId !== undefined &&
+      (obj.contactPointTypeId = message.contactPointTypeId);
     message.telephone !== undefined && (obj.telephone = message.telephone);
-    message.timezone_id !== undefined &&
-      (obj.timezone_id = message.timezone_id);
-    message.locale_id !== undefined && (obj.locale_id = message.locale_id);
+    message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
+    message.localeId !== undefined && (obj.localeId = message.localeId);
     return obj;
   },
 };

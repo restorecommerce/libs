@@ -19,7 +19,7 @@ export interface StatusObj {
 }
 
 export interface OperationStatusObj {
-  operation_status?: OperationStatus;
+  operationStatus?: OperationStatus;
 }
 
 export interface OperationStatus {
@@ -243,9 +243,9 @@ export const OperationStatusObj = {
     message: OperationStatusObj,
     writer: Writer = Writer.create()
   ): Writer {
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(10).fork()
       ).ldelim();
     }
@@ -262,7 +262,7 @@ export const OperationStatusObj = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -280,14 +280,14 @@ export const OperationStatusObj = {
       baseOperationStatusObj
     ) as OperationStatusObj;
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -295,23 +295,23 @@ export const OperationStatusObj = {
   fromPartial(object: DeepPartial<OperationStatusObj>): OperationStatusObj {
     const message = { ...baseOperationStatusObj } as OperationStatusObj;
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
 
   toJSON(message: OperationStatusObj): unknown {
     const obj: any = {};
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

@@ -9,7 +9,6 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
-import "io/restorecommerce/meta.proto";
 
 /**
 Microservice definition.

@@ -16,8 +16,8 @@ export interface Attachment {
   /** for binary data, eg.: images */
   buffer: Buffer;
   path: string;
-  content_type: string;
-  content_disposition: string;
+  contentType: string;
+  contentDisposition: string;
   cid: string;
   encoding: string;
 }
@@ -55,8 +55,8 @@ const baseAttachment: object = {
   filename: "",
   text: "",
   path: "",
-  content_type: "",
-  content_disposition: "",
+  contentType: "",
+  contentDisposition: "",
   cid: "",
   encoding: "",
 };
@@ -75,11 +75,11 @@ export const Attachment = {
     if (message.path !== "") {
       writer.uint32(34).string(message.path);
     }
-    if (message.content_type !== "") {
-      writer.uint32(42).string(message.content_type);
+    if (message.contentType !== "") {
+      writer.uint32(42).string(message.contentType);
     }
-    if (message.content_disposition !== "") {
-      writer.uint32(50).string(message.content_disposition);
+    if (message.contentDisposition !== "") {
+      writer.uint32(50).string(message.contentDisposition);
     }
     if (message.cid !== "") {
       writer.uint32(58).string(message.cid);
@@ -110,10 +110,10 @@ export const Attachment = {
           message.path = reader.string();
           break;
         case 5:
-          message.content_type = reader.string();
+          message.contentType = reader.string();
           break;
         case 6:
-          message.content_disposition = reader.string();
+          message.contentDisposition = reader.string();
           break;
         case 7:
           message.cid = reader.string();
@@ -149,18 +149,18 @@ export const Attachment = {
     } else {
       message.path = "";
     }
-    if (object.content_type !== undefined && object.content_type !== null) {
-      message.content_type = String(object.content_type);
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = String(object.contentType);
     } else {
-      message.content_type = "";
+      message.contentType = "";
     }
     if (
-      object.content_disposition !== undefined &&
-      object.content_disposition !== null
+      object.contentDisposition !== undefined &&
+      object.contentDisposition !== null
     ) {
-      message.content_disposition = String(object.content_disposition);
+      message.contentDisposition = String(object.contentDisposition);
     } else {
-      message.content_disposition = "";
+      message.contentDisposition = "";
     }
     if (object.cid !== undefined && object.cid !== null) {
       message.cid = String(object.cid);
@@ -197,18 +197,18 @@ export const Attachment = {
     } else {
       message.path = "";
     }
-    if (object.content_type !== undefined && object.content_type !== null) {
-      message.content_type = object.content_type;
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = object.contentType;
     } else {
-      message.content_type = "";
+      message.contentType = "";
     }
     if (
-      object.content_disposition !== undefined &&
-      object.content_disposition !== null
+      object.contentDisposition !== undefined &&
+      object.contentDisposition !== null
     ) {
-      message.content_disposition = object.content_disposition;
+      message.contentDisposition = object.contentDisposition;
     } else {
-      message.content_disposition = "";
+      message.contentDisposition = "";
     }
     if (object.cid !== undefined && object.cid !== null) {
       message.cid = object.cid;
@@ -232,10 +232,10 @@ export const Attachment = {
         message.buffer !== undefined ? message.buffer : new Buffer(0)
       ));
     message.path !== undefined && (obj.path = message.path);
-    message.content_type !== undefined &&
-      (obj.content_type = message.content_type);
-    message.content_disposition !== undefined &&
-      (obj.content_disposition = message.content_disposition);
+    message.contentType !== undefined &&
+      (obj.contentType = message.contentType);
+    message.contentDisposition !== undefined &&
+      (obj.contentDisposition = message.contentDisposition);
     message.cid !== undefined && (obj.cid = message.cid);
     message.encoding !== undefined && (obj.encoding = message.encoding);
     return obj;

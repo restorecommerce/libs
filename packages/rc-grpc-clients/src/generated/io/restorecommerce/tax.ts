@@ -29,14 +29,14 @@ export interface Deleted {
 
 export interface TaxList {
   items: Tax[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface TaxListResponse {
   items: TaxResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface TaxResponse {
@@ -47,10 +47,10 @@ export interface TaxResponse {
 export interface Tax {
   id: string;
   meta?: Meta;
-  country_id: string;
+  countryId: string;
   rate: number;
   variant: string;
-  type_id: string;
+  typeId: string;
 }
 
 const baseDeleted: object = { id: "" };
@@ -108,15 +108,15 @@ export const Deleted = {
   },
 };
 
-const baseTaxList: object = { total_count: 0 };
+const baseTaxList: object = { totalCount: 0 };
 
 export const TaxList = {
   encode(message: TaxList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Tax.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -136,7 +136,7 @@ export const TaxList = {
           message.items.push(Tax.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -157,10 +157,10 @@ export const TaxList = {
         message.items.push(Tax.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -178,10 +178,10 @@ export const TaxList = {
         message.items.push(Tax.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -198,8 +198,7 @@ export const TaxList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -208,19 +207,19 @@ export const TaxList = {
   },
 };
 
-const baseTaxListResponse: object = { total_count: 0 };
+const baseTaxListResponse: object = { totalCount: 0 };
 
 export const TaxListResponse = {
   encode(message: TaxListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       TaxResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -241,10 +240,10 @@ export const TaxListResponse = {
           message.items.push(TaxResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -267,20 +266,20 @@ export const TaxListResponse = {
         message.items.push(TaxResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -293,20 +292,20 @@ export const TaxListResponse = {
         message.items.push(TaxResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -320,11 +319,10 @@ export const TaxListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -406,10 +404,10 @@ export const TaxResponse = {
 
 const baseTax: object = {
   id: "",
-  country_id: "",
+  countryId: "",
   rate: 0,
   variant: "",
-  type_id: "",
+  typeId: "",
 };
 
 export const Tax = {
@@ -420,8 +418,8 @@ export const Tax = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.country_id !== "") {
-      writer.uint32(26).string(message.country_id);
+    if (message.countryId !== "") {
+      writer.uint32(26).string(message.countryId);
     }
     if (message.rate !== 0) {
       writer.uint32(33).double(message.rate);
@@ -429,8 +427,8 @@ export const Tax = {
     if (message.variant !== "") {
       writer.uint32(42).string(message.variant);
     }
-    if (message.type_id !== "") {
-      writer.uint32(50).string(message.type_id);
+    if (message.typeId !== "") {
+      writer.uint32(50).string(message.typeId);
     }
     return writer;
   },
@@ -449,7 +447,7 @@ export const Tax = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.country_id = reader.string();
+          message.countryId = reader.string();
           break;
         case 4:
           message.rate = reader.double();
@@ -458,7 +456,7 @@ export const Tax = {
           message.variant = reader.string();
           break;
         case 6:
-          message.type_id = reader.string();
+          message.typeId = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -480,10 +478,10 @@ export const Tax = {
     } else {
       message.meta = undefined;
     }
-    if (object.country_id !== undefined && object.country_id !== null) {
-      message.country_id = String(object.country_id);
+    if (object.countryId !== undefined && object.countryId !== null) {
+      message.countryId = String(object.countryId);
     } else {
-      message.country_id = "";
+      message.countryId = "";
     }
     if (object.rate !== undefined && object.rate !== null) {
       message.rate = Number(object.rate);
@@ -495,10 +493,10 @@ export const Tax = {
     } else {
       message.variant = "";
     }
-    if (object.type_id !== undefined && object.type_id !== null) {
-      message.type_id = String(object.type_id);
+    if (object.typeId !== undefined && object.typeId !== null) {
+      message.typeId = String(object.typeId);
     } else {
-      message.type_id = "";
+      message.typeId = "";
     }
     return message;
   },
@@ -515,10 +513,10 @@ export const Tax = {
     } else {
       message.meta = undefined;
     }
-    if (object.country_id !== undefined && object.country_id !== null) {
-      message.country_id = object.country_id;
+    if (object.countryId !== undefined && object.countryId !== null) {
+      message.countryId = object.countryId;
     } else {
-      message.country_id = "";
+      message.countryId = "";
     }
     if (object.rate !== undefined && object.rate !== null) {
       message.rate = object.rate;
@@ -530,10 +528,10 @@ export const Tax = {
     } else {
       message.variant = "";
     }
-    if (object.type_id !== undefined && object.type_id !== null) {
-      message.type_id = object.type_id;
+    if (object.typeId !== undefined && object.typeId !== null) {
+      message.typeId = object.typeId;
     } else {
-      message.type_id = "";
+      message.typeId = "";
     }
     return message;
   },
@@ -543,10 +541,10 @@ export const Tax = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.country_id !== undefined && (obj.country_id = message.country_id);
+    message.countryId !== undefined && (obj.countryId = message.countryId);
     message.rate !== undefined && (obj.rate = message.rate);
     message.variant !== undefined && (obj.variant = message.variant);
-    message.type_id !== undefined && (obj.type_id = message.type_id);
+    message.typeId !== undefined && (obj.typeId = message.typeId);
     return obj;
   },
 };

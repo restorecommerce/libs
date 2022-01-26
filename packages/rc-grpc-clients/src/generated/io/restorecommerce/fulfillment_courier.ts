@@ -33,14 +33,14 @@ export interface FulfillmentCourier {
   description: string;
   logo: string;
   website: string;
-  stub_type: string;
+  stubType: string;
   configuration?: Any;
   meta?: Meta;
 }
 
 export interface FulfillmentCourierList {
   items: FulfillmentCourier[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
@@ -51,8 +51,8 @@ export interface FulfillmentCourierResponse {
 
 export interface FulfillmentCourierResponseList {
   items: FulfillmentCourierResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface Deleted {
@@ -65,7 +65,7 @@ const baseFulfillmentCourier: object = {
   description: "",
   logo: "",
   website: "",
-  stub_type: "",
+  stubType: "",
 };
 
 export const FulfillmentCourier = {
@@ -88,8 +88,8 @@ export const FulfillmentCourier = {
     if (message.website !== "") {
       writer.uint32(58).string(message.website);
     }
-    if (message.stub_type !== "") {
-      writer.uint32(66).string(message.stub_type);
+    if (message.stubType !== "") {
+      writer.uint32(66).string(message.stubType);
     }
     if (message.configuration !== undefined) {
       Any.encode(message.configuration, writer.uint32(82).fork()).ldelim();
@@ -125,7 +125,7 @@ export const FulfillmentCourier = {
           message.website = reader.string();
           break;
         case 8:
-          message.stub_type = reader.string();
+          message.stubType = reader.string();
           break;
         case 10:
           message.configuration = Any.decode(reader, reader.uint32());
@@ -170,10 +170,10 @@ export const FulfillmentCourier = {
     } else {
       message.website = "";
     }
-    if (object.stub_type !== undefined && object.stub_type !== null) {
-      message.stub_type = String(object.stub_type);
+    if (object.stubType !== undefined && object.stubType !== null) {
+      message.stubType = String(object.stubType);
     } else {
-      message.stub_type = "";
+      message.stubType = "";
     }
     if (object.configuration !== undefined && object.configuration !== null) {
       message.configuration = Any.fromJSON(object.configuration);
@@ -215,10 +215,10 @@ export const FulfillmentCourier = {
     } else {
       message.website = "";
     }
-    if (object.stub_type !== undefined && object.stub_type !== null) {
-      message.stub_type = object.stub_type;
+    if (object.stubType !== undefined && object.stubType !== null) {
+      message.stubType = object.stubType;
     } else {
-      message.stub_type = "";
+      message.stubType = "";
     }
     if (object.configuration !== undefined && object.configuration !== null) {
       message.configuration = Any.fromPartial(object.configuration);
@@ -241,7 +241,7 @@ export const FulfillmentCourier = {
       (obj.description = message.description);
     message.logo !== undefined && (obj.logo = message.logo);
     message.website !== undefined && (obj.website = message.website);
-    message.stub_type !== undefined && (obj.stub_type = message.stub_type);
+    message.stubType !== undefined && (obj.stubType = message.stubType);
     message.configuration !== undefined &&
       (obj.configuration = message.configuration
         ? Any.toJSON(message.configuration)
@@ -252,7 +252,7 @@ export const FulfillmentCourier = {
   },
 };
 
-const baseFulfillmentCourierList: object = { total_count: 0 };
+const baseFulfillmentCourierList: object = { totalCount: 0 };
 
 export const FulfillmentCourierList = {
   encode(
@@ -262,8 +262,8 @@ export const FulfillmentCourierList = {
     for (const v of message.items) {
       FulfillmentCourier.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -287,7 +287,7 @@ export const FulfillmentCourierList = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -310,10 +310,10 @@ export const FulfillmentCourierList = {
         message.items.push(FulfillmentCourier.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -333,10 +333,10 @@ export const FulfillmentCourierList = {
         message.items.push(FulfillmentCourier.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -355,8 +355,7 @@ export const FulfillmentCourierList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -458,7 +457,7 @@ export const FulfillmentCourierResponse = {
   },
 };
 
-const baseFulfillmentCourierResponseList: object = { total_count: 0 };
+const baseFulfillmentCourierResponseList: object = { totalCount: 0 };
 
 export const FulfillmentCourierResponseList = {
   encode(
@@ -468,12 +467,12 @@ export const FulfillmentCourierResponseList = {
     for (const v of message.items) {
       FulfillmentCourierResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -499,10 +498,10 @@ export const FulfillmentCourierResponseList = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -525,20 +524,20 @@ export const FulfillmentCourierResponseList = {
         message.items.push(FulfillmentCourierResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -555,20 +554,20 @@ export const FulfillmentCourierResponseList = {
         message.items.push(FulfillmentCourierResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -582,11 +581,10 @@ export const FulfillmentCourierResponseList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

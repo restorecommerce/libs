@@ -261,9 +261,9 @@ export interface ReadRequest {
    * with highest priority.
    * Can be empty, single locale or multiple locales.
    */
-  locales_limiter: string[];
-  custom_queries: string[];
-  custom_arguments?: Any;
+  localesLimiter: string[];
+  customQueries: string[];
+  customArguments?: Any;
   subject?: Subject;
 }
 
@@ -277,21 +277,21 @@ export interface DeleteRequest {
 
 export interface DeleteResponse {
   status: Status[];
-  operation_status?: OperationStatus;
+  operationStatus?: OperationStatus;
 }
 
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 /** ResourceList response */
 export interface ResourceListResponse {
   items: ResourceResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 /** resource read response */
@@ -676,8 +676,8 @@ const baseReadRequest: object = {
   offset: 0,
   limit: 0,
   search: "",
-  locales_limiter: "",
-  custom_queries: "",
+  localesLimiter: "",
+  customQueries: "",
 };
 
 export const ReadRequest = {
@@ -700,14 +700,14 @@ export const ReadRequest = {
     for (const v of message.search) {
       writer.uint32(50).string(v!);
     }
-    for (const v of message.locales_limiter) {
+    for (const v of message.localesLimiter) {
       writer.uint32(58).string(v!);
     }
-    for (const v of message.custom_queries) {
+    for (const v of message.customQueries) {
       writer.uint32(66).string(v!);
     }
-    if (message.custom_arguments !== undefined) {
-      Any.encode(message.custom_arguments, writer.uint32(74).fork()).ldelim();
+    if (message.customArguments !== undefined) {
+      Any.encode(message.customArguments, writer.uint32(74).fork()).ldelim();
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(82).fork()).ldelim();
@@ -723,8 +723,8 @@ export const ReadRequest = {
     message.filters = [];
     message.field = [];
     message.search = [];
-    message.locales_limiter = [];
-    message.custom_queries = [];
+    message.localesLimiter = [];
+    message.customQueries = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -747,13 +747,13 @@ export const ReadRequest = {
           message.search.push(reader.string());
           break;
         case 7:
-          message.locales_limiter.push(reader.string());
+          message.localesLimiter.push(reader.string());
           break;
         case 8:
-          message.custom_queries.push(reader.string());
+          message.customQueries.push(reader.string());
           break;
         case 9:
-          message.custom_arguments = Any.decode(reader, reader.uint32());
+          message.customArguments = Any.decode(reader, reader.uint32());
           break;
         case 10:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -772,8 +772,8 @@ export const ReadRequest = {
     message.filters = [];
     message.field = [];
     message.search = [];
-    message.locales_limiter = [];
-    message.custom_queries = [];
+    message.localesLimiter = [];
+    message.customQueries = [];
     if (object.offset !== undefined && object.offset !== null) {
       message.offset = Number(object.offset);
     } else {
@@ -804,26 +804,23 @@ export const ReadRequest = {
         message.search.push(String(e));
       }
     }
-    if (
-      object.locales_limiter !== undefined &&
-      object.locales_limiter !== null
-    ) {
-      for (const e of object.locales_limiter) {
-        message.locales_limiter.push(String(e));
+    if (object.localesLimiter !== undefined && object.localesLimiter !== null) {
+      for (const e of object.localesLimiter) {
+        message.localesLimiter.push(String(e));
       }
     }
-    if (object.custom_queries !== undefined && object.custom_queries !== null) {
-      for (const e of object.custom_queries) {
-        message.custom_queries.push(String(e));
+    if (object.customQueries !== undefined && object.customQueries !== null) {
+      for (const e of object.customQueries) {
+        message.customQueries.push(String(e));
       }
     }
     if (
-      object.custom_arguments !== undefined &&
-      object.custom_arguments !== null
+      object.customArguments !== undefined &&
+      object.customArguments !== null
     ) {
-      message.custom_arguments = Any.fromJSON(object.custom_arguments);
+      message.customArguments = Any.fromJSON(object.customArguments);
     } else {
-      message.custom_arguments = undefined;
+      message.customArguments = undefined;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -839,8 +836,8 @@ export const ReadRequest = {
     message.filters = [];
     message.field = [];
     message.search = [];
-    message.locales_limiter = [];
-    message.custom_queries = [];
+    message.localesLimiter = [];
+    message.customQueries = [];
     if (object.offset !== undefined && object.offset !== null) {
       message.offset = object.offset;
     } else {
@@ -871,26 +868,23 @@ export const ReadRequest = {
         message.search.push(e);
       }
     }
-    if (
-      object.locales_limiter !== undefined &&
-      object.locales_limiter !== null
-    ) {
-      for (const e of object.locales_limiter) {
-        message.locales_limiter.push(e);
+    if (object.localesLimiter !== undefined && object.localesLimiter !== null) {
+      for (const e of object.localesLimiter) {
+        message.localesLimiter.push(e);
       }
     }
-    if (object.custom_queries !== undefined && object.custom_queries !== null) {
-      for (const e of object.custom_queries) {
-        message.custom_queries.push(e);
+    if (object.customQueries !== undefined && object.customQueries !== null) {
+      for (const e of object.customQueries) {
+        message.customQueries.push(e);
       }
     }
     if (
-      object.custom_arguments !== undefined &&
-      object.custom_arguments !== null
+      object.customArguments !== undefined &&
+      object.customArguments !== null
     ) {
-      message.custom_arguments = Any.fromPartial(object.custom_arguments);
+      message.customArguments = Any.fromPartial(object.customArguments);
     } else {
-      message.custom_arguments = undefined;
+      message.customArguments = undefined;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -928,19 +922,19 @@ export const ReadRequest = {
     } else {
       obj.search = [];
     }
-    if (message.locales_limiter) {
-      obj.locales_limiter = message.locales_limiter.map((e) => e);
+    if (message.localesLimiter) {
+      obj.localesLimiter = message.localesLimiter.map((e) => e);
     } else {
-      obj.locales_limiter = [];
+      obj.localesLimiter = [];
     }
-    if (message.custom_queries) {
-      obj.custom_queries = message.custom_queries.map((e) => e);
+    if (message.customQueries) {
+      obj.customQueries = message.customQueries.map((e) => e);
     } else {
-      obj.custom_queries = [];
+      obj.customQueries = [];
     }
-    message.custom_arguments !== undefined &&
-      (obj.custom_arguments = message.custom_arguments
-        ? Any.toJSON(message.custom_arguments)
+    message.customArguments !== undefined &&
+      (obj.customArguments = message.customArguments
+        ? Any.toJSON(message.customArguments)
         : undefined);
     message.subject !== undefined &&
       (obj.subject = message.subject
@@ -1060,9 +1054,9 @@ export const DeleteResponse = {
     for (const v of message.status) {
       Status.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(18).fork()
       ).ldelim();
     }
@@ -1083,7 +1077,7 @@ export const DeleteResponse = {
           message.status.push(Status.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -1107,14 +1101,14 @@ export const DeleteResponse = {
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1128,14 +1122,14 @@ export const DeleteResponse = {
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1149,23 +1143,23 @@ export const DeleteResponse = {
     } else {
       obj.status = [];
     }
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
 };
 
-const baseResourceList: object = { total_count: 0 };
+const baseResourceList: object = { totalCount: 0 };
 
 export const ResourceList = {
   encode(message: ResourceList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -1185,7 +1179,7 @@ export const ResourceList = {
           message.items.push(Resource.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1206,10 +1200,10 @@ export const ResourceList = {
         message.items.push(Resource.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -1227,10 +1221,10 @@ export const ResourceList = {
         message.items.push(Resource.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -1249,8 +1243,7 @@ export const ResourceList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -1259,7 +1252,7 @@ export const ResourceList = {
   },
 };
 
-const baseResourceListResponse: object = { total_count: 0 };
+const baseResourceListResponse: object = { totalCount: 0 };
 
 export const ResourceListResponse = {
   encode(
@@ -1269,12 +1262,12 @@ export const ResourceListResponse = {
     for (const v of message.items) {
       ResourceResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -1295,10 +1288,10 @@ export const ResourceListResponse = {
           message.items.push(ResourceResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -1321,20 +1314,20 @@ export const ResourceListResponse = {
         message.items.push(ResourceResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1347,20 +1340,20 @@ export const ResourceListResponse = {
         message.items.push(ResourceResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -1374,11 +1367,10 @@ export const ResourceListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

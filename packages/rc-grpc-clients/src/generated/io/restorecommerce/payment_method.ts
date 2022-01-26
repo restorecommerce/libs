@@ -109,14 +109,14 @@ export interface Deleted {
 
 export interface PaymentMethodList {
   items: PaymentMethod[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface PaymentMethodListResponse {
   items: PaymentMethodResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface PaymentMethodResponse {
@@ -127,8 +127,8 @@ export interface PaymentMethodResponse {
 export interface PaymentMethod {
   id: string;
   meta?: Meta;
-  payment_method: PaymentMethodEnum;
-  transfer_type: TransferTypeEnum;
+  paymentMethod: PaymentMethodEnum;
+  transferType: TransferTypeEnum;
   data?: Any;
 }
 
@@ -187,15 +187,15 @@ export const Deleted = {
   },
 };
 
-const basePaymentMethodList: object = { total_count: 0 };
+const basePaymentMethodList: object = { totalCount: 0 };
 
 export const PaymentMethodList = {
   encode(message: PaymentMethodList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -217,7 +217,7 @@ export const PaymentMethodList = {
           message.items.push(PaymentMethod.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -240,10 +240,10 @@ export const PaymentMethodList = {
         message.items.push(PaymentMethod.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -261,10 +261,10 @@ export const PaymentMethodList = {
         message.items.push(PaymentMethod.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -283,8 +283,7 @@ export const PaymentMethodList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -293,7 +292,7 @@ export const PaymentMethodList = {
   },
 };
 
-const basePaymentMethodListResponse: object = { total_count: 0 };
+const basePaymentMethodListResponse: object = { totalCount: 0 };
 
 export const PaymentMethodListResponse = {
   encode(
@@ -303,12 +302,12 @@ export const PaymentMethodListResponse = {
     for (const v of message.items) {
       PaymentMethodResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -334,10 +333,10 @@ export const PaymentMethodListResponse = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -360,20 +359,20 @@ export const PaymentMethodListResponse = {
         message.items.push(PaymentMethodResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -390,20 +389,20 @@ export const PaymentMethodListResponse = {
         message.items.push(PaymentMethodResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -417,11 +416,10 @@ export const PaymentMethodListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -512,11 +510,7 @@ export const PaymentMethodResponse = {
   },
 };
 
-const basePaymentMethod: object = {
-  id: "",
-  payment_method: 0,
-  transfer_type: 0,
-};
+const basePaymentMethod: object = { id: "", paymentMethod: 0, transferType: 0 };
 
 export const PaymentMethod = {
   encode(message: PaymentMethod, writer: Writer = Writer.create()): Writer {
@@ -526,11 +520,11 @@ export const PaymentMethod = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.payment_method !== 0) {
-      writer.uint32(24).int32(message.payment_method);
+    if (message.paymentMethod !== 0) {
+      writer.uint32(24).int32(message.paymentMethod);
     }
-    if (message.transfer_type !== 0) {
-      writer.uint32(32).int32(message.transfer_type);
+    if (message.transferType !== 0) {
+      writer.uint32(32).int32(message.transferType);
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(42).fork()).ldelim();
@@ -554,10 +548,10 @@ export const PaymentMethod = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.payment_method = reader.int32() as any;
+          message.paymentMethod = reader.int32() as any;
           break;
         case 4:
-          message.transfer_type = reader.int32() as any;
+          message.transferType = reader.int32() as any;
           break;
         case 5:
           message.data = Any.decode(reader, reader.uint32());
@@ -584,15 +578,15 @@ export const PaymentMethod = {
     } else {
       message.meta = undefined;
     }
-    if (object.payment_method !== undefined && object.payment_method !== null) {
-      message.payment_method = paymentMethodEnumFromJSON(object.payment_method);
+    if (object.paymentMethod !== undefined && object.paymentMethod !== null) {
+      message.paymentMethod = paymentMethodEnumFromJSON(object.paymentMethod);
     } else {
-      message.payment_method = 0;
+      message.paymentMethod = 0;
     }
-    if (object.transfer_type !== undefined && object.transfer_type !== null) {
-      message.transfer_type = transferTypeEnumFromJSON(object.transfer_type);
+    if (object.transferType !== undefined && object.transferType !== null) {
+      message.transferType = transferTypeEnumFromJSON(object.transferType);
     } else {
-      message.transfer_type = 0;
+      message.transferType = 0;
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromJSON(object.data);
@@ -614,15 +608,15 @@ export const PaymentMethod = {
     } else {
       message.meta = undefined;
     }
-    if (object.payment_method !== undefined && object.payment_method !== null) {
-      message.payment_method = object.payment_method;
+    if (object.paymentMethod !== undefined && object.paymentMethod !== null) {
+      message.paymentMethod = object.paymentMethod;
     } else {
-      message.payment_method = 0;
+      message.paymentMethod = 0;
     }
-    if (object.transfer_type !== undefined && object.transfer_type !== null) {
-      message.transfer_type = object.transfer_type;
+    if (object.transferType !== undefined && object.transferType !== null) {
+      message.transferType = object.transferType;
     } else {
-      message.transfer_type = 0;
+      message.transferType = 0;
     }
     if (object.data !== undefined && object.data !== null) {
       message.data = Any.fromPartial(object.data);
@@ -637,10 +631,10 @@ export const PaymentMethod = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.payment_method !== undefined &&
-      (obj.payment_method = paymentMethodEnumToJSON(message.payment_method));
-    message.transfer_type !== undefined &&
-      (obj.transfer_type = transferTypeEnumToJSON(message.transfer_type));
+    message.paymentMethod !== undefined &&
+      (obj.paymentMethod = paymentMethodEnumToJSON(message.paymentMethod));
+    message.transferType !== undefined &&
+      (obj.transferType = transferTypeEnumToJSON(message.transferType));
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;

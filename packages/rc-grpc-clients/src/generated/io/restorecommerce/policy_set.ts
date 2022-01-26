@@ -40,21 +40,21 @@ export interface PolicySet {
   name: string;
   description: string;
   target?: Target;
-  combining_algorithm: string;
+  combiningAlgorithm: string;
   /** policy IDs */
   policies: string[];
 }
 
 export interface PolicySetList {
   items: PolicySet[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface PolicySetListResponse {
   items: PolicySetResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface PolicySetResponse {
@@ -65,7 +65,7 @@ export interface PolicySetResponse {
 export interface PolicySetRQ {
   id: string;
   target?: Target;
-  combining_algorithm: string;
+  combiningAlgorithm: string;
   policies: PolicyRQ[];
   effect: Effect;
 }
@@ -74,7 +74,7 @@ const basePolicySet: object = {
   id: "",
   name: "",
   description: "",
-  combining_algorithm: "",
+  combiningAlgorithm: "",
   policies: "",
 };
 
@@ -95,8 +95,8 @@ export const PolicySet = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
-    if (message.combining_algorithm !== "") {
-      writer.uint32(50).string(message.combining_algorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(50).string(message.combiningAlgorithm);
     }
     for (const v of message.policies) {
       writer.uint32(58).string(v!);
@@ -128,7 +128,7 @@ export const PolicySet = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 6:
-          message.combining_algorithm = reader.string();
+          message.combiningAlgorithm = reader.string();
           break;
         case 7:
           message.policies.push(reader.string());
@@ -170,12 +170,12 @@ export const PolicySet = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = String(object.combining_algorithm);
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.policies !== undefined && object.policies !== null) {
       for (const e of object.policies) {
@@ -214,12 +214,12 @@ export const PolicySet = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = object.combining_algorithm;
+      message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.policies !== undefined && object.policies !== null) {
       for (const e of object.policies) {
@@ -239,8 +239,8 @@ export const PolicySet = {
       (obj.description = message.description);
     message.target !== undefined &&
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combining_algorithm !== undefined &&
-      (obj.combining_algorithm = message.combining_algorithm);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.policies) {
       obj.policies = message.policies.map((e) => e);
     } else {
@@ -250,15 +250,15 @@ export const PolicySet = {
   },
 };
 
-const basePolicySetList: object = { total_count: 0 };
+const basePolicySetList: object = { totalCount: 0 };
 
 export const PolicySetList = {
   encode(message: PolicySetList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -280,7 +280,7 @@ export const PolicySetList = {
           message.items.push(PolicySet.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -303,10 +303,10 @@ export const PolicySetList = {
         message.items.push(PolicySet.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -324,10 +324,10 @@ export const PolicySetList = {
         message.items.push(PolicySet.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -346,8 +346,7 @@ export const PolicySetList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -356,7 +355,7 @@ export const PolicySetList = {
   },
 };
 
-const basePolicySetListResponse: object = { total_count: 0 };
+const basePolicySetListResponse: object = { totalCount: 0 };
 
 export const PolicySetListResponse = {
   encode(
@@ -366,12 +365,12 @@ export const PolicySetListResponse = {
     for (const v of message.items) {
       PolicySetResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -392,10 +391,10 @@ export const PolicySetListResponse = {
           message.items.push(PolicySetResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -418,20 +417,20 @@ export const PolicySetListResponse = {
         message.items.push(PolicySetResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -446,20 +445,20 @@ export const PolicySetListResponse = {
         message.items.push(PolicySetResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -473,11 +472,10 @@ export const PolicySetListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -563,7 +561,7 @@ export const PolicySetResponse = {
   },
 };
 
-const basePolicySetRQ: object = { id: "", combining_algorithm: "", effect: 0 };
+const basePolicySetRQ: object = { id: "", combiningAlgorithm: "", effect: 0 };
 
 export const PolicySetRQ = {
   encode(message: PolicySetRQ, writer: Writer = Writer.create()): Writer {
@@ -573,8 +571,8 @@ export const PolicySetRQ = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.combining_algorithm !== "") {
-      writer.uint32(26).string(message.combining_algorithm);
+    if (message.combiningAlgorithm !== "") {
+      writer.uint32(26).string(message.combiningAlgorithm);
     }
     for (const v of message.policies) {
       PolicyRQ.encode(v!, writer.uint32(34).fork()).ldelim();
@@ -600,7 +598,7 @@ export const PolicySetRQ = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 3:
-          message.combining_algorithm = reader.string();
+          message.combiningAlgorithm = reader.string();
           break;
         case 4:
           message.policies.push(PolicyRQ.decode(reader, reader.uint32()));
@@ -630,12 +628,12 @@ export const PolicySetRQ = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = String(object.combining_algorithm);
+      message.combiningAlgorithm = String(object.combiningAlgorithm);
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.policies !== undefined && object.policies !== null) {
       for (const e of object.policies) {
@@ -664,12 +662,12 @@ export const PolicySetRQ = {
       message.target = undefined;
     }
     if (
-      object.combining_algorithm !== undefined &&
-      object.combining_algorithm !== null
+      object.combiningAlgorithm !== undefined &&
+      object.combiningAlgorithm !== null
     ) {
-      message.combining_algorithm = object.combining_algorithm;
+      message.combiningAlgorithm = object.combiningAlgorithm;
     } else {
-      message.combining_algorithm = "";
+      message.combiningAlgorithm = "";
     }
     if (object.policies !== undefined && object.policies !== null) {
       for (const e of object.policies) {
@@ -689,8 +687,8 @@ export const PolicySetRQ = {
     message.id !== undefined && (obj.id = message.id);
     message.target !== undefined &&
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combining_algorithm !== undefined &&
-      (obj.combining_algorithm = message.combining_algorithm);
+    message.combiningAlgorithm !== undefined &&
+      (obj.combiningAlgorithm = message.combiningAlgorithm);
     if (message.policies) {
       obj.policies = message.policies.map((e) =>
         e ? PolicyRQ.toJSON(e) : undefined

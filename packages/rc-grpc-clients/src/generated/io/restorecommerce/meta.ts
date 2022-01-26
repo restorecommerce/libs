@@ -15,12 +15,12 @@ export interface Meta {
   /** timestamp */
   modified: number;
   /** ID from last User who modified it */
-  modified_by: string;
+  modifiedBy: string;
   owner: Attribute[];
   acl: AttributeObj[];
 }
 
-const baseMeta: object = { created: 0, modified: 0, modified_by: "" };
+const baseMeta: object = { created: 0, modified: 0, modifiedBy: "" };
 
 export const Meta = {
   encode(message: Meta, writer: Writer = Writer.create()): Writer {
@@ -30,8 +30,8 @@ export const Meta = {
     if (message.modified !== 0) {
       writer.uint32(17).double(message.modified);
     }
-    if (message.modified_by !== "") {
-      writer.uint32(26).string(message.modified_by);
+    if (message.modifiedBy !== "") {
+      writer.uint32(26).string(message.modifiedBy);
     }
     for (const v of message.owner) {
       Attribute.encode(v!, writer.uint32(34).fork()).ldelim();
@@ -58,7 +58,7 @@ export const Meta = {
           message.modified = reader.double();
           break;
         case 3:
-          message.modified_by = reader.string();
+          message.modifiedBy = reader.string();
           break;
         case 4:
           message.owner.push(Attribute.decode(reader, reader.uint32()));
@@ -88,10 +88,10 @@ export const Meta = {
     } else {
       message.modified = 0;
     }
-    if (object.modified_by !== undefined && object.modified_by !== null) {
-      message.modified_by = String(object.modified_by);
+    if (object.modifiedBy !== undefined && object.modifiedBy !== null) {
+      message.modifiedBy = String(object.modifiedBy);
     } else {
-      message.modified_by = "";
+      message.modifiedBy = "";
     }
     if (object.owner !== undefined && object.owner !== null) {
       for (const e of object.owner) {
@@ -120,10 +120,10 @@ export const Meta = {
     } else {
       message.modified = 0;
     }
-    if (object.modified_by !== undefined && object.modified_by !== null) {
-      message.modified_by = object.modified_by;
+    if (object.modifiedBy !== undefined && object.modifiedBy !== null) {
+      message.modifiedBy = object.modifiedBy;
     } else {
-      message.modified_by = "";
+      message.modifiedBy = "";
     }
     if (object.owner !== undefined && object.owner !== null) {
       for (const e of object.owner) {
@@ -142,8 +142,7 @@ export const Meta = {
     const obj: any = {};
     message.created !== undefined && (obj.created = message.created);
     message.modified !== undefined && (obj.modified = message.modified);
-    message.modified_by !== undefined &&
-      (obj.modified_by = message.modified_by);
+    message.modifiedBy !== undefined && (obj.modifiedBy = message.modifiedBy);
     if (message.owner) {
       obj.owner = message.owner.map((e) =>
         e ? Attribute.toJSON(e) : undefined

@@ -29,14 +29,14 @@ export interface Deleted {
 
 export interface AddressList {
   items: Address[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface AddressListResponse {
   items: AddressResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface AddressResponse {
@@ -48,14 +48,14 @@ export interface Address {
   id: string;
   meta?: Meta;
   postcode: string;
-  country_id: string;
+  countryId: string;
   locality: string;
   street: string;
   region: string;
-  geo_coordinates?: Address_GeoPoint;
+  geoCoordinates?: Address_GeoPoint;
   altitude: number;
-  building_number: string;
-  address_addition?: AddressAddition;
+  buildingNumber: string;
+  addressAddition?: AddressAddition;
 }
 
 export interface Address_GeoPoint {
@@ -123,15 +123,15 @@ export const Deleted = {
   },
 };
 
-const baseAddressList: object = { total_count: 0 };
+const baseAddressList: object = { totalCount: 0 };
 
 export const AddressList = {
   encode(message: AddressList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Address.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -151,7 +151,7 @@ export const AddressList = {
           message.items.push(Address.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -172,10 +172,10 @@ export const AddressList = {
         message.items.push(Address.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -193,10 +193,10 @@ export const AddressList = {
         message.items.push(Address.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -213,8 +213,7 @@ export const AddressList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -223,7 +222,7 @@ export const AddressList = {
   },
 };
 
-const baseAddressListResponse: object = { total_count: 0 };
+const baseAddressListResponse: object = { totalCount: 0 };
 
 export const AddressListResponse = {
   encode(
@@ -233,12 +232,12 @@ export const AddressListResponse = {
     for (const v of message.items) {
       AddressResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -259,10 +258,10 @@ export const AddressListResponse = {
           message.items.push(AddressResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -285,20 +284,20 @@ export const AddressListResponse = {
         message.items.push(AddressResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -311,20 +310,20 @@ export const AddressListResponse = {
         message.items.push(AddressResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -338,11 +337,10 @@ export const AddressListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -431,12 +429,12 @@ export const AddressResponse = {
 const baseAddress: object = {
   id: "",
   postcode: "",
-  country_id: "",
+  countryId: "",
   locality: "",
   street: "",
   region: "",
   altitude: 0,
-  building_number: "",
+  buildingNumber: "",
 };
 
 export const Address = {
@@ -450,8 +448,8 @@ export const Address = {
     if (message.postcode !== "") {
       writer.uint32(26).string(message.postcode);
     }
-    if (message.country_id !== "") {
-      writer.uint32(34).string(message.country_id);
+    if (message.countryId !== "") {
+      writer.uint32(34).string(message.countryId);
     }
     if (message.locality !== "") {
       writer.uint32(42).string(message.locality);
@@ -462,21 +460,21 @@ export const Address = {
     if (message.region !== "") {
       writer.uint32(58).string(message.region);
     }
-    if (message.geo_coordinates !== undefined) {
+    if (message.geoCoordinates !== undefined) {
       Address_GeoPoint.encode(
-        message.geo_coordinates,
+        message.geoCoordinates,
         writer.uint32(66).fork()
       ).ldelim();
     }
     if (message.altitude !== 0) {
       writer.uint32(73).double(message.altitude);
     }
-    if (message.building_number !== "") {
-      writer.uint32(82).string(message.building_number);
+    if (message.buildingNumber !== "") {
+      writer.uint32(82).string(message.buildingNumber);
     }
-    if (message.address_addition !== undefined) {
+    if (message.addressAddition !== undefined) {
       AddressAddition.encode(
-        message.address_addition,
+        message.addressAddition,
         writer.uint32(90).fork()
       ).ldelim();
     }
@@ -500,7 +498,7 @@ export const Address = {
           message.postcode = reader.string();
           break;
         case 4:
-          message.country_id = reader.string();
+          message.countryId = reader.string();
           break;
         case 5:
           message.locality = reader.string();
@@ -512,7 +510,7 @@ export const Address = {
           message.region = reader.string();
           break;
         case 8:
-          message.geo_coordinates = Address_GeoPoint.decode(
+          message.geoCoordinates = Address_GeoPoint.decode(
             reader,
             reader.uint32()
           );
@@ -521,10 +519,10 @@ export const Address = {
           message.altitude = reader.double();
           break;
         case 10:
-          message.building_number = reader.string();
+          message.buildingNumber = reader.string();
           break;
         case 11:
-          message.address_addition = AddressAddition.decode(
+          message.addressAddition = AddressAddition.decode(
             reader,
             reader.uint32()
           );
@@ -554,10 +552,10 @@ export const Address = {
     } else {
       message.postcode = "";
     }
-    if (object.country_id !== undefined && object.country_id !== null) {
-      message.country_id = String(object.country_id);
+    if (object.countryId !== undefined && object.countryId !== null) {
+      message.countryId = String(object.countryId);
     } else {
-      message.country_id = "";
+      message.countryId = "";
     }
     if (object.locality !== undefined && object.locality !== null) {
       message.locality = String(object.locality);
@@ -574,38 +572,30 @@ export const Address = {
     } else {
       message.region = "";
     }
-    if (
-      object.geo_coordinates !== undefined &&
-      object.geo_coordinates !== null
-    ) {
-      message.geo_coordinates = Address_GeoPoint.fromJSON(
-        object.geo_coordinates
-      );
+    if (object.geoCoordinates !== undefined && object.geoCoordinates !== null) {
+      message.geoCoordinates = Address_GeoPoint.fromJSON(object.geoCoordinates);
     } else {
-      message.geo_coordinates = undefined;
+      message.geoCoordinates = undefined;
     }
     if (object.altitude !== undefined && object.altitude !== null) {
       message.altitude = Number(object.altitude);
     } else {
       message.altitude = 0;
     }
-    if (
-      object.building_number !== undefined &&
-      object.building_number !== null
-    ) {
-      message.building_number = String(object.building_number);
+    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
+      message.buildingNumber = String(object.buildingNumber);
     } else {
-      message.building_number = "";
+      message.buildingNumber = "";
     }
     if (
-      object.address_addition !== undefined &&
-      object.address_addition !== null
+      object.addressAddition !== undefined &&
+      object.addressAddition !== null
     ) {
-      message.address_addition = AddressAddition.fromJSON(
-        object.address_addition
+      message.addressAddition = AddressAddition.fromJSON(
+        object.addressAddition
       );
     } else {
-      message.address_addition = undefined;
+      message.addressAddition = undefined;
     }
     return message;
   },
@@ -627,10 +617,10 @@ export const Address = {
     } else {
       message.postcode = "";
     }
-    if (object.country_id !== undefined && object.country_id !== null) {
-      message.country_id = object.country_id;
+    if (object.countryId !== undefined && object.countryId !== null) {
+      message.countryId = object.countryId;
     } else {
-      message.country_id = "";
+      message.countryId = "";
     }
     if (object.locality !== undefined && object.locality !== null) {
       message.locality = object.locality;
@@ -647,38 +637,32 @@ export const Address = {
     } else {
       message.region = "";
     }
-    if (
-      object.geo_coordinates !== undefined &&
-      object.geo_coordinates !== null
-    ) {
-      message.geo_coordinates = Address_GeoPoint.fromPartial(
-        object.geo_coordinates
+    if (object.geoCoordinates !== undefined && object.geoCoordinates !== null) {
+      message.geoCoordinates = Address_GeoPoint.fromPartial(
+        object.geoCoordinates
       );
     } else {
-      message.geo_coordinates = undefined;
+      message.geoCoordinates = undefined;
     }
     if (object.altitude !== undefined && object.altitude !== null) {
       message.altitude = object.altitude;
     } else {
       message.altitude = 0;
     }
-    if (
-      object.building_number !== undefined &&
-      object.building_number !== null
-    ) {
-      message.building_number = object.building_number;
+    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
+      message.buildingNumber = object.buildingNumber;
     } else {
-      message.building_number = "";
+      message.buildingNumber = "";
     }
     if (
-      object.address_addition !== undefined &&
-      object.address_addition !== null
+      object.addressAddition !== undefined &&
+      object.addressAddition !== null
     ) {
-      message.address_addition = AddressAddition.fromPartial(
-        object.address_addition
+      message.addressAddition = AddressAddition.fromPartial(
+        object.addressAddition
       );
     } else {
-      message.address_addition = undefined;
+      message.addressAddition = undefined;
     }
     return message;
   },
@@ -689,20 +673,20 @@ export const Address = {
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.postcode !== undefined && (obj.postcode = message.postcode);
-    message.country_id !== undefined && (obj.country_id = message.country_id);
+    message.countryId !== undefined && (obj.countryId = message.countryId);
     message.locality !== undefined && (obj.locality = message.locality);
     message.street !== undefined && (obj.street = message.street);
     message.region !== undefined && (obj.region = message.region);
-    message.geo_coordinates !== undefined &&
-      (obj.geo_coordinates = message.geo_coordinates
-        ? Address_GeoPoint.toJSON(message.geo_coordinates)
+    message.geoCoordinates !== undefined &&
+      (obj.geoCoordinates = message.geoCoordinates
+        ? Address_GeoPoint.toJSON(message.geoCoordinates)
         : undefined);
     message.altitude !== undefined && (obj.altitude = message.altitude);
-    message.building_number !== undefined &&
-      (obj.building_number = message.building_number);
-    message.address_addition !== undefined &&
-      (obj.address_addition = message.address_addition
-        ? AddressAddition.toJSON(message.address_addition)
+    message.buildingNumber !== undefined &&
+      (obj.buildingNumber = message.buildingNumber);
+    message.addressAddition !== undefined &&
+      (obj.addressAddition = message.addressAddition
+        ? AddressAddition.toJSON(message.addressAddition)
         : undefined);
     return obj;
   },

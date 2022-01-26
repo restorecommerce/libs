@@ -46,7 +46,7 @@
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "prepublishOnly": "npm run build",
-    "generate": "protoc --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,snakeToCamel=false --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/io/restorecommerce/*.proto"
+    "generate": "protoc --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,snakeToCamel=true --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/io/restorecommerce/*.proto"
   },
   "engines": {
     "node": ">= 12.18.0"

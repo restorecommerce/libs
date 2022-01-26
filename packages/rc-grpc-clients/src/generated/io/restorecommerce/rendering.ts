@@ -17,13 +17,13 @@ export interface Payload {
   /** data to fill template with */
   data?: Any;
   /** stylesheet URL */
-  style_url: string;
+  styleUrl: string;
   /** inlining, copying CSS into <style>, etc... */
   strategy: Payload_Strategy;
   /** rendering options JSON object */
   options?: Any;
   /** content type for rendering such as 'application/html' or 'application/text' */
-  content_type: string;
+  contentType: string;
 }
 
 /** style-applying 'strategy' */
@@ -72,7 +72,7 @@ export interface RenderResponse {
   response: Any[];
 }
 
-const basePayload: object = { style_url: "", strategy: 0, content_type: "" };
+const basePayload: object = { styleUrl: "", strategy: 0, contentType: "" };
 
 export const Payload = {
   encode(message: Payload, writer: Writer = Writer.create()): Writer {
@@ -82,8 +82,8 @@ export const Payload = {
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(18).fork()).ldelim();
     }
-    if (message.style_url !== "") {
-      writer.uint32(26).string(message.style_url);
+    if (message.styleUrl !== "") {
+      writer.uint32(26).string(message.styleUrl);
     }
     if (message.strategy !== 0) {
       writer.uint32(32).int32(message.strategy);
@@ -91,8 +91,8 @@ export const Payload = {
     if (message.options !== undefined) {
       Any.encode(message.options, writer.uint32(42).fork()).ldelim();
     }
-    if (message.content_type !== "") {
-      writer.uint32(50).string(message.content_type);
+    if (message.contentType !== "") {
+      writer.uint32(50).string(message.contentType);
     }
     return writer;
   },
@@ -111,7 +111,7 @@ export const Payload = {
           message.data = Any.decode(reader, reader.uint32());
           break;
         case 3:
-          message.style_url = reader.string();
+          message.styleUrl = reader.string();
           break;
         case 4:
           message.strategy = reader.int32() as any;
@@ -120,7 +120,7 @@ export const Payload = {
           message.options = Any.decode(reader, reader.uint32());
           break;
         case 6:
-          message.content_type = reader.string();
+          message.contentType = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -142,10 +142,10 @@ export const Payload = {
     } else {
       message.data = undefined;
     }
-    if (object.style_url !== undefined && object.style_url !== null) {
-      message.style_url = String(object.style_url);
+    if (object.styleUrl !== undefined && object.styleUrl !== null) {
+      message.styleUrl = String(object.styleUrl);
     } else {
-      message.style_url = "";
+      message.styleUrl = "";
     }
     if (object.strategy !== undefined && object.strategy !== null) {
       message.strategy = payload_StrategyFromJSON(object.strategy);
@@ -157,10 +157,10 @@ export const Payload = {
     } else {
       message.options = undefined;
     }
-    if (object.content_type !== undefined && object.content_type !== null) {
-      message.content_type = String(object.content_type);
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = String(object.contentType);
     } else {
-      message.content_type = "";
+      message.contentType = "";
     }
     return message;
   },
@@ -177,10 +177,10 @@ export const Payload = {
     } else {
       message.data = undefined;
     }
-    if (object.style_url !== undefined && object.style_url !== null) {
-      message.style_url = object.style_url;
+    if (object.styleUrl !== undefined && object.styleUrl !== null) {
+      message.styleUrl = object.styleUrl;
     } else {
-      message.style_url = "";
+      message.styleUrl = "";
     }
     if (object.strategy !== undefined && object.strategy !== null) {
       message.strategy = object.strategy;
@@ -192,10 +192,10 @@ export const Payload = {
     } else {
       message.options = undefined;
     }
-    if (object.content_type !== undefined && object.content_type !== null) {
-      message.content_type = object.content_type;
+    if (object.contentType !== undefined && object.contentType !== null) {
+      message.contentType = object.contentType;
     } else {
-      message.content_type = "";
+      message.contentType = "";
     }
     return message;
   },
@@ -208,13 +208,13 @@ export const Payload = {
         : undefined);
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
-    message.style_url !== undefined && (obj.style_url = message.style_url);
+    message.styleUrl !== undefined && (obj.styleUrl = message.styleUrl);
     message.strategy !== undefined &&
       (obj.strategy = payload_StrategyToJSON(message.strategy));
     message.options !== undefined &&
       (obj.options = message.options ? Any.toJSON(message.options) : undefined);
-    message.content_type !== undefined &&
-      (obj.content_type = message.content_type);
+    message.contentType !== undefined &&
+      (obj.contentType = message.contentType);
     return obj;
   },
 };

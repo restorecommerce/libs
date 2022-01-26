@@ -16,6 +16,10 @@ import {
   protoMetadata as protoMetadata3,
   PolicySetRQ,
 } from "../../io/restorecommerce/policy_set";
+import {
+  protoMetadata as protoMetadata5,
+  Attribute,
+} from "../../io/restorecommerce/attribute";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.access_control";
@@ -37,9 +41,9 @@ export interface Context {
 
 export interface Response {
   decision: Response_Decision;
-  obligation: string;
-  evaluation_cacheable: boolean;
-  operation_status?: OperationStatus;
+  obligation: Attribute[];
+  evaluationCacheable: boolean;
+  operationStatus?: OperationStatus;
 }
 
 export enum Response_Decision {
@@ -87,8 +91,9 @@ export function response_DecisionToJSON(object: Response_Decision): string {
 }
 
 export interface ReverseQuery {
-  policy_sets: PolicySetRQ[];
-  operation_status?: OperationStatus;
+  policySets: PolicySetRQ[];
+  obligation: Attribute[];
+  operationStatus?: OperationStatus;
 }
 
 const baseRequest: object = {};
@@ -269,26 +274,22 @@ export const Context = {
   },
 };
 
-const baseResponse: object = {
-  decision: 0,
-  obligation: "",
-  evaluation_cacheable: false,
-};
+const baseResponse: object = { decision: 0, evaluationCacheable: false };
 
 export const Response = {
   encode(message: Response, writer: Writer = Writer.create()): Writer {
     if (message.decision !== 0) {
       writer.uint32(8).int32(message.decision);
     }
-    if (message.obligation !== "") {
-      writer.uint32(18).string(message.obligation);
+    for (const v of message.obligation) {
+      Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.evaluation_cacheable === true) {
-      writer.uint32(24).bool(message.evaluation_cacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(24).bool(message.evaluationCacheable);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(34).fork()
       ).ldelim();
     }
@@ -299,6 +300,7 @@ export const Response = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseResponse) as Response;
+    message.obligation = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -306,13 +308,13 @@ export const Response = {
           message.decision = reader.int32() as any;
           break;
         case 2:
-          message.obligation = reader.string();
+          message.obligation.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.evaluation_cacheable = reader.bool();
+          message.evaluationCacheable = reader.bool();
           break;
         case 4:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -327,66 +329,68 @@ export const Response = {
 
   fromJSON(object: any): Response {
     const message = globalThis.Object.create(baseResponse) as Response;
+    message.obligation = [];
     if (object.decision !== undefined && object.decision !== null) {
       message.decision = response_DecisionFromJSON(object.decision);
     } else {
       message.decision = 0;
     }
     if (object.obligation !== undefined && object.obligation !== null) {
-      message.obligation = String(object.obligation);
-    } else {
-      message.obligation = "";
+      for (const e of object.obligation) {
+        message.obligation.push(Attribute.fromJSON(e));
+      }
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<Response>): Response {
     const message = { ...baseResponse } as Response;
+    message.obligation = [];
     if (object.decision !== undefined && object.decision !== null) {
       message.decision = object.decision;
     } else {
       message.decision = 0;
     }
     if (object.obligation !== undefined && object.obligation !== null) {
-      message.obligation = object.obligation;
-    } else {
-      message.obligation = "";
+      for (const e of object.obligation) {
+        message.obligation.push(Attribute.fromPartial(e));
+      }
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = object.evaluation_cacheable;
+      message.evaluationCacheable = object.evaluationCacheable;
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -395,12 +399,18 @@ export const Response = {
     const obj: any = {};
     message.decision !== undefined &&
       (obj.decision = response_DecisionToJSON(message.decision));
-    message.obligation !== undefined && (obj.obligation = message.obligation);
-    message.evaluation_cacheable !== undefined &&
-      (obj.evaluation_cacheable = message.evaluation_cacheable);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    if (message.obligation) {
+      obj.obligation = message.obligation.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.obligation = [];
+    }
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -410,13 +420,16 @@ const baseReverseQuery: object = {};
 
 export const ReverseQuery = {
   encode(message: ReverseQuery, writer: Writer = Writer.create()): Writer {
-    for (const v of message.policy_sets) {
+    for (const v of message.policySets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operation_status !== undefined) {
+    for (const v of message.obligation) {
+      Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
-        writer.uint32(18).fork()
+        message.operationStatus,
+        writer.uint32(26).fork()
       ).ldelim();
     }
     return writer;
@@ -426,15 +439,19 @@ export const ReverseQuery = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policy_sets = [];
+    message.policySets = [];
+    message.obligation = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.policy_sets.push(PolicySetRQ.decode(reader, reader.uint32()));
+          message.policySets.push(PolicySetRQ.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operation_status = OperationStatus.decode(
+          message.obligation.push(Attribute.decode(reader, reader.uint32()));
+          break;
+        case 3:
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -449,58 +466,77 @@ export const ReverseQuery = {
 
   fromJSON(object: any): ReverseQuery {
     const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policy_sets = [];
-    if (object.policy_sets !== undefined && object.policy_sets !== null) {
-      for (const e of object.policy_sets) {
-        message.policy_sets.push(PolicySetRQ.fromJSON(e));
+    message.policySets = [];
+    message.obligation = [];
+    if (object.policySets !== undefined && object.policySets !== null) {
+      for (const e of object.policySets) {
+        message.policySets.push(PolicySetRQ.fromJSON(e));
+      }
+    }
+    if (object.obligation !== undefined && object.obligation !== null) {
+      for (const e of object.obligation) {
+        message.obligation.push(Attribute.fromJSON(e));
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
 
   fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
     const message = { ...baseReverseQuery } as ReverseQuery;
-    message.policy_sets = [];
-    if (object.policy_sets !== undefined && object.policy_sets !== null) {
-      for (const e of object.policy_sets) {
-        message.policy_sets.push(PolicySetRQ.fromPartial(e));
+    message.policySets = [];
+    message.obligation = [];
+    if (object.policySets !== undefined && object.policySets !== null) {
+      for (const e of object.policySets) {
+        message.policySets.push(PolicySetRQ.fromPartial(e));
+      }
+    }
+    if (object.obligation !== undefined && object.obligation !== null) {
+      for (const e of object.obligation) {
+        message.obligation.push(Attribute.fromPartial(e));
       }
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
 
   toJSON(message: ReverseQuery): unknown {
     const obj: any = {};
-    if (message.policy_sets) {
-      obj.policy_sets = message.policy_sets.map((e) =>
+    if (message.policySets) {
+      obj.policySets = message.policySets.map((e) =>
         e ? PolicySetRQ.toJSON(e) : undefined
       );
     } else {
-      obj.policy_sets = [];
+      obj.policySets = [];
     }
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    if (message.obligation) {
+      obj.obligation = message.obligation.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
+    } else {
+      obj.obligation = [];
+    }
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -524,6 +560,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/rule.proto",
       "io/restorecommerce/policy_set.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/attribute.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -605,8 +642,9 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "obligation",
             number: 2,
-            label: 1,
-            type: 9,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
             jsonName: "obligation",
           },
           {
@@ -657,8 +695,16 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "policySets",
           },
           {
-            name: "operation_status",
+            name: "obligation",
             number: 2,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            jsonName: "obligation",
+          },
+          {
+            name: "operation_status",
+            number: 3,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
@@ -700,7 +746,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 1],
-          span: [17, 2, 22],
+          span: [18, 2, 22],
           leadingDetachedComments: [],
           leadingComments:
             " generic data structure which can be provided\n to a contextQuery (see io/restorecommerce/rule.proto)\n",
@@ -721,6 +767,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
 };
 

@@ -77,11 +77,11 @@ export interface Rule {
   name: string;
   description: string;
   target?: Target;
-  context_query?: ContextQuery;
+  contextQuery?: ContextQuery;
   /** JS code */
   condition: string;
   effect: Effect;
-  evaluation_cacheable: boolean;
+  evaluationCacheable: boolean;
 }
 
 /** used for `whatIsAllowed` / reverse queries */
@@ -90,20 +90,20 @@ export interface RuleRQ {
   target?: Target;
   effect: Effect;
   condition: string;
-  context_query?: ContextQuery;
-  evaluation_cacheable: boolean;
+  contextQuery?: ContextQuery;
+  evaluationCacheable: boolean;
 }
 
 export interface RuleList {
   items: Rule[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface RuleListResponse {
   items: RuleResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface RuleResponse {
@@ -243,7 +243,7 @@ const baseRule: object = {
   description: "",
   condition: "",
   effect: 0,
-  evaluation_cacheable: false,
+  evaluationCacheable: false,
 };
 
 export const Rule = {
@@ -263,9 +263,9 @@ export const Rule = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
-    if (message.context_query !== undefined) {
+    if (message.contextQuery !== undefined) {
       ContextQuery.encode(
-        message.context_query,
+        message.contextQuery,
         writer.uint32(50).fork()
       ).ldelim();
     }
@@ -275,8 +275,8 @@ export const Rule = {
     if (message.effect !== 0) {
       writer.uint32(64).int32(message.effect);
     }
-    if (message.evaluation_cacheable === true) {
-      writer.uint32(72).bool(message.evaluation_cacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(72).bool(message.evaluationCacheable);
     }
     return writer;
   },
@@ -304,7 +304,7 @@ export const Rule = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 6:
-          message.context_query = ContextQuery.decode(reader, reader.uint32());
+          message.contextQuery = ContextQuery.decode(reader, reader.uint32());
           break;
         case 7:
           message.condition = reader.string();
@@ -313,7 +313,7 @@ export const Rule = {
           message.effect = reader.int32() as any;
           break;
         case 9:
-          message.evaluation_cacheable = reader.bool();
+          message.evaluationCacheable = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -350,10 +350,10 @@ export const Rule = {
     } else {
       message.target = undefined;
     }
-    if (object.context_query !== undefined && object.context_query !== null) {
-      message.context_query = ContextQuery.fromJSON(object.context_query);
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
     } else {
-      message.context_query = undefined;
+      message.contextQuery = undefined;
     }
     if (object.condition !== undefined && object.condition !== null) {
       message.condition = String(object.condition);
@@ -366,12 +366,12 @@ export const Rule = {
       message.effect = 0;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -403,10 +403,10 @@ export const Rule = {
     } else {
       message.target = undefined;
     }
-    if (object.context_query !== undefined && object.context_query !== null) {
-      message.context_query = ContextQuery.fromPartial(object.context_query);
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
     } else {
-      message.context_query = undefined;
+      message.contextQuery = undefined;
     }
     if (object.condition !== undefined && object.condition !== null) {
       message.condition = object.condition;
@@ -419,12 +419,12 @@ export const Rule = {
       message.effect = 0;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = object.evaluation_cacheable;
+      message.evaluationCacheable = object.evaluationCacheable;
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -439,14 +439,14 @@ export const Rule = {
       (obj.description = message.description);
     message.target !== undefined &&
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.context_query !== undefined &&
-      (obj.context_query = message.context_query
-        ? ContextQuery.toJSON(message.context_query)
+    message.contextQuery !== undefined &&
+      (obj.contextQuery = message.contextQuery
+        ? ContextQuery.toJSON(message.contextQuery)
         : undefined);
     message.condition !== undefined && (obj.condition = message.condition);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
-    message.evaluation_cacheable !== undefined &&
-      (obj.evaluation_cacheable = message.evaluation_cacheable);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
@@ -455,7 +455,7 @@ const baseRuleRQ: object = {
   id: "",
   effect: 0,
   condition: "",
-  evaluation_cacheable: false,
+  evaluationCacheable: false,
 };
 
 export const RuleRQ = {
@@ -472,14 +472,14 @@ export const RuleRQ = {
     if (message.condition !== "") {
       writer.uint32(34).string(message.condition);
     }
-    if (message.context_query !== undefined) {
+    if (message.contextQuery !== undefined) {
       ContextQuery.encode(
-        message.context_query,
+        message.contextQuery,
         writer.uint32(42).fork()
       ).ldelim();
     }
-    if (message.evaluation_cacheable === true) {
-      writer.uint32(48).bool(message.evaluation_cacheable);
+    if (message.evaluationCacheable === true) {
+      writer.uint32(48).bool(message.evaluationCacheable);
     }
     return writer;
   },
@@ -504,10 +504,10 @@ export const RuleRQ = {
           message.condition = reader.string();
           break;
         case 5:
-          message.context_query = ContextQuery.decode(reader, reader.uint32());
+          message.contextQuery = ContextQuery.decode(reader, reader.uint32());
           break;
         case 6:
-          message.evaluation_cacheable = reader.bool();
+          message.evaluationCacheable = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -539,18 +539,18 @@ export const RuleRQ = {
     } else {
       message.condition = "";
     }
-    if (object.context_query !== undefined && object.context_query !== null) {
-      message.context_query = ContextQuery.fromJSON(object.context_query);
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
     } else {
-      message.context_query = undefined;
+      message.contextQuery = undefined;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = Boolean(object.evaluation_cacheable);
+      message.evaluationCacheable = Boolean(object.evaluationCacheable);
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -577,18 +577,18 @@ export const RuleRQ = {
     } else {
       message.condition = "";
     }
-    if (object.context_query !== undefined && object.context_query !== null) {
-      message.context_query = ContextQuery.fromPartial(object.context_query);
+    if (object.contextQuery !== undefined && object.contextQuery !== null) {
+      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
     } else {
-      message.context_query = undefined;
+      message.contextQuery = undefined;
     }
     if (
-      object.evaluation_cacheable !== undefined &&
-      object.evaluation_cacheable !== null
+      object.evaluationCacheable !== undefined &&
+      object.evaluationCacheable !== null
     ) {
-      message.evaluation_cacheable = object.evaluation_cacheable;
+      message.evaluationCacheable = object.evaluationCacheable;
     } else {
-      message.evaluation_cacheable = false;
+      message.evaluationCacheable = false;
     }
     return message;
   },
@@ -600,25 +600,25 @@ export const RuleRQ = {
       (obj.target = message.target ? Target.toJSON(message.target) : undefined);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
     message.condition !== undefined && (obj.condition = message.condition);
-    message.context_query !== undefined &&
-      (obj.context_query = message.context_query
-        ? ContextQuery.toJSON(message.context_query)
+    message.contextQuery !== undefined &&
+      (obj.contextQuery = message.contextQuery
+        ? ContextQuery.toJSON(message.contextQuery)
         : undefined);
-    message.evaluation_cacheable !== undefined &&
-      (obj.evaluation_cacheable = message.evaluation_cacheable);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
 };
 
-const baseRuleList: object = { total_count: 0 };
+const baseRuleList: object = { totalCount: 0 };
 
 export const RuleList = {
   encode(message: RuleList, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       Rule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -638,7 +638,7 @@ export const RuleList = {
           message.items.push(Rule.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -659,10 +659,10 @@ export const RuleList = {
         message.items.push(Rule.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -680,10 +680,10 @@ export const RuleList = {
         message.items.push(Rule.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -700,8 +700,7 @@ export const RuleList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -710,19 +709,19 @@ export const RuleList = {
   },
 };
 
-const baseRuleListResponse: object = { total_count: 0 };
+const baseRuleListResponse: object = { totalCount: 0 };
 
 export const RuleListResponse = {
   encode(message: RuleListResponse, writer: Writer = Writer.create()): Writer {
     for (const v of message.items) {
       RuleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -743,10 +742,10 @@ export const RuleListResponse = {
           message.items.push(RuleResponse.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -769,20 +768,20 @@ export const RuleListResponse = {
         message.items.push(RuleResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -795,20 +794,20 @@ export const RuleListResponse = {
         message.items.push(RuleResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -822,11 +821,10 @@ export const RuleListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },

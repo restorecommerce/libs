@@ -25,14 +25,14 @@ export const protobufPackage = "io.restorecommerce.authentication_log";
 
 export interface AuthenticationLogList {
   items: AuthenticationLog[];
-  total_count: number;
+  totalCount: number;
   subject?: Subject;
 }
 
 export interface AuthenticationLogListResponse {
   items: AuthenticationLogResponse[];
-  total_count: number;
-  operation_status?: OperationStatus;
+  totalCount: number;
+  operationStatus?: OperationStatus;
 }
 
 export interface AuthenticationLogResponse {
@@ -44,10 +44,10 @@ export interface AuthenticationLogResponse {
 export interface AuthenticationLog {
   /** log id */
   id: string;
-  ipv4_address: string;
-  ipv6_address: string;
-  operating_system: string;
-  user_agent: string;
+  ipv4Address: string;
+  ipv6Address: string;
+  operatingSystem: string;
+  userAgent: string;
   /** time stamp of login, logout or token update */
   date: number;
   /** login, logout */
@@ -55,16 +55,16 @@ export interface AuthenticationLog {
   /** meta info */
   meta?: Meta;
   /** subject id */
-  subject_id: string;
+  subjectId: string;
   /** token name associated with io.restorecommerce.auth.Token.token_name */
-  token_name: string;
+  tokenName: string;
 }
 
 export interface Deleted {
   id: string;
 }
 
-const baseAuthenticationLogList: object = { total_count: 0 };
+const baseAuthenticationLogList: object = { totalCount: 0 };
 
 export const AuthenticationLogList = {
   encode(
@@ -74,8 +74,8 @@ export const AuthenticationLogList = {
     for (const v of message.items) {
       AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -97,7 +97,7 @@ export const AuthenticationLogList = {
           message.items.push(AuthenticationLog.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -120,10 +120,10 @@ export const AuthenticationLogList = {
         message.items.push(AuthenticationLog.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
@@ -143,10 +143,10 @@ export const AuthenticationLogList = {
         message.items.push(AuthenticationLog.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
@@ -165,8 +165,7 @@ export const AuthenticationLogList = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
@@ -175,7 +174,7 @@ export const AuthenticationLogList = {
   },
 };
 
-const baseAuthenticationLogListResponse: object = { total_count: 0 };
+const baseAuthenticationLogListResponse: object = { totalCount: 0 };
 
 export const AuthenticationLogListResponse = {
   encode(
@@ -185,12 +184,12 @@ export const AuthenticationLogListResponse = {
     for (const v of message.items) {
       AuthenticationLogResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
     }
-    if (message.operation_status !== undefined) {
+    if (message.operationStatus !== undefined) {
       OperationStatus.encode(
-        message.operation_status,
+        message.operationStatus,
         writer.uint32(26).fork()
       ).ldelim();
     }
@@ -216,10 +215,10 @@ export const AuthenticationLogListResponse = {
           );
           break;
         case 2:
-          message.total_count = reader.uint32();
+          message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
+          message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
           );
@@ -242,20 +241,20 @@ export const AuthenticationLogListResponse = {
         message.items.push(AuthenticationLogResponse.fromJSON(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = Number(object.total_count);
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromJSON(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -272,20 +271,20 @@ export const AuthenticationLogListResponse = {
         message.items.push(AuthenticationLogResponse.fromPartial(e));
       }
     }
-    if (object.total_count !== undefined && object.total_count !== null) {
-      message.total_count = object.total_count;
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
     } else {
-      message.total_count = 0;
+      message.totalCount = 0;
     }
     if (
-      object.operation_status !== undefined &&
-      object.operation_status !== null
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
     ) {
-      message.operation_status = OperationStatus.fromPartial(
-        object.operation_status
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
       );
     } else {
-      message.operation_status = undefined;
+      message.operationStatus = undefined;
     }
     return message;
   },
@@ -299,11 +298,10 @@ export const AuthenticationLogListResponse = {
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = message.total_count);
-    message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
@@ -404,14 +402,14 @@ export const AuthenticationLogResponse = {
 
 const baseAuthenticationLog: object = {
   id: "",
-  ipv4_address: "",
-  ipv6_address: "",
-  operating_system: "",
-  user_agent: "",
+  ipv4Address: "",
+  ipv6Address: "",
+  operatingSystem: "",
+  userAgent: "",
   date: 0,
   activity: "",
-  subject_id: "",
-  token_name: "",
+  subjectId: "",
+  tokenName: "",
 };
 
 export const AuthenticationLog = {
@@ -419,17 +417,17 @@ export const AuthenticationLog = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.ipv4_address !== "") {
-      writer.uint32(18).string(message.ipv4_address);
+    if (message.ipv4Address !== "") {
+      writer.uint32(18).string(message.ipv4Address);
     }
-    if (message.ipv6_address !== "") {
-      writer.uint32(26).string(message.ipv6_address);
+    if (message.ipv6Address !== "") {
+      writer.uint32(26).string(message.ipv6Address);
     }
-    if (message.operating_system !== "") {
-      writer.uint32(34).string(message.operating_system);
+    if (message.operatingSystem !== "") {
+      writer.uint32(34).string(message.operatingSystem);
     }
-    if (message.user_agent !== "") {
-      writer.uint32(42).string(message.user_agent);
+    if (message.userAgent !== "") {
+      writer.uint32(42).string(message.userAgent);
     }
     if (message.date !== 0) {
       writer.uint32(49).double(message.date);
@@ -440,11 +438,11 @@ export const AuthenticationLog = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(66).fork()).ldelim();
     }
-    if (message.subject_id !== "") {
-      writer.uint32(74).string(message.subject_id);
+    if (message.subjectId !== "") {
+      writer.uint32(74).string(message.subjectId);
     }
-    if (message.token_name !== "") {
-      writer.uint32(82).string(message.token_name);
+    if (message.tokenName !== "") {
+      writer.uint32(82).string(message.tokenName);
     }
     return writer;
   },
@@ -462,16 +460,16 @@ export const AuthenticationLog = {
           message.id = reader.string();
           break;
         case 2:
-          message.ipv4_address = reader.string();
+          message.ipv4Address = reader.string();
           break;
         case 3:
-          message.ipv6_address = reader.string();
+          message.ipv6Address = reader.string();
           break;
         case 4:
-          message.operating_system = reader.string();
+          message.operatingSystem = reader.string();
           break;
         case 5:
-          message.user_agent = reader.string();
+          message.userAgent = reader.string();
           break;
         case 6:
           message.date = reader.double();
@@ -483,10 +481,10 @@ export const AuthenticationLog = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 9:
-          message.subject_id = reader.string();
+          message.subjectId = reader.string();
           break;
         case 10:
-          message.token_name = reader.string();
+          message.tokenName = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -505,28 +503,28 @@ export const AuthenticationLog = {
     } else {
       message.id = "";
     }
-    if (object.ipv4_address !== undefined && object.ipv4_address !== null) {
-      message.ipv4_address = String(object.ipv4_address);
+    if (object.ipv4Address !== undefined && object.ipv4Address !== null) {
+      message.ipv4Address = String(object.ipv4Address);
     } else {
-      message.ipv4_address = "";
+      message.ipv4Address = "";
     }
-    if (object.ipv6_address !== undefined && object.ipv6_address !== null) {
-      message.ipv6_address = String(object.ipv6_address);
+    if (object.ipv6Address !== undefined && object.ipv6Address !== null) {
+      message.ipv6Address = String(object.ipv6Address);
     } else {
-      message.ipv6_address = "";
+      message.ipv6Address = "";
     }
     if (
-      object.operating_system !== undefined &&
-      object.operating_system !== null
+      object.operatingSystem !== undefined &&
+      object.operatingSystem !== null
     ) {
-      message.operating_system = String(object.operating_system);
+      message.operatingSystem = String(object.operatingSystem);
     } else {
-      message.operating_system = "";
+      message.operatingSystem = "";
     }
-    if (object.user_agent !== undefined && object.user_agent !== null) {
-      message.user_agent = String(object.user_agent);
+    if (object.userAgent !== undefined && object.userAgent !== null) {
+      message.userAgent = String(object.userAgent);
     } else {
-      message.user_agent = "";
+      message.userAgent = "";
     }
     if (object.date !== undefined && object.date !== null) {
       message.date = Number(object.date);
@@ -543,15 +541,15 @@ export const AuthenticationLog = {
     } else {
       message.meta = undefined;
     }
-    if (object.subject_id !== undefined && object.subject_id !== null) {
-      message.subject_id = String(object.subject_id);
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = String(object.subjectId);
     } else {
-      message.subject_id = "";
+      message.subjectId = "";
     }
-    if (object.token_name !== undefined && object.token_name !== null) {
-      message.token_name = String(object.token_name);
+    if (object.tokenName !== undefined && object.tokenName !== null) {
+      message.tokenName = String(object.tokenName);
     } else {
-      message.token_name = "";
+      message.tokenName = "";
     }
     return message;
   },
@@ -563,28 +561,28 @@ export const AuthenticationLog = {
     } else {
       message.id = "";
     }
-    if (object.ipv4_address !== undefined && object.ipv4_address !== null) {
-      message.ipv4_address = object.ipv4_address;
+    if (object.ipv4Address !== undefined && object.ipv4Address !== null) {
+      message.ipv4Address = object.ipv4Address;
     } else {
-      message.ipv4_address = "";
+      message.ipv4Address = "";
     }
-    if (object.ipv6_address !== undefined && object.ipv6_address !== null) {
-      message.ipv6_address = object.ipv6_address;
+    if (object.ipv6Address !== undefined && object.ipv6Address !== null) {
+      message.ipv6Address = object.ipv6Address;
     } else {
-      message.ipv6_address = "";
+      message.ipv6Address = "";
     }
     if (
-      object.operating_system !== undefined &&
-      object.operating_system !== null
+      object.operatingSystem !== undefined &&
+      object.operatingSystem !== null
     ) {
-      message.operating_system = object.operating_system;
+      message.operatingSystem = object.operatingSystem;
     } else {
-      message.operating_system = "";
+      message.operatingSystem = "";
     }
-    if (object.user_agent !== undefined && object.user_agent !== null) {
-      message.user_agent = object.user_agent;
+    if (object.userAgent !== undefined && object.userAgent !== null) {
+      message.userAgent = object.userAgent;
     } else {
-      message.user_agent = "";
+      message.userAgent = "";
     }
     if (object.date !== undefined && object.date !== null) {
       message.date = object.date;
@@ -601,15 +599,15 @@ export const AuthenticationLog = {
     } else {
       message.meta = undefined;
     }
-    if (object.subject_id !== undefined && object.subject_id !== null) {
-      message.subject_id = object.subject_id;
+    if (object.subjectId !== undefined && object.subjectId !== null) {
+      message.subjectId = object.subjectId;
     } else {
-      message.subject_id = "";
+      message.subjectId = "";
     }
-    if (object.token_name !== undefined && object.token_name !== null) {
-      message.token_name = object.token_name;
+    if (object.tokenName !== undefined && object.tokenName !== null) {
+      message.tokenName = object.tokenName;
     } else {
-      message.token_name = "";
+      message.tokenName = "";
     }
     return message;
   },
@@ -617,19 +615,19 @@ export const AuthenticationLog = {
   toJSON(message: AuthenticationLog): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.ipv4_address !== undefined &&
-      (obj.ipv4_address = message.ipv4_address);
-    message.ipv6_address !== undefined &&
-      (obj.ipv6_address = message.ipv6_address);
-    message.operating_system !== undefined &&
-      (obj.operating_system = message.operating_system);
-    message.user_agent !== undefined && (obj.user_agent = message.user_agent);
+    message.ipv4Address !== undefined &&
+      (obj.ipv4Address = message.ipv4Address);
+    message.ipv6Address !== undefined &&
+      (obj.ipv6Address = message.ipv6Address);
+    message.operatingSystem !== undefined &&
+      (obj.operatingSystem = message.operatingSystem);
+    message.userAgent !== undefined && (obj.userAgent = message.userAgent);
     message.date !== undefined && (obj.date = message.date);
     message.activity !== undefined && (obj.activity = message.activity);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.subject_id !== undefined && (obj.subject_id = message.subject_id);
-    message.token_name !== undefined && (obj.token_name = message.token_name);
+    message.subjectId !== undefined && (obj.subjectId = message.subjectId);
+    message.tokenName !== undefined && (obj.tokenName = message.tokenName);
     return obj;
   },
 };

@@ -11,7 +11,7 @@ import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
-import { TraversalRequest, FilterOperation, OperatorType } from '../lib/core/interfaces';
+import { TraversalRequest, FilterOperation, OperatorType, Direction } from '../lib/core/interfaces';
 
 const database = chassis.database;
 let cfg = createServiceConfig(process.cwd() + '/test');
@@ -119,7 +119,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND' },
+          opts: { direction: Direction.OUTBOUND },
           path: false
         };
         const expectedVertices = [
@@ -167,7 +167,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND' },
+          opts: { direction: Direction.OUTBOUND },
           path: true
         };
         const expectedVertices = [
@@ -214,7 +214,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
           path: true
         };
         const expectedVertices = [
@@ -258,7 +258,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, exclude_vertex: ['cars'] },
           path: true
         };
         const expectedVertices = [
@@ -304,7 +304,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND', include_edge: ['has'] },
+          opts: { direction: Direction.OUTBOUND, include_edge: ['has'] },
           path: true
         };
         const expectedVertices = [
@@ -348,7 +348,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND', exclude_edge: ['belongs'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edge: ['belongs'] },
           path: true
         };
         const expectedVertices = [
@@ -394,7 +394,7 @@ const testProvider = (providerCfg) => {
             collection_name: 'persons',
             start_vertex_id: ['a']
           },
-          opts: { direction: 'OUTBOUND', exclude_edge: ['resides'], include_edge: ['lives'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edge: ['resides'], include_edge: ['lives'] },
           path: true
         };
         const expectedVertices = [
@@ -437,7 +437,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND' },
+          opts: { direction: Direction.OUTBOUND },
           path: true
         };
         const expectedVertices = [
@@ -489,7 +489,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND' },
+          opts: { direction: Direction.OUTBOUND },
           filters: [{
             filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }],
             entity: 'cars'
@@ -545,7 +545,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
           filters: [{
             filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }, { field: 'car', operation: FilterOperation.eq, value: 'vw' }],
             operator: OperatorType.or,
@@ -596,7 +596,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, exclude_vertex: ['cars'] },
           filters: [{
             filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation
@@ -650,7 +650,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND', exclude_edge: ['resides'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edge: ['resides'] },
           filters: [{
             filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation
@@ -704,7 +704,7 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: 'OUTBOUND', include_edge: ['has', 'lives'] },
+          opts: { direction: Direction.OUTBOUND, include_edge: ['has', 'lives'] },
           filters: [{
             filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation

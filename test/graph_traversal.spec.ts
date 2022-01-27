@@ -111,6 +111,43 @@ const testProvider = (providerCfg) => {
           server.logger, resourceAPI1, false);
         result_1 = await service_1.create({ request: { items: personsVertices } });
       });
+      // test error handling
+      it('should throw an error for graph traversal for missing collection name / start_vertex', async () => {
+        // missing collection name in vertices
+        let result = await testService.traversal({ vertices: { start_vertex_id: ['a'] } });
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            partResp.operation_status.code.should.equal(500);
+            partResp.operation_status.message.should.equal('missing collection name for vertex id a');
+          });
+          result.on('end', () => {
+            resolve(0);
+          });
+        });
+
+        result = await testService.traversal({ vertices: { collection_name: 'person' } });
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            partResp.operation_status.code.should.equal(500);
+            partResp.operation_status.message.should.equal('missing vertex id for collection_name person');
+          });
+          result.on('end', () => {
+            resolve(0);
+          });
+        });
+
+        // empty collection name for collections
+        result = await testService.traversal({ collection: { collection_name: '' } });
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            partResp.operation_status.code.should.equal(500);
+            partResp.operation_status.message.should.equal('One of the Vertices or Collection should be defined');
+          });
+          result.on('end', () => {
+            resolve(0);
+          });
+        });
+      });
 
       // traversal without path flag
       it('should traverse the graph and return only vertices for Person A', async () => {
@@ -739,6 +776,101 @@ const testProvider = (providerCfg) => {
             should.exist(traversalResponse.data);
             traversalResponse.paths.should.have.size(4); // 4 edges
             traversalResponse.data.should.have.size(6); // 6 vertices - 2 persons, 2 cars, 2 states
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // pagination - with limit should traverse along only the limit entities
+      it('pagination - should traverse the graph through only first entity when limit filter is specified for root entity', async () => {
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons',
+            limit: 1
+          },
+          opts: { direction: Direction.OUTBOUND },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Alice", "id": "a", "car_id": "c", "state_id": "i" },
+          { "car": "bmw", "id": "c", "place_id": "e" },
+          { "place": "Munich", "id": "e", "state_id": "g" },
+          { "state": "Bayern", "id": "g" },
+          { "state": "BW", "id": "i" }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(4); // 4 edges
+            traversalResponse.data.should.have.size(5); // 5 vertices - 1 persons, 1 cars, 1 place and 2 states
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // pagination with both limit and offset
+      it('pagination - should traverse the graph through only from second entity when limit and offset filter is specified for root entity', async () => {
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons',
+            limit: 1,
+            offset: 1
+          },
+          opts: { direction: Direction.OUTBOUND },
+          path: true
+        };
+        const expectedVertices = [
+          { "name": "Bob", "id": "b", "car_id": "d", "state_id": "j" },
+          { "car": "vw", "id": "d", "place_id": "f" },
+          { "place": "wolfsburg", "id": "f", "state_id": "h" },
+          { "state": "Saxony", "id": "h" },
+          { "state": "Hessen", "id": "j" }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(4); // 4 edges
+            traversalResponse.data.should.have.size(5); // 5 vertices - 1 persons, 1 cars, 1 place and 2 states
             for (let eachVertice of traversalResponse.data) {
               finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
             }

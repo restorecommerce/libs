@@ -12,6 +12,7 @@ import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
 import { TraversalRequest, FilterOperation, OperatorType, Direction } from '../lib/core/interfaces';
+import { SortOrder } from '@restorecommerce/chassis-srv/lib/database/provider/arango/interface';
 
 const database = chassis.database;
 let cfg = createServiceConfig(process.cwd() + '/test');
@@ -1026,6 +1027,134 @@ const testProvider = (providerCfg) => {
         });
       });
 
+      // traversal from Place entity with inbound vertices
+      it('inbound traversal - should traverse the graph from Place vertice in inbound direction and return list of traversed entities from Place entity', async () => {
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'places',
+            start_vertex_id: ['e']
+          },
+          opts: { direction: Direction.INBOUND },
+          path: true
+        };
+        const expectedVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
+          { car: 'bmw', id: 'c', place_id: 'e' },
+          { place: 'Munich', id: 'e', state_id: 'g' }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(2); // 2 edges
+            traversalResponse.data.should.have.size(3); // 3 vertices - 1 place, 1 car and 1 person
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // traversal from Place Collection with inbound vertices
+      it('inbound traversal - should traverse the graph from Place collection in inbound direction and return list of all traversed entities from Place entity', async () => {
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'places'
+          },
+          opts: { direction: Direction.INBOUND },
+          path: true
+        };
+        const expectedVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
+          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j' },
+          { car: 'bmw', id: 'c', place_id: 'e' },
+          { car: 'vw', id: 'd', place_id: 'f' },
+          { place: 'Munich', id: 'e', state_id: 'g' },
+          { place: 'wolfsburg', id: 'f', state_id: 'h' }];
+
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+            traversalResponse.paths.should.have.size(4); // 2 edges
+            traversalResponse.data.should.have.size(6); // 6 vertices - 2 place, 2 car and 2 person
+            for (let eachVertice of traversalResponse.data) {
+              finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+            }
+            finalVertices =
+              _.sortBy(finalVertices, [(o) => { return o.id; }]);
+            finalVertices.should.deepEqual(expectedVertices);
+            resolve(traversalResponse);
+          });
+        });
+      });
+
+      // sort root collection in DESC order
+      it('should sort the root collection in descending order and return data from all traversed entities', async () => {
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'person',
+            sort: [{ field: 'name', order: SortOrder.DESCENDING }]
+          },
+          opts: { direction: Direction.INBOUND },
+          path: true
+        };
+        const expectedVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
+          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j' },
+          { car: 'bmw', id: 'c', place_id: 'e' },
+          { car: 'vw', id: 'd', place_id: 'f' },
+          { place: 'Munich', id: 'e', state_id: 'g' },
+          { place: 'wolfsburg', id: 'f', state_id: 'h' }];
+        // traverse graph
+        let result = await testService.traversal(traversalRequest);
+
+        let traversalResponse = { data: [], paths: [] };
+        await new Promise((resolve, reject) => {
+          result.on('data', (partResp) => {
+            if ((partResp && partResp.data && partResp.data.value)) {
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
+            }
+            if ((partResp && partResp.paths && partResp.paths.value)) {
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+            }
+          });
+          let finalVertices: any = [];
+          result.on('end', () => {
+            should.exist(traversalResponse.paths);
+            should.exist(traversalResponse.data);
+          });
+        });
+      });
       it('delete vertices, should delete the edges associated as well',
         async () => {
           // Deleting the ids of vertexCollection 'cars' should remove

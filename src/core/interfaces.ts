@@ -1,3 +1,5 @@
+import { Vertices, Collection } from '@restorecommerce/chassis-srv';
+
 export type TRequest = CreateRequest | DeleteRequest | UpdateRequest | UpsertRequest | ReadRequest;
 export interface ServiceCall<TRequest> {
   request: TRequest;
@@ -103,4 +105,12 @@ export interface GraphFilters {
   edge?: string;
   filter?: GraphFilter[];
   operator?: OperatorType;
+}
+
+export interface TraversalRequest {
+  vertices?: Vertices;
+  collection?: Collection;
+  opts?: TraversalOptions;
+  path?: boolean;
+  filters?: GraphFilters[];
 }

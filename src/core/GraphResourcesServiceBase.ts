@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
-import { GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
+import { GraphDatabaseProvider, TraversalResponse } from '@restorecommerce/chassis-srv';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
-import { TraversalOptions } from './interfaces';
+import { TraversalRequest } from './interfaces';
 import { Stream } from 'stream';
 
 /**
@@ -55,11 +55,11 @@ export class GraphResourcesServiceBase {
   */
   async traversal(call: any, context?: any): Promise<any> {
     try {
-      const request = call.request?.request;
-      const collection_name = request.collection_name;
-      let start_vertex = request.start_vertex;
-      const opts: TraversalOptions = request?.opts;
-      if (!start_vertex && !collection_name) {
+      const request: TraversalRequest = call.request?.request;
+      const vertices = request?.vertices;
+      const collection = request?.collection;
+      const options = request?.opts;
+      if (!vertices && !collection) {
         const message = 'missing start vertex or collection_name for graph traversal';
         this.logger.error(message);
         await call.write({
@@ -69,12 +69,12 @@ export class GraphResourcesServiceBase {
       }
       const filters = request?.filters;
       let path = request?.path ? request.path : false;
-      let queryResult;
+      let traversalCursor: TraversalResponse;
       try {
-        this.logger.debug('Calling traversal', { start_vertex, collection_name });
-        queryResult = await this.db.traversal(start_vertex,
-          collection_name, opts, filters, path);
-        this.logger.debug('Received traversal response from DB');
+        this.logger.debug('Calling traversal', { vertices, collection });
+        traversalCursor = await this.db.traversal(vertices, collection,
+          options, filters);
+        this.logger.debug('Received traversal ArrayCursor from DB');
       } catch (err) {
         this.logger.error('Error stack', err);
         this.logger.error('Error executing DB Traversal', { error: err.message });
@@ -84,41 +84,50 @@ export class GraphResourcesServiceBase {
         return await call.end();
       }
 
-      let decodedDBData = [];
-      let decodedDBPaths = [];
+      let rootCursor = traversalCursor.rootCursor;
+      let associationCursor = traversalCursor.associationCursor;
       const traversalStream = new Stream.Readable({ objectMode: true });
-      if ((queryResult && queryResult.data && queryResult.data.value)) {
-        // get the decoded JSON list of resources.
-        const decodedData = JSON.parse(Buffer.from(queryResult.data.value).toString());
-        for (let doc of decodedData) {
-          const resourceName = doc._id.substring(0, '/');
-          if (this.bufferedCollections.indexOf(resourceName) > -1) {
-            decodedDBData.push(this.marshallData(doc, this.bufferFiledCfg[resourceName]));
-          } else {
-            decodedDBData.push(doc);
+      // root entity data batches
+      if (rootCursor && rootCursor.batches) {
+        for await (const batch of rootCursor.batches) {
+          // root entity data, encoding before pushing batch
+          for (let elem of batch) {
+            if (elem._key) {
+              delete elem._key;
+            }
+            if (elem._rev) {
+              delete elem._rev;
+            }
           }
+          traversalStream.push({ data: { value: Buffer.from(JSON.stringify(batch)) } });
         }
       }
-      if ((queryResult && queryResult.paths && queryResult.paths.value)) {
-        // get the decoded JSON list of resources.
-        const decodedData = JSON.parse(Buffer.from(queryResult.paths.value).toString());
-        for (let doc of decodedData) {
-          decodedDBPaths.push(doc);
-        }
-      }
-
-      queryResult = [];
-      while ((decodedDBData && decodedDBData.length > 0) ||
-        (decodedDBPaths && decodedDBPaths.length > 0)) {
-        if (decodedDBData.length > 0) {
-          const partDoc = decodedDBData.splice(0, 1000);
-          // this.logger.debug('Writing Buffer Chunk', partDoc);
-          traversalStream.push({ data: { value: Buffer.from(JSON.stringify(partDoc)) } });
-        }
-        if (decodedDBPaths.length > 0) {
-          const partDoc = decodedDBPaths.splice(0, 1000);
-          // this.logger.debug('Writing Buffer Chunk', partDoc);
-          traversalStream.push({ paths: { value: Buffer.from(JSON.stringify(partDoc)) } });
+      // association entity data batches
+      if (associationCursor && associationCursor.batches) {
+        for await (const batch of associationCursor.batches) {
+          let associationData = [];
+          let traversedPaths = [];
+          for (let data of batch) {
+            if (data.v._key) {
+              delete data.v._key;
+            }
+            if (data.v._rev) {
+              delete data.v._rev;
+            }
+            associationData.push(data.v);
+            if (path) {
+              traversedPaths.push(data.p);
+            }
+          }
+          if (!_.isEmpty(associationData)) {
+            // associated entity data, encoding before pushing data
+            traversalStream.push({ data: { value: Buffer.from(JSON.stringify(associationData)) } });
+          }
+          // paths
+          if (!_.isEmpty(traversedPaths)) {
+            // traversed paths, encoding before pushing paths
+            traversalStream.push({ paths: { value: Buffer.from(JSON.stringify(traversedPaths)) } });
+          }
         }
       }
 

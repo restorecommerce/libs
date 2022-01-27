@@ -11,6 +11,7 @@ import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
+import { TraversalRequest, FilterOperation, OperatorType } from '../lib/core/interfaces';
 
 const database = chassis.database;
 let cfg = createServiceConfig(process.cwd() + '/test');
@@ -113,8 +114,11 @@ const testProvider = (providerCfg) => {
 
       // traversal without path flag
       it('should traverse the graph and return only vertices for Person A', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND' },
           path: false
         };
@@ -132,11 +136,11 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && !_.isEmpty(partResp.paths.value))) {
-              console.log('Paths are....', partResp.paths.value);
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -158,8 +162,11 @@ const testProvider = (providerCfg) => {
 
       // traversal with path flag
       it('should traverse the graph and return both vertices and paths when paths flag is set to true', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND' },
           path: true
         };
@@ -177,10 +184,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -202,8 +209,11 @@ const testProvider = (providerCfg) => {
 
       // include vertices
       it('should traverse the graph with included vertices options and return only the included vertices', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
           path: true
         };
@@ -218,10 +228,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -243,8 +253,11 @@ const testProvider = (providerCfg) => {
 
       // exclude vertices
       it('should traverse the graph with excluded vertices options and return only traversed data with excluded vertices', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
           path: true
         };
@@ -261,10 +274,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -286,8 +299,11 @@ const testProvider = (providerCfg) => {
 
       // include edges
       it('should traverse the graph with included edges options and return vertices from included edges', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND', include_edge: ['has'] },
           path: true
         };
@@ -302,10 +318,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -327,8 +343,11 @@ const testProvider = (providerCfg) => {
 
       // exclude edges
       it('should traverse the graph with exclude edges options and return vertices from excluded edges', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND', exclude_edge: ['belongs'] },
           path: true
         };
@@ -345,10 +364,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -370,8 +389,11 @@ const testProvider = (providerCfg) => {
 
       // exclude one edge and include another edge of same entity
       it('for 2 entities should exclude one entity edge and include another entity edge', async () => {
-        const traversalRequest = {
-          start_vertex: `persons/a`,
+        const traversalRequest: TraversalRequest = {
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
           opts: { direction: 'OUTBOUND', exclude_edge: ['resides'], include_edge: ['lives'] },
           path: true
         };
@@ -386,10 +408,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -411,8 +433,10 @@ const testProvider = (providerCfg) => {
 
       // collection traversal
       it('should traverse the entire collection and return data from all traversed entities', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND' },
           path: true
         };
@@ -436,10 +460,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -461,15 +485,17 @@ const testProvider = (providerCfg) => {
 
       // Filter tests for collection traversal
       it('with filters should traverse the collection and return data with filtering applied on respective entities', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND' },
           filters: [{
-            filter: [{ field: 'car', operation: 'eq', value: 'bmw' }],
+            filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }],
             entity: 'cars'
           }, {
-            filter: [{ field: 'place', operation: 'eq', value: 'Munich' }, {}],
-            operator: 'or',
+            filter: [{ field: 'place', operation: FilterOperation.eq, value: 'Munich' }],
+            operator: OperatorType.or,
             entity: 'places'
           }],
           path: true
@@ -490,10 +516,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -515,12 +541,14 @@ const testProvider = (providerCfg) => {
 
       // filters with include vertices
       it('should traverse the graph with filters and included vertices options and return only the filtered and included vertices', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND', include_vertex: ['cars'] },
           filters: [{
-            filter: [{ field: 'car', operation: 'eq', value: 'bmw' }, { field: 'car', operation: 'eq', value: 'vw' }],
-            operator: 'or',
+            filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }, { field: 'car', operation: FilterOperation.eq, value: 'vw' }],
+            operator: OperatorType.or,
             entity: 'cars'
           }],
           path: true
@@ -539,10 +567,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -564,12 +592,14 @@ const testProvider = (providerCfg) => {
 
       // filter with exclude vertices
       it('should traverse the graph with filters and excluded vertices options and return only the filtered and excluded vertices', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND', exclude_vertex: ['cars'] },
           filters: [{
-            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
-            operator: 'or', // Default is AND operation
+            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            operator: OperatorType.or, // Default is AND operation
             entity: 'state'
           }],
           path: true
@@ -591,10 +621,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -616,12 +646,14 @@ const testProvider = (providerCfg) => {
 
       // filter with exclude edges
       it('for 2 entities should exclude one entity edge and include another entity edge with filtering enabled on second edge entity', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND', exclude_edge: ['resides'] },
           filters: [{
-            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
-            operator: 'or', // Default is AND operation
+            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            operator: OperatorType.or, // Default is AND operation
             edge: 'lives'
           }],
           path: true
@@ -643,10 +675,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];
@@ -668,12 +700,14 @@ const testProvider = (providerCfg) => {
 
       // filter with include edges
       it('should traverse the graph with filters and included edges and return only the filtered and included edge vertices data', async () => {
-        const traversalRequest = {
-          collection_name: 'persons',
+        const traversalRequest: TraversalRequest = {
+          collection: {
+            collection_name: 'persons'
+          },
           opts: { direction: 'OUTBOUND', include_edge: ['has', 'lives'] },
           filters: [{
-            filter: [{ field: 'state', operation: 'eq', value: 'BW' }, { field: 'state', operation: 'eq', value: 'Hessen' }],
-            operator: 'or', // Default is AND operation
+            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            operator: OperatorType.or, // Default is AND operation
             edge: 'lives'
           }],
           path: true
@@ -693,10 +727,10 @@ const testProvider = (providerCfg) => {
         await new Promise((resolve, reject) => {
           result.on('data', (partResp) => {
             if ((partResp && partResp.data && partResp.data.value)) {
-              Object.assign(traversalResponse.data, JSON.parse(partResp.data.value.toString()));
+              traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
             }
             if ((partResp && partResp.paths && partResp.paths.value)) {
-              Object.assign(traversalResponse.paths, JSON.parse(partResp.paths.value.toString()));
+              traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
           let finalVertices: any = [];

@@ -8,6 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "esModuleInterop": true,
+    "skipLibCheck": true,
     "outDir": "lib",
     "typeRoots": [
       "node_modules/@types"

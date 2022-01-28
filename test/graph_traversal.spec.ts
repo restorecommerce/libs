@@ -51,6 +51,12 @@ const testProvider = (providerCfg) => {
       testResourceBaseService = resourceBaseClient.test;
     });
     after(async () => {
+      // drop DB
+      const dbHost: string = cfg.get('database:testdb:host');
+      const dbPort: string = cfg.get('database:testdb:port');
+      const dbName: string = cfg.get('database:testdb:database');
+      const db = new Database('http://' + dbHost + ':' + dbPort);
+      await db.dropDatabase(dbName);
       await client.close();
       await server.stop();
     });
@@ -1122,19 +1128,12 @@ const testProvider = (providerCfg) => {
       it('should sort the root collection in descending order and return data from all traversed entities', async () => {
         const traversalRequest: TraversalRequest = {
           collection: {
-            collection_name: 'person',
+            collection_name: 'persons',
             sort: [{ field: 'name', order: SortOrder.DESCENDING }]
           },
-          opts: { direction: Direction.INBOUND },
+          opts: { direction: Direction.OUTBOUND },
           path: true
         };
-        const expectedVertices = [
-          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
-          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j' },
-          { car: 'bmw', id: 'c', place_id: 'e' },
-          { car: 'vw', id: 'd', place_id: 'f' },
-          { place: 'Munich', id: 'e', state_id: 'g' },
-          { place: 'wolfsburg', id: 'f', state_id: 'h' }];
         // traverse graph
         let result = await testService.traversal(traversalRequest);
 
@@ -1148,10 +1147,13 @@ const testProvider = (providerCfg) => {
               traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
             }
           });
-          let finalVertices: any = [];
           result.on('end', () => {
             should.exist(traversalResponse.paths);
             should.exist(traversalResponse.data);
+            // Descending order for persons entity
+            traversalResponse.data[0].name.should.equal('Bob');
+            traversalResponse.data[1].name.should.equal('Alice');
+            resolve(traversalResponse);
           });
         });
       });
@@ -1170,11 +1172,6 @@ const providers = [
   {
     name: 'arango',
     init: async (): Promise<any> => {
-      const dbHost: string = cfg.get('database:testdb:host');
-      const dbPort: string = cfg.get('database:testdb:port');
-      const dbName: string = cfg.get('database:testdb:database');
-      const db = new Database('http://' + dbHost + ':' + dbPort);
-      await db.dropDatabase(dbName);
       return database.get(cfg.get('database:testdb'), server.logger, 'testGraph',
         cfg.get('graph:edgeDefinitions'));
     }

@@ -4,6 +4,7 @@ import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { TraversalRequest } from './interfaces';
 import { Stream } from 'stream';
+import { SortOrder } from '@restorecommerce/chassis-srv/lib/database/provider/arango/interface';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
@@ -70,6 +71,29 @@ export class GraphResourcesServiceBase {
       const filters = request?.filters;
       let path = request?.path ? request.path : false;
       let traversalCursor: TraversalResponse;
+
+      let sort;
+      if (collection && !_.isEmpty(collection.sort)) {
+        sort = {};
+        _.forEach(collection.sort, (s: any) => {
+          switch (s.order) {
+            case 'ASCENDING':
+            case 1:
+              sort[s.field] = 'ASC';
+              break;
+            case 2:
+            case 'DESCENDING':
+              sort[s.field] = 'DESC';
+              break;
+            case 'UNSORTED':
+            case 0:
+            default:
+              break;
+          }
+        });
+        (collection as any).sort = sort;
+      }
+
       try {
         this.logger.debug('Calling traversal', { vertices, collection });
         traversalCursor = await this.db.traversal(vertices, collection,

@@ -199,18 +199,22 @@ export const getGQLResolverFunctions =
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {
             let operationStatus = { code: 0, message: '' };
-            let aggregatedResponse = await new Promise((resolve, reject) => {
+            let aggregatedResponse: any = await new Promise((resolve, reject) => {
               let response: any = {};
+              let combinedChunks: any = {};
               result.on('data', (chunk) => {
                 const chunkObj = _.cloneDeep(chunk);
-                if (!response) {
-                  response = chunk;
+                if (!combinedChunks) {
+                  combinedChunks = chunk;
                 } else {
-                  Object.assign(response, chunk);
+                  Object.assign(combinedChunks, chunk);
                 }
                 const existingBufferFields = _.intersection(Object.keys(chunk), bufferFields);
                 for (let bufferField of existingBufferFields) {
                   if (chunkObj[bufferField] && chunkObj[bufferField].value) {
+                    if(!response[bufferField]) {
+                      response[bufferField] = { value: []};
+                    }
                     if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
                       response[bufferField].value = [];
                     }
@@ -235,7 +239,11 @@ export const getGQLResolverFunctions =
                   operationStatus.code = 200;
                   operationStatus.message = 'success';
                 }
-                resolve(response);
+                if (!_.isEmpty(response)) {
+                  resolve(response);
+                } else if (!_.isEmpty(combinedChunks)) {
+                  resolve(combinedChunks);
+                }
               });
             });
             return { details: aggregatedResponse, operationStatus };

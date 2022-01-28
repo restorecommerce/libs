@@ -52,7 +52,7 @@ export type ProtoIoRestorecommerceAccessControlResponse = {
 export type IoRestorecommerceAccessControlResponse = {
   __typename?: 'IoRestorecommerceAccessControlResponse';
   decision?: Maybe<IoRestorecommerceAccessControlResponseDecision>;
-  obligation?: Maybe<Scalars['String']>;
+  obligation?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   evaluationCacheable?: Maybe<Scalars['Boolean']>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
@@ -63,6 +63,13 @@ export enum IoRestorecommerceAccessControlResponseDecision {
   NotApplicable = 2,
   Indeterminate = 3
 }
+
+export type IoRestorecommerceAttributeAttribute = {
+  __typename?: 'IoRestorecommerceAttributeAttribute';
+  id?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+};
 
 export type IoRestorecommerceStatusOperationStatus = {
   __typename?: 'IoRestorecommerceStatusOperationStatus';
@@ -107,6 +114,7 @@ export type ProtoIoRestorecommerceAccessControlReverseQuery = {
 export type IoRestorecommerceAccessControlReverseQuery = {
   __typename?: 'IoRestorecommerceAccessControlReverseQuery';
   policySets?: Maybe<Array<IoRestorecommercePolicySetPolicySetRq>>;
+  obligation?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
@@ -124,13 +132,6 @@ export type IoRestorecommerceRuleTarget = {
   subject?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   resources?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   action?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-};
-
-export type IoRestorecommerceAttributeAttribute = {
-  __typename?: 'IoRestorecommerceAttributeAttribute';
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommercePolicyPolicyRq = {
@@ -649,6 +650,7 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceAccessControlResponse: ResolverTypeWrapper<ProtoIoRestorecommerceAccessControlResponse>;
   IoRestorecommerceAccessControlResponse: ResolverTypeWrapper<IoRestorecommerceAccessControlResponse>;
   IoRestorecommerceAccessControlResponseDecision: IoRestorecommerceAccessControlResponseDecision;
+  IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
@@ -663,7 +665,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAccessControlReverseQuery: ResolverTypeWrapper<IoRestorecommerceAccessControlReverseQuery>;
   IoRestorecommercePolicySetPolicySetRQ: ResolverTypeWrapper<IoRestorecommercePolicySetPolicySetRq>;
   IoRestorecommerceRuleTarget: ResolverTypeWrapper<IoRestorecommerceRuleTarget>;
-  IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommercePolicyPolicyRQ: ResolverTypeWrapper<IoRestorecommercePolicyPolicyRq>;
   IoRestorecommerceRuleRuleRQ: ResolverTypeWrapper<IoRestorecommerceRuleRuleRq>;
   IoRestorecommerceRuleEffect: IoRestorecommerceRuleEffect;
@@ -730,6 +731,7 @@ export type ResolversParentTypes = ResolversObject<{
   AccessControlAccessControlQuery: AccessControlAccessControlQuery;
   ProtoIoRestorecommerceAccessControlResponse: ProtoIoRestorecommerceAccessControlResponse;
   IoRestorecommerceAccessControlResponse: IoRestorecommerceAccessControlResponse;
+  IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   String: Scalars['String'];
   Boolean: Scalars['Boolean'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
@@ -744,7 +746,6 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAccessControlReverseQuery: IoRestorecommerceAccessControlReverseQuery;
   IoRestorecommercePolicySetPolicySetRQ: IoRestorecommercePolicySetPolicySetRq;
   IoRestorecommerceRuleTarget: IoRestorecommerceRuleTarget;
-  IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommercePolicyPolicyRQ: IoRestorecommercePolicyPolicyRq;
   IoRestorecommerceRuleRuleRQ: IoRestorecommerceRuleRuleRq;
   IoRestorecommerceRuleContextQuery: IoRestorecommerceRuleContextQuery;
@@ -820,13 +821,20 @@ export type ProtoIoRestorecommerceAccessControlResponseResolvers<ContextType = A
 
 export type IoRestorecommerceAccessControlResponseResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAccessControlResponse'] = ResolversParentTypes['IoRestorecommerceAccessControlResponse']> = ResolversObject<{
   decision?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAccessControlResponseDecision']>, ParentType, ContextType>;
-  obligation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  obligation?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   evaluationCacheable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAccessControlResponseDecisionResolvers = { PERMIT: 'undefined', DENY: 1, NOT_APPLICABLE: 2, INDETERMINATE: 3 };
+
+export type IoRestorecommerceAttributeAttributeResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
 
 export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusOperationStatus'] = ResolversParentTypes['IoRestorecommerceStatusOperationStatus']> = ResolversObject<{
   code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -845,6 +853,7 @@ export type ProtoIoRestorecommerceAccessControlReverseQueryResolvers<ContextType
 
 export type IoRestorecommerceAccessControlReverseQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAccessControlReverseQuery'] = ResolversParentTypes['IoRestorecommerceAccessControlReverseQuery']> = ResolversObject<{
   policySets?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePolicySetPolicySetRQ']>>, ParentType, ContextType>;
+  obligation?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -862,13 +871,6 @@ export type IoRestorecommerceRuleTargetResolvers<ContextType = AccessControlCont
   subject?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   resources?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   action?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAttributeAttributeResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1104,13 +1106,13 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   ProtoIoRestorecommerceAccessControlResponse?: ProtoIoRestorecommerceAccessControlResponseResolvers<ContextType>;
   IoRestorecommerceAccessControlResponse?: IoRestorecommerceAccessControlResponseResolvers<ContextType>;
   IoRestorecommerceAccessControlResponseDecision?: IoRestorecommerceAccessControlResponseDecisionResolvers;
+  IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   Upload?: GraphQLScalarType;
   ProtoIoRestorecommerceAccessControlReverseQuery?: ProtoIoRestorecommerceAccessControlReverseQueryResolvers<ContextType>;
   IoRestorecommerceAccessControlReverseQuery?: IoRestorecommerceAccessControlReverseQueryResolvers<ContextType>;
   IoRestorecommercePolicySetPolicySetRQ?: IoRestorecommercePolicySetPolicySetRqResolvers<ContextType>;
   IoRestorecommerceRuleTarget?: IoRestorecommerceRuleTargetResolvers<ContextType>;
-  IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommercePolicyPolicyRQ?: IoRestorecommercePolicyPolicyRqResolvers<ContextType>;
   IoRestorecommerceRuleRuleRQ?: IoRestorecommerceRuleRuleRqResolvers<ContextType>;
   IoRestorecommerceRuleEffect?: IoRestorecommerceRuleEffectResolvers;

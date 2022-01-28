@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.11...@restorecommerce/protos@0.5.0) (2022-01-28)
+
+
+### Bug Fixes
+
+* **fix generated interfaces: convert snake_case to camelcase:** snake_case to camelCase ([bf78c27](https://github.com/restorecommerce/libs/commit/bf78c27a1e776d716c711c0b633acd7609ca4561))
+
+
+### Features
+
+* **add protos for fulfillment-product solution proposals:** packsol ([ce6f78f](https://github.com/restorecommerce/libs/commit/ce6f78f34a39924aa30c50857ad751b9ac3be396))
+
+
+### BREAKING CHANGES
+
+* **add protos for fulfillment-product solution proposals:** fulfillment.proto, fulfillment-courier.proto and fulfillment-product.proto have
+changed completely
+
+
+
+
+
 ## [0.4.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.10...@restorecommerce/protos@0.4.11) (2021-12-09)
 
 

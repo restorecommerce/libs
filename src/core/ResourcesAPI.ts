@@ -1,14 +1,9 @@
 import * as _ from 'lodash';
-import bluebird from 'bluebird';
 import { errors } from '@restorecommerce/chassis-srv';
 import * as uuid from 'uuid';
-import * as redis from 'redis';
 import { Topic } from '@restorecommerce/kafka-client';
-
 import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
-
-bluebird.promisifyAll(redis.RedisClient.prototype);
 
 let redisClient: any;
 

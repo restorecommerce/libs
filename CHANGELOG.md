@@ -1,3 +1,8 @@
+### 0.2.3 (January 28th, 2022)
+
+- fix traversal for changes in proto structure and updated tests
+- updated dependencies
+
 ### 0.2.2 (December 22nd, 2021)
 
 - updated RC dependencies

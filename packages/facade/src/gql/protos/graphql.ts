@@ -16,7 +16,7 @@ import {
 import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes, getNameSpaceTypeName } from "./registry";
-import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields, updateJSON } from "./utils";
+import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields, convertEnumToInt } from "./utils";
 import { Readable } from "stream";
 import {
   DescriptorProto,
@@ -164,9 +164,8 @@ export const getGQLResolverFunctions =
       const defaults = typing.processor.fromPartial({});
 
       let subjectField: null | string = null;
-      const inputTyping = getTyping(method.inputType);
-      if (inputTyping) {
-        for (let field of (inputTyping.meta as DescriptorProto).field) {
+      if (typing) {
+        for (let field of (typing.meta as DescriptorProto).field) {
           if (field.typeName === authSubjectType) {
             subjectField = field.name;
             break;
@@ -180,46 +179,13 @@ export const getGQLResolverFunctions =
         try {
           const converted = await recursiveUploadToBuffer(args.input, typing.input);
 
-          const req = {
+          let req = {
             // Fill defaults
             ...defaults,
             ...converted
           };
 
-          let enumMap: Map<string, string> = new Map();
-          // enumMap populated with key as enum name space type and value as the path (to replace from request object)
-          if (inputTyping) {
-            const gqlInputObject = inputTyping.input;
-            const gqlFields = (gqlInputObject as GraphQLInputObjectType).getFields();
-            if (gqlFields) {
-              const fieldNames = Object.keys(gqlFields);
-              for (let fieldName of fieldNames) {
-                // gql fieldName from input is of format [IIoRestorecommerceResourcebaseSort!]
-                // below check is to remove `[` and `!]`
-                let fieldType = gqlFields[fieldName].type.toString();
-                if (fieldType.startsWith('[') && fieldType.endsWith('!]')) {
-                  fieldType = fieldType.substring(1, fieldType.length - 2);
-                }
-                // if fieldType is not basic type, then check if its fieldType belongs to Enum
-                // if not get the object and make recursive check till no more objects are found
-                if (scalarTypes.indexOf(fieldType) <= -1) {
-                  enumMap = recursiveEnumCheck(fieldType, enumMap, fieldName, []);
-                }
-              }
-            }
-          }
-
-          for (let [key, val] of enumMap) {
-            const enumNameSpace = getNameSpaceTypeName(key);
-            if (enumNameSpace && typeof enumNameSpace === 'string') {
-              const enumTyping = getTyping(enumNameSpace);
-              const enumIntMapping = (enumTyping?.meta as any).value;
-              if (enumIntMapping && _.isArray(enumIntMapping) && enumIntMapping.length > 0) {
-                updateJSON(val, enumIntMapping, req);
-              }
-            }
-          }
-
+          req = convertEnumToInt(typing, req);
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 
@@ -316,6 +282,7 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
   if (schema?.path?.prev?.key) {
     key = schema.path.prev.key;
   }
+  console.log('Schema is........', schema);
   if (schema?.path?.prev?.typename) {
     let typeName = schema.path.prev.typename;
     if (typeName.endsWith('Mutation')) {

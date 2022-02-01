@@ -16,7 +16,7 @@ import {
 import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes, getNameSpaceTypeName } from "./registry";
-import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields } from "./utils";
+import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields, updateJSON } from "./utils";
 import { Readable } from "stream";
 import {
   DescriptorProto,
@@ -214,13 +214,11 @@ export const getGQLResolverFunctions =
             if (enumNameSpace && typeof enumNameSpace === 'string') {
               const enumTyping = getTyping(enumNameSpace);
               const enumIntMapping = (enumTyping?.meta as any).value;
-              if (_.isArray(enumIntMapping) && enumIntMapping.length > 0) {
-                // TODO find the order from request get its value and replace it with
-                // index value from enumIntMapping
+              if (enumIntMapping && _.isArray(enumIntMapping) && enumIntMapping.length > 0) {
+                updateJSON(val, enumIntMapping, req);
               }
             }
           }
-          console.log('Enum Map finally is..........', enumMap);
 
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});

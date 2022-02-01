@@ -15,7 +15,7 @@ import {
 } from "graphql/type/definition";
 import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
-import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes } from "./registry";
+import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes, getNameSpaceTypeName } from "./registry";
 import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields } from "./utils";
 import { Readable } from "stream";
 import {
@@ -174,7 +174,6 @@ export const getGQLResolverFunctions =
         }
       }
 
-      const registeredEnumTypes = getRegisteredEnumTypings();
       (obj as any)[method.name!] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
@@ -187,24 +186,42 @@ export const getGQLResolverFunctions =
             ...converted
           };
 
+          let enumMap: Map<string, string> = new Map();
+          // enumMap populated with key as enum name space type and value as the path (to replace from request object)
           if (inputTyping) {
-            console.log('Registered Enum Types are.......', registeredEnumTypes);
             const gqlInputObject = inputTyping.input;
             const gqlFields = (gqlInputObject as GraphQLInputObjectType).getFields();
             if (gqlFields) {
               const fieldNames = Object.keys(gqlFields);
               for (let fieldName of fieldNames) {
-                const fieldType = gqlFields[fieldName].type.toString();
+                // gql fieldName from input is of format [IIoRestorecommerceResourcebaseSort!]
+                // below check is to remove `[` and `!]`
+                let fieldType = gqlFields[fieldName].type.toString();
+                if (fieldType.startsWith('[') && fieldType.endsWith('!]')) {
+                  fieldType = fieldType.substring(1, fieldType.length - 2);
+                }
                 // if fieldType is not basic type, then check if its fieldType belongs to Enum
                 // if not get the object and make recursive check till no more objects are found
                 if (scalarTypes.indexOf(fieldType) <= -1) {
-                  const enumFieldType = recursiveEnumCheck(fieldType);
-                  console.log('Enum Field Type is...', enumFieldType);
+                  enumMap = recursiveEnumCheck(fieldType, enumMap, fieldName, []);
                 }
               }
             }
           }
-          console.log('Method obj is...........', method);
+
+          for (let [key, val] of enumMap) {
+            const enumNameSpace = getNameSpaceTypeName(key);
+            if (enumNameSpace && typeof enumNameSpace === 'string') {
+              const enumTyping = getTyping(enumNameSpace);
+              const enumIntMapping = (enumTyping?.meta as any).value;
+              if (_.isArray(enumIntMapping) && enumIntMapping.length > 0) {
+                // TODO find the order from request get its value and replace it with
+                // index value from enumIntMapping
+              }
+            }
+          }
+          console.log('Enum Map finally is..........', enumMap);
+
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 

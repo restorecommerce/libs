@@ -4,7 +4,7 @@ import {
   GraphQLFieldConfigMap, GraphQLFloat, GraphQLInputFieldConfigMap,
   GraphQLInputObjectTypeConfig, GraphQLInputType, GraphQLInt, GraphQLList, GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLObjectTypeConfig, GraphQLOutputType, GraphQLString, GraphQLUnionType
+  GraphQLObjectTypeConfig, GraphQLOutputType, GraphQLString, GraphQLUnionType, validate
 } from "graphql";
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
 import { GraphQLUpload } from 'graphql-upload';
@@ -16,6 +16,7 @@ import {
   FieldDescriptorProto, FieldDescriptorProto_Label,
   FieldDescriptorProto_Type, MethodDescriptorProto
 } from "ts-proto-descriptors/google/protobuf/descriptor";
+import * as _ from 'lodash';
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType;
@@ -75,38 +76,53 @@ export const getNameSpaceTypeName = (typeName: string): string | undefined => {
 };
 
 // Iterate through the object and collect list of all enum types with their keys / paths
-export const recursiveEnumCheck = (typeName: string, enumList: string[]): string[] => {
-  // To remove Prefix 'I'
+export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string>, prevFieldName: string, traversedFields: string[]): Map<string, string> => {
   if (scalarTypes.indexOf(typeName) <= -1) {
-    console.log('With in recursive function >>>>>>>>........................', typeName);
+    if (typeName && typeName.startsWith('[') && typeName.endsWith('!]')) {
+      typeName = typeName.substring(1, typeName.length - 2);
+    }
     const objectNameSpace = getNameSpaceTypeName(typeName);
-    console.log('NS is...', objectNameSpace);
     if (objectNameSpace) {
       const objectType = getTyping(objectNameSpace);
-      console.log('Object Type is......', objectType);
       if (objectType?.input && (registeredEnumTypes.indexOf(objectType.input.toString()) > -1)) {
-        console.log('We found an enum....', objectType);
-        enumList.push(objectType?.input.toString());
-        // return objectType.input.toString();
+        enumMap.set(objectType?.input.toString(), prevFieldName);
+        prevFieldName = '';
       } else if (objectType?.input) {
-        // get nested fields in this object and check
+        // get nested fields from this object and check recursively
         const gqlFields = (objectType.input as GraphQLInputObjectType).getFields();
         if (gqlFields) {
           const fieldNames = Object.keys(gqlFields);
           for (let fieldName of fieldNames) {
-            const fieldType = gqlFields[fieldName].type.toString();
-            // if fieldType is not basic type, then check if its fieldType belongs to Enum
-            // if not get the object and make recursive check till no more objects are found
+            let fieldType = gqlFields[fieldName].type.toString(); 
+            // if fieldType is not basic type, get the object and make recursive check till no more objects are found
+            let skipLoop = false;
             if (scalarTypes.indexOf(fieldType) <= -1) {
-              const enumFieldType = recursiveEnumCheck(fieldType, enumList);
-              console.log('Enum Field Type is...', enumFieldType);
+              // check if fieldName already exists in the enumMap (to avoid circular reference for infinite loop)
+              for (let [key, val] of enumMap) {
+                const valueArray = val.split('.');
+                // if fieldName already exists in enumMap, this field is a circular field ref
+                // ignore it as its already traversed and enums are kept track of
+                if (valueArray.indexOf(fieldName) > -1) {
+                  skipLoop = true;
+                }
+              }
+              if (skipLoop) {
+                continue;
+              }
+              if (!prevFieldName || _.isEmpty(prevFieldName)) {
+                prevFieldName = fieldName;
+              }
+              if (prevFieldName && prevFieldName != fieldName) {
+                fieldName = prevFieldName + '.' + fieldName;
+              }
+              recursiveEnumCheck(fieldType, enumMap, fieldName, traversedFields);
             }
           }
         }
       }
     }
   }
-  return enumList;
+  return enumMap;
 };
 
 const registerMessageTypesRecursive = (packageName: string, methodDef: MethodDescriptorProto[],

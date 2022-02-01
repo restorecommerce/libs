@@ -15,7 +15,7 @@ import {
 } from "graphql/type/definition";
 import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
-import { getTyping } from "./registry";
+import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes } from "./registry";
 import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields } from "./utils";
 import { Readable } from "stream";
 import {
@@ -174,6 +174,7 @@ export const getGQLResolverFunctions =
         }
       }
 
+      const registeredEnumTypes = getRegisteredEnumTypings();
       (obj as any)[method.name!] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
@@ -186,6 +187,24 @@ export const getGQLResolverFunctions =
             ...converted
           };
 
+          if (inputTyping) {
+            console.log('Registered Enum Types are.......', registeredEnumTypes);
+            const gqlInputObject = inputTyping.input;
+            const gqlFields = (gqlInputObject as GraphQLInputObjectType).getFields();
+            if (gqlFields) {
+              const fieldNames = Object.keys(gqlFields);
+              for (let fieldName of fieldNames) {
+                const fieldType = gqlFields[fieldName].type.toString();
+                // if fieldType is not basic type, then check if its fieldType belongs to Enum
+                // if not get the object and make recursive check till no more objects are found
+                if (scalarTypes.indexOf(fieldType) <= -1) {
+                  const enumFieldType = recursiveEnumCheck(fieldType);
+                  console.log('Enum Field Type is...', enumFieldType);
+                }
+              }
+            }
+          }
+          console.log('Method obj is...........', method);
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 
@@ -212,8 +231,8 @@ export const getGQLResolverFunctions =
                 const existingBufferFields = _.intersection(Object.keys(chunk), bufferFields);
                 for (let bufferField of existingBufferFields) {
                   if (chunkObj[bufferField] && chunkObj[bufferField].value) {
-                    if(!response[bufferField]) {
-                      response[bufferField] = { value: []};
+                    if (!response[bufferField]) {
+                      response[bufferField] = { value: [] };
                     }
                     if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
                       response[bufferField].value = [];

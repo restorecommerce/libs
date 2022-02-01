@@ -26,6 +26,9 @@ export interface TypingData {
 
 const registeredTypings = new Map<string, TypingData>();
 
+export const scalarTypes = ['Boolean', 'Int', 'Float', 'String', 'ID', 'Upload'];
+const typeNameAndNameSpaceMapping = new Map<string, string>();
+const registeredEnumTypes: string[] = [];
 const MapScalar = new GraphQLScalarType({
   name: 'MapScalar',
 });
@@ -62,6 +65,49 @@ export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => 
     });
   });
 }
+
+export const getRegisteredEnumTypings = (): string[] => {
+  return registeredEnumTypes;
+};
+
+export const getNameSpaceTypeName = (typeName: string): string | undefined => {
+  return typeNameAndNameSpaceMapping.get(typeName);
+};
+
+// Iterate through the object and collect list of all enum types with their keys / paths
+export const recursiveEnumCheck = (typeName: string, enumList: string[]): string[] => {
+  // To remove Prefix 'I'
+  if (scalarTypes.indexOf(typeName) <= -1) {
+    console.log('With in recursive function >>>>>>>>........................', typeName);
+    const objectNameSpace = getNameSpaceTypeName(typeName);
+    console.log('NS is...', objectNameSpace);
+    if (objectNameSpace) {
+      const objectType = getTyping(objectNameSpace);
+      console.log('Object Type is......', objectType);
+      if (objectType?.input && (registeredEnumTypes.indexOf(objectType.input.toString()) > -1)) {
+        console.log('We found an enum....', objectType);
+        enumList.push(objectType?.input.toString());
+        // return objectType.input.toString();
+      } else if (objectType?.input) {
+        // get nested fields in this object and check
+        const gqlFields = (objectType.input as GraphQLInputObjectType).getFields();
+        if (gqlFields) {
+          const fieldNames = Object.keys(gqlFields);
+          for (let fieldName of fieldNames) {
+            const fieldType = gqlFields[fieldName].type.toString();
+            // if fieldType is not basic type, then check if its fieldType belongs to Enum
+            // if not get the object and make recursive check till no more objects are found
+            if (scalarTypes.indexOf(fieldType) <= -1) {
+              const enumFieldType = recursiveEnumCheck(fieldType, enumList);
+              console.log('Enum Field Type is...', enumFieldType);
+            }
+          }
+        }
+      }
+    }
+  }
+  return enumList;
+};
 
 const registerMessageTypesRecursive = (packageName: string, methodDef: MethodDescriptorProto[],
   ...types: DescriptorProto[]) => {
@@ -170,6 +216,7 @@ export const registerTyping = (
     fields: inputFields,
   });
 
+  typeNameAndNameSpaceMapping.set(resultInputObj.name, type);
   registeredTypings.set(type, {
     output: resultObj,
     input: resultInputObj,
@@ -203,6 +250,8 @@ export const registerEnumTyping = <T = { [key: string]: any }>(
     values
   });
 
+  registeredEnumTypes.push(name);
+  typeNameAndNameSpaceMapping.set(name, type);
   registeredTypings.set(type, {
     output: result,
     input: result,

@@ -93,20 +93,14 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
         if (gqlFields) {
           const fieldNames = Object.keys(gqlFields);
           for (let fieldName of fieldNames) {
-            let fieldType = gqlFields[fieldName].type.toString(); 
+            let fieldType = gqlFields[fieldName].type.toString();
             // if fieldType is not basic type, get the object and make recursive check till no more objects are found
-            let skipLoop = false;
             if (scalarTypes.indexOf(fieldType) <= -1) {
-              // check if fieldName already exists in the enumMap (to avoid circular reference for infinite loop)
-              for (let [key, val] of enumMap) {
-                const valueArray = val.split('.');
-                // if fieldName already exists in enumMap, this field is a circular field ref
-                // ignore it as its already traversed and enums are kept track of
-                if (valueArray.indexOf(fieldName) > -1) {
-                  skipLoop = true;
-                }
-              }
-              if (skipLoop) {
+              // check if fieldName already exists in the traversedFields (to avoid circular reference for infinite loop)
+              if (traversedFields.indexOf(fieldName) <= -1) {
+                traversedFields.push(fieldName);
+              } else if(traversedFields.indexOf(fieldName) > -1) {
+                // skip loop as this GQL type is already traversed
                 continue;
               }
               if (!prevFieldName || _.isEmpty(prevFieldName)) {

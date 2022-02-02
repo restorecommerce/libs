@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.43](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.42...@restorecommerce/facade@0.1.43) (2022-02-02)
+
+
+### Bug Fixes
+
+* **facade:** enum convert string to integer ([47127ef](https://github.com/restorecommerce/libs/commit/47127ef323f5853a4c6573b01dd36c3725074d4e))
+* **facade:** fix for mutation resolvers to convert enums string values to integer ([28d0fea](https://github.com/restorecommerce/libs/commit/28d0fea912778b3cf4f748bc68b1e0fafaea60af))
+* **facade:** fixed read operations to convert enums to number ([81083c0](https://github.com/restorecommerce/libs/commit/81083c0162d605d6a3c8394e06ba093d1e29948e))
+* **facade:** move conversion of enum to int to utils ([72c9a1f](https://github.com/restorecommerce/libs/commit/72c9a1f0be269b68bc9b2501a38789ce7409453f))
+* **facade:** recursive enum path fix ([244f7fc](https://github.com/restorecommerce/libs/commit/244f7fc782d10ffb5f774f0245174446288cacb5))
+
+
+
+
+
 ## [0.1.42](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.41...@restorecommerce/facade@0.1.42) (2022-01-28)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -25,7 +25,7 @@ export interface TypingData {
   processor?: any;
 }
 
-const registeredTypings = new Map<string, TypingData>();
+export const registeredTypings = new Map<string, TypingData>();
 
 export const scalarTypes = ['Boolean', 'Int', 'Float', 'String', 'ID', 'Upload'];
 const typeNameAndNameSpaceMapping = new Map<string, string>();

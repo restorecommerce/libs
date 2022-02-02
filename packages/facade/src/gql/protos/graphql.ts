@@ -13,9 +13,8 @@ import {
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
   Thunk
 } from "graphql/type/definition";
-import { OperationStatusType } from "../";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
-import { getTyping, getRegisteredEnumTypings, recursiveEnumCheck, scalarTypes, getNameSpaceTypeName } from "./registry";
+import { getTyping, registeredTypings, getNameSpaceTypeName } from "./registry";
 import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields, convertEnumToInt } from "./utils";
 import { Readable } from "stream";
 import {
@@ -29,6 +28,7 @@ import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 
 const typeCache = new Map<string, GraphQLObjectType>();
 const Mutate = ['Create', 'Update', 'Upsert'];
+const inputMethodType = new Map<string, string>();
 
 export const getGQLSchema = <TSource, TContext>
   (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
@@ -185,6 +185,7 @@ export const getGQLResolverFunctions =
             ...converted
           };
 
+          // convert enum strings to integers
           req = convertEnumToInt(typing, req);
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
@@ -282,7 +283,6 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
   if (schema?.path?.prev?.key) {
     key = schema.path.prev.key;
   }
-  console.log('Schema is........', schema);
   if (schema?.path?.prev?.typename) {
     let typeName = schema.path.prev.typename;
     if (typeName.endsWith('Mutation')) {
@@ -309,6 +309,13 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
       method = 'Update';
     } else if (mode === 'UPSERT') {
       method = 'Upsert';
+    }
+
+    const inputMethodTypeKey = module_name.toLowerCase() + '.' + key.toLowerCase() + '.' + method.toLowerCase();
+    const nsType = inputMethodType.get(inputMethodTypeKey);
+    if (nsType) {
+      const inputTyping = getTyping(nsType);
+      convertEnumToInt(inputTyping!!, input);
     }
 
     // check service object contains requested mode's method def
@@ -424,7 +431,7 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
   (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
-    mutation: boolean = false, subspace: string | undefined = undefined) => {
+    mutation: boolean = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -448,7 +455,13 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
       throw new Error(`Namespace "${namespace}" already contains a function: ${name} (mutation: ${mutation})`);
     }
   }
-
+  if (service) {
+    const key = namespace?.toLocaleLowerCase() + '.' + subspace?.toLocaleLowerCase() + '.' + name?.toLocaleLowerCase();
+    const value = service.method.find((m) => m.name === name);
+    if (key && value?.inputType) {
+      inputMethodType.set(key, value.inputType);
+    }
+  }
   // custom mutation resolver for create, update and upsert - Mutate
   if (Mutate.indexOf(name) > -1) {
     name = 'Mutate';
@@ -699,7 +712,7 @@ export const getAndGenerateResolvers =
     const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg.client);
 
     Object.keys(func).forEach(k => {
-      registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace);
+      registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace, service);
     });
 
     return generateResolver(namespace as string)
@@ -732,9 +745,10 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
     const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config);
 
     const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config.client);
-
     Object.keys(func).forEach(k => {
-      registerResolverFunction(config.root ? sub.name : namespace, k, func[k], !queries.has(k) && mutations.has(k), config.root ? undefined : sub.name);
+      const regNamespace = config.root ? sub.name : namespace;
+      const regSubspace = config.root ? undefined : sub.name;
+      registerResolverFunction(regNamespace, k, func[k], !queries.has(k) && mutations.has(k), regSubspace, sub.service);
     });
   });
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.44](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.43...@restorecommerce/facade@0.1.44) (2022-02-02)
+
+
+### Bug Fixes
+
+* **facade:** for recursive circular references (ex: attributes -> having nested attributes) ([59c2904](https://github.com/restorecommerce/libs/commit/59c29049c23ecb5f3265ea37a6757ca551023b38))
+
+
+
+
+
 ## [0.1.43](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.42...@restorecommerce/facade@0.1.43) (2022-02-02)
 
 

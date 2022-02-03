@@ -50,4 +50,5 @@ message Location {
   repeated string children_ids = 7;  // Locations contained in this location
   string address_id = 8;
   google.protobuf.Any data = 9; /// additional data
+  string type = 10; // location type
 }

@@ -48,7 +48,6 @@ message Organization {
   io.restorecommerce.meta.Meta meta = 2;
   string address_id = 3; /// Address for the organization
   string parent_id = 4; //  Hierarchically superior organization; may be null
-  repeated string children_ids = 5; // Hierarchically inferior organizations; may be null/empty
   repeated string contact_point_ids = 6; // list of possible legal addresses of different types
   string website = 7;
   string email = 8;

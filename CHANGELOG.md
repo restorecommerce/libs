@@ -1,3 +1,7 @@
+### 0.2.5 (February 7th, 2022)
+
+- fix for strategy for fields for updated redis
+
 ### 0.2.4 (January 28th, 2022)
 
 - remove bluebird and updated redis

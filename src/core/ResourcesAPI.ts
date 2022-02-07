@@ -31,7 +31,7 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
 
   const now = Date.now();
   if (redisClient) {
-    const values: Array<string> = await redisClient.hgetallAsync(collectionName);
+    const values = await redisClient.hGetAll(collectionName);
 
     if (values) {
       for (let field in values) {
@@ -39,8 +39,8 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
         switch (strategy) {
           case Strategies.INCREMENT:
             const key = collectionName + ':' + field;
-            o[field] = await redisClient.getAsync(key);
-            await redisClient.incrAsync(key);
+            o[field] = await redisClient.get(key);
+            await redisClient.incr(key);
             break;
           case Strategies.UUID:
             o[field] = uuidGen();
@@ -49,7 +49,7 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
             o[field] = uuidGen();
             break;
           case Strategies.TIMESTAMP:
-            o[field] = await redisClient.timeAsync()[0];
+            o[field] = await redisClient.time()[0];
             break;
         }
       }
@@ -143,22 +143,14 @@ export class ResourcesAPIBase {
     }
 
     // values for Redis hash set
-    const hashValues = [];
-    hashValues.push(collectionName);
     for (let field in strategyCfg) {
       const strategy = strategyCfg[field].strategy;
-      hashValues.push(field);
-      hashValues.push(strategy);
+      redisClient.hSet(collectionName, field, strategy);
       switch (strategy) {
         case Strategies.INCREMENT:
-          let startingValue;
           // check if value already exists in redis
-          redisClient.get(`${collectionName}:${field}`, (err, reply) => {
-            if (err) {
-              throw err;
-            }
-            startingValue = reply;
-          });
+          let startingValue: any;
+          startingValue = redisClient.get(`${collectionName}:${field}`).then((val) => val);
           if (!startingValue) {
             if (strategyCfg[field].startingValue) {
               startingValue = Number(strategyCfg[field].startingValue) != NaN ?
@@ -167,26 +159,12 @@ export class ResourcesAPIBase {
             else {
               startingValue = '0';
             }
-            redisClient.set(`${collectionName}:${field}`, startingValue, (err, reply) => {
-              if (err) {
-                throw err;
-              }
-              if (reply != 'OK') {
-                throw Error('Unexpected reply from Redis: ' + reply);
-              }
-            });
+            redisClient.set(`${collectionName}:${field}`, startingValue).then((val) => val);
           }
           break;
         default:
           break;
       }
-    }
-    if (redisClient) {
-      redisClient.hset(hashValues, (err, reply) => {
-        if (err) {
-          throw err;
-        }
-      });
     }
   }
 

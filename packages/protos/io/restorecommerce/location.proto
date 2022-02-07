@@ -47,7 +47,6 @@ message Location {
   string description = 4; 
   string organization_id = 5; // Organization to which this location is linked
   string parent_id = 6;  //  Location which may contain this location; may be null
-  repeated string children_ids = 7;  // Locations contained in this location
   string address_id = 8;
   google.protobuf.Any data = 9; /// additional data
   string type = 10; // location type

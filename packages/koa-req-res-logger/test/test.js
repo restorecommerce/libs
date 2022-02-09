@@ -2,9 +2,11 @@
 
 const fetch = require('isomorphic-fetch');
 const Koa = require('koa');
-const koaReqResLogger = require('../');
+let reqResLogger = require('../lib/index');
 const assert = require('assert');
 const bodyParser = require('koa-bodyparser');
+
+reqResLogger = reqResLogger.default;
 
 let loggedLines = [];
 
@@ -38,7 +40,7 @@ function setupServer(bodyParsing = false, bodyBeforeLogging = true) {
     app.use(bodyParser());
   }
 
-  app.use(koaReqResLogger({
+  app.use(reqResLogger({
     logger: testLogger,
     logGraphQL: true,
     logGraphQLVariables: true

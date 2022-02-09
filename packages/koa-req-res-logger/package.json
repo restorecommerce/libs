@@ -2,8 +2,9 @@
   "name": "@restorecommerce/koa-req-res-logger",
   "version": "0.1.14",
   "description": "Koa 2 middleware which logs incoming requests and outgoing responses",
-  "main": "index",
-  "author": "Invend GmbH",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/koa-req-res-logger.git"
@@ -18,27 +19,37 @@
     "middleware"
   ],
   "scripts": {
-    "test": "npm run lint && npm run mocha",
-    "lint": "eslint *.json *.js",
-    "mocha": "nyc mocha ./test/* --exit",
+    "lint": "eslint src --ext .ts ",
+    "pretest": "npm run build",
+    "test": "nyc mocha ./test/* --exit",
+    "build:tsc": "tsc --strict",
+    "build:clean": "rimraf lib",
+    "build": "npm-run-all lint build:clean build:tsc",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc --reporter text --reporter lcov npm test"
   },
   "dependencies": {
-    "debug": "^4.3.1",
-    "winston": "^3.3.3"
+    "debug": "^4.3.3",
+    "winston": "^3.5.1"
   },
   "devDependencies": {
-    "@restorecommerce/eslint-config-restorecommerce": "^0.1.5",
-    "@types/mocha": "^8.2.1",
-    "coveralls": "^3.1.0",
+    "@types/mocha": "^9.1.0",
+    "@types/node": "^17.0.16",
+    "coveralls": "^3.1.1",
     "is-generator": "^1.0.3",
     "isomorphic-fetch": "^3.0.0",
-    "koa": "^2.13.1",
+    "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
-    "mocha": "^8.3.0",
+    "mocha": "^9.2.0",
     "nyc": "^15.1.0",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.11.0",
+    "@typescript-eslint/parser": "^5.11.0",
+    "eslint": "^8.8.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.1.4",
+    "typescript": "^4.5.5",
+    "npm-run-all": "^4.1.5"
   },
   "engines": {
     "node": ">= 8.0.0"

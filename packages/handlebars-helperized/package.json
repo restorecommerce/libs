@@ -3,7 +3,7 @@
   "version": "0.1.15",
   "description": "Opinionated handlebars based templating engine for rendering e-mail like content",
   "main": "index",
-  "author": "Invend GmbH",
+  "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/handlebars-helperized.git"

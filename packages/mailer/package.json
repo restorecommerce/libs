@@ -3,7 +3,7 @@
   "version": "0.1.15",
   "description": "Multi transport mailer based on nodemailer",
   "main": "index",
-  "author": "Invend GmbH",
+  "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/libs.git"

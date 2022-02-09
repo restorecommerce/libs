@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "Opinionated Kafka Client for Microservices",
   "main": "./lib/index.js",
-  "author": "Invend GmbH",
+  "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/kafka-client.git"

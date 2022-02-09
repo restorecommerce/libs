@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.14...@restorecommerce/grpc-client@0.3.0) (2022-02-09)
+
+
+### Features
+
+* add oauth ([3e7798e](https://github.com/restorecommerce/libs/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
+
+
+
+
+
 ## [0.2.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.2.13...@restorecommerce/grpc-client@0.2.14) (2021-12-22)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

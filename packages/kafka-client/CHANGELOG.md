@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.29...@restorecommerce/kafka-client@0.3.0) (2022-02-09)
+
+
+### Features
+
+* add oauth ([3e7798e](https://github.com/restorecommerce/kafka-client/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
+
+
+
+
+
 ## [0.2.29](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.2.28...@restorecommerce/kafka-client@0.2.29) (2021-12-22)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

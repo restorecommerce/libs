@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.44...@restorecommerce/facade@0.2.0) (2022-02-09)
+
+
+### Features
+
+* add oauth ([3e7798e](https://github.com/restorecommerce/libs/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
+
+
+
+
+
 ## [0.1.44](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.43...@restorecommerce/facade@0.1.44) (2022-02-02)
 
 

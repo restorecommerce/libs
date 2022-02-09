@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.5.0...@restorecommerce/protos@0.6.0) (2022-02-09)
+
+
+### Bug Fixes
+
+* **protos:** added type for location ([d332fdd](https://github.com/restorecommerce/libs/commit/d332fdd687b361381259b77beddc4d646ad6d718))
+* **protos:** removed children_ids for location proto ([4908e7c](https://github.com/restorecommerce/libs/commit/4908e7c36312bb2a45e9402c357be8f0e0a5ffd0))
+* **protos:** up organization proto to remove children_ids ([b0b8741](https://github.com/restorecommerce/libs/commit/b0b8741e2ad3b0cbec605ebbfdca75e50e7c0f61))
+
+
+### Features
+
+* add oauth ([3e7798e](https://github.com/restorecommerce/libs/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
+
+
+
+
+
 # [0.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.11...@restorecommerce/protos@0.5.0) (2022-01-28)
 
 

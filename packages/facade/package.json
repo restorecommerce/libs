@@ -98,7 +98,7 @@
     "generate": "ts-node --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
     "prepublishOnly": "npm run build",
     "debug-run": "ts-node --project tsconfig.debug.json debug-run.ts",
-    "copyhbs": "bash copy-hbs.sh"
+    "copyhbs": "sh copy-hbs.sh"
   },
   "engines": {
     "node": ">= 12.18.0"

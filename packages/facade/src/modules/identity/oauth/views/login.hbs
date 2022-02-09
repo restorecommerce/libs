@@ -1,0 +1,27 @@
+<style>
+.rc-login {
+  height: 100%;
+  background-color: #00adef;
+}
+
+.rc-account {
+  width: 815px;
+  box-sizing: border-box;
+  border-radius: .3rem;
+  background: #fff;
+  padding: 1rem;
+}
+</style>
+
+<div class="rc-login flex col justify-center">
+  <div class="self-center justify-center rc-account scale110p">
+    <h2>{{title}}</h2>
+    <div class="col center justify-center">
+      <h3>Login using one of the following providers:</h3>
+
+      <a href="{{links.google}}" class="button emphasized">
+        <div class="icogram"><span class="text">Google</span></div>
+      </a>
+    </div>
+  </div>
+</div>

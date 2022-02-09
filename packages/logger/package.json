@@ -20,7 +20,7 @@
     "cls-rtracer": "^2.6.0",
     "source-map-support": "^0.5.21",
     "winston": "^3.3.3",
-    "winston-elasticsearch": "^0.16.0"
+    "winston-elasticsearch": "^0.16.1"
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",

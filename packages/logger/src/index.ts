@@ -16,7 +16,7 @@ export interface RestoreLoggerOptions extends WinstonLoggerOptions {
 
 export type TransportStreamArray = Logger['transports'];
 
-export function createLogger(opts: RestoreLoggerOptions = {}) {
+export function createLogger(opts: RestoreLoggerOptions = {}): Logger {
   // TODO reason for setting namespaces flag?
   (log as any).namespaces = true;
 

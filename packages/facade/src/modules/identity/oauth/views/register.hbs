@@ -1,0 +1,134 @@
+<style>
+  .rc-login {
+    height: 100%;
+    background-color: #00adef;
+  }
+
+  .rc-account {
+    width: 815px;
+    box-sizing: border-box;
+    border-radius: .3rem;
+    background: #fff;
+    padding: 1rem;
+  }
+</style>
+
+<div class="rc-login flex col justify-center">
+  <div class="self-center justify-center rc-account scale110p">
+    <h2>{{title}}</h2>
+    <div class="col center justify-center">
+      <h3>Please register!</h3>
+      <form class="form w-100p" method="post" action="/oauth2-register">
+        <div class="form-control-group embedded-input-field-label floating">
+          <label for="first_name" class="form-control-label">
+            First Name
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="text" autocomplete="off" name="first_name" required>
+          </div>
+        </div>
+
+        <div class="form-control-group embedded-input-field-label floating">
+          <label for="last_name" class="form-control-label">
+            Last Name
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="text" autocomplete="off" name="last_name" required>
+          </div>
+        </div>
+
+        <div class="form-control-group embedded-input-field-label floating">
+          <label for="username" class="form-control-label">
+            Username
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="text" autocomplete="off" name="username" required>
+          </div>
+        </div>
+
+        <div class="form-control-group embedded-input-field-label">
+          <label for="email" class="form-control-label">
+            Email
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="email" autocomplete="off" name="email" value="{{email}}" required>
+          </div>
+        </div>
+
+        <div class="form-control-group embedded-input-field-label floating">
+          <label for="password" class="form-control-label">
+            Password
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="password" autocomplete="off" name="password" required>
+          </div>
+        </div>
+
+        <div class="form-control-group embedded-input-field-label floating">
+          <label for="password_repeated" class="form-control-label">
+            Password Repeated
+            <em class="required-indicator">•</em>
+          </label>
+          <div class="input-field">
+            <input class="input" type="password" autocomplete="off" name="password_repeated" required>
+          </div>
+        </div>
+
+        <button type="submit" class="button emphasized">
+          <div class="icogram"><span class="text">Register</span></div>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  !function() {
+    const docRoot = document.demoShadowRoot || document;
+
+    function registerInputFieldListeners(fcg) {
+      const inputField = fcg.querySelector('.input-field');
+      const input = inputField.querySelector('input, textarea');
+
+      function updateState() {
+        const hasValue = typeof input.value === 'string' && input.value.length > 0;
+        const hasFocus = docRoot.activeElement === input;
+
+        if (hasFocus) {
+          inputField.classList.add('focused');
+          fcg.classList.add('focused');
+        } else {
+          inputField.classList.remove('focused');
+          fcg.classList.remove('focused');
+        }
+
+        if (hasValue || hasFocus) {
+          fcg.classList.remove('floating');
+        } else {
+          fcg.classList.add('floating');
+        }
+      }
+
+      input.addEventListener('focus', updateState);
+      input.addEventListener('blur', updateState);
+      input.addEventListener('input', updateState);
+
+      updateState();
+
+      let prependedElements = 0, sibling = input;
+      while (sibling = sibling.previousElementSibling) {
+        prependedElements++;
+      }
+      fcg.style.setProperty('--prepended-elements', prependedElements);
+
+    }
+
+    const form = docRoot.querySelector('form');
+    form.querySelectorAll('.form-control-group').forEach(fcg => registerInputFieldListeners(fcg));
+  }();
+</script>

@@ -1,0 +1,23 @@
+<style>
+.rc-login {
+  height: 100%;
+  background-color: #00adef;
+}
+
+.rc-account {
+  width: 815px;
+  box-sizing: border-box;
+  border-radius: .3rem;
+  background: #fff;
+  padding: 1rem;
+}
+</style>
+
+<div class="rc-login flex col justify-center">
+  <div class="self-center justify-center rc-account scale110p">
+    <h2>{{title}}</h2>
+    <div class="row center justify-center">
+      <h3>Welcome {{user.firstName}} {{user.lastName}}!</h3>
+    </div>
+  </div>
+</div>

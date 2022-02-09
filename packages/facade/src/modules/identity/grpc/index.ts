@@ -19,6 +19,11 @@ import {
   protobufPackage as tokenProtobufPackage,
   Service as tokenService
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import {
+  protoMetadata as oauthMetaService,
+  protobufPackage as oauthProtobufPackage,
+  Service as oauthService
+} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth";
 import { getGRPCService } from "../../../gql/protos";
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 import { Logger } from "winston";
@@ -32,4 +37,5 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
   role = getGRPCService<roleService>(this, roleProtobufPackage, roleMetaService.fileDescriptor.service![0]);
   authentication_log = getGRPCService<authentication_logService>(this, authentication_logProtobufPackage, authentication_logMetaService.fileDescriptor.service![0]);
   token = getGRPCService<tokenService>(this, tokenProtobufPackage, tokenMetaService.fileDescriptor.service![0]);
+  oauth = getGRPCService<oauthService>(this, oauthProtobufPackage, oauthMetaService.fileDescriptor.service![0]);
 }

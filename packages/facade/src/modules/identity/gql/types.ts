@@ -2,6 +2,7 @@ import { protoMetadata as metaPackageIoRestorecommerceUser } from "@restorecomme
 import { protoMetadata as metaPackageIoRestorecommerceRole } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
 import { protoMetadata as metaPackageIoRestorecommerceAuthentication_log } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
 import { protoMetadata as metaPackageIoRestorecommerceToken } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { protoMetadata as metaPackageIoRestorecommerceOauth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth";
 import { registerPackagesRecursive, SubService } from "../../../gql/protos";
 
 export function registerTypings() {
@@ -10,6 +11,7 @@ export function registerTypings() {
     metaPackageIoRestorecommerceRole,
     metaPackageIoRestorecommerceAuthentication_log,
     metaPackageIoRestorecommerceToken,
+    metaPackageIoRestorecommerceOauth,
   );
 }
 

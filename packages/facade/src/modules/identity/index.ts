@@ -5,6 +5,7 @@ import { createOIDC } from './oidc';
 import { IdentityConfig, IdentityModule } from './interfaces';
 import { setupApiKey } from "./api-key/api-key";
 import { IdentitySrvGrpcClient } from "./grpc";
+import { createOAuth } from "./oauth/oauth";
 
 export { OIDCConfig } from './oidc';
 export { IdentityModule, IdentityConfig, IdentityContext } from './interfaces';
@@ -34,6 +35,10 @@ export const identityModule = createFacadeModuleFactory<IdentityConfig, Identity
 
     facade.koa.use(router.routes());
     facade.koa.use(mount(provider.app));
+  }
+
+  if (config.oauth) {
+    facade.koa.use(createOAuth().routes());
   }
 
   const identity = {

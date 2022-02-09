@@ -249,13 +249,20 @@ export const getGQLResolverFunctions =
             });
             return { details: aggregatedResponse, operationStatus };
           }
-          let items = decodeBufferFields(result.items, bufferFields);
-          return {
-            details: {
-              items: items, // items includes both payload and individual status
-              operationStatus: result.operationStatus // overall status
-            },
-          };
+
+          if ('items' in result) {
+            let items = decodeBufferFields(result.items, bufferFields);
+            return {
+              details: {
+                items: items, // items includes both payload and individual status
+                operationStatus: result.operationStatus // overall status
+              },
+            };
+          } else {
+            return {
+              details: decodeBufferFields([result], bufferFields)[0]
+            }
+          }
         } catch (error) {
           console.error(error);
           return {

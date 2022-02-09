@@ -51,6 +51,7 @@ function createTestFacade() {
         ],
         jwks,
       },
+      oauth: true,
       apiKey: 'api_key'
     }))
     .useModule(resourceModule({config: serviceConfig.get('resource')}))

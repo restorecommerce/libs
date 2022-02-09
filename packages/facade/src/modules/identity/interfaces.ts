@@ -13,6 +13,7 @@ export interface IdentityConfig  {
   identitySrvClientConfig: GrpcClientConfig;
   oidc?: OIDCConfig;
   apiKey?: boolean | string;
+  oauth?: boolean
 }
 
 export interface IdentityContext extends FacadeContext {

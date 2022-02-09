@@ -85,7 +85,7 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile",
+    "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile copyhbs",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "build:codegen:clean": "rimraf -rf ./codegen",
@@ -97,7 +97,8 @@
     "dev:serve": "TS_NODE_PROJECT=tsconfig.test.json nodemon -e ts,hbs -w ./tests -w ./src -x node --inspect=7000 -r ts-node/register tests/server.ts",
     "generate": "ts-node --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
     "prepublishOnly": "npm run build",
-    "debug-run": "ts-node --project tsconfig.debug.json debug-run.ts"
+    "debug-run": "ts-node --project tsconfig.debug.json debug-run.ts",
+    "copyhbs": "bash copy-hbs.sh"
   },
   "engines": {
     "node": ">= 12.18.0"

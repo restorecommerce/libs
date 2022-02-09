@@ -1,8 +1,8 @@
 import KoaRouter from "koa-router";
 import { IdentityContext } from "../interfaces";
 import { IdentitySrvGrpcClient } from "../grpc";
-import fs from "fs";
-import path from "path";
+import { readFile } from "fs";
+import { resolve as resolvePath } from "path";
 import hbs from "handlebars";
 import { marshallProtobufAny, nanoid } from "../oidc/utils";
 import * as uuid from 'uuid';
@@ -106,7 +106,7 @@ let layoutHbs: HandlebarsTemplateDelegate;
 export const layout = async (context: { body: string; title: string }) => {
   if (!layoutHbs) {
     const layoutTpl = await new Promise<string>((resolve, reject) => {
-      fs.readFile(path.resolve(__dirname, 'views/layout.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+      readFile(resolvePath(__dirname, 'views/layout.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
     });
     layoutHbs = hbs.compile(layoutTpl);
   }
@@ -117,7 +117,7 @@ let registerHbs: HandlebarsTemplateDelegate;
 export const register = async (email: string) => {
   if (!registerHbs) {
     const registerTpl = await new Promise<string>((resolve, reject) => {
-      fs.readFile(path.resolve(__dirname, 'views/register.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+      readFile(resolvePath(__dirname, 'views/register.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
     });
     registerHbs = hbs.compile(registerTpl);
   }
@@ -132,7 +132,7 @@ let loginHbs: HandlebarsTemplateDelegate;
 export const login = async (links: any) => {
   if (!loginHbs) {
     const loginTpl = await new Promise<string>((resolve, reject) => {
-      fs.readFile(path.resolve(__dirname, 'views/login.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+      readFile(resolvePath(__dirname, 'views/login.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
     });
     loginHbs = hbs.compile(loginTpl);
   }
@@ -147,7 +147,7 @@ let accountHbs: HandlebarsTemplateDelegate;
 export const account = async (user: User) => {
   if (!accountHbs) {
     const accountTpl = await new Promise<string>((resolve, reject) => {
-      fs.readFile(path.resolve(__dirname, 'views/account.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+      readFile(resolvePath(__dirname, 'views/account.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
     });
     accountHbs = hbs.compile(accountTpl);
   }

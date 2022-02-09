@@ -1,4 +1,3 @@
-import mount from 'koa-mount';
 import { createFacadeModuleFactory } from "../../utils";
 import { FederatedResourceSchema } from './gql/federation';
 import { createOIDC } from './oidc';
@@ -9,6 +8,8 @@ import { createOAuth } from "./oauth/oauth";
 
 export { OIDCConfig } from './oidc';
 export { IdentityModule, IdentityConfig, IdentityContext } from './interfaces';
+
+const mount = eval('require("koa-mount")');
 
 export const identityModule = createFacadeModuleFactory<IdentityConfig, IdentityModule>('identity', (facade, config) => {
   const identitySrvClient = new IdentitySrvGrpcClient(config.identitySrvClientConfig, facade.logger);

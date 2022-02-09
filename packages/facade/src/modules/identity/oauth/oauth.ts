@@ -1,4 +1,4 @@
-import Router from "koa-router";
+import KoaRouter from "koa-router";
 import { IdentityContext } from "../interfaces";
 import { IdentitySrvGrpcClient } from "../grpc";
 import fs from "fs";
@@ -11,12 +11,14 @@ import {
   User,
   UserType
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
-import koaBody from "koa-body";
 
-export const createOAuth = (): Router<{}, IdentityContext> => {
-  const router = new Router<{}, IdentityContext>();
+const Router = eval('require("koa-router")');
+const bodyParser = eval('require("koa-body")');
 
-  router.use(koaBody({multipart: true}));
+export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
+  const router = new Router() as KoaRouter<{}, IdentityContext>;
+
+  router.use(bodyParser({multipart: true}));
 
   router.get('/oauth2-login', async (ctx, next) => {
     ctx.type = 'html';

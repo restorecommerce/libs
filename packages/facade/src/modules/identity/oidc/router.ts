@@ -1,6 +1,5 @@
-import Router from 'koa-router';
+import KoaRouter from 'koa-router';
 import { InteractionResults, Provider } from 'oidc-provider';
-import bodyParser from 'koa-body';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
@@ -15,13 +14,16 @@ export interface CreateOIDCRouterArgs {
   loginFn: OIDCBodyLoginFn;
 }
 
-export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): Router<{}, IdentityContext> {
+const Router = eval('require("koa-router")');
+const bodyParser = eval('require("koa-body")');
+
+export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): KoaRouter<{}, IdentityContext> {
 
   const dev = env === 'development';
 
   const tplEngine = new OIDCTemplateEngine(templates);
 
-  const router = new Router<{}, IdentityContext>();
+  const router = new Router() as KoaRouter<{}, IdentityContext>;
 
   router.get('/interaction/:uid', async (ctx, next) => {
     const {

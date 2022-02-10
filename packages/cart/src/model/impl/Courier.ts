@@ -7,8 +7,6 @@ import { BoxItem } from './bin/BoxItem';
 import { Box } from './bin/Box';
 import { Placement } from './bin/Placement';
 import { IShippingMethodResult } from '../IShippingMethodResult';
-const fs = require('fs');
-
 
 export type AdditionalRule = {
   ruleType: 'L+2xW+2xH' | 'L+W+H';

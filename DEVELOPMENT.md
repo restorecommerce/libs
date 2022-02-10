@@ -5,6 +5,10 @@
 This repository use [commitizen](https://github.com/commitizen/cz-cli) to normalize the commit messages.
 Commit messages are not linted.
 
+## Installing Dependencies
+
+Run `npm run install:all`.
+
 ## Testing all packages
 
 Run `npm test` from the shell to run tests for all packages.

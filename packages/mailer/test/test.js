@@ -1,7 +1,11 @@
 /* eslint-env node, mocha */
 
 const assert = require('assert');
-const Mailer = require('../index');
+const Mail = require('nodemailer/lib/mailer');
+let Mailer = require('../lib/index');
+Mailer = Mailer.default;
+
+console.log(Mailer);
 
 const workingOpts = {
   tls: {

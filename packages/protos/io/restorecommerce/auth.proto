@@ -35,7 +35,7 @@ message RoleAssociation {
   string role = 1;  // role ID
   repeated io.restorecommerce.attribute.Attribute attributes = 2;  // useful attributes for RBAC/ABAC like organizational scope
   string id = 3; // identifier for role_association
-  double created = 1; // timestamp when the role was created
+  double created = 4; // timestamp when the role was created
 }
 
 message HierarchicalScopesRequest {

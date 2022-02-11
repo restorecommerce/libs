@@ -8,6 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/image.proto";
 import "io/restorecommerce/status.proto";
+import "google/protobuf/any.proto";
 
 /**
  * The microservice for the user resource.
@@ -255,4 +256,5 @@ message User {
   string invited_by_user_last_name = 23; // Last name of user inviting
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   double last_access = 25;
+  google.protobuf.Any data = 26; /// additional data
 }

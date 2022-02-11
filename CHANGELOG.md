@@ -1,3 +1,7 @@
+### 0.2.6 (February 11th, 2022)
+
+- updated dependencies
+
 ### 0.2.5 (February 7th, 2022)
 
 - fix for strategy for fields for updated redis

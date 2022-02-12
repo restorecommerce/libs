@@ -1,11 +1,9 @@
-'use strict';
+import moment from 'moment-timezone';
 
-const moment = require('moment-timezone');
-
-module.exports = function momentHandlebarsExtension(hbs, opts) {
+let  momentHandlebarsExtension = (hbs: any, opts: any) => {
   // Output point in time relative to current point in time
   // for example: '1h ago'
-  hbs.registerHelper('ago', (value, options) => {
+  hbs.registerHelper('ago', (value: any, options: any) => {
     let v = value;
     if (options.isSeconds) {
       // the given property represents seconds since UNIX epoch, so we
@@ -17,31 +15,31 @@ module.exports = function momentHandlebarsExtension(hbs, opts) {
   });
 
   // Date format short
-  hbs.registerHelper('df', (value, options) => {
+  hbs.registerHelper('df', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
     return moment.tz(value, tz).locale(opts.locale).format('L');
   });
 
   // Date format Long
-  hbs.registerHelper('dfl', (value, options) => {
+  hbs.registerHelper('dfl', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
     return moment.tz(value, tz).locale(opts.locale).format('LL');
   });
 
   // Time format
-  hbs.registerHelper('tf', (value, options) => {
+  hbs.registerHelper('tf', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
     return moment.tz(value, tz).locale(opts.locale).format('LT');
   });
 
   // Date-Time format
-  hbs.registerHelper('dtf', (value, options) => {
+  hbs.registerHelper('dtf', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
     return moment.tz(value, tz).locale(opts.locale).format('LLL');
   });
 
   // Date-Time format with given format
-  hbs.registerHelper('dff', (value, options) => {
+  hbs.registerHelper('dff', (value: any, options: any) => {
     const format = options.hash.format || '';
     const tz = options.hash.timezone || moment.tz.guess();
     return moment(value).tz(tz).format(format);
@@ -55,10 +53,12 @@ module.exports = function momentHandlebarsExtension(hbs, opts) {
   //
   // A format can be a template string with this syntax:
   // '[it\'s] D [days and] h [hours]'
-  hbs.registerHelper('duf', (value, options) => {
+  hbs.registerHelper('duf', (value: any, options: any) => {
     const format = options.hash.format || '';
-    const dur = moment.duration(value);
+    const dur: any = moment.duration(value);
     // eslint-disable-next-line
     return moment(dur._data).format(format);
   });
 };
+
+module.exports = momentHandlebarsExtension;

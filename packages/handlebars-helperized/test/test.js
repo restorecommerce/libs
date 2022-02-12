@@ -5,7 +5,8 @@
 // eslint-disable-next-line
 const should = require('should');
 const fs = require('fs');
-const Renderer = require('../index');
+let Renderer = require('../lib');
+Renderer = Renderer.default;
 
 const data = {
   firstName: 'John',
@@ -50,7 +51,7 @@ describe('the handlebars template engine', () => {
   });
 
   it('should be able to render templates with a provided custom helper', () => {
-    const filePathList = ['./test/handlebars/helper-loud.js'];
+    const filePathList = ['../test/handlebars/helper-loud.js'];
     const tpl = '<h1>Hello {{loud name}}</h1>';
     const renderer = new Renderer(tpl, '', '', {}, filePathList );
     const result = renderer.render({ name: 'John' });

@@ -1,7 +1,5 @@
-'use strict';
-
-const _ = require('lodash');
-const juice = require('juice');
+import juice from 'juice';
+import defaults from 'lodash/defaults';
 
 const defaultOpts = {
   locale: 'en_US',
@@ -9,16 +7,16 @@ const defaultOpts = {
 };
 
 // Initializes and configures a custom handlebars instance
-function init(options, customHelpersList) {
+const init = (options: object, customHelpersList: any) => {
   // default values if nothing given
-  const opts = _.defaults(options, defaultOpts);
+  const opts = defaults(options, defaultOpts);
   // the basic building block is the handlebars rendering engine
   const hbs = require('handlebars');
   // more functionality directly added via custom plugins from ./lib
-  require('./lib/l10n-helpers')(hbs, opts); // localization
-  require('./lib/numbro-helpers')(hbs, opts); // numbers & currencies
-  require('./lib/moment-helpers')(hbs, opts); // dates, times & durations
-  require('./lib/custom-helpers')(hbs, opts); // everything else
+  require('./helpers/l10n-helpers.js')(hbs, opts); // localization
+  require('./helpers/numbro-helpers.js')(hbs, opts); // numbers & currencies
+  require('./helpers/moment-helpers.js')(hbs, opts); // dates, times & durations
+  require('./helpers/custom-helpers.js')(hbs, opts); // everything else
 
   // add custom helpers from rendering-srv
   if (customHelpersList) {
@@ -31,7 +29,7 @@ function init(options, customHelpersList) {
   const handlebarsLayouts = require('handlebars-layouts');
   handlebarsLayouts.register(hbs);
   return hbs;
-}
+};
 
 class Renderer {
   /**
@@ -41,7 +39,12 @@ class Renderer {
   @param {Object} opts handlebars options
   @param {Array} customHelpersList contains a list of custom helpers (optional)
   */
-  constructor(template, layout, style, opts, customHelpersList) {
+
+  hbs: any;
+  style: string;
+  template: any;
+
+  constructor(template: string, layout: string, style: string, opts: object, customHelpersList: any) {
     this.hbs = init(opts, customHelpersList);
     this.style = style;
     if (layout) {
@@ -54,7 +57,7 @@ class Renderer {
   @param {Object} context: required data for the placeholders
   @return {String} html
   */
-  render(context) {
+  render(context: Object) {
     let html = this.template(context);
 
     if (this.style) {
@@ -74,4 +77,4 @@ class Renderer {
   }
 }
 
-module.exports = Renderer;
+export default Renderer;

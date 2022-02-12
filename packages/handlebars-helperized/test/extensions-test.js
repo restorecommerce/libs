@@ -6,7 +6,8 @@
 const should = require('should');
 const fs = require('fs');
 const moment = require('moment-timezone');
-const Renderer = require('../index');
+let Renderer = require('../lib');
+Renderer = Renderer.default;
 
 const load = function loadTemplateFile(name) {
   return fs.readFileSync(`./test/templates/${name}.hbs`, 'utf-8');

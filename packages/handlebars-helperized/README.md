@@ -15,7 +15,8 @@ extension `t`.
 
 Additional custom helpers can be provided from the service which makes use of
 this module by passing an array which contains the file's path relative to the
-root folder on class initialization.  
+root folder on class initialization.
+
  ```js
 // example
 const filePathList = ['./test/handlebars/helper-loud.js'];

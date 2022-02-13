@@ -16,14 +16,14 @@
     "service"
   ],
   "dependencies": {
-    "forever-monitor": "^1.7.1",
-    "recluster": "^0.4.5"
+    "forever-monitor": "^3.0.3",
+    "recluster": "^1.0.0"
   },
   "devDependencies": {
-    "coveralls": "^3.1.0",
+    "coveralls": "^3.1.1",
     "is-generator": "^1.0.3",
-    "mocha": "^6.1.4",
-    "nyc": "^14.1.1",
+    "mocha": "^9.2.0",
+    "nyc": "^15.1.0",
     "should": "^13.2.3"
   },
   "scripts": {

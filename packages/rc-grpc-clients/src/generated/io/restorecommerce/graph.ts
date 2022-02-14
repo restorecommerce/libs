@@ -13,133 +13,283 @@ import {
   protoMetadata as protoMetadata3,
 } from "../../io/restorecommerce/status";
 import { Observable } from "rxjs";
+import {
+  protoMetadata as protoMetadata4,
+  Sort,
+} from "../../io/restorecommerce/resource_base";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.graph";
 
 export interface TraversalRequest {
-  startVertex: string | undefined;
-  startVertices?: TraversalRequest_StartVertices | undefined;
-  /** Filter based on fieldName|operation, value|list */
+  vertices?: Vertices | undefined;
+  collection?: Collection | undefined;
   opts?: Options;
-  collectionName: string;
-  edgeName: string;
-  data: boolean;
   path: boolean;
-  aql: boolean;
   subject?: Subject;
+  filters: Filters[];
 }
 
-export interface TraversalRequest_StartVertices {
-  vertices: string[];
+export interface Vertices {
+  collectionName: string;
+  startVertexId: string[];
 }
 
-export interface TraversalResponse {
-  vertexFields: VertexFields[];
-  paths?: Any;
-  data?: Any;
-  operationStatus?: OperationStatus;
-}
-
-export interface VertexFields {
-  id: string;
-  key: string;
-  rev: string;
+export interface Collection {
+  collectionName: string;
+  limit: number;
+  offset: number;
+  sort: Sort[];
 }
 
 export interface Options {
-  /** JS code */
-  sort: string;
-  /** either inbound or outbound */
-  direction: string;
-  /** ANDed with any existing filters): visits only nodes in at least the given depth */
-  minDepth: number;
-  /** id of the startVertex */
-  startVertex: string;
-  /** JS code */
-  visitor: string;
-  /** item iteration order can be "forward" or "backward" */
-  itemOrder: string;
-  /** traversal strategy can be "depthfirst" or "breadthfirst" */
-  strategy: string;
-  /** JS code */
+  /** to include vertices */
+  includeVertex: string[];
+  /** to exclude vertices */
+  excludeVertex: string[];
+  /** to include vertices */
+  includeEdge: string[];
+  /** to exclude vertices */
+  excludeEdge: string[];
+  /** either inbound or outbound, defaults to outbound direction */
+  direction: Options_Direction;
+}
+
+export enum Options_Direction {
+  OUTBOUND = 0,
+  INBOUND = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function options_DirectionFromJSON(object: any): Options_Direction {
+  switch (object) {
+    case 0:
+    case "OUTBOUND":
+      return Options_Direction.OUTBOUND;
+    case 1:
+    case "INBOUND":
+      return Options_Direction.INBOUND;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Options_Direction.UNRECOGNIZED;
+  }
+}
+
+export function options_DirectionToJSON(object: Options_Direction): string {
+  switch (object) {
+    case Options_Direction.OUTBOUND:
+      return "OUTBOUND";
+    case Options_Direction.INBOUND:
+      return "INBOUND";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export interface Filters {
+  /** entity on which the filters are applied */
+  entity: string;
+  /** if edge is specified depending on the direction filter are applied only for those entities */
+  edge: string;
   filter: Filter[];
-  /** JS code */
-  init: string;
-  /** maximum number of iterations in each traversal */
-  maxIterations: number;
-  /** ANDed with any existing filters visits only nodes in at most the given depth */
-  maxDepth: number;
-  /** specifies uniqueness for vertices and edges visited */
-  uniqueness?: Uniqueness;
-  /** "preorder", "postorder" or "preorder-expander" */
-  order: string;
-  /** name of graph that contains the edges */
-  graphName: string;
-  /** JS code */
-  expander: Expander[];
-  /** name of the collection that contains the edges */
-  edgeCollection: string;
-  lowestCommonAncestor: boolean;
+  operator: Filters_Operator;
+}
+
+export enum Filters_Operator {
+  and = 0,
+  or = 1,
+  UNRECOGNIZED = -1,
+}
+
+export function filters_OperatorFromJSON(object: any): Filters_Operator {
+  switch (object) {
+    case 0:
+    case "and":
+      return Filters_Operator.and;
+    case 1:
+    case "or":
+      return Filters_Operator.or;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Filters_Operator.UNRECOGNIZED;
+  }
+}
+
+export function filters_OperatorToJSON(object: Filters_Operator): string {
+  switch (object) {
+    case Filters_Operator.and:
+      return "and";
+    case Filters_Operator.or:
+      return "or";
+    default:
+      return "UNKNOWN";
+  }
 }
 
 export interface Filter {
-  /** exclude these vertices */
-  vertex: string;
+  field: string;
+  operation: Filter_Operation;
+  value: string;
+  type: Filter_ValueType;
+  filters: Filters[];
 }
 
-export interface Expander {
-  /** expand these edges */
-  edge: string;
-  direction: string;
+export enum Filter_Operation {
+  eq = 0,
+  lt = 1,
+  lte = 2,
+  gt = 3,
+  gte = 4,
+  isEmpty = 5,
+  iLike = 6,
+  in = 7,
+  neq = 8,
+  UNRECOGNIZED = -1,
 }
 
-export interface Uniqueness {
-  /** "none"|"global"|"path" for unique vertices */
-  vertices: string;
-  /** "none"|"global"|"path" for unique edges */
-  edges: string;
+export function filter_OperationFromJSON(object: any): Filter_Operation {
+  switch (object) {
+    case 0:
+    case "eq":
+      return Filter_Operation.eq;
+    case 1:
+    case "lt":
+      return Filter_Operation.lt;
+    case 2:
+    case "lte":
+      return Filter_Operation.lte;
+    case 3:
+    case "gt":
+      return Filter_Operation.gt;
+    case 4:
+    case "gte":
+      return Filter_Operation.gte;
+    case 5:
+    case "isEmpty":
+      return Filter_Operation.isEmpty;
+    case 6:
+    case "iLike":
+      return Filter_Operation.iLike;
+    case 7:
+    case "in":
+      return Filter_Operation.in;
+    case 8:
+    case "neq":
+      return Filter_Operation.neq;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Filter_Operation.UNRECOGNIZED;
+  }
 }
 
-const baseTraversalRequest: object = {
-  collectionName: "",
-  edgeName: "",
-  data: false,
-  path: false,
-  aql: false,
-};
+export function filter_OperationToJSON(object: Filter_Operation): string {
+  switch (object) {
+    case Filter_Operation.eq:
+      return "eq";
+    case Filter_Operation.lt:
+      return "lt";
+    case Filter_Operation.lte:
+      return "lte";
+    case Filter_Operation.gt:
+      return "gt";
+    case Filter_Operation.gte:
+      return "gte";
+    case Filter_Operation.isEmpty:
+      return "isEmpty";
+    case Filter_Operation.iLike:
+      return "iLike";
+    case Filter_Operation.in:
+      return "in";
+    case Filter_Operation.neq:
+      return "neq";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export enum Filter_ValueType {
+  /** STRING - default value type if not specified */
+  STRING = 0,
+  NUMBER = 1,
+  BOOLEAN = 2,
+  DATE = 3,
+  ARRAY = 4,
+  UNRECOGNIZED = -1,
+}
+
+export function filter_ValueTypeFromJSON(object: any): Filter_ValueType {
+  switch (object) {
+    case 0:
+    case "STRING":
+      return Filter_ValueType.STRING;
+    case 1:
+    case "NUMBER":
+      return Filter_ValueType.NUMBER;
+    case 2:
+    case "BOOLEAN":
+      return Filter_ValueType.BOOLEAN;
+    case 3:
+    case "DATE":
+      return Filter_ValueType.DATE;
+    case 4:
+    case "ARRAY":
+      return Filter_ValueType.ARRAY;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Filter_ValueType.UNRECOGNIZED;
+  }
+}
+
+export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
+  switch (object) {
+    case Filter_ValueType.STRING:
+      return "STRING";
+    case Filter_ValueType.NUMBER:
+      return "NUMBER";
+    case Filter_ValueType.BOOLEAN:
+      return "BOOLEAN";
+    case Filter_ValueType.DATE:
+      return "DATE";
+    case Filter_ValueType.ARRAY:
+      return "ARRAY";
+    default:
+      return "UNKNOWN";
+  }
+}
+
+export interface TraversalResponse {
+  /** vertices */
+  data?: Any;
+  /** traversed vertices paths */
+  paths?: Any;
+  operationStatus?: OperationStatus;
+}
+
+const baseTraversalRequest: object = { path: false };
 
 export const TraversalRequest = {
   encode(message: TraversalRequest, writer: Writer = Writer.create()): Writer {
-    if (message.startVertex !== undefined) {
-      writer.uint32(10).string(message.startVertex);
+    if (message.vertices !== undefined) {
+      Vertices.encode(message.vertices, writer.uint32(10).fork()).ldelim();
     }
-    if (message.startVertices !== undefined) {
-      TraversalRequest_StartVertices.encode(
-        message.startVertices,
-        writer.uint32(18).fork()
-      ).ldelim();
+    if (message.collection !== undefined) {
+      Collection.encode(message.collection, writer.uint32(18).fork()).ldelim();
     }
     if (message.opts !== undefined) {
       Options.encode(message.opts, writer.uint32(26).fork()).ldelim();
     }
-    if (message.collectionName !== "") {
-      writer.uint32(34).string(message.collectionName);
-    }
-    if (message.edgeName !== "") {
-      writer.uint32(42).string(message.edgeName);
-    }
-    if (message.data === true) {
-      writer.uint32(48).bool(message.data);
-    }
     if (message.path === true) {
-      writer.uint32(56).bool(message.path);
-    }
-    if (message.aql === true) {
-      writer.uint32(64).bool(message.aql);
+      writer.uint32(32).bool(message.path);
     }
     if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(74).fork()).ldelim();
+      Subject.encode(message.subject, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.filters) {
+      Filters.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -150,38 +300,27 @@ export const TraversalRequest = {
     const message = globalThis.Object.create(
       baseTraversalRequest
     ) as TraversalRequest;
+    message.filters = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.startVertex = reader.string();
+          message.vertices = Vertices.decode(reader, reader.uint32());
           break;
         case 2:
-          message.startVertices = TraversalRequest_StartVertices.decode(
-            reader,
-            reader.uint32()
-          );
+          message.collection = Collection.decode(reader, reader.uint32());
           break;
         case 3:
           message.opts = Options.decode(reader, reader.uint32());
           break;
         case 4:
-          message.collectionName = reader.string();
-          break;
-        case 5:
-          message.edgeName = reader.string();
-          break;
-        case 6:
-          message.data = reader.bool();
-          break;
-        case 7:
           message.path = reader.bool();
           break;
-        case 8:
-          message.aql = reader.bool();
-          break;
-        case 9:
+        case 5:
           message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        case 6:
+          message.filters.push(Filters.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -195,160 +334,130 @@ export const TraversalRequest = {
     const message = globalThis.Object.create(
       baseTraversalRequest
     ) as TraversalRequest;
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = String(object.startVertex);
+    message.filters = [];
+    if (object.vertices !== undefined && object.vertices !== null) {
+      message.vertices = Vertices.fromJSON(object.vertices);
     } else {
-      message.startVertex = undefined;
+      message.vertices = undefined;
     }
-    if (object.startVertices !== undefined && object.startVertices !== null) {
-      message.startVertices = TraversalRequest_StartVertices.fromJSON(
-        object.startVertices
-      );
+    if (object.collection !== undefined && object.collection !== null) {
+      message.collection = Collection.fromJSON(object.collection);
     } else {
-      message.startVertices = undefined;
+      message.collection = undefined;
     }
     if (object.opts !== undefined && object.opts !== null) {
       message.opts = Options.fromJSON(object.opts);
     } else {
       message.opts = undefined;
     }
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = String(object.collectionName);
-    } else {
-      message.collectionName = "";
-    }
-    if (object.edgeName !== undefined && object.edgeName !== null) {
-      message.edgeName = String(object.edgeName);
-    } else {
-      message.edgeName = "";
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Boolean(object.data);
-    } else {
-      message.data = false;
-    }
     if (object.path !== undefined && object.path !== null) {
       message.path = Boolean(object.path);
     } else {
       message.path = false;
-    }
-    if (object.aql !== undefined && object.aql !== null) {
-      message.aql = Boolean(object.aql);
-    } else {
-      message.aql = false;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromJSON(object.subject);
     } else {
       message.subject = undefined;
     }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(Filters.fromJSON(e));
+      }
+    }
     return message;
   },
 
   fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
     const message = { ...baseTraversalRequest } as TraversalRequest;
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = object.startVertex;
+    message.filters = [];
+    if (object.vertices !== undefined && object.vertices !== null) {
+      message.vertices = Vertices.fromPartial(object.vertices);
     } else {
-      message.startVertex = undefined;
+      message.vertices = undefined;
     }
-    if (object.startVertices !== undefined && object.startVertices !== null) {
-      message.startVertices = TraversalRequest_StartVertices.fromPartial(
-        object.startVertices
-      );
+    if (object.collection !== undefined && object.collection !== null) {
+      message.collection = Collection.fromPartial(object.collection);
     } else {
-      message.startVertices = undefined;
+      message.collection = undefined;
     }
     if (object.opts !== undefined && object.opts !== null) {
       message.opts = Options.fromPartial(object.opts);
     } else {
       message.opts = undefined;
     }
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = object.collectionName;
-    } else {
-      message.collectionName = "";
-    }
-    if (object.edgeName !== undefined && object.edgeName !== null) {
-      message.edgeName = object.edgeName;
-    } else {
-      message.edgeName = "";
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = object.data;
-    } else {
-      message.data = false;
-    }
     if (object.path !== undefined && object.path !== null) {
       message.path = object.path;
     } else {
       message.path = false;
-    }
-    if (object.aql !== undefined && object.aql !== null) {
-      message.aql = object.aql;
-    } else {
-      message.aql = false;
     }
     if (object.subject !== undefined && object.subject !== null) {
       message.subject = Subject.fromPartial(object.subject);
     } else {
       message.subject = undefined;
     }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(Filters.fromPartial(e));
+      }
+    }
     return message;
   },
 
   toJSON(message: TraversalRequest): unknown {
     const obj: any = {};
-    message.startVertex !== undefined &&
-      (obj.startVertex = message.startVertex);
-    message.startVertices !== undefined &&
-      (obj.startVertices = message.startVertices
-        ? TraversalRequest_StartVertices.toJSON(message.startVertices)
+    message.vertices !== undefined &&
+      (obj.vertices = message.vertices
+        ? Vertices.toJSON(message.vertices)
+        : undefined);
+    message.collection !== undefined &&
+      (obj.collection = message.collection
+        ? Collection.toJSON(message.collection)
         : undefined);
     message.opts !== undefined &&
       (obj.opts = message.opts ? Options.toJSON(message.opts) : undefined);
-    message.collectionName !== undefined &&
-      (obj.collectionName = message.collectionName);
-    message.edgeName !== undefined && (obj.edgeName = message.edgeName);
-    message.data !== undefined && (obj.data = message.data);
     message.path !== undefined && (obj.path = message.path);
-    message.aql !== undefined && (obj.aql = message.aql);
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
+    if (message.filters) {
+      obj.filters = message.filters.map((e) =>
+        e ? Filters.toJSON(e) : undefined
+      );
+    } else {
+      obj.filters = [];
+    }
     return obj;
   },
 };
 
-const baseTraversalRequest_StartVertices: object = { vertices: "" };
+const baseVertices: object = { collectionName: "", startVertexId: "" };
 
-export const TraversalRequest_StartVertices = {
-  encode(
-    message: TraversalRequest_StartVertices,
-    writer: Writer = Writer.create()
-  ): Writer {
-    for (const v of message.vertices) {
-      writer.uint32(10).string(v!);
+export const Vertices = {
+  encode(message: Vertices, writer: Writer = Writer.create()): Writer {
+    if (message.collectionName !== "") {
+      writer.uint32(10).string(message.collectionName);
+    }
+    for (const v of message.startVertexId) {
+      writer.uint32(18).string(v!);
     }
     return writer;
   },
 
-  decode(
-    input: Reader | Uint8Array,
-    length?: number
-  ): TraversalRequest_StartVertices {
+  decode(input: Reader | Uint8Array, length?: number): Vertices {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseTraversalRequest_StartVertices
-    ) as TraversalRequest_StartVertices;
-    message.vertices = [];
+    const message = globalThis.Object.create(baseVertices) as Vertices;
+    message.startVertexId = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vertices.push(reader.string());
+          message.collectionName = reader.string();
+          break;
+        case 2:
+          message.startVertexId.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -358,40 +467,568 @@ export const TraversalRequest_StartVertices = {
     return message;
   },
 
-  fromJSON(object: any): TraversalRequest_StartVertices {
-    const message = globalThis.Object.create(
-      baseTraversalRequest_StartVertices
-    ) as TraversalRequest_StartVertices;
-    message.vertices = [];
-    if (object.vertices !== undefined && object.vertices !== null) {
-      for (const e of object.vertices) {
-        message.vertices.push(String(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<TraversalRequest_StartVertices>
-  ): TraversalRequest_StartVertices {
-    const message = {
-      ...baseTraversalRequest_StartVertices,
-    } as TraversalRequest_StartVertices;
-    message.vertices = [];
-    if (object.vertices !== undefined && object.vertices !== null) {
-      for (const e of object.vertices) {
-        message.vertices.push(e);
-      }
-    }
-    return message;
-  },
-
-  toJSON(message: TraversalRequest_StartVertices): unknown {
-    const obj: any = {};
-    if (message.vertices) {
-      obj.vertices = message.vertices.map((e) => e);
+  fromJSON(object: any): Vertices {
+    const message = globalThis.Object.create(baseVertices) as Vertices;
+    message.startVertexId = [];
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = String(object.collectionName);
     } else {
-      obj.vertices = [];
+      message.collectionName = "";
+    }
+    if (object.startVertexId !== undefined && object.startVertexId !== null) {
+      for (const e of object.startVertexId) {
+        message.startVertexId.push(String(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Vertices>): Vertices {
+    const message = { ...baseVertices } as Vertices;
+    message.startVertexId = [];
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = object.collectionName;
+    } else {
+      message.collectionName = "";
+    }
+    if (object.startVertexId !== undefined && object.startVertexId !== null) {
+      for (const e of object.startVertexId) {
+        message.startVertexId.push(e);
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: Vertices): unknown {
+    const obj: any = {};
+    message.collectionName !== undefined &&
+      (obj.collectionName = message.collectionName);
+    if (message.startVertexId) {
+      obj.startVertexId = message.startVertexId.map((e) => e);
+    } else {
+      obj.startVertexId = [];
+    }
+    return obj;
+  },
+};
+
+const baseCollection: object = { collectionName: "", limit: 0, offset: 0 };
+
+export const Collection = {
+  encode(message: Collection, writer: Writer = Writer.create()): Writer {
+    if (message.collectionName !== "") {
+      writer.uint32(10).string(message.collectionName);
+    }
+    if (message.limit !== 0) {
+      writer.uint32(16).uint32(message.limit);
+    }
+    if (message.offset !== 0) {
+      writer.uint32(24).uint32(message.offset);
+    }
+    for (const v of message.sort) {
+      Sort.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Collection {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseCollection) as Collection;
+    message.sort = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.collectionName = reader.string();
+          break;
+        case 2:
+          message.limit = reader.uint32();
+          break;
+        case 3:
+          message.offset = reader.uint32();
+          break;
+        case 4:
+          message.sort.push(Sort.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Collection {
+    const message = globalThis.Object.create(baseCollection) as Collection;
+    message.sort = [];
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = String(object.collectionName);
+    } else {
+      message.collectionName = "";
+    }
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = Number(object.limit);
+    } else {
+      message.limit = 0;
+    }
+    if (object.offset !== undefined && object.offset !== null) {
+      message.offset = Number(object.offset);
+    } else {
+      message.offset = 0;
+    }
+    if (object.sort !== undefined && object.sort !== null) {
+      for (const e of object.sort) {
+        message.sort.push(Sort.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Collection>): Collection {
+    const message = { ...baseCollection } as Collection;
+    message.sort = [];
+    if (object.collectionName !== undefined && object.collectionName !== null) {
+      message.collectionName = object.collectionName;
+    } else {
+      message.collectionName = "";
+    }
+    if (object.limit !== undefined && object.limit !== null) {
+      message.limit = object.limit;
+    } else {
+      message.limit = 0;
+    }
+    if (object.offset !== undefined && object.offset !== null) {
+      message.offset = object.offset;
+    } else {
+      message.offset = 0;
+    }
+    if (object.sort !== undefined && object.sort !== null) {
+      for (const e of object.sort) {
+        message.sort.push(Sort.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: Collection): unknown {
+    const obj: any = {};
+    message.collectionName !== undefined &&
+      (obj.collectionName = message.collectionName);
+    message.limit !== undefined && (obj.limit = message.limit);
+    message.offset !== undefined && (obj.offset = message.offset);
+    if (message.sort) {
+      obj.sort = message.sort.map((e) => (e ? Sort.toJSON(e) : undefined));
+    } else {
+      obj.sort = [];
+    }
+    return obj;
+  },
+};
+
+const baseOptions: object = {
+  includeVertex: "",
+  excludeVertex: "",
+  includeEdge: "",
+  excludeEdge: "",
+  direction: 0,
+};
+
+export const Options = {
+  encode(message: Options, writer: Writer = Writer.create()): Writer {
+    for (const v of message.includeVertex) {
+      writer.uint32(10).string(v!);
+    }
+    for (const v of message.excludeVertex) {
+      writer.uint32(18).string(v!);
+    }
+    for (const v of message.includeEdge) {
+      writer.uint32(26).string(v!);
+    }
+    for (const v of message.excludeEdge) {
+      writer.uint32(34).string(v!);
+    }
+    if (message.direction !== 0) {
+      writer.uint32(40).int32(message.direction);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Options {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseOptions) as Options;
+    message.includeVertex = [];
+    message.excludeVertex = [];
+    message.includeEdge = [];
+    message.excludeEdge = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.includeVertex.push(reader.string());
+          break;
+        case 2:
+          message.excludeVertex.push(reader.string());
+          break;
+        case 3:
+          message.includeEdge.push(reader.string());
+          break;
+        case 4:
+          message.excludeEdge.push(reader.string());
+          break;
+        case 5:
+          message.direction = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Options {
+    const message = globalThis.Object.create(baseOptions) as Options;
+    message.includeVertex = [];
+    message.excludeVertex = [];
+    message.includeEdge = [];
+    message.excludeEdge = [];
+    if (object.includeVertex !== undefined && object.includeVertex !== null) {
+      for (const e of object.includeVertex) {
+        message.includeVertex.push(String(e));
+      }
+    }
+    if (object.excludeVertex !== undefined && object.excludeVertex !== null) {
+      for (const e of object.excludeVertex) {
+        message.excludeVertex.push(String(e));
+      }
+    }
+    if (object.includeEdge !== undefined && object.includeEdge !== null) {
+      for (const e of object.includeEdge) {
+        message.includeEdge.push(String(e));
+      }
+    }
+    if (object.excludeEdge !== undefined && object.excludeEdge !== null) {
+      for (const e of object.excludeEdge) {
+        message.excludeEdge.push(String(e));
+      }
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = options_DirectionFromJSON(object.direction);
+    } else {
+      message.direction = 0;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Options>): Options {
+    const message = { ...baseOptions } as Options;
+    message.includeVertex = [];
+    message.excludeVertex = [];
+    message.includeEdge = [];
+    message.excludeEdge = [];
+    if (object.includeVertex !== undefined && object.includeVertex !== null) {
+      for (const e of object.includeVertex) {
+        message.includeVertex.push(e);
+      }
+    }
+    if (object.excludeVertex !== undefined && object.excludeVertex !== null) {
+      for (const e of object.excludeVertex) {
+        message.excludeVertex.push(e);
+      }
+    }
+    if (object.includeEdge !== undefined && object.includeEdge !== null) {
+      for (const e of object.includeEdge) {
+        message.includeEdge.push(e);
+      }
+    }
+    if (object.excludeEdge !== undefined && object.excludeEdge !== null) {
+      for (const e of object.excludeEdge) {
+        message.excludeEdge.push(e);
+      }
+    }
+    if (object.direction !== undefined && object.direction !== null) {
+      message.direction = object.direction;
+    } else {
+      message.direction = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: Options): unknown {
+    const obj: any = {};
+    if (message.includeVertex) {
+      obj.includeVertex = message.includeVertex.map((e) => e);
+    } else {
+      obj.includeVertex = [];
+    }
+    if (message.excludeVertex) {
+      obj.excludeVertex = message.excludeVertex.map((e) => e);
+    } else {
+      obj.excludeVertex = [];
+    }
+    if (message.includeEdge) {
+      obj.includeEdge = message.includeEdge.map((e) => e);
+    } else {
+      obj.includeEdge = [];
+    }
+    if (message.excludeEdge) {
+      obj.excludeEdge = message.excludeEdge.map((e) => e);
+    } else {
+      obj.excludeEdge = [];
+    }
+    message.direction !== undefined &&
+      (obj.direction = options_DirectionToJSON(message.direction));
+    return obj;
+  },
+};
+
+const baseFilters: object = { entity: "", edge: "", operator: 0 };
+
+export const Filters = {
+  encode(message: Filters, writer: Writer = Writer.create()): Writer {
+    if (message.entity !== "") {
+      writer.uint32(10).string(message.entity);
+    }
+    if (message.edge !== "") {
+      writer.uint32(18).string(message.edge);
+    }
+    for (const v of message.filter) {
+      Filter.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.operator !== 0) {
+      writer.uint32(32).int32(message.operator);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Filters {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseFilters) as Filters;
+    message.filter = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.entity = reader.string();
+          break;
+        case 2:
+          message.edge = reader.string();
+          break;
+        case 3:
+          message.filter.push(Filter.decode(reader, reader.uint32()));
+          break;
+        case 4:
+          message.operator = reader.int32() as any;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Filters {
+    const message = globalThis.Object.create(baseFilters) as Filters;
+    message.filter = [];
+    if (object.entity !== undefined && object.entity !== null) {
+      message.entity = String(object.entity);
+    } else {
+      message.entity = "";
+    }
+    if (object.edge !== undefined && object.edge !== null) {
+      message.edge = String(object.edge);
+    } else {
+      message.edge = "";
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromJSON(e));
+      }
+    }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = filters_OperatorFromJSON(object.operator);
+    } else {
+      message.operator = 0;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Filters>): Filters {
+    const message = { ...baseFilters } as Filters;
+    message.filter = [];
+    if (object.entity !== undefined && object.entity !== null) {
+      message.entity = object.entity;
+    } else {
+      message.entity = "";
+    }
+    if (object.edge !== undefined && object.edge !== null) {
+      message.edge = object.edge;
+    } else {
+      message.edge = "";
+    }
+    if (object.filter !== undefined && object.filter !== null) {
+      for (const e of object.filter) {
+        message.filter.push(Filter.fromPartial(e));
+      }
+    }
+    if (object.operator !== undefined && object.operator !== null) {
+      message.operator = object.operator;
+    } else {
+      message.operator = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: Filters): unknown {
+    const obj: any = {};
+    message.entity !== undefined && (obj.entity = message.entity);
+    message.edge !== undefined && (obj.edge = message.edge);
+    if (message.filter) {
+      obj.filter = message.filter.map((e) =>
+        e ? Filter.toJSON(e) : undefined
+      );
+    } else {
+      obj.filter = [];
+    }
+    message.operator !== undefined &&
+      (obj.operator = filters_OperatorToJSON(message.operator));
+    return obj;
+  },
+};
+
+const baseFilter: object = { field: "", operation: 0, value: "", type: 0 };
+
+export const Filter = {
+  encode(message: Filter, writer: Writer = Writer.create()): Writer {
+    if (message.field !== "") {
+      writer.uint32(10).string(message.field);
+    }
+    if (message.operation !== 0) {
+      writer.uint32(16).int32(message.operation);
+    }
+    if (message.value !== "") {
+      writer.uint32(26).string(message.value);
+    }
+    if (message.type !== 0) {
+      writer.uint32(32).int32(message.type);
+    }
+    for (const v of message.filters) {
+      Filters.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): Filter {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseFilter) as Filter;
+    message.filters = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.field = reader.string();
+          break;
+        case 2:
+          message.operation = reader.int32() as any;
+          break;
+        case 3:
+          message.value = reader.string();
+          break;
+        case 4:
+          message.type = reader.int32() as any;
+          break;
+        case 5:
+          message.filters.push(Filters.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Filter {
+    const message = globalThis.Object.create(baseFilter) as Filter;
+    message.filters = [];
+    if (object.field !== undefined && object.field !== null) {
+      message.field = String(object.field);
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = filter_OperationFromJSON(object.operation);
+    } else {
+      message.operation = 0;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value);
+    } else {
+      message.value = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = filter_ValueTypeFromJSON(object.type);
+    } else {
+      message.type = 0;
+    }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(Filters.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<Filter>): Filter {
+    const message = { ...baseFilter } as Filter;
+    message.filters = [];
+    if (object.field !== undefined && object.field !== null) {
+      message.field = object.field;
+    } else {
+      message.field = "";
+    }
+    if (object.operation !== undefined && object.operation !== null) {
+      message.operation = object.operation;
+    } else {
+      message.operation = 0;
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value;
+    } else {
+      message.value = "";
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = 0;
+    }
+    if (object.filters !== undefined && object.filters !== null) {
+      for (const e of object.filters) {
+        message.filters.push(Filters.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: Filter): unknown {
+    const obj: any = {};
+    message.field !== undefined && (obj.field = message.field);
+    message.operation !== undefined &&
+      (obj.operation = filter_OperationToJSON(message.operation));
+    message.value !== undefined && (obj.value = message.value);
+    message.type !== undefined &&
+      (obj.type = filter_ValueTypeToJSON(message.type));
+    if (message.filters) {
+      obj.filters = message.filters.map((e) =>
+        e ? Filters.toJSON(e) : undefined
+      );
+    } else {
+      obj.filters = [];
     }
     return obj;
   },
@@ -401,19 +1038,16 @@ const baseTraversalResponse: object = {};
 
 export const TraversalResponse = {
   encode(message: TraversalResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.vertexFields) {
-      VertexFields.encode(v!, writer.uint32(10).fork()).ldelim();
+    if (message.data !== undefined) {
+      Any.encode(message.data, writer.uint32(10).fork()).ldelim();
     }
     if (message.paths !== undefined) {
       Any.encode(message.paths, writer.uint32(18).fork()).ldelim();
     }
-    if (message.data !== undefined) {
-      Any.encode(message.data, writer.uint32(26).fork()).ldelim();
-    }
     if (message.operationStatus !== undefined) {
       OperationStatus.encode(
         message.operationStatus,
-        writer.uint32(34).fork()
+        writer.uint32(26).fork()
       ).ldelim();
     }
     return writer;
@@ -425,22 +1059,16 @@ export const TraversalResponse = {
     const message = globalThis.Object.create(
       baseTraversalResponse
     ) as TraversalResponse;
-    message.vertexFields = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.vertexFields.push(
-            VertexFields.decode(reader, reader.uint32())
-          );
+          message.data = Any.decode(reader, reader.uint32());
           break;
         case 2:
           message.paths = Any.decode(reader, reader.uint32());
           break;
         case 3:
-          message.data = Any.decode(reader, reader.uint32());
-          break;
-        case 4:
           message.operationStatus = OperationStatus.decode(
             reader,
             reader.uint32()
@@ -458,21 +1086,15 @@ export const TraversalResponse = {
     const message = globalThis.Object.create(
       baseTraversalResponse
     ) as TraversalResponse;
-    message.vertexFields = [];
-    if (object.vertexFields !== undefined && object.vertexFields !== null) {
-      for (const e of object.vertexFields) {
-        message.vertexFields.push(VertexFields.fromJSON(e));
-      }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromJSON(object.data);
+    } else {
+      message.data = undefined;
     }
     if (object.paths !== undefined && object.paths !== null) {
       message.paths = Any.fromJSON(object.paths);
     } else {
       message.paths = undefined;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromJSON(object.data);
-    } else {
-      message.data = undefined;
     }
     if (
       object.operationStatus !== undefined &&
@@ -489,21 +1111,15 @@ export const TraversalResponse = {
 
   fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
     const message = { ...baseTraversalResponse } as TraversalResponse;
-    message.vertexFields = [];
-    if (object.vertexFields !== undefined && object.vertexFields !== null) {
-      for (const e of object.vertexFields) {
-        message.vertexFields.push(VertexFields.fromPartial(e));
-      }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromPartial(object.data);
+    } else {
+      message.data = undefined;
     }
     if (object.paths !== undefined && object.paths !== null) {
       message.paths = Any.fromPartial(object.paths);
     } else {
       message.paths = undefined;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromPartial(object.data);
-    } else {
-      message.data = undefined;
     }
     if (
       object.operationStatus !== undefined &&
@@ -520,682 +1136,14 @@ export const TraversalResponse = {
 
   toJSON(message: TraversalResponse): unknown {
     const obj: any = {};
-    if (message.vertexFields) {
-      obj.vertexFields = message.vertexFields.map((e) =>
-        e ? VertexFields.toJSON(e) : undefined
-      );
-    } else {
-      obj.vertexFields = [];
-    }
-    message.paths !== undefined &&
-      (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.paths !== undefined &&
+      (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
-    return obj;
-  },
-};
-
-const baseVertexFields: object = { id: "", key: "", rev: "" };
-
-export const VertexFields = {
-  encode(message: VertexFields, writer: Writer = Writer.create()): Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    if (message.key !== "") {
-      writer.uint32(18).string(message.key);
-    }
-    if (message.rev !== "") {
-      writer.uint32(26).string(message.rev);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): VertexFields {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseVertexFields) as VertexFields;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-        case 2:
-          message.key = reader.string();
-          break;
-        case 3:
-          message.rev = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): VertexFields {
-    const message = globalThis.Object.create(baseVertexFields) as VertexFields;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.rev !== undefined && object.rev !== null) {
-      message.rev = String(object.rev);
-    } else {
-      message.rev = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<VertexFields>): VertexFields {
-    const message = { ...baseVertexFields } as VertexFields;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.rev !== undefined && object.rev !== null) {
-      message.rev = object.rev;
-    } else {
-      message.rev = "";
-    }
-    return message;
-  },
-
-  toJSON(message: VertexFields): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.key !== undefined && (obj.key = message.key);
-    message.rev !== undefined && (obj.rev = message.rev);
-    return obj;
-  },
-};
-
-const baseOptions: object = {
-  sort: "",
-  direction: "",
-  minDepth: 0,
-  startVertex: "",
-  visitor: "",
-  itemOrder: "",
-  strategy: "",
-  init: "",
-  maxIterations: 0,
-  maxDepth: 0,
-  order: "",
-  graphName: "",
-  edgeCollection: "",
-  lowestCommonAncestor: false,
-};
-
-export const Options = {
-  encode(message: Options, writer: Writer = Writer.create()): Writer {
-    if (message.sort !== "") {
-      writer.uint32(10).string(message.sort);
-    }
-    if (message.direction !== "") {
-      writer.uint32(18).string(message.direction);
-    }
-    if (message.minDepth !== 0) {
-      writer.uint32(24).uint32(message.minDepth);
-    }
-    if (message.startVertex !== "") {
-      writer.uint32(34).string(message.startVertex);
-    }
-    if (message.visitor !== "") {
-      writer.uint32(42).string(message.visitor);
-    }
-    if (message.itemOrder !== "") {
-      writer.uint32(50).string(message.itemOrder);
-    }
-    if (message.strategy !== "") {
-      writer.uint32(58).string(message.strategy);
-    }
-    for (const v of message.filter) {
-      Filter.encode(v!, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.init !== "") {
-      writer.uint32(74).string(message.init);
-    }
-    if (message.maxIterations !== 0) {
-      writer.uint32(80).uint32(message.maxIterations);
-    }
-    if (message.maxDepth !== 0) {
-      writer.uint32(88).uint32(message.maxDepth);
-    }
-    if (message.uniqueness !== undefined) {
-      Uniqueness.encode(message.uniqueness, writer.uint32(98).fork()).ldelim();
-    }
-    if (message.order !== "") {
-      writer.uint32(106).string(message.order);
-    }
-    if (message.graphName !== "") {
-      writer.uint32(114).string(message.graphName);
-    }
-    for (const v of message.expander) {
-      Expander.encode(v!, writer.uint32(122).fork()).ldelim();
-    }
-    if (message.edgeCollection !== "") {
-      writer.uint32(130).string(message.edgeCollection);
-    }
-    if (message.lowestCommonAncestor === true) {
-      writer.uint32(136).bool(message.lowestCommonAncestor);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): Options {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOptions) as Options;
-    message.filter = [];
-    message.expander = [];
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.sort = reader.string();
-          break;
-        case 2:
-          message.direction = reader.string();
-          break;
-        case 3:
-          message.minDepth = reader.uint32();
-          break;
-        case 4:
-          message.startVertex = reader.string();
-          break;
-        case 5:
-          message.visitor = reader.string();
-          break;
-        case 6:
-          message.itemOrder = reader.string();
-          break;
-        case 7:
-          message.strategy = reader.string();
-          break;
-        case 8:
-          message.filter.push(Filter.decode(reader, reader.uint32()));
-          break;
-        case 9:
-          message.init = reader.string();
-          break;
-        case 10:
-          message.maxIterations = reader.uint32();
-          break;
-        case 11:
-          message.maxDepth = reader.uint32();
-          break;
-        case 12:
-          message.uniqueness = Uniqueness.decode(reader, reader.uint32());
-          break;
-        case 13:
-          message.order = reader.string();
-          break;
-        case 14:
-          message.graphName = reader.string();
-          break;
-        case 15:
-          message.expander.push(Expander.decode(reader, reader.uint32()));
-          break;
-        case 16:
-          message.edgeCollection = reader.string();
-          break;
-        case 17:
-          message.lowestCommonAncestor = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Options {
-    const message = globalThis.Object.create(baseOptions) as Options;
-    message.filter = [];
-    message.expander = [];
-    if (object.sort !== undefined && object.sort !== null) {
-      message.sort = String(object.sort);
-    } else {
-      message.sort = "";
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = String(object.direction);
-    } else {
-      message.direction = "";
-    }
-    if (object.minDepth !== undefined && object.minDepth !== null) {
-      message.minDepth = Number(object.minDepth);
-    } else {
-      message.minDepth = 0;
-    }
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = String(object.startVertex);
-    } else {
-      message.startVertex = "";
-    }
-    if (object.visitor !== undefined && object.visitor !== null) {
-      message.visitor = String(object.visitor);
-    } else {
-      message.visitor = "";
-    }
-    if (object.itemOrder !== undefined && object.itemOrder !== null) {
-      message.itemOrder = String(object.itemOrder);
-    } else {
-      message.itemOrder = "";
-    }
-    if (object.strategy !== undefined && object.strategy !== null) {
-      message.strategy = String(object.strategy);
-    } else {
-      message.strategy = "";
-    }
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromJSON(e));
-      }
-    }
-    if (object.init !== undefined && object.init !== null) {
-      message.init = String(object.init);
-    } else {
-      message.init = "";
-    }
-    if (object.maxIterations !== undefined && object.maxIterations !== null) {
-      message.maxIterations = Number(object.maxIterations);
-    } else {
-      message.maxIterations = 0;
-    }
-    if (object.maxDepth !== undefined && object.maxDepth !== null) {
-      message.maxDepth = Number(object.maxDepth);
-    } else {
-      message.maxDepth = 0;
-    }
-    if (object.uniqueness !== undefined && object.uniqueness !== null) {
-      message.uniqueness = Uniqueness.fromJSON(object.uniqueness);
-    } else {
-      message.uniqueness = undefined;
-    }
-    if (object.order !== undefined && object.order !== null) {
-      message.order = String(object.order);
-    } else {
-      message.order = "";
-    }
-    if (object.graphName !== undefined && object.graphName !== null) {
-      message.graphName = String(object.graphName);
-    } else {
-      message.graphName = "";
-    }
-    if (object.expander !== undefined && object.expander !== null) {
-      for (const e of object.expander) {
-        message.expander.push(Expander.fromJSON(e));
-      }
-    }
-    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
-      message.edgeCollection = String(object.edgeCollection);
-    } else {
-      message.edgeCollection = "";
-    }
-    if (
-      object.lowestCommonAncestor !== undefined &&
-      object.lowestCommonAncestor !== null
-    ) {
-      message.lowestCommonAncestor = Boolean(object.lowestCommonAncestor);
-    } else {
-      message.lowestCommonAncestor = false;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Options>): Options {
-    const message = { ...baseOptions } as Options;
-    message.filter = [];
-    message.expander = [];
-    if (object.sort !== undefined && object.sort !== null) {
-      message.sort = object.sort;
-    } else {
-      message.sort = "";
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = object.direction;
-    } else {
-      message.direction = "";
-    }
-    if (object.minDepth !== undefined && object.minDepth !== null) {
-      message.minDepth = object.minDepth;
-    } else {
-      message.minDepth = 0;
-    }
-    if (object.startVertex !== undefined && object.startVertex !== null) {
-      message.startVertex = object.startVertex;
-    } else {
-      message.startVertex = "";
-    }
-    if (object.visitor !== undefined && object.visitor !== null) {
-      message.visitor = object.visitor;
-    } else {
-      message.visitor = "";
-    }
-    if (object.itemOrder !== undefined && object.itemOrder !== null) {
-      message.itemOrder = object.itemOrder;
-    } else {
-      message.itemOrder = "";
-    }
-    if (object.strategy !== undefined && object.strategy !== null) {
-      message.strategy = object.strategy;
-    } else {
-      message.strategy = "";
-    }
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromPartial(e));
-      }
-    }
-    if (object.init !== undefined && object.init !== null) {
-      message.init = object.init;
-    } else {
-      message.init = "";
-    }
-    if (object.maxIterations !== undefined && object.maxIterations !== null) {
-      message.maxIterations = object.maxIterations;
-    } else {
-      message.maxIterations = 0;
-    }
-    if (object.maxDepth !== undefined && object.maxDepth !== null) {
-      message.maxDepth = object.maxDepth;
-    } else {
-      message.maxDepth = 0;
-    }
-    if (object.uniqueness !== undefined && object.uniqueness !== null) {
-      message.uniqueness = Uniqueness.fromPartial(object.uniqueness);
-    } else {
-      message.uniqueness = undefined;
-    }
-    if (object.order !== undefined && object.order !== null) {
-      message.order = object.order;
-    } else {
-      message.order = "";
-    }
-    if (object.graphName !== undefined && object.graphName !== null) {
-      message.graphName = object.graphName;
-    } else {
-      message.graphName = "";
-    }
-    if (object.expander !== undefined && object.expander !== null) {
-      for (const e of object.expander) {
-        message.expander.push(Expander.fromPartial(e));
-      }
-    }
-    if (object.edgeCollection !== undefined && object.edgeCollection !== null) {
-      message.edgeCollection = object.edgeCollection;
-    } else {
-      message.edgeCollection = "";
-    }
-    if (
-      object.lowestCommonAncestor !== undefined &&
-      object.lowestCommonAncestor !== null
-    ) {
-      message.lowestCommonAncestor = object.lowestCommonAncestor;
-    } else {
-      message.lowestCommonAncestor = false;
-    }
-    return message;
-  },
-
-  toJSON(message: Options): unknown {
-    const obj: any = {};
-    message.sort !== undefined && (obj.sort = message.sort);
-    message.direction !== undefined && (obj.direction = message.direction);
-    message.minDepth !== undefined && (obj.minDepth = message.minDepth);
-    message.startVertex !== undefined &&
-      (obj.startVertex = message.startVertex);
-    message.visitor !== undefined && (obj.visitor = message.visitor);
-    message.itemOrder !== undefined && (obj.itemOrder = message.itemOrder);
-    message.strategy !== undefined && (obj.strategy = message.strategy);
-    if (message.filter) {
-      obj.filter = message.filter.map((e) =>
-        e ? Filter.toJSON(e) : undefined
-      );
-    } else {
-      obj.filter = [];
-    }
-    message.init !== undefined && (obj.init = message.init);
-    message.maxIterations !== undefined &&
-      (obj.maxIterations = message.maxIterations);
-    message.maxDepth !== undefined && (obj.maxDepth = message.maxDepth);
-    message.uniqueness !== undefined &&
-      (obj.uniqueness = message.uniqueness
-        ? Uniqueness.toJSON(message.uniqueness)
-        : undefined);
-    message.order !== undefined && (obj.order = message.order);
-    message.graphName !== undefined && (obj.graphName = message.graphName);
-    if (message.expander) {
-      obj.expander = message.expander.map((e) =>
-        e ? Expander.toJSON(e) : undefined
-      );
-    } else {
-      obj.expander = [];
-    }
-    message.edgeCollection !== undefined &&
-      (obj.edgeCollection = message.edgeCollection);
-    message.lowestCommonAncestor !== undefined &&
-      (obj.lowestCommonAncestor = message.lowestCommonAncestor);
-    return obj;
-  },
-};
-
-const baseFilter: object = { vertex: "" };
-
-export const Filter = {
-  encode(message: Filter, writer: Writer = Writer.create()): Writer {
-    if (message.vertex !== "") {
-      writer.uint32(10).string(message.vertex);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): Filter {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.vertex = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Filter {
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    if (object.vertex !== undefined && object.vertex !== null) {
-      message.vertex = String(object.vertex);
-    } else {
-      message.vertex = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Filter>): Filter {
-    const message = { ...baseFilter } as Filter;
-    if (object.vertex !== undefined && object.vertex !== null) {
-      message.vertex = object.vertex;
-    } else {
-      message.vertex = "";
-    }
-    return message;
-  },
-
-  toJSON(message: Filter): unknown {
-    const obj: any = {};
-    message.vertex !== undefined && (obj.vertex = message.vertex);
-    return obj;
-  },
-};
-
-const baseExpander: object = { edge: "", direction: "" };
-
-export const Expander = {
-  encode(message: Expander, writer: Writer = Writer.create()): Writer {
-    if (message.edge !== "") {
-      writer.uint32(10).string(message.edge);
-    }
-    if (message.direction !== "") {
-      writer.uint32(18).string(message.direction);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): Expander {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseExpander) as Expander;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.edge = reader.string();
-          break;
-        case 2:
-          message.direction = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Expander {
-    const message = globalThis.Object.create(baseExpander) as Expander;
-    if (object.edge !== undefined && object.edge !== null) {
-      message.edge = String(object.edge);
-    } else {
-      message.edge = "";
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = String(object.direction);
-    } else {
-      message.direction = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Expander>): Expander {
-    const message = { ...baseExpander } as Expander;
-    if (object.edge !== undefined && object.edge !== null) {
-      message.edge = object.edge;
-    } else {
-      message.edge = "";
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = object.direction;
-    } else {
-      message.direction = "";
-    }
-    return message;
-  },
-
-  toJSON(message: Expander): unknown {
-    const obj: any = {};
-    message.edge !== undefined && (obj.edge = message.edge);
-    message.direction !== undefined && (obj.direction = message.direction);
-    return obj;
-  },
-};
-
-const baseUniqueness: object = { vertices: "", edges: "" };
-
-export const Uniqueness = {
-  encode(message: Uniqueness, writer: Writer = Writer.create()): Writer {
-    if (message.vertices !== "") {
-      writer.uint32(10).string(message.vertices);
-    }
-    if (message.edges !== "") {
-      writer.uint32(18).string(message.edges);
-    }
-    return writer;
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): Uniqueness {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseUniqueness) as Uniqueness;
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.vertices = reader.string();
-          break;
-        case 2:
-          message.edges = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Uniqueness {
-    const message = globalThis.Object.create(baseUniqueness) as Uniqueness;
-    if (object.vertices !== undefined && object.vertices !== null) {
-      message.vertices = String(object.vertices);
-    } else {
-      message.vertices = "";
-    }
-    if (object.edges !== undefined && object.edges !== null) {
-      message.edges = String(object.edges);
-    } else {
-      message.edges = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Uniqueness>): Uniqueness {
-    const message = { ...baseUniqueness } as Uniqueness;
-    if (object.vertices !== undefined && object.vertices !== null) {
-      message.vertices = object.vertices;
-    } else {
-      message.vertices = "";
-    }
-    if (object.edges !== undefined && object.edges !== null) {
-      message.edges = object.edges;
-    } else {
-      message.edges = "";
-    }
-    return message;
-  },
-
-  toJSON(message: Uniqueness): unknown {
-    const obj: any = {};
-    message.vertices !== undefined && (obj.vertices = message.vertices);
-    message.edges !== undefined && (obj.edges = message.edges);
     return obj;
   },
 };
@@ -1217,6 +1165,7 @@ export const protoMetadata: ProtoMetadata = {
       "google/protobuf/any.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/resource_base.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1224,22 +1173,22 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "start_vertex",
+            name: "vertices",
             number: 1,
             label: 1,
-            type: 9,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Vertices",
             oneofIndex: 0,
-            jsonName: "startVertex",
+            jsonName: "vertices",
           },
           {
-            name: "start_vertices",
+            name: "collection",
             number: 2,
             label: 1,
             type: 11,
-            typeName:
-              ".io.restorecommerce.graph.TraversalRequest.StartVertices",
+            typeName: ".io.restorecommerce.graph.Collection",
             oneofIndex: 0,
-            jsonName: "startVertices",
+            jsonName: "collection",
           },
           {
             name: "opts",
@@ -1249,54 +1198,26 @@ export const protoMetadata: ProtoMetadata = {
             typeName: ".io.restorecommerce.graph.Options",
             jsonName: "opts",
           },
-          {
-            name: "collection_name",
-            number: 4,
-            label: 1,
-            type: 9,
-            jsonName: "collectionName",
-          },
-          {
-            name: "edge_name",
-            number: 5,
-            label: 1,
-            type: 9,
-            jsonName: "edgeName",
-          },
-          { name: "data", number: 6, label: 1, type: 8, jsonName: "data" },
-          { name: "path", number: 7, label: 1, type: 8, jsonName: "path" },
-          { name: "aql", number: 8, label: 1, type: 8, jsonName: "aql" },
+          { name: "path", number: 4, label: 1, type: 8, jsonName: "path" },
           {
             name: "subject",
-            number: 9,
+            number: 5,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
             jsonName: "subject",
           },
-        ],
-        extension: [],
-        nestedType: [
           {
-            field: [
-              {
-                name: "vertices",
-                number: 1,
-                label: 3,
-                type: 9,
-                jsonName: "vertices",
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            reservedRange: [],
-            reservedName: [],
-            name: "StartVertices",
+            name: "filters",
+            number: 6,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filters",
+            jsonName: "filters",
           },
         ],
+        extension: [],
+        nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [{ name: "vertex" }],
@@ -1307,12 +1228,232 @@ export const protoMetadata: ProtoMetadata = {
       {
         field: [
           {
-            name: "vertex_fields",
+            name: "collection_name",
             number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "collectionName",
+          },
+          {
+            name: "start_vertex_id",
+            number: 2,
+            label: 3,
+            type: 9,
+            jsonName: "startVertexId",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Vertices",
+      },
+      {
+        field: [
+          {
+            name: "collection_name",
+            number: 1,
+            label: 1,
+            type: 9,
+            jsonName: "collectionName",
+          },
+          { name: "limit", number: 2, label: 1, type: 13, jsonName: "limit" },
+          { name: "offset", number: 3, label: 1, type: 13, jsonName: "offset" },
+          {
+            name: "sort",
+            number: 4,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.graph.VertexFields",
-            jsonName: "vertexFields",
+            typeName: ".io.restorecommerce.resourcebase.Sort",
+            jsonName: "sort",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Collection",
+      },
+      {
+        field: [
+          {
+            name: "include_vertex",
+            number: 1,
+            label: 3,
+            type: 9,
+            jsonName: "includeVertex",
+          },
+          {
+            name: "exclude_vertex",
+            number: 2,
+            label: 3,
+            type: 9,
+            jsonName: "excludeVertex",
+          },
+          {
+            name: "include_edge",
+            number: 3,
+            label: 3,
+            type: 9,
+            jsonName: "includeEdge",
+          },
+          {
+            name: "exclude_edge",
+            number: 4,
+            label: 3,
+            type: 9,
+            jsonName: "excludeEdge",
+          },
+          {
+            name: "direction",
+            number: 5,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Options.Direction",
+            jsonName: "direction",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            value: [
+              { name: "OUTBOUND", number: 0 },
+              { name: "INBOUND", number: 1 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "Direction",
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Options",
+      },
+      {
+        field: [
+          { name: "entity", number: 1, label: 1, type: 9, jsonName: "entity" },
+          { name: "edge", number: 2, label: 1, type: 9, jsonName: "edge" },
+          {
+            name: "filter",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filter",
+            jsonName: "filter",
+          },
+          {
+            name: "operator",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filters.Operator",
+            jsonName: "operator",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            value: [
+              { name: "and", number: 0 },
+              { name: "or", number: 1 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "Operator",
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Filters",
+      },
+      {
+        field: [
+          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
+          {
+            name: "operation",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filter.Operation",
+            jsonName: "operation",
+          },
+          { name: "value", number: 3, label: 1, type: 9, jsonName: "value" },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filter.ValueType",
+            jsonName: "type",
+          },
+          {
+            name: "filters",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filters",
+            jsonName: "filters",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            value: [
+              { name: "eq", number: 0 },
+              { name: "lt", number: 1 },
+              { name: "lte", number: 2 },
+              { name: "gt", number: 3 },
+              { name: "gte", number: 4 },
+              { name: "isEmpty", number: 5 },
+              { name: "iLike", number: 6 },
+              { name: "in", number: 7 },
+              { name: "neq", number: 8 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "Operation",
+          },
+          {
+            value: [
+              { name: "STRING", number: 0 },
+              { name: "NUMBER", number: 1 },
+              { name: "BOOLEAN", number: 2 },
+              { name: "DATE", number: 3 },
+              { name: "ARRAY", number: 4 },
+            ],
+            reservedRange: [],
+            reservedName: [],
+            name: "ValueType",
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "Filter",
+      },
+      {
+        field: [
+          {
+            name: "data",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
           },
           {
             name: "paths",
@@ -1323,16 +1464,8 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "paths",
           },
           {
-            name: "data",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.Any",
-            jsonName: "data",
-          },
-          {
             name: "operation_status",
-            number: 4,
+            number: 3,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
@@ -1347,190 +1480,6 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
         name: "TraversalResponse",
-      },
-      {
-        field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
-          { name: "key", number: 2, label: 1, type: 9, jsonName: "key" },
-          { name: "rev", number: 3, label: 1, type: 9, jsonName: "rev" },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "VertexFields",
-      },
-      {
-        field: [
-          { name: "sort", number: 1, label: 1, type: 9, jsonName: "sort" },
-          {
-            name: "direction",
-            number: 2,
-            label: 1,
-            type: 9,
-            jsonName: "direction",
-          },
-          {
-            name: "min_depth",
-            number: 3,
-            label: 1,
-            type: 13,
-            jsonName: "minDepth",
-          },
-          {
-            name: "start_vertex",
-            number: 4,
-            label: 1,
-            type: 9,
-            jsonName: "startVertex",
-          },
-          {
-            name: "visitor",
-            number: 5,
-            label: 1,
-            type: 9,
-            jsonName: "visitor",
-          },
-          {
-            name: "item_order",
-            number: 6,
-            label: 1,
-            type: 9,
-            jsonName: "itemOrder",
-          },
-          {
-            name: "strategy",
-            number: 7,
-            label: 1,
-            type: 9,
-            jsonName: "strategy",
-          },
-          {
-            name: "filter",
-            number: 8,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.graph.Filter",
-            jsonName: "filter",
-          },
-          { name: "init", number: 9, label: 1, type: 9, jsonName: "init" },
-          {
-            name: "max_iterations",
-            number: 10,
-            label: 1,
-            type: 13,
-            jsonName: "maxIterations",
-          },
-          {
-            name: "max_depth",
-            number: 11,
-            label: 1,
-            type: 13,
-            jsonName: "maxDepth",
-          },
-          {
-            name: "uniqueness",
-            number: 12,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.graph.Uniqueness",
-            jsonName: "uniqueness",
-          },
-          { name: "order", number: 13, label: 1, type: 9, jsonName: "order" },
-          {
-            name: "graph_name",
-            number: 14,
-            label: 1,
-            type: 9,
-            jsonName: "graphName",
-          },
-          {
-            name: "expander",
-            number: 15,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.graph.Expander",
-            jsonName: "expander",
-          },
-          {
-            name: "edge_collection",
-            number: 16,
-            label: 1,
-            type: 9,
-            jsonName: "edgeCollection",
-          },
-          {
-            name: "lowest_common_ancestor",
-            number: 17,
-            label: 1,
-            type: 8,
-            jsonName: "lowestCommonAncestor",
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "Options",
-      },
-      {
-        field: [
-          { name: "vertex", number: 1, label: 1, type: 9, jsonName: "vertex" },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "Filter",
-      },
-      {
-        field: [
-          { name: "edge", number: 1, label: 1, type: 9, jsonName: "edge" },
-          {
-            name: "direction",
-            number: 2,
-            label: 1,
-            type: 9,
-            jsonName: "direction",
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "Expander",
-      },
-      {
-        field: [
-          {
-            name: "vertices",
-            number: 1,
-            label: 1,
-            type: 9,
-            jsonName: "vertices",
-          },
-          { name: "edges", number: 2, label: 1, type: 9, jsonName: "edges" },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
-        name: "Uniqueness",
       },
     ],
     enumType: [],
@@ -1554,147 +1503,77 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [7, 0, 9, 1],
+          span: [9, 0, 11, 1],
           leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
         },
         {
           path: [4, 0, 8, 0],
-          span: [17, 2, 20, 3],
+          span: [15, 2, 18, 3],
           leadingDetachedComments: [],
           leadingComments: " Document handle either _id or _key value\n",
         },
         {
-          path: [4, 0, 2, 2],
-          span: [23, 2, 19],
-          leadingDetachedComments: [],
-          leadingComments: " Filter based on fieldName|operation, value|list\n",
-        },
-        {
           path: [4, 3, 2, 0],
-          span: [46, 1, 17],
+          span: [38, 1, 36],
           leadingDetachedComments: [],
-          trailingComments: " JS code\n",
+          trailingComments: " to include vertices\n",
         },
         {
           path: [4, 3, 2, 1],
-          span: [47, 1, 22],
+          span: [39, 1, 36],
           leadingDetachedComments: [],
-          trailingComments: " either inbound or outbound\n",
+          trailingComments: " to exclude vertices\n",
         },
         {
           path: [4, 3, 2, 2],
-          span: [48, 1, 22],
+          span: [40, 1, 34],
           leadingDetachedComments: [],
-          trailingComments:
-            " ANDed with any existing filters): visits only nodes in at least the given depth\n",
+          trailingComments: " to include vertices\n",
         },
         {
           path: [4, 3, 2, 3],
-          span: [49, 1, 25],
+          span: [41, 1, 34],
           leadingDetachedComments: [],
-          trailingComments: " id of the startVertex\n",
+          trailingComments: " to exclude vertices\n",
         },
         {
           path: [4, 3, 2, 4],
-          span: [50, 1, 20],
-          leadingDetachedComments: [],
-          trailingComments: " JS code\n",
-        },
-        {
-          path: [4, 3, 2, 5],
-          span: [51, 1, 23],
+          span: [42, 1, 25],
           leadingDetachedComments: [],
           trailingComments:
-            ' item iteration order can be "forward" or "backward"\n',
-        },
-        {
-          path: [4, 3, 2, 6],
-          span: [52, 1, 21],
-          leadingDetachedComments: [],
-          trailingComments:
-            ' traversal strategy can be "depthfirst" or "breadthfirst"\n',
-        },
-        {
-          path: [4, 3, 2, 7],
-          span: [53, 1, 28],
-          leadingDetachedComments: [],
-          trailingComments: " JS code\n",
-        },
-        {
-          path: [4, 3, 2, 8],
-          span: [54, 1, 17],
-          leadingDetachedComments: [],
-          trailingComments: " JS code\n",
-        },
-        {
-          path: [4, 3, 2, 9],
-          span: [55, 1, 28],
-          leadingDetachedComments: [],
-          trailingComments: " maximum number of iterations in each traversal\n",
-        },
-        {
-          path: [4, 3, 2, 10],
-          span: [56, 1, 23],
-          leadingDetachedComments: [],
-          trailingComments:
-            " ANDed with any existing filters visits only nodes in at most the given depth\n",
-        },
-        {
-          path: [4, 3, 2, 11],
-          span: [57, 1, 28],
-          leadingDetachedComments: [],
-          trailingComments:
-            " specifies uniqueness for vertices and edges visited\n",
-        },
-        {
-          path: [4, 3, 2, 12],
-          span: [58, 1, 19],
-          leadingDetachedComments: [],
-          trailingComments:
-            '  "preorder", "postorder" or "preorder-expander"\n',
-        },
-        {
-          path: [4, 3, 2, 13],
-          span: [59, 1, 24],
-          leadingDetachedComments: [],
-          trailingComments: " name of graph that contains the edges\n",
-        },
-        {
-          path: [4, 3, 2, 14],
-          span: [60, 1, 33],
-          leadingDetachedComments: [],
-          trailingComments: " JS code\n",
-        },
-        {
-          path: [4, 3, 2, 15],
-          span: [61, 1, 29],
-          leadingDetachedComments: [],
-          trailingComments: " name of the collection that contains the edges\n",
+            " either inbound or outbound, defaults to outbound direction\n",
         },
         {
           path: [4, 4, 2, 0],
-          span: [66, 2, 20],
+          span: [51, 2, 20],
           leadingDetachedComments: [],
-          trailingComments: " exclude these vertices\n",
+          trailingComments: " entity on which the filters are applied\n",
         },
         {
-          path: [4, 5, 2, 0],
-          span: [70, 2, 18],
+          path: [4, 4, 2, 1],
+          span: [52, 2, 18],
           leadingDetachedComments: [],
-          trailingComments: " expand these edges\n",
+          trailingComments:
+            " if edge is specified depending on the direction filter are applied only for those entities\n",
+        },
+        {
+          path: [4, 5, 4, 1, 2, 0],
+          span: [77, 4, 15],
+          leadingDetachedComments: [],
+          trailingComments: " default value type if not specified\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [75, 2, 22],
+          span: [88, 2, 31],
           leadingDetachedComments: [],
-          trailingComments: ' "none"|"global"|"path" for unique vertices\n',
+          trailingComments: " vertices\n",
         },
         {
           path: [4, 6, 2, 1],
-          span: [76, 2, 19],
+          span: [89, 2, 32],
           leadingDetachedComments: [],
-          trailingComments: ' "none"|"global"|"path" for unique edges\n',
+          trailingComments: " traversed vertices paths\n",
         },
       ],
     },
@@ -1702,15 +1581,23 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.graph.TraversalRequest": TraversalRequest,
-    ".io.restorecommerce.graph.TraversalRequest.StartVertices": TraversalRequest_StartVertices,
-    ".io.restorecommerce.graph.TraversalResponse": TraversalResponse,
-    ".io.restorecommerce.graph.VertexFields": VertexFields,
+    ".io.restorecommerce.graph.Vertices": Vertices,
+    ".io.restorecommerce.graph.Collection": Collection,
     ".io.restorecommerce.graph.Options": Options,
+    ".io.restorecommerce.graph.Options.Direction": Options_Direction,
+    ".io.restorecommerce.graph.Filters": Filters,
+    ".io.restorecommerce.graph.Filters.Operator": Filters_Operator,
     ".io.restorecommerce.graph.Filter": Filter,
-    ".io.restorecommerce.graph.Expander": Expander,
-    ".io.restorecommerce.graph.Uniqueness": Uniqueness,
+    ".io.restorecommerce.graph.Filter.Operation": Filter_Operation,
+    ".io.restorecommerce.graph.Filter.ValueType": Filter_ValueType,
+    ".io.restorecommerce.graph.TraversalResponse": TraversalResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+  ],
 };
 
 declare var self: any | undefined;

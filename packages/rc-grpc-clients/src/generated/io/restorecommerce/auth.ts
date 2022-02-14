@@ -54,6 +54,8 @@ export interface RoleAssociation {
   attributes: Attribute[];
   /** identifier for role_association */
   id: string;
+  /** timestamp when the role was created */
+  created: number;
 }
 
 export interface HierarchicalScopesRequest {
@@ -529,7 +531,7 @@ export const HierarchicalScope = {
   },
 };
 
-const baseRoleAssociation: object = { role: "", id: "" };
+const baseRoleAssociation: object = { role: "", id: "", created: 0 };
 
 export const RoleAssociation = {
   encode(message: RoleAssociation, writer: Writer = Writer.create()): Writer {
@@ -541,6 +543,9 @@ export const RoleAssociation = {
     }
     if (message.id !== "") {
       writer.uint32(26).string(message.id);
+    }
+    if (message.created !== 0) {
+      writer.uint32(33).double(message.created);
     }
     return writer;
   },
@@ -563,6 +568,9 @@ export const RoleAssociation = {
           break;
         case 3:
           message.id = reader.string();
+          break;
+        case 4:
+          message.created = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -592,6 +600,11 @@ export const RoleAssociation = {
     } else {
       message.id = "";
     }
+    if (object.created !== undefined && object.created !== null) {
+      message.created = Number(object.created);
+    } else {
+      message.created = 0;
+    }
     return message;
   },
 
@@ -613,6 +626,11 @@ export const RoleAssociation = {
     } else {
       message.id = "";
     }
+    if (object.created !== undefined && object.created !== null) {
+      message.created = object.created;
+    } else {
+      message.created = 0;
+    }
     return message;
   },
 
@@ -627,6 +645,7 @@ export const RoleAssociation = {
       obj.attributes = [];
     }
     message.id !== undefined && (obj.id = message.id);
+    message.created !== undefined && (obj.created = message.created);
     return obj;
   },
 };
@@ -941,6 +960,13 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "attributes",
           },
           { name: "id", number: 3, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "created",
+            number: 4,
+            label: 1,
+            type: 1,
+            jsonName: "created",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -1103,6 +1129,12 @@ export const protoMetadata: ProtoMetadata = {
           span: [36, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " identifier for role_association\n",
+        },
+        {
+          path: [4, 3, 2, 3],
+          span: [37, 2, 21],
+          leadingDetachedComments: [],
+          trailingComments: " timestamp when the role was created\n",
         },
       ],
     },

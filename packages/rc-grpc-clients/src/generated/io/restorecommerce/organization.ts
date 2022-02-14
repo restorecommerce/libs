@@ -62,8 +62,6 @@ export interface Organization {
   addressId: string;
   /** Hierarchically superior organization; may be null */
   parentId: string;
-  /** Hierarchically inferior organizations; may be null/empty */
-  childrenIds: string[];
   /** list of possible legal addresses of different types */
   contactPointIds: string[];
   website: string;
@@ -570,7 +568,6 @@ const baseOrganization: object = {
   id: "",
   addressId: "",
   parentId: "",
-  childrenIds: "",
   contactPointIds: "",
   website: "",
   email: "",
@@ -596,9 +593,6 @@ export const Organization = {
     }
     if (message.parentId !== "") {
       writer.uint32(34).string(message.parentId);
-    }
-    for (const v of message.childrenIds) {
-      writer.uint32(42).string(v!);
     }
     for (const v of message.contactPointIds) {
       writer.uint32(50).string(v!);
@@ -640,7 +634,6 @@ export const Organization = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.childrenIds = [];
     message.contactPointIds = [];
     message.paymentMethodIds = [];
     while (reader.pos < end) {
@@ -657,9 +650,6 @@ export const Organization = {
           break;
         case 4:
           message.parentId = reader.string();
-          break;
-        case 5:
-          message.childrenIds.push(reader.string());
           break;
         case 6:
           message.contactPointIds.push(reader.string());
@@ -704,7 +694,6 @@ export const Organization = {
 
   fromJSON(object: any): Organization {
     const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.childrenIds = [];
     message.contactPointIds = [];
     message.paymentMethodIds = [];
     if (object.id !== undefined && object.id !== null) {
@@ -726,11 +715,6 @@ export const Organization = {
       message.parentId = String(object.parentId);
     } else {
       message.parentId = "";
-    }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(String(e));
-      }
     }
     if (
       object.contactPointIds !== undefined &&
@@ -801,7 +785,6 @@ export const Organization = {
 
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = { ...baseOrganization } as Organization;
-    message.childrenIds = [];
     message.contactPointIds = [];
     message.paymentMethodIds = [];
     if (object.id !== undefined && object.id !== null) {
@@ -823,11 +806,6 @@ export const Organization = {
       message.parentId = object.parentId;
     } else {
       message.parentId = "";
-    }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(e);
-      }
     }
     if (
       object.contactPointIds !== undefined &&
@@ -903,11 +881,6 @@ export const Organization = {
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.addressId !== undefined && (obj.addressId = message.addressId);
     message.parentId !== undefined && (obj.parentId = message.parentId);
-    if (message.childrenIds) {
-      obj.childrenIds = message.childrenIds.map((e) => e);
-    } else {
-      obj.childrenIds = [];
-    }
     if (message.contactPointIds) {
       obj.contactPointIds = message.contactPointIds.map((e) => e);
     } else {
@@ -1123,13 +1096,6 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "parentId",
           },
           {
-            name: "children_ids",
-            number: 5,
-            label: 3,
-            type: 9,
-            jsonName: "childrenIds",
-          },
-          {
             name: "contact_point_ids",
             number: 6,
             label: 3,
@@ -1257,27 +1223,20 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 5, 2, 4],
-          span: [50, 2, 35],
-          leadingDetachedComments: [],
-          trailingComments:
-            " Hierarchically inferior organizations; may be null/empty\n",
-        },
-        {
-          path: [4, 5, 2, 5],
-          span: [51, 2, 40],
+          span: [50, 2, 40],
           leadingDetachedComments: [],
           trailingComments:
             " list of possible legal addresses of different types\n",
         },
         {
-          path: [4, 5, 2, 8],
-          span: [54, 2, 18],
+          path: [4, 5, 2, 7],
+          span: [53, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " base64; arangoDB does not support blob storage\n",
         },
         {
-          path: [4, 5, 2, 15],
-          span: [61, 2, 32],
+          path: [4, 5, 2, 14],
+          span: [60, 2, 32],
           leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },

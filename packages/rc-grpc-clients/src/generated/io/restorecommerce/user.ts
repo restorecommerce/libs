@@ -21,6 +21,10 @@ import {
   protoMetadata as protoMetadata5,
 } from "../../io/restorecommerce/image";
 import {
+  Any,
+  protoMetadata as protoMetadata7,
+} from "../../google/protobuf/any";
+import {
   protoMetadata as protoMetadata1,
   DeleteResponse,
   ReadRequest,
@@ -316,6 +320,8 @@ export interface User {
   invitedByUserLastName: string;
   tokens: Tokens[];
   lastAccess: number;
+  /** / additional data */
+  data?: Any;
 }
 
 const baseLoginRequest: object = { identifier: "", password: "", token: "" };
@@ -3045,6 +3051,9 @@ export const User = {
     if (message.lastAccess !== 0) {
       writer.uint32(201).double(message.lastAccess);
     }
+    if (message.data !== undefined) {
+      Any.encode(message.data, writer.uint32(210).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -3133,6 +3142,9 @@ export const User = {
           break;
         case 25:
           message.lastAccess = reader.double();
+          break;
+        case 26:
+          message.data = Any.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -3286,6 +3298,11 @@ export const User = {
     } else {
       message.lastAccess = 0;
     }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
     return message;
   },
 
@@ -3433,6 +3450,11 @@ export const User = {
     } else {
       message.lastAccess = 0;
     }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
     return message;
   },
 
@@ -3485,6 +3507,8 @@ export const User = {
       obj.tokens = [];
     }
     message.lastAccess !== undefined && (obj.lastAccess = message.lastAccess);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 };
@@ -3541,6 +3565,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/image.proto",
       "io/restorecommerce/status.proto",
+      "google/protobuf/any.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -4444,6 +4469,14 @@ export const protoMetadata: ProtoMetadata = {
             type: 1,
             jsonName: "lastAccess",
           },
+          {
+            name: "data",
+            number: 26,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -4587,276 +4620,282 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [14, 0, 37, 1],
+          span: [15, 0, 38, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n The microservice for the user resource.\n",
         },
         {
           path: [4, 0],
-          span: [43, 0, 47, 1],
+          span: [44, 0, 48, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         },
         {
           path: [4, 0, 2, 0],
-          span: [44, 2, 24],
+          span: [45, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " User name or email\n",
         },
         {
           path: [4, 0, 2, 1],
-          span: [45, 2, 22],
+          span: [46, 2, 22],
           leadingDetachedComments: [],
           trailingComments: " Raw password\n",
         },
         {
           path: [4, 3, 2, 0],
-          span: [60, 2, 16],
+          span: [61, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 5, 2, 10],
-          span: [89, 2, 28],
+          span: [90, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [95, 2, 24],
+          span: [96, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ user name or email\n",
         },
         {
           path: [4, 7, 2, 0],
-          span: [101, 2, 24],
+          span: [102, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 8, 2, 0],
-          span: [108, 2, 24],
+          span: [109, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 9, 2, 0],
-          span: [114, 2, 24],
+          span: [115, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ user name or email\n",
         },
         {
           path: [4, 10, 2, 0],
-          span: [121, 2, 24],
+          span: [122, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 11, 2, 0],
-          span: [126, 2, 24],
+          span: [127, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 12, 2, 0],
-          span: [133, 2, 24],
+          span: [134, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 13, 2, 0],
-          span: [139, 2, 24],
+          span: [140, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 14, 2, 0],
-          span: [145, 2, 24],
+          span: [146, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 15, 2, 0],
-          span: [150, 2, 24],
+          span: [151, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ User name or email\n",
         },
         {
           path: [4, 16],
-          span: [162, 0, 164, 1],
+          span: [163, 0, 165, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
         },
         {
           path: [4, 17],
-          span: [172, 0, 175, 1],
+          span: [173, 0, 176, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
         },
         {
           path: [4, 17, 2, 0],
-          span: [173, 2, 16],
+          span: [174, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 18, 2, 0],
-          span: [178, 2, 16],
+          span: [179, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " User ID\n",
         },
         {
           path: [4, 19],
-          span: [184, 0, 188, 1],
+          span: [185, 0, 189, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User email id changed event.\n",
         },
         {
           path: [4, 20, 2, 0],
-          span: [191, 2, 16],
+          span: [192, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 21],
-          span: [198, 0, 202, 1],
+          span: [199, 0, 203, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A list of User.\n",
         },
         {
           path: [4, 24],
-          span: [218, 0, 220, 1],
+          span: [219, 0, 221, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User activation request.\n",
         },
         {
           path: [4, 24, 2, 0],
-          span: [219, 2, 16],
+          span: [220, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 26],
-          span: [231, 0, 257, 1],
+          span: [232, 0, 259, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A User resource.\n",
         },
         {
           path: [4, 26, 2, 0],
-          span: [232, 2, 16],
+          span: [233, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID, unique, key\n",
         },
         {
           path: [4, 26, 2, 2],
-          span: [234, 2, 18],
+          span: [235, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " The name of the user, can be used for login\n",
         },
         {
           path: [4, 26, 2, 5],
-          span: [237, 2, 19],
+          span: [238, 2, 19],
           leadingDetachedComments: [],
           trailingComments: "/ Email address, can be used for login\n",
         },
         {
           path: [4, 26, 2, 6],
-          span: [238, 2, 23],
+          span: [239, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         },
         {
           path: [4, 26, 2, 7],
-          span: [239, 2, 18],
+          span: [240, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ If the user was activated via the activation process\n",
         },
         {
           path: [4, 26, 2, 8],
-          span: [240, 2, 29],
+          span: [241, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             "/ Activation code used in the activation process\n",
         },
         {
           path: [4, 26, 2, 9],
-          span: [241, 2, 23],
+          span: [242, 2, 23],
           leadingDetachedComments: [],
           trailingComments: "/ Raw password, not stored\n",
         },
         {
           path: [4, 26, 2, 10],
-          span: [242, 2, 28],
+          span: [243, 2, 28],
           leadingDetachedComments: [],
           trailingComments: "/ Encrypted password, stored\n",
         },
         {
           path: [4, 26, 2, 11],
-          span: [243, 2, 74],
+          span: [244, 2, 74],
           leadingDetachedComments: [],
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
         },
         {
           path: [4, 26, 2, 12],
-          span: [244, 2, 26],
+          span: [245, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " timezone_id specifications\n",
         },
         {
           path: [4, 26, 2, 13],
-          span: [245, 2, 24],
+          span: [246, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " locale specifications\n",
         },
         {
           path: [4, 26, 2, 14],
-          span: [246, 2, 28],
+          span: [247, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 26, 2, 15],
-          span: [247, 2, 28],
+          span: [248, 2, 28],
           leadingDetachedComments: [],
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
         },
         {
           path: [4, 26, 2, 16],
-          span: [248, 2, 18],
+          span: [249, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         },
         {
           path: [4, 26, 2, 19],
-          span: [251, 2, 19],
+          span: [252, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " For user invitation\n",
         },
         {
           path: [4, 26, 2, 20],
-          span: [252, 2, 35],
+          span: [253, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " user who is inviting\n",
         },
         {
           path: [4, 26, 2, 21],
-          span: [253, 2, 41],
+          span: [254, 2, 41],
           leadingDetachedComments: [],
           trailingComments: " First name of user inviting\n",
         },
         {
           path: [4, 26, 2, 22],
-          span: [254, 2, 40],
+          span: [255, 2, 40],
           leadingDetachedComments: [],
           trailingComments: " Last name of user inviting\n",
+        },
+        {
+          path: [4, 26, 2, 25],
+          span: [258, 2, 32],
+          leadingDetachedComments: [],
+          trailingComments: "/ additional data\n",
         },
       ],
     },
@@ -4899,6 +4938,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
 };
 

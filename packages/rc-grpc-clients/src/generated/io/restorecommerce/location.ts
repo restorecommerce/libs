@@ -59,11 +59,11 @@ export interface Location {
   organizationId: string;
   /** Location which may contain this location; may be null */
   parentId: string;
-  /** Locations contained in this location */
-  childrenIds: string[];
   addressId: string;
   /** / additional data */
   data?: Any;
+  /** location type */
+  type: string;
 }
 
 const baseDeleted: object = { id: "" };
@@ -432,8 +432,8 @@ const baseLocation: object = {
   description: "",
   organizationId: "",
   parentId: "",
-  childrenIds: "",
   addressId: "",
+  type: "",
 };
 
 export const Location = {
@@ -456,14 +456,14 @@ export const Location = {
     if (message.parentId !== "") {
       writer.uint32(50).string(message.parentId);
     }
-    for (const v of message.childrenIds) {
-      writer.uint32(58).string(v!);
-    }
     if (message.addressId !== "") {
       writer.uint32(66).string(message.addressId);
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.type !== "") {
+      writer.uint32(82).string(message.type);
     }
     return writer;
   },
@@ -472,7 +472,6 @@ export const Location = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = globalThis.Object.create(baseLocation) as Location;
-    message.childrenIds = [];
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -494,14 +493,14 @@ export const Location = {
         case 6:
           message.parentId = reader.string();
           break;
-        case 7:
-          message.childrenIds.push(reader.string());
-          break;
         case 8:
           message.addressId = reader.string();
           break;
         case 9:
           message.data = Any.decode(reader, reader.uint32());
+          break;
+        case 10:
+          message.type = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -513,7 +512,6 @@ export const Location = {
 
   fromJSON(object: any): Location {
     const message = globalThis.Object.create(baseLocation) as Location;
-    message.childrenIds = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id);
     } else {
@@ -544,11 +542,6 @@ export const Location = {
     } else {
       message.parentId = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(String(e));
-      }
-    }
     if (object.addressId !== undefined && object.addressId !== null) {
       message.addressId = String(object.addressId);
     } else {
@@ -559,12 +552,16 @@ export const Location = {
     } else {
       message.data = undefined;
     }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = String(object.type);
+    } else {
+      message.type = "";
+    }
     return message;
   },
 
   fromPartial(object: DeepPartial<Location>): Location {
     const message = { ...baseLocation } as Location;
-    message.childrenIds = [];
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id;
     } else {
@@ -595,11 +592,6 @@ export const Location = {
     } else {
       message.parentId = "";
     }
-    if (object.childrenIds !== undefined && object.childrenIds !== null) {
-      for (const e of object.childrenIds) {
-        message.childrenIds.push(e);
-      }
-    }
     if (object.addressId !== undefined && object.addressId !== null) {
       message.addressId = object.addressId;
     } else {
@@ -609,6 +601,11 @@ export const Location = {
       message.data = Any.fromPartial(object.data);
     } else {
       message.data = undefined;
+    }
+    if (object.type !== undefined && object.type !== null) {
+      message.type = object.type;
+    } else {
+      message.type = "";
     }
     return message;
   },
@@ -624,14 +621,10 @@ export const Location = {
     message.organizationId !== undefined &&
       (obj.organizationId = message.organizationId);
     message.parentId !== undefined && (obj.parentId = message.parentId);
-    if (message.childrenIds) {
-      obj.childrenIds = message.childrenIds.map((e) => e);
-    } else {
-      obj.childrenIds = [];
-    }
     message.addressId !== undefined && (obj.addressId = message.addressId);
     message.data !== undefined &&
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.type !== undefined && (obj.type = message.type);
     return obj;
   },
 };
@@ -806,13 +799,6 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "parentId",
           },
           {
-            name: "children_ids",
-            number: 7,
-            label: 3,
-            type: 9,
-            jsonName: "childrenIds",
-          },
-          {
             name: "address_id",
             number: 8,
             label: 1,
@@ -827,6 +813,7 @@ export const protoMetadata: ProtoMetadata = {
             typeName: ".google.protobuf.Any",
             jsonName: "data",
           },
+          { name: "type", number: 10, label: 1, type: 9, jsonName: "type" },
         ],
         extension: [],
         nestedType: [],
@@ -908,16 +895,16 @@ export const protoMetadata: ProtoMetadata = {
             "  Location which may contain this location; may be null\n",
         },
         {
-          path: [4, 4, 2, 6],
-          span: [49, 2, 35],
+          path: [4, 4, 2, 7],
+          span: [50, 2, 31],
           leadingDetachedComments: [],
-          trailingComments: " Locations contained in this location\n",
+          trailingComments: "/ additional data\n",
         },
         {
           path: [4, 4, 2, 8],
-          span: [51, 2, 31],
+          span: [51, 2, 19],
           leadingDetachedComments: [],
-          trailingComments: "/ additional data\n",
+          trailingComments: " location type\n",
         },
       ],
     },

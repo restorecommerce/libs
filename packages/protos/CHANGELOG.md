@@ -319,4 +319,4 @@ Updated user proto to include auth_context and roles proto to include `assignabl
 
 ### 0.0.1 (January 29th, 2020)
 
-Initial share.
+Initial share

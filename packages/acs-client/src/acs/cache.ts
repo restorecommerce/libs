@@ -1,14 +1,14 @@
 import { cfg } from '../config';
 import logger from '../logger';
 import * as crypto from 'crypto';
-import * as Redis from 'ioredis';
+import { createClient, RedisClientType } from 'redis';
 import * as _ from 'lodash';
 
 let attempted = false;
-let redisInstance;
+let redisInstance: RedisClientType<any, any>;
 let ttl: number | undefined;
 let cacheEnabled = true;
-let redisSubjectInstance;
+let redisSubjectInstance: RedisClientType<any, any>;
 
 /**
  * Initialize ACS Cache
@@ -31,14 +31,18 @@ export const initializeCache = async () => {
     const redisConfig = cfg.get('authorization:cache');
     const redisSubConfig = cfg.get('redis');
     if (redisConfig) {
-      redisConfig.db = cfg.get('authorization:cache:db-index');
-      redisInstance = redis.createClient(redisConfig);
+      redisConfig.database = cfg.get('authorization:cache:db-index');
+      redisInstance = createClient(redisConfig);
+      redisInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache', err));
+      await redisInstance.connect();
       ttl = cfg.get('authorization:cache:ttl');
     }
     if (redisSubConfig) {
       // init redis subject instance
-      redisSubConfig.db = redisSubConfig['db-indexes']['db-subject'];
-      redisSubjectInstance = redis.createClient(redisSubConfig);
+      redisSubConfig.database = redisSubConfig['db-indexes']['db-subject'];
+      redisSubjectInstance = createClient(redisSubConfig);
+      redisSubjectInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache', err));
+      await redisSubjectInstance.connect();
     }
   }
 };
@@ -62,60 +66,46 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
   if (prefix) {
     redisKey = `${prefix}:` + redisKey;
   }
-
-  return new Promise((resolve, reject) => {
-    redisInstance.get(redisKey, async (err, reply) => {
-      if (err) {
-        logger.error('Failed fetching key from ACS cache: ', err);
-        return;
-      }
-
-      if (reply && useCache) {
-        const response = JSON.parse(reply);
-        let evaluation_cacheable = response.evaluation_cacheable;
-        if (response && !_.isEmpty(response.policy_sets)) {
-          const policies = response.policy_sets[0].policies;
-          if (policies && policies.length > 0) {
-            for (let policy of policies) {
-              for (let rule of policy.rules) {
-                if (!rule.evaluation_cacheable || (rule.evaluation_cacheable === false)) {
-                  evaluation_cacheable = rule.evaluation_cacheable;
-                  break;
-                } else if (rule.evaluation_cacheable) {
-                  evaluation_cacheable = rule.evaluation_cacheable;
-                }
-              }
+  let redisKeyResponse = await redisInstance.get(redisKey);
+  if (redisKeyResponse && useCache) {
+    const response = JSON.parse(redisKeyResponse);
+    let evaluation_cacheable = response.evaluation_cacheable;
+    if (response && !_.isEmpty(response.policy_sets)) {
+      const policies = response.policy_sets[0].policies;
+      if (policies && policies.length > 0) {
+        for (let policy of policies) {
+          for (let rule of policy.rules) {
+            if (!rule.evaluation_cacheable || (rule.evaluation_cacheable === false)) {
+              evaluation_cacheable = rule.evaluation_cacheable;
+              break;
+            } else if (rule.evaluation_cacheable) {
+              evaluation_cacheable = rule.evaluation_cacheable;
             }
           }
         }
-        if (evaluation_cacheable) {
-          logger.debug('Found key in cache: ' + redisKey);
-          return resolve(response);
-        }
       }
+    }
+    if (evaluation_cacheable) {
+      logger.debug('Found key in cache: ' + redisKey);
+      return response;
+    }
+  }
 
-      if (!useCache) {
-        return filler(keyData).then((data) => {
-          // when useCache is false, dont store in cache
-          resolve(data);
-        }).catch(reject);
-      }
+  if (!useCache) {
+    // when useCache is false, dont store in cache
+    return await filler(keyData);
+  }
 
-      logger.debug('Filling cache key: ' + redisKey);
-
-      return filler(keyData).then((data) => {
-        if (data) {
-          if (ttl) {
-            redisInstance.setex(redisKey, ttl, JSON.stringify(data));
-          } else {
-            redisInstance.set(redisKey, JSON.stringify(data));
-          }
-        }
-
-        resolve(data);
-      }).catch(reject);
-    });
-  });
+  logger.debug('Filling cache key: ' + redisKey);
+  const acsResponse = await filler(keyData);
+  if (acsResponse) {
+    if (ttl) {
+      await redisInstance.setEx(redisKey, ttl, JSON.stringify(acsResponse));
+    } else {
+      await redisInstance.set(redisKey, JSON.stringify(acsResponse));
+    }
+  }
+  return acsResponse;
 };
 
 /**
@@ -129,24 +119,15 @@ export const get = async (key: string): Promise<any> => {
   if (!redisSubjectInstance) {
     return;
   }
-  return new Promise((resolve, reject) => {
-    redisSubjectInstance.get(key, async (err, reply) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      if (reply) {
-        logger.debug('Found key in cache: ' + key);
-        resolve(JSON.parse(reply));
-        return;
-      }
-      if (!err && !reply) {
-        logger.info('Key does not exist', { key });
-        resolve(0);
-      }
-    });
-  });
+  const redisResponse = await redisSubjectInstance.get(key);
+  if (!redisResponse) {
+    logger.info('Key does not exist', { key });
+    return;
+  }
+  if (redisResponse) {
+    logger.debug('Found key in cache: ' + key);
+    return JSON.parse(redisResponse);
+  }
 };
 
 /**
@@ -155,58 +136,32 @@ export const get = async (key: string): Promise<any> => {
  * @param prefix An optional prefix to flush instead of entire cache
  */
 export const flushCache = async (prefix?: string) => {
-  let ioredisInstance;
-  const redisConfig = cfg.get('authorization:cache');
-  if (redisConfig) {
-    redisConfig.db = cfg.get('authorization:cache:db-index');
-    ioredisInstance = new Redis(redisConfig);
-  }
-  if (!ioredisInstance || !cacheEnabled) {
+  if (!redisInstance || !cacheEnabled) {
+    logger.info('Redis client not initialized in acs-client');
     return;
   }
 
   if (prefix != undefined) {
-    let stream = ioredisInstance.scanStream({ match: `acs:${prefix}:*`, count: 100 });
-    let pipeline = ioredisInstance.pipeline();
-    let localKeys = [];
-
-    stream.on('data', (resultKeys) => {
-      logger.info('Data Received:', localKeys.length);
-      for (let i = 0; i < resultKeys.length; i++) {
-        localKeys.push(resultKeys[i]);
-        pipeline.del(resultKeys[i]);
-      } if (localKeys.length > 100) {
-        pipeline.exec(() => { logger.info('one batch delete complete'); });
-        localKeys = [];
-        pipeline = ioredisInstance.pipeline();
+    let flushPattern = `acs:${prefix}:*`;
+    logger.debug(`Flushing cache with pattern ${flushPattern}`);
+    let scanIterator;
+    try {
+      scanIterator = redisInstance.scanIterator({ MATCH: flushPattern, COUNT: 100 });
+      for await (const key of scanIterator) {
+        await redisInstance.del(key);
       }
-    });
-    stream.on('end', () => {
-      pipeline.exec(() => { logger.info('final batch delete complete'); });
+      logger.debug(`Successfully flushed cache pattern ${flushPattern}`);
       return;
-    });
-    stream.on('error', (err) => {
-      logger.error('error', err);
+    } catch (err) {
+      logger.error('Error flushing ACS cache', { message: err.message });
       return;
-    });
-    return;
+    }
   }
-
   logger.debug('Flushing ACS cache');
-
-  return new Promise((resolve, reject) => {
-    redisInstance.flushdb(async (err, reply) => {
-      if (err) {
-        logger.error('Failed flushing ACS cache: ', err);
-        return reject();
-      }
-
-      if (reply) {
-        logger.debug('Flushed ACS cache');
-        return resolve(0);
-      }
-    });
-  });
+  const reply = await redisInstance.flushDb();
+  if (reply) {
+    logger.debug('Flushed ACS cache');
+  }
 };
 
 /**

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.0...@restorecommerce/protos@0.6.3) (2022-02-14)
+
+
+### Bug Fixes
+
+* **protos:** added data field for user and created time stamp for role associations ([cf14968](https://github.com/restorecommerce/libs/commit/cf14968aa1575ef83fde4b73780ba80fd3bf0188))
+* **protos:** fix auth proto ([b5e7f41](https://github.com/restorecommerce/libs/commit/b5e7f410bad2c1786e69186555584f591cd0c48b))
+
+
+
+
+
 # [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.5.0...@restorecommerce/protos@0.6.0) (2022-02-09)
 
 

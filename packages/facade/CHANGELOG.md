@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.2.0...@restorecommerce/facade@0.2.1) (2022-02-14)
+
+
+### Bug Fixes
+
+* **facade:** regenerated schema ([a8fba43](https://github.com/restorecommerce/libs/commit/a8fba43233999191d2583139cefe9a8af647706b))
+* bypass non-compliant koa modules ([8a92b83](https://github.com/restorecommerce/libs/commit/8a92b83ce717f52caa843b00d5db894ca07ab1a9))
+* copy hbs on build ([efd8e78](https://github.com/restorecommerce/libs/commit/efd8e783a09badb84d76f2b72377de438f34d014))
+* switch to sh ([5756072](https://github.com/restorecommerce/libs/commit/57560723184a300b2d315068f29339a5f2dc517e))
+
+
+
+
+
 # [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.1.44...@restorecommerce/facade@0.2.0) (2022-02-09)
 
 

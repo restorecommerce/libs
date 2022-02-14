@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/service-config",
-  "version": "0.4.24",
+  "version": "0.4.25",
   "description": "An opinionated wrapper of nconf optimized for microservices",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -16,7 +16,7 @@
     "configuration"
   ],
   "dependencies": {
-    "@restorecommerce/logger": "^0.12.0",
+    "@restorecommerce/logger": "^0.12.1",
     "nconf": "^0.11.3"
   },
   "devDependencies": {

@@ -2,8 +2,8 @@
   "name": "@restorecommerce/mailer",
   "version": "0.1.16",
   "description": "Multi transport mailer based on nodemailer",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "author": "n-fuse GmbH",
   "repository": {
     "type": "git",

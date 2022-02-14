@@ -514,9 +514,9 @@ export type IoRestorecommerceLocationLocation = {
   description?: Maybe<Scalars['String']>;
   organizationId?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
-  childrenIds?: Maybe<Array<Scalars['String']>>;
   addressId?: Maybe<Scalars['String']>;
   data?: Maybe<GoogleProtobufAny>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type GoogleProtobufAny = {
@@ -560,7 +560,6 @@ export type IoRestorecommerceOrganizationOrganization = {
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   addressId?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
-  childrenIds?: Maybe<Array<Scalars['String']>>;
   contactPointIds?: Maybe<Array<Scalars['String']>>;
   website?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -1034,9 +1033,9 @@ export type IIoRestorecommerceLocationLocation = {
   description?: Maybe<Scalars['String']>;
   organizationId?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
-  childrenIds?: Maybe<Array<Scalars['String']>>;
   addressId?: Maybe<Scalars['String']>;
   data?: Maybe<IGoogleProtobufAny>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type ResourceOrganizationMutation = {
@@ -1066,7 +1065,6 @@ export type IIoRestorecommerceOrganizationOrganization = {
   meta?: Maybe<IIoRestorecommerceMetaMeta>;
   addressId?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['String']>;
-  childrenIds?: Maybe<Array<Scalars['String']>>;
   contactPointIds?: Maybe<Array<Scalars['String']>>;
   website?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -1898,9 +1896,9 @@ export type IoRestorecommerceLocationLocationResolvers<ContextType = ResourceCon
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  childrenIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1942,7 +1940,6 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Res
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  childrenIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

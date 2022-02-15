@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.17](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@0.1.16...@restorecommerce/handlebars-helperized@0.1.17) (2022-02-15)
+
+
+### Bug Fixes
+
+* **handlebars-helperized:** made layout, style, opts and customhelpers as optional parameters ([a4e3f6d](https://github.com/restorecommerce/handlebars-helperized/commit/a4e3f6d8879f5f6581ab8cac27c8fa3f588a231c))
+
+
+
+
+
 ## [0.1.16](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@0.1.15...@restorecommerce/handlebars-helperized@0.1.16) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/handlebars-helperized

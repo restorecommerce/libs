@@ -4,13 +4,14 @@ import { IdentitySrvGrpcClient } from "../grpc";
 import { readFile } from "fs";
 import { resolve as resolvePath } from "path";
 import hbs from "handlebars";
-import { marshallProtobufAny, nanoid, unmarshallProtobufAny } from "../oidc/utils";
+import { marshallProtobufAny } from "../oidc/utils";
 import * as uuid from 'uuid';
 import {
   RegisterRequest,
   User,
   UserType
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+import * as jose from 'jose';
 
 const Router = eval('require("koa-router")');
 const bodyParser = eval('require("koa-body")');
@@ -120,7 +121,10 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 }
 
 const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string): Promise<string> => {
-  const token = nanoid();
+  const token = new jose.UnsecuredJWT({})
+    .setIssuedAt()
+    .setExpirationTime('30d')
+    .encode();
 
   // 1 Month
   const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);

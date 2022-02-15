@@ -7,7 +7,7 @@ const defaultOpts = {
 };
 
 // Initializes and configures a custom handlebars instance
-const init = (options: object, customHelpersList: any) => {
+const init = (options: object | undefined, customHelpersList: any) => {
   // default values if nothing given
   const opts = defaults(options, defaultOpts);
   // the basic building block is the handlebars rendering engine
@@ -22,7 +22,7 @@ const init = (options: object, customHelpersList: any) => {
   if (customHelpersList) {
     for (let customHelper of customHelpersList) {
       const filePath = customHelper;
-      require(filePath) (hbs, opts);
+      require(filePath)(hbs, opts);
     }
   }
   // extend rendering with layout functionality
@@ -41,10 +41,10 @@ class Renderer {
   */
 
   hbs: any;
-  style: string;
+  style: string | undefined;
   template: any;
 
-  constructor(template: string, layout: string, style: string, opts: object, customHelpersList: any) {
+  constructor(template: string, layout?: string | undefined, style?: string | undefined, opts?: object | undefined, customHelpersList?: any) {
     this.hbs = init(opts, customHelpersList);
     this.style = style;
     if (layout) {

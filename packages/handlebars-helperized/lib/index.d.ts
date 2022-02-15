@@ -7,9 +7,9 @@ declare class Renderer {
     @param {Array} customHelpersList contains a list of custom helpers (optional)
     */
     hbs: any;
-    style: string;
+    style: string | undefined;
     template: any;
-    constructor(template: string, layout: string, style: string, opts: object, customHelpersList: any);
+    constructor(template: string, layout?: string | undefined, style?: string | undefined, opts?: object | undefined, customHelpersList?: any);
     /**
     @param {Object} context: required data for the placeholders
     @return {String} html

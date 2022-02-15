@@ -102,14 +102,9 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     });
 
     if (!user.user || !user.user.payload || (user.user.status && user.user.status.code !== 200)) {
-      if (user.email) {
-        ctx.type = 'html';
-        ctx.body = await register(user.email);
-        return next();
-      } else {
-        ctx.body = 'Internal Error';
-        return next();
-      }
+      ctx.type = 'html';
+      ctx.body = await register(user.email || '');
+      return next();
     }
 
     const token = await upsertUserToken(ids, user.user.payload.id);

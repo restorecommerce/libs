@@ -290,8 +290,19 @@ const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: stri
         throw new Error("Typing '" + objType + "' not registered for key '" + key + "' in object: " + objName);
       }
 
+      let typingData = registeredTypings.get(objType)!;
+      let mapEntry = false;
+      if ((typingData.meta as DescriptorProto).options) {
+        mapEntry = !!(typingData.meta as DescriptorProto).options?.mapEntry;
+      }
+
+      // TODO Actually unroll maps into entries
+      if (mapEntry) {
+        return MapScalar;
+      }
+
       if (!input) {
-        result = registeredTypings.get(objType)!.output;
+        result = typingData.output;
         break;
       }
 
@@ -299,7 +310,7 @@ const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: stri
         return null;
       }
 
-      result = registeredTypings.get(objType)!.input;
+      result = typingData.input;
       break;
     case FieldDescriptorProto_Type.TYPE_BYTES:
       if (input) {

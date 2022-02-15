@@ -36,4 +36,9 @@ export const subServices: SubService[] = [
     service: metaPackageIoRestorecommerceToken.fileDescriptor.service![0],
     queries: ['find']
   },
+  {
+    name: 'oauth',
+    service: metaPackageIoRestorecommerceOauth.fileDescriptor.service![0],
+    queries: ['AvailableServices', 'GenerateLinks']
+  },
 ];

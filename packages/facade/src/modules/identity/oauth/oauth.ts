@@ -4,7 +4,7 @@ import { IdentitySrvGrpcClient } from "../grpc";
 import { readFile } from "fs";
 import { resolve as resolvePath } from "path";
 import hbs from "handlebars";
-import { marshallProtobufAny, nanoid } from "../oidc/utils";
+import { marshallProtobufAny, nanoid, unmarshallProtobufAny } from "../oidc/utils";
 import * as uuid from 'uuid';
 import {
   RegisterRequest,
@@ -26,8 +26,39 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     return next();
   });
 
+  router.get('/oauth2-logout', async (ctx, next) => {
+    ctx.cookies.set('token', undefined);
+    ctx.status = 303;
+    ctx.redirect('/oauth2-login');
+    ctx.body = 'Redirecting to login page';
+    return next();
+  });
+
   router.get('/oauth2-urls', async (ctx, next) => {
     ctx.body = (await ctx.identitySrvClient.oauth.GenerateLinks({})).links;
+    return next();
+  });
+
+  router.get('/oauth2-account', async (ctx, next) => {
+    const token = ctx.cookies.get('token');
+    if (!token) {
+      ctx.body = 'user not logged in';
+      return next();
+    }
+
+    const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
+
+    const user = await ids.user.FindByToken({
+      token: token
+    });
+
+    if (!user || !user.payload) {
+      ctx.body = 'user not logged in';
+      return next();
+    }
+
+    ctx.type = 'html';
+    ctx.body = await account(user.payload);
     return next();
   });
 
@@ -46,8 +77,12 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     }));
 
     if (user.payload) {
-      ctx.type = 'html';
-      ctx.body = await account(user.payload);
+      const token = await upsertUserToken(ids, user.payload.id);
+      ctx.cookies.set('token', token);
+
+      ctx.status = 303;
+      ctx.redirect('/oauth2-account');
+      ctx.body = 'Redirecting to account page';
       return next();
     }
 
@@ -66,7 +101,6 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
       state: ctx.request.query['state'] as string
     });
 
-    console.log(user);
     if (!user.user || !user.user.payload || (user.user.status && user.user.status.code !== 200)) {
       if (user.email) {
         ctx.type = 'html';
@@ -78,28 +112,36 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
       }
     }
 
-    const token = nanoid();
+    const token = await upsertUserToken(ids, user.user.payload.id);
+    ctx.cookies.set('token', token);
 
-    // 1 Month
-    const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);
-
-    await ids.token.upsert({
-      id: uuid.v4().replace(/-/g, ''),
-      type: 'access_token',
-      expiresIn: expiresIn,
-      payload: marshallProtobufAny({
-        accountId: user.user.payload.id,
-        exp: expiresIn,
-        jti: token
-      })
-    });
-
-    ctx.type = 'html';
-    ctx.body = await account(user.user.payload);
+    ctx.status = 303;
+    ctx.redirect('/oauth2-account');
+    ctx.body = 'Redirecting to account page';
     return next();
   });
 
   return router;
+}
+
+const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string): Promise<string> => {
+  const token = nanoid();
+
+  // 1 Month
+  const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);
+
+  await ids.token.upsert({
+    id: uuid.v4().replace(/-/g, ''),
+    type: 'access_token',
+    expiresIn: expiresIn,
+    payload: marshallProtobufAny({
+      accountId: accountId,
+      exp: expiresIn,
+      jti: token
+    })
+  });
+
+  return token;
 }
 
 let layoutHbs: HandlebarsTemplateDelegate;

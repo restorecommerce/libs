@@ -16,8 +16,12 @@
 <div class="rc-login flex col justify-center">
   <div class="self-center justify-center rc-account scale110p">
     <h2>{{title}}</h2>
-    <div class="row center justify-center">
+    <div class="col center justify-center">
       <h3>Welcome {{user.firstName}} {{user.lastName}}!</h3>
+
+      <a href="/oauth2-logout" class="button emphasized">
+        <div class="icogram"><span class="text">Logout</span></div>
+      </a>
     </div>
   </div>
 </div>

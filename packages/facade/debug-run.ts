@@ -15,7 +15,7 @@ import {
   ostorageModule,
   paymentModule,
   schedulingModule
-} from './dist';
+} from './src';
 import { join } from 'path';
 
 const CONFIG_PATH = __dirname;

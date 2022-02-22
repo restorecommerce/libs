@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.2.2...@restorecommerce/facade@0.3.0) (2022-02-22)
+
+
+### Bug Fixes
+
+* **facade:** do not internal error ([a98594d](https://github.com/restorecommerce/libs/commit/a98594d2a478965eb3b22fff530b86c290afbbb2))
+* **facade:** use jwt token ([666a08f](https://github.com/restorecommerce/libs/commit/666a08f9b7727cda26a499c3ebaa5335ed38a27a))
+* **protos:** add token to code exchange ([9c17cb6](https://github.com/restorecommerce/libs/commit/9c17cb6e3a16761a85a4b9379c3c6996cc5422e8))
+
+
+### Features
+
+* **facade:** support maps ([2c466fe](https://github.com/restorecommerce/libs/commit/2c466fe1e0ef883ab4b7eb19f637ef13f1f88e96))
+
+
+
+
+
 ## [0.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.2.1...@restorecommerce/facade@0.2.2) (2022-02-15)
 
 

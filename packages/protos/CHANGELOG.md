@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.3...@restorecommerce/protos@0.6.4) (2022-02-22)
+
+
+### Bug Fixes
+
+* **protos:** add token to code exchange ([9c17cb6](https://github.com/restorecommerce/libs/commit/9c17cb6e3a16761a85a4b9379c3c6996cc5422e8))
+
+
+
+
+
 ## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.0...@restorecommerce/protos@0.6.3) (2022-02-14)
 
 

@@ -102,14 +102,13 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
       state: ctx.request.query['state'] as string
     });
 
-    if (!user.user || !user.user.payload || (user.user.status && user.user.status.code !== 200)) {
+    if (!user.user || !user.user.payload || !user.token || (user.user.status && user.user.status.code !== 200)) {
       ctx.type = 'html';
       ctx.body = await register(user.email || '');
       return next();
     }
 
-    const token = await upsertUserToken(ids, user.user.payload.id);
-    ctx.cookies.set('token', token);
+    ctx.cookies.set('token', user.token.token);
 
     ctx.status = 303;
     ctx.redirect('/oauth2-account');

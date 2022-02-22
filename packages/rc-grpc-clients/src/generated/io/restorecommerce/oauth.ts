@@ -2,10 +2,14 @@
 import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
 import {
   UserResponse,
-  protoMetadata as protoMetadata1,
+  protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/user";
 import {
-  protoMetadata as protoMetadata2,
+  Tokens,
+  protoMetadata as protoMetadata1,
+} from "../../io/restorecommerce/auth";
+import {
+  protoMetadata as protoMetadata3,
   Empty,
 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
@@ -34,6 +38,7 @@ export interface ExchangeCodeRequest {
 export interface ExchangeCodeResponse {
   user?: UserResponse;
   email: string;
+  token?: Tokens;
 }
 
 const baseServicesResponse: object = { services: "" };
@@ -380,6 +385,9 @@ export const ExchangeCodeResponse = {
     if (message.email !== "") {
       writer.uint32(18).string(message.email);
     }
+    if (message.token !== undefined) {
+      Tokens.encode(message.token, writer.uint32(26).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -397,6 +405,9 @@ export const ExchangeCodeResponse = {
           break;
         case 2:
           message.email = reader.string();
+          break;
+        case 3:
+          message.token = Tokens.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -420,6 +431,11 @@ export const ExchangeCodeResponse = {
     } else {
       message.email = "";
     }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = Tokens.fromJSON(object.token);
+    } else {
+      message.token = undefined;
+    }
     return message;
   },
 
@@ -435,6 +451,11 @@ export const ExchangeCodeResponse = {
     } else {
       message.email = "";
     }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = Tokens.fromPartial(object.token);
+    } else {
+      message.token = undefined;
+    }
     return message;
   },
 
@@ -443,6 +464,8 @@ export const ExchangeCodeResponse = {
     message.user !== undefined &&
       (obj.user = message.user ? UserResponse.toJSON(message.user) : undefined);
     message.email !== undefined && (obj.email = message.email);
+    message.token !== undefined &&
+      (obj.token = message.token ? Tokens.toJSON(message.token) : undefined);
     return obj;
   },
 };
@@ -462,6 +485,7 @@ export interface ProtoMetadata {
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     dependency: [
+      "io/restorecommerce/auth.proto",
       "io/restorecommerce/user.proto",
       "google/protobuf/empty.proto",
     ],
@@ -562,6 +586,14 @@ export const protoMetadata: ProtoMetadata = {
             jsonName: "user",
           },
           { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
+          {
+            name: "token",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Tokens",
+            jsonName: "token",
+          },
         ],
         extension: [],
         nestedType: [],
@@ -609,7 +641,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.oauth.ExchangeCodeRequest": ExchangeCodeRequest,
     ".io.restorecommerce.oauth.ExchangeCodeResponse": ExchangeCodeResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
 };
 
 declare var self: any | undefined;

@@ -1,12 +1,14 @@
 import { cfg } from './config';
-import * as Redis from 'ioredis';
+import { createClient, RedisClientType } from 'redis';
 
-export const getRedisInstance = (dbIndex?: number): Redis.Redis => {
+export const getRedisInstance = (dbIndex?: number): RedisClientType<any, any> => {
   if (!dbIndex) {
     dbIndex = 0;
   }
   const redisCfg = cfg.get('redis');
-  redisCfg.db = dbIndex;
-  const clientInstance = new Redis.default(redisCfg);
+  redisCfg.database = dbIndex;
+  const clientInstance = createClient(redisCfg);
+  clientInstance.on('error', (err) => console.log('Redis Client Error in oidc store', err));
+  clientInstance.connect().then((val) => console.log('Redis client connection successful for oidc'));
   return clientInstance;
 };

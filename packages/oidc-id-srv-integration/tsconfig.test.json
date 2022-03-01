@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "outDir": "test"
+    },
+    "extends": "./tsconfig.json",
+    "include": [
+      "./test/acs_test.ts"
+    ]
+  }

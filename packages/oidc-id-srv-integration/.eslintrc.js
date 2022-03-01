@@ -1,60 +1,81 @@
 module.exports = {
-  env: {
-    browser: false,
-    es6: true,
-    node: true
+  root: true,
+  "env": {
+    "browser": false,
+    "es6": true,
+    "node": true
   },
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: "tsconfig.json",
-    sourceType: "module"
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "tsconfig.json",
+      "tsconfig.test.json"
+    ],
+    "sourceType": "module"
   },
-  plugins: [
+  "plugins": [
     "@typescript-eslint",
     "@typescript-eslint/eslint-plugin",
     "prefer-arrow-functions"
   ],
-  rules: {
+  "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      }
+    ],
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
-        multiline: {
-          delimiter: "semi",
-          requireLast: true
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
         },
-        singleline: {
-          delimiter: "semi",
-          requireLast: false
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
         }
       }
     ],
     "@typescript-eslint/no-inferrable-types": "error",
-    "@typescript-eslint/no-use-before-define": [
-      2,
-      { functions: true, classes: true }
-    ],
+    "@typescript-eslint/no-use-before-define": [2, {"functions": true, "classes": true}],
     "@typescript-eslint/prefer-namespace-keyword": "error",
-    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/semi": [
+      "error",
+      "always"
+    ],
     "@typescript-eslint/type-annotation-spacing": "error",
-    "arrow-parens": ["off", "as-needed"],
+    "arrow-parens": [
+      "off",
+      "as-needed"
+    ],
     "capitalized-comments": 0,
-    quotes: ["error", "single", { allowTemplateLiterals: true }],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "no-trailing-spaces": "error",
     "no-var": "error",
     "object-shorthand": "error",
     "prefer-arrow-functions/prefer-arrow-functions": [
       "warn",
       {
-        classPropertiesAllowed: false,
-        disallowPrototype: false,
-        returnStyle: "unchanged",
-        singleReturnOnly: false
+        "classPropertiesAllowed": false,
+        "disallowPrototype": false,
+        "returnStyle": "unchanged",
+        "singleReturnOnly": false
       }
     ],
     "prefer-arrow-callback": "error",
-    "quote-props": ["error", "as-needed"],
+    "quote-props": [
+      "error",
+      "as-needed"
+    ],
     "spaced-comment": "error"
   }
 };

@@ -1,5 +1,5 @@
 import { AdapterConstructor, Adapter, AdapterPayload } from 'oidc-provider';
-import { Redis } from 'ioredis';
+import { RedisClientType } from 'redis';
 import { cfg } from './config';
 import * as _ from 'lodash';
 
@@ -54,7 +54,7 @@ interface TokenService {
 
 const delegate = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 
-export function createIdentityServiceAdapterClass(tokenService: TokenService, logger: any, redisClient: Redis): AdapterConstructor {
+export function createIdentityServiceAdapterClass(tokenService: TokenService, logger: any, redisClient: RedisClientType<any, any>): AdapterConstructor {
   return class IdentityServiceAdapter implements Adapter {
 
     constructor(public type: string) { }

@@ -1,4 +1,4 @@
-import * as Redis from 'ioredis';
+import { RedisClientType } from 'redis';
 import * as Koa from 'koa';
 import { errors } from 'oidc-provider';
 
@@ -42,7 +42,7 @@ export type afterPasswordGrantHookFunc =
     (account: Account, accessToken: string, idToken: string, jwtMeta: JwtMeta) => void;
 
 export interface Config {
-  redisInstance?: Redis.Redis;
+  redisInstance?: RedisClientType<any, any>;
   pathPrefix: string;
   clients?: any[];
   jwks?: {};

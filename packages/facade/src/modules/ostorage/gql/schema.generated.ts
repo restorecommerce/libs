@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { OstorageContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -69,7 +70,6 @@ export type IoRestorecommerceOstorageObjectResponsePayload = {
   options?: Maybe<IoRestorecommerceOstorageOptions>;
 };
 
-
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
   created?: Maybe<Scalars['Float']>;
@@ -124,9 +124,9 @@ export type IoRestorecommerceStatusOperationStatus = {
 };
 
 export type IIoRestorecommerceOstorageGetRequest = {
-  key?: Maybe<Scalars['String']>;
-  bucket?: Maybe<Scalars['String']>;
-  download?: Maybe<Scalars['Boolean']>;
+  key?: InputMaybe<Scalars['String']>;
+  bucket?: InputMaybe<Scalars['String']>;
+  download?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ProtoIoRestorecommerceOstorageListResponse = {
@@ -154,23 +154,23 @@ export type IoRestorecommerceOstorageObjectData = {
 };
 
 export type IIoRestorecommerceOstorageListRequest = {
-  bucket?: Maybe<Scalars['String']>;
-  filters?: Maybe<IIoRestorecommerceFilterFilterOp>;
-  maxKeys?: Maybe<Scalars['Int']>;
-  prefix?: Maybe<Scalars['String']>;
+  bucket?: InputMaybe<Scalars['String']>;
+  filters?: InputMaybe<IIoRestorecommerceFilterFilterOp>;
+  maxKeys?: InputMaybe<Scalars['Int']>;
+  prefix?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilterOp = {
-  filter?: Maybe<Array<IIoRestorecommerceFilterFilter>>;
-  operator?: Maybe<IoRestorecommerceFilterFilterOpOperator>;
+  filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
+  operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
-  field?: Maybe<Scalars['String']>;
-  operation?: Maybe<IoRestorecommerceFilterFilterOperation>;
-  value?: Maybe<Scalars['String']>;
-  type?: Maybe<IoRestorecommerceFilterFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  field?: InputMaybe<Scalars['String']>;
+  operation?: InputMaybe<IoRestorecommerceFilterFilterOperation>;
+  value?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -264,48 +264,47 @@ export type IoRestorecommerceOstorageResponse = {
 };
 
 export type IIoRestorecommerceOstorageObject = {
-  key?: Maybe<Scalars['String']>;
-  bucket?: Maybe<Scalars['String']>;
-  object?: Maybe<Scalars['Upload']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  url?: Maybe<Scalars['String']>;
-  options?: Maybe<IIoRestorecommerceOstorageOptions>;
+  key?: InputMaybe<Scalars['String']>;
+  bucket?: InputMaybe<Scalars['String']>;
+  object?: InputMaybe<Scalars['Upload']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  url?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
 };
 
-
 export type IIoRestorecommerceMetaMeta = {
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  created?: InputMaybe<Scalars['Float']>;
+  modified?: InputMaybe<Scalars['Float']>;
+  modifiedBy?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: Maybe<IIoRestorecommerceAttributeAttribute>;
+  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceOstorageOptions = {
-  encoding?: Maybe<Scalars['String']>;
-  contentType?: Maybe<Scalars['String']>;
-  contentLanguage?: Maybe<Scalars['String']>;
-  contentDisposition?: Maybe<Scalars['String']>;
-  length?: Maybe<Scalars['Int']>;
-  version?: Maybe<Scalars['String']>;
-  md5?: Maybe<Scalars['String']>;
-  tags?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  data?: Maybe<IGoogleProtobufAny>;
+  encoding?: InputMaybe<Scalars['String']>;
+  contentType?: InputMaybe<Scalars['String']>;
+  contentLanguage?: InputMaybe<Scalars['String']>;
+  contentDisposition?: InputMaybe<Scalars['String']>;
+  length?: InputMaybe<Scalars['Int']>;
+  version?: InputMaybe<Scalars['String']>;
+  md5?: InputMaybe<Scalars['String']>;
+  tags?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  data?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['Upload']>;
+  typeUrl?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Upload']>;
 };
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
@@ -320,8 +319,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 };
 
 export type IIoRestorecommerceOstorageDeleteRequest = {
-  key?: Maybe<Scalars['String']>;
-  bucket?: Maybe<Scalars['String']>;
+  key?: InputMaybe<Scalars['String']>;
+  bucket?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceOstorageCopyResponseList = {
@@ -351,15 +350,15 @@ export type IoRestorecommerceOstorageCopyResponseItem = {
 };
 
 export type IIoRestorecommerceOstorageCopyRequestList = {
-  items?: Maybe<Array<IIoRestorecommerceOstorageCopyRequestItem>>;
+  items?: InputMaybe<Array<IIoRestorecommerceOstorageCopyRequestItem>>;
 };
 
 export type IIoRestorecommerceOstorageCopyRequestItem = {
-  bucket?: Maybe<Scalars['String']>;
-  copySource?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  options?: Maybe<IIoRestorecommerceOstorageOptions>;
+  bucket?: InputMaybe<Scalars['String']>;
+  copySource?: InputMaybe<Scalars['String']>;
+  key?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
 };
 
 export type ProtoIoRestorecommerceOstorageMoveResponseList = {
@@ -389,15 +388,15 @@ export type IoRestorecommerceOstorageMoveResponseItem = {
 };
 
 export type IIoRestorecommerceOstorageMoveRequestList = {
-  items?: Maybe<Array<IIoRestorecommerceOstorageMoveRequestItem>>;
+  items?: InputMaybe<Array<IIoRestorecommerceOstorageMoveRequestItem>>;
 };
 
 export type IIoRestorecommerceOstorageMoveRequestItem = {
-  bucket?: Maybe<Scalars['String']>;
-  sourceObject?: Maybe<Scalars['String']>;
-  key?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  options?: Maybe<IIoRestorecommerceOstorageOptions>;
+  bucket?: InputMaybe<Scalars['String']>;
+  sourceObject?: InputMaybe<Scalars['String']>;
+  key?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -405,7 +404,11 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -419,7 +422,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -870,9 +873,3 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   IoRestorecommerceOstorageMoveResponseItem?: IoRestorecommerceOstorageMoveResponseItemResolvers<ContextType>;
 }>;
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = OstorageContext> = Resolvers<ContextType>;

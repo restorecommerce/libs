@@ -1,6 +1,6 @@
 import { GrpcClientRpcMethodDefinition, GrpcService, GrpcServiceMethods } from "@restorecommerce/grpc-client";
 import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
-import { ServiceDescriptorProto, MethodDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { ServiceDescriptorProto, MethodDescriptorProto } from "ts-proto-descriptors";
 import { getTyping } from "./registry";
 
 export const getProtoFunction = (method: MethodDescriptorProto): GrpcClientRpcMethodDefinition<any, any> => {

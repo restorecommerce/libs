@@ -6,7 +6,7 @@ export const FacadeStatusType = new GraphQLObjectType({
   description: 'The facade status',
   fields: {
     running: {
-      type: GraphQLNonNull(GraphQLBoolean)
+      type: new GraphQLNonNull(GraphQLBoolean)
     },
   },
 });

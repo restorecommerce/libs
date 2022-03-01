@@ -137,7 +137,7 @@ export async function resolveCRUDReadResources<TGqlType = unknown, TGrpcType = u
         message: 'success'
       }
     }
-  } catch (error) {
+  } catch (error: any) {
     return {
       details: {
         items: []
@@ -261,7 +261,7 @@ export async function resolveCRUDCreateResources<TGqlType, TGrpcType>({service, 
     const payload: TGqlType[] = mapResponseItem ?
           result.items.map((_item) => mapResponseItem(_item.payload)) :
           result.items as unknown as TGqlType[];
-          
+
     return {
       details: {
         items: payload
@@ -271,7 +271,7 @@ export async function resolveCRUDCreateResources<TGqlType, TGrpcType>({service, 
         message: 'success'
       }
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       details: {
         items: []
@@ -298,7 +298,7 @@ export async function resolveCRUDDeleteResources<TGrpcType>({service, input}: Re
       collection: input.collection ?? false
     });
     return deleteResponse;
-  } catch (error) {
+  } catch (error: any) {
     return {
       status: [],
       operationStatus: {
@@ -340,7 +340,7 @@ export async function resolveCRUDUpdateResources<TGqlType, TGrpcType>({service, 
         message: 'success'
       }
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       details: {
         items: []

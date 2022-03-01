@@ -27,7 +27,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
         [key]: password
       };
       account = await config.authenticate(ctx as any, user);
-    } catch (err) {
+    } catch (err: any) {
       if (err.details && err.details.includes(':')) {
         err.details = err.details.split(':')[1].trim();
       }

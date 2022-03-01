@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo } from 'graphql';
 import { PaymentContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -96,24 +97,24 @@ export type IoRestorecommerceStatusOperationStatus = {
 };
 
 export type IIoRestorecommercePaymentSetupRequest = {
-  ip?: Maybe<Scalars['String']>;
-  items?: Maybe<Array<IIoRestorecommercePaymentItem>>;
-  subtotal?: Maybe<Scalars['Int']>;
-  shipping?: Maybe<Scalars['Int']>;
-  handling?: Maybe<Scalars['Int']>;
-  tax?: Maybe<Scalars['Int']>;
-  currency?: Maybe<Scalars['String']>;
-  returnUrl?: Maybe<Scalars['String']>;
-  cancelReturnUrl?: Maybe<Scalars['String']>;
-  allowGuestCheckout?: Maybe<Scalars['Boolean']>;
-  provider?: Maybe<IoRestorecommercePaymentProvider>;
+  ip?: InputMaybe<Scalars['String']>;
+  items?: InputMaybe<Array<IIoRestorecommercePaymentItem>>;
+  subtotal?: InputMaybe<Scalars['Int']>;
+  shipping?: InputMaybe<Scalars['Int']>;
+  handling?: InputMaybe<Scalars['Int']>;
+  tax?: InputMaybe<Scalars['Int']>;
+  currency?: InputMaybe<Scalars['String']>;
+  returnUrl?: InputMaybe<Scalars['String']>;
+  cancelReturnUrl?: InputMaybe<Scalars['String']>;
+  allowGuestCheckout?: InputMaybe<Scalars['Boolean']>;
+  provider?: InputMaybe<IoRestorecommercePaymentProvider>;
 };
 
 export type IIoRestorecommercePaymentItem = {
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  quantity?: Maybe<Scalars['Int']>;
-  amount?: Maybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  amount?: InputMaybe<Scalars['Int']>;
 };
 
 export enum IoRestorecommercePaymentProvider {
@@ -290,19 +291,19 @@ export type IoRestorecommercePaymentPaymentPayload = {
 };
 
 export type IIoRestorecommercePaymentPaymentRequest = {
-  provider?: Maybe<IoRestorecommercePaymentProvider>;
-  paymentSum?: Maybe<Scalars['Int']>;
-  currency?: Maybe<Scalars['String']>;
-  paymentId?: Maybe<Scalars['String']>;
-  payerId?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  provider?: InputMaybe<IoRestorecommercePaymentProvider>;
+  paymentSum?: InputMaybe<Scalars['Int']>;
+  currency?: InputMaybe<Scalars['String']>;
+  paymentId?: InputMaybe<Scalars['String']>;
+  payerId?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommercePaymentCaptureRequest = {
-  provider?: Maybe<IoRestorecommercePaymentProvider>;
-  paymentSum?: Maybe<Scalars['Int']>;
-  currency?: Maybe<Scalars['String']>;
-  paymentId?: Maybe<Scalars['String']>;
+  provider?: InputMaybe<IoRestorecommercePaymentProvider>;
+  paymentSum?: InputMaybe<Scalars['Int']>;
+  currency?: InputMaybe<Scalars['String']>;
+  paymentId?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -310,7 +311,11 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -324,7 +329,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -515,9 +520,3 @@ export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   IoRestorecommercePaymentPaymentPayload?: IoRestorecommercePaymentPaymentPayloadResolvers<ContextType>;
 }>;
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = PaymentContext> = Resolvers<ContextType>;

@@ -15,7 +15,7 @@ import {
   EnumDescriptorProto,
   FieldDescriptorProto, FieldDescriptorProto_Label,
   FieldDescriptorProto_Type, MethodDescriptorProto
-} from "ts-proto-descriptors/google/protobuf/descriptor";
+} from "ts-proto-descriptors";
 import * as _ from 'lodash';
 
 export interface TypingData {
@@ -182,11 +182,11 @@ export const registerTyping = (
 
     message.field?.forEach(field => {
       // TODO Union types
-      const resolvedMeta = resolveMeta(field.jsonName!, field, type, name, false);
+      const resolvedMeta = resolveMeta<GraphQLOutputType>(field.jsonName!, field, type, name, false);
 
       if (resolvedMeta !== null) {
         result[field.jsonName!] = {
-          type: resolvedMeta as GraphQLOutputType
+          type: resolvedMeta
         };
       }
     });
@@ -273,7 +273,7 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): GraphQLOutputType | GraphQLInputType | null => {
+const resolveMeta = <T extends  GraphQLOutputType | GraphQLInputType>(key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): T | null => {
   let result;
 
   switch (field.type) {
@@ -298,7 +298,7 @@ const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: stri
 
       // TODO Actually unroll maps into entries
       if (mapEntry) {
-        return MapScalar;
+        return MapScalar as any;
       }
 
       if (!input) {
@@ -341,12 +341,12 @@ const resolveMeta = (key: string, field: FieldDescriptorProto, rootObjType: stri
   }
 
   if (field.label === FieldDescriptorProto_Label.LABEL_REPEATED) {
-    result = GraphQLList(GraphQLNonNull(result));
+    result = new GraphQLList(new GraphQLNonNull(result));
   }
 
   if (field.label === FieldDescriptorProto_Label.LABEL_REQUIRED) {
-    result = GraphQLNonNull(result);
+    result = new GraphQLNonNull(result);
   }
 
-  return result;
+  return result as any;
 }

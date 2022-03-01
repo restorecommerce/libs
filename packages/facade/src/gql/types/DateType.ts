@@ -4,13 +4,13 @@ import { Kind } from 'graphql/language';
 export const DateType = new GraphQLScalarType({
   name: 'Date',
   description: 'Date custom scalar type',
-  parseValue: (value) => {
+  parseValue: (value: any) => {
     if (value === 0) {
       return null;
     }
     return new Date(value);
   },
-  serialize: (value) => {
+  serialize: (value: any) => {
     // This is the object received back from the DB
     if (value === 0) {
       return null;
@@ -18,7 +18,7 @@ export const DateType = new GraphQLScalarType({
     let dateObj = new Date(value);
     return dateObj;
   },
-  parseLiteral: (ast) => {
+  parseLiteral: (ast): any => {
     if (ast.kind === Kind.STRING) {
       if (ast.value === '0') {
         return null;

@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { AccessControlContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -78,33 +79,32 @@ export type IoRestorecommerceStatusOperationStatus = {
 };
 
 export type IIoRestorecommerceAccessControlRequest = {
-  target?: Maybe<IIoRestorecommerceRuleTarget>;
-  context?: Maybe<IIoRestorecommerceAccessControlContext>;
+  target?: InputMaybe<IIoRestorecommerceRuleTarget>;
+  context?: InputMaybe<IIoRestorecommerceAccessControlContext>;
 };
 
 export type IIoRestorecommerceRuleTarget = {
-  subject?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  resources?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  action?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  subject?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  resources?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  action?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAccessControlContext = {
-  subject?: Maybe<IGoogleProtobufAny>;
-  resources?: Maybe<Array<IGoogleProtobufAny>>;
-  security?: Maybe<IGoogleProtobufAny>;
+  subject?: InputMaybe<IGoogleProtobufAny>;
+  resources?: InputMaybe<Array<IGoogleProtobufAny>>;
+  security?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['Upload']>;
+  typeUrl?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Upload']>;
 };
-
 
 export type ProtoIoRestorecommerceAccessControlReverseQuery = {
   __typename?: 'ProtoIoRestorecommerceAccessControlReverseQuery';
@@ -269,20 +269,20 @@ export type IoRestorecommerceStatusStatus = {
 };
 
 export type IIoRestorecommerceResourcebaseReadRequest = {
-  offset?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<IIoRestorecommerceResourcebaseSort>>;
-  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
-  field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
-  search?: Maybe<Array<Scalars['String']>>;
-  localesLimiter?: Maybe<Array<Scalars['String']>>;
-  customQueries?: Maybe<Array<Scalars['String']>>;
-  customArguments?: Maybe<IGoogleProtobufAny>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
+  filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
+  field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
+  localesLimiter?: InputMaybe<Array<Scalars['String']>>;
+  customQueries?: InputMaybe<Array<Scalars['String']>>;
+  customArguments?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
-  field?: Maybe<Scalars['String']>;
-  order?: Maybe<IoRestorecommerceResourcebaseSortSortOrder>;
+  field?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -292,16 +292,16 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 }
 
 export type IIoRestorecommerceResourcebaseFilterOp = {
-  filter?: Maybe<Array<IIoRestorecommerceResourcebaseFilter>>;
-  operator?: Maybe<IoRestorecommerceResourcebaseFilterOpOperator>;
+  filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
+  operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
-  field?: Maybe<Scalars['String']>;
-  operation?: Maybe<IoRestorecommerceResourcebaseFilterOperation>;
-  value?: Maybe<Scalars['String']>;
-  type?: Maybe<IoRestorecommerceResourcebaseFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  field?: InputMaybe<Scalars['String']>;
+  operation?: InputMaybe<IoRestorecommerceResourcebaseFilterOperation>;
+  value?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -325,16 +325,16 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 }
 
 export type IIoRestorecommerceFilterFilterOp = {
-  filter?: Maybe<Array<IIoRestorecommerceFilterFilter>>;
-  operator?: Maybe<IoRestorecommerceFilterFilterOpOperator>;
+  filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
+  operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
-  field?: Maybe<Scalars['String']>;
-  operation?: Maybe<IoRestorecommerceFilterFilterOperation>;
-  value?: Maybe<Scalars['String']>;
-  type?: Maybe<IoRestorecommerceFilterFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  field?: InputMaybe<Scalars['String']>;
+  operation?: InputMaybe<IoRestorecommerceFilterFilterOperation>;
+  value?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOpOperator {
@@ -343,8 +343,8 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 }
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
-  name?: Maybe<Scalars['String']>;
-  include?: Maybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  include?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type AccessControlRuleQuery = {
@@ -456,33 +456,33 @@ export type AccessControlPolicyMutationDeleteArgs = {
 };
 
 export type IIoRestorecommercePolicyPolicyList = {
-  items?: Maybe<Array<IIoRestorecommercePolicyPolicy>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommercePolicyPolicy>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommercePolicyPolicy = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  rules?: Maybe<Array<Scalars['String']>>;
-  target?: Maybe<IIoRestorecommerceRuleTarget>;
-  effect?: Maybe<IoRestorecommerceRuleEffect>;
-  combiningAlgorithm?: Maybe<Scalars['String']>;
-  evaluationCacheable?: Maybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  rules?: InputMaybe<Array<Scalars['String']>>;
+  target?: InputMaybe<IIoRestorecommerceRuleTarget>;
+  effect?: InputMaybe<IoRestorecommerceRuleEffect>;
+  combiningAlgorithm?: InputMaybe<Scalars['String']>;
+  evaluationCacheable?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  created?: InputMaybe<Scalars['Float']>;
+  modified?: InputMaybe<Scalars['Float']>;
+  modifiedBy?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: Maybe<IIoRestorecommerceAttributeAttribute>;
+  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export enum ModeType {
@@ -503,8 +503,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
-  collection?: Maybe<Scalars['Boolean']>;
-  ids?: Maybe<Array<Scalars['String']>>;
+  collection?: InputMaybe<Scalars['Boolean']>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type AccessControlRuleMutation = {
@@ -524,26 +524,26 @@ export type AccessControlRuleMutationDeleteArgs = {
 };
 
 export type IIoRestorecommerceRuleRuleList = {
-  items?: Maybe<Array<IIoRestorecommerceRuleRule>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommerceRuleRule>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommerceRuleRule = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  target?: Maybe<IIoRestorecommerceRuleTarget>;
-  contextQuery?: Maybe<IIoRestorecommerceRuleContextQuery>;
-  condition?: Maybe<Scalars['String']>;
-  effect?: Maybe<IoRestorecommerceRuleEffect>;
-  evaluationCacheable?: Maybe<Scalars['Boolean']>;
+  id?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  target?: InputMaybe<IIoRestorecommerceRuleTarget>;
+  contextQuery?: InputMaybe<IIoRestorecommerceRuleContextQuery>;
+  condition?: InputMaybe<Scalars['String']>;
+  effect?: InputMaybe<IoRestorecommerceRuleEffect>;
+  evaluationCacheable?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IIoRestorecommerceRuleContextQuery = {
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  query?: Maybe<Scalars['String']>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  query?: InputMaybe<Scalars['String']>;
 };
 
 export type AccessControlPolicySetMutation = {
@@ -563,19 +563,19 @@ export type AccessControlPolicySetMutationDeleteArgs = {
 };
 
 export type IIoRestorecommercePolicySetPolicySetList = {
-  items?: Maybe<Array<IIoRestorecommercePolicySetPolicySet>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommercePolicySetPolicySet>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommercePolicySetPolicySet = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  target?: Maybe<IIoRestorecommerceRuleTarget>;
-  combiningAlgorithm?: Maybe<Scalars['String']>;
-  policies?: Maybe<Array<Scalars['String']>>;
+  id?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  target?: InputMaybe<IIoRestorecommerceRuleTarget>;
+  combiningAlgorithm?: InputMaybe<Scalars['String']>;
+  policies?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -583,7 +583,11 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -597,7 +601,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -1153,9 +1157,3 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   AccessControlPolicySetMutation?: AccessControlPolicySetMutationResolvers<ContextType>;
 }>;
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = AccessControlContext> = Resolvers<ContextType>;

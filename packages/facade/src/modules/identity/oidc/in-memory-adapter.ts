@@ -6,9 +6,9 @@ export class InMemoryAdapter implements Adapter {
 
   constructor(private type: string) {}
 
-  private tokenStorage = new LRU<string, AdapterPayload>({});
-  private sessionStorage = new LRU<string, string>({});
-  private grantIdStorage = new LRU<string, string[]>({});
+  private tokenStorage = new LRU<string, AdapterPayload>();
+  private sessionStorage = new LRU<string, string>();
+  private grantIdStorage = new LRU<string, string[]>();
 
   private key(id: string) {
     return `${this.type}:${id}`;
@@ -18,7 +18,9 @@ export class InMemoryAdapter implements Adapter {
     const key = this.key(id);
 
     if (this.type === 'Session' && payload.uid) {
-      this.sessionStorage.set(payload.uid, id, expiresIn * 1000);
+      this.sessionStorage.set(payload.uid, id, {
+        ttl: expiresIn * 1000
+      });
     }
 
     const { grantId, userCode } = payload;
@@ -35,7 +37,9 @@ export class InMemoryAdapter implements Adapter {
     if (userCode) {
       throw 'UNSUPPORTED';
     }
-    this.tokenStorage.set(key, payload, expiresIn * 1000);
+    this.tokenStorage.set(key, payload, {
+      ttl: expiresIn * 1000
+    });
   }
 
   findByUserCode(userCode: string): Promise<void | AdapterPayload | undefined> {

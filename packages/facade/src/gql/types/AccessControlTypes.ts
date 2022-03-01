@@ -63,11 +63,11 @@ export const AttributeType = new GraphQLObjectType({
   description: 'An ID-value attribute',
   fields: () => ({
     id: {
-      type: GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Attribute ID'
     },
     value: {
-      type: GraphQLNonNull(GraphQLString),
+      type: new GraphQLNonNull(GraphQLString),
       description: 'Attribute value'
     }
   })

@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { IdentityContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -172,7 +173,6 @@ export type GoogleProtobufAny = {
   value?: Maybe<Scalars['TodoScalar']>;
 };
 
-
 export type IoRestorecommerceStatusStatus = {
   __typename?: 'IoRestorecommerceStatusStatus';
   id?: Maybe<Scalars['String']>;
@@ -187,20 +187,20 @@ export type IoRestorecommerceStatusOperationStatus = {
 };
 
 export type IIoRestorecommerceResourcebaseReadRequest = {
-  offset?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<Array<IIoRestorecommerceResourcebaseSort>>;
-  filters?: Maybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
-  field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
-  search?: Maybe<Array<Scalars['String']>>;
-  localesLimiter?: Maybe<Array<Scalars['String']>>;
-  customQueries?: Maybe<Array<Scalars['String']>>;
-  customArguments?: Maybe<IGoogleProtobufAny>;
+  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
+  filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
+  field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
+  localesLimiter?: InputMaybe<Array<Scalars['String']>>;
+  customQueries?: InputMaybe<Array<Scalars['String']>>;
+  customArguments?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
-  field?: Maybe<Scalars['String']>;
-  order?: Maybe<IoRestorecommerceResourcebaseSortSortOrder>;
+  field?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -210,16 +210,16 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 }
 
 export type IIoRestorecommerceResourcebaseFilterOp = {
-  filter?: Maybe<Array<IIoRestorecommerceResourcebaseFilter>>;
-  operator?: Maybe<IoRestorecommerceResourcebaseFilterOpOperator>;
+  filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
+  operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
-  field?: Maybe<Scalars['String']>;
-  operation?: Maybe<IoRestorecommerceResourcebaseFilterOperation>;
-  value?: Maybe<Scalars['String']>;
-  type?: Maybe<IoRestorecommerceResourcebaseFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  field?: InputMaybe<Scalars['String']>;
+  operation?: InputMaybe<IoRestorecommerceResourcebaseFilterOperation>;
+  value?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -243,16 +243,16 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 }
 
 export type IIoRestorecommerceFilterFilterOp = {
-  filter?: Maybe<Array<IIoRestorecommerceFilterFilter>>;
-  operator?: Maybe<IoRestorecommerceFilterFilterOpOperator>;
+  filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
+  operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
-  field?: Maybe<Scalars['String']>;
-  operation?: Maybe<IoRestorecommerceFilterFilterOperation>;
-  value?: Maybe<Scalars['String']>;
-  type?: Maybe<IoRestorecommerceFilterFilterValueType>;
-  filters?: Maybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  field?: InputMaybe<Scalars['String']>;
+  operation?: InputMaybe<IoRestorecommerceFilterFilterOperation>;
+  value?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -286,31 +286,30 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 }
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
-  name?: Maybe<Scalars['String']>;
-  include?: Maybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  include?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['Upload']>;
+  typeUrl?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Upload']>;
 };
 
-
 export type IIoRestorecommerceUserFindRequest = {
-  id?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserFindByRoleRequest = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  role?: InputMaybe<Scalars['String']>;
+  attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type ProtoIoRestorecommerceUserUserResponse = {
@@ -319,7 +318,7 @@ export type ProtoIoRestorecommerceUserUserResponse = {
 };
 
 export type IIoRestorecommerceUserFindByTokenRequest = {
-  token?: Maybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityRoleQuery = {
@@ -417,8 +416,8 @@ export type ProtoGoogleProtobufAny = {
 };
 
 export type IIoRestorecommerceTokenIdentifier = {
-  id?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityOauthQuery = {
@@ -446,7 +445,6 @@ export type IoRestorecommerceOauthGenerateLinksResponse = {
   __typename?: 'IoRestorecommerceOauthGenerateLinksResponse';
   links?: Maybe<Scalars['MapScalar']>;
 };
-
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -557,78 +555,78 @@ export type IdentityUserMutationSendActivationEmailArgs = {
 };
 
 export type IIoRestorecommerceUserUserList = {
-  items?: Maybe<Array<IIoRestorecommerceUserUser>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommerceUserUser>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommerceUserUser = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  newEmail?: Maybe<Scalars['String']>;
-  active?: Maybe<Scalars['Boolean']>;
-  activationCode?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  passwordHash?: Maybe<Scalars['String']>;
-  roleAssociations?: Maybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
-  timezoneId?: Maybe<Scalars['String']>;
-  localeId?: Maybe<Scalars['String']>;
-  defaultScope?: Maybe<Scalars['String']>;
-  unauthenticated?: Maybe<Scalars['Boolean']>;
-  guest?: Maybe<Scalars['Boolean']>;
-  image?: Maybe<IIoRestorecommerceImageImage>;
-  userType?: Maybe<IoRestorecommerceUserUserType>;
-  invite?: Maybe<Scalars['Boolean']>;
-  invitedByUserName?: Maybe<Scalars['String']>;
-  invitedByUserFirstName?: Maybe<Scalars['String']>;
-  invitedByUserLastName?: Maybe<Scalars['String']>;
-  tokens?: Maybe<Array<IIoRestorecommerceAuthTokens>>;
-  lastAccess?: Maybe<Scalars['Float']>;
-  data?: Maybe<IGoogleProtobufAny>;
+  id?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  newEmail?: InputMaybe<Scalars['String']>;
+  active?: InputMaybe<Scalars['Boolean']>;
+  activationCode?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  passwordHash?: InputMaybe<Scalars['String']>;
+  roleAssociations?: InputMaybe<Array<IIoRestorecommerceAuthRoleAssociation>>;
+  timezoneId?: InputMaybe<Scalars['String']>;
+  localeId?: InputMaybe<Scalars['String']>;
+  defaultScope?: InputMaybe<Scalars['String']>;
+  unauthenticated?: InputMaybe<Scalars['Boolean']>;
+  guest?: InputMaybe<Scalars['Boolean']>;
+  image?: InputMaybe<IIoRestorecommerceImageImage>;
+  userType?: InputMaybe<IoRestorecommerceUserUserType>;
+  invite?: InputMaybe<Scalars['Boolean']>;
+  invitedByUserName?: InputMaybe<Scalars['String']>;
+  invitedByUserFirstName?: InputMaybe<Scalars['String']>;
+  invitedByUserLastName?: InputMaybe<Scalars['String']>;
+  tokens?: InputMaybe<Array<IIoRestorecommerceAuthTokens>>;
+  lastAccess?: InputMaybe<Scalars['Float']>;
+  data?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  created?: InputMaybe<Scalars['Float']>;
+  modified?: InputMaybe<Scalars['Float']>;
+  modifiedBy?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: Maybe<IIoRestorecommerceAttributeAttribute>;
+  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
-  role?: Maybe<Scalars['String']>;
-  attributes?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  id?: Maybe<Scalars['String']>;
-  created?: Maybe<Scalars['Float']>;
+  role?: InputMaybe<Scalars['String']>;
+  attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: InputMaybe<Scalars['String']>;
+  created?: InputMaybe<Scalars['Float']>;
 };
 
 export type IIoRestorecommerceImageImage = {
-  id?: Maybe<Scalars['String']>;
-  caption?: Maybe<Scalars['String']>;
-  filename?: Maybe<Scalars['String']>;
-  contentType?: Maybe<Scalars['String']>;
-  url?: Maybe<Scalars['String']>;
-  width?: Maybe<Scalars['Float']>;
-  height?: Maybe<Scalars['Float']>;
-  length?: Maybe<Scalars['Float']>;
+  id?: InputMaybe<Scalars['String']>;
+  caption?: InputMaybe<Scalars['String']>;
+  filename?: InputMaybe<Scalars['String']>;
+  contentType?: InputMaybe<Scalars['String']>;
+  url?: InputMaybe<Scalars['String']>;
+  width?: InputMaybe<Scalars['Float']>;
+  height?: InputMaybe<Scalars['Float']>;
+  length?: InputMaybe<Scalars['Float']>;
 };
 
 export type IIoRestorecommerceAuthTokens = {
-  name?: Maybe<Scalars['String']>;
-  expiresIn?: Maybe<Scalars['Float']>;
-  token?: Maybe<Scalars['String']>;
-  scopes?: Maybe<Array<Scalars['String']>>;
-  type?: Maybe<Scalars['String']>;
-  interactive?: Maybe<Scalars['Boolean']>;
-  lastLogin?: Maybe<Scalars['Float']>;
+  name?: InputMaybe<Scalars['String']>;
+  expiresIn?: InputMaybe<Scalars['Float']>;
+  token?: InputMaybe<Scalars['String']>;
+  scopes?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Scalars['String']>;
+  interactive?: InputMaybe<Scalars['Boolean']>;
+  lastLogin?: InputMaybe<Scalars['Float']>;
 };
 
 export enum ModeType {
@@ -649,24 +647,24 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
-  collection?: Maybe<Scalars['Boolean']>;
-  ids?: Maybe<Array<Scalars['String']>>;
+  collection?: InputMaybe<Scalars['Boolean']>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type IIoRestorecommerceUserRegisterRequest = {
-  id?: Maybe<Scalars['String']>;
-  guest?: Maybe<Scalars['Boolean']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  timezoneId?: Maybe<Scalars['String']>;
-  localeId?: Maybe<Scalars['String']>;
-  defaultScope?: Maybe<Scalars['String']>;
-  userType?: Maybe<IoRestorecommerceUserUserType>;
-  captchaCode?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  guest?: InputMaybe<Scalars['Boolean']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  timezoneId?: InputMaybe<Scalars['String']>;
+  localeId?: InputMaybe<Scalars['String']>;
+  defaultScope?: InputMaybe<Scalars['String']>;
+  userType?: InputMaybe<IoRestorecommerceUserUserType>;
+  captchaCode?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceStatusOperationStatusObj = {
@@ -680,44 +678,44 @@ export type IoRestorecommerceStatusOperationStatusObj = {
 };
 
 export type IIoRestorecommerceUserActivateRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  activationCode?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  activationCode?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserChangePasswordRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  newPassword?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  newPassword?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserRequestPasswordChangeRequest = {
-  identifier?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserChangeEmailRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  newEmail?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  newEmail?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserConfirmPasswordChangeRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  activationCode?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  activationCode?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserConfirmEmailChangeRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  activationCode?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  activationCode?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserUnregisterRequest = {
-  identifier?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserLoginRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  token?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceUserDeleteUsersByOrgResponse = {
@@ -732,22 +730,22 @@ export type IoRestorecommerceUserDeleteUsersByOrgResponse = {
 };
 
 export type IIoRestorecommerceUserOrgIdRequest = {
-  orgIds?: Maybe<Array<Scalars['String']>>;
+  orgIds?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type IIoRestorecommerceUserConfirmUserInvitationRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
-  activationCode?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  activationCode?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserSendInvitationEmailRequest = {
-  identifier?: Maybe<Scalars['String']>;
-  invitedByUserIdentifier?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
+  invitedByUserIdentifier?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserSendActivationEmailRequest = {
-  identifier?: Maybe<Scalars['String']>;
+  identifier?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityRoleMutation = {
@@ -767,17 +765,17 @@ export type IdentityRoleMutationDeleteArgs = {
 };
 
 export type IIoRestorecommerceRoleRoleList = {
-  items?: Maybe<Array<IIoRestorecommerceRoleRole>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommerceRoleRole>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommerceRoleRole = {
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  assignableByRoles?: Maybe<Array<Scalars['String']>>;
+  id?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  assignableByRoles?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type IdentityAuthenticationLogMutation = {
@@ -797,22 +795,22 @@ export type IdentityAuthenticationLogMutationDeleteArgs = {
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLogList = {
-  items?: Maybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
-  id?: Maybe<Scalars['String']>;
-  ipv4Address?: Maybe<Scalars['String']>;
-  ipv6Address?: Maybe<Scalars['String']>;
-  operatingSystem?: Maybe<Scalars['String']>;
-  userAgent?: Maybe<Scalars['String']>;
-  date?: Maybe<Scalars['Float']>;
-  activity?: Maybe<Scalars['String']>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  subjectId?: Maybe<Scalars['String']>;
-  tokenName?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  ipv4Address?: InputMaybe<Scalars['String']>;
+  ipv6Address?: InputMaybe<Scalars['String']>;
+  operatingSystem?: InputMaybe<Scalars['String']>;
+  userAgent?: InputMaybe<Scalars['String']>;
+  date?: InputMaybe<Scalars['Float']>;
+  activity?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  subjectId?: InputMaybe<Scalars['String']>;
+  tokenName?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityTokenMutation = {
@@ -844,14 +842,14 @@ export type IdentityTokenMutationConsumeArgs = {
 };
 
 export type IIoRestorecommerceTokenTokenData = {
-  id?: Maybe<Scalars['String']>;
-  payload?: Maybe<IGoogleProtobufAny>;
-  expiresIn?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  payload?: InputMaybe<IGoogleProtobufAny>;
+  expiresIn?: InputMaybe<Scalars['Float']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceTokenGrantId = {
-  grantId?: Maybe<Scalars['String']>;
+  grantId?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityOauthMutation = {
@@ -877,9 +875,9 @@ export type IoRestorecommerceOauthExchangeCodeResponse = {
 };
 
 export type IIoRestorecommerceOauthExchangeCodeRequest = {
-  service?: Maybe<Scalars['String']>;
-  code?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
+  service?: InputMaybe<Scalars['String']>;
+  code?: InputMaybe<Scalars['String']>;
+  state?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -887,7 +885,11 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -901,7 +903,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -1599,9 +1601,3 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceOauthExchangeCodeResponse?: IoRestorecommerceOauthExchangeCodeResponseResolvers<ContextType>;
 }>;
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = IdentityContext> = Resolvers<ContextType>;

@@ -1,10 +1,11 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import { SchedulingContext } from '../interfaces';
 export type Maybe<T> = T | undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -76,7 +77,6 @@ export type GoogleProtobufAny = {
   typeUrl?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['TodoScalar']>;
 };
-
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
@@ -153,10 +153,10 @@ export type IoRestorecommerceStatusOperationStatus = {
 };
 
 export type IIoRestorecommerceJobJobReadRequest = {
-  limit?: Maybe<Scalars['Int']>;
-  sort?: Maybe<IoRestorecommerceJobJobReadRequestSortOrder>;
-  filter?: Maybe<IIoRestorecommerceJobJobFilter>;
-  field?: Maybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<IoRestorecommerceJobJobReadRequestSortOrder>;
+  filter?: InputMaybe<IIoRestorecommerceJobJobFilter>;
+  field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
 };
 
 export enum IoRestorecommerceJobJobReadRequestSortOrder {
@@ -166,13 +166,13 @@ export enum IoRestorecommerceJobJobReadRequestSortOrder {
 }
 
 export type IIoRestorecommerceJobJobFilter = {
-  jobIds?: Maybe<Array<Scalars['String']>>;
-  type?: Maybe<Scalars['String']>;
+  jobIds?: InputMaybe<Array<Scalars['String']>>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
-  name?: Maybe<Scalars['String']>;
-  include?: Maybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']>;
+  include?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
@@ -202,72 +202,71 @@ export type SchedulingJobMutationDeleteArgs = {
 };
 
 export type IIoRestorecommerceJobJobList = {
-  items?: Maybe<Array<IIoRestorecommerceJobJob>>;
-  totalCount?: Maybe<Scalars['Int']>;
-  mode?: Maybe<ModeType>;
+  items?: InputMaybe<Array<IIoRestorecommerceJobJob>>;
+  totalCount?: InputMaybe<Scalars['Int']>;
+  mode?: InputMaybe<ModeType>;
 };
 
 export type IIoRestorecommerceJobJob = {
-  id?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
-  data?: Maybe<IIoRestorecommerceJobData>;
-  when?: Maybe<Scalars['String']>;
-  options?: Maybe<IIoRestorecommerceJobJobOptions>;
+  id?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
+  data?: InputMaybe<IIoRestorecommerceJobData>;
+  when?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<IIoRestorecommerceJobJobOptions>;
 };
 
 export type IIoRestorecommerceJobData = {
-  timezone?: Maybe<Scalars['String']>;
-  payload?: Maybe<IGoogleProtobufAny>;
-  meta?: Maybe<IIoRestorecommerceMetaMeta>;
-  subjectId?: Maybe<Scalars['String']>;
+  timezone?: InputMaybe<Scalars['String']>;
+  payload?: InputMaybe<IGoogleProtobufAny>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  subjectId?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['Upload']>;
+  typeUrl?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['Upload']>;
 };
 
-
 export type IIoRestorecommerceMetaMeta = {
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  created?: InputMaybe<Scalars['Float']>;
+  modified?: InputMaybe<Scalars['Float']>;
+  modifiedBy?: InputMaybe<Scalars['String']>;
+  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  id?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: Maybe<IIoRestorecommerceAttributeAttribute>;
+  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceJobJobOptions = {
-  priority?: Maybe<IoRestorecommerceJobJobOptionsPriority>;
-  attempts?: Maybe<Scalars['Int']>;
-  backoff?: Maybe<IIoRestorecommerceJobBackoff>;
-  timeout?: Maybe<Scalars['Int']>;
-  repeat?: Maybe<IIoRestorecommerceJobRepeat>;
-  jobId?: Maybe<Scalars['String']>;
-  removeOnComplete?: Maybe<Scalars['Boolean']>;
+  priority?: InputMaybe<IoRestorecommerceJobJobOptionsPriority>;
+  attempts?: InputMaybe<Scalars['Int']>;
+  backoff?: InputMaybe<IIoRestorecommerceJobBackoff>;
+  timeout?: InputMaybe<Scalars['Int']>;
+  repeat?: InputMaybe<IIoRestorecommerceJobRepeat>;
+  jobId?: InputMaybe<Scalars['String']>;
+  removeOnComplete?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type IIoRestorecommerceJobBackoff = {
-  delay?: Maybe<Scalars['Float']>;
-  type?: Maybe<IoRestorecommerceJobBackoffType>;
+  delay?: InputMaybe<Scalars['Float']>;
+  type?: InputMaybe<IoRestorecommerceJobBackoffType>;
 };
 
 export type IIoRestorecommerceJobRepeat = {
-  every?: Maybe<Scalars['Int']>;
-  cron?: Maybe<Scalars['String']>;
-  startDate?: Maybe<Scalars['String']>;
-  endDate?: Maybe<Scalars['String']>;
-  count?: Maybe<Scalars['Int']>;
-  jobId?: Maybe<Scalars['String']>;
+  every?: InputMaybe<Scalars['Int']>;
+  cron?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['String']>;
+  endDate?: InputMaybe<Scalars['String']>;
+  count?: InputMaybe<Scalars['Int']>;
+  jobId?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -288,8 +287,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
-  collection?: Maybe<Scalars['Boolean']>;
-  ids?: Maybe<Array<Scalars['String']>>;
+  collection?: InputMaybe<Scalars['Boolean']>;
+  ids?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -297,7 +296,11 @@ export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
+
+export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
+  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
+};
+export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs> | ResolverWithResolve<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -311,7 +314,7 @@ export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   args: TArgs,
   context: TContext,
   info: GraphQLResolveInfo
-) => AsyncIterator<TResult> | Promise<AsyncIterator<TResult>>;
+) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -638,9 +641,3 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
 }>;
 
-
-/**
- * @deprecated
- * Use "Resolvers" root object instead. If you wish to get "IResolvers", add "typesPrefix: I" to your config.
- */
-export type IResolvers<ContextType = SchedulingContext> = Resolvers<ContextType>;

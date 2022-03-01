@@ -8,6 +8,7 @@ import { GraphQLSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { facadeStatusModule } from './modules/facade-status/index';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 export * from './modules/index';
 export * from './middlewares/index';
@@ -123,7 +124,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   async start(): Promise<void> {
     if (!this._initialized) {
       this.runFnQueue(this.startFns);
-      this.mountApolloServer();
+      await this.mountApolloServer();
       this._initialized = true;
     }
     return new Promise<void>((resolve, reject) => {
@@ -160,7 +161,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     });
   }
 
-  private mountApolloServer() {
+  private async mountApolloServer() {
     const serviceList = Object.keys(this.apolloServices).map(key => {
       return {
         name: key,
@@ -191,8 +192,9 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const gqlServer = new ApolloServer({
       gateway,
       introspection: true,
-      playground: true,
-      subscriptions: false, // not supported when using federation - but not used anyway
+      plugins: [
+        ApolloServerPluginLandingPageGraphQLPlayground()
+      ],
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
         this.logger.debug('Error while processing request', { error });
@@ -204,6 +206,8 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       },
       context: ({ ctx }) => ctx
     });
+
+    await gqlServer.start();
 
     const middleware = gqlServer.getMiddleware({
       path: '/graphql',

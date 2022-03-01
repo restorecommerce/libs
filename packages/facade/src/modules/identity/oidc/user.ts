@@ -61,7 +61,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
       identifier,
       remember
     }
-  } catch (error) {
+  } catch (error: any) {
     return {
       error: {
         key: 'ERROR',

@@ -4,14 +4,13 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLResolveInfo,
-  GraphQLSchema
+  GraphQLSchema, ThunkObjMap
 } from "graphql";
 import {
   GraphQLEnumType,
   GraphQLFieldConfig,
   GraphQLFieldConfigMap,
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
-  Thunk
 } from "graphql/type/definition";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
 import { getTyping, registeredTypings, getNameSpaceTypeName } from "./registry";
@@ -21,7 +20,7 @@ import {
   DescriptorProto,
   MethodDescriptorProto,
   ServiceDescriptorProto
-} from "ts-proto-descriptors/google/protobuf/descriptor";
+} from "ts-proto-descriptors";
 import * as stream from "stream";
 import * as _ from 'lodash';
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
@@ -69,7 +68,7 @@ export const getGQLSchema = <TSource, TContext>
     type: out,
     args: method.inputType! === '.google.protobuf.Empty' ? undefined : {
       input: {
-        type: GraphQLNonNull(typing.input!)
+        type: new GraphQLNonNull(typing.input!)
       }
     }
   }
@@ -263,7 +262,7 @@ export const getGQLResolverFunctions =
               details: decodeBufferFields([result], bufferFields)[0]
             }
           }
-        } catch (error) {
+        } catch (error: any) {
           console.error(error);
           return {
             details: {
@@ -422,7 +421,7 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
         operationStatus: result.operationStatus // overall status
       }
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
     return {
       details: {
@@ -528,10 +527,10 @@ export const generateResolver = (...namespaces: string[]) => {
   return resolvers;
 }
 
-type SchemaBaseOrSub = Thunk<GraphQLFieldConfig<any, any>> | Map<string, Thunk<GraphQLFieldConfig<any, any>>>;
+type SchemaBaseOrSub = ThunkObjMap<GraphQLFieldConfig<any, any>> | Map<string, ThunkObjMap<GraphQLFieldConfig<any, any>>>;
 const namespaceResolverSchemaRegistry = new Map<string, Map<boolean, Map<string, SchemaBaseOrSub>>>();
 
-export const registerResolverSchema = (namespace: string, name: string, schema: Thunk<GraphQLFieldConfig<any, any>>, mutation: boolean = false, subspace: string | undefined = undefined) => {
+export const registerResolverSchema = (namespace: string, name: string, schema: ThunkObjMap<GraphQLFieldConfig<any, any>>, mutation: boolean = false, subspace: string | undefined = undefined) => {
   if (!namespaceResolverSchemaRegistry.has(namespace)) {
     namespaceResolverSchemaRegistry.set(namespace, new Map());
   }
@@ -545,7 +544,7 @@ export const registerResolverSchema = (namespace: string, name: string, schema: 
     if (!space.has(subspace)) {
       space.set(subspace, new Map());
     }
-    space = space.get(subspace)! as Map<string, Thunk<GraphQLFieldConfig<any, any>>>;
+    space = space.get(subspace)! as Map<string, ThunkObjMap<GraphQLFieldConfig<any, any>>>;
   }
 
   if (space.has(name)) {
@@ -579,9 +578,9 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
         if (value instanceof Map) {
           const capitalName = capitalizeProtoName(key);
           fields[key] = {
-            type: GraphQLNonNull(new GraphQLObjectType({
+            type: new GraphQLNonNull(new GraphQLObjectType({
               name: s.prefix + capitalName + 'Query',
-              fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
+              fields: Object.fromEntries(value) as unknown as GraphQLFieldConfigMap<any, any>,
             }))
           };
         } else {
@@ -590,7 +589,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
       });
 
       queryFields[s.namespace] = {
-        type: GraphQLNonNull(new GraphQLObjectType({
+        type: new GraphQLNonNull(new GraphQLObjectType({
           name: s.prefix + 'Query',
           fields
         }))
@@ -604,9 +603,9 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
         if (value instanceof Map) {
           const capitalName = capitalizeProtoName(key);
           fields[key] = {
-            type: GraphQLNonNull(new GraphQLObjectType({
+            type: new GraphQLNonNull(new GraphQLObjectType({
               name: s.prefix + capitalName + 'Mutation',
-              fields: Object.fromEntries(value) as GraphQLFieldConfigMap<any, any>,
+              fields: Object.fromEntries(value) as unknown as GraphQLFieldConfigMap<any, any>,
             }))
           };
         } else {
@@ -615,7 +614,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
       });
 
       mutationFields[s.namespace] = {
-        type: GraphQLNonNull(new GraphQLObjectType({
+        type: new GraphQLNonNull(new GraphQLObjectType({
           name: s.prefix + 'Mutation',
           fields
         }))
@@ -705,7 +704,7 @@ export const getAndGenerateSchema = <TSource, TContext>
   const schemas = getGQLSchemas(service);
 
   Object.keys(schemas).forEach(key => {
-    registerResolverSchema(namespace, key, schemas[key], !queries.has(key) && mutations.has(key))
+    registerResolverSchema(namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key))
   })
 
   return generateSchema([{ prefix, namespace }]);
@@ -732,7 +731,7 @@ export const generateSubServiceSchemas = (subServices: SubService[], config: Sub
     const schemas = getGQLSchemas(sub.service);
 
     Object.keys(schemas).forEach(key => {
-      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key], !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name)
+      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name)
     })
   });
 

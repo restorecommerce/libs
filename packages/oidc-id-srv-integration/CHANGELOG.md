@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.26](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@0.0.25...@restorecommerce/oidc-id-srv-integration@0.0.26) (2022-03-01)
+
+
+### Bug Fixes
+
+* **oidc-id-srv-integration:** migration from ioredis to redis ([5a7c96b](https://github.com/restorecommerce/libs/commit/5a7c96b637fe65a9e16dd1c0796c5e1682b087ab))
+
+
+
+
+
 ## [0.0.25](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@0.0.24...@restorecommerce/oidc-id-srv-integration@0.0.25) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/oidc-id-srv-integration

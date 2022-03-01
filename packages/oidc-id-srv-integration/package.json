@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/oidc-id-srv-integration",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -18,13 +18,12 @@
     "@restorecommerce/grpc-client": "^0.3.1",
     "@restorecommerce/logger": "^0.12.1",
     "@restorecommerce/service-config": "^0.4.25",
-    "redis": "4.0.3",
     "lodash": "^4.17.19",
     "oidc-provider": "6.13.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "redis": "4.0.3"
   },
   "devDependencies": {
-    "@types/redis": "4.0.11",
     "@types/koa": "^2.0.51",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa-ejs": "^4.2.0",
@@ -33,6 +32,7 @@
     "@types/lodash": "^4.14.138",
     "@types/nanoid": "^2.0.0",
     "@types/nconf": "^0.10.1",
+    "@types/redis": "4.0.11",
     "@typescript-eslint/eslint-plugin": "^2.8.0",
     "@typescript-eslint/eslint-plugin-tslint": "^2.8.0",
     "@typescript-eslint/parser": "^2.8.0",
@@ -44,13 +44,13 @@
     "typescript": "4.5.5"
   },
   "peerDependencies": {
-    "redis": "4.0.3",
     "koa": "2.11.0",
     "koa-bodyparser": "4.2.1",
     "koa-ejs": "4.3.0",
     "koa-mount": "4.0.0",
     "koa-router": "7.4.0",
-    "koa-websocket": "6.0.0"
+    "koa-websocket": "6.0.0",
+    "redis": "4.0.3"
   },
   "scripts": {
     "lint": "eslint src --ext .ts ",

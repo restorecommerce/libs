@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.3...@restorecommerce/facade@0.3.4) (2022-03-04)
+
+
+### Bug Fixes
+
+* **facade:** added scope for all mutations and queries ([3b4df19](https://github.com/restorecommerce/libs/commit/3b4df196fa8bbbdc169846c588d3d53c85a4c091))
+* **facade:** fixed enum type mapping for nested object ([f452229](https://github.com/restorecommerce/libs/commit/f452229fc3ceec7205d079884a55076578e5a975))
+
+
+
+
+
 ## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.2...@restorecommerce/facade@0.3.3) (2022-03-01)
 
 **Note:** Version bump only for package @restorecommerce/facade

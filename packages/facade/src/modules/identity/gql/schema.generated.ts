@@ -196,11 +196,15 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -212,6 +216,8 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -220,6 +226,8 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -245,6 +253,8 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -253,6 +263,8 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -288,28 +300,38 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserFindRequest = {
   id?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserFindByRoleRequest = {
   role?: InputMaybe<Scalars['String']>;
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceUserUserResponse = {
@@ -319,6 +341,8 @@ export type ProtoIoRestorecommerceUserUserResponse = {
 
 export type IIoRestorecommerceUserFindByTokenRequest = {
   token?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityRoleQuery = {
@@ -418,6 +442,8 @@ export type ProtoGoogleProtobufAny = {
 export type IIoRestorecommerceTokenIdentifier = {
   id?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityOauthQuery = {
@@ -558,6 +584,8 @@ export type IIoRestorecommerceUserUserList = {
   items?: InputMaybe<Array<IIoRestorecommerceUserUser>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserUser = {
@@ -587,6 +615,8 @@ export type IIoRestorecommerceUserUser = {
   tokens?: InputMaybe<Array<IIoRestorecommerceAuthTokens>>;
   lastAccess?: InputMaybe<Scalars['Float']>;
   data?: InputMaybe<IGoogleProtobufAny>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -595,10 +625,14 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
@@ -606,6 +640,8 @@ export type IIoRestorecommerceAuthRoleAssociation = {
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   id?: InputMaybe<Scalars['String']>;
   created?: InputMaybe<Scalars['Float']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceImageImage = {
@@ -617,6 +653,8 @@ export type IIoRestorecommerceImageImage = {
   width?: InputMaybe<Scalars['Float']>;
   height?: InputMaybe<Scalars['Float']>;
   length?: InputMaybe<Scalars['Float']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthTokens = {
@@ -627,6 +665,8 @@ export type IIoRestorecommerceAuthTokens = {
   type?: InputMaybe<Scalars['String']>;
   interactive?: InputMaybe<Scalars['Boolean']>;
   lastLogin?: InputMaybe<Scalars['Float']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -649,6 +689,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserRegisterRequest = {
@@ -665,6 +707,8 @@ export type IIoRestorecommerceUserRegisterRequest = {
   defaultScope?: InputMaybe<Scalars['String']>;
   userType?: InputMaybe<IoRestorecommerceUserUserType>;
   captchaCode?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceStatusOperationStatusObj = {
@@ -680,42 +724,58 @@ export type IoRestorecommerceStatusOperationStatusObj = {
 export type IIoRestorecommerceUserActivateRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   activationCode?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserChangePasswordRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
   newPassword?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserRequestPasswordChangeRequest = {
   identifier?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserChangeEmailRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   newEmail?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserConfirmPasswordChangeRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   activationCode?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserConfirmEmailChangeRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   activationCode?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserUnregisterRequest = {
   identifier?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserLoginRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceUserDeleteUsersByOrgResponse = {
@@ -731,21 +791,29 @@ export type IoRestorecommerceUserDeleteUsersByOrgResponse = {
 
 export type IIoRestorecommerceUserOrgIdRequest = {
   orgIds?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserConfirmUserInvitationRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
   activationCode?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserSendInvitationEmailRequest = {
   identifier?: InputMaybe<Scalars['String']>;
   invitedByUserIdentifier?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceUserSendActivationEmailRequest = {
   identifier?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityRoleMutation = {
@@ -768,6 +836,8 @@ export type IIoRestorecommerceRoleRoleList = {
   items?: InputMaybe<Array<IIoRestorecommerceRoleRole>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceRoleRole = {
@@ -776,6 +846,8 @@ export type IIoRestorecommerceRoleRole = {
   name?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   assignableByRoles?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityAuthenticationLogMutation = {
@@ -798,6 +870,8 @@ export type IIoRestorecommerceAuthenticationLogAuthenticationLogList = {
   items?: InputMaybe<Array<IIoRestorecommerceAuthenticationLogAuthenticationLog>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
@@ -811,6 +885,8 @@ export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   subjectId?: InputMaybe<Scalars['String']>;
   tokenName?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityTokenMutation = {
@@ -846,10 +922,14 @@ export type IIoRestorecommerceTokenTokenData = {
   payload?: InputMaybe<IGoogleProtobufAny>;
   expiresIn?: InputMaybe<Scalars['Float']>;
   type?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceTokenGrantId = {
   grantId?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IdentityOauthMutation = {
@@ -878,6 +958,8 @@ export type IIoRestorecommerceOauthExchangeCodeRequest = {
   service?: InputMaybe<Scalars['String']>;
   code?: InputMaybe<Scalars['String']>;
   state?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

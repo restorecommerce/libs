@@ -81,29 +81,39 @@ export type IoRestorecommerceStatusOperationStatus = {
 export type IIoRestorecommerceAccessControlRequest = {
   target?: InputMaybe<IIoRestorecommerceRuleTarget>;
   context?: InputMaybe<IIoRestorecommerceAccessControlContext>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceRuleTarget = {
   subject?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   resources?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   action?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAccessControlContext = {
   subject?: InputMaybe<IGoogleProtobufAny>;
   resources?: InputMaybe<Array<IGoogleProtobufAny>>;
   security?: InputMaybe<IGoogleProtobufAny>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceAccessControlReverseQuery = {
@@ -278,11 +288,15 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -294,6 +308,8 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -302,6 +318,8 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -327,6 +345,8 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -335,6 +355,8 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOpOperator {
@@ -345,6 +367,8 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type AccessControlRuleQuery = {
@@ -459,6 +483,8 @@ export type IIoRestorecommercePolicyPolicyList = {
   items?: InputMaybe<Array<IIoRestorecommercePolicyPolicy>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommercePolicyPolicy = {
@@ -471,6 +497,8 @@ export type IIoRestorecommercePolicyPolicy = {
   effect?: InputMaybe<IoRestorecommerceRuleEffect>;
   combiningAlgorithm?: InputMaybe<Scalars['String']>;
   evaluationCacheable?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -479,10 +507,14 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -505,6 +537,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type AccessControlRuleMutation = {
@@ -527,6 +561,8 @@ export type IIoRestorecommerceRuleRuleList = {
   items?: InputMaybe<Array<IIoRestorecommerceRuleRule>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceRuleRule = {
@@ -539,11 +575,15 @@ export type IIoRestorecommerceRuleRule = {
   condition?: InputMaybe<Scalars['String']>;
   effect?: InputMaybe<IoRestorecommerceRuleEffect>;
   evaluationCacheable?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceRuleContextQuery = {
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
   query?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type AccessControlPolicySetMutation = {
@@ -566,6 +606,8 @@ export type IIoRestorecommercePolicySetPolicySetList = {
   items?: InputMaybe<Array<IIoRestorecommercePolicySetPolicySet>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommercePolicySetPolicySet = {
@@ -576,6 +618,8 @@ export type IIoRestorecommercePolicySetPolicySet = {
   target?: InputMaybe<IIoRestorecommerceRuleTarget>;
   combiningAlgorithm?: InputMaybe<Scalars['String']>;
   policies?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

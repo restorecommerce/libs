@@ -99,7 +99,7 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
               // check if fieldName already exists in the traversedFields (to avoid circular reference for infinite loop)
               if (traversedFields.indexOf(fieldName) <= -1) {
                 traversedFields.push(fieldName);
-              } else if(traversedFields.indexOf(fieldName) > -1) {
+              } else if (traversedFields.indexOf(fieldName) > -1) {
                 // skip loop as this GQL type is already traversed
                 continue;
               }
@@ -207,6 +207,12 @@ export const registerTyping = (
         type: ModeType
       };
     }
+    // add scope to all mutations / queries
+    if (!result.scope) {
+      result['scope'] = {
+        description: 'target scope',
+        type: GraphQLString };
+    }
     return result;
   };
 
@@ -267,7 +273,7 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = <T extends  GraphQLOutputType | GraphQLInputType>(key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): T | null => {
+const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): T | null => {
   let result;
 
   switch (field.type) {

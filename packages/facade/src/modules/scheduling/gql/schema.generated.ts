@@ -157,6 +157,8 @@ export type IIoRestorecommerceJobJobReadRequest = {
   sort?: InputMaybe<IoRestorecommerceJobJobReadRequestSortOrder>;
   filter?: InputMaybe<IIoRestorecommerceJobJobFilter>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceJobJobReadRequestSortOrder {
@@ -168,11 +170,15 @@ export enum IoRestorecommerceJobJobReadRequestSortOrder {
 export type IIoRestorecommerceJobJobFilter = {
   jobIds?: InputMaybe<Array<Scalars['String']>>;
   type?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -205,6 +211,8 @@ export type IIoRestorecommerceJobJobList = {
   items?: InputMaybe<Array<IIoRestorecommerceJobJob>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobJob = {
@@ -213,6 +221,8 @@ export type IIoRestorecommerceJobJob = {
   data?: InputMaybe<IIoRestorecommerceJobData>;
   when?: InputMaybe<Scalars['String']>;
   options?: InputMaybe<IIoRestorecommerceJobJobOptions>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobData = {
@@ -220,11 +230,15 @@ export type IIoRestorecommerceJobData = {
   payload?: InputMaybe<IGoogleProtobufAny>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   subjectId?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -233,16 +247,22 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobJobOptions = {
@@ -253,11 +273,15 @@ export type IIoRestorecommerceJobJobOptions = {
   repeat?: InputMaybe<IIoRestorecommerceJobRepeat>;
   jobId?: InputMaybe<Scalars['String']>;
   removeOnComplete?: InputMaybe<Scalars['Boolean']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobBackoff = {
   delay?: InputMaybe<Scalars['Float']>;
   type?: InputMaybe<IoRestorecommerceJobBackoffType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceJobRepeat = {
@@ -267,6 +291,8 @@ export type IIoRestorecommerceJobRepeat = {
   endDate?: InputMaybe<Scalars['String']>;
   count?: InputMaybe<Scalars['Int']>;
   jobId?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -289,6 +315,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

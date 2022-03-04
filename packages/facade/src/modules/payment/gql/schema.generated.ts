@@ -108,6 +108,8 @@ export type IIoRestorecommercePaymentSetupRequest = {
   cancelReturnUrl?: InputMaybe<Scalars['String']>;
   allowGuestCheckout?: InputMaybe<Scalars['Boolean']>;
   provider?: InputMaybe<IoRestorecommercePaymentProvider>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommercePaymentItem = {
@@ -115,6 +117,8 @@ export type IIoRestorecommercePaymentItem = {
   description?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Int']>;
   amount?: InputMaybe<Scalars['Int']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommercePaymentProvider {
@@ -297,6 +301,8 @@ export type IIoRestorecommercePaymentPaymentRequest = {
   paymentId?: InputMaybe<Scalars['String']>;
   payerId?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommercePaymentCaptureRequest = {
@@ -304,6 +310,8 @@ export type IIoRestorecommercePaymentCaptureRequest = {
   paymentSum?: InputMaybe<Scalars['Int']>;
   currency?: InputMaybe<Scalars['String']>;
   paymentId?: InputMaybe<Scalars['String']>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

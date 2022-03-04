@@ -51,6 +51,8 @@ export type IIoRestorecommerceSearchSearchRequest = {
   collection?: InputMaybe<Scalars['String']>;
   text?: InputMaybe<Scalars['String']>;
   acl?: InputMaybe<Array<Scalars['String']>>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

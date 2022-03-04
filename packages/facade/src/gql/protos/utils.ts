@@ -53,43 +53,21 @@ interface EnumMetaData {
 }
 
 /**
- * recursively find the path and updates the object with given value, this function
+ * recursively find the id and updates the object with given value, this function
  * also takes care to handle if there is an array at any position in the path
- * @param path path in dot notation
+ * @param id property of the object
  * @param val value to be updated in Object
  * @param obj Object
  */
-export const updateJSON = (path: string, val: EnumMetaData[], obj: any) => {
-  let fields = path.split('.');
-  let result = obj;
-  let j = 0;
-  for (let i = 0, n = fields.length; i < n && result !== undefined; i++) {
-    let field = fields[i];
-    if (i === n - 1) {
-      // reset value finally after iterating to the position (only if value already exists)
-      if (result[field]) {
-        const foundElement = val.find((e) => e.name === result[field]);
-        result[field] = foundElement?.number;
+const updateJSON = (id: string, value: any, obj: any) => {
+  for (const [k, v] of Object.entries(obj)) {
+    if (k === id) {
+      const foundObj = value.find((e: any) => e.name === obj[k]);
+      if (foundObj) {
+          obj[k] = foundObj.number;
       }
-    } else {
-      if (_.isArray(result[field])) {
-        // till i < n concat new fields
-        let newField = '';
-        for (let k = i + 1; k < n; k++) {
-          if (newField && !_.isEmpty(newField)) {
-            newField = newField + '.' + fields[k];
-          } else {
-            newField = fields[k];
-          }
-        }
-        for (; j < result[field].length; j++) {
-          // recurisve call to update each element if its an array
-          updateJSON(newField, val, result[field][j]);
-        }
-      } else {
-        // update object till final path is reached
-        result = result[field];
-      }
+    } else if (typeof v === "object") {
+      updateJSON(id, value, v);
     }
   }
 };
@@ -129,6 +107,7 @@ export const convertEnumToInt = (inputTyping: TypingData, req: any): any => {
       const enumTyping = getTyping(enumNameSpace);
       const enumIntMapping = (enumTyping?.meta as any).value;
       if (enumIntMapping && _.isArray(enumIntMapping) && enumIntMapping.length > 0) {
+        // val refers to property name
         updateJSON(val, enumIntMapping, req);
       }
     }

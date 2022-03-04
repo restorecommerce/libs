@@ -103,12 +103,6 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
                 // skip loop as this GQL type is already traversed
                 continue;
               }
-              if (!prevFieldName || _.isEmpty(prevFieldName)) {
-                prevFieldName = fieldName;
-              }
-              if (prevFieldName && prevFieldName != fieldName) {
-                fieldName = prevFieldName + '.' + fieldName;
-              }
               recursiveEnumCheck(fieldType, enumMap, fieldName, traversedFields);
             }
           }

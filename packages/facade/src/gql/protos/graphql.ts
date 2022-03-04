@@ -89,7 +89,7 @@ export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObje
   if (model instanceof GraphQLInputObjectType) {
     const fields = model.getFields();
     for (let key of Object.keys(fields)) {
-      if (key in data) {
+      if (data && key in data) {
         data[key] = await recursiveUploadToBuffer(data[key], fields[key].type);
       }
     }

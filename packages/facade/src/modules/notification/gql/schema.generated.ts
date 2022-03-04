@@ -130,8 +130,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -143,8 +141,6 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -153,8 +149,6 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -180,8 +174,6 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -190,8 +182,6 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -227,15 +217,11 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceNotificationNotificationList = {
@@ -256,8 +242,6 @@ export type IIoRestorecommerceNotificationNotification = {
   telephoneNumber?: InputMaybe<Scalars['String']>;
   subjectTemplate?: InputMaybe<Scalars['String']>;
   bodyTemplate?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -266,22 +250,16 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {

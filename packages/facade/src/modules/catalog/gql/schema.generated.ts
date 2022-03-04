@@ -180,8 +180,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -193,8 +191,6 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -203,8 +199,6 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -230,8 +224,6 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -240,8 +232,6 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -277,15 +267,11 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type CatalogProductPrototypeQuery = {
@@ -486,8 +472,6 @@ export type IIoRestorecommerceProductMainProduct = {
   bundle?: InputMaybe<IIoRestorecommerceProductBundle>;
   active?: InputMaybe<Scalars['Boolean']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductProduct = {
@@ -501,14 +485,10 @@ export type IIoRestorecommerceProductProduct = {
   taxId?: InputMaybe<Array<Scalars['String']>>;
   variants?: InputMaybe<Array<IIoRestorecommerceProductVariant>>;
   gtin?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductIdentifier = {
   id?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductVariant = {
@@ -523,8 +503,6 @@ export type IIoRestorecommerceProductVariant = {
   stockKeepingUnit?: InputMaybe<Scalars['String']>;
   templateVariant?: InputMaybe<Scalars['String']>;
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceImageImage = {
@@ -536,16 +514,12 @@ export type IIoRestorecommerceImageImage = {
   width?: InputMaybe<Scalars['Float']>;
   height?: InputMaybe<Scalars['Float']>;
   length?: InputMaybe<Scalars['Float']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductBundle = {
@@ -555,15 +529,11 @@ export type IIoRestorecommerceProductBundle = {
   image?: InputMaybe<Array<IIoRestorecommerceImageImage>>;
   product?: InputMaybe<Array<IIoRestorecommerceProductBundleProduct>>;
   price?: InputMaybe<Scalars['Float']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductBundleProduct = {
   productId?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Int']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -572,14 +542,10 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -637,8 +603,6 @@ export type IIoRestorecommerceProductPrototypeProductPrototype = {
   version?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
   categoryId?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type CatalogProductCategoryMutation = {
@@ -673,14 +637,10 @@ export type IIoRestorecommerceProductCategoryProductCategory = {
   priceGroupId?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<IIoRestorecommerceImageImage>;
   parent?: InputMaybe<IIoRestorecommerceProductCategoryParent>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceProductCategoryParent = {
   parentId?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type CatalogPriceGroupMutation = {
@@ -712,8 +672,6 @@ export type IIoRestorecommercePriceGroupPriceGroup = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   name?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type CatalogManufacturerMutation = {
@@ -745,8 +703,6 @@ export type IIoRestorecommerceManufacturerManufacturer = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   name?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

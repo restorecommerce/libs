@@ -144,8 +144,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -157,8 +155,6 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -167,8 +163,6 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -194,8 +188,6 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -204,8 +196,6 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -241,15 +231,11 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceCountryQuery = {
@@ -772,8 +758,6 @@ export type IIoRestorecommerceAddressAddress = {
   altitude?: InputMaybe<Scalars['Float']>;
   buildingNumber?: InputMaybe<Scalars['String']>;
   addressAddition?: InputMaybe<IIoRestorecommerceAddressAddressAddition>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -782,36 +766,26 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressAddressGeoPoint = {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressAddressAddition = {
   field1?: InputMaybe<Scalars['String']>;
   field2?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -869,8 +843,6 @@ export type IIoRestorecommerceCountryCountry = {
   countryCode?: InputMaybe<Scalars['String']>;
   geographicalName?: InputMaybe<Scalars['String']>;
   economicAreas?: InputMaybe<Array<Scalars['String']>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceTimezoneMutation = {
@@ -901,8 +873,6 @@ export type IIoRestorecommerceTimezoneTimezone = {
   id?: InputMaybe<Scalars['String']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceContactPointTypeMutation = {
@@ -933,8 +903,6 @@ export type IIoRestorecommerceContactPointTypeContactPointType = {
   id?: InputMaybe<Scalars['String']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   type?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceCustomerMutation = {
@@ -967,31 +935,23 @@ export type IIoRestorecommerceCustomerCustomer = {
   individualUser?: InputMaybe<IIoRestorecommerceCustomerIndividualUser>;
   orgUser?: InputMaybe<IIoRestorecommerceCustomerOrgUser>;
   guest?: InputMaybe<IIoRestorecommerceCustomerGuest>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceCustomerIndividualUser = {
   userId?: InputMaybe<Scalars['String']>;
   addressId?: InputMaybe<Scalars['String']>;
   contactPointIds?: InputMaybe<Array<Scalars['String']>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceCustomerOrgUser = {
   userId?: InputMaybe<Scalars['String']>;
   organizationId?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceCustomerGuest = {
   guest?: InputMaybe<Scalars['Boolean']>;
   addressId?: InputMaybe<Scalars['String']>;
   contactPointIds?: InputMaybe<Array<Scalars['String']>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceContactPointMutation = {
@@ -1028,8 +988,6 @@ export type IIoRestorecommerceContactPointContactPoint = {
   telephone?: InputMaybe<Scalars['String']>;
   timezoneId?: InputMaybe<Scalars['String']>;
   localeId?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceLocaleMutation = {
@@ -1061,8 +1019,6 @@ export type IIoRestorecommerceLocaleLocale = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   value?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceLocationMutation = {
@@ -1099,8 +1055,6 @@ export type IIoRestorecommerceLocationLocation = {
   addressId?: InputMaybe<Scalars['String']>;
   data?: InputMaybe<IGoogleProtobufAny>;
   type?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceOrganizationMutation = {
@@ -1143,8 +1097,6 @@ export type IIoRestorecommerceOrganizationOrganization = {
   name?: InputMaybe<Scalars['String']>;
   paymentMethodIds?: InputMaybe<Array<Scalars['String']>>;
   data?: InputMaybe<IGoogleProtobufAny>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceTaxMutation = {
@@ -1178,8 +1130,6 @@ export type IIoRestorecommerceTaxTax = {
   rate?: InputMaybe<Scalars['Float']>;
   variant?: InputMaybe<Scalars['String']>;
   typeId?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceTaxTypeMutation = {
@@ -1211,8 +1161,6 @@ export type IIoRestorecommerceTaxTypeTaxType = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   type?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ResourceCommandMutation = {
@@ -1245,8 +1193,6 @@ export type IIoRestorecommerceCommandCommand = {
   name?: InputMaybe<Scalars['String']>;
   parameters?: InputMaybe<Array<IIoRestorecommerceCommandCommandParameter>>;
   description?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceCommandCommandParameter = {
@@ -1254,8 +1200,6 @@ export type IIoRestorecommerceCommandCommandParameter = {
   description?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceCommandCommandParameterParameterType>;
   properties?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

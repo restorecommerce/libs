@@ -35,6 +35,7 @@ const MapScalar = new GraphQLScalarType({
 });
 
 const Mutate = ['Create', 'Update', 'Upsert'];
+const CRUD_OPERATION_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read'];
 
 const TodoScalar = new GraphQLScalarType({
   name: 'TodoScalar',
@@ -153,6 +154,7 @@ export const registerTyping = (
   inputOpts?: Omit<Readonly<GraphQLInputObjectTypeConfig>, 'fields'>,
 ) => {
   let insertMode = false;
+  let crudOperation = false;
   const type = (protoPackage.startsWith('.') ? '' : '.') + protoPackage + '.' + message.name!;
   if (methodDef && methodDef.length > 0) {
     for (let method of methodDef) {
@@ -160,6 +162,10 @@ export const registerTyping = (
       // then update input type to include `mode` parameter
       if ((Mutate.indexOf(method.name) > -1) && type === method.inputType) {
         insertMode = true;
+      }
+      // add scope
+      if ((CRUD_OPERATION_NAMES.indexOf(method.name) > -1) && type === method.inputType) {
+        crudOperation = true;
       }
     }
   }
@@ -207,11 +213,14 @@ export const registerTyping = (
         type: ModeType
       };
     }
-    // add scope to all mutations / queries
-    if (!result.scope) {
-      result['scope'] = {
-        description: 'target scope',
-        type: GraphQLString };
+    if (crudOperation) {
+      // add scope to all mutations / queries
+      if (!result.scope) {
+        result['scope'] = {
+          description: 'target scope',
+          type: GraphQLString
+        };
+      }
     }
     return result;
   };

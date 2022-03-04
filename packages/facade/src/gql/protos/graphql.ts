@@ -193,6 +193,9 @@ export const getGQLResolverFunctions =
             if (authToken && authToken.startsWith('Bearer ')) {
               req.subject.token = authToken.split(' ')[1];
             }
+            if (req.scope) {
+              req.subject.scope = req.scope;
+            }
           }
 
           const result = await service[method.name!](req);
@@ -340,6 +343,10 @@ const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => 
     const authToken = (ctx as any).request!.req.headers['authorization'];
     if (authToken && authToken.startsWith('Bearer ')) {
       subject.token = authToken.split(' ')[1];
+    }
+
+    if (req.scope) {
+      req.subject.scope = req.scope;
     }
 
     // TODO identify google.protobufAny from config

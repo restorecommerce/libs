@@ -127,8 +127,6 @@ export type IIoRestorecommerceOstorageGetRequest = {
   key?: InputMaybe<Scalars['String']>;
   bucket?: InputMaybe<Scalars['String']>;
   download?: InputMaybe<Scalars['Boolean']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceOstorageListResponse = {
@@ -160,15 +158,11 @@ export type IIoRestorecommerceOstorageListRequest = {
   filters?: InputMaybe<IIoRestorecommerceFilterFilterOp>;
   maxKeys?: InputMaybe<Scalars['Int']>;
   prefix?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -177,8 +171,6 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -278,8 +270,6 @@ export type IIoRestorecommerceOstorageObject = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   url?: InputMaybe<Scalars['String']>;
   options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -288,22 +278,16 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceOstorageOptions = {
@@ -316,15 +300,11 @@ export type IIoRestorecommerceOstorageOptions = {
   md5?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   data?: InputMaybe<IGoogleProtobufAny>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
@@ -373,8 +353,6 @@ export type IoRestorecommerceOstorageCopyResponseItem = {
 
 export type IIoRestorecommerceOstorageCopyRequestList = {
   items?: InputMaybe<Array<IIoRestorecommerceOstorageCopyRequestItem>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceOstorageCopyRequestItem = {
@@ -383,8 +361,6 @@ export type IIoRestorecommerceOstorageCopyRequestItem = {
   key?: InputMaybe<Scalars['String']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceOstorageMoveResponseList = {
@@ -415,8 +391,6 @@ export type IoRestorecommerceOstorageMoveResponseItem = {
 
 export type IIoRestorecommerceOstorageMoveRequestList = {
   items?: InputMaybe<Array<IIoRestorecommerceOstorageMoveRequestItem>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceOstorageMoveRequestItem = {
@@ -425,8 +399,6 @@ export type IIoRestorecommerceOstorageMoveRequestItem = {
   key?: InputMaybe<Scalars['String']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

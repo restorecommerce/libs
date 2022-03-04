@@ -124,8 +124,6 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
 export type IIoRestorecommerceResourcebaseSort = {
   field?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IoRestorecommerceResourcebaseSortSortOrder>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseSortSortOrder {
@@ -137,8 +135,6 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 export type IIoRestorecommerceResourcebaseFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceResourcebaseFilter = {
@@ -147,8 +143,6 @@ export type IIoRestorecommerceResourcebaseFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceResourcebaseFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceResourcebaseFilterOperation {
@@ -174,8 +168,6 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 export type IIoRestorecommerceFilterFilterOp = {
   filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFilterFilter = {
@@ -184,8 +176,6 @@ export type IIoRestorecommerceFilterFilter = {
   value?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<IoRestorecommerceFilterFilterValueType>;
   filters?: InputMaybe<Array<IIoRestorecommerceFilterFilterOp>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum IoRestorecommerceFilterFilterOperation {
@@ -221,15 +211,11 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['Upload']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -423,16 +409,12 @@ export type IIoRestorecommerceFulfillmentFulfillmentRequestList = {
   items?: InputMaybe<Array<IIoRestorecommerceFulfillmentFulfillmentRequest>>;
   totalCount?: InputMaybe<Scalars['Int']>;
   mode?: InputMaybe<ModeType>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentFulfillmentRequest = {
   id?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<IIoRestorecommerceFulfillmentOrder>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentOrder = {
@@ -441,8 +423,6 @@ export type IIoRestorecommerceFulfillmentOrder = {
   sender?: InputMaybe<IIoRestorecommerceFulfillmentAddress>;
   receiver?: InputMaybe<IIoRestorecommerceFulfillmentAddress>;
   notify?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentParcel = {
@@ -453,15 +433,11 @@ export type IIoRestorecommerceFulfillmentParcel = {
   heightInCm?: InputMaybe<Scalars['Float']>;
   widthInCm?: InputMaybe<Scalars['Float']>;
   lengthInCm?: InputMaybe<Scalars['Float']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentParcelItem = {
   itemId?: InputMaybe<Scalars['String']>;
   quantity?: InputMaybe<Scalars['Int']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentAddress = {
@@ -472,8 +448,6 @@ export type IIoRestorecommerceFulfillmentAddress = {
   branch?: InputMaybe<IIoRestorecommerceFulfillmentBranch>;
   country?: InputMaybe<IIoRestorecommerceCountryCountry>;
   contact?: InputMaybe<IIoRestorecommerceFulfillmentContact>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressAddress = {
@@ -488,8 +462,6 @@ export type IIoRestorecommerceAddressAddress = {
   altitude?: InputMaybe<Scalars['Float']>;
   buildingNumber?: InputMaybe<Scalars['String']>;
   addressAddition?: InputMaybe<IIoRestorecommerceAddressAddressAddition>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -498,52 +470,38 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']>;
   owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
   attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressAddressGeoPoint = {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressAddressAddition = {
   field1?: InputMaybe<Scalars['String']>;
   field2?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentPackstation = {
   provider?: InputMaybe<Scalars['String']>;
   stationNumber?: InputMaybe<Scalars['String']>;
   postNumber?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentBranch = {
   provider?: InputMaybe<Scalars['String']>;
   branchNumber?: InputMaybe<Scalars['String']>;
   postNumber?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceCountryCountry = {
@@ -553,16 +511,12 @@ export type IIoRestorecommerceCountryCountry = {
   countryCode?: InputMaybe<Scalars['String']>;
   geographicalName?: InputMaybe<Scalars['String']>;
   economicAreas?: InputMaybe<Array<Scalars['String']>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentContact = {
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -607,22 +561,16 @@ export type IoRestorecommerceFulfillmentEvent = {
 
 export type IIoRestorecommerceFulfillmentTrackingRequestList = {
   items?: InputMaybe<Array<IIoRestorecommerceFulfillmentTrackingRequest>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentTrackingRequest = {
   fulfillmentId?: InputMaybe<Scalars['String']>;
   shipmentNumbers?: InputMaybe<Array<Scalars['String']>>;
   options?: InputMaybe<IGoogleProtobufAny>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceFulfillmentCancelRequestList = {
   ids?: InputMaybe<Array<Scalars['String']>>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
@@ -676,8 +624,6 @@ export type IIoRestorecommerceFulfillmentCourierFulfillmentCourier = {
   stubType?: InputMaybe<Scalars['String']>;
   configuration?: InputMaybe<IGoogleProtobufAny>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;

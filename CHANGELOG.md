@@ -1,3 +1,7 @@
+### 0.2.8 (March 4th, 2022)
+
+- removed empty check condition (fix for isEmpty filter operation)
+
 ### 0.2.7 (February 18th, 2022)
 
 - updated chassis-srv (includes fix for offset store config)

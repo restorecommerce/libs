@@ -13,8 +13,8 @@ import {
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
 } from "graphql/type/definition";
 import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
-import { getTyping, registeredTypings, getNameSpaceTypeName } from "./registry";
-import { capitalizeProtoName, convertyCamelToSnakeCase, getKeys, decodeBufferFields, convertEnumToInt } from "./utils";
+import { getTyping } from "./registry";
+import { capitalizeProtoName, getKeys, decodeBufferFields, convertEnumToInt } from "./utils";
 import { Readable } from "stream";
 import {
   DescriptorProto,
@@ -160,8 +160,6 @@ export const getGQLResolverFunctions =
         throw Error(`Method ${method.name} input type '${method.inputType}' does not contain 'fromPartial' function`);
       }
 
-      const defaults = typing.processor.fromPartial({});
-
       let subjectField: null | string = null;
       if (typing) {
         for (let field of (typing.meta as DescriptorProto).field) {
@@ -172,17 +170,22 @@ export const getGQLResolverFunctions =
         }
       }
 
-      (obj as any)[method.name!] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
+      let methodName = method.name;
+      if (Mutate.indexOf(method.name) > -1) {
+        methodName = 'Mutate';
+      }
+
+      if (methodName in obj) {
+        return obj;
+      }
+
+      (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
         const service = client[serviceKey];
         try {
           const converted = await recursiveUploadToBuffer(args.input, typing.input);
 
-          let req = {
-            // Fill defaults
-            ...defaults,
-            ...converted
-          };
+          let req = typing.processor.fromPartial(converted);
 
           // convert enum strings to integers
           req = convertEnumToInt(typing, req);
@@ -198,7 +201,22 @@ export const getGQLResolverFunctions =
             }
           }
 
-          const result = await service[method.name!](req);
+          let realMethod = method.name;
+          if (Mutate.indexOf(method.name) > -1) {
+            const mode = args?.input?.mode;
+            if (!mode) {
+              throw new Error('Please specify mode');
+            }
+            if (mode === 'CREATE') {
+              realMethod = 'Create';
+            } else if (mode === 'UPDATE') {
+              realMethod = 'Update';
+            } else if (mode === 'UPSERT') {
+              realMethod = 'Upsert';
+            }
+          }
+
+          const result = await service[realMethod](req);
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {
             let operationStatus = { code: 0, message: '' };
@@ -287,161 +305,6 @@ type ResolverBaseOrSub =
   | Map<string, ResolverFn<any, any, ServiceClient<any, any, any>, any>>;
 const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverBaseOrSub>>>();
 
-const MutateResolver = async (req: any, ctx: any, schema: any): Promise<any> => {
-  let module_name, key, service;
-  if (schema?.path?.prev?.key) {
-    key = schema.path.prev.key;
-  }
-  if (schema?.path?.prev?.typename) {
-    let typeName = schema.path.prev.typename;
-    if (typeName.endsWith('Mutation')) {
-      module_name = typeName.split('Mutation')[0];
-    }
-  }
-
-  if (key && module_name) {
-    module_name = convertyCamelToSnakeCase(module_name);
-    key = convertyCamelToSnakeCase(key);
-    service = ctx[module_name]?.client[key];
-  }
-
-  try {
-    let method = '';
-    let input = req.input;
-    const mode = req?.input?.mode;
-    if (!mode) {
-      throw new Error('Please specify mode');
-    }
-    if (mode === 'CREATE') {
-      method = 'Create';
-    } else if (mode === 'UPDATE') {
-      method = 'Update';
-    } else if (mode === 'UPSERT') {
-      method = 'Upsert';
-    }
-
-    const inputMethodTypeKey = module_name.toLowerCase() + '.' + key.toLowerCase() + '.' + method.toLowerCase();
-    const nsType = inputMethodType.get(inputMethodTypeKey);
-    if (nsType) {
-      const inputTyping = getTyping(nsType);
-      convertEnumToInt(inputTyping!!, input);
-    }
-
-    // check service object contains requested mode's method def
-    if (!service[method]) {
-      throw new Error(`Method ${method} not defined on ${module_name}`);
-    }
-    // update subject token from authorizatin header
-    let subject = {
-      id: '',
-      scope: '',
-      roleAssociations: [],
-      hierarchicalScopes: [],
-      token: '',
-      unauthenticated: false
-    };
-    const authToken = (ctx as any).request!.req.headers['authorization'];
-    if (authToken && authToken.startsWith('Bearer ')) {
-      subject.token = authToken.split(' ')[1];
-    }
-
-    if (req.scope) {
-      req.subject.scope = req.scope;
-    }
-
-    // TODO identify google.protobufAny from config
-    for (let item of input.items) {
-      let keys = Object.keys(item);
-      for (let key of keys) {
-        if (item[key] && item[key].value) {
-          item[key] = { typeUrl: '', value: Buffer.from(JSON.stringify(item.data.value)) };
-        }
-      }
-    }
-
-    const result = await service[method]({
-      items: input?.items,
-      subject
-    });
-    // TODO read from grpcClientConfig
-    // const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
-    const bufferFields: any = [];
-    if (result instanceof stream.Readable) {
-      let operationStatus = { code: 0, message: '' };
-      let aggregatedResponse = await new Promise((resolve, reject) => {
-        let response: any = {};
-        result.on('data', (chunk) => {
-          const chunkObj = _.cloneDeep(chunk);
-          if (!response) {
-            response = chunk;
-          } else {
-            Object.assign(response, chunk);
-          }
-          const existingBufferFields = _.intersection(Object.keys(chunk), bufferFields);
-          for (let bufferField of existingBufferFields) {
-            if (chunkObj[bufferField] && chunkObj[bufferField].value) {
-              if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
-                response[bufferField].value = [];
-              }
-              let data = JSON.parse(chunkObj[bufferField].value.toString());
-              if (_.isArray(data)) {
-                for (let dataObj of data) {
-                  response[bufferField].value.push(dataObj);
-                }
-              } else {
-                response[bufferField].value.push(data);
-              }
-            }
-          }
-        });
-        result.on('error', (err) => {
-          console.error(err);
-          operationStatus.code = (err as any).code ? (err as any).code : 500;
-          operationStatus.message = err.message;
-        });
-        result.on('end', () => {
-          if (_.isEmpty(operationStatus.message)) {
-            operationStatus.code = 200;
-            operationStatus.message = 'success';
-          }
-          resolve(response);
-        });
-      });
-      return { details: { items: aggregatedResponse, operationStatus } };
-    }
-    // TODO identify google.protobufAny from config
-    // let items = decodeBufferFields(result.items, bufferFields);
-    for (let item of result.items) {
-      if (item && item.payload) {
-        const keys = Object.keys(item.payload);
-        for (let bufferField of keys) {
-          if (item.payload[bufferField] && item.payload[bufferField].value) {
-            item.payload[bufferField].value = JSON.parse(item.payload[bufferField].value.toString());
-          }
-        }
-      }
-    }
-
-    return {
-      details: {
-        items: result.items, // items includes both payload and individual status
-        operationStatus: result.operationStatus // overall status
-      }
-    };
-  } catch (error: any) {
-    console.error(error);
-    return {
-      details: {
-        items: [],
-        operationStatus: {
-          code: error.code,
-          message: error.message
-        }
-      }
-    }
-  }
-};
-
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
   (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
     mutation: boolean = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
@@ -474,11 +337,6 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
     if (key && value?.inputType) {
       inputMethodType.set(key, value.inputType);
     }
-  }
-  // custom mutation resolver for create, update and upsert - Mutate
-  if (Mutate.indexOf(name) > -1) {
-    name = 'Mutate';
-    func = MutateResolver;
   }
   space.set(name, func);
 }
@@ -696,6 +554,10 @@ export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto,
         console.error('Blacklist contains undefined methods:', blacklist)
       }
     }
+  }
+
+  if (Mutate.findIndex(val => mut.has(val)) > -1) {
+    mut.add('Mutate');
   }
 
   return {

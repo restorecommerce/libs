@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.5...@restorecommerce/facade@0.3.6) (2022-03-09)
+
+
+### Bug Fixes
+
+* **facade:** merge query and mutation resolvers ([c2481b0](https://github.com/restorecommerce/libs/commit/c2481b05c46a5992d2a05017f9c4d279f3055613))
+* **facade:** to add scope only to root mutation / query instead of all input types and updated suject scope to read from request scope ([9bbc8da](https://github.com/restorecommerce/libs/commit/9bbc8daba19d1ce5ef16b54f9353b9c2df39258e))
+
+
+
+
+
 ## [0.3.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.4...@restorecommerce/facade@0.3.5) (2022-03-04)
 
 

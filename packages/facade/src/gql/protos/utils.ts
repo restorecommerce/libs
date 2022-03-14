@@ -28,13 +28,13 @@ export const getKeys = (obj: any): string[] => {
   return Array.from(set);
 };
 
-export const decodeBufferFields = (items: any, bufferFields: string[]): any => {
+export const decodeBufferFields = (items: any[], bufferFields: string[]): any => {
   if (bufferFields && bufferFields.length > 0 && items && items.length > 0) {
     for (let item of items) {
       if (item && item.payload) {
         const existingBufferFields = _.intersection(Object.keys(item.payload), bufferFields);
         for (let bufferField of existingBufferFields) {
-          if (item.payload[bufferField] && item.payload[bufferField].value) {
+          if (item.payload[bufferField] && item.payload[bufferField].value && item.payload[bufferField].value instanceof Buffer) {
             item.payload[bufferField].value = JSON.parse(item.payload[bufferField].value.toString());
           }
         }

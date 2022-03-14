@@ -383,7 +383,6 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
               continue;
             }
           }
-          console.log('Subject Passed for Bild Query Target is...', subject);
           const filterPermissions = buildQueryFromTarget(rule.target, rule.effect,
             reducedUserScope, urns, userCondition, scopingUpdated, reqResources,
             rule.condition, subject, database);

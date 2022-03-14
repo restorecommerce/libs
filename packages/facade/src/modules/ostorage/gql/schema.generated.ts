@@ -14,6 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   TodoScalar: any;
+  GoogleProtobufAnyValue: any;
   Upload: any;
 };
 
@@ -107,7 +108,7 @@ export type IoRestorecommerceOstorageOptions = {
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -304,7 +305,7 @@ export type IIoRestorecommerceOstorageOptions = {
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['Upload']>;
+  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type ProtoIoRestorecommerceResourcebaseDeleteResponse = {
@@ -487,6 +488,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceOstorageOptions: ResolverTypeWrapper<IoRestorecommerceOstorageOptions>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
@@ -550,6 +552,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceOstorageOptions: IoRestorecommerceOstorageOptions;
   Int: Scalars['Int'];
   GoogleProtobufAny: GoogleProtobufAny;
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceOstorageGetRequest: IIoRestorecommerceOstorageGetRequest;
@@ -674,9 +677,13 @@ export type IoRestorecommerceOstorageOptionsResolvers<ContextType = OstorageCont
 
 export type GoogleProtobufAnyResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['GoogleProtobufAnyValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
+  name: 'GoogleProtobufAnyValue';
+}
 
 export type IoRestorecommerceStatusStatusResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -846,6 +853,7 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceOstorageOptions?: IoRestorecommerceOstorageOptionsResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
+  GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   ProtoIoRestorecommerceOstorageListResponse?: ProtoIoRestorecommerceOstorageListResponseResolvers<ContextType>;

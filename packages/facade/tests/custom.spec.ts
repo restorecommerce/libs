@@ -10,8 +10,8 @@ import { agent, SuperAgentTest } from 'supertest';
 import { createServiceConfig } from "@restorecommerce/service-config";
 import { createLogger } from "@restorecommerce/logger";
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from "../src/gql/protos";
-import { GraphQLString } from "graphql";
-import { buildFederatedSchema, printSchema } from "@apollo/federation";
+import { GraphQLString, printSchema } from "graphql";
+import { buildFederatedSchema } from "@apollo/federation";
 import { gql } from "apollo-server-koa";
 
 const CONFIG_PATH = __dirname;
@@ -42,7 +42,7 @@ function createTestFacade() {
   const logger = createLogger(cfg.logger);
 
   registerResolverSchema(namespace, customFunction, {
-    type: GraphQLString
+    type: GraphQLString as any
   });
   registerResolverFunction(namespace, customFunction, (_, ctx) => ctx.message);
 
@@ -82,7 +82,7 @@ describe('extend', () => {
   });
 
   afterAll(async () => {
-    await facade && facade.stop();
+    await facade && await facade.stop();
   })
 
   it('should start the facade', () => {
@@ -90,7 +90,7 @@ describe('extend', () => {
     expect(facade.listening).toBe(true);
   });
 
-  it('should call custom function', async (done) => {
+  it('should call custom function', (done) => {
     request
       .post("/graphql")
       .send({

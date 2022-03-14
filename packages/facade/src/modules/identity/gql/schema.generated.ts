@@ -13,8 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  TodoScalar: any;
-  Upload: any;
+  GoogleProtobufAnyValue: any;
   MapScalar: any;
 };
 
@@ -170,7 +169,7 @@ export type IoRestorecommerceAuthTokens = {
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -294,7 +293,7 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['Upload']>;
+  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IIoRestorecommerceUserFindRequest = {
@@ -978,7 +977,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceUserUserType: IoRestorecommerceUserUserType;
   IoRestorecommerceAuthTokens: ResolverTypeWrapper<IoRestorecommerceAuthTokens>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
@@ -997,7 +996,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
@@ -1087,7 +1085,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceImageImage: IoRestorecommerceImageImage;
   IoRestorecommerceAuthTokens: IoRestorecommerceAuthTokens;
   GoogleProtobufAny: GoogleProtobufAny;
-  TodoScalar: Scalars['TodoScalar'];
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
@@ -1099,7 +1097,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: Scalars['Upload'];
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
@@ -1294,12 +1291,12 @@ export type IoRestorecommerceAuthTokensResolvers<ContextType = IdentityContext, 
 
 export type GoogleProtobufAnyResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['GoogleProtobufAnyValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
+export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
+  name: 'GoogleProtobufAnyValue';
 }
 
 export type IoRestorecommerceStatusStatusResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
@@ -1328,10 +1325,6 @@ export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefin
 export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
 
 export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
-
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type ProtoIoRestorecommerceUserUserResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserUserResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserUserResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserResponse']>, ParentType, ContextType>;
@@ -1564,7 +1557,7 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceUserUserType?: IoRestorecommerceUserUserTypeResolvers;
   IoRestorecommerceAuthTokens?: IoRestorecommerceAuthTokensResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
-  TodoScalar?: GraphQLScalarType;
+  GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
@@ -1574,7 +1567,6 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
   IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
   IoRestorecommerceResourcebaseFilterOpOperator?: IoRestorecommerceResourcebaseFilterOpOperatorResolvers;
-  Upload?: GraphQLScalarType;
   ProtoIoRestorecommerceUserUserResponse?: ProtoIoRestorecommerceUserUserResponseResolvers<ContextType>;
   IdentityRoleQuery?: IdentityRoleQueryResolvers<ContextType>;
   ProtoIoRestorecommerceRoleRoleListResponse?: ProtoIoRestorecommerceRoleRoleListResponseResolvers<ContextType>;

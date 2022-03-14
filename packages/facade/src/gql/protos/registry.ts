@@ -16,7 +16,6 @@ import {
   FieldDescriptorProto, FieldDescriptorProto_Label,
   FieldDescriptorProto_Type, MethodDescriptorProto
 } from "ts-proto-descriptors";
-import * as _ from 'lodash';
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType;
@@ -33,6 +32,31 @@ const registeredEnumTypes: string[] = [];
 const MapScalar = new GraphQLScalarType({
   name: 'MapScalar',
 });
+
+const GoogleProtobufAnyValue = new GraphQLScalarType({
+  name: 'GoogleProtobufAnyValue'
+});
+
+const protobufAnyFields = {
+  typeUrl: {
+    type: GraphQLString
+  },
+  value: {
+    type: GoogleProtobufAnyValue
+  }
+};
+
+const GoogleProtobufAny = new GraphQLObjectType({
+  name: 'GoogleProtobufAny',
+  fields: protobufAnyFields
+});
+
+export const IGoogleProtobufAny = new GraphQLInputObjectType({
+  name: 'IGoogleProtobufAny',
+  fields: protobufAnyFields
+});
+
+const googleProtobufAnyName = '.google.protobuf.Any';
 
 const Mutate = ['Create', 'Update', 'Upsert'];
 const CRUD_OPERATION_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read'];
@@ -169,6 +193,17 @@ export const registerTyping = (
       }
     }
   }
+
+  if (type === googleProtobufAnyName) {
+    // Do not register any type
+    typeNameAndNameSpaceMapping.set(GoogleProtobufAny.name, type);
+    registeredTypings.set(type, {
+      output: GoogleProtobufAny,
+      input: IGoogleProtobufAny,
+      meta: message
+    });
+  }
+
   if (registeredTypings.has(type)) {
     // TODO Log debug "Typings for object are already registered"
     return;
@@ -295,6 +330,16 @@ const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(key: string
     case FieldDescriptorProto_Type.TYPE_ENUM:
     case FieldDescriptorProto_Type.TYPE_MESSAGE:
       const objType = field.typeName!;
+
+      if (objType === googleProtobufAnyName) {
+        if (input) {
+          result = IGoogleProtobufAny;
+          break;
+        }
+        result = GoogleProtobufAny;
+        break;
+      }
+
       if (!registeredTypings.has(objType)) {
         throw new Error("Typing '" + objType + "' not registered for key '" + key + "' in object: " + objName);
       }

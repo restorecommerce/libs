@@ -21,7 +21,7 @@ function createTestFacade() {
   };
 
   const logger = createLogger(cfg.logger);
-  const resourcesClient = new ResourceSrvGrpcClient(cfg.resources.client);
+  const resourcesClient = new ResourceSrvGrpcClient(cfg.resources.client, logger);
 
   return createFacade({
     // ...cfg.facade,

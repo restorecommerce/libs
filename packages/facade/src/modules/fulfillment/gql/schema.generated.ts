@@ -13,8 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  TodoScalar: any;
-  Upload: any;
+  GoogleProtobufAnyValue: any;
 };
 
 export type Query = {
@@ -70,7 +69,7 @@ export type IoRestorecommerceFulfillmentCourierFulfillmentCourier = {
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -215,7 +214,7 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['Upload']>;
+  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type Mutation = {
@@ -705,7 +704,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceFulfillmentCourierFulfillmentCourier: ResolverTypeWrapper<IoRestorecommerceFulfillmentCourierFulfillmentCourier>;
   String: ResolverTypeWrapper<Scalars['String']>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
@@ -729,7 +728,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   Mutation: ResolverTypeWrapper<{}>;
   FulfillmentMutation: ResolverTypeWrapper<FulfillmentMutation>;
   FulfillmentFulfillmentMutation: ResolverTypeWrapper<FulfillmentFulfillmentMutation>;
@@ -794,7 +792,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceFulfillmentCourierFulfillmentCourier: IoRestorecommerceFulfillmentCourierFulfillmentCourier;
   String: Scalars['String'];
   GoogleProtobufAny: GoogleProtobufAny;
-  TodoScalar: Scalars['TodoScalar'];
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
@@ -811,7 +809,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Boolean: Scalars['Boolean'];
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: Scalars['Upload'];
   Mutation: {};
   FulfillmentMutation: FulfillmentMutation;
   FulfillmentFulfillmentMutation: FulfillmentFulfillmentMutation;
@@ -909,12 +906,12 @@ export type IoRestorecommerceFulfillmentCourierFulfillmentCourierResolvers<Conte
 
 export type GoogleProtobufAnyResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['GoogleProtobufAnyValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
+export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
+  name: 'GoogleProtobufAnyValue';
 }
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
@@ -964,10 +961,6 @@ export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefin
 export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
 
 export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
-
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
 
 export type MutationResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   fulfillment?: Resolver<ResolversTypes['FulfillmentMutation'], ParentType, ContextType>;
@@ -1182,7 +1175,7 @@ export type Resolvers<ContextType = FulfillmentContext> = ResolversObject<{
   IoRestorecommerceFulfillmentCourierFulfillmentCourierResponse?: IoRestorecommerceFulfillmentCourierFulfillmentCourierResponseResolvers<ContextType>;
   IoRestorecommerceFulfillmentCourierFulfillmentCourier?: IoRestorecommerceFulfillmentCourierFulfillmentCourierResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
-  TodoScalar?: GraphQLScalarType;
+  GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
@@ -1195,7 +1188,6 @@ export type Resolvers<ContextType = FulfillmentContext> = ResolversObject<{
   IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
   IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
   IoRestorecommerceResourcebaseFilterOpOperator?: IoRestorecommerceResourcebaseFilterOpOperatorResolvers;
-  Upload?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   FulfillmentMutation?: FulfillmentMutationResolvers<ContextType>;
   FulfillmentFulfillmentMutation?: FulfillmentFulfillmentMutationResolvers<ContextType>;

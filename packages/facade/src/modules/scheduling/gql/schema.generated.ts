@@ -13,8 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  TodoScalar: any;
-  Upload: any;
+  GoogleProtobufAnyValue: any;
 };
 
 export type Query = {
@@ -75,7 +74,7 @@ export type IoRestorecommerceJobData = {
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -228,7 +227,7 @@ export type IIoRestorecommerceJobData = {
 
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['Upload']>;
+  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -377,7 +376,7 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceJobData: ResolverTypeWrapper<IoRestorecommerceJobData>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
@@ -402,7 +401,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: ResolverTypeWrapper<Scalars['Upload']>;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
@@ -427,7 +425,7 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   IoRestorecommerceJobData: IoRestorecommerceJobData;
   GoogleProtobufAny: GoogleProtobufAny;
-  TodoScalar: Scalars['TodoScalar'];
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
@@ -449,7 +447,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  Upload: Scalars['Upload'];
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
@@ -512,12 +509,12 @@ export type IoRestorecommerceJobDataResolvers<ContextType = SchedulingContext, P
 
 export type GoogleProtobufAnyResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['GoogleProtobufAnyValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
+export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
+  name: 'GoogleProtobufAnyValue';
 }
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
@@ -602,10 +599,6 @@ export type SchedulingJobMutationResolvers<ContextType = SchedulingContext, Pare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
-
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -627,7 +620,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   IoRestorecommerceJobJob?: IoRestorecommerceJobJobResolvers<ContextType>;
   IoRestorecommerceJobData?: IoRestorecommerceJobDataResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
-  TodoScalar?: GraphQLScalarType;
+  GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
@@ -642,7 +635,6 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   SchedulingMutation?: SchedulingMutationResolvers<ContextType>;
   SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
 }>;

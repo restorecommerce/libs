@@ -13,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  TodoScalar: any;
+  GoogleProtobufAnyValue: any;
 };
 
 export type Query = {
@@ -44,7 +44,7 @@ export type IoRestorecommerceSearchSearchResponse = {
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['TodoScalar']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
 export type IIoRestorecommerceSearchSearchRequest = {
@@ -129,7 +129,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<IoRestorecommerceSearchSearchResponse>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   String: ResolverTypeWrapper<Scalars['String']>;
-  TodoScalar: ResolverTypeWrapper<Scalars['TodoScalar']>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
@@ -142,7 +142,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceSearchSearchResponse: IoRestorecommerceSearchSearchResponse;
   GoogleProtobufAny: GoogleProtobufAny;
   String: Scalars['String'];
-  TodoScalar: Scalars['TodoScalar'];
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
   Boolean: Scalars['Boolean'];
 }>;
@@ -168,12 +168,12 @@ export type IoRestorecommerceSearchSearchResponseResolvers<ContextType = Indexin
 
 export type GoogleProtobufAnyResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['TodoScalar']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['GoogleProtobufAnyValue']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export interface TodoScalarScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['TodoScalar'], any> {
-  name: 'TodoScalar';
+export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
+  name: 'GoogleProtobufAnyValue';
 }
 
 export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
@@ -182,6 +182,6 @@ export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
   ProtoIoRestorecommerceSearchSearchResponse?: ProtoIoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   IoRestorecommerceSearchSearchResponse?: IoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
-  TodoScalar?: GraphQLScalarType;
+  GoogleProtobufAnyValue?: GraphQLScalarType;
 }>;
 

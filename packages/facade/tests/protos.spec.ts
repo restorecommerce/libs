@@ -1,12 +1,12 @@
 import {
   FulfillmentResults,
   protoMetadata,
-  OrderDataList, OrderList
+  OrderDataList, OrderList, OrderListResponse
 } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from "graphql";
 import { getProtoFunction, getProtoFunctions, getTyping, registerPackagesRecursive } from "../src/gql/protos";
 import { DeleteRequest, ReadRequest } from "@restorecommerce/rc-grpc-clients";
-import { Empty } from "@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/empty";
+import { DeleteResponse } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base";
 
 describe("proto-meta", () => {
   it('should register typings', () => {
@@ -60,27 +60,27 @@ describe("proto-meta", () => {
     expect(fns.Read).toBeTruthy();
     expect(fns.Read.type).toEqual('unary');
     expect(fns.Read.serialize).toEqual(ReadRequest.encode);
-    expect(fns.Read.deserialize).toEqual(OrderList.decode);
+    expect(fns.Read.deserialize).toEqual(OrderListResponse.decode);
 
     expect(fns.Create).toBeTruthy();
     expect(fns.Create.type).toEqual('unary');
     expect(fns.Create.serialize).toEqual(OrderList.encode);
-    expect(fns.Create.deserialize).toEqual(OrderList.decode);
+    expect(fns.Create.deserialize).toEqual(OrderListResponse.decode);
 
     expect(fns.Delete).toBeTruthy();
     expect(fns.Delete.type).toEqual('unary');
     expect(fns.Delete.serialize).toEqual(DeleteRequest.encode);
-    expect(fns.Delete.deserialize).toEqual(Empty.decode);
+    expect(fns.Delete.deserialize).toEqual(DeleteResponse.decode);
 
     expect(fns.Update).toBeTruthy();
     expect(fns.Update.type).toEqual('unary');
     expect(fns.Update.serialize).toEqual(OrderList.encode);
-    expect(fns.Update.deserialize).toEqual(OrderList.decode);
+    expect(fns.Update.deserialize).toEqual(OrderListResponse.decode);
 
     expect(fns.Upsert).toBeTruthy();
     expect(fns.Upsert.type).toEqual('unary');
     expect(fns.Upsert.serialize).toEqual(OrderList.encode);
-    expect(fns.Upsert.deserialize).toEqual(OrderList.decode);
+    expect(fns.Upsert.deserialize).toEqual(OrderListResponse.decode);
 
     expect(fns.TriggerFulfillment).toBeTruthy();
     expect(fns.TriggerFulfillment.type).toEqual('unary');

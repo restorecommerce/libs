@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.7...@restorecommerce/facade@0.3.8) (2022-03-14)
+
+
+### Bug Fixes
+
+* **facade:** check if buffer field is actually a buffer ([d0930dc](https://github.com/restorecommerce/libs/commit/d0930dcd979d0a2acc101890517e43c7f7d6e2df))
+
+
+
+
+
 ## [0.3.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.6...@restorecommerce/facade@0.3.7) (2022-03-14)
 
 

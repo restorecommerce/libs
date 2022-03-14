@@ -277,7 +277,6 @@ export const getGQLResolverFunctions =
             }
           }
 
-          console.log(outputTyping);
           const rawResult = await service[realMethod](req);
           const result = recursiveBufferToValue(rawResult, outputTyping.output);
 

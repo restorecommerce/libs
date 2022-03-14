@@ -6,7 +6,7 @@ import {
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
 import { errors, cfg } from './config';
-import * as nodeEval from 'node-eval';
+import nodeEval from 'node-eval';
 import logger from './logger';
 import { get } from './acs/cache';
 import { formatResourceType } from './acs/authz';
@@ -229,6 +229,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       }
     } catch (err) {
       logger.error('Error caught evaluating condition:', { condition });
+      console.log('Erris.......', err);
       logger.error('Error', { err });
       return;
     }

@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.15...@restorecommerce/acs-client@0.6.16) (2022-03-14)
+
+
+### Bug Fixes
+
+* remove console log ([88da0c3](https://github.com/restorecommerce/libs/commit/88da0c360efa290dbe49a32c728090993630c5a7))
+
+
+
+
+
+## [0.6.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.14...@restorecommerce/acs-client@0.6.15) (2022-03-14)
+
+
+### Bug Fixes
+
+* **acs-client:** nodeEval import fix ([1370655](https://github.com/restorecommerce/libs/commit/13706558d22ea37a6de785adafacffe893b83b0b))
+
+
+
+
+
 ## [0.6.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.13...@restorecommerce/acs-client@0.6.14) (2022-02-22)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.9...@restorecommerce/facade@0.3.10) (2022-03-15)
+
+
+### Bug Fixes
+
+* **facade:** set target scope if it exists ([0597107](https://github.com/restorecommerce/libs/commit/0597107001e68fcbe19a51a8621e603e9a7610ad))
+
+
+
+
+
 ## [0.3.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.8...@restorecommerce/facade@0.3.9) (2022-03-14)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -152,7 +152,7 @@ export const recursiveBufferToValue = (data: any, model: GraphQLOutputType): any
   }
 
   if (model instanceof GraphQLObjectType) {
-    if (model.name === 'GoogleProtobufAny') {
+    if (model.name === 'GoogleProtobufAny' && data?.value) {
       // TODO Use encoded once resource base supports it
 
       const decoded = JSON.parse((data.value as Buffer).toString());

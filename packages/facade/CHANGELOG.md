@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.10...@restorecommerce/facade@0.3.11) (2022-03-15)
+
+
+### Bug Fixes
+
+* decode only if data exists (prevent undefined error) ([3137108](https://github.com/restorecommerce/libs/commit/3137108e2524596628663ea2a81cdb24b46c1ee3))
+
+
+
+
+
 ## [0.3.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.9...@restorecommerce/facade@0.3.10) (2022-03-15)
 
 

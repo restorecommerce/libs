@@ -245,6 +245,7 @@ export const getGQLResolverFunctions =
         const service = client[serviceKey];
         try {
           const converted = await recursiveUploadToBuffer(args.input, typing.input);
+          const scope = args?.input?.scope;
 
           let req = typing.processor.fromPartial(converted);
 
@@ -257,8 +258,8 @@ export const getGQLResolverFunctions =
             if (authToken && authToken.startsWith('Bearer ')) {
               req.subject.token = authToken.split(' ')[1];
             }
-            if (req.scope) {
-              req.subject.scope = req.scope;
+            if (scope) {
+              req.subject.scope = scope;
             }
           }
 

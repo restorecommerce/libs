@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.18...@restorecommerce/acs-client@0.6.19) (2022-03-16)
+
+
+### Bug Fixes
+
+* **acs-client:** to override and return when enfore config is set to true ([b993a1f](https://github.com/restorecommerce/libs/commit/b993a1fd28c287872ea210aabe94b2661022901e))
+
+
+
+
+
 ## [0.6.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.17...@restorecommerce/acs-client@0.6.18) (2022-03-14)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

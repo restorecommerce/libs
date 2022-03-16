@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.19...@restorecommerce/acs-client@0.6.20) (2022-03-16)
+
+
+### Bug Fixes
+
+* **acs-client:** remove console logging and filter reset ([abfb432](https://github.com/restorecommerce/libs/commit/abfb4322dbea002a7dde60cdf133159541ed34db))
+
+
+
+
+
 ## [0.6.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.18...@restorecommerce/acs-client@0.6.19) (2022-03-16)
 
 

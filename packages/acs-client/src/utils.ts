@@ -638,17 +638,21 @@ export const createResourceFilterMap = async (resource: Resource[],
       logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
         `resource:${resourceName}, action:${action}, target_scope:${targetScope}, ` +
         `but since ACS enforcement config is disabled overriding the ACS result`);
+      return { decision: Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
     }
-    if (!_.isArray(permissionArguments.filters)) {
-      permissionArguments.filters = [permissionArguments.filters];
-    }
-    resourceFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
-    if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
-      customQueryArgs.push({
-        resource: resourceName,
-        custom_queries: permissionArguments.custom_queries,
-        custom_arguments: permissionArguments.custom_arguments
-      });
+
+    if (permissionArguments) {
+      if (!_.isArray(permissionArguments.filters)) {
+        permissionArguments.filters = [permissionArguments.filters];
+      }
+      resourceFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
+      if (permissionArguments.custom_queries && permissionArguments.custom_arguments) {
+        customQueryArgs.push({
+          resource: resourceName,
+          custom_queries: permissionArguments.custom_queries,
+          custom_arguments: permissionArguments.custom_arguments
+        });
+      }
     }
   }
   return {
@@ -673,7 +677,7 @@ export const mapResourceURNObligationProperties = (obligation: any): Obligation[
       const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);
       let resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
       let resourceWithNameSpace = resourceNameSpace.substring(0, resourceNameSpace.lastIndexOf('.'));
-      if(resource != resourceWithNameSpace) {
+      if (resource != resourceWithNameSpace) {
         // name space exists add the entity name to obligation as well with name space
         resource = resourceWithNameSpace;
       }

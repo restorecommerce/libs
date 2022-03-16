@@ -229,7 +229,6 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       }
     } catch (err) {
       logger.error('Error caught evaluating condition:', { condition });
-      console.log('Erris.......', err);
       logger.error('Error', { err });
       return;
     }
@@ -238,9 +237,6 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     attribute.id == urns.roleScopingEntity);
   if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB') { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
-    if (userCondition) {
-      filter = [];
-    }
     query['scope'] = {
       custom_query: 'filterByOwnership',
       custom_arguments: {

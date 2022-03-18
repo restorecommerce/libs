@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.20...@restorecommerce/acs-client@0.6.21) (2022-03-18)
+
+
+### Bug Fixes
+
+* unit tests ([740cf00](https://github.com/restorecommerce/libs/commit/740cf00e0e617d4593b8eb8b3b8f643c2616a9ba))
+* **acs-client:** Fix to override conditional filters if AQL custom query filters exist ([7d304d5](https://github.com/restorecommerce/libs/commit/7d304d521e69bee5242733330a36358efa9bad99))
+
+
+
+
+
 ## [0.6.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.19...@restorecommerce/acs-client@0.6.20) (2022-03-16)
 
 

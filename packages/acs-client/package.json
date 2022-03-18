@@ -58,7 +58,7 @@
     "test": "npm run build && npm run lint && nyc npm run mocha && nyc npm run mocha:cache",
     "mocha": "cross-env NODE_ENV=test mocha --full-trace --exit --timeout 30000",
     "mocha:cache": "cross-env NODE_ENV=test CACHE_ENABLED=true mocha --full-trace --exit --timeout 30000",
-    "test-debug": "cpm run mocha -- --inspect-brk",
+    "test-debug": "npm run mocha -- --inspect-brk",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },

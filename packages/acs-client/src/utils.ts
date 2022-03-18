@@ -309,7 +309,6 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     };
   }
   query.scopingUpdated = scopingUpdated;
-  query.ruleCondition = ruleCondition;
   return query;
 };
 

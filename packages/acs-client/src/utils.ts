@@ -166,19 +166,27 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   return false;
 };
 
-const validateCondition = (condition: string, request: any): boolean => {
-  return nodeEval(condition, 'condition.js', request);
+const validateCondition = (condition: string, request: any): any => {
+  let evalResponse = nodeEval(condition, 'condition.js', request);
+  if (typeof evalResponse === 'function') {
+    return evalResponse(request);
+  } else {
+    return evalResponse;
+  }
 };
 
 const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
-  userTotalScope: string[], urns: any, userCondition, scopingUpdated, reqResources,
+  userTotalScope: string[], urns: any, scopingUpdated, reqResources,
   condition?: string, reqSubject?: Subject, database?: string): QueryParams => {
   const { subject, resources } = target;
-
+  let ruleCondition = false;
   let filter = [];
   const query: any = {};
   let filterId;
 
+  if (condition) {
+    ruleCondition = true;
+  }
   // if there is a condition add this to filter
   if (condition && !_.isEmpty(condition)) {
     condition = condition.replace(/\\n/g, '\n');
@@ -198,7 +206,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
           if (reqResources && reqResources[0] && reqResources[0].filters && reqResources[0].filters.length > 0) {
             const targetId = reqResources[0]?.filters[0]?.filter[0]?.value;
             if (targetId && targetId === filterId) {
-              userCondition = true;
+              ruleCondition = true;
               filter.push({
                 field: 'id',
                 operation: FilterOperation.eq,
@@ -206,7 +214,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
               });
             }
           } else {
-            userCondition = true;
+            ruleCondition = true;
             filter.push({
               field: 'id',
               operation: FilterOperation.eq,
@@ -215,10 +223,11 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
           }
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
+        ruleCondition = true;
         filter.push(filterId);
       }
       else if (filterId && !scopingUpdated) {
-        userCondition = true;
+        ruleCondition = true;
         filter.push({
           field: 'id',
           operation: FilterOperation.eq,
@@ -235,7 +244,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   }
   const scopingAttribute = _.find(subject, (attribute: Attribute) =>
     attribute.id == urns.roleScopingEntity);
-  if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB') { // note: there is currently no query to exclude scopes
+  if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB' && !ruleCondition) { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
     query['scope'] = {
       custom_query: 'filterByOwnership',
@@ -300,7 +309,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     };
   }
   query.scopingUpdated = scopingUpdated;
-  query.userCondition = userCondition;
+  query.ruleCondition = ruleCondition;
   return query;
 };
 
@@ -368,7 +377,6 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
           effect = algorithm == urns.permitOverrides ? Effect.DENY : Effect.PERMIT;
         }
 
-        let userCondition = false;
         let scopingUpdated = false;
         for (let rule of policy.rules) {
           let reducedUserScope = [];
@@ -380,13 +388,11 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
             }
           }
           const filterPermissions = buildQueryFromTarget(rule.target, rule.effect,
-            reducedUserScope, urns, userCondition, scopingUpdated, reqResources,
+            reducedUserScope, urns, scopingUpdated, reqResources,
             rule.condition, subject, database);
           if (!_.isEmpty(filterPermissions)) {
             scopingUpdated = filterPermissions.scopingUpdated;
-            userCondition = filterPermissions.userCondition;
             delete filterPermissions.scopingUpdated;
-            delete filterPermissions.userCondition;
           }
           if (!_.isEmpty(filterPermissions)) {
             policyFiltersArr.push(filterPermissions);
@@ -415,17 +421,11 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     return undefined;
   }
 
+  let aqlQueryFilters = false;
   for (let policy of policyFiltersArr) {
     let filterList = [];
-    if (policy.filters && policy.filters.filter) {
-      filterList = policy.filters.filter;
-    }
-    for (let filter of filterList) {
-      query.filters.filter.push(filter);
-    }
-    if (_.isArray(filterList) && filterList.length > 0) {
-      query.filters.operator = key;
-    }
+    // fix to override the AQL query filters with ACS policy filters if they exist for ArangoDB
+    // TODO remove this once the AQL filterByOwnership is removed and ACS policy filters are returned
     if (policy.scope && applicable == Effect.PERMIT && !query['custom_query']) {
       if (!query['custom_queries']) {
         query['custom_queries'] = [];
@@ -438,7 +438,17 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
           query['custom_arguments'] = {};
         }
         _.merge(query['custom_arguments'], policy.scope.custom_arguments);
+        aqlQueryFilters = true;
       }
+    }
+    if (policy.filters && policy.filters.filter && !aqlQueryFilters) {
+      filterList = policy.filters.filter;
+    }
+    for (let filter of filterList) {
+      query.filters.filter.push(filter);
+    }
+    if (_.isArray(filterList) && filterList.length > 0) {
+      query.filters.operator = key;
     }
     if (policy.field) {
       if (!query['field']) {
@@ -447,6 +457,10 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
         query['field'] = policy.field.concat(query['field']);
       }
     }
+  }
+
+  if (aqlQueryFilters && query?.filters?.filter?.length > 0) {
+    query.filters.filter = [];
   }
 
   if (!_.isEmpty(query) && (!_.isNil(query.filters) || !_.isEmpty(query['field']) || !_.isEmpty(query['custom_query']))) {
@@ -464,7 +478,7 @@ interface QueryParams {
   filters?: any;
   field?: any[];
   scopingUpdated?: boolean;
-  userCondition?: boolean;
+  ruleCondition?: boolean;
 }
 
 export const generateOperationStatus = (code?: number, message?: string) => {

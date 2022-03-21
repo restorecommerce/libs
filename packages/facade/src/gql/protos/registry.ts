@@ -59,7 +59,7 @@ export const IGoogleProtobufAny = new GraphQLInputObjectType({
 const googleProtobufAnyName = '.google.protobuf.Any';
 
 const Mutate = ['Create', 'Update', 'Upsert'];
-const CRUD_OPERATION_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read'];
+const CRUD_TRAVERSAL_OP_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read', 'Traversal'];
 
 const TodoScalar = new GraphQLScalarType({
   name: 'TodoScalar',
@@ -188,7 +188,7 @@ export const registerTyping = (
         insertMode = true;
       }
       // add scope
-      if ((CRUD_OPERATION_NAMES.indexOf(method.name) > -1) && type === method.inputType) {
+      if ((CRUD_TRAVERSAL_OP_NAMES.indexOf(method.name) > -1) && type === method.inputType) {
         crudOperation = true;
       }
     }

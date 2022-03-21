@@ -158,7 +158,7 @@ export const toObject = (input: any, obj?: any, operatorList?: string[]) => {
     for (let filterObj of filters) {
       toObject(filterObj, obj, operatorList);
     }
-  } else if (filters.field && (filters.operation || filters.operation === 0)) {
+  } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value != undefined) {
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(filters, obj, operatorList);
   }

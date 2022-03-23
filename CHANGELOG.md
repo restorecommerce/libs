@@ -1,3 +1,7 @@
+### 0.2.9 (March 23rd, 2022)
+
+- add empty check condition comparing to undefined (fix for isEmpty filter operation)
+
 ### 0.2.8 (March 4th, 2022)
 
 - removed empty check condition (fix for isEmpty filter operation)

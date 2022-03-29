@@ -105,15 +105,15 @@ message InvoicePosition {
 
 message InvoiceRow {
   string product = 1;
-  uint32 pricePerUnit = 2;
+  double pricePerUnit = 2;
   uint32 quantity = 3;
   string vat = 4;
-  uint32 amount = 5;
+  double amount = 5;
 }
 
 message InvoicePrice {
-  uint32 gross = 1;
-  uint32 net = 2;
+  double gross = 1;
+  double net = 2;
 }
 
 message TriggerInvoices {

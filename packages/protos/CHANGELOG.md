@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.4...@restorecommerce/protos@0.6.5) (2022-03-29)
+
+
+### Bug Fixes
+
+* **protos:** updated invoice proto ([c927dae](https://github.com/restorecommerce/libs/commit/c927dae3ee9a4b8f47b0844feaa615a15a7f1afd))
+
+
+
+
+
 ## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.3...@restorecommerce/protos@0.6.4) (2022-02-22)
 
 

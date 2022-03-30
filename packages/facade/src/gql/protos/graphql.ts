@@ -82,7 +82,7 @@ export const getGQLSchemas = <TSource, TContext>(service: ServiceDescriptorProto
   }, {} as any);
 }
 
-export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType): Promise<any> => {
+export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType): Promise<any> => {
   if (model instanceof GraphQLEnumType) {
     return data;
   }
@@ -107,7 +107,7 @@ export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObje
       const fields = model.getFields();
       for (let key of Object.keys(fields)) {
         if (data && key in data) {
-          data[key] = await recursiveUploadToBuffer(data[key], fields[key].type);
+          data[key] = await preprocessGQLInput(data[key], fields[key].type);
         }
       }
     }
@@ -120,12 +120,12 @@ export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObje
   }
 
   if (model instanceof GraphQLNonNull) {
-    return await recursiveUploadToBuffer(data, model.ofType);
+    return await preprocessGQLInput(data, model.ofType);
   }
 
   if (model instanceof GraphQLList) {
     for (let i = 0; i < data.length; i++) {
-      data[i] = await recursiveUploadToBuffer(data[i], model.ofType);
+      data[i] = await preprocessGQLInput(data[i], model.ofType);
     }
   }
 
@@ -152,7 +152,7 @@ export const recursiveUploadToBuffer = async (data: any, model: GraphQLInputObje
   return data;
 }
 
-export const recursiveBufferToValue = (data: any, model: GraphQLOutputType): any => {
+export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any => {
   if (model instanceof GraphQLEnumType) {
     return data;
   }
@@ -171,19 +171,19 @@ export const recursiveBufferToValue = (data: any, model: GraphQLOutputType): any
       const fields = model.getFields();
       for (let key of Object.keys(fields)) {
         if (data && key in data) {
-          data[key] = recursiveBufferToValue(data[key], fields[key].type);
+          data[key] = postProcessGQLValue(data[key], fields[key].type);
         }
       }
     }
   }
 
   if (model instanceof GraphQLNonNull) {
-    return recursiveBufferToValue(data, model.ofType);
+    return postProcessGQLValue(data, model.ofType);
   }
 
   if (model instanceof GraphQLList) {
     for (let i = 0; i < data.length; i++) {
-      data[i] = recursiveBufferToValue(data[i], model.ofType);
+      data[i] = postProcessGQLValue(data[i], model.ofType);
     }
   }
 
@@ -250,7 +250,7 @@ export const getGQLResolverFunctions =
         const client = context[key].client;
         const service = client[serviceKey];
         try {
-          const converted = await recursiveUploadToBuffer(args.input, typing.input);
+          const converted = await preprocessGQLInput(args.input, typing.input);
           const scope = args?.input?.scope;
 
           let req = typing.processor.fromPartial(converted);
@@ -285,7 +285,7 @@ export const getGQLResolverFunctions =
           }
 
           const rawResult = await service[realMethod](req);
-          const result = recursiveBufferToValue(rawResult, outputTyping.output);
+          const result = postProcessGQLValue(rawResult, outputTyping.output);
 
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {

@@ -18,8 +18,8 @@ import {
 } from "ts-proto-descriptors";
 
 export interface TypingData {
-  output: GraphQLObjectType | GraphQLEnumType;
-  input: GraphQLInputObjectType | GraphQLEnumType;
+  output: GraphQLObjectType | GraphQLEnumType | GraphQLScalarType;
+  input: GraphQLInputObjectType | GraphQLEnumType | GraphQLScalarType;
   meta: DescriptorProto | EnumDescriptorProto;
   processor?: any;
 }
@@ -56,7 +56,24 @@ export const IGoogleProtobufAny = new GraphQLInputObjectType({
   fields: protobufAnyFields
 });
 
+const DateTime = new GraphQLScalarType({
+  name: 'DateTime',
+  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z, 
+                compliant with the date-time format outlined in section 5.6 of 
+                the RFC 3339 profile of the ISO 8601 standard for representation
+                of dates and times using the Gregorian calendar.`,
+});
+
+const IDateTime = new GraphQLScalarType({
+  name: 'IDateTime',
+  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z, 
+                compliant with the date-time format outlined in section 5.6 of 
+                the RFC 3339 profile of the ISO 8601 standard for representation
+                of dates and times using the Gregorian calendar.`,
+});
+
 const googleProtobufAnyName = '.google.protobuf.Any';
+const googleProtobufTimestampName = '.google.protobuf.Timestamp';
 
 const Mutate = ['Create', 'Update', 'Upsert'];
 const CRUD_TRAVERSAL_OP_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read', 'Traversal'];
@@ -204,6 +221,15 @@ export const registerTyping = (
     });
   }
 
+  if (type === googleProtobufTimestampName) {
+    typeNameAndNameSpaceMapping.set(DateTime.name, type);
+    registeredTypings.set(type, {
+      output: DateTime,
+      input: IDateTime,
+      meta: message
+    });
+  }
+
   if (registeredTypings.has(type)) {
     // TODO Log debug "Typings for object are already registered"
     return;
@@ -337,6 +363,15 @@ const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(key: string
           break;
         }
         result = GoogleProtobufAny;
+        break;
+      }
+
+      if (objType === googleProtobufTimestampName) {
+        if (input) {
+          result = IDateTime;
+          break;
+        }
+        result = DateTime;
         break;
       }
 

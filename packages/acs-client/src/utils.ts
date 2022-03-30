@@ -183,6 +183,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   let filter = [];
   const query: any = {};
   let filterId;
+  let filterOperator;
 
   if (condition) {
     ruleCondition = true;
@@ -196,7 +197,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     if (!_.isArray(reqResources)) {
       reqResources = [reqResources];
     }
-    const request = { target, context: { subject: { id: reqSubject.id, token: reqSubject.token }, resources: reqResources } };
+    const request = { target, context: { subject: { id: reqSubject.id, token: reqSubject.token, scope: reqSubject.scope }, resources: reqResources } };
     try {
       filterId = validateCondition(condition, request);
       // special filter added to filter user read for his own entity
@@ -223,8 +224,17 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
           }
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
-        ruleCondition = true;
-        filter.push(filterId);
+        // handle array
+        if (filterId.filter && _.isArray(filterId.filter)) {
+          filter.push(...filterId.filter);
+          // map filter operator if its returned from condition
+          if (filterId?.operator) {
+            filterOperator = filterId.operator;
+          }
+        } else {
+          ruleCondition = true;
+          filter.push(filterId);
+        }
       }
       else if (filterId && !scopingUpdated) {
         ruleCondition = true;
@@ -301,12 +311,21 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   const key = effect == Effect.PERMIT ? OperatorType.or : OperatorType.and;
   if (query.filter && !query.filters) {
     query.filters = { filter: query['filter'] };
+    // and or operator comparision
     query.filters.operator = key;
+    // override the operator if its returned from rule condition
+    if (filterOperator) {
+      query.filters.operator = filterOperator;
+    }
     delete query['filter'];
   } else if (!_.isEmpty(filter) || key == OperatorType.or) {
     query['filters'] = {
       filter
     };
+    // override the operator if its returned from rule condition
+    if (filterOperator) {
+      query.filters.operator = filterOperator;
+    }
   }
   query.scopingUpdated = scopingUpdated;
   return query;
@@ -448,6 +467,10 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     }
     if (_.isArray(filterList) && filterList.length > 0) {
       query.filters.operator = key;
+      // override the operator if its returned from rule condition
+      if (policy?.filters?.operator) {
+        query.filters.operator = policy.filters.operator;
+      }
     }
     if (policy.field) {
       if (!query['field']) {

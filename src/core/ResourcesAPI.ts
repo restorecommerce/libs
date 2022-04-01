@@ -113,6 +113,7 @@ const encodeMsgObj = (document: any, bufferField: string): any => {
 export class ResourcesAPIBase {
   bufferField: string;
   requiredFields: any;
+  dateTimeField: string[];
   resourceName: string;
   logger: any;
   /**
@@ -136,6 +137,11 @@ export class ResourcesAPIBase {
 
     if (fieldHandlerConf.bufferField) {
       this.bufferField = fieldHandlerConf.bufferField;
+    }
+
+    // config fix to be removed after ts-proto is used
+    if (fieldHandlerConf.dateTimeField) {
+      this.dateTimeField = fieldHandlerConf.dateTimeField;
     }
 
     if (fieldHandlerConf.requiredFields) {
@@ -188,7 +194,7 @@ export class ResourcesAPIBase {
       customQueries,
       customArguments: customArgs.value ? JSON.parse(customArgs.value.toString()) : {}
     };
-    const entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
+    let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferField) {
       // encode the msg obj back to buffer obj and send it back
       entities.forEach(element => {
@@ -198,6 +204,8 @@ export class ResourcesAPIBase {
         }
       });
     }
+    // config fix to be removed after ts-proto is used
+    entities = this.convertmsToSecondsNanos(entities);
     return entities;
   }
 
@@ -228,6 +236,8 @@ export class ResourcesAPIBase {
         }
       }
 
+      // config fix to be removed after ts-proto is used
+      documents = this.convertSecondsNanosToms(documents);
       if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
@@ -268,6 +278,9 @@ export class ResourcesAPIBase {
         } else {
           result.push(createVertexResp);
         }
+        console.log('1 Create Vertex resp is...', result);
+        // config fix to be removed after ts-proto is used
+        result = this.convertmsToSecondsNanos(result);
         return result;
       }
       else {
@@ -281,6 +294,9 @@ export class ResourcesAPIBase {
             result.push(reqFieldResult);
           }
         }
+        // config fix to be removed after ts-proto is used
+        console.log('2 DB insert', result);
+        result = this.convertmsToSecondsNanos(result);
         return result;
       }
     } catch (e) {
@@ -425,9 +441,14 @@ export class ResourcesAPIBase {
         dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
       }
 
+      // config fix to be removed after ts-proto is used
+      documents = this.convertSecondsNanosToms(documents);
       result = await this.db.upsert(this.collectionName, documents);
       await dispatch;
 
+      console.log('DB Upsert response is...', result);
+      // config fix to be removed after ts-proto is used
+      result = this.convertmsToSecondsNanos(result);
       if (this.bufferField) {
         return _.map(result, doc => encodeMsgObj(doc, this.bufferField));
       }
@@ -528,11 +549,14 @@ export class ResourcesAPIBase {
         docsWithUpMetadata.push(doc);
       }
 
+      // config fix to be removed after ts-proto is used
+      docsWithUpMetadata = this.convertSecondsNanosToms(docsWithUpMetadata);
       updateResponse = await this.db.update(collectionName, docsWithUpMetadata);
-
+      updateResponse = this.convertmsToSecondsNanos(updateResponse);
       if (this.bufferField) {
         updateResponse = _.map(updateResponse, patch => encodeMsgObj(patch, this.bufferField));
       }
+      console.log('DB update Response is...', updateResponse);
       return updateResponse;
     } catch (e) {
       this.logger.error('Error updating documents', { error: e.message });
@@ -543,5 +567,32 @@ export class ResourcesAPIBase {
       });
       return updateResponse;
     }
+  }
+
+  private convertSecondsNanosToms(documents: any): any {
+    documents?.forEach(doc => {
+      this.dateTimeField?.forEach((field) => {
+        if (field && doc[field]?.seconds) {
+          // convert seconds and nano seconds to unix epoch date time in mili seconds
+          let millis = doc[field].seconds * 1_000;
+          millis += doc[field]?.nanos / 1_000_000;
+          doc[field] = millis;
+        }
+      });
+    });
+    return documents;
+  }
+
+  private convertmsToSecondsNanos(documents: any): any {
+    documents?.forEach(doc => {
+      this.dateTimeField?.forEach(field => {
+        if (doc && doc[field]) {
+          const seconds = doc[field] / 1_000;
+          const nanos = (doc[field] % 1_000) * 1_000_000;
+          doc[field] = { seconds, nanos };
+        }
+      });
+    });
+    return documents;
   }
 }

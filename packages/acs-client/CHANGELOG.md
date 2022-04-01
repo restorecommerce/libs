@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.23](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.22...@restorecommerce/acs-client@0.6.23) (2022-04-01)
+
+
+### Bug Fixes
+
+* **acs-client:** fix to handle array of filters from rule condition along with operator if its returned ([07a88b7](https://github.com/restorecommerce/libs/commit/07a88b7c0f737088e4e66cccefb29e65219b2372))
+
+
+
+
+
 ## [0.6.22](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.21...@restorecommerce/acs-client@0.6.22) (2022-03-29)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

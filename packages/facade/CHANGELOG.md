@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.13...@restorecommerce/facade@0.3.14) (2022-04-01)
+
+
+### Bug Fixes
+
+* **facade:** fix to convert google.protobuf.timestamp to DateTime scalar type and convert it to JS Date object for create / update operation. ([ced5ecf](https://github.com/restorecommerce/libs/commit/ced5ecfae25eb928691a6a17eb32683ae9650a68))
+* **facade:** renamed preprocess and postprocess GQL function name ([ef0f5f0](https://github.com/restorecommerce/libs/commit/ef0f5f02dcd605067b6399d4afa525248ce64417))
+
+
+
+
+
 ## [0.3.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.12...@restorecommerce/facade@0.3.13) (2022-03-29)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -568,7 +568,10 @@ export class ResourcesAPIBase {
   private convertSecondsNanosToms(documents: any): any {
     documents?.forEach(doc => {
       this.dateTimeField?.forEach((field) => {
-        if (field && doc[field]?.seconds) {
+        if (field.indexOf('.')) {
+          this.updateJSON(field, doc, true);
+          console.log('Doc after updating is.....', doc);
+        } else if (field && doc[field]?.seconds) {
           // convert seconds and nano seconds to unix epoch date time in mili seconds
           let millis = doc[field].seconds * 1_000;
           millis += doc[field]?.nanos / 1_000_000;
@@ -582,7 +585,10 @@ export class ResourcesAPIBase {
   private convertmsToSecondsNanos(documents: any): any {
     documents?.forEach(doc => {
       this.dateTimeField?.forEach(field => {
-        if (doc && doc[field]) {
+        if (field.indexOf('.')) {
+          this.updateJSON(field, doc, false);
+          console.log('Doc after converting back is.....', doc);
+        } else if (doc && doc[field]) {
           const seconds = doc[field] / 1_000;
           const nanos = (doc[field] % 1_000) * 1_000_000;
           doc[field] = { seconds, nanos };
@@ -591,4 +597,46 @@ export class ResourcesAPIBase {
     });
     return documents;
   }
+
+  private updateJSON = (path, obj, secondsNanoToms = true) => {
+    let fields = path.split('.');
+    let result = obj;
+    let j = 0;
+    for (let i = 0, n = fields.length; i < n && result !== undefined; i++) {
+      let field = fields[i];
+      if (i === n - 1) {
+        // reset value finally after iterating to the position (only if value already exists)
+        if (result[field]) {
+          if (secondsNanoToms && result[field]?.seconds) {
+            let millis = result[field].seconds * 1_000;
+            millis += result[field]?.nanos / 1_000_000;
+            result[field] = millis;
+          } else {
+            const seconds = result[field] / 1_000;
+            const nanos = (result[field] % 1_000) * 1_000_000;
+            result[field] = { seconds, nanos };
+          }
+        }
+      } else {
+        if (_.isArray(result[field])) {
+          // till i < n concat new fields
+          let newField;
+          for (let k = i + 1; k < n; k++) {
+            if (newField) {
+              newField = newField + '.' + fields[k];
+            } else {
+              newField = fields[k];
+            }
+          }
+          for (; j < result[field].length; j++) {
+            // recurisve call to update each element if its an array
+            this.updateJSON(newField, result[field][j], secondsNanoToms);
+          }
+        } else {
+          // update object till final path is reached
+          result = result[field];
+        }
+      }
+    }
+  };
 }

@@ -570,7 +570,6 @@ export class ResourcesAPIBase {
       this.dateTimeField?.forEach((field) => {
         if (field.indexOf('.')) {
           this.updateJSON(field, doc, true);
-          console.log('Doc after updating is.....', doc);
         } else if (field && doc[field]?.seconds) {
           // convert seconds and nano seconds to unix epoch date time in mili seconds
           let millis = doc[field].seconds * 1_000;
@@ -587,7 +586,6 @@ export class ResourcesAPIBase {
       this.dateTimeField?.forEach(field => {
         if (field.indexOf('.')) {
           this.updateJSON(field, doc, false);
-          console.log('Doc after converting back is.....', doc);
         } else if (doc && doc[field]) {
           const seconds = doc[field] / 1_000;
           const nanos = (doc[field] % 1_000) * 1_000_000;

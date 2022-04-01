@@ -1,3 +1,7 @@
+### 0.2.11 (April 1st, 2022)
+
+- fix date time for traversal field entities
+
 ### 0.2.10 (April 1st, 2022)
 
 - added special field handlers based on dateTime field config

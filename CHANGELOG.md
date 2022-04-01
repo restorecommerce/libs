@@ -1,3 +1,7 @@
+### 0.2.10 (April 1st, 2022)
+
+- added special field handlers based on dateTime field config
+
 ### 0.2.9 (March 23rd, 2022)
 
 - add empty check condition comparing to undefined (fix for isEmpty filter operation)

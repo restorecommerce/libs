@@ -278,7 +278,6 @@ export class ResourcesAPIBase {
         } else {
           result.push(createVertexResp);
         }
-        console.log('1 Create Vertex resp is...', result);
         // config fix to be removed after ts-proto is used
         result = this.convertmsToSecondsNanos(result);
         return result;
@@ -295,7 +294,6 @@ export class ResourcesAPIBase {
           }
         }
         // config fix to be removed after ts-proto is used
-        console.log('2 DB insert', result);
         result = this.convertmsToSecondsNanos(result);
         return result;
       }
@@ -446,7 +444,6 @@ export class ResourcesAPIBase {
       result = await this.db.upsert(this.collectionName, documents);
       await dispatch;
 
-      console.log('DB Upsert response is...', result);
       // config fix to be removed after ts-proto is used
       result = this.convertmsToSecondsNanos(result);
       if (this.bufferField) {
@@ -556,7 +553,6 @@ export class ResourcesAPIBase {
       if (this.bufferField) {
         updateResponse = _.map(updateResponse, patch => encodeMsgObj(patch, this.bufferField));
       }
-      console.log('DB update Response is...', updateResponse);
       return updateResponse;
     } catch (e) {
       this.logger.error('Error updating documents', { error: e.message });

@@ -95,6 +95,8 @@ message BillingAddress {
   string telephone = 9;
   string timezone = 10;
   string economic_area = 11;
+  string locality = 12;
+  string organization_name = 13;
 }
 
 message InvoicePosition {

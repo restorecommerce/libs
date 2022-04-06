@@ -206,12 +206,20 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, key: NS, serviceKey: B, grpcClientConfig: GrpcClientConfig): { [key in keyof SRV]: R } => {
+    (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
 
     return service.method.reduce((obj, method) => {
+
+      if ((cfg as any)[serviceKey]?.methods?.blacklist) {
+        const blacklistMethods = (cfg as any)[serviceKey]?.methods?.blacklist;
+        if (blacklistMethods.includes(method.name)) {
+          return {} as { [key in keyof SRV]: R };
+        }
+      }
+
       const typing = getTyping(method.inputType!)!;
       const outputTyping = getTyping(method.outputType!)!;
 
@@ -287,6 +295,7 @@ export const getGQLResolverFunctions =
           const rawResult = await service[realMethod](req);
           const result = postProcessGQLValue(rawResult, outputTyping.output);
 
+          const grpcClientConfig = cfg.client;
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {
             let operationStatus = { code: 0, message: '' };
@@ -467,9 +476,16 @@ type SchemaBaseOrSub =
   | Map<string, ThunkObjMap<GraphQLFieldConfig<any, any>>>;
 const namespaceResolverSchemaRegistry = new Map<string, Map<boolean, Map<string, SchemaBaseOrSub>>>();
 
-export const registerResolverSchema = (namespace: string, name: string, schema: SchemaBaseOrSub, mutation: boolean = false, subspace: string | undefined = undefined) => {
+export const registerResolverSchema = (namespace: string, name: string, schema: SchemaBaseOrSub, mutation: boolean = false, subspace: string | undefined = undefined, config: ServiceConfig) => {
   if (!namespaceResolverSchemaRegistry.has(namespace)) {
     namespaceResolverSchemaRegistry.set(namespace, new Map());
+  }
+
+  if ( subspace && (config as any)[subspace]) {
+    const blacklistMethods = (config as any)[subspace].methods.blacklist;
+    if (blacklistMethods.includes(name)) {
+      return;
+    }
   }
 
   if (!namespaceResolverSchemaRegistry.get(namespace)!.has(mutation)) {
@@ -645,7 +661,7 @@ export const getAndGenerateSchema = <TSource, TContext>
   const schemas = getGQLSchemas(service);
 
   Object.keys(schemas).forEach(key => {
-    registerResolverSchema(namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key))
+    registerResolverSchema(namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), undefined, cfg)
   })
 
   return generateSchema([{ prefix, namespace }]);
@@ -656,7 +672,7 @@ export const getAndGenerateResolvers =
     (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
     const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg, service.name);
 
-    const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg.client);
+    const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg);
 
     Object.keys(func).forEach(k => {
       registerResolverFunction(namespace as string, k, func[k], !queries.has(k) && mutations.has(k), subspace, service);
@@ -672,7 +688,7 @@ export const generateSubServiceSchemas = (subServices: SubService[], config: Sub
     const schemas = getGQLSchemas(sub.service);
 
     Object.keys(schemas).forEach(key => {
-      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name)
+      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name, config)
     })
   });
 
@@ -691,7 +707,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
   subServices.forEach((sub) => {
     const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config, sub.name);
 
-    const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config.client);
+    const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config);
     Object.keys(func).forEach(k => {
       const regNamespace = config.root ? sub.name : namespace;
       const regSubspace = config.root ? undefined : sub.name;

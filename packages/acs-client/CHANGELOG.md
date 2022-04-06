@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.25](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.24...@restorecommerce/acs-client@0.6.25) (2022-04-06)
+
+
+### Bug Fixes
+
+* **acs-client:** to pass role associations to validation condition ([5f007e9](https://github.com/restorecommerce/libs/commit/5f007e9163682d5759c9d0d428115c77a2293cd3))
+
+
+
+
+
 ## [0.6.24](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@0.6.23...@restorecommerce/acs-client@0.6.24) (2022-04-05)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

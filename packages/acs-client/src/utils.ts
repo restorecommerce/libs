@@ -197,11 +197,21 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     if (!_.isArray(reqResources)) {
       reqResources = [reqResources];
     }
-    const request = { target, context: { subject: { id: reqSubject.id, token: reqSubject.token, scope: reqSubject.scope }, resources: reqResources } };
+    const request = {
+      target, context: {
+        subject: {
+          id: reqSubject.id,
+          token: reqSubject.token, scope: reqSubject.scope,
+          role_associations: (reqSubject as any).role_associations
+        }, resources: reqResources
+      }
+    };
     try {
       filterId = validateCondition(condition, request);
       // special filter added to filter user read for his own entity
-      if (typeof filterId === 'string') {
+      if (typeof filterId === 'boolean') {
+        return;
+      } else if (typeof filterId === 'string') {
         if (filterId && !scopingUpdated) {
           // verify if the returned filterId is same as the targetID
           if (reqResources && reqResources[0] && reqResources[0].filters && reqResources[0].filters.length > 0) {

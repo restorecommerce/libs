@@ -9,14 +9,18 @@ export interface ProtoMetadata {
   dependencies?: ProtoMetadata[];
 }
 
-export interface MethodConfig {
+export interface BlackListWhiteListConfig {
   whitelist?: string[]
   blacklist?: string[]
 }
 
+export interface MethodConfig {
+  methods?: BlackListWhiteListConfig;
+}
+
 export interface ServiceConfig {
   client: GrpcClientConfig;
-  methods?: MethodConfig;
+  [key: string]: any;
 }
 
 export interface SubSpaceServiceConfig extends ServiceConfig {

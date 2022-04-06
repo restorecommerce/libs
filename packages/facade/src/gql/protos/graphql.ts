@@ -578,13 +578,13 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
   return new GraphQLSchema(config);
 }
 
-export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto, queries: string[], config: ServiceConfig): { queries: Set<string>, mutations: Set<string> } => {
+export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto, queries: string[], config: ServiceConfig, entity: string): { queries: Set<string>, mutations: Set<string> } => {
   const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) < 0) as any)
   const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) >= 0) as any)
 
-  if (config.methods) {
-    if (config.methods.whitelist) {
-      const whitelist = new Set(config.methods.whitelist);
+  if (config[entity]) {
+    if (config[entity]?.methods?.whitelist) {
+      const whitelist = new Set(config[entity].methods.whitelist);
       mut.forEach(key => {
         if (whitelist.has(key as any)) {
           whitelist.delete(key as any);
@@ -605,8 +605,8 @@ export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto,
         // TODO Log error that whitelist contains methods that don't exist
         console.error('Whitelist contains undefined methods:', whitelist)
       }
-    } else if (config.methods.blacklist) {
-      const blacklist = new Set(config.methods.blacklist);
+    } else if (config[entity]?.methods?.blacklist) {
+      const blacklist = new Set(config[entity].methods.blacklist);
       mut.forEach(key => {
         if (blacklist.has(key as any)) {
           blacklist.delete(key as any);
@@ -640,7 +640,7 @@ export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto,
 
 export const getAndGenerateSchema = <TSource, TContext>
   (service: ServiceDescriptorProto, namespace: string, prefix: string, cfg: ServiceConfig, queryList: string[]) => {
-  const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg)
+  const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg, service.name)
 
   const schemas = getGQLSchemas(service);
 
@@ -654,7 +654,7 @@ export const getAndGenerateSchema = <TSource, TContext>
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, NS extends keyof CTX = any>
     (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg);
+    const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg, service.name);
 
     const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg.client);
 
@@ -667,7 +667,7 @@ export const getAndGenerateResolvers =
 
 export const generateSubServiceSchemas = (subServices: SubService[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
   subServices.forEach((sub) => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config)
+    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config, sub.name)
 
     const schemas = getGQLSchemas(sub.service);
 
@@ -689,7 +689,7 @@ export const generateSubServiceSchemas = (subServices: SubService[], config: Sub
 
 export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: SubService[], config: SubSpaceServiceConfig, namespace: string): T => {
   subServices.forEach((sub) => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config);
+    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config, sub.name);
 
     const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config.client);
     Object.keys(func).forEach(k => {

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.15...@restorecommerce/facade@0.3.16) (2022-04-07)
+
+
+### Bug Fixes
+
+* **facade:** blacklist and whitelist config for sub service name space level ([6d737d6](https://github.com/restorecommerce/libs/commit/6d737d62a5395890e506a3fb76aa31f9e127d38e))
+* **facade:** mask register resolver schema for blacklisted config ([8478590](https://github.com/restorecommerce/libs/commit/8478590bd994eedd3023a8e0f7f347a33f2019f1))
+
+
+
+
+
 ## [0.3.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.3.14...@restorecommerce/facade@0.3.15) (2022-04-05)
 
 **Note:** Version bump only for package @restorecommerce/facade

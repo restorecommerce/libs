@@ -81,7 +81,7 @@ message InvoicePositions {
 
 message RecipientCustomer {
   string id = 1; // customer id - used to store the resource in DB
-  string customer_number = 2; // displayed in invoice - auto generated per customer
+  string customer_number = 2; // displayed in invoice
 }
 
 message BillingAddress {
@@ -111,6 +111,7 @@ message InvoiceRow {
   uint32 quantity = 3;
   string vat = 4;
   double amount = 5;
+  double contract_start_date = 6; // if there is any contract associated with product
 }
 
 message InvoicePrice {

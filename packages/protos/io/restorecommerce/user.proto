@@ -9,12 +9,13 @@ import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/image.proto";
 import "io/restorecommerce/status.proto";
 import "google/protobuf/any.proto";
+import "io/restorecommerce/role.proto";
 
 /**
  * The microservice for the user resource.
  */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListResponse);
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListWithRoleResponse);
   rpc Create (UserList) returns (UserListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (UserList) returns (UserListResponse);
@@ -203,6 +204,17 @@ message UserList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
+message UserListWithRoleResponse {
+  repeated UserRoleResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message UserRoleResponse {
+  UserRole payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
 message UserListResponse {
   repeated UserResponse items = 1;
   uint32 total_count = 2;
@@ -257,4 +269,37 @@ message User {
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   double last_access = 25;
   google.protobuf.Any data = 26; /// additional data
+}
+
+/**
+ * A User resource with role
+ */
+message UserRole {
+  string id = 1; /// User ID, unique, key
+  io.restorecommerce.meta.Meta meta = 2;
+  string name = 3; // The name of the user, can be used for login
+  string first_name = 4;
+  string last_name = 5;
+  string email = 6; /// Email address, can be used for login
+  string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  bool active = 8; /// If the user was activated via the activation process
+  string activation_code = 9; /// Activation code used in the activation process
+  string password = 10; /// Raw password, not stored
+  string password_hash = 11; /// Encrypted password, stored
+  repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
+  string timezone_id = 13;	// timezone_id specifications
+  string locale_id = 14;	// locale specifications
+  string default_scope = 15; // default hierarchical scope
+  bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
+  bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  io.restorecommerce.image.Image image = 18;
+  UserType user_type = 19;
+  bool invite = 20; // For user invitation
+  string invited_by_user_name = 21; // user who is inviting
+  string invited_by_user_first_name = 22; // First name of user inviting
+  string invited_by_user_last_name = 23; // Last name of user inviting
+  repeated io.restorecommerce.auth.Tokens tokens = 24;
+  double last_access = 25;
+  google.protobuf.Any data = 26; /// additional data
+  repeated io.restorecommerce.role.Role role = 27;
 }

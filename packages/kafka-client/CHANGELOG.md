@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.3.1...@restorecommerce/kafka-client@0.3.2) (2022-04-29)
+
+
+### Bug Fixes
+
+* **kafka-client:** fix to reset consumers on kafkajs crash error KafkaJSNonRetriableError ([2a23174](https://github.com/restorecommerce/kafka-client/commit/2a231741179155c56858ef1e90f32c1dbdbd755a))
+* **kafka-client:** up kafkajs error name ([f20658a](https://github.com/restorecommerce/kafka-client/commit/f20658af9747e3493dda85159dfb8722d12e7676))
+
+
+
+
+
 ## [0.3.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.3.0...@restorecommerce/kafka-client@0.3.1) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

@@ -394,7 +394,7 @@ export class Topic {
       // Fix for kafkaJS onCrash issue for KafkaJSNonRetriableError, to reset the consumers
       this.provider.logger.warn('Commit error name', { name: error.name });
       this.provider.logger.warn('Commit error message', { message: error.message });
-      if (error.name === 'KafkaJSNonRetriableError' && error.message === 'The coordinator is not aware of this member') {
+      if ((error.name === 'KafkaJSNonRetriableError' || error.name === 'KafkaJSError') && error.message === 'The coordinator is not aware of this member') {
         this.provider.logger.info('Reset Consumer connection due to KafkaJSNonRetriableError');
         this.$resetConsumer(this.subscribed, this.currentOffset);
         this.provider.logger.info('Consumer connection reset successfully');

@@ -189,6 +189,34 @@ export class Topic {
   }
 
   /**
+   * Reset consumer, unsubscribes all the events on the topic and then
+   * subcribes again for same set of events
+   *
+   * @param {string[]} eventNames list of event names
+   * @param {number} offset The offset at which to restart from.
+   */
+  async $resetConsumer(eventNames: string[], offset: number): Promise<void> {
+    this.provider.logger.info('Event Names for consumer reset', eventNames);
+    if (eventNames && eventNames.length > 0) {
+      // since the consumer is set to undefined only when there is no more subscription
+      // need to unsubcribe all eventNames and then resubcribe at once
+      const eventNamesList = _.clone(eventNames);
+      // unsubscribe all events on consumer
+      for (let eventName of eventNamesList) {
+        await this.$unsubscribe(eventName);
+        this.provider.logger.info(`Unsubscribed event ${eventName}`);
+      }
+      // subscribe all events on consumer
+      for (let eventName of eventNamesList) {
+        await this.$subscribe(eventName, offset);
+        this.provider.logger.info(`Subscribed event ${eventName}`);
+      }
+    } else {
+      this.provider.logger.warn('Event names empty for consumer reset');
+    }
+  }
+
+  /**
    * Force a committed offset reset.
    *
    * @param {string} eventName
@@ -363,6 +391,14 @@ export class Topic {
       this.provider.logger.verbose('Offsets committed successfully');
     }).catch(error => {
       this.provider.logger.warn('Failed to commit offsets, resuming anyway after:', error);
+      // Fix for kafkaJS onCrash issue for KafkaJSNonRetriableError, to reset the consumers
+      this.provider.logger.warn('Commit error name', { name: error.name });
+      this.provider.logger.warn('Commit error message', { message: error.message });
+      if (error.name === 'KafkaJSNonRetriableError' && error.message === 'The coordinator is not aware of this member') {
+        this.provider.logger.info('Reset Consumer connection due to KafkaJSNonRetriableError');
+        this.$resetConsumer(this.subscribed, this.currentOffset);
+        this.provider.logger.info('Consumer connection reset successfully');
+      }
     });
   }
 

@@ -1,12 +1,13 @@
 import { Observable } from "rxjs";
-import { Client, credentials, ServiceDefinition, Metadata } from '@grpc/grpc-js';
+import { Client, credentials, ServiceDefinition, Metadata, status as grpcStatus, InterceptingCall, InterceptorOptions, StatusBuilder } from '@grpc/grpc-js';
 import { loadSync as protoLoaderLoadSync } from '@grpc/proto-loader';
 import { Writer } from 'protobufjs/minimal';
 import { Logger } from 'winston';
 import * as rTracer from 'cls-rtracer';
 import * as _ from 'lodash';
 import { Stream } from 'stream';
-import * as retry from 'retry';
+import { NextCall, RequesterBuilder, ListenerBuilder } from "@grpc/grpc-js/build/src/client-interceptors";
+import { InterceptingListener, Listener, StatusObject } from "@grpc/grpc-js/build/src/call-stream";
 
 export interface GrpcClientLoadProtoConfig {
   protoRoot?: string;
@@ -30,8 +31,6 @@ export interface GrpcClientConfig {
   bufferFields?: any;
 }
 
-// to handle dropping client connection errors - https://github.com/grpc/grpc-node/issues/1907
-const GRPC_CONN_RST_ERR = '14 UNAVAILABLE: read ECONNRESET';
 // A service must only have functions that that take an argument and return a Promise or Observable
 export interface GrpcService {
   [key: string]: { (req: Object): Promise<Object> | Observable<Object> };
@@ -133,127 +132,172 @@ export class GrpcClient {
     { methodPath, serialize, deserialize, data }: UnaryArgs<TArguments, TResponse>
   ): Promise<TResponse> {
     return new Promise<TResponse>((resolve, reject) => {
-      const operation = retry.operation({ retries: 5, maxTimeout: 2000 });
       this.logger.info(`Invoking Unary endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
       const options = {
-        deadline: Date.now() + this.timeout
+        deadline: Date.now() + this.timeout,
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
       if (rid) {
         meta.add('rid', rid);
       }
-      return operation.attempt(async () => {
-        this.client.makeUnaryRequest<TArguments, TResponse>(
-          methodPath,
-          serialize,
-          deserialize,
-          data,
-          meta,
-          options,
-          (err, value) => {
-            if (err) {
-              if (err.message === GRPC_CONN_RST_ERR) {
-                const attemptNo = (operation.attempts as () => number)();
-                this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
-                operation.retry(err);
-              } else {
-                this.logger.error('Error serving unary request', { message: err.message });
-                this.logger.error('Error stack', { stack: err.stack });
-                return resolve({
-                  operationStatus: {
-                    code: err.code,
-                    message: err.message
-                  }
-                } as any);
+      return this.client.makeUnaryRequest<TArguments, TResponse>(
+        methodPath,
+        serialize,
+        deserialize,
+        data,
+        meta,
+        options,
+        (err, value) => {
+          if (err) {
+            this.logger.error('Error serving unary request', { message: err.message });
+            this.logger.error('Error stack', { stack: err.stack });
+            return resolve({
+              operationStatus: {
+                code: err.code,
+                message: err.message
               }
-            } else {
-              return resolve(value!)
-            }
+            } as any);
+          } else {
+            return resolve(value!)
           }
-        );
-      });
+        }
+      );
     });
   }
 
+  retry_interceptor(options: InterceptorOptions, nextCall: NextCall): any {
+    let savedMetadata: Metadata;
+    let savedSendMessage: any;
+    let savedReceiveMessage: any;
+    let savedMessageNext: any;
+    let maxRetries = 5;
+    let requester = (new RequesterBuilder())
+      .withStart(function (metadata: Metadata, listener: InterceptingListener,
+        next: (metadata: Metadata, listener: InterceptingListener | Listener) => void): void {
+        savedMetadata = metadata;
+        let new_listener = (new ListenerBuilder())
+          .withOnReceiveMessage(function (message: any, next: any) {
+            savedReceiveMessage = message;
+            savedMessageNext = next;
+            // for response streaming
+            if (options?.method_definition?.responseStream === true) {
+              savedMessageNext(savedReceiveMessage);
+            }
+          })
+          .withOnReceiveStatus(function (status: any, next: any) {
+            let retries = 0;
+            let retry = function (message: any, metadata: any) {
+              retries++;
+              let newCall = nextCall(options);
+              let receivedMessage: any;
+              newCall.start(metadata, {
+                onReceiveMessage: function (message: any) {
+                  receivedMessage = message;
+                },
+                onReceiveStatus: async function (status: StatusObject) {
+                  if (status.code !== grpcStatus.OK) {
+                    if (retries <= maxRetries) {
+                      console.log('Retrying request', { retries, options });
+                      retry(message, metadata);
+                    } else if (savedMessageNext) {
+                      savedMessageNext(receivedMessage);
+                      next(status);
+                    } else {
+                      next(status);
+                    }
+                  } else {
+                    let new_status: any = (new StatusBuilder())
+                      .withCode(grpcStatus.OK).build();
+                    savedMessageNext(receivedMessage);
+                    next(new_status);
+                  }
+                }
+              });
+              newCall.sendMessage(message);
+              newCall.halfClose();
+            };
+            if (status.code !== grpcStatus.OK) {
+              console.log('Retrying due to status', status);
+              retry(savedSendMessage, savedMetadata);
+            } else {
+              // not to send last chunk twice for response stream
+              if (options?.method_definition?.responseStream === false) {
+                savedMessageNext(savedReceiveMessage);
+              }
+              next(status);
+            }
+          }
+          ).build();
+        next(metadata, new_listener);
+      })
+      .withSendMessage(function (message, next) {
+        savedSendMessage = message;
+        next(message);
+      }).build();
+    return new InterceptingCall(nextCall(options), requester);
+  };
+
   serverStream<TArguments = any, TResponse = any>(
     { methodPath, serialize, deserialize, data }: ServerStreamArgs<TArguments, TResponse>
-  ): Promise<any> {
-    const operation = retry.operation({ retries: 5, maxTimeout: 2000 });
+  ): any {
     this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
     this.logRequestMessage(data, methodPath);
     const options = {
-      deadline: Date.now() + this.timeout
+      deadline: Date.now() + this.timeout,
+      interceptors: [this.retry_interceptor]
     };
     const meta = new Metadata();
     const rid: any = rTracer.id();
     if (rid) {
       meta.add('rid', rid);
     }
-    return new Promise((resolve, reject) => {
-      operation.attempt(async () => {
-        const serverStream =
-          this.client.makeServerStreamRequest<TArguments, TResponse>(
-            methodPath,
-            serialize,
-            deserialize,
-            data,
-            meta,
-            options
-          );
-        serverStream.on('error', err => {
-          if (err.message === GRPC_CONN_RST_ERR) {
-            const attemptNo = (operation.attempts as () => number)();
-            this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
-            operation.retry(err);
-          }
-        });
-        resolve(serverStream);
-      });
-    });
+    const serverStream =
+      this.client.makeServerStreamRequest<TArguments, TResponse>(
+        methodPath,
+        serialize,
+        deserialize,
+        data,
+        meta,
+        options
+      );
+    return serverStream;
   }
 
   serverStreamOB<TArguments = any, TResponse = any>(
     { methodPath, serialize, deserialize, data }: ServerStreamArgs<TArguments, TResponse>
   ): Observable<TResponse> {
     return new Observable<TResponse>((subscriber) => {
-      const operation = retry.operation({ retries: 5, maxTimeout: 2000 });
       this.logger.info(`Invoking Server Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
       const options = {
-        deadline: Date.now() + this.timeout
+        deadline: Date.now() + this.timeout,
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
       if (rid) {
         meta.add('rid', rid);
       }
-      return operation.attempt(async () => {
-        const serverStream =
-          this.client.makeServerStreamRequest<TArguments, TResponse>(
-            methodPath,
-            serialize,
-            deserialize,
-            data,
-            meta,
-            options
-          );
-        serverStream.on('data', value => subscriber.next(value));
-        serverStream.on('error', err => {
-          if (err.message === GRPC_CONN_RST_ERR) {
-            const attemptNo = (operation.attempts as () => number)();
-            this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
-            operation.retry(err);
-          } else {
-            subscriber.error(err);
-          }
-        });
-        serverStream.on('end', () => subscriber.complete());
-        return () => {
-          serverStream.cancel();
-        }
+      const serverStream =
+        this.client.makeServerStreamRequest<TArguments, TResponse>(
+          methodPath,
+          serialize,
+          deserialize,
+          data,
+          meta,
+          options
+        );
+      serverStream.on('data', value => subscriber.next(value));
+      serverStream.on('error', err => {
+        subscriber.error(err);
       });
+      serverStream.on('end', () => subscriber.complete());
+      return () => {
+        serverStream.cancel();
+      }
     });
   }
 
@@ -261,54 +305,46 @@ export class GrpcClient {
     { methodPath, serialize, deserialize, data }: ClientStreamArgs<TArguments, TResponse>
   ): Promise<TResponse> {
     return new Promise<TResponse>((resolve, reject) => {
-      const operation = retry.operation({ retries: 5, maxTimeout: 2000 });
       this.logger.info(`Invoking Client Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
       const options = {
-        deadline: Date.now() + this.timeout
+        deadline: Date.now() + this.timeout,
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
       if (rid) {
         meta.add('rid', rid);
       }
-      operation.attempt(async () => {
-        const clientStream =
-          this.client.makeClientStreamRequest<TArguments, TResponse>(
-            methodPath,
-            serialize,
-            deserialize,
-            meta,
-            options,
-            (err, value) => {
-              if (err) {
-                if (err.message === GRPC_CONN_RST_ERR) {
-                  const attemptNo = (operation.attempts as () => number)();
-                  this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
-                  operation.retry(err);
-                } else {
-                  this.logger.error('Error client stream request', err);
-                  return resolve({
-                    operationStatus: {
-                      code: err.code,
-                      message: err.message
-                    }
-                  } as any);
+      const clientStream =
+        this.client.makeClientStreamRequest<TArguments, TResponse>(
+          methodPath,
+          serialize,
+          deserialize,
+          meta,
+          options,
+          (err, value) => {
+            if (err) {
+              this.logger.error('Error client stream request', err);
+              return resolve({
+                operationStatus: {
+                  code: err.code,
+                  message: err.message
                 }
-              } else {
-                return resolve(value!)
-              }
+              } as any);
+            } else {
+              return resolve(value!)
             }
-          );
-        (data as Stream).on('error', (err) => {
-          this.logger.error('Error on client streaming', err);
-        });
-        (data as Stream).on('data', (data) => {
-          clientStream.write(data);
-        });
-        (data as Stream).on('end', () => {
-          clientStream.end();
-        });
+          }
+        );
+      (data as Stream).on('error', (err) => {
+        this.logger.error('Error on client streaming', err);
+      });
+      (data as Stream).on('data', (data) => {
+        clientStream.write(data);
+      });
+      (data as Stream).on('end', () => {
+        clientStream.end();
       });
     });
   }
@@ -317,56 +353,48 @@ export class GrpcClient {
     { methodPath, serialize, deserialize, data }: ClientStreamArgs<TArguments, TResponse>
   ): Promise<TResponse> {
     return new Promise<TResponse>((resolve, reject) => {
-      const operation = retry.operation({ retries: 5, maxTimeout: 2000 });
       this.logger.info(`Invoking Client Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
       const options = {
-        deadline: Date.now() + this.timeout
+        deadline: Date.now() + this.timeout,
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
       if (rid) {
         meta.add('rid', rid);
       }
-      operation.attempt(async () => {
-        const clientStream =
-          this.client.makeClientStreamRequest<TArguments, TResponse>(
-            methodPath,
-            serialize,
-            deserialize,
-            meta,
-            options,
-            (err, value) => {
-              if (err) {
-                if (err.message === GRPC_CONN_RST_ERR) {
-                  const attemptNo = (operation.attempts as () => number)();
-                  this.logger.info(`Retrying attempt no ${attemptNo} due to`, { message: GRPC_CONN_RST_ERR });
-                  operation.retry(err);
-                } else {
-                  this.logger.error('Error client stream request', { message: err.message });
-                  this.logger.error('Error stack', { stack: err.stack });
-                  return resolve({
-                    operationStatus: {
-                      code: err.code,
-                      message: err.message
-                    }
-                  } as any);
+      const clientStream =
+        this.client.makeClientStreamRequest<TArguments, TResponse>(
+          methodPath,
+          serialize,
+          deserialize,
+          meta,
+          options,
+          (err, value) => {
+            if (err) {
+              this.logger.error('Error client stream request', { message: err.message });
+              this.logger.error('Error stack', { stack: err.stack });
+              return resolve({
+                operationStatus: {
+                  code: err.code,
+                  message: err.message
                 }
-              } else {
-                return resolve(value!)
-              }
+              } as any);
+            } else {
+              return resolve(value!)
             }
-          );
-        const sub = (data as Observable<TArguments>)?.subscribe(_data => {
-          clientStream.write(_data);
-        }, undefined, () => clientStream.end());
+          }
+        );
+      const sub = (data as Observable<TArguments>)?.subscribe(_data => {
+        clientStream.write(_data);
+      }, undefined, () => clientStream.end());
 
-        clientStream.on('close', () => sub?.unsubscribe());
-        clientStream.on('end', () => sub?.unsubscribe());
-        clientStream.on('error', (err) => {
-          sub?.unsubscribe();
-          reject(err);
-        });
+      clientStream.on('close', () => sub?.unsubscribe());
+      clientStream.on('end', () => sub?.unsubscribe());
+      clientStream.on('error', (err) => {
+        sub?.unsubscribe();
+        reject(err);
       });
     });
   }
@@ -378,7 +406,8 @@ export class GrpcClient {
       this.logger.info(`Invoking Bidirectional Stream endpoint ${methodPath}`);
       this.logRequestMessage(data, methodPath);
       const options = {
-        deadline: Date.now() + this.timeout
+        deadline: Date.now() + this.timeout,
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();

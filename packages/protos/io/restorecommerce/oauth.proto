@@ -4,12 +4,14 @@ package io.restorecommerce.oauth;
 
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/user.proto";
+import "io/restorecommerce/status.proto";
 import "google/protobuf/empty.proto";
 
 service Service {
   rpc AvailableServices(google.protobuf.Empty) returns (ServicesResponse);
   rpc GenerateLinks(google.protobuf.Empty) returns (GenerateLinksResponse);
   rpc ExchangeCode(ExchangeCodeRequest) returns (ExchangeCodeResponse);
+  rpc GetToken(GetTokenRequest) returns (GetTokenResponse);
 }
 
 message ServicesResponse {
@@ -30,4 +32,14 @@ message ExchangeCodeResponse {
   io.restorecommerce.user.UserResponse user = 1;
   string email = 2;
   io.restorecommerce.auth.Tokens token = 3;
+}
+
+message GetTokenRequest {
+  io.restorecommerce.auth.Subject subject = 1;
+  string service = 2;
+}
+
+message GetTokenResponse {
+  io.restorecommerce.status.Status status = 1;
+  optional string token = 2;
 }

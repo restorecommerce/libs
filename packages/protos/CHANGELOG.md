@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.8...@restorecommerce/protos@0.6.9) (2022-05-09)
+
+
+### Bug Fixes
+
+* **protos:** add get token grpc endpoint to oauth ([965701b](https://github.com/restorecommerce/libs/commit/965701b5192c73060bf0377bc2f81d33a2ea4bd8))
+
+
+
+
+
 ## [0.6.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.7...@restorecommerce/protos@0.6.8) (2022-04-25)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.3.1...@restorecommerce/grpc-client@0.3.2) (2022-05-09)
+
+
+### Bug Fixes
+
+* **grpc-client:** added interceptors for grpc-client ([cb1616b](https://github.com/restorecommerce/libs/commit/cb1616b8584835c3914115a8698ee810df0580b2))
+
+
+
+
+
 ## [0.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.3.0...@restorecommerce/grpc-client@0.3.1) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

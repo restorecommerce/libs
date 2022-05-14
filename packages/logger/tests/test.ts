@@ -33,6 +33,8 @@ describe('a logger', () => {
   it('can be instantiated', (done) => {
     try {
       let logger = createLogger(opts);
+      let esTransport = logger.transports[1] as any;
+      esTransport.bulkWriter.stop(); // TODO: does not work, fix in Winston ES
       done();
     } catch (err) {
       throw 'Nope';
@@ -41,6 +43,8 @@ describe('a logger', () => {
 
   describe('it should log', () => {
     let logger = createLogger(opts);
+    let esTransport = logger.transports[1] as any;
+
     it('a simple message', (done) => {
       logger.info('Simple message');
       done();
@@ -63,5 +67,6 @@ describe('a logger', () => {
       logger.error('Generic Error!');
       done();
     });
+        esTransport.bulkWriter.stop();
   });
 });

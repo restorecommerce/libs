@@ -43,7 +43,7 @@ function createTestFacade() {
 
   registerResolverSchema(namespace, customFunction, {
     type: GraphQLString as any
-  });
+  }, false, '', serviceConfig);
   registerResolverFunction(namespace, customFunction, (_, ctx) => ctx.message);
 
   const customStuff = createFacadeModuleFactory<CustomConfig, CustomModule>(namespace, (facade, config) => {

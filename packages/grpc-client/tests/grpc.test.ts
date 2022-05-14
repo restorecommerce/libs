@@ -101,9 +101,10 @@ describe('grpc client', () => {
     expect(result.message).toEqual(data);
     const decodedAnyData = JSON.parse(result.test.value.toString());
     expect(decodedAnyData.testAny).toEqual('testMessage');
+    return Promise.resolve({});
   });
 
-  it('should send a client-stream request and receive response', async (done) => {
+  it('should send a client-stream request and receive response', async () => {
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
     const transformBuffObj = () => {
       return new Transform({
@@ -121,10 +122,10 @@ describe('grpc client', () => {
 
     expect(result).toHaveProperty('message');
     expect(result.message).toEqual(buffer.toString('utf-8'));
-    done();
+    return Promise.resolve({});
   });
 
-  it('should send request and receive a server-stream response', async (done) => {
+  it('should send request and receive a server-stream response', async () => {
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
     const result = await grpcClient.echo.echoServerStream({
       message: buffer
@@ -140,7 +141,7 @@ describe('grpc client', () => {
       });
     });
     expect(response).toEqual(buffer.toString('utf-8'));
-    done();
+    return Promise.resolve({});
   });
 
   it('should send observable client-stream request and receive response', async () => {
@@ -152,7 +153,10 @@ describe('grpc client', () => {
     expect(result.message).toEqual(buffer.toString('utf-8'));
   });
 
-  it('should send request and receive a observable server-stream response', async (done) => {
+  it('should send request and receive a observable server-stream response', async () => {
+    let done: (value?: any) => void;
+    const callbackResolved = new Promise((resolve) => { done = resolve; });
+
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
 
     const result = await observableGrpcClient.echo.echoServerStream({
@@ -167,9 +171,13 @@ describe('grpc client', () => {
       expect(response).toEqual(buffer.toString('utf-8'));
       done();
     });
+    await callbackResolved;
   });
 
-  it('should send and receive a bidi-stream request', async (done) => {
+  it('should send and receive a bidi-stream request', async () => {
+    let done: (value?: any) => void;
+    const callbackResolved = new Promise((resolve) => { done = resolve; });
+
     const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
 
     const result = await grpcClient.echo.echoBidiStream(bufferToObservable(buffer));
@@ -182,5 +190,6 @@ describe('grpc client', () => {
       expect(response).toEqual(buffer.toString('utf-8'));
       done();
     })
+    await callbackResolved;
   });
 });

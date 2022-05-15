@@ -34,6 +34,10 @@ import {
   protoMetadata as protoMetadata4,
   Attribute,
 } from "../../io/restorecommerce/attribute";
+import {
+  protoMetadata as protoMetadata8,
+  Role,
+} from "../../io/restorecommerce/role";
 import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.user";
@@ -252,6 +256,17 @@ export interface UserList {
   subject?: Subject;
 }
 
+export interface UserListWithRoleResponse {
+  items: UserRoleResponse[];
+  totalCount: number;
+  operationStatus?: OperationStatus;
+}
+
+export interface UserRoleResponse {
+  payload?: UserRole;
+  status?: Status;
+}
+
 export interface UserListResponse {
   items: UserResponse[];
   totalCount: number;
@@ -322,6 +337,56 @@ export interface User {
   lastAccess: number;
   /** / additional data */
   data?: Any;
+}
+
+/** A User resource with role */
+export interface UserRole {
+  /** / User ID, unique, key */
+  id: string;
+  meta?: Meta;
+  /** The name of the user, can be used for login */
+  name: string;
+  firstName: string;
+  lastName: string;
+  /** / Email address, can be used for login */
+  email: string;
+  /** / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange` */
+  newEmail: string;
+  /** / If the user was activated via the activation process */
+  active: boolean;
+  /** / Activation code used in the activation process */
+  activationCode: string;
+  /** / Raw password, not stored */
+  password: string;
+  /** / Encrypted password, stored */
+  passwordHash: string;
+  /** A user can have multiple roles and different attributes coupled with each role */
+  roleAssociations: RoleAssociation[];
+  /** timezone_id specifications */
+  timezoneId: string;
+  /** locale specifications */
+  localeId: string;
+  /** default hierarchical scope */
+  defaultScope: string;
+  /** true in case in case of `register`; set to false after activation */
+  unauthenticated: boolean;
+  /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
+  guest: boolean;
+  image?: Image;
+  userType: UserType;
+  /** For user invitation */
+  invite: boolean;
+  /** user who is inviting */
+  invitedByUserName: string;
+  /** First name of user inviting */
+  invitedByUserFirstName: string;
+  /** Last name of user inviting */
+  invitedByUserLastName: string;
+  tokens: Tokens[];
+  lastAccess: number;
+  /** / additional data */
+  data?: Any;
+  role: Role[];
 }
 
 const baseLoginRequest: object = { identifier: "", password: "", token: "" };
@@ -2593,6 +2658,217 @@ export const UserList = {
   },
 };
 
+const baseUserListWithRoleResponse: object = { totalCount: 0 };
+
+export const UserListWithRoleResponse = {
+  encode(
+    message: UserListWithRoleResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    for (const v of message.items) {
+      UserRoleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.totalCount !== 0) {
+      writer.uint32(16).uint32(message.totalCount);
+    }
+    if (message.operationStatus !== undefined) {
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
+    }
+    return writer;
+  },
+
+  decode(
+    input: Reader | Uint8Array,
+    length?: number
+  ): UserListWithRoleResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseUserListWithRoleResponse
+    ) as UserListWithRoleResponse;
+    message.items = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(UserRoleResponse.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.totalCount = reader.uint32();
+          break;
+        case 3:
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserListWithRoleResponse {
+    const message = globalThis.Object.create(
+      baseUserListWithRoleResponse
+    ) as UserListWithRoleResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(UserRoleResponse.fromJSON(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = Number(object.totalCount);
+    } else {
+      message.totalCount = 0;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromJSON(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(
+    object: DeepPartial<UserListWithRoleResponse>
+  ): UserListWithRoleResponse {
+    const message = {
+      ...baseUserListWithRoleResponse,
+    } as UserListWithRoleResponse;
+    message.items = [];
+    if (object.items !== undefined && object.items !== null) {
+      for (const e of object.items) {
+        message.items.push(UserRoleResponse.fromPartial(e));
+      }
+    }
+    if (object.totalCount !== undefined && object.totalCount !== null) {
+      message.totalCount = object.totalCount;
+    } else {
+      message.totalCount = 0;
+    }
+    if (
+      object.operationStatus !== undefined &&
+      object.operationStatus !== null
+    ) {
+      message.operationStatus = OperationStatus.fromPartial(
+        object.operationStatus
+      );
+    } else {
+      message.operationStatus = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: UserListWithRoleResponse): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) =>
+        e ? UserRoleResponse.toJSON(e) : undefined
+      );
+    } else {
+      obj.items = [];
+    }
+    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.operationStatus !== undefined &&
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
+    return obj;
+  },
+};
+
+const baseUserRoleResponse: object = {};
+
+export const UserRoleResponse = {
+  encode(message: UserRoleResponse, writer: Writer = Writer.create()): Writer {
+    if (message.payload !== undefined) {
+      UserRole.encode(message.payload, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): UserRoleResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseUserRoleResponse
+    ) as UserRoleResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.payload = UserRole.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserRoleResponse {
+    const message = globalThis.Object.create(
+      baseUserRoleResponse
+    ) as UserRoleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = UserRole.fromJSON(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<UserRoleResponse>): UserRoleResponse {
+    const message = { ...baseUserRoleResponse } as UserRoleResponse;
+    if (object.payload !== undefined && object.payload !== null) {
+      message.payload = UserRole.fromPartial(object.payload);
+    } else {
+      message.payload = undefined;
+    }
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: UserRoleResponse): unknown {
+    const obj: any = {};
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? UserRole.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    return obj;
+  },
+};
+
 const baseUserListResponse: object = { totalCount: 0 };
 
 export const UserListResponse = {
@@ -3513,9 +3789,596 @@ export const User = {
   },
 };
 
+const baseUserRole: object = {
+  id: "",
+  name: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  newEmail: "",
+  active: false,
+  activationCode: "",
+  password: "",
+  passwordHash: "",
+  timezoneId: "",
+  localeId: "",
+  defaultScope: "",
+  unauthenticated: false,
+  guest: false,
+  userType: 0,
+  invite: false,
+  invitedByUserName: "",
+  invitedByUserFirstName: "",
+  invitedByUserLastName: "",
+  lastAccess: 0,
+};
+
+export const UserRole = {
+  encode(message: UserRole, writer: Writer = Writer.create()): Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.meta !== undefined) {
+      Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.name !== "") {
+      writer.uint32(26).string(message.name);
+    }
+    if (message.firstName !== "") {
+      writer.uint32(34).string(message.firstName);
+    }
+    if (message.lastName !== "") {
+      writer.uint32(42).string(message.lastName);
+    }
+    if (message.email !== "") {
+      writer.uint32(50).string(message.email);
+    }
+    if (message.newEmail !== "") {
+      writer.uint32(58).string(message.newEmail);
+    }
+    if (message.active === true) {
+      writer.uint32(64).bool(message.active);
+    }
+    if (message.activationCode !== "") {
+      writer.uint32(74).string(message.activationCode);
+    }
+    if (message.password !== "") {
+      writer.uint32(82).string(message.password);
+    }
+    if (message.passwordHash !== "") {
+      writer.uint32(90).string(message.passwordHash);
+    }
+    for (const v of message.roleAssociations) {
+      RoleAssociation.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.timezoneId !== "") {
+      writer.uint32(106).string(message.timezoneId);
+    }
+    if (message.localeId !== "") {
+      writer.uint32(114).string(message.localeId);
+    }
+    if (message.defaultScope !== "") {
+      writer.uint32(122).string(message.defaultScope);
+    }
+    if (message.unauthenticated === true) {
+      writer.uint32(128).bool(message.unauthenticated);
+    }
+    if (message.guest === true) {
+      writer.uint32(136).bool(message.guest);
+    }
+    if (message.image !== undefined) {
+      Image.encode(message.image, writer.uint32(146).fork()).ldelim();
+    }
+    if (message.userType !== 0) {
+      writer.uint32(152).int32(message.userType);
+    }
+    if (message.invite === true) {
+      writer.uint32(160).bool(message.invite);
+    }
+    if (message.invitedByUserName !== "") {
+      writer.uint32(170).string(message.invitedByUserName);
+    }
+    if (message.invitedByUserFirstName !== "") {
+      writer.uint32(178).string(message.invitedByUserFirstName);
+    }
+    if (message.invitedByUserLastName !== "") {
+      writer.uint32(186).string(message.invitedByUserLastName);
+    }
+    for (const v of message.tokens) {
+      Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
+    }
+    if (message.lastAccess !== 0) {
+      writer.uint32(201).double(message.lastAccess);
+    }
+    if (message.data !== undefined) {
+      Any.encode(message.data, writer.uint32(210).fork()).ldelim();
+    }
+    for (const v of message.role) {
+      Role.encode(v!, writer.uint32(218).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): UserRole {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(baseUserRole) as UserRole;
+    message.roleAssociations = [];
+    message.tokens = [];
+    message.role = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.meta = Meta.decode(reader, reader.uint32());
+          break;
+        case 3:
+          message.name = reader.string();
+          break;
+        case 4:
+          message.firstName = reader.string();
+          break;
+        case 5:
+          message.lastName = reader.string();
+          break;
+        case 6:
+          message.email = reader.string();
+          break;
+        case 7:
+          message.newEmail = reader.string();
+          break;
+        case 8:
+          message.active = reader.bool();
+          break;
+        case 9:
+          message.activationCode = reader.string();
+          break;
+        case 10:
+          message.password = reader.string();
+          break;
+        case 11:
+          message.passwordHash = reader.string();
+          break;
+        case 12:
+          message.roleAssociations.push(
+            RoleAssociation.decode(reader, reader.uint32())
+          );
+          break;
+        case 13:
+          message.timezoneId = reader.string();
+          break;
+        case 14:
+          message.localeId = reader.string();
+          break;
+        case 15:
+          message.defaultScope = reader.string();
+          break;
+        case 16:
+          message.unauthenticated = reader.bool();
+          break;
+        case 17:
+          message.guest = reader.bool();
+          break;
+        case 18:
+          message.image = Image.decode(reader, reader.uint32());
+          break;
+        case 19:
+          message.userType = reader.int32() as any;
+          break;
+        case 20:
+          message.invite = reader.bool();
+          break;
+        case 21:
+          message.invitedByUserName = reader.string();
+          break;
+        case 22:
+          message.invitedByUserFirstName = reader.string();
+          break;
+        case 23:
+          message.invitedByUserLastName = reader.string();
+          break;
+        case 24:
+          message.tokens.push(Tokens.decode(reader, reader.uint32()));
+          break;
+        case 25:
+          message.lastAccess = reader.double();
+          break;
+        case 26:
+          message.data = Any.decode(reader, reader.uint32());
+          break;
+        case 27:
+          message.role.push(Role.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): UserRole {
+    const message = globalThis.Object.create(baseUserRole) as UserRole;
+    message.roleAssociations = [];
+    message.tokens = [];
+    message.role = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id);
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromJSON(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = String(object.name);
+    } else {
+      message.name = "";
+    }
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = String(object.firstName);
+    } else {
+      message.firstName = "";
+    }
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = String(object.lastName);
+    } else {
+      message.lastName = "";
+    }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = String(object.email);
+    } else {
+      message.email = "";
+    }
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = String(object.newEmail);
+    } else {
+      message.newEmail = "";
+    }
+    if (object.active !== undefined && object.active !== null) {
+      message.active = Boolean(object.active);
+    } else {
+      message.active = false;
+    }
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = String(object.activationCode);
+    } else {
+      message.activationCode = "";
+    }
+    if (object.password !== undefined && object.password !== null) {
+      message.password = String(object.password);
+    } else {
+      message.password = "";
+    }
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = String(object.passwordHash);
+    } else {
+      message.passwordHash = "";
+    }
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromJSON(e));
+      }
+    }
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = String(object.timezoneId);
+    } else {
+      message.timezoneId = "";
+    }
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = String(object.localeId);
+    } else {
+      message.localeId = "";
+    }
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = String(object.defaultScope);
+    } else {
+      message.defaultScope = "";
+    }
+    if (
+      object.unauthenticated !== undefined &&
+      object.unauthenticated !== null
+    ) {
+      message.unauthenticated = Boolean(object.unauthenticated);
+    } else {
+      message.unauthenticated = false;
+    }
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = Boolean(object.guest);
+    } else {
+      message.guest = false;
+    }
+    if (object.image !== undefined && object.image !== null) {
+      message.image = Image.fromJSON(object.image);
+    } else {
+      message.image = undefined;
+    }
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = userTypeFromJSON(object.userType);
+    } else {
+      message.userType = 0;
+    }
+    if (object.invite !== undefined && object.invite !== null) {
+      message.invite = Boolean(object.invite);
+    } else {
+      message.invite = false;
+    }
+    if (
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
+    ) {
+      message.invitedByUserName = String(object.invitedByUserName);
+    } else {
+      message.invitedByUserName = "";
+    }
+    if (
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
+    ) {
+      message.invitedByUserFirstName = String(object.invitedByUserFirstName);
+    } else {
+      message.invitedByUserFirstName = "";
+    }
+    if (
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
+    ) {
+      message.invitedByUserLastName = String(object.invitedByUserLastName);
+    } else {
+      message.invitedByUserLastName = "";
+    }
+    if (object.tokens !== undefined && object.tokens !== null) {
+      for (const e of object.tokens) {
+        message.tokens.push(Tokens.fromJSON(e));
+      }
+    }
+    if (object.lastAccess !== undefined && object.lastAccess !== null) {
+      message.lastAccess = Number(object.lastAccess);
+    } else {
+      message.lastAccess = 0;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromJSON(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.role !== undefined && object.role !== null) {
+      for (const e of object.role) {
+        message.role.push(Role.fromJSON(e));
+      }
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<UserRole>): UserRole {
+    const message = { ...baseUserRole } as UserRole;
+    message.roleAssociations = [];
+    message.tokens = [];
+    message.role = [];
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = "";
+    }
+    if (object.meta !== undefined && object.meta !== null) {
+      message.meta = Meta.fromPartial(object.meta);
+    } else {
+      message.meta = undefined;
+    }
+    if (object.name !== undefined && object.name !== null) {
+      message.name = object.name;
+    } else {
+      message.name = "";
+    }
+    if (object.firstName !== undefined && object.firstName !== null) {
+      message.firstName = object.firstName;
+    } else {
+      message.firstName = "";
+    }
+    if (object.lastName !== undefined && object.lastName !== null) {
+      message.lastName = object.lastName;
+    } else {
+      message.lastName = "";
+    }
+    if (object.email !== undefined && object.email !== null) {
+      message.email = object.email;
+    } else {
+      message.email = "";
+    }
+    if (object.newEmail !== undefined && object.newEmail !== null) {
+      message.newEmail = object.newEmail;
+    } else {
+      message.newEmail = "";
+    }
+    if (object.active !== undefined && object.active !== null) {
+      message.active = object.active;
+    } else {
+      message.active = false;
+    }
+    if (object.activationCode !== undefined && object.activationCode !== null) {
+      message.activationCode = object.activationCode;
+    } else {
+      message.activationCode = "";
+    }
+    if (object.password !== undefined && object.password !== null) {
+      message.password = object.password;
+    } else {
+      message.password = "";
+    }
+    if (object.passwordHash !== undefined && object.passwordHash !== null) {
+      message.passwordHash = object.passwordHash;
+    } else {
+      message.passwordHash = "";
+    }
+    if (
+      object.roleAssociations !== undefined &&
+      object.roleAssociations !== null
+    ) {
+      for (const e of object.roleAssociations) {
+        message.roleAssociations.push(RoleAssociation.fromPartial(e));
+      }
+    }
+    if (object.timezoneId !== undefined && object.timezoneId !== null) {
+      message.timezoneId = object.timezoneId;
+    } else {
+      message.timezoneId = "";
+    }
+    if (object.localeId !== undefined && object.localeId !== null) {
+      message.localeId = object.localeId;
+    } else {
+      message.localeId = "";
+    }
+    if (object.defaultScope !== undefined && object.defaultScope !== null) {
+      message.defaultScope = object.defaultScope;
+    } else {
+      message.defaultScope = "";
+    }
+    if (
+      object.unauthenticated !== undefined &&
+      object.unauthenticated !== null
+    ) {
+      message.unauthenticated = object.unauthenticated;
+    } else {
+      message.unauthenticated = false;
+    }
+    if (object.guest !== undefined && object.guest !== null) {
+      message.guest = object.guest;
+    } else {
+      message.guest = false;
+    }
+    if (object.image !== undefined && object.image !== null) {
+      message.image = Image.fromPartial(object.image);
+    } else {
+      message.image = undefined;
+    }
+    if (object.userType !== undefined && object.userType !== null) {
+      message.userType = object.userType;
+    } else {
+      message.userType = 0;
+    }
+    if (object.invite !== undefined && object.invite !== null) {
+      message.invite = object.invite;
+    } else {
+      message.invite = false;
+    }
+    if (
+      object.invitedByUserName !== undefined &&
+      object.invitedByUserName !== null
+    ) {
+      message.invitedByUserName = object.invitedByUserName;
+    } else {
+      message.invitedByUserName = "";
+    }
+    if (
+      object.invitedByUserFirstName !== undefined &&
+      object.invitedByUserFirstName !== null
+    ) {
+      message.invitedByUserFirstName = object.invitedByUserFirstName;
+    } else {
+      message.invitedByUserFirstName = "";
+    }
+    if (
+      object.invitedByUserLastName !== undefined &&
+      object.invitedByUserLastName !== null
+    ) {
+      message.invitedByUserLastName = object.invitedByUserLastName;
+    } else {
+      message.invitedByUserLastName = "";
+    }
+    if (object.tokens !== undefined && object.tokens !== null) {
+      for (const e of object.tokens) {
+        message.tokens.push(Tokens.fromPartial(e));
+      }
+    }
+    if (object.lastAccess !== undefined && object.lastAccess !== null) {
+      message.lastAccess = object.lastAccess;
+    } else {
+      message.lastAccess = 0;
+    }
+    if (object.data !== undefined && object.data !== null) {
+      message.data = Any.fromPartial(object.data);
+    } else {
+      message.data = undefined;
+    }
+    if (object.role !== undefined && object.role !== null) {
+      for (const e of object.role) {
+        message.role.push(Role.fromPartial(e));
+      }
+    }
+    return message;
+  },
+
+  toJSON(message: UserRole): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.name !== undefined && (obj.name = message.name);
+    message.firstName !== undefined && (obj.firstName = message.firstName);
+    message.lastName !== undefined && (obj.lastName = message.lastName);
+    message.email !== undefined && (obj.email = message.email);
+    message.newEmail !== undefined && (obj.newEmail = message.newEmail);
+    message.active !== undefined && (obj.active = message.active);
+    message.activationCode !== undefined &&
+      (obj.activationCode = message.activationCode);
+    message.password !== undefined && (obj.password = message.password);
+    message.passwordHash !== undefined &&
+      (obj.passwordHash = message.passwordHash);
+    if (message.roleAssociations) {
+      obj.roleAssociations = message.roleAssociations.map((e) =>
+        e ? RoleAssociation.toJSON(e) : undefined
+      );
+    } else {
+      obj.roleAssociations = [];
+    }
+    message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
+    message.localeId !== undefined && (obj.localeId = message.localeId);
+    message.defaultScope !== undefined &&
+      (obj.defaultScope = message.defaultScope);
+    message.unauthenticated !== undefined &&
+      (obj.unauthenticated = message.unauthenticated);
+    message.guest !== undefined && (obj.guest = message.guest);
+    message.image !== undefined &&
+      (obj.image = message.image ? Image.toJSON(message.image) : undefined);
+    message.userType !== undefined &&
+      (obj.userType = userTypeToJSON(message.userType));
+    message.invite !== undefined && (obj.invite = message.invite);
+    message.invitedByUserName !== undefined &&
+      (obj.invitedByUserName = message.invitedByUserName);
+    message.invitedByUserFirstName !== undefined &&
+      (obj.invitedByUserFirstName = message.invitedByUserFirstName);
+    message.invitedByUserLastName !== undefined &&
+      (obj.invitedByUserLastName = message.invitedByUserLastName);
+    if (message.tokens) {
+      obj.tokens = message.tokens.map((e) =>
+        e ? Tokens.toJSON(e) : undefined
+      );
+    } else {
+      obj.tokens = [];
+    }
+    message.lastAccess !== undefined && (obj.lastAccess = message.lastAccess);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    if (message.role) {
+      obj.role = message.role.map((e) => (e ? Role.toJSON(e) : undefined));
+    } else {
+      obj.role = [];
+    }
+    return obj;
+  },
+};
+
 /** The microservice for the user resource. */
 export interface Service {
-  Read(request: ReadRequest): Promise<UserListResponse>;
+  Read(request: ReadRequest): Promise<UserListWithRoleResponse>;
   Create(request: UserList): Promise<UserListResponse>;
   Delete(request: DeleteRequest): Promise<DeleteResponse>;
   Update(request: UserList): Promise<UserListResponse>;
@@ -3566,6 +4429,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/image.proto",
       "io/restorecommerce/status.proto",
       "google/protobuf/any.proto",
+      "io/restorecommerce/role.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -4227,6 +5091,69 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 3,
             type: 11,
+            typeName: ".io.restorecommerce.user.UserRoleResponse",
+            jsonName: "items",
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            jsonName: "totalCount",
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            jsonName: "operationStatus",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserListWithRoleResponse",
+      },
+      {
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.user.UserRole",
+            jsonName: "payload",
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserRoleResponse",
+      },
+      {
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
             typeName: ".io.restorecommerce.user.UserResponse",
             jsonName: "items",
           },
@@ -4487,6 +5414,178 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "User",
       },
+      {
+        field: [
+          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            jsonName: "meta",
+          },
+          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "first_name",
+            number: 4,
+            label: 1,
+            type: 9,
+            jsonName: "firstName",
+          },
+          {
+            name: "last_name",
+            number: 5,
+            label: 1,
+            type: 9,
+            jsonName: "lastName",
+          },
+          { name: "email", number: 6, label: 1, type: 9, jsonName: "email" },
+          {
+            name: "new_email",
+            number: 7,
+            label: 1,
+            type: 9,
+            jsonName: "newEmail",
+          },
+          { name: "active", number: 8, label: 1, type: 8, jsonName: "active" },
+          {
+            name: "activation_code",
+            number: 9,
+            label: 1,
+            type: 9,
+            jsonName: "activationCode",
+          },
+          {
+            name: "password",
+            number: 10,
+            label: 1,
+            type: 9,
+            jsonName: "password",
+          },
+          {
+            name: "password_hash",
+            number: 11,
+            label: 1,
+            type: 9,
+            jsonName: "passwordHash",
+          },
+          {
+            name: "role_associations",
+            number: 12,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.RoleAssociation",
+            jsonName: "roleAssociations",
+          },
+          {
+            name: "timezone_id",
+            number: 13,
+            label: 1,
+            type: 9,
+            jsonName: "timezoneId",
+          },
+          {
+            name: "locale_id",
+            number: 14,
+            label: 1,
+            type: 9,
+            jsonName: "localeId",
+          },
+          {
+            name: "default_scope",
+            number: 15,
+            label: 1,
+            type: 9,
+            jsonName: "defaultScope",
+          },
+          {
+            name: "unauthenticated",
+            number: 16,
+            label: 1,
+            type: 8,
+            jsonName: "unauthenticated",
+          },
+          { name: "guest", number: 17, label: 1, type: 8, jsonName: "guest" },
+          {
+            name: "image",
+            number: 18,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.image.Image",
+            jsonName: "image",
+          },
+          {
+            name: "user_type",
+            number: 19,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.user.UserType",
+            jsonName: "userType",
+          },
+          { name: "invite", number: 20, label: 1, type: 8, jsonName: "invite" },
+          {
+            name: "invited_by_user_name",
+            number: 21,
+            label: 1,
+            type: 9,
+            jsonName: "invitedByUserName",
+          },
+          {
+            name: "invited_by_user_first_name",
+            number: 22,
+            label: 1,
+            type: 9,
+            jsonName: "invitedByUserFirstName",
+          },
+          {
+            name: "invited_by_user_last_name",
+            number: 23,
+            label: 1,
+            type: 9,
+            jsonName: "invitedByUserLastName",
+          },
+          {
+            name: "tokens",
+            number: 24,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Tokens",
+            jsonName: "tokens",
+          },
+          {
+            name: "last_access",
+            number: 25,
+            label: 1,
+            type: 1,
+            jsonName: "lastAccess",
+          },
+          {
+            name: "data",
+            number: 26,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            jsonName: "data",
+          },
+          {
+            name: "role",
+            number: 27,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.role.Role",
+            jsonName: "role",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "UserRole",
+      },
     ],
     enumType: [
       {
@@ -4507,7 +5606,7 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.user.UserListResponse",
+            outputType: ".io.restorecommerce.user.UserListWithRoleResponse",
           },
           {
             name: "Create",
@@ -4620,280 +5719,406 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [15, 0, 38, 1],
+          span: [16, 0, 39, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n The microservice for the user resource.\n",
         },
         {
           path: [4, 0],
-          span: [44, 0, 48, 1],
+          span: [45, 0, 49, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         },
         {
           path: [4, 0, 2, 0],
-          span: [45, 2, 24],
+          span: [46, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " User name or email\n",
         },
         {
           path: [4, 0, 2, 1],
-          span: [46, 2, 22],
+          span: [47, 2, 22],
           leadingDetachedComments: [],
           trailingComments: " Raw password\n",
         },
         {
           path: [4, 3, 2, 0],
-          span: [61, 2, 16],
+          span: [62, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 5, 2, 10],
-          span: [90, 2, 28],
+          span: [91, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
           path: [4, 6, 2, 0],
-          span: [96, 2, 24],
+          span: [97, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ user name or email\n",
         },
         {
           path: [4, 7, 2, 0],
-          span: [102, 2, 24],
+          span: [103, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 8, 2, 0],
-          span: [109, 2, 24],
+          span: [110, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 9, 2, 0],
-          span: [115, 2, 24],
+          span: [116, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ user name or email\n",
         },
         {
           path: [4, 10, 2, 0],
-          span: [122, 2, 24],
+          span: [123, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 11, 2, 0],
-          span: [127, 2, 24],
+          span: [128, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 12, 2, 0],
-          span: [134, 2, 24],
+          span: [135, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 13, 2, 0],
-          span: [140, 2, 24],
+          span: [141, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " user name or email\n",
         },
         {
           path: [4, 14, 2, 0],
-          span: [146, 2, 24],
+          span: [147, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 15, 2, 0],
-          span: [151, 2, 24],
+          span: [152, 2, 24],
           leadingDetachedComments: [],
           trailingComments: "/ User name or email\n",
         },
         {
           path: [4, 16],
-          span: [163, 0, 165, 1],
+          span: [164, 0, 166, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
         },
         {
           path: [4, 17],
-          span: [173, 0, 176, 1],
+          span: [174, 0, 177, 1],
           leadingDetachedComments: [],
           leadingComments:
             "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
         },
         {
           path: [4, 17, 2, 0],
-          span: [174, 2, 16],
+          span: [175, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 18, 2, 0],
-          span: [179, 2, 16],
+          span: [180, 2, 16],
           leadingDetachedComments: [],
           trailingComments: " User ID\n",
         },
         {
           path: [4, 19],
-          span: [185, 0, 189, 1],
+          span: [186, 0, 190, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User email id changed event.\n",
         },
         {
           path: [4, 20, 2, 0],
-          span: [192, 2, 16],
+          span: [193, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
           path: [4, 21],
-          span: [199, 0, 203, 1],
+          span: [200, 0, 204, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A list of User.\n",
         },
         {
-          path: [4, 24],
-          span: [219, 0, 221, 1],
+          path: [4, 26],
+          span: [231, 0, 233, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n User activation request.\n",
         },
         {
-          path: [4, 24, 2, 0],
-          span: [220, 2, 16],
+          path: [4, 26, 2, 0],
+          span: [232, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID\n",
         },
         {
-          path: [4, 26],
-          span: [232, 0, 259, 1],
+          path: [4, 28],
+          span: [244, 0, 271, 1],
           leadingDetachedComments: [],
           leadingComments: "*\n A User resource.\n",
         },
         {
-          path: [4, 26, 2, 0],
-          span: [233, 2, 16],
+          path: [4, 28, 2, 0],
+          span: [245, 2, 16],
           leadingDetachedComments: [],
           trailingComments: "/ User ID, unique, key\n",
         },
         {
-          path: [4, 26, 2, 2],
-          span: [235, 2, 18],
+          path: [4, 28, 2, 2],
+          span: [247, 2, 18],
           leadingDetachedComments: [],
           trailingComments: " The name of the user, can be used for login\n",
         },
         {
-          path: [4, 26, 2, 5],
-          span: [238, 2, 19],
+          path: [4, 28, 2, 5],
+          span: [250, 2, 19],
           leadingDetachedComments: [],
           trailingComments: "/ Email address, can be used for login\n",
         },
         {
-          path: [4, 26, 2, 6],
-          span: [239, 2, 23],
+          path: [4, 28, 2, 6],
+          span: [251, 2, 23],
           leadingDetachedComments: [],
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         },
         {
-          path: [4, 26, 2, 7],
-          span: [240, 2, 18],
+          path: [4, 28, 2, 7],
+          span: [252, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ If the user was activated via the activation process\n",
         },
         {
-          path: [4, 26, 2, 8],
-          span: [241, 2, 29],
+          path: [4, 28, 2, 8],
+          span: [253, 2, 29],
           leadingDetachedComments: [],
           trailingComments:
             "/ Activation code used in the activation process\n",
         },
         {
-          path: [4, 26, 2, 9],
-          span: [242, 2, 23],
+          path: [4, 28, 2, 9],
+          span: [254, 2, 23],
           leadingDetachedComments: [],
           trailingComments: "/ Raw password, not stored\n",
         },
         {
-          path: [4, 26, 2, 10],
-          span: [243, 2, 28],
+          path: [4, 28, 2, 10],
+          span: [255, 2, 28],
           leadingDetachedComments: [],
           trailingComments: "/ Encrypted password, stored\n",
         },
         {
-          path: [4, 26, 2, 11],
-          span: [244, 2, 74],
+          path: [4, 28, 2, 11],
+          span: [256, 2, 74],
           leadingDetachedComments: [],
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
         },
         {
-          path: [4, 26, 2, 12],
-          span: [245, 2, 26],
+          path: [4, 28, 2, 12],
+          span: [257, 2, 26],
           leadingDetachedComments: [],
           trailingComments: " timezone_id specifications\n",
         },
         {
-          path: [4, 26, 2, 13],
-          span: [246, 2, 24],
+          path: [4, 28, 2, 13],
+          span: [258, 2, 24],
           leadingDetachedComments: [],
           trailingComments: " locale specifications\n",
         },
         {
-          path: [4, 26, 2, 14],
-          span: [247, 2, 28],
+          path: [4, 28, 2, 14],
+          span: [259, 2, 28],
           leadingDetachedComments: [],
           trailingComments: " default hierarchical scope\n",
         },
         {
-          path: [4, 26, 2, 15],
-          span: [248, 2, 28],
+          path: [4, 28, 2, 15],
+          span: [260, 2, 28],
           leadingDetachedComments: [],
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
         },
         {
-          path: [4, 26, 2, 16],
-          span: [249, 2, 18],
+          path: [4, 28, 2, 16],
+          span: [261, 2, 18],
           leadingDetachedComments: [],
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         },
         {
-          path: [4, 26, 2, 19],
-          span: [252, 2, 19],
+          path: [4, 28, 2, 19],
+          span: [264, 2, 19],
           leadingDetachedComments: [],
           trailingComments: " For user invitation\n",
         },
         {
-          path: [4, 26, 2, 20],
-          span: [253, 2, 35],
+          path: [4, 28, 2, 20],
+          span: [265, 2, 35],
           leadingDetachedComments: [],
           trailingComments: " user who is inviting\n",
         },
         {
-          path: [4, 26, 2, 21],
-          span: [254, 2, 41],
+          path: [4, 28, 2, 21],
+          span: [266, 2, 41],
           leadingDetachedComments: [],
           trailingComments: " First name of user inviting\n",
         },
         {
-          path: [4, 26, 2, 22],
-          span: [255, 2, 40],
+          path: [4, 28, 2, 22],
+          span: [267, 2, 40],
           leadingDetachedComments: [],
           trailingComments: " Last name of user inviting\n",
         },
         {
-          path: [4, 26, 2, 25],
-          span: [258, 2, 32],
+          path: [4, 28, 2, 25],
+          span: [270, 2, 32],
+          leadingDetachedComments: [],
+          trailingComments: "/ additional data\n",
+        },
+        {
+          path: [4, 29],
+          span: [276, 0, 304, 1],
+          leadingDetachedComments: [],
+          leadingComments: "*\n A User resource with role\n",
+        },
+        {
+          path: [4, 29, 2, 0],
+          span: [277, 2, 16],
+          leadingDetachedComments: [],
+          trailingComments: "/ User ID, unique, key\n",
+        },
+        {
+          path: [4, 29, 2, 2],
+          span: [279, 2, 18],
+          leadingDetachedComments: [],
+          trailingComments: " The name of the user, can be used for login\n",
+        },
+        {
+          path: [4, 29, 2, 5],
+          span: [282, 2, 19],
+          leadingDetachedComments: [],
+          trailingComments: "/ Email address, can be used for login\n",
+        },
+        {
+          path: [4, 29, 2, 6],
+          span: [283, 2, 23],
+          leadingDetachedComments: [],
+          trailingComments:
+            "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
+        },
+        {
+          path: [4, 29, 2, 7],
+          span: [284, 2, 18],
+          leadingDetachedComments: [],
+          trailingComments:
+            "/ If the user was activated via the activation process\n",
+        },
+        {
+          path: [4, 29, 2, 8],
+          span: [285, 2, 29],
+          leadingDetachedComments: [],
+          trailingComments:
+            "/ Activation code used in the activation process\n",
+        },
+        {
+          path: [4, 29, 2, 9],
+          span: [286, 2, 23],
+          leadingDetachedComments: [],
+          trailingComments: "/ Raw password, not stored\n",
+        },
+        {
+          path: [4, 29, 2, 10],
+          span: [287, 2, 28],
+          leadingDetachedComments: [],
+          trailingComments: "/ Encrypted password, stored\n",
+        },
+        {
+          path: [4, 29, 2, 11],
+          span: [288, 2, 74],
+          leadingDetachedComments: [],
+          trailingComments:
+            " A user can have multiple roles and different attributes coupled with each role\n",
+        },
+        {
+          path: [4, 29, 2, 12],
+          span: [289, 2, 26],
+          leadingDetachedComments: [],
+          trailingComments: " timezone_id specifications\n",
+        },
+        {
+          path: [4, 29, 2, 13],
+          span: [290, 2, 24],
+          leadingDetachedComments: [],
+          trailingComments: " locale specifications\n",
+        },
+        {
+          path: [4, 29, 2, 14],
+          span: [291, 2, 28],
+          leadingDetachedComments: [],
+          trailingComments: " default hierarchical scope\n",
+        },
+        {
+          path: [4, 29, 2, 15],
+          span: [292, 2, 28],
+          leadingDetachedComments: [],
+          trailingComments:
+            " true in case in case of `register`; set to false after activation\n",
+        },
+        {
+          path: [4, 29, 2, 16],
+          span: [293, 2, 18],
+          leadingDetachedComments: [],
+          trailingComments:
+            "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
+        },
+        {
+          path: [4, 29, 2, 19],
+          span: [296, 2, 19],
+          leadingDetachedComments: [],
+          trailingComments: " For user invitation\n",
+        },
+        {
+          path: [4, 29, 2, 20],
+          span: [297, 2, 35],
+          leadingDetachedComments: [],
+          trailingComments: " user who is inviting\n",
+        },
+        {
+          path: [4, 29, 2, 21],
+          span: [298, 2, 41],
+          leadingDetachedComments: [],
+          trailingComments: " First name of user inviting\n",
+        },
+        {
+          path: [4, 29, 2, 22],
+          span: [299, 2, 40],
+          leadingDetachedComments: [],
+          trailingComments: " Last name of user inviting\n",
+        },
+        {
+          path: [4, 29, 2, 25],
+          span: [302, 2, 32],
           leadingDetachedComments: [],
           trailingComments: "/ additional data\n",
         },
@@ -4925,11 +6150,14 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.user.EmailChangeRequested": EmailChangeRequested,
     ".io.restorecommerce.user.EmailChangeConfirmed": EmailChangeConfirmed,
     ".io.restorecommerce.user.UserList": UserList,
+    ".io.restorecommerce.user.UserListWithRoleResponse": UserListWithRoleResponse,
+    ".io.restorecommerce.user.UserRoleResponse": UserRoleResponse,
     ".io.restorecommerce.user.UserListResponse": UserListResponse,
     ".io.restorecommerce.user.UserResponse": UserResponse,
     ".io.restorecommerce.user.Activate": Activate,
     ".io.restorecommerce.user.FindByRoleRequest": FindByRoleRequest,
     ".io.restorecommerce.user.User": User,
+    ".io.restorecommerce.user.UserRole": UserRole,
   },
   dependencies: [
     protoMetadata1,
@@ -4939,6 +6167,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata5,
     protoMetadata6,
     protoMetadata7,
+    protoMetadata8,
   ],
 };
 

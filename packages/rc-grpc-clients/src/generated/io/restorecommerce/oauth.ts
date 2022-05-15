@@ -6,10 +6,15 @@ import {
 } from "../../io/restorecommerce/user";
 import {
   Tokens,
+  Subject,
   protoMetadata as protoMetadata1,
 } from "../../io/restorecommerce/auth";
 import {
+  Status,
   protoMetadata as protoMetadata3,
+} from "../../io/restorecommerce/status";
+import {
+  protoMetadata as protoMetadata4,
   Empty,
 } from "../../google/protobuf/empty";
 import { Writer, Reader } from "protobufjs/minimal";
@@ -39,6 +44,16 @@ export interface ExchangeCodeResponse {
   user?: UserResponse;
   email: string;
   token?: Tokens;
+}
+
+export interface GetTokenRequest {
+  subject?: Subject;
+  service: string;
+}
+
+export interface GetTokenResponse {
+  status?: Status;
+  token?: string | undefined;
 }
 
 const baseServicesResponse: object = { services: "" };
@@ -470,10 +485,167 @@ export const ExchangeCodeResponse = {
   },
 };
 
+const baseGetTokenRequest: object = { service: "" };
+
+export const GetTokenRequest = {
+  encode(message: GetTokenRequest, writer: Writer = Writer.create()): Writer {
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.service !== "") {
+      writer.uint32(18).string(message.service);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): GetTokenRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseGetTokenRequest
+    ) as GetTokenRequest;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.service = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetTokenRequest {
+    const message = globalThis.Object.create(
+      baseGetTokenRequest
+    ) as GetTokenRequest;
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromJSON(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.service !== undefined && object.service !== null) {
+      message.service = String(object.service);
+    } else {
+      message.service = "";
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<GetTokenRequest>): GetTokenRequest {
+    const message = { ...baseGetTokenRequest } as GetTokenRequest;
+    if (object.subject !== undefined && object.subject !== null) {
+      message.subject = Subject.fromPartial(object.subject);
+    } else {
+      message.subject = undefined;
+    }
+    if (object.service !== undefined && object.service !== null) {
+      message.service = object.service;
+    } else {
+      message.service = "";
+    }
+    return message;
+  },
+
+  toJSON(message: GetTokenRequest): unknown {
+    const obj: any = {};
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
+    message.service !== undefined && (obj.service = message.service);
+    return obj;
+  },
+};
+
+const baseGetTokenResponse: object = {};
+
+export const GetTokenResponse = {
+  encode(message: GetTokenResponse, writer: Writer = Writer.create()): Writer {
+    if (message.status !== undefined) {
+      Status.encode(message.status, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.token !== undefined) {
+      writer.uint32(18).string(message.token);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): GetTokenResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = globalThis.Object.create(
+      baseGetTokenResponse
+    ) as GetTokenResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status = Status.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.token = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetTokenResponse {
+    const message = globalThis.Object.create(
+      baseGetTokenResponse
+    ) as GetTokenResponse;
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromJSON(object.status);
+    } else {
+      message.status = undefined;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = String(object.token);
+    } else {
+      message.token = undefined;
+    }
+    return message;
+  },
+
+  fromPartial(object: DeepPartial<GetTokenResponse>): GetTokenResponse {
+    const message = { ...baseGetTokenResponse } as GetTokenResponse;
+    if (object.status !== undefined && object.status !== null) {
+      message.status = Status.fromPartial(object.status);
+    } else {
+      message.status = undefined;
+    }
+    if (object.token !== undefined && object.token !== null) {
+      message.token = object.token;
+    } else {
+      message.token = undefined;
+    }
+    return message;
+  },
+
+  toJSON(message: GetTokenResponse): unknown {
+    const obj: any = {};
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.token !== undefined && (obj.token = message.token);
+    return obj;
+  },
+};
+
 export interface Service {
   AvailableServices(request: Empty): Promise<ServicesResponse>;
   GenerateLinks(request: Empty): Promise<GenerateLinksResponse>;
   ExchangeCode(request: ExchangeCodeRequest): Promise<ExchangeCodeResponse>;
+  GetToken(request: GetTokenRequest): Promise<GetTokenResponse>;
 }
 
 export interface ProtoMetadata {
@@ -487,6 +659,7 @@ export const protoMetadata: ProtoMetadata = {
     dependency: [
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/user.proto",
+      "io/restorecommerce/status.proto",
       "google/protobuf/empty.proto",
     ],
     publicDependency: [],
@@ -604,6 +777,62 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
         name: "ExchangeCodeResponse",
       },
+      {
+        field: [
+          {
+            name: "subject",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            jsonName: "subject",
+          },
+          {
+            name: "service",
+            number: 2,
+            label: 1,
+            type: 9,
+            jsonName: "service",
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        reservedRange: [],
+        reservedName: [],
+        name: "GetTokenRequest",
+      },
+      {
+        field: [
+          {
+            name: "status",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            jsonName: "status",
+          },
+          {
+            name: "token",
+            number: 2,
+            label: 1,
+            type: 9,
+            oneofIndex: 0,
+            jsonName: "token",
+            proto3Optional: true,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [{ name: "_token" }],
+        reservedRange: [],
+        reservedName: [],
+        name: "GetTokenResponse",
+      },
     ],
     enumType: [],
     service: [
@@ -624,6 +853,11 @@ export const protoMetadata: ProtoMetadata = {
             inputType: ".io.restorecommerce.oauth.ExchangeCodeRequest",
             outputType: ".io.restorecommerce.oauth.ExchangeCodeResponse",
           },
+          {
+            name: "GetToken",
+            inputType: ".io.restorecommerce.oauth.GetTokenRequest",
+            outputType: ".io.restorecommerce.oauth.GetTokenResponse",
+          },
         ],
         name: "Service",
       },
@@ -640,8 +874,15 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.oauth.GenerateLinksResponse.LinksEntry": GenerateLinksResponse_LinksEntry,
     ".io.restorecommerce.oauth.ExchangeCodeRequest": ExchangeCodeRequest,
     ".io.restorecommerce.oauth.ExchangeCodeResponse": ExchangeCodeResponse,
+    ".io.restorecommerce.oauth.GetTokenRequest": GetTokenRequest,
+    ".io.restorecommerce.oauth.GetTokenResponse": GetTokenResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+  ],
 };
 
 declare var self: any | undefined;

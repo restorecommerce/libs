@@ -180,7 +180,7 @@ export class Topic {
     return new Promise((() => {
       return (cb) => {
         if (this.currentOffset >= offset) {
-          cb();
+          cb(null);
           return;
         }
         this.waitQueue.push({offset, cb});

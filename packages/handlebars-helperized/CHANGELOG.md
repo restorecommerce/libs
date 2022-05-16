@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.19](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@0.1.18...@restorecommerce/handlebars-helperized@0.1.19) (2022-05-16)
+
+**Note:** Version bump only for package @restorecommerce/handlebars-helperized
+
+
+
+
+
 ## [0.1.18](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@0.1.17...@restorecommerce/handlebars-helperized@0.1.18) (2022-02-22)
 
 **Note:** Version bump only for package @restorecommerce/handlebars-helperized

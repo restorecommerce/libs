@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/mailer",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "Multi transport mailer based on nodemailer",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",

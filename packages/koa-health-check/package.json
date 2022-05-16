@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/koa-health-check",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Koa 2 middleware for Cloud Health",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

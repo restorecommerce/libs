@@ -6,9 +6,9 @@ export class InMemoryAdapter implements Adapter {
 
   constructor(private type: string) {}
 
-  private tokenStorage = new LRU<string, AdapterPayload>();
-  private sessionStorage = new LRU<string, string>();
-  private grantIdStorage = new LRU<string, string[]>();
+  private tokenStorage = new LRU<string, AdapterPayload>({max: 1000});
+  private sessionStorage = new LRU<string, string>({max: 1000});
+  private grantIdStorage = new LRU<string, string[]>({max: 1000});
 
   private key(id: string) {
     return `${this.type}:${id}`;

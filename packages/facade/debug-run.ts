@@ -71,3 +71,4 @@ function createTestFacade() {
 const facade = createTestFacade();
 
 facade.start();
+

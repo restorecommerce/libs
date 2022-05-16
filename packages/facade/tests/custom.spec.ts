@@ -7,7 +7,7 @@ import {
   reqResLogger
 } from '../src/index';
 import { agent, SuperAgentTest } from 'supertest';
-import { createServiceConfig } from "@restorecommerce/service-config";
+import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from "@restorecommerce/logger";
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from "../src/gql/protos";
 import { GraphQLString, printSchema } from "graphql";

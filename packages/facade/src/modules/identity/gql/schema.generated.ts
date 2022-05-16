@@ -33,7 +33,7 @@ export type IdentityQuery = {
 
 export type IdentityUserQuery = {
   __typename?: 'IdentityUserQuery';
-  Read?: Maybe<ProtoIoRestorecommerceUserUserListResponse>;
+  Read?: Maybe<ProtoIoRestorecommerceUserUserListWithRoleResponse>;
   Find?: Maybe<ProtoIoRestorecommerceUserUserListResponse>;
   FindByRole?: Maybe<ProtoIoRestorecommerceUserUserListResponse>;
   FindByToken?: Maybe<ProtoIoRestorecommerceUserUserResponse>;
@@ -59,26 +59,26 @@ export type IdentityUserQueryFindByTokenArgs = {
   input: IIoRestorecommerceUserFindByTokenRequest;
 };
 
-export type ProtoIoRestorecommerceUserUserListResponse = {
-  __typename?: 'ProtoIoRestorecommerceUserUserListResponse';
-  details?: Maybe<IoRestorecommerceUserUserListResponse>;
+export type ProtoIoRestorecommerceUserUserListWithRoleResponse = {
+  __typename?: 'ProtoIoRestorecommerceUserUserListWithRoleResponse';
+  details?: Maybe<IoRestorecommerceUserUserListWithRoleResponse>;
 };
 
-export type IoRestorecommerceUserUserListResponse = {
-  __typename?: 'IoRestorecommerceUserUserListResponse';
-  items?: Maybe<Array<IoRestorecommerceUserUserResponse>>;
+export type IoRestorecommerceUserUserListWithRoleResponse = {
+  __typename?: 'IoRestorecommerceUserUserListWithRoleResponse';
+  items?: Maybe<Array<IoRestorecommerceUserUserRoleResponse>>;
   totalCount?: Maybe<Scalars['Int']>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
-export type IoRestorecommerceUserUserResponse = {
-  __typename?: 'IoRestorecommerceUserUserResponse';
-  payload?: Maybe<IoRestorecommerceUserUser>;
+export type IoRestorecommerceUserUserRoleResponse = {
+  __typename?: 'IoRestorecommerceUserUserRoleResponse';
+  payload?: Maybe<IoRestorecommerceUserUserRole>;
   status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
-export type IoRestorecommerceUserUser = {
-  __typename?: 'IoRestorecommerceUserUser';
+export type IoRestorecommerceUserUserRole = {
+  __typename?: 'IoRestorecommerceUserUserRole';
   id?: Maybe<Scalars['String']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   name?: Maybe<Scalars['String']>;
@@ -105,6 +105,7 @@ export type IoRestorecommerceUserUser = {
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
   lastAccess?: Maybe<Scalars['Float']>;
   data?: Maybe<GoogleProtobufAny>;
+  role?: Maybe<Array<IoRestorecommerceRoleRole>>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -170,6 +171,15 @@ export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
   typeUrl?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
+};
+
+export type IoRestorecommerceRoleRole = {
+  __typename?: 'IoRestorecommerceRoleRole';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  assignableByRoles?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -296,6 +306,54 @@ export type IGoogleProtobufAny = {
   value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
+export type ProtoIoRestorecommerceUserUserListResponse = {
+  __typename?: 'ProtoIoRestorecommerceUserUserListResponse';
+  details?: Maybe<IoRestorecommerceUserUserListResponse>;
+};
+
+export type IoRestorecommerceUserUserListResponse = {
+  __typename?: 'IoRestorecommerceUserUserListResponse';
+  items?: Maybe<Array<IoRestorecommerceUserUserResponse>>;
+  totalCount?: Maybe<Scalars['Int']>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
+};
+
+export type IoRestorecommerceUserUserResponse = {
+  __typename?: 'IoRestorecommerceUserUserResponse';
+  payload?: Maybe<IoRestorecommerceUserUser>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceUserUser = {
+  __typename?: 'IoRestorecommerceUserUser';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  newEmail?: Maybe<Scalars['String']>;
+  active?: Maybe<Scalars['Boolean']>;
+  activationCode?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  passwordHash?: Maybe<Scalars['String']>;
+  roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
+  timezoneId?: Maybe<Scalars['String']>;
+  localeId?: Maybe<Scalars['String']>;
+  defaultScope?: Maybe<Scalars['String']>;
+  unauthenticated?: Maybe<Scalars['Boolean']>;
+  guest?: Maybe<Scalars['Boolean']>;
+  image?: Maybe<IoRestorecommerceImageImage>;
+  userType?: Maybe<IoRestorecommerceUserUserType>;
+  invite?: Maybe<Scalars['Boolean']>;
+  invitedByUserName?: Maybe<Scalars['String']>;
+  invitedByUserFirstName?: Maybe<Scalars['String']>;
+  invitedByUserLastName?: Maybe<Scalars['String']>;
+  tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
+  lastAccess?: Maybe<Scalars['Float']>;
+  data?: Maybe<GoogleProtobufAny>;
+};
+
 export type IIoRestorecommerceUserFindRequest = {
   id?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
@@ -348,15 +406,6 @@ export type IoRestorecommerceRoleRoleResponse = {
   __typename?: 'IoRestorecommerceRoleRoleResponse';
   payload?: Maybe<IoRestorecommerceRoleRole>;
   status?: Maybe<IoRestorecommerceStatusStatus>;
-};
-
-export type IoRestorecommerceRoleRole = {
-  __typename?: 'IoRestorecommerceRoleRole';
-  id?: Maybe<Scalars['String']>;
-  meta?: Maybe<IoRestorecommerceMetaMeta>;
-  name?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  assignableByRoles?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IdentityAuthenticationLogQuery = {
@@ -864,11 +913,17 @@ export type IIoRestorecommerceTokenGrantId = {
 export type IdentityOauthMutation = {
   __typename?: 'IdentityOauthMutation';
   ExchangeCode?: Maybe<ProtoIoRestorecommerceOauthExchangeCodeResponse>;
+  GetToken?: Maybe<ProtoIoRestorecommerceOauthGetTokenResponse>;
 };
 
 
 export type IdentityOauthMutationExchangeCodeArgs = {
   input: IIoRestorecommerceOauthExchangeCodeRequest;
+};
+
+
+export type IdentityOauthMutationGetTokenArgs = {
+  input: IIoRestorecommerceOauthGetTokenRequest;
 };
 
 export type ProtoIoRestorecommerceOauthExchangeCodeResponse = {
@@ -887,6 +942,21 @@ export type IIoRestorecommerceOauthExchangeCodeRequest = {
   service?: InputMaybe<Scalars['String']>;
   code?: InputMaybe<Scalars['String']>;
   state?: InputMaybe<Scalars['String']>;
+};
+
+export type ProtoIoRestorecommerceOauthGetTokenResponse = {
+  __typename?: 'ProtoIoRestorecommerceOauthGetTokenResponse';
+  details?: Maybe<IoRestorecommerceOauthGetTokenResponse>;
+};
+
+export type IoRestorecommerceOauthGetTokenResponse = {
+  __typename?: 'IoRestorecommerceOauthGetTokenResponse';
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+  token?: Maybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceOauthGetTokenRequest = {
+  service?: InputMaybe<Scalars['String']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -962,10 +1032,10 @@ export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   IdentityQuery: ResolverTypeWrapper<IdentityQuery>;
   IdentityUserQuery: ResolverTypeWrapper<IdentityUserQuery>;
-  ProtoIoRestorecommerceUserUserListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUserUserListResponse>;
-  IoRestorecommerceUserUserListResponse: ResolverTypeWrapper<IoRestorecommerceUserUserListResponse>;
-  IoRestorecommerceUserUserResponse: ResolverTypeWrapper<IoRestorecommerceUserUserResponse>;
-  IoRestorecommerceUserUser: ResolverTypeWrapper<IoRestorecommerceUserUser>;
+  ProtoIoRestorecommerceUserUserListWithRoleResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUserUserListWithRoleResponse>;
+  IoRestorecommerceUserUserListWithRoleResponse: ResolverTypeWrapper<IoRestorecommerceUserUserListWithRoleResponse>;
+  IoRestorecommerceUserUserRoleResponse: ResolverTypeWrapper<IoRestorecommerceUserUserRoleResponse>;
+  IoRestorecommerceUserUserRole: ResolverTypeWrapper<IoRestorecommerceUserUserRole>;
   String: ResolverTypeWrapper<Scalars['String']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   Float: ResolverTypeWrapper<Scalars['Float']>;
@@ -978,6 +1048,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: ResolverTypeWrapper<IoRestorecommerceAuthTokens>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
+  IoRestorecommerceRoleRole: ResolverTypeWrapper<IoRestorecommerceRoleRole>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
@@ -996,6 +1067,10 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
+  ProtoIoRestorecommerceUserUserListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUserUserListResponse>;
+  IoRestorecommerceUserUserListResponse: ResolverTypeWrapper<IoRestorecommerceUserUserListResponse>;
+  IoRestorecommerceUserUserResponse: ResolverTypeWrapper<IoRestorecommerceUserUserResponse>;
+  IoRestorecommerceUserUser: ResolverTypeWrapper<IoRestorecommerceUserUser>;
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
@@ -1005,7 +1080,6 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceRoleRoleListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceRoleRoleListResponse>;
   IoRestorecommerceRoleRoleListResponse: ResolverTypeWrapper<IoRestorecommerceRoleRoleListResponse>;
   IoRestorecommerceRoleRoleResponse: ResolverTypeWrapper<IoRestorecommerceRoleRoleResponse>;
-  IoRestorecommerceRoleRole: ResolverTypeWrapper<IoRestorecommerceRoleRole>;
   IdentityAuthenticationLogQuery: ResolverTypeWrapper<IdentityAuthenticationLogQuery>;
   ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponse>;
   IoRestorecommerceAuthenticationLogAuthenticationLogListResponse: ResolverTypeWrapper<IoRestorecommerceAuthenticationLogAuthenticationLogListResponse>;
@@ -1064,6 +1138,9 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceOauthExchangeCodeResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOauthExchangeCodeResponse>;
   IoRestorecommerceOauthExchangeCodeResponse: ResolverTypeWrapper<IoRestorecommerceOauthExchangeCodeResponse>;
   IIoRestorecommerceOauthExchangeCodeRequest: IIoRestorecommerceOauthExchangeCodeRequest;
+  ProtoIoRestorecommerceOauthGetTokenResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOauthGetTokenResponse>;
+  IoRestorecommerceOauthGetTokenResponse: ResolverTypeWrapper<IoRestorecommerceOauthGetTokenResponse>;
+  IIoRestorecommerceOauthGetTokenRequest: IIoRestorecommerceOauthGetTokenRequest;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1071,10 +1148,10 @@ export type ResolversParentTypes = ResolversObject<{
   Query: {};
   IdentityQuery: IdentityQuery;
   IdentityUserQuery: IdentityUserQuery;
-  ProtoIoRestorecommerceUserUserListResponse: ProtoIoRestorecommerceUserUserListResponse;
-  IoRestorecommerceUserUserListResponse: IoRestorecommerceUserUserListResponse;
-  IoRestorecommerceUserUserResponse: IoRestorecommerceUserUserResponse;
-  IoRestorecommerceUserUser: IoRestorecommerceUserUser;
+  ProtoIoRestorecommerceUserUserListWithRoleResponse: ProtoIoRestorecommerceUserUserListWithRoleResponse;
+  IoRestorecommerceUserUserListWithRoleResponse: IoRestorecommerceUserUserListWithRoleResponse;
+  IoRestorecommerceUserUserRoleResponse: IoRestorecommerceUserUserRoleResponse;
+  IoRestorecommerceUserUserRole: IoRestorecommerceUserUserRole;
   String: Scalars['String'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   Float: Scalars['Float'];
@@ -1086,6 +1163,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: IoRestorecommerceAuthTokens;
   GoogleProtobufAny: GoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
+  IoRestorecommerceRoleRole: IoRestorecommerceRoleRole;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
@@ -1097,6 +1175,10 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
+  ProtoIoRestorecommerceUserUserListResponse: ProtoIoRestorecommerceUserUserListResponse;
+  IoRestorecommerceUserUserListResponse: IoRestorecommerceUserUserListResponse;
+  IoRestorecommerceUserUserResponse: IoRestorecommerceUserUserResponse;
+  IoRestorecommerceUserUser: IoRestorecommerceUserUser;
   IIoRestorecommerceUserFindRequest: IIoRestorecommerceUserFindRequest;
   IIoRestorecommerceUserFindByRoleRequest: IIoRestorecommerceUserFindByRoleRequest;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
@@ -1106,7 +1188,6 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceRoleRoleListResponse: ProtoIoRestorecommerceRoleRoleListResponse;
   IoRestorecommerceRoleRoleListResponse: IoRestorecommerceRoleRoleListResponse;
   IoRestorecommerceRoleRoleResponse: IoRestorecommerceRoleRoleResponse;
-  IoRestorecommerceRoleRole: IoRestorecommerceRoleRole;
   IdentityAuthenticationLogQuery: IdentityAuthenticationLogQuery;
   ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponse: ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponse;
   IoRestorecommerceAuthenticationLogAuthenticationLogListResponse: IoRestorecommerceAuthenticationLogAuthenticationLogListResponse;
@@ -1164,6 +1245,9 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceOauthExchangeCodeResponse: ProtoIoRestorecommerceOauthExchangeCodeResponse;
   IoRestorecommerceOauthExchangeCodeResponse: IoRestorecommerceOauthExchangeCodeResponse;
   IIoRestorecommerceOauthExchangeCodeRequest: IIoRestorecommerceOauthExchangeCodeRequest;
+  ProtoIoRestorecommerceOauthGetTokenResponse: ProtoIoRestorecommerceOauthGetTokenResponse;
+  IoRestorecommerceOauthGetTokenResponse: IoRestorecommerceOauthGetTokenResponse;
+  IIoRestorecommerceOauthGetTokenRequest: IIoRestorecommerceOauthGetTokenRequest;
 }>;
 
 export type QueryResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -1180,32 +1264,32 @@ export type IdentityQueryResolvers<ContextType = IdentityContext, ParentType ext
 }>;
 
 export type IdentityUserQueryResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IdentityUserQuery'] = ResolversParentTypes['IdentityUserQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserListResponse']>, ParentType, ContextType, RequireFields<IdentityUserQueryReadArgs, 'input'>>;
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserListWithRoleResponse']>, ParentType, ContextType, RequireFields<IdentityUserQueryReadArgs, 'input'>>;
   Find?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserListResponse']>, ParentType, ContextType, RequireFields<IdentityUserQueryFindArgs, 'input'>>;
   FindByRole?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserListResponse']>, ParentType, ContextType, RequireFields<IdentityUserQueryFindByRoleArgs, 'input'>>;
   FindByToken?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserUserResponse']>, ParentType, ContextType, RequireFields<IdentityUserQueryFindByTokenArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type ProtoIoRestorecommerceUserUserListResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserUserListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserUserListResponse']> = ResolversObject<{
-  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserListResponse']>, ParentType, ContextType>;
+export type ProtoIoRestorecommerceUserUserListWithRoleResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserUserListWithRoleResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserUserListWithRoleResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserListWithRoleResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceUserUserListResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserListResponse'] = ResolversParentTypes['IoRestorecommerceUserUserListResponse']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUserUserResponse']>>, ParentType, ContextType>;
+export type IoRestorecommerceUserUserListWithRoleResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserListWithRoleResponse'] = ResolversParentTypes['IoRestorecommerceUserUserListWithRoleResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUserUserRoleResponse']>>, ParentType, ContextType>;
   totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceUserUserResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserResponse'] = ResolversParentTypes['IoRestorecommerceUserUserResponse']> = ResolversObject<{
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
+export type IoRestorecommerceUserUserRoleResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserRoleResponse'] = ResolversParentTypes['IoRestorecommerceUserUserRoleResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserRole']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUser'] = ResolversParentTypes['IoRestorecommerceUserUser']> = ResolversObject<{
+export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserRole'] = ResolversParentTypes['IoRestorecommerceUserUserRole']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1232,6 +1316,7 @@ export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, Pa
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
   lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  role?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1299,6 +1384,15 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
   name: 'GoogleProtobufAnyValue';
 }
 
+export type IoRestorecommerceRoleRoleResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceRoleRole'] = ResolversParentTypes['IoRestorecommerceRoleRole']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  assignableByRoles?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type IoRestorecommerceStatusStatusResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatus'] = ResolversParentTypes['IoRestorecommerceStatusStatus']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   code?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1326,6 +1420,54 @@ export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined
 
 export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
 
+export type ProtoIoRestorecommerceUserUserListResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserUserListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserUserListResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserListResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUserUserListResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserListResponse'] = ResolversParentTypes['IoRestorecommerceUserUserListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUserUserResponse']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUserUserResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUserResponse'] = ResolversParentTypes['IoRestorecommerceUserUserResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserUser'] = ResolversParentTypes['IoRestorecommerceUserUser']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  newEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  activationCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  passwordHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
+  timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
+  userType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserType']>, ParentType, ContextType>;
+  invite?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  invitedByUserName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invitedByUserFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
+  lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ProtoIoRestorecommerceUserUserResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserUserResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserUserResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1351,15 +1493,6 @@ export type IoRestorecommerceRoleRoleListResponseResolvers<ContextType = Identit
 export type IoRestorecommerceRoleRoleResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceRoleRoleResponse'] = ResolversParentTypes['IoRestorecommerceRoleRoleResponse']> = ResolversObject<{
   payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceRoleRole']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceRoleRoleResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceRoleRole'] = ResolversParentTypes['IoRestorecommerceRoleRole']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  assignableByRoles?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1526,6 +1659,7 @@ export type IdentityTokenMutationResolvers<ContextType = IdentityContext, Parent
 
 export type IdentityOauthMutationResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IdentityOauthMutation'] = ResolversParentTypes['IdentityOauthMutation']> = ResolversObject<{
   ExchangeCode?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOauthExchangeCodeResponse']>, ParentType, ContextType, RequireFields<IdentityOauthMutationExchangeCodeArgs, 'input'>>;
+  GetToken?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOauthGetTokenResponse']>, ParentType, ContextType, RequireFields<IdentityOauthMutationGetTokenArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1541,14 +1675,25 @@ export type IoRestorecommerceOauthExchangeCodeResponseResolvers<ContextType = Id
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ProtoIoRestorecommerceOauthGetTokenResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceOauthGetTokenResponse'] = ResolversParentTypes['ProtoIoRestorecommerceOauthGetTokenResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOauthGetTokenResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceOauthGetTokenResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceOauthGetTokenResponse'] = ResolversParentTypes['IoRestorecommerceOauthGetTokenResponse']> = ResolversObject<{
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   IdentityQuery?: IdentityQueryResolvers<ContextType>;
   IdentityUserQuery?: IdentityUserQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceUserUserListResponse?: ProtoIoRestorecommerceUserUserListResponseResolvers<ContextType>;
-  IoRestorecommerceUserUserListResponse?: IoRestorecommerceUserUserListResponseResolvers<ContextType>;
-  IoRestorecommerceUserUserResponse?: IoRestorecommerceUserUserResponseResolvers<ContextType>;
-  IoRestorecommerceUserUser?: IoRestorecommerceUserUserResolvers<ContextType>;
+  ProtoIoRestorecommerceUserUserListWithRoleResponse?: ProtoIoRestorecommerceUserUserListWithRoleResponseResolvers<ContextType>;
+  IoRestorecommerceUserUserListWithRoleResponse?: IoRestorecommerceUserUserListWithRoleResponseResolvers<ContextType>;
+  IoRestorecommerceUserUserRoleResponse?: IoRestorecommerceUserUserRoleResponseResolvers<ContextType>;
+  IoRestorecommerceUserUserRole?: IoRestorecommerceUserUserRoleResolvers<ContextType>;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
@@ -1558,6 +1703,7 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceAuthTokens?: IoRestorecommerceAuthTokensResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;
+  IoRestorecommerceRoleRole?: IoRestorecommerceRoleRoleResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
@@ -1567,12 +1713,15 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
   IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
   IoRestorecommerceResourcebaseFilterOpOperator?: IoRestorecommerceResourcebaseFilterOpOperatorResolvers;
+  ProtoIoRestorecommerceUserUserListResponse?: ProtoIoRestorecommerceUserUserListResponseResolvers<ContextType>;
+  IoRestorecommerceUserUserListResponse?: IoRestorecommerceUserUserListResponseResolvers<ContextType>;
+  IoRestorecommerceUserUserResponse?: IoRestorecommerceUserUserResponseResolvers<ContextType>;
+  IoRestorecommerceUserUser?: IoRestorecommerceUserUserResolvers<ContextType>;
   ProtoIoRestorecommerceUserUserResponse?: ProtoIoRestorecommerceUserUserResponseResolvers<ContextType>;
   IdentityRoleQuery?: IdentityRoleQueryResolvers<ContextType>;
   ProtoIoRestorecommerceRoleRoleListResponse?: ProtoIoRestorecommerceRoleRoleListResponseResolvers<ContextType>;
   IoRestorecommerceRoleRoleListResponse?: IoRestorecommerceRoleRoleListResponseResolvers<ContextType>;
   IoRestorecommerceRoleRoleResponse?: IoRestorecommerceRoleRoleResponseResolvers<ContextType>;
-  IoRestorecommerceRoleRole?: IoRestorecommerceRoleRoleResolvers<ContextType>;
   IdentityAuthenticationLogQuery?: IdentityAuthenticationLogQueryResolvers<ContextType>;
   ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponse?: ProtoIoRestorecommerceAuthenticationLogAuthenticationLogListResponseResolvers<ContextType>;
   IoRestorecommerceAuthenticationLogAuthenticationLogListResponse?: IoRestorecommerceAuthenticationLogAuthenticationLogListResponseResolvers<ContextType>;
@@ -1601,5 +1750,7 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IdentityOauthMutation?: IdentityOauthMutationResolvers<ContextType>;
   ProtoIoRestorecommerceOauthExchangeCodeResponse?: ProtoIoRestorecommerceOauthExchangeCodeResponseResolvers<ContextType>;
   IoRestorecommerceOauthExchangeCodeResponse?: IoRestorecommerceOauthExchangeCodeResponseResolvers<ContextType>;
+  ProtoIoRestorecommerceOauthGetTokenResponse?: ProtoIoRestorecommerceOauthGetTokenResponseResolvers<ContextType>;
+  IoRestorecommerceOauthGetTokenResponse?: IoRestorecommerceOauthGetTokenResponseResolvers<ContextType>;
 }>;
 

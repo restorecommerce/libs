@@ -9,7 +9,7 @@
     "changed": "lerna changed",
     "test": "lerna run test",
     "build": "lerna run build",
-    "install:all": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
     "install:ci": "lerna bootstrap --ci"
   },
   "repository": {

@@ -7,7 +7,7 @@ Commit messages are not linted.
 
 ## Installing Dependencies
 
-Run `npm run install:all`.
+Run `npm run bootstrap`.
 
 ## Testing all packages
 

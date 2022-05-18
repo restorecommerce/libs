@@ -19,8 +19,10 @@
     "@grpc/grpc-js": "^1.6.7",
     "@grpc/proto-loader": "^0.6.12",
     "@restorecommerce/grpc-client": "^0.4.0",
+    "long": "^4.0.0",
     "protobufjs": "^6.10.2",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "ts-proto-descriptors": "1.2.0"
   },
   "devDependencies": {
     "@restorecommerce/protos": "^0.6.9",

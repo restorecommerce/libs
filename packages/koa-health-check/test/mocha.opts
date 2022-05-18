@@ -1,4 +1,4 @@
---require ts-node/register
+--require node_modules/ts-node/register/index.js
 --require source-map-support/register
 --recursive
 test/**/*.test.ts

@@ -1,4 +1,5 @@
 import { format } from 'winston';
+import type { FormatWrap } from 'logform';
 
 const parse = (stack: string): any[] => {
   const lines = stack.split('\n').slice(1);
@@ -84,7 +85,7 @@ export const getStackTrace = (obj?: any) => {
   return v8StackTrace;
 }
 
-export const traceFormatter = format((info, opts) => {
+export const traceFormatter: FormatWrap = format((info, opts) => {
   if (!(info as any)[Symbol.for('source')]) {
     (info as any)[Symbol.for('source')] = {};
   }

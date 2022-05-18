@@ -20,16 +20,16 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15'
+          node-version: 16
 
-      - name: Upgrade npm
-        run: npm i -g npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.1.0
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+        run: pnpm -r --filter oidc-id-srv-integration... install
 
       - name: Build
-        run: npm run build -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+        run: pnpm -r --filter oidc-id-srv-integration... build
 
   test:
     runs-on: ubuntu-20.04
@@ -41,17 +41,16 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15'
+          node-version: 16
 
-      - name: Upgrade npm
-        run: npm i -g npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.1.0
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+        run: pnpm -r --filter oidc-id-srv-integration... install
 
       - name: Build
-        run: npm run build -- --scope="@restorecommerce/oidc-id-srv-integration" --include-filtered-dependencies
+        run: pnpm -r --filter oidc-id-srv-integration... build
 
       - name: Test
-        run: npm run test
-        working-directory: ./packages/oidc-id-srv-integration
+        run: pnpm -r --filter oidc-id-srv-integration test

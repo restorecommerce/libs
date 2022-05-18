@@ -7,10 +7,8 @@
   "scripts": {
     "publish": "lerna publish --conventional-commits",
     "changed": "lerna changed",
-    "test": "lerna run test",
-    "build": "lerna run build",
-    "bootstrap": "lerna bootstrap",
-    "install:ci": "lerna bootstrap --ci"
+    "test": "pnpm -r test",
+    "build": "pnpm -r build"
   },
   "repository": {
     "type": "git",
@@ -29,5 +27,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "packageManager": "pnpm@7.0.1",
+  "engines": {
+    "node": ">=16",
+    "pnpm": ">=7"
   }
 }

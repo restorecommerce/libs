@@ -7,15 +7,15 @@ Commit messages are not linted.
 
 ## Installing Dependencies
 
-Run `npm run bootstrap`.
+Run `pnpm -r install`.
 
 ## Testing all packages
 
-Run `npm test` from the shell to run tests for all packages.
+Run `prpm test` from the shell to run tests for all packages.
 
 ## Releasing one (or more) packages
 
-Run `npm run publish` from the shell to:
+Run `pnpm run publish` from the shell to:
 
 - update version in changed packages
 - create a release commit and tag

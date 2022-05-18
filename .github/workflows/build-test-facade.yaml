@@ -20,16 +20,16 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15'
+          node-version: 16
 
-      - name: Upgrade npm
-        run: npm i -g npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.1.0
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
+        run: pnpm -r --filter facade... install
 
       - name: Build
-        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
+        run: pnpm -r --filter facade... build
 
   test:
     runs-on: ubuntu-20.04
@@ -41,10 +41,10 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '14.15'
+          node-version: 16
 
-      - name: Upgrade npm
-        run: npm i -g npm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.1.0
 
       - name: Setup System
         uses: restorecommerce/setup-system-action@v1
@@ -53,11 +53,10 @@ jobs:
           shutdown: facade-srv
 
       - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
+        run: pnpm -r --filter facade... install
 
       - name: Build
-        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
+        run: pnpm -r --filter facade... build
 
       - name: Test
-        run: npm run test
-        working-directory: ./packages/facade
+        run: pnpm -r --filter facade test

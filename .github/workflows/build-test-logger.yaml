@@ -23,7 +23,7 @@ jobs:
           node-version: 16
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2.2.1
 
       - name: Install Dependencies
         run: pnpm -r --filter logger... install
@@ -44,7 +44,7 @@ jobs:
           node-version: 16
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v2.2.1
 
       - name: Setup System
         uses: restorecommerce/setup-system-action@v1

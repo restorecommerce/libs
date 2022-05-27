@@ -1,3 +1,7 @@
+### 0.2.12 (May 27th, 2022)
+
+- up dependencies
+
 ### 0.2.11 (April 1st, 2022)
 
 - fix date time for traversal field entities

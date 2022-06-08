@@ -7,13 +7,18 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /**
  * The microservice for scheduling jobs.
  * Provides CRUD operations.
  */
 service Service {
-  rpc Read (JobReadRequest) returns (JobListResponse);
+  option (io.restorecommerce.options.service_name) = "job";
+
+  rpc Read (JobReadRequest) returns (JobListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (JobList) returns (JobListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (JobList) returns (JobListResponse);

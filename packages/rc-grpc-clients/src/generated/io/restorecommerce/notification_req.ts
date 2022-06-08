@@ -1,10 +1,11 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   protoMetadata as protoMetadata1,
   OperationStatusObj,
 } from "../../io/restorecommerce/status";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.notification_req";
 
@@ -51,18 +52,24 @@ export interface Log {
   level: string;
 }
 
-const baseAttachment: object = {
-  filename: "",
-  text: "",
-  path: "",
-  contentType: "",
-  contentDisposition: "",
-  cid: "",
-  encoding: "",
-};
+function createBaseAttachment(): Attachment {
+  return {
+    filename: "",
+    text: "",
+    buffer: Buffer.alloc(0),
+    path: "",
+    contentType: "",
+    contentDisposition: "",
+    cid: "",
+    encoding: "",
+  };
+}
 
 export const Attachment = {
-  encode(message: Attachment, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Attachment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.filename !== "") {
       writer.uint32(10).string(message.filename);
     }
@@ -90,10 +97,10 @@ export const Attachment = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Attachment {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Attachment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseAttachment) as Attachment;
+    const message = createBaseAttachment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -130,97 +137,20 @@ export const Attachment = {
   },
 
   fromJSON(object: any): Attachment {
-    const message = globalThis.Object.create(baseAttachment) as Attachment;
-    if (object.filename !== undefined && object.filename !== null) {
-      message.filename = String(object.filename);
-    } else {
-      message.filename = "";
-    }
-    if (object.text !== undefined && object.text !== null) {
-      message.text = String(object.text);
-    } else {
-      message.text = "";
-    }
-    if (object.buffer !== undefined && object.buffer !== null) {
-      message.buffer = Buffer.from(bytesFromBase64(object.buffer));
-    }
-    if (object.path !== undefined && object.path !== null) {
-      message.path = String(object.path);
-    } else {
-      message.path = "";
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = String(object.contentType);
-    } else {
-      message.contentType = "";
-    }
-    if (
-      object.contentDisposition !== undefined &&
-      object.contentDisposition !== null
-    ) {
-      message.contentDisposition = String(object.contentDisposition);
-    } else {
-      message.contentDisposition = "";
-    }
-    if (object.cid !== undefined && object.cid !== null) {
-      message.cid = String(object.cid);
-    } else {
-      message.cid = "";
-    }
-    if (object.encoding !== undefined && object.encoding !== null) {
-      message.encoding = String(object.encoding);
-    } else {
-      message.encoding = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Attachment>): Attachment {
-    const message = { ...baseAttachment } as Attachment;
-    if (object.filename !== undefined && object.filename !== null) {
-      message.filename = object.filename;
-    } else {
-      message.filename = "";
-    }
-    if (object.text !== undefined && object.text !== null) {
-      message.text = object.text;
-    } else {
-      message.text = "";
-    }
-    if (object.buffer !== undefined && object.buffer !== null) {
-      message.buffer = object.buffer;
-    } else {
-      message.buffer = new Buffer(0);
-    }
-    if (object.path !== undefined && object.path !== null) {
-      message.path = object.path;
-    } else {
-      message.path = "";
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = object.contentType;
-    } else {
-      message.contentType = "";
-    }
-    if (
-      object.contentDisposition !== undefined &&
-      object.contentDisposition !== null
-    ) {
-      message.contentDisposition = object.contentDisposition;
-    } else {
-      message.contentDisposition = "";
-    }
-    if (object.cid !== undefined && object.cid !== null) {
-      message.cid = object.cid;
-    } else {
-      message.cid = "";
-    }
-    if (object.encoding !== undefined && object.encoding !== null) {
-      message.encoding = object.encoding;
-    } else {
-      message.encoding = "";
-    }
-    return message;
+    return {
+      filename: isSet(object.filename) ? String(object.filename) : "",
+      text: isSet(object.text) ? String(object.text) : "",
+      buffer: isSet(object.buffer)
+        ? Buffer.from(bytesFromBase64(object.buffer))
+        : Buffer.alloc(0),
+      path: isSet(object.path) ? String(object.path) : "",
+      contentType: isSet(object.contentType) ? String(object.contentType) : "",
+      contentDisposition: isSet(object.contentDisposition)
+        ? String(object.contentDisposition)
+        : "",
+      cid: isSet(object.cid) ? String(object.cid) : "",
+      encoding: isSet(object.encoding) ? String(object.encoding) : "",
+    };
   },
 
   toJSON(message: Attachment): unknown {
@@ -229,7 +159,7 @@ export const Attachment = {
     message.text !== undefined && (obj.text = message.text);
     message.buffer !== undefined &&
       (obj.buffer = base64FromBytes(
-        message.buffer !== undefined ? message.buffer : new Buffer(0)
+        message.buffer !== undefined ? message.buffer : Buffer.alloc(0)
       ));
     message.path !== undefined && (obj.path = message.path);
     message.contentType !== undefined &&
@@ -240,17 +170,38 @@ export const Attachment = {
     message.encoding !== undefined && (obj.encoding = message.encoding);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Attachment>): Attachment {
+    const message = createBaseAttachment();
+    message.filename = object.filename ?? "";
+    message.text = object.text ?? "";
+    message.buffer = object.buffer ?? Buffer.alloc(0);
+    message.path = object.path ?? "";
+    message.contentType = object.contentType ?? "";
+    message.contentDisposition = object.contentDisposition ?? "";
+    message.cid = object.cid ?? "";
+    message.encoding = object.encoding ?? "";
+    return message;
+  },
 };
 
-const baseNotificationReq: object = {
-  subject: "",
-  body: "",
-  transport: "",
-  provider: "",
-};
+function createBaseNotificationReq(): NotificationReq {
+  return {
+    email: undefined,
+    log: undefined,
+    subject: "",
+    body: "",
+    transport: "",
+    provider: "",
+    attachments: [],
+  };
+}
 
 export const NotificationReq = {
-  encode(message: NotificationReq, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: NotificationReq,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.email !== undefined) {
       Email.encode(message.email, writer.uint32(10).fork()).ldelim();
     }
@@ -275,13 +226,10 @@ export const NotificationReq = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NotificationReq {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): NotificationReq {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseNotificationReq
-    ) as NotificationReq;
-    message.attachments = [];
+    const message = createBaseNotificationReq();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -315,87 +263,17 @@ export const NotificationReq = {
   },
 
   fromJSON(object: any): NotificationReq {
-    const message = globalThis.Object.create(
-      baseNotificationReq
-    ) as NotificationReq;
-    message.attachments = [];
-    if (object.email !== undefined && object.email !== null) {
-      message.email = Email.fromJSON(object.email);
-    } else {
-      message.email = undefined;
-    }
-    if (object.log !== undefined && object.log !== null) {
-      message.log = Log.fromJSON(object.log);
-    } else {
-      message.log = undefined;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = String(object.subject);
-    } else {
-      message.subject = "";
-    }
-    if (object.body !== undefined && object.body !== null) {
-      message.body = String(object.body);
-    } else {
-      message.body = "";
-    }
-    if (object.transport !== undefined && object.transport !== null) {
-      message.transport = String(object.transport);
-    } else {
-      message.transport = "";
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = String(object.provider);
-    } else {
-      message.provider = "";
-    }
-    if (object.attachments !== undefined && object.attachments !== null) {
-      for (const e of object.attachments) {
-        message.attachments.push(Attachment.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<NotificationReq>): NotificationReq {
-    const message = { ...baseNotificationReq } as NotificationReq;
-    message.attachments = [];
-    if (object.email !== undefined && object.email !== null) {
-      message.email = Email.fromPartial(object.email);
-    } else {
-      message.email = undefined;
-    }
-    if (object.log !== undefined && object.log !== null) {
-      message.log = Log.fromPartial(object.log);
-    } else {
-      message.log = undefined;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = object.subject;
-    } else {
-      message.subject = "";
-    }
-    if (object.body !== undefined && object.body !== null) {
-      message.body = object.body;
-    } else {
-      message.body = "";
-    }
-    if (object.transport !== undefined && object.transport !== null) {
-      message.transport = object.transport;
-    } else {
-      message.transport = "";
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = object.provider;
-    } else {
-      message.provider = "";
-    }
-    if (object.attachments !== undefined && object.attachments !== null) {
-      for (const e of object.attachments) {
-        message.attachments.push(Attachment.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      email: isSet(object.email) ? Email.fromJSON(object.email) : undefined,
+      log: isSet(object.log) ? Log.fromJSON(object.log) : undefined,
+      subject: isSet(object.subject) ? String(object.subject) : "",
+      body: isSet(object.body) ? String(object.body) : "",
+      transport: isSet(object.transport) ? String(object.transport) : "",
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      attachments: Array.isArray(object?.attachments)
+        ? object.attachments.map((e: any) => Attachment.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: NotificationReq): unknown {
@@ -417,12 +295,33 @@ export const NotificationReq = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<NotificationReq>): NotificationReq {
+    const message = createBaseNotificationReq();
+    message.email =
+      object.email !== undefined && object.email !== null
+        ? Email.fromPartial(object.email)
+        : undefined;
+    message.log =
+      object.log !== undefined && object.log !== null
+        ? Log.fromPartial(object.log)
+        : undefined;
+    message.subject = object.subject ?? "";
+    message.body = object.body ?? "";
+    message.transport = object.transport ?? "";
+    message.provider = object.provider ?? "";
+    message.attachments =
+      object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseEmail: object = { to: "", cc: "", bcc: "", replyto: "" };
+function createBaseEmail(): Email {
+  return { to: [], cc: [], bcc: [], replyto: "" };
+}
 
 export const Email = {
-  encode(message: Email, writer: Writer = Writer.create()): Writer {
+  encode(message: Email, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.to) {
       writer.uint32(10).string(v!);
     }
@@ -438,13 +337,10 @@ export const Email = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Email {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Email {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseEmail) as Email;
-    message.to = [];
-    message.cc = [];
-    message.bcc = [];
+    const message = createBaseEmail();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -469,59 +365,14 @@ export const Email = {
   },
 
   fromJSON(object: any): Email {
-    const message = globalThis.Object.create(baseEmail) as Email;
-    message.to = [];
-    message.cc = [];
-    message.bcc = [];
-    if (object.to !== undefined && object.to !== null) {
-      for (const e of object.to) {
-        message.to.push(String(e));
-      }
-    }
-    if (object.cc !== undefined && object.cc !== null) {
-      for (const e of object.cc) {
-        message.cc.push(String(e));
-      }
-    }
-    if (object.bcc !== undefined && object.bcc !== null) {
-      for (const e of object.bcc) {
-        message.bcc.push(String(e));
-      }
-    }
-    if (object.replyto !== undefined && object.replyto !== null) {
-      message.replyto = String(object.replyto);
-    } else {
-      message.replyto = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Email>): Email {
-    const message = { ...baseEmail } as Email;
-    message.to = [];
-    message.cc = [];
-    message.bcc = [];
-    if (object.to !== undefined && object.to !== null) {
-      for (const e of object.to) {
-        message.to.push(e);
-      }
-    }
-    if (object.cc !== undefined && object.cc !== null) {
-      for (const e of object.cc) {
-        message.cc.push(e);
-      }
-    }
-    if (object.bcc !== undefined && object.bcc !== null) {
-      for (const e of object.bcc) {
-        message.bcc.push(e);
-      }
-    }
-    if (object.replyto !== undefined && object.replyto !== null) {
-      message.replyto = object.replyto;
-    } else {
-      message.replyto = "";
-    }
-    return message;
+    return {
+      to: Array.isArray(object?.to) ? object.to.map((e: any) => String(e)) : [],
+      cc: Array.isArray(object?.cc) ? object.cc.map((e: any) => String(e)) : [],
+      bcc: Array.isArray(object?.bcc)
+        ? object.bcc.map((e: any) => String(e))
+        : [],
+      replyto: isSet(object.replyto) ? String(object.replyto) : "",
+    };
   },
 
   toJSON(message: Email): unknown {
@@ -544,22 +395,33 @@ export const Email = {
     message.replyto !== undefined && (obj.replyto = message.replyto);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Email>): Email {
+    const message = createBaseEmail();
+    message.to = object.to?.map((e) => e) || [];
+    message.cc = object.cc?.map((e) => e) || [];
+    message.bcc = object.bcc?.map((e) => e) || [];
+    message.replyto = object.replyto ?? "";
+    return message;
+  },
 };
 
-const baseLog: object = { level: "" };
+function createBaseLog(): Log {
+  return { level: "" };
+}
 
 export const Log = {
-  encode(message: Log, writer: Writer = Writer.create()): Writer {
+  encode(message: Log, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.level !== "") {
       writer.uint32(10).string(message.level);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Log {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Log {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseLog) as Log;
+    const message = createBaseLog();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -575,29 +437,21 @@ export const Log = {
   },
 
   fromJSON(object: any): Log {
-    const message = globalThis.Object.create(baseLog) as Log;
-    if (object.level !== undefined && object.level !== null) {
-      message.level = String(object.level);
-    } else {
-      message.level = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Log>): Log {
-    const message = { ...baseLog } as Log;
-    if (object.level !== undefined && object.level !== null) {
-      message.level = object.level;
-    } else {
-      message.level = "";
-    }
-    return message;
+    return {
+      level: isSet(object.level) ? String(object.level) : "",
+    };
   },
 
   toJSON(message: Log): unknown {
     const obj: any = {};
     message.level !== undefined && (obj.level = message.level);
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<Log>): Log {
+    const message = createBaseLog();
+    message.level = object.level ?? "";
+    return message;
   },
 };
 
@@ -606,51 +460,151 @@ export interface Service {
   Send(request: NotificationReq): Promise<OperationStatusObj>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/notification_req.proto",
+    package: "io.restorecommerce.notification_req",
     dependency: ["io/restorecommerce/status.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Attachment",
         field: [
           {
             name: "filename",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filename",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "text", number: 2, label: 1, type: 9, jsonName: "text" },
-          { name: "buffer", number: 3, label: 1, type: 12, jsonName: "buffer" },
-          { name: "path", number: 4, label: 1, type: 9, jsonName: "path" },
+          {
+            name: "text",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "text",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "buffer",
+            number: 3,
+            label: 1,
+            type: 12,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "buffer",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "path",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "path",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "content_type",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contentType",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "content_disposition",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contentDisposition",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "cid", number: 7, label: 1, type: 9, jsonName: "cid" },
+          {
+            name: "cid",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "cid",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "encoding",
             number: 8,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "encoding",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -658,11 +612,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Attachment",
       },
       {
+        name: "NotificationReq",
         field: [
           {
             name: "email",
@@ -670,8 +625,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.notification_req.Email",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "log",
@@ -679,30 +638,64 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.notification_req.Log",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "log",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "body", number: 4, label: 1, type: 9, jsonName: "body" },
+          {
+            name: "body",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "body",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "transport",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "transport",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "provider",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "provider",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "attachments",
@@ -710,29 +703,77 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.notification_req.Attachment",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "attachments",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [{ name: "channel" }],
+        oneofDecl: [{ name: "channel", options: undefined }],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "NotificationReq",
       },
       {
+        name: "Email",
         field: [
-          { name: "to", number: 1, label: 3, type: 9, jsonName: "to" },
-          { name: "cc", number: 2, label: 3, type: 9, jsonName: "cc" },
-          { name: "bcc", number: 3, label: 3, type: 9, jsonName: "bcc" },
+          {
+            name: "to",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "to",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "cc",
+            number: 2,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "cc",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "bcc",
+            number: 3,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "bcc",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "replyto",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "replyto",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -740,118 +781,144 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Email",
       },
       {
+        name: "Log",
         field: [
-          { name: "level", number: 1, label: 1, type: 9, jsonName: "level" },
+          {
+            name: "level",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "level",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Log",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Send",
             inputType: ".io.restorecommerce.notification_req.NotificationReq",
             outputType: ".io.restorecommerce.status.OperationStatusObj",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/notification_req.proto",
-    package: "io.restorecommerce.notification_req",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0, 2, 0],
           span: [8, 2, 84],
-          leadingDetachedComments: [],
           leadingComments: " direct notifications\n",
           trailingComments: "/ generic fallback\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0],
           span: [12, 0, 24, 1],
-          leadingDetachedComments: [],
           leadingComments:
             " mimics nodemailer properties for easy configuration\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 1],
           span: [16, 2, 18],
-          leadingDetachedComments: [],
           leadingComments: ' the "content" may be on of the following:\n',
           trailingComments: " for textual data\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 2],
           span: [17, 2, 19],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " for binary data, eg.: images\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1],
           span: [27, 0, 37, 1],
-          leadingDetachedComments: [],
           leadingComments: " sendEmail NotificationReq event\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 3],
           span: [33, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " text/HTML content\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 4],
           span: [34, 2, 23],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: "/ 'email', 'log', ... default == 'log'\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 5],
           span: [35, 2, 22],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             "/ specific transport provider, eg: 'console' for transport == 'log'\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 0],
           span: [40, 2, 25],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " array of to email list\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 1],
           span: [41, 2, 26],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " array of cc email list\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 2],
           span: [42, 2, 26],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " array of bcc email list\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 3],
           span: [43, 2, 21],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             " if set, the outgoing mail will have this replyTo header set\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -868,6 +935,7 @@ export const protoMetadata: ProtoMetadata = {
 
 declare var self: any | undefined;
 declare var window: any | undefined;
+declare var global: any | undefined;
 var globalThis: any = (() => {
   if (typeof globalThis !== "undefined") return globalThis;
   if (typeof self !== "undefined") return self;
@@ -893,13 +961,21 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]));
-  }
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
   return btoa(bin.join(""));
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -909,3 +985,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
-import { Writer, Reader } from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "google.protobuf";
 
@@ -17,17 +18,19 @@ export const protobufPackage = "google.protobuf";
  */
 export interface Empty {}
 
-const baseEmpty: object = {};
+function createBaseEmpty(): Empty {
+  return {};
+}
 
 export const Empty = {
-  encode(_: Empty, writer: Writer = Writer.create()): Writer {
+  encode(_: Empty, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Empty {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Empty {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseEmpty) as Empty;
+    const message = createBaseEmpty();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -40,69 +43,107 @@ export const Empty = {
   },
 
   fromJSON(_: any): Empty {
-    const message = globalThis.Object.create(baseEmpty) as Empty;
-    return message;
-  },
-
-  fromPartial(_: DeepPartial<Empty>): Empty {
-    const message = { ...baseEmpty } as Empty;
-    return message;
+    return {};
   },
 
   toJSON(_: Empty): unknown {
     const obj: any = {};
     return obj;
   },
+
+  fromPartial(_: DeepPartial<Empty>): Empty {
+    const message = createBaseEmpty();
+    return message;
+  },
+};
+
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "google/protobuf/empty.proto",
+    package: "google.protobuf",
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Empty",
         field: [],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Empty",
       },
     ],
     enumType: [],
     service: [],
     extension: [],
-    name: "google/protobuf/empty.proto",
-    package: "google.protobuf",
     options: {
-      uninterpretedOption: [],
       javaPackage: "com.google.protobuf",
       javaOuterClassname: "EmptyProto",
       javaMultipleFiles: true,
-      goPackage: "github.com/golang/protobuf/ptypes/empty",
       javaGenerateEqualsAndHash: true,
+      javaStringCheckUtf8: false,
+      optimizeFor: 1,
+      goPackage: "github.com/golang/protobuf/ptypes/empty",
+      ccGenericServices: false,
+      javaGenericServices: false,
+      pyGenericServices: false,
+      phpGenericServices: false,
+      deprecated: false,
       ccEnableArenas: true,
       objcClassPrefix: "GPB",
       csharpNamespace: "Google.Protobuf.WellKnownTypes",
+      swiftPrefix: "",
+      phpClassPrefix: "",
+      phpNamespace: "",
+      phpMetadataNamespace: "",
+      rubyPackage: "",
+      uninterpretedOption: [],
     },
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
           span: [52, 0, 16],
-          leadingDetachedComments: [],
           leadingComments:
             "/ A generic empty message that you can re-use to avoid defining duplicated\n/ empty messages in your APIs. A typical example is to use it as the request\n/ or the response type of an API method. For instance:\n/\n/     service Foo {\n/       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n/     }\n/\n/ The JSON representation for `Empty` is empty JSON object `{}`.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -112,17 +153,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -132,3 +171,10 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

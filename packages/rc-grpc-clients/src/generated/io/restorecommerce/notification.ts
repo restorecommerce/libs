@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
@@ -19,7 +21,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.notification";
 
@@ -56,20 +58,25 @@ export interface Notification {
   bodyTemplate: string;
 }
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -85,23 +92,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -109,12 +102,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseNotificationList: object = { totalCount: 0 };
+function createBaseNotificationList(): NotificationList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const NotificationList = {
-  encode(message: NotificationList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: NotificationList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Notification.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -127,13 +131,10 @@ export const NotificationList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NotificationList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): NotificationList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseNotificationList
-    ) as NotificationList;
-    message.items = [];
+    const message = createBaseNotificationList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -155,47 +156,15 @@ export const NotificationList = {
   },
 
   fromJSON(object: any): NotificationList {
-    const message = globalThis.Object.create(
-      baseNotificationList
-    ) as NotificationList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Notification.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<NotificationList>): NotificationList {
-    const message = { ...baseNotificationList } as NotificationList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Notification.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Notification.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: NotificationList): unknown {
@@ -207,22 +176,36 @@ export const NotificationList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<NotificationList>): NotificationList {
+    const message = createBaseNotificationList();
+    message.items = object.items?.map((e) => Notification.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseNotificationListResponse: object = { totalCount: 0 };
+function createBaseNotificationListResponse(): NotificationListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const NotificationListResponse = {
   encode(
     message: NotificationListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       NotificationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -239,15 +222,12 @@ export const NotificationListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): NotificationListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseNotificationListResponse
-    ) as NotificationListResponse;
-    message.items = [];
+    const message = createBaseNotificationListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -274,61 +254,15 @@ export const NotificationListResponse = {
   },
 
   fromJSON(object: any): NotificationListResponse {
-    const message = globalThis.Object.create(
-      baseNotificationListResponse
-    ) as NotificationListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(NotificationResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<NotificationListResponse>
-  ): NotificationListResponse {
-    const message = {
-      ...baseNotificationListResponse,
-    } as NotificationListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(NotificationResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => NotificationResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: NotificationListResponse): unknown {
@@ -340,22 +274,39 @@ export const NotificationListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<NotificationListResponse>
+  ): NotificationListResponse {
+    const message = createBaseNotificationListResponse();
+    message.items =
+      object.items?.map((e) => NotificationResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseNotificationResponse: object = {};
+function createBaseNotificationResponse(): NotificationResponse {
+  return { items: undefined, status: undefined };
+}
 
 export const NotificationResponse = {
   encode(
     message: NotificationResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.items !== undefined) {
       Notification.encode(message.items, writer.uint32(10).fork()).ldelim();
     }
@@ -365,12 +316,13 @@ export const NotificationResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): NotificationResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): NotificationResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseNotificationResponse
-    ) as NotificationResponse;
+    const message = createBaseNotificationResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -389,35 +341,12 @@ export const NotificationResponse = {
   },
 
   fromJSON(object: any): NotificationResponse {
-    const message = globalThis.Object.create(
-      baseNotificationResponse
-    ) as NotificationResponse;
-    if (object.items !== undefined && object.items !== null) {
-      message.items = Notification.fromJSON(object.items);
-    } else {
-      message.items = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<NotificationResponse>): NotificationResponse {
-    const message = { ...baseNotificationResponse } as NotificationResponse;
-    if (object.items !== undefined && object.items !== null) {
-      message.items = Notification.fromPartial(object.items);
-    } else {
-      message.items = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      items: isSet(object.items)
+        ? Notification.fromJSON(object.items)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: NotificationResponse): unknown {
@@ -430,19 +359,40 @@ export const NotificationResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<NotificationResponse>): NotificationResponse {
+    const message = createBaseNotificationResponse();
+    message.items =
+      object.items !== undefined && object.items !== null
+        ? Notification.fromPartial(object.items)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseNotification: object = {
-  id: "",
-  name: "",
-  description: "",
-  notificationChannelIds: "",
-  subjectTemplate: "",
-  bodyTemplate: "",
-};
+function createBaseNotification(): Notification {
+  return {
+    id: "",
+    meta: undefined,
+    name: "",
+    description: "",
+    notificationChannelIds: [],
+    email: undefined,
+    telephoneNumber: undefined,
+    subjectTemplate: "",
+    bodyTemplate: "",
+  };
+}
 
 export const Notification = {
-  encode(message: Notification, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Notification,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -473,11 +423,10 @@ export const Notification = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Notification {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Notification {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseNotification) as Notification;
-    message.notificationChannelIds = [];
+    const message = createBaseNotification();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -517,123 +466,25 @@ export const Notification = {
   },
 
   fromJSON(object: any): Notification {
-    const message = globalThis.Object.create(baseNotification) as Notification;
-    message.notificationChannelIds = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (
-      object.notificationChannelIds !== undefined &&
-      object.notificationChannelIds !== null
-    ) {
-      for (const e of object.notificationChannelIds) {
-        message.notificationChannelIds.push(String(e));
-      }
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = undefined;
-    }
-    if (
-      object.telephoneNumber !== undefined &&
-      object.telephoneNumber !== null
-    ) {
-      message.telephoneNumber = String(object.telephoneNumber);
-    } else {
-      message.telephoneNumber = undefined;
-    }
-    if (
-      object.subjectTemplate !== undefined &&
-      object.subjectTemplate !== null
-    ) {
-      message.subjectTemplate = String(object.subjectTemplate);
-    } else {
-      message.subjectTemplate = "";
-    }
-    if (object.bodyTemplate !== undefined && object.bodyTemplate !== null) {
-      message.bodyTemplate = String(object.bodyTemplate);
-    } else {
-      message.bodyTemplate = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Notification>): Notification {
-    const message = { ...baseNotification } as Notification;
-    message.notificationChannelIds = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (
-      object.notificationChannelIds !== undefined &&
-      object.notificationChannelIds !== null
-    ) {
-      for (const e of object.notificationChannelIds) {
-        message.notificationChannelIds.push(e);
-      }
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = undefined;
-    }
-    if (
-      object.telephoneNumber !== undefined &&
-      object.telephoneNumber !== null
-    ) {
-      message.telephoneNumber = object.telephoneNumber;
-    } else {
-      message.telephoneNumber = undefined;
-    }
-    if (
-      object.subjectTemplate !== undefined &&
-      object.subjectTemplate !== null
-    ) {
-      message.subjectTemplate = object.subjectTemplate;
-    } else {
-      message.subjectTemplate = "";
-    }
-    if (object.bodyTemplate !== undefined && object.bodyTemplate !== null) {
-      message.bodyTemplate = object.bodyTemplate;
-    } else {
-      message.bodyTemplate = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      notificationChannelIds: Array.isArray(object?.notificationChannelIds)
+        ? object.notificationChannelIds.map((e: any) => String(e))
+        : [],
+      email: isSet(object.email) ? String(object.email) : undefined,
+      telephoneNumber: isSet(object.telephoneNumber)
+        ? String(object.telephoneNumber)
+        : undefined,
+      subjectTemplate: isSet(object.subjectTemplate)
+        ? String(object.subjectTemplate)
+        : "",
+      bodyTemplate: isSet(object.bodyTemplate)
+        ? String(object.bodyTemplate)
+        : "",
+    };
   },
 
   toJSON(message: Notification): unknown {
@@ -658,6 +509,24 @@ export const Notification = {
       (obj.bodyTemplate = message.bodyTemplate);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Notification>): Notification {
+    const message = createBaseNotification();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
+    message.notificationChannelIds =
+      object.notificationChannelIds?.map((e) => e) || [];
+    message.email = object.email ?? undefined;
+    message.telephoneNumber = object.telephoneNumber ?? undefined;
+    message.subjectTemplate = object.subjectTemplate ?? "";
+    message.bodyTemplate = object.bodyTemplate ?? "";
+    return message;
+  },
 };
 
 /** Message structure for Notification */
@@ -669,35 +538,79 @@ export interface Service {
   Upsert(request: NotificationList): Promise<NotificationListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/notification.proto",
+    package: "io.restorecommerce.notification",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
       {
+        name: "NotificationList",
         field: [
           {
             name: "items",
@@ -705,14 +618,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.notification.Notification",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -720,7 +644,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -728,11 +657,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "NotificationList",
       },
       {
+        name: "NotificationListResponse",
         field: [
           {
             name: "items",
@@ -740,14 +670,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.notification.NotificationResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -755,7 +696,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -763,11 +709,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "NotificationListResponse",
       },
       {
+        name: "NotificationResponse",
         field: [
           {
             name: "items",
@@ -775,7 +722,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.notification.Notification",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -783,7 +735,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -791,124 +748,208 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "NotificationResponse",
       },
       {
+        name: "Notification",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "description",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "notification_channel_ids",
             number: 5,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "notificationChannelIds",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "email",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "telephone_number",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "telephoneNumber",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject_template",
             number: 8,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subjectTemplate",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "body_template",
             number: 9,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "bodyTemplate",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [{ name: "address_type" }],
+        oneofDecl: [{ name: "address_type", options: undefined }],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Notification",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.notification.NotificationListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.notification.NotificationList",
             outputType:
               ".io.restorecommerce.notification.NotificationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.notification.NotificationList",
             outputType:
               ".io.restorecommerce.notification.NotificationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.notification.NotificationList",
             outputType:
               ".io.restorecommerce.notification.NotificationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/notification.proto",
-    package: "io.restorecommerce.notification",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
-          span: [10, 0, 16, 1],
-          leadingDetachedComments: [],
+          span: [11, 0, 21, 1],
           leadingComments: " Message structure for Notification\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -917,8 +958,10 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.notification.Deleted": Deleted,
     ".io.restorecommerce.notification.NotificationList": NotificationList,
-    ".io.restorecommerce.notification.NotificationListResponse": NotificationListResponse,
-    ".io.restorecommerce.notification.NotificationResponse": NotificationResponse,
+    ".io.restorecommerce.notification.NotificationListResponse":
+      NotificationListResponse,
+    ".io.restorecommerce.notification.NotificationResponse":
+      NotificationResponse,
     ".io.restorecommerce.notification.Notification": Notification,
   },
   dependencies: [
@@ -926,20 +969,27 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "notification" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -949,3 +999,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

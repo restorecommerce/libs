@@ -1,13 +1,14 @@
 syntax = "proto3";
 
 package io.restorecommerce.policy_set;
- 
+
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/policy.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/rule.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 message PolicySet {
   string id = 1;
@@ -45,7 +46,11 @@ message PolicySetRQ {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListResponse);
+  option (io.restorecommerce.options.service_name) = "policy_set";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (PolicySetList) returns (PolicySetListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (PolicySetList) returns (PolicySetListResponse);

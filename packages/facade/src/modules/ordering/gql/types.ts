@@ -1,14 +1,10 @@
 import { protoMetadata as metaPackageIoRestorecommerceOrdering } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
-import { registerPackagesRecursive, SubService} from "../../../gql/protos";
+import { ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos';
 
 export function registerTypings() {
-  registerPackagesRecursive(metaPackageIoRestorecommerceOrdering);
+  registerPackagesRecursive(...subServices);
 }
 
-export const subServices: SubService[] = [
-  {
-    name: 'order',
-    service: metaPackageIoRestorecommerceOrdering.fileDescriptor.service![0],
-    queries: ['Read']
-  }
+export const subServices: ProtoMetadata[] = [
+  metaPackageIoRestorecommerceOrdering
 ]

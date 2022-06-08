@@ -9,12 +9,19 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/options.proto";
 
 service Service {
-  rpc Get (GetRequest) returns (stream ObjectResponse);
+  option (io.restorecommerce.options.service_name) = "object";
+
+  rpc Get (GetRequest) returns (stream ObjectResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Put (stream Object) returns (PutResponse);
   rpc Delete (DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc List (ListRequest) returns (ListResponse);
+  rpc List (ListRequest) returns (ListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Copy (CopyRequestList) returns (CopyResponseList);
   rpc Move (MoveRequestList) returns (MoveResponseList);
 }

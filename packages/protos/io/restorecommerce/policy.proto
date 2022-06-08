@@ -7,6 +7,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/rule.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /**
 * A Policy is defined by a set of Rules.
@@ -51,7 +52,11 @@ message PolicyResponse {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListResponse);
+  option (io.restorecommerce.options.service_name) = "policy";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (PolicyList) returns (PolicyListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (PolicyList) returns (PolicyListResponse);

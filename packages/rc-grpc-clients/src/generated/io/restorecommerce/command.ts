@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Meta,
   protoMetadata as protoMetadata2,
@@ -19,7 +21,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.command";
 
@@ -95,8 +97,9 @@ export function commandParameter_ParameterTypeToJSON(
       return "number_value";
     case CommandParameter_ParameterType.string_value:
       return "string_value";
+    case CommandParameter_ParameterType.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -117,10 +120,15 @@ export interface CommandResponse {
   status?: Status;
 }
 
-const baseCommand: object = { id: "", name: "", description: "" };
+function createBaseCommand(): Command {
+  return { id: "", meta: undefined, name: "", parameters: [], description: "" };
+}
 
 export const Command = {
-  encode(message: Command, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Command,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -139,11 +147,10 @@ export const Command = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Command {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Command {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseCommand) as Command;
-    message.parameters = [];
+    const message = createBaseCommand();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -173,65 +180,15 @@ export const Command = {
   },
 
   fromJSON(object: any): Command {
-    const message = globalThis.Object.create(baseCommand) as Command;
-    message.parameters = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.parameters !== undefined && object.parameters !== null) {
-      for (const e of object.parameters) {
-        message.parameters.push(CommandParameter.fromJSON(e));
-      }
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Command>): Command {
-    const message = { ...baseCommand } as Command;
-    message.parameters = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.parameters !== undefined && object.parameters !== null) {
-      for (const e of object.parameters) {
-        message.parameters.push(CommandParameter.fromPartial(e));
-      }
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      parameters: Array.isArray(object?.parameters)
+        ? object.parameters.map((e: any) => CommandParameter.fromJSON(e))
+        : [],
+      description: isSet(object.description) ? String(object.description) : "",
+    };
   },
 
   toJSON(message: Command): unknown {
@@ -251,17 +208,31 @@ export const Command = {
       (obj.description = message.description);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Command>): Command {
+    const message = createBaseCommand();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.name = object.name ?? "";
+    message.parameters =
+      object.parameters?.map((e) => CommandParameter.fromPartial(e)) || [];
+    message.description = object.description ?? "";
+    return message;
+  },
 };
 
-const baseCommandParameter: object = {
-  field: "",
-  description: "",
-  type: 0,
-  properties: "",
-};
+function createBaseCommandParameter(): CommandParameter {
+  return { field: "", description: "", type: 0, properties: "" };
+}
 
 export const CommandParameter = {
-  encode(message: CommandParameter, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CommandParameter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -277,12 +248,10 @@ export const CommandParameter = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandParameter {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandParameter {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandParameter
-    ) as CommandParameter;
+    const message = createBaseCommandParameter();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -307,55 +276,14 @@ export const CommandParameter = {
   },
 
   fromJSON(object: any): CommandParameter {
-    const message = globalThis.Object.create(
-      baseCommandParameter
-    ) as CommandParameter;
-    if (object.field !== undefined && object.field !== null) {
-      message.field = String(object.field);
-    } else {
-      message.field = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = commandParameter_ParameterTypeFromJSON(object.type);
-    } else {
-      message.type = 0;
-    }
-    if (object.properties !== undefined && object.properties !== null) {
-      message.properties = String(object.properties);
-    } else {
-      message.properties = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
-    const message = { ...baseCommandParameter } as CommandParameter;
-    if (object.field !== undefined && object.field !== null) {
-      message.field = object.field;
-    } else {
-      message.field = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = 0;
-    }
-    if (object.properties !== undefined && object.properties !== null) {
-      message.properties = object.properties;
-    } else {
-      message.properties = "";
-    }
-    return message;
+    return {
+      field: isSet(object.field) ? String(object.field) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      type: isSet(object.type)
+        ? commandParameter_ParameterTypeFromJSON(object.type)
+        : 0,
+      properties: isSet(object.properties) ? String(object.properties) : "",
+    };
   },
 
   toJSON(message: CommandParameter): unknown {
@@ -368,12 +296,26 @@ export const CommandParameter = {
     message.properties !== undefined && (obj.properties = message.properties);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
+    const message = createBaseCommandParameter();
+    message.field = object.field ?? "";
+    message.description = object.description ?? "";
+    message.type = object.type ?? 0;
+    message.properties = object.properties ?? "";
+    return message;
+  },
 };
 
-const baseCommandList: object = { totalCount: 0 };
+function createBaseCommandList(): CommandList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const CommandList = {
-  encode(message: CommandList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CommandList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Command.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -386,11 +328,10 @@ export const CommandList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseCommandList) as CommandList;
-    message.items = [];
+    const message = createBaseCommandList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -412,45 +353,15 @@ export const CommandList = {
   },
 
   fromJSON(object: any): CommandList {
-    const message = globalThis.Object.create(baseCommandList) as CommandList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Command.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandList>): CommandList {
-    const message = { ...baseCommandList } as CommandList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Command.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Command.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: CommandList): unknown {
@@ -460,22 +371,36 @@ export const CommandList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandList>): CommandList {
+    const message = createBaseCommandList();
+    message.items = object.items?.map((e) => Command.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseCommandListResponse: object = { totalCount: 0 };
+function createBaseCommandListResponse(): CommandListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const CommandListResponse = {
   encode(
     message: CommandListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       CommandResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -491,13 +416,10 @@ export const CommandListResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandListResponse
-    ) as CommandListResponse;
-    message.items = [];
+    const message = createBaseCommandListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -522,57 +444,15 @@ export const CommandListResponse = {
   },
 
   fromJSON(object: any): CommandListResponse {
-    const message = globalThis.Object.create(
-      baseCommandListResponse
-    ) as CommandListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(CommandResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
-    const message = { ...baseCommandListResponse } as CommandListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(CommandResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => CommandResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: CommandListResponse): unknown {
@@ -584,19 +464,37 @@ export const CommandListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
+    const message = createBaseCommandListResponse();
+    message.items =
+      object.items?.map((e) => CommandResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseCommandResponse: object = {};
+function createBaseCommandResponse(): CommandResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const CommandResponse = {
-  encode(message: CommandResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CommandResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Command.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -606,12 +504,10 @@ export const CommandResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandResponse
-    ) as CommandResponse;
+    const message = createBaseCommandResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -630,35 +526,12 @@ export const CommandResponse = {
   },
 
   fromJSON(object: any): CommandResponse {
-    const message = globalThis.Object.create(
-      baseCommandResponse
-    ) as CommandResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Command.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
-    const message = { ...baseCommandResponse } as CommandResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Command.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? Command.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: CommandResponse): unknown {
@@ -671,6 +544,19 @@ export const CommandResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
+    const message = createBaseCommandResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Command.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
 export interface Service {
@@ -681,49 +567,118 @@ export interface Service {
   Upsert(request: CommandList): Promise<CommandListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/command.proto",
+    package: "io.restorecommerce.command",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Command",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "parameters",
             number: 4,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.command.CommandParameter",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "parameters",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "description",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -731,19 +686,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Command",
       },
       {
+        name: "CommandParameter",
         field: [
-          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "description",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "type",
@@ -752,39 +726,52 @@ export const protoMetadata: ProtoMetadata = {
             type: 14,
             typeName:
               ".io.restorecommerce.command.CommandParameter.ParameterType",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "properties",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "properties",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "ParameterType",
             value: [
-              { name: "boolean_value", number: 0 },
-              { name: "object_value", number: 1 },
-              { name: "array_value", number: 2 },
-              { name: "number_value", number: 3 },
-              { name: "string_value", number: 4 },
+              { name: "boolean_value", number: 0, options: undefined },
+              { name: "object_value", number: 1, options: undefined },
+              { name: "array_value", number: 2, options: undefined },
+              { name: "number_value", number: 3, options: undefined },
+              { name: "string_value", number: 4, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "ParameterType",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandParameter",
       },
       {
+        name: "CommandList",
         field: [
           {
             name: "items",
@@ -792,14 +779,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.command.Command",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -807,7 +805,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -815,11 +818,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandList",
       },
       {
+        name: "CommandListResponse",
         field: [
           {
             name: "items",
@@ -827,14 +831,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.command.CommandResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -842,7 +857,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -850,11 +870,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandListResponse",
       },
       {
+        name: "CommandResponse",
         field: [
           {
             name: "payload",
@@ -862,7 +883,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.command.Command",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -870,7 +896,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -878,96 +909,123 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandResponse",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType: ".io.restorecommerce.command.CommandListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.command.CommandList",
             outputType: ".io.restorecommerce.command.CommandListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.command.CommandList",
             outputType: ".io.restorecommerce.command.CommandListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.command.CommandList",
             outputType: ".io.restorecommerce.command.CommandListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/command.proto",
-    package: "io.restorecommerce.command",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
-          span: [10, 0, 16, 1],
-          leadingDetachedComments: [],
+          span: [11, 0, 17, 1],
           leadingComments: " command resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 2],
-          span: [13, 2, 18],
-          leadingDetachedComments: [],
+          span: [14, 2, 18],
+          leadingComments: "",
           trailingComments: " command name\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 3],
-          span: [14, 2, 43],
-          leadingDetachedComments: [],
+          span: [15, 2, 43],
+          leadingComments: "",
           trailingComments: " all possible parameters\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 4],
-          span: [15, 2, 25],
-          leadingDetachedComments: [],
+          span: [16, 2, 25],
+          leadingComments: "",
           trailingComments: " command description\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
-          span: [27, 2, 19],
-          leadingDetachedComments: [],
+          span: [28, 2, 19],
+          leadingComments: "",
           trailingComments: "  field name\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 1],
-          span: [28, 2, 25],
-          leadingDetachedComments: [],
+          span: [29, 2, 25],
+          leadingComments: "",
           trailingComments: " field description\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 2],
-          span: [29, 2, 25],
-          leadingDetachedComments: [],
+          span: [30, 2, 25],
+          leadingComments: "",
           trailingComments: " field's type\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 3],
-          span: [30, 2, 24],
-          leadingDetachedComments: [],
+          span: [31, 2, 24],
+          leadingComments: "",
           trailingComments: " dump properties in case of `object_value``\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -976,7 +1034,8 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.command.Command": Command,
     ".io.restorecommerce.command.CommandParameter": CommandParameter,
-    ".io.restorecommerce.command.CommandParameter.ParameterType": CommandParameter_ParameterType,
+    ".io.restorecommerce.command.CommandParameter.ParameterType":
+      CommandParameter_ParameterType,
     ".io.restorecommerce.command.CommandList": CommandList,
     ".io.restorecommerce.command.CommandListResponse": CommandListResponse,
     ".io.restorecommerce.command.CommandResponse": CommandResponse,
@@ -986,20 +1045,27 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "command" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1009,3 +1075,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

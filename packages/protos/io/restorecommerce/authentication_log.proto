@@ -6,12 +6,17 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AuthenticationLogListResponse);
+  option (io.restorecommerce.options.service_name) = "authentication_log";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AuthenticationLogListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (AuthenticationLogList) returns (AuthenticationLogListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (AuthenticationLogList) returns (AuthenticationLogListResponse);

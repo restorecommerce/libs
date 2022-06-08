@@ -92,7 +92,9 @@ export type IoRestorecommerceUserUserRole = {
   passwordHash?: Maybe<Scalars['String']>;
   roleAssociations?: Maybe<Array<IoRestorecommerceAuthRoleAssociation>>;
   timezoneId?: Maybe<Scalars['String']>;
+  timezone?: Maybe<IoRestorecommerceTimezoneTimezone>;
   localeId?: Maybe<Scalars['String']>;
+  locale?: Maybe<IoRestorecommerceLocaleLocale>;
   defaultScope?: Maybe<Scalars['String']>;
   unauthenticated?: Maybe<Scalars['Boolean']>;
   guest?: Maybe<Scalars['Boolean']>;
@@ -135,6 +137,21 @@ export type IoRestorecommerceAuthRoleAssociation = {
   attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   id?: Maybe<Scalars['String']>;
   created?: Maybe<Scalars['Float']>;
+};
+
+export type IoRestorecommerceTimezoneTimezone = {
+  __typename?: 'IoRestorecommerceTimezoneTimezone';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceLocaleLocale = {
+  __typename?: 'IoRestorecommerceLocaleLocale';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  value?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceImageImage = {
@@ -1043,6 +1060,8 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
+  IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
+  IoRestorecommerceLocaleLocale: ResolverTypeWrapper<IoRestorecommerceLocaleLocale>;
   IoRestorecommerceImageImage: ResolverTypeWrapper<IoRestorecommerceImageImage>;
   IoRestorecommerceUserUserType: IoRestorecommerceUserUserType;
   IoRestorecommerceAuthTokens: ResolverTypeWrapper<IoRestorecommerceAuthTokens>;
@@ -1159,6 +1178,8 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   Boolean: Scalars['Boolean'];
   IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
+  IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
+  IoRestorecommerceLocaleLocale: IoRestorecommerceLocaleLocale;
   IoRestorecommerceImageImage: IoRestorecommerceImageImage;
   IoRestorecommerceAuthTokens: IoRestorecommerceAuthTokens;
   GoogleProtobufAny: GoogleProtobufAny;
@@ -1303,7 +1324,9 @@ export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext
   passwordHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   roleAssociations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthRoleAssociation']>>, ParentType, ContextType>;
   timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezone?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
   localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
   defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
@@ -1346,6 +1369,21 @@ export type IoRestorecommerceAuthRoleAssociationResolvers<ContextType = Identity
   attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTimezoneTimezoneResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezone'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezone']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceLocaleLocaleResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocaleLocale'] = ResolversParentTypes['IoRestorecommerceLocaleLocale']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1698,6 +1736,8 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
+  IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
+  IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;
   IoRestorecommerceImageImage?: IoRestorecommerceImageImageResolvers<ContextType>;
   IoRestorecommerceUserUserType?: IoRestorecommerceUserUserTypeResolvers;
   IoRestorecommerceAuthTokens?: IoRestorecommerceAuthTokensResolvers<ContextType>;

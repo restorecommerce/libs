@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata1,
@@ -8,7 +10,6 @@ import {
   Subject,
   protoMetadata as protoMetadata2,
 } from "../../io/restorecommerce/auth";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.commandinterface";
 
@@ -33,10 +34,15 @@ export interface CommandResponse {
   payload?: Any;
 }
 
-const baseCommandRequest: object = { name: "" };
+function createBaseCommandRequest(): CommandRequest {
+  return { name: "", payload: undefined, subject: undefined };
+}
 
 export const CommandRequest = {
-  encode(message: CommandRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CommandRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -49,12 +55,10 @@ export const CommandRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandRequest
-    ) as CommandRequest;
+    const message = createBaseCommandRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -76,45 +80,13 @@ export const CommandRequest = {
   },
 
   fromJSON(object: any): CommandRequest {
-    const message = globalThis.Object.create(
-      baseCommandRequest
-    ) as CommandRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
-    const message = { ...baseCommandRequest } as CommandRequest;
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: CommandRequest): unknown {
@@ -128,12 +100,31 @@ export const CommandRequest = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
+    const message = createBaseCommandRequest();
+    message.name = object.name ?? "";
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseCommandResponse: object = { services: "" };
+function createBaseCommandResponse(): CommandResponse {
+  return { services: [], payload: undefined };
+}
 
 export const CommandResponse = {
-  encode(message: CommandResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CommandResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.services) {
       writer.uint32(10).string(v!);
     }
@@ -143,13 +134,10 @@ export const CommandResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CommandResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): CommandResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseCommandResponse
-    ) as CommandResponse;
-    message.services = [];
+    const message = createBaseCommandResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -168,37 +156,12 @@ export const CommandResponse = {
   },
 
   fromJSON(object: any): CommandResponse {
-    const message = globalThis.Object.create(
-      baseCommandResponse
-    ) as CommandResponse;
-    message.services = [];
-    if (object.services !== undefined && object.services !== null) {
-      for (const e of object.services) {
-        message.services.push(String(e));
-      }
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
-    const message = { ...baseCommandResponse } as CommandResponse;
-    message.services = [];
-    if (object.services !== undefined && object.services !== null) {
-      for (const e of object.services) {
-        message.services.push(e);
-      }
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    return message;
+    return {
+      services: Array.isArray(object?.services)
+        ? object.services.map((e: any) => String(e))
+        : [],
+      payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
+    };
   },
 
   toJSON(message: CommandResponse): unknown {
@@ -212,6 +175,16 @@ export const CommandResponse = {
       (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
+    const message = createBaseCommandResponse();
+    message.services = object.services?.map((e) => e) || [];
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
+    return message;
+  },
 };
 
 /** RPC service for executing commands */
@@ -219,28 +192,73 @@ export interface Service {
   Command(request: CommandRequest): Promise<Any>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/commandinterface.proto",
+    package: "io.restorecommerce.commandinterface",
     dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "CommandRequest",
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "payload",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -248,7 +266,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -256,18 +279,25 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandRequest",
       },
       {
+        name: "CommandResponse",
         field: [
           {
             name: "services",
             number: 1,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "services",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "payload",
@@ -275,7 +305,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -283,72 +318,82 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "CommandResponse",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Command",
             inputType: ".io.restorecommerce.commandinterface.CommandRequest",
             outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/commandinterface.proto",
-    package: "io.restorecommerce.commandinterface",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
           span: [8, 0, 13, 1],
-          leadingDetachedComments: [],
           leadingComments: " used to send requests through Kafka or gRPC\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 0],
           span: [10, 2, 18],
-          leadingDetachedComments: [],
           leadingComments:
             "  command identifier (used to demultiplex operation in the command implementation)\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 1],
           span: [11, 2, 34],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " variable payload\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1],
           span: [16, 0, 22, 1],
-          leadingDetachedComments: [],
           leadingComments: " used to push responses to Kafka\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
           span: [20, 2, 31],
-          leadingDetachedComments: [],
           leadingComments:
             " service identifiers\n (multiple services may reply to one system command)\n (multiple service names can be bound to one microservice)\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 1],
           span: [21, 2, 34],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " variable payload\n",
+          leadingDetachedComments: [],
         },
         {
           path: [6, 0],
           span: [27, 0, 29, 1],
-          leadingDetachedComments: [],
           leadingComments: "*\n RPC service for executing commands\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -361,17 +406,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1, protoMetadata2],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -381,3 +424,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

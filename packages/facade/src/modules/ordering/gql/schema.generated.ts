@@ -65,7 +65,9 @@ export type IoRestorecommerceOrderOrder = {
   items?: Maybe<Array<IoRestorecommerceOrderItems>>;
   totalPrice?: Maybe<Scalars['Float']>;
   shippingContactPointId?: Maybe<Scalars['String']>;
+  shippingContactPoint?: Maybe<IoRestorecommerceContactPointContactPoint>;
   billingContactPointId?: Maybe<Scalars['String']>;
+  billingContactPoint?: Maybe<IoRestorecommerceContactPointContactPoint>;
   totalWeightInKg?: Maybe<Scalars['Float']>;
 };
 
@@ -115,6 +117,83 @@ export type IoRestorecommerceOrderItem = {
   lengthInCm?: Maybe<Scalars['Int']>;
   widthInCm?: Maybe<Scalars['Int']>;
   heightInCm?: Maybe<Scalars['Int']>;
+};
+
+export type IoRestorecommerceContactPointContactPoint = {
+  __typename?: 'IoRestorecommerceContactPointContactPoint';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  physicalAddressId?: Maybe<Scalars['String']>;
+  physicalAddress?: Maybe<IoRestorecommerceAddressAddress>;
+  website?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  contactPointTypeId?: Maybe<Scalars['String']>;
+  contactPointType?: Maybe<IoRestorecommerceContactPointTypeContactPointType>;
+  telephone?: Maybe<Scalars['String']>;
+  timezoneId?: Maybe<Scalars['String']>;
+  timezone?: Maybe<IoRestorecommerceTimezoneTimezone>;
+  localeId?: Maybe<Scalars['String']>;
+  locale?: Maybe<IoRestorecommerceLocaleLocale>;
+};
+
+export type IoRestorecommerceAddressAddress = {
+  __typename?: 'IoRestorecommerceAddressAddress';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  postcode?: Maybe<Scalars['String']>;
+  countryId?: Maybe<Scalars['String']>;
+  country?: Maybe<IoRestorecommerceCountryCountry>;
+  locality?: Maybe<Scalars['String']>;
+  street?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  geoCoordinates?: Maybe<IoRestorecommerceAddressAddressGeoPoint>;
+  altitude?: Maybe<Scalars['Float']>;
+  buildingNumber?: Maybe<Scalars['String']>;
+  addressAddition?: Maybe<IoRestorecommerceAddressAddressAddition>;
+};
+
+export type IoRestorecommerceCountryCountry = {
+  __typename?: 'IoRestorecommerceCountryCountry';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
+  geographicalName?: Maybe<Scalars['String']>;
+  economicAreas?: Maybe<Array<Scalars['String']>>;
+};
+
+export type IoRestorecommerceAddressAddressGeoPoint = {
+  __typename?: 'IoRestorecommerceAddressAddressGeoPoint';
+  latitude?: Maybe<Scalars['Float']>;
+  longitude?: Maybe<Scalars['Float']>;
+};
+
+export type IoRestorecommerceAddressAddressAddition = {
+  __typename?: 'IoRestorecommerceAddressAddressAddition';
+  field1?: Maybe<Scalars['String']>;
+  field2?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceContactPointTypeContactPointType = {
+  __typename?: 'IoRestorecommerceContactPointTypeContactPointType';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceTimezoneTimezone = {
+  __typename?: 'IoRestorecommerceTimezoneTimezone';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  description?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceLocaleLocale = {
+  __typename?: 'IoRestorecommerceLocaleLocale';
+  id?: Maybe<Scalars['String']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  value?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -496,6 +575,14 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceOrderItems: ResolverTypeWrapper<IoRestorecommerceOrderItems>;
   IoRestorecommerceOrderItem: ResolverTypeWrapper<IoRestorecommerceOrderItem>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  IoRestorecommerceContactPointContactPoint: ResolverTypeWrapper<IoRestorecommerceContactPointContactPoint>;
+  IoRestorecommerceAddressAddress: ResolverTypeWrapper<IoRestorecommerceAddressAddress>;
+  IoRestorecommerceCountryCountry: ResolverTypeWrapper<IoRestorecommerceCountryCountry>;
+  IoRestorecommerceAddressAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressAddressGeoPoint>;
+  IoRestorecommerceAddressAddressAddition: ResolverTypeWrapper<IoRestorecommerceAddressAddressAddition>;
+  IoRestorecommerceContactPointTypeContactPointType: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointType>;
+  IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
+  IoRestorecommerceLocaleLocale: ResolverTypeWrapper<IoRestorecommerceLocaleLocale>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -556,6 +643,14 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceOrderItems: IoRestorecommerceOrderItems;
   IoRestorecommerceOrderItem: IoRestorecommerceOrderItem;
   Int: Scalars['Int'];
+  IoRestorecommerceContactPointContactPoint: IoRestorecommerceContactPointContactPoint;
+  IoRestorecommerceAddressAddress: IoRestorecommerceAddressAddress;
+  IoRestorecommerceCountryCountry: IoRestorecommerceCountryCountry;
+  IoRestorecommerceAddressAddressGeoPoint: IoRestorecommerceAddressAddressGeoPoint;
+  IoRestorecommerceAddressAddressAddition: IoRestorecommerceAddressAddressAddition;
+  IoRestorecommerceContactPointTypeContactPointType: IoRestorecommerceContactPointTypeContactPointType;
+  IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
+  IoRestorecommerceLocaleLocale: IoRestorecommerceLocaleLocale;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -633,7 +728,9 @@ export type IoRestorecommerceOrderOrderResolvers<ContextType = OrderingContext, 
   items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOrderItems']>>, ParentType, ContextType>;
   totalPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   shippingContactPointId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shippingContactPoint?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPoint']>, ParentType, ContextType>;
   billingContactPointId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  billingContactPoint?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointContactPoint']>, ParentType, ContextType>;
   totalWeightInKg?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -683,6 +780,83 @@ export type IoRestorecommerceOrderItemResolvers<ContextType = OrderingContext, P
   lengthInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   widthInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   heightInCm?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceContactPointContactPointResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPoint'] = ResolversParentTypes['IoRestorecommerceContactPointContactPoint']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  physicalAddressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  physicalAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
+  website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactPointTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactPointType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>, ParentType, ContextType>;
+  telephone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezone?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
+  localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressAddressResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddress'] = ResolversParentTypes['IoRestorecommerceAddressAddress']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  postcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  countryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  country?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountry']>, ParentType, ContextType>;
+  locality?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  street?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  geoCoordinates?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressGeoPoint']>, ParentType, ContextType>;
+  altitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  buildingNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  addressAddition?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressAddition']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCountryCountryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCountryCountry'] = ResolversParentTypes['IoRestorecommerceCountryCountry']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  countryCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  geographicalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  economicAreas?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressAddressGeoPointResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressGeoPoint'] = ResolversParentTypes['IoRestorecommerceAddressAddressGeoPoint']> = ResolversObject<{
+  latitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  longitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressAddressAdditionResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressAddition'] = ResolversParentTypes['IoRestorecommerceAddressAddressAddition']> = ResolversObject<{
+  field1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  field2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointType'] = ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTimezoneTimezoneResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezone'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezone']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceLocaleLocaleResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceLocaleLocale'] = ResolversParentTypes['IoRestorecommerceLocaleLocale']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -785,6 +959,14 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceOrderItems?: IoRestorecommerceOrderItemsResolvers<ContextType>;
   IoRestorecommerceOrderItem?: IoRestorecommerceOrderItemResolvers<ContextType>;
+  IoRestorecommerceContactPointContactPoint?: IoRestorecommerceContactPointContactPointResolvers<ContextType>;
+  IoRestorecommerceAddressAddress?: IoRestorecommerceAddressAddressResolvers<ContextType>;
+  IoRestorecommerceCountryCountry?: IoRestorecommerceCountryCountryResolvers<ContextType>;
+  IoRestorecommerceAddressAddressGeoPoint?: IoRestorecommerceAddressAddressGeoPointResolvers<ContextType>;
+  IoRestorecommerceAddressAddressAddition?: IoRestorecommerceAddressAddressAdditionResolvers<ContextType>;
+  IoRestorecommerceContactPointTypeContactPointType?: IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType>;
+  IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
+  IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;

@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
@@ -19,7 +21,10 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as protoMetadata5,
+  Resolver,
+} from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.address";
 
@@ -68,20 +73,25 @@ export interface AddressAddition {
   field2: string;
 }
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -97,23 +107,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -121,12 +117,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseAddressList: object = { totalCount: 0 };
+function createBaseAddressList(): AddressList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const AddressList = {
-  encode(message: AddressList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddressList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Address.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -139,11 +146,10 @@ export const AddressList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AddressList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddressList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseAddressList) as AddressList;
-    message.items = [];
+    const message = createBaseAddressList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -165,45 +171,15 @@ export const AddressList = {
   },
 
   fromJSON(object: any): AddressList {
-    const message = globalThis.Object.create(baseAddressList) as AddressList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Address.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AddressList>): AddressList {
-    const message = { ...baseAddressList } as AddressList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Address.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Address.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: AddressList): unknown {
@@ -213,22 +189,36 @@ export const AddressList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<AddressList>): AddressList {
+    const message = createBaseAddressList();
+    message.items = object.items?.map((e) => Address.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAddressListResponse: object = { totalCount: 0 };
+function createBaseAddressListResponse(): AddressListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const AddressListResponse = {
   encode(
     message: AddressListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       AddressResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -244,13 +234,10 @@ export const AddressListResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AddressListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddressListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAddressListResponse
-    ) as AddressListResponse;
-    message.items = [];
+    const message = createBaseAddressListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -275,57 +262,15 @@ export const AddressListResponse = {
   },
 
   fromJSON(object: any): AddressListResponse {
-    const message = globalThis.Object.create(
-      baseAddressListResponse
-    ) as AddressListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AddressResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AddressListResponse>): AddressListResponse {
-    const message = { ...baseAddressListResponse } as AddressListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AddressResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => AddressResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: AddressListResponse): unknown {
@@ -337,19 +282,37 @@ export const AddressListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<AddressListResponse>): AddressListResponse {
+    const message = createBaseAddressListResponse();
+    message.items =
+      object.items?.map((e) => AddressResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAddressResponse: object = {};
+function createBaseAddressResponse(): AddressResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const AddressResponse = {
-  encode(message: AddressResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddressResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Address.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -359,12 +322,10 @@ export const AddressResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AddressResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddressResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAddressResponse
-    ) as AddressResponse;
+    const message = createBaseAddressResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -383,35 +344,12 @@ export const AddressResponse = {
   },
 
   fromJSON(object: any): AddressResponse {
-    const message = globalThis.Object.create(
-      baseAddressResponse
-    ) as AddressResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Address.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AddressResponse>): AddressResponse {
-    const message = { ...baseAddressResponse } as AddressResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Address.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? Address.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: AddressResponse): unknown {
@@ -424,21 +362,42 @@ export const AddressResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<AddressResponse>): AddressResponse {
+    const message = createBaseAddressResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Address.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAddress: object = {
-  id: "",
-  postcode: "",
-  countryId: "",
-  locality: "",
-  street: "",
-  region: "",
-  altitude: 0,
-  buildingNumber: "",
-};
+function createBaseAddress(): Address {
+  return {
+    id: "",
+    meta: undefined,
+    postcode: "",
+    countryId: "",
+    locality: "",
+    street: "",
+    region: "",
+    geoCoordinates: undefined,
+    altitude: 0,
+    buildingNumber: "",
+    addressAddition: undefined,
+  };
+}
 
 export const Address = {
-  encode(message: Address, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Address,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -481,10 +440,10 @@ export const Address = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Address {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Address {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseAddress) as Address;
+    const message = createBaseAddress();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -536,135 +495,25 @@ export const Address = {
   },
 
   fromJSON(object: any): Address {
-    const message = globalThis.Object.create(baseAddress) as Address;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.postcode !== undefined && object.postcode !== null) {
-      message.postcode = String(object.postcode);
-    } else {
-      message.postcode = "";
-    }
-    if (object.countryId !== undefined && object.countryId !== null) {
-      message.countryId = String(object.countryId);
-    } else {
-      message.countryId = "";
-    }
-    if (object.locality !== undefined && object.locality !== null) {
-      message.locality = String(object.locality);
-    } else {
-      message.locality = "";
-    }
-    if (object.street !== undefined && object.street !== null) {
-      message.street = String(object.street);
-    } else {
-      message.street = "";
-    }
-    if (object.region !== undefined && object.region !== null) {
-      message.region = String(object.region);
-    } else {
-      message.region = "";
-    }
-    if (object.geoCoordinates !== undefined && object.geoCoordinates !== null) {
-      message.geoCoordinates = Address_GeoPoint.fromJSON(object.geoCoordinates);
-    } else {
-      message.geoCoordinates = undefined;
-    }
-    if (object.altitude !== undefined && object.altitude !== null) {
-      message.altitude = Number(object.altitude);
-    } else {
-      message.altitude = 0;
-    }
-    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
-      message.buildingNumber = String(object.buildingNumber);
-    } else {
-      message.buildingNumber = "";
-    }
-    if (
-      object.addressAddition !== undefined &&
-      object.addressAddition !== null
-    ) {
-      message.addressAddition = AddressAddition.fromJSON(
-        object.addressAddition
-      );
-    } else {
-      message.addressAddition = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Address>): Address {
-    const message = { ...baseAddress } as Address;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.postcode !== undefined && object.postcode !== null) {
-      message.postcode = object.postcode;
-    } else {
-      message.postcode = "";
-    }
-    if (object.countryId !== undefined && object.countryId !== null) {
-      message.countryId = object.countryId;
-    } else {
-      message.countryId = "";
-    }
-    if (object.locality !== undefined && object.locality !== null) {
-      message.locality = object.locality;
-    } else {
-      message.locality = "";
-    }
-    if (object.street !== undefined && object.street !== null) {
-      message.street = object.street;
-    } else {
-      message.street = "";
-    }
-    if (object.region !== undefined && object.region !== null) {
-      message.region = object.region;
-    } else {
-      message.region = "";
-    }
-    if (object.geoCoordinates !== undefined && object.geoCoordinates !== null) {
-      message.geoCoordinates = Address_GeoPoint.fromPartial(
-        object.geoCoordinates
-      );
-    } else {
-      message.geoCoordinates = undefined;
-    }
-    if (object.altitude !== undefined && object.altitude !== null) {
-      message.altitude = object.altitude;
-    } else {
-      message.altitude = 0;
-    }
-    if (object.buildingNumber !== undefined && object.buildingNumber !== null) {
-      message.buildingNumber = object.buildingNumber;
-    } else {
-      message.buildingNumber = "";
-    }
-    if (
-      object.addressAddition !== undefined &&
-      object.addressAddition !== null
-    ) {
-      message.addressAddition = AddressAddition.fromPartial(
-        object.addressAddition
-      );
-    } else {
-      message.addressAddition = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      postcode: isSet(object.postcode) ? String(object.postcode) : "",
+      countryId: isSet(object.countryId) ? String(object.countryId) : "",
+      locality: isSet(object.locality) ? String(object.locality) : "",
+      street: isSet(object.street) ? String(object.street) : "",
+      region: isSet(object.region) ? String(object.region) : "",
+      geoCoordinates: isSet(object.geoCoordinates)
+        ? Address_GeoPoint.fromJSON(object.geoCoordinates)
+        : undefined,
+      altitude: isSet(object.altitude) ? Number(object.altitude) : 0,
+      buildingNumber: isSet(object.buildingNumber)
+        ? String(object.buildingNumber)
+        : "",
+      addressAddition: isSet(object.addressAddition)
+        ? AddressAddition.fromJSON(object.addressAddition)
+        : undefined,
+    };
   },
 
   toJSON(message: Address): unknown {
@@ -690,12 +539,42 @@ export const Address = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Address>): Address {
+    const message = createBaseAddress();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.postcode = object.postcode ?? "";
+    message.countryId = object.countryId ?? "";
+    message.locality = object.locality ?? "";
+    message.street = object.street ?? "";
+    message.region = object.region ?? "";
+    message.geoCoordinates =
+      object.geoCoordinates !== undefined && object.geoCoordinates !== null
+        ? Address_GeoPoint.fromPartial(object.geoCoordinates)
+        : undefined;
+    message.altitude = object.altitude ?? 0;
+    message.buildingNumber = object.buildingNumber ?? "";
+    message.addressAddition =
+      object.addressAddition !== undefined && object.addressAddition !== null
+        ? AddressAddition.fromPartial(object.addressAddition)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAddress_GeoPoint: object = { latitude: 0, longitude: 0 };
+function createBaseAddress_GeoPoint(): Address_GeoPoint {
+  return { latitude: 0, longitude: 0 };
+}
 
 export const Address_GeoPoint = {
-  encode(message: Address_GeoPoint, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Address_GeoPoint,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.latitude !== 0) {
       writer.uint32(9).double(message.latitude);
     }
@@ -705,12 +584,10 @@ export const Address_GeoPoint = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Address_GeoPoint {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Address_GeoPoint {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAddress_GeoPoint
-    ) as Address_GeoPoint;
+    const message = createBaseAddress_GeoPoint();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -729,35 +606,10 @@ export const Address_GeoPoint = {
   },
 
   fromJSON(object: any): Address_GeoPoint {
-    const message = globalThis.Object.create(
-      baseAddress_GeoPoint
-    ) as Address_GeoPoint;
-    if (object.latitude !== undefined && object.latitude !== null) {
-      message.latitude = Number(object.latitude);
-    } else {
-      message.latitude = 0;
-    }
-    if (object.longitude !== undefined && object.longitude !== null) {
-      message.longitude = Number(object.longitude);
-    } else {
-      message.longitude = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Address_GeoPoint>): Address_GeoPoint {
-    const message = { ...baseAddress_GeoPoint } as Address_GeoPoint;
-    if (object.latitude !== undefined && object.latitude !== null) {
-      message.latitude = object.latitude;
-    } else {
-      message.latitude = 0;
-    }
-    if (object.longitude !== undefined && object.longitude !== null) {
-      message.longitude = object.longitude;
-    } else {
-      message.longitude = 0;
-    }
-    return message;
+    return {
+      latitude: isSet(object.latitude) ? Number(object.latitude) : 0,
+      longitude: isSet(object.longitude) ? Number(object.longitude) : 0,
+    };
   },
 
   toJSON(message: Address_GeoPoint): unknown {
@@ -766,12 +618,24 @@ export const Address_GeoPoint = {
     message.longitude !== undefined && (obj.longitude = message.longitude);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Address_GeoPoint>): Address_GeoPoint {
+    const message = createBaseAddress_GeoPoint();
+    message.latitude = object.latitude ?? 0;
+    message.longitude = object.longitude ?? 0;
+    return message;
+  },
 };
 
-const baseAddressAddition: object = { field1: "", field2: "" };
+function createBaseAddressAddition(): AddressAddition {
+  return { field1: "", field2: "" };
+}
 
 export const AddressAddition = {
-  encode(message: AddressAddition, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AddressAddition,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field1 !== "") {
       writer.uint32(10).string(message.field1);
     }
@@ -781,12 +645,10 @@ export const AddressAddition = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AddressAddition {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): AddressAddition {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAddressAddition
-    ) as AddressAddition;
+    const message = createBaseAddressAddition();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -805,35 +667,10 @@ export const AddressAddition = {
   },
 
   fromJSON(object: any): AddressAddition {
-    const message = globalThis.Object.create(
-      baseAddressAddition
-    ) as AddressAddition;
-    if (object.field1 !== undefined && object.field1 !== null) {
-      message.field1 = String(object.field1);
-    } else {
-      message.field1 = "";
-    }
-    if (object.field2 !== undefined && object.field2 !== null) {
-      message.field2 = String(object.field2);
-    } else {
-      message.field2 = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AddressAddition>): AddressAddition {
-    const message = { ...baseAddressAddition } as AddressAddition;
-    if (object.field1 !== undefined && object.field1 !== null) {
-      message.field1 = object.field1;
-    } else {
-      message.field1 = "";
-    }
-    if (object.field2 !== undefined && object.field2 !== null) {
-      message.field2 = object.field2;
-    } else {
-      message.field2 = "";
-    }
-    return message;
+    return {
+      field1: isSet(object.field1) ? String(object.field1) : "",
+      field2: isSet(object.field2) ? String(object.field2) : "",
+    };
   },
 
   toJSON(message: AddressAddition): unknown {
@@ -841,6 +678,13 @@ export const AddressAddition = {
     message.field1 !== undefined && (obj.field1 = message.field1);
     message.field2 !== undefined && (obj.field2 = message.field2);
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<AddressAddition>): AddressAddition {
+    const message = createBaseAddressAddition();
+    message.field1 = object.field1 ?? "";
+    message.field2 = object.field2 ?? "";
+    return message;
   },
 };
 
@@ -853,35 +697,79 @@ export interface Service {
   Upsert(request: AddressList): Promise<AddressListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/address.proto",
+    package: "io.restorecommerce.address",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
       {
+        name: "AddressList",
         field: [
           {
             name: "items",
@@ -889,14 +777,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.address.Address",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -904,7 +803,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -912,11 +816,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AddressList",
       },
       {
+        name: "AddressListResponse",
         field: [
           {
             name: "items",
@@ -924,14 +829,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.address.AddressResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -939,7 +855,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -947,11 +868,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AddressListResponse",
       },
       {
+        name: "AddressResponse",
         field: [
           {
             name: "payload",
@@ -959,7 +881,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.address.Address",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -967,7 +894,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -975,65 +907,150 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AddressResponse",
       },
       {
+        name: "Address",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "postcode",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "postcode",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "country_id",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "countryId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "locality",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "locality",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "street", number: 6, label: 1, type: 9, jsonName: "street" },
-          { name: "region", number: 7, label: 1, type: 9, jsonName: "region" },
+          {
+            name: "street",
+            number: 6,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "street",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "region",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "region",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "geo_coordinates",
             number: 8,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.address.Address.GeoPoint",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "geoCoordinates",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "altitude",
             number: 9,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "altitude",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "building_number",
             number: 10,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "buildingNumber",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "address_addition",
@@ -1041,26 +1058,44 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.address.AddressAddition",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "addressAddition",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [
           {
+            name: "GeoPoint",
             field: [
               {
                 name: "latitude",
                 number: 1,
                 label: 1,
                 type: 1,
+                typeName: "",
+                extendee: "",
+                defaultValue: "",
+                oneofIndex: 0,
                 jsonName: "latitude",
+                options: undefined,
+                proto3Optional: false,
               },
               {
                 name: "longitude",
                 number: 2,
                 label: 1,
                 type: 1,
+                typeName: "",
+                extendee: "",
+                defaultValue: "",
+                oneofIndex: 0,
                 jsonName: "longitude",
+                options: undefined,
+                proto3Optional: false,
               },
             ],
             extension: [],
@@ -1068,76 +1103,121 @@ export const protoMetadata: ProtoMetadata = {
             enumType: [],
             extensionRange: [],
             oneofDecl: [],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "GeoPoint",
           },
         ],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Address",
       },
       {
+        name: "AddressAddition",
         field: [
-          { name: "field1", number: 1, label: 1, type: 9, jsonName: "field1" },
-          { name: "field2", number: 2, label: 1, type: 9, jsonName: "field2" },
+          {
+            name: "field1",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field1",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "field2",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field2",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AddressAddition",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType: ".io.restorecommerce.address.AddressListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.address.AddressList",
             outputType: ".io.restorecommerce.address.AddressListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.address.AddressList",
             outputType: ".io.restorecommerce.address.AddressListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.address.AddressList",
             outputType: ".io.restorecommerce.address.AddressListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/address.proto",
-    package: "io.restorecommerce.address",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
-          span: [12, 0, 18, 1],
-          leadingDetachedComments: [],
+          span: [13, 0, 23, 1],
           leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -1157,20 +1237,41 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    messages: {
+      Address: {
+        fields: {
+          country_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmNvdW50cnkuQ291bnRyeRIIcmVzb3VyY2UaB2NvdW50cnkiBFJlYWQqB2NvdW50cnk=",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "address" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1180,3 +1281,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

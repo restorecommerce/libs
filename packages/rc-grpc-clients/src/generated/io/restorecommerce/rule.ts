@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Meta,
   protoMetadata as protoMetadata2,
@@ -27,7 +29,7 @@ import {
   protoMetadata as protoMetadata6,
   FilterOp,
 } from "../../io/restorecommerce/filter";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.rule";
 
@@ -59,8 +61,9 @@ export function effectToJSON(object: Effect): string {
       return "PERMIT";
     case Effect.DENY:
       return "DENY";
+    case Effect.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -121,10 +124,15 @@ export interface ContextQuery {
   query: string;
 }
 
-const baseTarget: object = {};
+function createBaseTarget(): Target {
+  return { subject: [], resources: [], action: [] };
+}
 
 export const Target = {
-  encode(message: Target, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Target,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.subject) {
       Attribute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -137,13 +145,10 @@ export const Target = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Target {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Target {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseTarget) as Target;
-    message.subject = [];
-    message.resources = [];
-    message.action = [];
+    const message = createBaseTarget();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -165,49 +170,17 @@ export const Target = {
   },
 
   fromJSON(object: any): Target {
-    const message = globalThis.Object.create(baseTarget) as Target;
-    message.subject = [];
-    message.resources = [];
-    message.action = [];
-    if (object.subject !== undefined && object.subject !== null) {
-      for (const e of object.subject) {
-        message.subject.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.action !== undefined && object.action !== null) {
-      for (const e of object.action) {
-        message.action.push(Attribute.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Target>): Target {
-    const message = { ...baseTarget } as Target;
-    message.subject = [];
-    message.resources = [];
-    message.action = [];
-    if (object.subject !== undefined && object.subject !== null) {
-      for (const e of object.subject) {
-        message.subject.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.action !== undefined && object.action !== null) {
-      for (const e of object.action) {
-        message.action.push(Attribute.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      subject: Array.isArray(object?.subject)
+        ? object.subject.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      resources: Array.isArray(object?.resources)
+        ? object.resources.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      action: Array.isArray(object?.action)
+        ? object.action.map((e: any) => Attribute.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Target): unknown {
@@ -235,19 +208,34 @@ export const Target = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Target>): Target {
+    const message = createBaseTarget();
+    message.subject =
+      object.subject?.map((e) => Attribute.fromPartial(e)) || [];
+    message.resources =
+      object.resources?.map((e) => Attribute.fromPartial(e)) || [];
+    message.action = object.action?.map((e) => Attribute.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseRule: object = {
-  id: "",
-  name: "",
-  description: "",
-  condition: "",
-  effect: 0,
-  evaluationCacheable: false,
-};
+function createBaseRule(): Rule {
+  return {
+    id: "",
+    meta: undefined,
+    name: "",
+    description: "",
+    target: undefined,
+    contextQuery: undefined,
+    condition: "",
+    effect: 0,
+    evaluationCacheable: false,
+  };
+}
 
 export const Rule = {
-  encode(message: Rule, writer: Writer = Writer.create()): Writer {
+  encode(message: Rule, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -281,10 +269,10 @@ export const Rule = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Rule {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Rule {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseRule) as Rule;
+    const message = createBaseRule();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -324,109 +312,21 @@ export const Rule = {
   },
 
   fromJSON(object: any): Rule {
-    const message = globalThis.Object.create(baseRule) as Rule;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromJSON(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.contextQuery !== undefined && object.contextQuery !== null) {
-      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
-    } else {
-      message.contextQuery = undefined;
-    }
-    if (object.condition !== undefined && object.condition !== null) {
-      message.condition = String(object.condition);
-    } else {
-      message.condition = "";
-    }
-    if (object.effect !== undefined && object.effect !== null) {
-      message.effect = effectFromJSON(object.effect);
-    } else {
-      message.effect = 0;
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = Boolean(object.evaluationCacheable);
-    } else {
-      message.evaluationCacheable = false;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Rule>): Rule {
-    const message = { ...baseRule } as Rule;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromPartial(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.contextQuery !== undefined && object.contextQuery !== null) {
-      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
-    } else {
-      message.contextQuery = undefined;
-    }
-    if (object.condition !== undefined && object.condition !== null) {
-      message.condition = object.condition;
-    } else {
-      message.condition = "";
-    }
-    if (object.effect !== undefined && object.effect !== null) {
-      message.effect = object.effect;
-    } else {
-      message.effect = 0;
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = object.evaluationCacheable;
-    } else {
-      message.evaluationCacheable = false;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
+      contextQuery: isSet(object.contextQuery)
+        ? ContextQuery.fromJSON(object.contextQuery)
+        : undefined,
+      condition: isSet(object.condition) ? String(object.condition) : "",
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      evaluationCacheable: isSet(object.evaluationCacheable)
+        ? Boolean(object.evaluationCacheable)
+        : false,
+    };
   },
 
   toJSON(message: Rule): unknown {
@@ -449,17 +349,47 @@ export const Rule = {
       (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Rule>): Rule {
+    const message = createBaseRule();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Target.fromPartial(object.target)
+        : undefined;
+    message.contextQuery =
+      object.contextQuery !== undefined && object.contextQuery !== null
+        ? ContextQuery.fromPartial(object.contextQuery)
+        : undefined;
+    message.condition = object.condition ?? "";
+    message.effect = object.effect ?? 0;
+    message.evaluationCacheable = object.evaluationCacheable ?? false;
+    return message;
+  },
 };
 
-const baseRuleRQ: object = {
-  id: "",
-  effect: 0,
-  condition: "",
-  evaluationCacheable: false,
-};
+function createBaseRuleRQ(): RuleRQ {
+  return {
+    id: "",
+    target: undefined,
+    effect: 0,
+    condition: "",
+    contextQuery: undefined,
+    evaluationCacheable: false,
+  };
+}
 
 export const RuleRQ = {
-  encode(message: RuleRQ, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RuleRQ,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -484,10 +414,10 @@ export const RuleRQ = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RuleRQ {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RuleRQ {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseRuleRQ) as RuleRQ;
+    const message = createBaseRuleRQ();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -518,79 +448,18 @@ export const RuleRQ = {
   },
 
   fromJSON(object: any): RuleRQ {
-    const message = globalThis.Object.create(baseRuleRQ) as RuleRQ;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromJSON(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.effect !== undefined && object.effect !== null) {
-      message.effect = effectFromJSON(object.effect);
-    } else {
-      message.effect = 0;
-    }
-    if (object.condition !== undefined && object.condition !== null) {
-      message.condition = String(object.condition);
-    } else {
-      message.condition = "";
-    }
-    if (object.contextQuery !== undefined && object.contextQuery !== null) {
-      message.contextQuery = ContextQuery.fromJSON(object.contextQuery);
-    } else {
-      message.contextQuery = undefined;
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = Boolean(object.evaluationCacheable);
-    } else {
-      message.evaluationCacheable = false;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
-    const message = { ...baseRuleRQ } as RuleRQ;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromPartial(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.effect !== undefined && object.effect !== null) {
-      message.effect = object.effect;
-    } else {
-      message.effect = 0;
-    }
-    if (object.condition !== undefined && object.condition !== null) {
-      message.condition = object.condition;
-    } else {
-      message.condition = "";
-    }
-    if (object.contextQuery !== undefined && object.contextQuery !== null) {
-      message.contextQuery = ContextQuery.fromPartial(object.contextQuery);
-    } else {
-      message.contextQuery = undefined;
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = object.evaluationCacheable;
-    } else {
-      message.evaluationCacheable = false;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      condition: isSet(object.condition) ? String(object.condition) : "",
+      contextQuery: isSet(object.contextQuery)
+        ? ContextQuery.fromJSON(object.contextQuery)
+        : undefined,
+      evaluationCacheable: isSet(object.evaluationCacheable)
+        ? Boolean(object.evaluationCacheable)
+        : false,
+    };
   },
 
   toJSON(message: RuleRQ): unknown {
@@ -608,12 +477,34 @@ export const RuleRQ = {
       (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
+    const message = createBaseRuleRQ();
+    message.id = object.id ?? "";
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Target.fromPartial(object.target)
+        : undefined;
+    message.effect = object.effect ?? 0;
+    message.condition = object.condition ?? "";
+    message.contextQuery =
+      object.contextQuery !== undefined && object.contextQuery !== null
+        ? ContextQuery.fromPartial(object.contextQuery)
+        : undefined;
+    message.evaluationCacheable = object.evaluationCacheable ?? false;
+    return message;
+  },
 };
 
-const baseRuleList: object = { totalCount: 0 };
+function createBaseRuleList(): RuleList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const RuleList = {
-  encode(message: RuleList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RuleList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Rule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -626,11 +517,10 @@ export const RuleList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RuleList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RuleList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseRuleList) as RuleList;
-    message.items = [];
+    const message = createBaseRuleList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -652,45 +542,15 @@ export const RuleList = {
   },
 
   fromJSON(object: any): RuleList {
-    const message = globalThis.Object.create(baseRuleList) as RuleList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Rule.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RuleList>): RuleList {
-    const message = { ...baseRuleList } as RuleList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Rule.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Rule.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: RuleList): unknown {
@@ -700,19 +560,36 @@ export const RuleList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RuleList>): RuleList {
+    const message = createBaseRuleList();
+    message.items = object.items?.map((e) => Rule.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseRuleListResponse: object = { totalCount: 0 };
+function createBaseRuleListResponse(): RuleListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const RuleListResponse = {
-  encode(message: RuleListResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RuleListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       RuleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -728,13 +605,10 @@ export const RuleListResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RuleListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RuleListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRuleListResponse
-    ) as RuleListResponse;
-    message.items = [];
+    const message = createBaseRuleListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -759,57 +633,15 @@ export const RuleListResponse = {
   },
 
   fromJSON(object: any): RuleListResponse {
-    const message = globalThis.Object.create(
-      baseRuleListResponse
-    ) as RuleListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(RuleResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
-    const message = { ...baseRuleListResponse } as RuleListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(RuleResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => RuleResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: RuleListResponse): unknown {
@@ -821,19 +653,36 @@ export const RuleListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
+    const message = createBaseRuleListResponse();
+    message.items = object.items?.map((e) => RuleResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseRuleResponse: object = {};
+function createBaseRuleResponse(): RuleResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const RuleResponse = {
-  encode(message: RuleResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RuleResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Rule.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -843,10 +692,10 @@ export const RuleResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RuleResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RuleResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseRuleResponse) as RuleResponse;
+    const message = createBaseRuleResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -865,33 +714,12 @@ export const RuleResponse = {
   },
 
   fromJSON(object: any): RuleResponse {
-    const message = globalThis.Object.create(baseRuleResponse) as RuleResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Rule.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RuleResponse>): RuleResponse {
-    const message = { ...baseRuleResponse } as RuleResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Rule.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? Rule.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: RuleResponse): unknown {
@@ -904,12 +732,30 @@ export const RuleResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RuleResponse>): RuleResponse {
+    const message = createBaseRuleResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Rule.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseContextQuery: object = { query: "" };
+function createBaseContextQuery(): ContextQuery {
+  return { filters: [], query: "" };
+}
 
 export const ContextQuery = {
-  encode(message: ContextQuery, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ContextQuery,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.filters) {
       FilterOp.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -919,11 +765,10 @@ export const ContextQuery = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ContextQuery {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ContextQuery {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseContextQuery) as ContextQuery;
-    message.filters = [];
+    const message = createBaseContextQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -942,35 +787,12 @@ export const ContextQuery = {
   },
 
   fromJSON(object: any): ContextQuery {
-    const message = globalThis.Object.create(baseContextQuery) as ContextQuery;
-    message.filters = [];
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(FilterOp.fromJSON(e));
-      }
-    }
-    if (object.query !== undefined && object.query !== null) {
-      message.query = String(object.query);
-    } else {
-      message.query = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
-    const message = { ...baseContextQuery } as ContextQuery;
-    message.filters = [];
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(FilterOp.fromPartial(e));
-      }
-    }
-    if (object.query !== undefined && object.query !== null) {
-      message.query = object.query;
-    } else {
-      message.query = "";
-    }
-    return message;
+    return {
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => FilterOp.fromJSON(e))
+        : [],
+      query: isSet(object.query) ? String(object.query) : "",
+    };
   },
 
   toJSON(message: ContextQuery): unknown {
@@ -985,6 +807,13 @@ export const ContextQuery = {
     message.query !== undefined && (obj.query = message.query);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
+    const message = createBaseContextQuery();
+    message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
+    message.query = object.query ?? "";
+    return message;
+  },
 };
 
 export interface Service {
@@ -995,14 +824,41 @@ export interface Service {
   Upsert(request: RuleList): Promise<RuleListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/rule.proto",
+    package: "io.restorecommerce.rule",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
@@ -1010,11 +866,13 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/filter.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Target",
         field: [
           {
             name: "subject",
@@ -1022,7 +880,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "resources",
@@ -1030,7 +893,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "resources",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "action",
@@ -1038,7 +906,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "action",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1046,28 +919,64 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Target",
       },
       {
+        name: "Rule",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "description",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "target",
@@ -1075,7 +984,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.Target",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "target",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "context_query",
@@ -1083,14 +997,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.ContextQuery",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contextQuery",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "condition",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "condition",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "effect",
@@ -1098,14 +1023,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.rule.Effect",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "effect",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "evaluation_cacheable",
             number: 9,
             label: 1,
             type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "evaluationCacheable",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1113,20 +1049,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Rule",
       },
       {
+        name: "RuleRQ",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "target",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.Target",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "target",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "effect",
@@ -1134,14 +1088,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.rule.Effect",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "effect",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "condition",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "condition",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "context_query",
@@ -1149,14 +1114,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.ContextQuery",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contextQuery",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "evaluation_cacheable",
             number: 6,
             label: 1,
             type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "evaluationCacheable",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1164,11 +1140,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RuleRQ",
       },
       {
+        name: "RuleList",
         field: [
           {
             name: "items",
@@ -1176,14 +1153,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.rule.Rule",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -1191,7 +1179,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1199,11 +1192,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RuleList",
       },
       {
+        name: "RuleListResponse",
         field: [
           {
             name: "items",
@@ -1211,14 +1205,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.rule.RuleResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -1226,7 +1231,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1234,11 +1244,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RuleListResponse",
       },
       {
+        name: "RuleResponse",
         field: [
           {
             name: "payload",
@@ -1246,7 +1257,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.Rule",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -1254,7 +1270,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1262,11 +1283,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RuleResponse",
       },
       {
+        name: "ContextQuery",
         field: [
           {
             name: "filters",
@@ -1274,98 +1296,140 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.filter.FilterOp",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "query", number: 2, label: 1, type: 9, jsonName: "query" },
+          {
+            name: "query",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "query",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ContextQuery",
       },
     ],
     enumType: [
       {
+        name: "Effect",
         value: [
-          { name: "PERMIT", number: 0 },
-          { name: "DENY", number: 1 },
+          { name: "PERMIT", number: 0, options: undefined },
+          { name: "DENY", number: 1, options: undefined },
         ],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Effect",
       },
     ],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.rule.RuleList",
             outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.rule.RuleList",
             outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.rule.RuleList",
             outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/rule.proto",
-    package: "io.restorecommerce.rule",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
           span: [15, 0, 19, 1],
-          leadingDetachedComments: [],
           leadingComments: "*\n Target specified by a Rule or a Request.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [5, 0],
           span: [24, 0, 27, 1],
-          leadingDetachedComments: [],
           leadingComments: "*\n Resulting effect from a Policy or Rule.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 6],
           span: [36, 2, 23],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " JS code\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2],
           span: [41, 0, 48, 1],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " used for `whatIsAllowed` / reverse queries\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 6],
           span: [70, 0, 73, 1],
-          leadingDetachedComments: [],
           leadingComments:
             " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -1388,20 +1452,27 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "rule" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1411,3 +1482,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

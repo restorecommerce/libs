@@ -8,7 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/filter.proto";
-
+import "io/restorecommerce/options.proto";
 
 /**
 * Target specified by a Rule or a Request.
@@ -44,7 +44,7 @@ message RuleRQ { // used for `whatIsAllowed` / reverse queries
   Target target = 2;
   Effect effect = 3;
   string condition = 4;
-  ContextQuery context_query = 5; 
+  ContextQuery context_query = 5;
   bool evaluation_cacheable = 6;
 }
 
@@ -74,7 +74,11 @@ message ContextQuery {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListResponse);
+  option (io.restorecommerce.options.service_name) = "rule";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (RuleList) returns (RuleListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (RuleList) returns (RuleListResponse);

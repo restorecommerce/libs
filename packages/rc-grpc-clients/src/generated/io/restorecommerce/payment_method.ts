@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata4,
@@ -23,7 +25,6 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment_method";
 
@@ -60,8 +61,9 @@ export function paymentMethodEnumToJSON(object: PaymentMethodEnum): string {
       return "DIRECT_DEBIT";
     case PaymentMethodEnum.PAYPAL:
       return "PAYPAL";
+    case PaymentMethodEnum.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -98,8 +100,9 @@ export function transferTypeEnumToJSON(object: TransferTypeEnum): string {
       return "SEND";
     case TransferTypeEnum.BOTH:
       return "BOTH";
+    case TransferTypeEnum.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -132,20 +135,25 @@ export interface PaymentMethod {
   data?: Any;
 }
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -161,23 +169,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -185,12 +179,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const basePaymentMethodList: object = { totalCount: 0 };
+function createBasePaymentMethodList(): PaymentMethodList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const PaymentMethodList = {
-  encode(message: PaymentMethodList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: PaymentMethodList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -203,13 +208,10 @@ export const PaymentMethodList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PaymentMethodList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): PaymentMethodList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePaymentMethodList
-    ) as PaymentMethodList;
-    message.items = [];
+    const message = createBasePaymentMethodList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -231,47 +233,15 @@ export const PaymentMethodList = {
   },
 
   fromJSON(object: any): PaymentMethodList {
-    const message = globalThis.Object.create(
-      basePaymentMethodList
-    ) as PaymentMethodList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethod.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
-    const message = { ...basePaymentMethodList } as PaymentMethodList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethod.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => PaymentMethod.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: PaymentMethodList): unknown {
@@ -283,22 +253,37 @@ export const PaymentMethodList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
+    const message = createBasePaymentMethodList();
+    message.items =
+      object.items?.map((e) => PaymentMethod.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const basePaymentMethodListResponse: object = { totalCount: 0 };
+function createBasePaymentMethodListResponse(): PaymentMethodListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const PaymentMethodListResponse = {
   encode(
     message: PaymentMethodListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       PaymentMethodResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -315,15 +300,12 @@ export const PaymentMethodListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): PaymentMethodListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePaymentMethodListResponse
-    ) as PaymentMethodListResponse;
-    message.items = [];
+    const message = createBasePaymentMethodListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -350,61 +332,15 @@ export const PaymentMethodListResponse = {
   },
 
   fromJSON(object: any): PaymentMethodListResponse {
-    const message = globalThis.Object.create(
-      basePaymentMethodListResponse
-    ) as PaymentMethodListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethodResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<PaymentMethodListResponse>
-  ): PaymentMethodListResponse {
-    const message = {
-      ...basePaymentMethodListResponse,
-    } as PaymentMethodListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(PaymentMethodResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => PaymentMethodResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: PaymentMethodListResponse): unknown {
@@ -416,22 +352,39 @@ export const PaymentMethodListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<PaymentMethodListResponse>
+  ): PaymentMethodListResponse {
+    const message = createBasePaymentMethodListResponse();
+    message.items =
+      object.items?.map((e) => PaymentMethodResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const basePaymentMethodResponse: object = {};
+function createBasePaymentMethodResponse(): PaymentMethodResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const PaymentMethodResponse = {
   encode(
     message: PaymentMethodResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       PaymentMethod.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -441,12 +394,13 @@ export const PaymentMethodResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PaymentMethodResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PaymentMethodResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePaymentMethodResponse
-    ) as PaymentMethodResponse;
+    const message = createBasePaymentMethodResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -465,37 +419,12 @@ export const PaymentMethodResponse = {
   },
 
   fromJSON(object: any): PaymentMethodResponse {
-    const message = globalThis.Object.create(
-      basePaymentMethodResponse
-    ) as PaymentMethodResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = PaymentMethod.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<PaymentMethodResponse>
-  ): PaymentMethodResponse {
-    const message = { ...basePaymentMethodResponse } as PaymentMethodResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = PaymentMethod.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? PaymentMethod.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: PaymentMethodResponse): unknown {
@@ -508,12 +437,38 @@ export const PaymentMethodResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<PaymentMethodResponse>
+  ): PaymentMethodResponse {
+    const message = createBasePaymentMethodResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? PaymentMethod.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const basePaymentMethod: object = { id: "", paymentMethod: 0, transferType: 0 };
+function createBasePaymentMethod(): PaymentMethod {
+  return {
+    id: "",
+    meta: undefined,
+    paymentMethod: 0,
+    transferType: 0,
+    data: undefined,
+  };
+}
 
 export const PaymentMethod = {
-  encode(message: PaymentMethod, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: PaymentMethod,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -532,12 +487,10 @@ export const PaymentMethod = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PaymentMethod {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): PaymentMethod {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      basePaymentMethod
-    ) as PaymentMethod;
+    const message = createBasePaymentMethod();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -565,65 +518,17 @@ export const PaymentMethod = {
   },
 
   fromJSON(object: any): PaymentMethod {
-    const message = globalThis.Object.create(
-      basePaymentMethod
-    ) as PaymentMethod;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.paymentMethod !== undefined && object.paymentMethod !== null) {
-      message.paymentMethod = paymentMethodEnumFromJSON(object.paymentMethod);
-    } else {
-      message.paymentMethod = 0;
-    }
-    if (object.transferType !== undefined && object.transferType !== null) {
-      message.transferType = transferTypeEnumFromJSON(object.transferType);
-    } else {
-      message.transferType = 0;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromJSON(object.data);
-    } else {
-      message.data = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<PaymentMethod>): PaymentMethod {
-    const message = { ...basePaymentMethod } as PaymentMethod;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.paymentMethod !== undefined && object.paymentMethod !== null) {
-      message.paymentMethod = object.paymentMethod;
-    } else {
-      message.paymentMethod = 0;
-    }
-    if (object.transferType !== undefined && object.transferType !== null) {
-      message.transferType = object.transferType;
-    } else {
-      message.transferType = 0;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromPartial(object.data);
-    } else {
-      message.data = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      paymentMethod: isSet(object.paymentMethod)
+        ? paymentMethodEnumFromJSON(object.paymentMethod)
+        : 0,
+      transferType: isSet(object.transferType)
+        ? transferTypeEnumFromJSON(object.transferType)
+        : 0,
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
+    };
   },
 
   toJSON(message: PaymentMethod): unknown {
@@ -639,6 +544,22 @@ export const PaymentMethod = {
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<PaymentMethod>): PaymentMethod {
+    const message = createBasePaymentMethod();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.paymentMethod = object.paymentMethod ?? 0;
+    message.transferType = object.transferType ?? 0;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
+    return message;
+  },
 };
 
 /** Microservice definition. */
@@ -650,14 +571,41 @@ export interface Service {
   Upsert(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/payment_method.proto",
+    package: "io.restorecommerce.payment_method",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
@@ -669,40 +617,20 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
         name: "Deleted",
-      },
-      {
         field: [
           {
-            name: "items",
+            name: "id",
             number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.payment_method.PaymentMethod",
-            jsonName: "items",
-          },
-          {
-            name: "total_count",
-            number: 2,
             label: 1,
-            type: 13,
-            jsonName: "totalCount",
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            jsonName: "subject",
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -710,11 +638,64 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethodList",
       },
       {
+        name: "PaymentMethodList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.payment_method.PaymentMethod",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "PaymentMethodListResponse",
         field: [
           {
             name: "items",
@@ -723,14 +704,25 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.payment_method.PaymentMethodResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -738,7 +730,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -746,11 +743,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethodListResponse",
       },
       {
+        name: "PaymentMethodResponse",
         field: [
           {
             name: "payload",
@@ -758,7 +756,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.payment_method.PaymentMethod",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -766,7 +769,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -774,20 +782,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethodResponse",
       },
       {
+        name: "PaymentMethod",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "payment_method",
@@ -795,7 +821,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.payment_method.PaymentMethodEnum",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "paymentMethod",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "transfer_type",
@@ -803,7 +834,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.payment_method.TransferTypeEnum",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "transferType",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "data",
@@ -811,7 +847,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -819,79 +860,97 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethod",
       },
     ],
     enumType: [
       {
+        name: "PaymentMethodEnum",
         value: [
-          { name: "WIRE_TRANSFER", number: 0 },
-          { name: "DIRECT_DEBIT", number: 1 },
-          { name: "PAYPAL", number: 2 },
+          { name: "WIRE_TRANSFER", number: 0, options: undefined },
+          { name: "DIRECT_DEBIT", number: 1, options: undefined },
+          { name: "PAYPAL", number: 2, options: undefined },
         ],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "PaymentMethodEnum",
       },
       {
+        name: "TransferTypeEnum",
         value: [
-          { name: "RECEIVE", number: 0 },
-          { name: "SEND", number: 1 },
-          { name: "BOTH", number: 2 },
+          { name: "RECEIVE", number: 0, options: undefined },
+          { name: "SEND", number: 1, options: undefined },
+          { name: "BOTH", number: 2, options: undefined },
         ],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "TransferTypeEnum",
       },
     ],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.payment_method.PaymentMethodListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
             outputType:
               ".io.restorecommerce.payment_method.PaymentMethodListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
             outputType:
               ".io.restorecommerce.payment_method.PaymentMethodListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.payment_method.PaymentMethodList",
             outputType:
               ".io.restorecommerce.payment_method.PaymentMethodListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/payment_method.proto",
-    package: "io.restorecommerce.payment_method",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
           span: [13, 0, 19, 1],
-          leadingDetachedComments: [],
           leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -902,8 +961,10 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.payment_method.TransferTypeEnum": TransferTypeEnum,
     ".io.restorecommerce.payment_method.Deleted": Deleted,
     ".io.restorecommerce.payment_method.PaymentMethodList": PaymentMethodList,
-    ".io.restorecommerce.payment_method.PaymentMethodListResponse": PaymentMethodListResponse,
-    ".io.restorecommerce.payment_method.PaymentMethodResponse": PaymentMethodResponse,
+    ".io.restorecommerce.payment_method.PaymentMethodListResponse":
+      PaymentMethodListResponse,
+    ".io.restorecommerce.payment_method.PaymentMethodResponse":
+      PaymentMethodResponse,
     ".io.restorecommerce.payment_method.PaymentMethod": PaymentMethod,
   },
   dependencies: [
@@ -915,17 +976,15 @@ export const protoMetadata: ProtoMetadata = {
   ],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -935,3 +994,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

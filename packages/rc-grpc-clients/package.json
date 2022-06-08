@@ -31,7 +31,8 @@
     "protoc": "^1.0.4",
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.2",
-    "ts-proto": "^1.65.0",
+    "ts-proto": "^1.115.4",
+    "ts-proto-descriptors": "^1.6.0",
     "typescript": "^4.1.5"
   },
   "scripts": {
@@ -39,7 +40,8 @@
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "prepublishOnly": "npm run build",
-    "generate": "protoc --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,snakeToCamel=true --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/io/restorecommerce/*.proto"
+    "generate": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/io/restorecommerce/*.proto",
+    "generate:google": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/google/protobuf/*.proto"
   },
   "engines": {
     "node": ">= 12.18.0"

@@ -16,18 +16,18 @@ export type Scalars = {
   GoogleProtobufAnyValue: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  indexing: IndexingQuery;
+export type Mutation = {
+  __typename?: 'Mutation';
+  indexing: IndexingMutation;
 };
 
-export type IndexingQuery = {
-  __typename?: 'IndexingQuery';
+export type IndexingMutation = {
+  __typename?: 'IndexingMutation';
   Search?: Maybe<ProtoIoRestorecommerceSearchSearchResponse>;
 };
 
 
-export type IndexingQuerySearchArgs = {
+export type IndexingMutationSearchArgs = {
   input: IIoRestorecommerceSearchSearchRequest;
 };
 
@@ -123,8 +123,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Query: ResolverTypeWrapper<{}>;
-  IndexingQuery: ResolverTypeWrapper<IndexingQuery>;
+  Mutation: ResolverTypeWrapper<{}>;
+  IndexingMutation: ResolverTypeWrapper<IndexingMutation>;
   ProtoIoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<ProtoIoRestorecommerceSearchSearchResponse>;
   IoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<IoRestorecommerceSearchSearchResponse>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
@@ -136,8 +136,8 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Query: {};
-  IndexingQuery: IndexingQuery;
+  Mutation: {};
+  IndexingMutation: IndexingMutation;
   ProtoIoRestorecommerceSearchSearchResponse: ProtoIoRestorecommerceSearchSearchResponse;
   IoRestorecommerceSearchSearchResponse: IoRestorecommerceSearchSearchResponse;
   GoogleProtobufAny: GoogleProtobufAny;
@@ -147,12 +147,12 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
 }>;
 
-export type QueryResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  indexing?: Resolver<ResolversTypes['IndexingQuery'], ParentType, ContextType>;
+export type MutationResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  indexing?: Resolver<ResolversTypes['IndexingMutation'], ParentType, ContextType>;
 }>;
 
-export type IndexingQueryResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IndexingQuery'] = ResolversParentTypes['IndexingQuery']> = ResolversObject<{
-  Search?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceSearchSearchResponse']>, ParentType, ContextType, RequireFields<IndexingQuerySearchArgs, 'input'>>;
+export type IndexingMutationResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IndexingMutation'] = ResolversParentTypes['IndexingMutation']> = ResolversObject<{
+  Search?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceSearchSearchResponse']>, ParentType, ContextType, RequireFields<IndexingMutationSearchArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -177,8 +177,8 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
 }
 
 export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
-  Query?: QueryResolvers<ContextType>;
-  IndexingQuery?: IndexingQueryResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
+  IndexingMutation?: IndexingMutationResolvers<ContextType>;
   ProtoIoRestorecommerceSearchSearchResponse?: ProtoIoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   IoRestorecommerceSearchSearchResponse?: IoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;

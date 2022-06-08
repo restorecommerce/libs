@@ -1,10 +1,11 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.rendering";
 
@@ -54,8 +55,9 @@ export function payload_StrategyToJSON(object: Payload_Strategy): string {
       return "INLINE";
     case Payload_Strategy.COPY:
       return "COPY";
+    case Payload_Strategy.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -72,10 +74,22 @@ export interface RenderResponse {
   response: Any[];
 }
 
-const basePayload: object = { styleUrl: "", strategy: 0, contentType: "" };
+function createBasePayload(): Payload {
+  return {
+    templates: undefined,
+    data: undefined,
+    styleUrl: "",
+    strategy: 0,
+    options: undefined,
+    contentType: "",
+  };
+}
 
 export const Payload = {
-  encode(message: Payload, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Payload,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.templates !== undefined) {
       Any.encode(message.templates, writer.uint32(10).fork()).ldelim();
     }
@@ -97,10 +111,10 @@ export const Payload = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Payload {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Payload {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(basePayload) as Payload;
+    const message = createBasePayload();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -131,73 +145,18 @@ export const Payload = {
   },
 
   fromJSON(object: any): Payload {
-    const message = globalThis.Object.create(basePayload) as Payload;
-    if (object.templates !== undefined && object.templates !== null) {
-      message.templates = Any.fromJSON(object.templates);
-    } else {
-      message.templates = undefined;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromJSON(object.data);
-    } else {
-      message.data = undefined;
-    }
-    if (object.styleUrl !== undefined && object.styleUrl !== null) {
-      message.styleUrl = String(object.styleUrl);
-    } else {
-      message.styleUrl = "";
-    }
-    if (object.strategy !== undefined && object.strategy !== null) {
-      message.strategy = payload_StrategyFromJSON(object.strategy);
-    } else {
-      message.strategy = 0;
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = Any.fromJSON(object.options);
-    } else {
-      message.options = undefined;
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = String(object.contentType);
-    } else {
-      message.contentType = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Payload>): Payload {
-    const message = { ...basePayload } as Payload;
-    if (object.templates !== undefined && object.templates !== null) {
-      message.templates = Any.fromPartial(object.templates);
-    } else {
-      message.templates = undefined;
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromPartial(object.data);
-    } else {
-      message.data = undefined;
-    }
-    if (object.styleUrl !== undefined && object.styleUrl !== null) {
-      message.styleUrl = object.styleUrl;
-    } else {
-      message.styleUrl = "";
-    }
-    if (object.strategy !== undefined && object.strategy !== null) {
-      message.strategy = object.strategy;
-    } else {
-      message.strategy = 0;
-    }
-    if (object.options !== undefined && object.options !== null) {
-      message.options = Any.fromPartial(object.options);
-    } else {
-      message.options = undefined;
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = object.contentType;
-    } else {
-      message.contentType = "";
-    }
-    return message;
+    return {
+      templates: isSet(object.templates)
+        ? Any.fromJSON(object.templates)
+        : undefined,
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
+      styleUrl: isSet(object.styleUrl) ? String(object.styleUrl) : "",
+      strategy: isSet(object.strategy)
+        ? payload_StrategyFromJSON(object.strategy)
+        : 0,
+      options: isSet(object.options) ? Any.fromJSON(object.options) : undefined,
+      contentType: isSet(object.contentType) ? String(object.contentType) : "",
+    };
   },
 
   toJSON(message: Payload): unknown {
@@ -217,12 +176,37 @@ export const Payload = {
       (obj.contentType = message.contentType);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Payload>): Payload {
+    const message = createBasePayload();
+    message.templates =
+      object.templates !== undefined && object.templates !== null
+        ? Any.fromPartial(object.templates)
+        : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
+    message.styleUrl = object.styleUrl ?? "";
+    message.strategy = object.strategy ?? 0;
+    message.options =
+      object.options !== undefined && object.options !== null
+        ? Any.fromPartial(object.options)
+        : undefined;
+    message.contentType = object.contentType ?? "";
+    return message;
+  },
 };
 
-const baseRenderRequest: object = { id: "" };
+function createBaseRenderRequest(): RenderRequest {
+  return { id: "", payload: [] };
+}
 
 export const RenderRequest = {
-  encode(message: RenderRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RenderRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -232,13 +216,10 @@ export const RenderRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RenderRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RenderRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRenderRequest
-    ) as RenderRequest;
-    message.payload = [];
+    const message = createBaseRenderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -257,37 +238,12 @@ export const RenderRequest = {
   },
 
   fromJSON(object: any): RenderRequest {
-    const message = globalThis.Object.create(
-      baseRenderRequest
-    ) as RenderRequest;
-    message.payload = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      for (const e of object.payload) {
-        message.payload.push(Payload.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
-    const message = { ...baseRenderRequest } as RenderRequest;
-    message.payload = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      for (const e of object.payload) {
-        message.payload.push(Payload.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      payload: Array.isArray(object?.payload)
+        ? object.payload.map((e: any) => Payload.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: RenderRequest): unknown {
@@ -302,12 +258,24 @@ export const RenderRequest = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
+    const message = createBaseRenderRequest();
+    message.id = object.id ?? "";
+    message.payload = object.payload?.map((e) => Payload.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseRenderResponse: object = { id: "" };
+function createBaseRenderResponse(): RenderResponse {
+  return { id: "", response: [] };
+}
 
 export const RenderResponse = {
-  encode(message: RenderResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RenderResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -317,13 +285,10 @@ export const RenderResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RenderResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RenderResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRenderResponse
-    ) as RenderResponse;
-    message.response = [];
+    const message = createBaseRenderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -342,37 +307,12 @@ export const RenderResponse = {
   },
 
   fromJSON(object: any): RenderResponse {
-    const message = globalThis.Object.create(
-      baseRenderResponse
-    ) as RenderResponse;
-    message.response = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.response !== undefined && object.response !== null) {
-      for (const e of object.response) {
-        message.response.push(Any.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {
-    const message = { ...baseRenderResponse } as RenderResponse;
-    message.response = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.response !== undefined && object.response !== null) {
-      for (const e of object.response) {
-        message.response.push(Any.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      response: Array.isArray(object?.response)
+        ? object.response.map((e: any) => Any.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: RenderResponse): unknown {
@@ -387,21 +327,56 @@ export const RenderResponse = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {
+    const message = createBaseRenderResponse();
+    message.id = object.id ?? "";
+    message.response = object.response?.map((e) => Any.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/rendering.proto",
+    package: "io.restorecommerce.rendering",
     dependency: ["google/protobuf/any.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Payload",
         field: [
           {
             name: "templates",
@@ -409,7 +384,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "templates",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "data",
@@ -417,14 +397,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "style_url",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "styleUrl",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "strategy",
@@ -432,7 +423,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.rendering.Payload.Strategy",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "strategy",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "options",
@@ -440,45 +436,75 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "options",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "content_type",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contentType",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Strategy",
             value: [
-              { name: "INLINE", number: 0 },
-              { name: "COPY", number: 1 },
+              { name: "INLINE", number: 0, options: undefined },
+              { name: "COPY", number: 1, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Strategy",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Payload",
       },
       {
+        name: "RenderRequest",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "payload",
             number: 2,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.rendering.Payload",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -486,20 +512,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RenderRequest",
       },
       {
+        name: "RenderResponse",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "response",
             number: 2,
             label: 3,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "response",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -507,80 +551,89 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RenderResponse",
       },
     ],
     enumType: [],
     service: [],
     extension: [],
-    name: "io/restorecommerce/rendering.proto",
-    package: "io.restorecommerce.rendering",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0, 2, 0],
           span: [9, 2, 36],
-          leadingDetachedComments: [],
           leadingComments:
             " json with <key, template> pairs\n e.g. { 'subject': ..., 'message':....}\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 1],
           span: [10, 2, 31],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " data to fill template with\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 2],
           span: [11, 2, 23],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " stylesheet URL\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 4, 0],
           span: [13, 2, 16, 3],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " style-applying 'strategy'\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 3],
           span: [17, 2, 24],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " inlining, copying CSS into <style>, etc...\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 4],
           span: [19, 2, 34],
-          leadingDetachedComments: [],
           leadingComments: " rendering options JSON object\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 5],
           span: [21, 2, 26],
-          leadingDetachedComments: [],
           leadingComments:
             " content type for rendering such as 'application/html' or 'application/text'\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
           span: [25, 2, 16],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " identifies the render request payload\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 1],
           span: [27, 2, 31],
-          leadingDetachedComments: [],
           leadingComments:
             " List of templates with associated data and rendering options\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 1],
           span: [32, 2, 44],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " error or HTML contents\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -595,17 +648,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -615,3 +666,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

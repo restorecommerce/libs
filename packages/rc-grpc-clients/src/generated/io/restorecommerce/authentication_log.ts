@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
@@ -19,7 +21,7 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.authentication_log";
 
@@ -64,13 +66,15 @@ export interface Deleted {
   id: string;
 }
 
-const baseAuthenticationLogList: object = { totalCount: 0 };
+function createBaseAuthenticationLogList(): AuthenticationLogList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const AuthenticationLogList = {
   encode(
     message: AuthenticationLogList,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -83,13 +87,13 @@ export const AuthenticationLogList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AuthenticationLogList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): AuthenticationLogList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAuthenticationLogList
-    ) as AuthenticationLogList;
-    message.items = [];
+    const message = createBaseAuthenticationLogList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -111,49 +115,15 @@ export const AuthenticationLogList = {
   },
 
   fromJSON(object: any): AuthenticationLogList {
-    const message = globalThis.Object.create(
-      baseAuthenticationLogList
-    ) as AuthenticationLogList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AuthenticationLog.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<AuthenticationLogList>
-  ): AuthenticationLogList {
-    const message = { ...baseAuthenticationLogList } as AuthenticationLogList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AuthenticationLog.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => AuthenticationLog.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: AuthenticationLogList): unknown {
@@ -165,22 +135,39 @@ export const AuthenticationLogList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogList>
+  ): AuthenticationLogList {
+    const message = createBaseAuthenticationLogList();
+    message.items =
+      object.items?.map((e) => AuthenticationLog.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAuthenticationLogListResponse: object = { totalCount: 0 };
+function createBaseAuthenticationLogListResponse(): AuthenticationLogListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const AuthenticationLogListResponse = {
   encode(
     message: AuthenticationLogListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       AuthenticationLogResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -197,15 +184,12 @@ export const AuthenticationLogListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): AuthenticationLogListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAuthenticationLogListResponse
-    ) as AuthenticationLogListResponse;
-    message.items = [];
+    const message = createBaseAuthenticationLogListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -232,61 +216,15 @@ export const AuthenticationLogListResponse = {
   },
 
   fromJSON(object: any): AuthenticationLogListResponse {
-    const message = globalThis.Object.create(
-      baseAuthenticationLogListResponse
-    ) as AuthenticationLogListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AuthenticationLogResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<AuthenticationLogListResponse>
-  ): AuthenticationLogListResponse {
-    const message = {
-      ...baseAuthenticationLogListResponse,
-    } as AuthenticationLogListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(AuthenticationLogResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => AuthenticationLogResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: AuthenticationLogListResponse): unknown {
@@ -298,22 +236,39 @@ export const AuthenticationLogListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogListResponse>
+  ): AuthenticationLogListResponse {
+    const message = createBaseAuthenticationLogListResponse();
+    message.items =
+      object.items?.map((e) => AuthenticationLogResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAuthenticationLogResponse: object = {};
+function createBaseAuthenticationLogResponse(): AuthenticationLogResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const AuthenticationLogResponse = {
   encode(
     message: AuthenticationLogResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       AuthenticationLog.encode(
         message.payload,
@@ -327,14 +282,12 @@ export const AuthenticationLogResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): AuthenticationLogResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAuthenticationLogResponse
-    ) as AuthenticationLogResponse;
+    const message = createBaseAuthenticationLogResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -353,39 +306,12 @@ export const AuthenticationLogResponse = {
   },
 
   fromJSON(object: any): AuthenticationLogResponse {
-    const message = globalThis.Object.create(
-      baseAuthenticationLogResponse
-    ) as AuthenticationLogResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = AuthenticationLog.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<AuthenticationLogResponse>
-  ): AuthenticationLogResponse {
-    const message = {
-      ...baseAuthenticationLogResponse,
-    } as AuthenticationLogResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = AuthenticationLog.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? AuthenticationLog.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: AuthenticationLogResponse): unknown {
@@ -398,22 +324,43 @@ export const AuthenticationLogResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<AuthenticationLogResponse>
+  ): AuthenticationLogResponse {
+    const message = createBaseAuthenticationLogResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? AuthenticationLog.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseAuthenticationLog: object = {
-  id: "",
-  ipv4Address: "",
-  ipv6Address: "",
-  operatingSystem: "",
-  userAgent: "",
-  date: 0,
-  activity: "",
-  subjectId: "",
-  tokenName: "",
-};
+function createBaseAuthenticationLog(): AuthenticationLog {
+  return {
+    id: "",
+    ipv4Address: "",
+    ipv6Address: "",
+    operatingSystem: "",
+    userAgent: "",
+    date: 0,
+    activity: "",
+    meta: undefined,
+    subjectId: "",
+    tokenName: "",
+  };
+}
 
 export const AuthenticationLog = {
-  encode(message: AuthenticationLog, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AuthenticationLog,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -447,12 +394,10 @@ export const AuthenticationLog = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AuthenticationLog {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): AuthenticationLog {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseAuthenticationLog
-    ) as AuthenticationLog;
+    const message = createBaseAuthenticationLog();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -495,121 +440,20 @@ export const AuthenticationLog = {
   },
 
   fromJSON(object: any): AuthenticationLog {
-    const message = globalThis.Object.create(
-      baseAuthenticationLog
-    ) as AuthenticationLog;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.ipv4Address !== undefined && object.ipv4Address !== null) {
-      message.ipv4Address = String(object.ipv4Address);
-    } else {
-      message.ipv4Address = "";
-    }
-    if (object.ipv6Address !== undefined && object.ipv6Address !== null) {
-      message.ipv6Address = String(object.ipv6Address);
-    } else {
-      message.ipv6Address = "";
-    }
-    if (
-      object.operatingSystem !== undefined &&
-      object.operatingSystem !== null
-    ) {
-      message.operatingSystem = String(object.operatingSystem);
-    } else {
-      message.operatingSystem = "";
-    }
-    if (object.userAgent !== undefined && object.userAgent !== null) {
-      message.userAgent = String(object.userAgent);
-    } else {
-      message.userAgent = "";
-    }
-    if (object.date !== undefined && object.date !== null) {
-      message.date = Number(object.date);
-    } else {
-      message.date = 0;
-    }
-    if (object.activity !== undefined && object.activity !== null) {
-      message.activity = String(object.activity);
-    } else {
-      message.activity = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
-    } else {
-      message.subjectId = "";
-    }
-    if (object.tokenName !== undefined && object.tokenName !== null) {
-      message.tokenName = String(object.tokenName);
-    } else {
-      message.tokenName = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<AuthenticationLog>): AuthenticationLog {
-    const message = { ...baseAuthenticationLog } as AuthenticationLog;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.ipv4Address !== undefined && object.ipv4Address !== null) {
-      message.ipv4Address = object.ipv4Address;
-    } else {
-      message.ipv4Address = "";
-    }
-    if (object.ipv6Address !== undefined && object.ipv6Address !== null) {
-      message.ipv6Address = object.ipv6Address;
-    } else {
-      message.ipv6Address = "";
-    }
-    if (
-      object.operatingSystem !== undefined &&
-      object.operatingSystem !== null
-    ) {
-      message.operatingSystem = object.operatingSystem;
-    } else {
-      message.operatingSystem = "";
-    }
-    if (object.userAgent !== undefined && object.userAgent !== null) {
-      message.userAgent = object.userAgent;
-    } else {
-      message.userAgent = "";
-    }
-    if (object.date !== undefined && object.date !== null) {
-      message.date = object.date;
-    } else {
-      message.date = 0;
-    }
-    if (object.activity !== undefined && object.activity !== null) {
-      message.activity = object.activity;
-    } else {
-      message.activity = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
-    } else {
-      message.subjectId = "";
-    }
-    if (object.tokenName !== undefined && object.tokenName !== null) {
-      message.tokenName = object.tokenName;
-    } else {
-      message.tokenName = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      ipv4Address: isSet(object.ipv4Address) ? String(object.ipv4Address) : "",
+      ipv6Address: isSet(object.ipv6Address) ? String(object.ipv6Address) : "",
+      operatingSystem: isSet(object.operatingSystem)
+        ? String(object.operatingSystem)
+        : "",
+      userAgent: isSet(object.userAgent) ? String(object.userAgent) : "",
+      date: isSet(object.date) ? Number(object.date) : 0,
+      activity: isSet(object.activity) ? String(object.activity) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      subjectId: isSet(object.subjectId) ? String(object.subjectId) : "",
+      tokenName: isSet(object.tokenName) ? String(object.tokenName) : "",
+    };
   },
 
   toJSON(message: AuthenticationLog): unknown {
@@ -630,22 +474,45 @@ export const AuthenticationLog = {
     message.tokenName !== undefined && (obj.tokenName = message.tokenName);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<AuthenticationLog>): AuthenticationLog {
+    const message = createBaseAuthenticationLog();
+    message.id = object.id ?? "";
+    message.ipv4Address = object.ipv4Address ?? "";
+    message.ipv6Address = object.ipv6Address ?? "";
+    message.operatingSystem = object.operatingSystem ?? "";
+    message.userAgent = object.userAgent ?? "";
+    message.date = object.date ?? 0;
+    message.activity = object.activity ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.subjectId = object.subjectId ?? "";
+    message.tokenName = object.tokenName ?? "";
+    return message;
+  },
 };
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -661,29 +528,21 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
   },
 };
 
@@ -702,24 +561,53 @@ export interface Service {
   ): Promise<AuthenticationLogListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/authentication_log.proto",
+    package: "io.restorecommerce.authentication_log",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "AuthenticationLogList",
         field: [
           {
             name: "items",
@@ -728,14 +616,25 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.authentication_log.AuthenticationLog",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -743,7 +642,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -751,11 +655,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AuthenticationLogList",
       },
       {
+        name: "AuthenticationLogListResponse",
         field: [
           {
             name: "items",
@@ -764,14 +669,25 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.authentication_log.AuthenticationLogResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -779,7 +695,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -787,11 +708,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AuthenticationLogListResponse",
       },
       {
+        name: "AuthenticationLogResponse",
         field: [
           {
             name: "payload",
@@ -800,7 +722,12 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.authentication_log.AuthenticationLog",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -808,7 +735,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -816,48 +748,103 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AuthenticationLogResponse",
       },
       {
+        name: "AuthenticationLog",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "ipv4_address",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "ipv4Address",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "ipv6_address",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "ipv6Address",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operating_system",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operatingSystem",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "user_agent",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "userAgent",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "date", number: 6, label: 1, type: 1, jsonName: "date" },
+          {
+            name: "date",
+            number: 6,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "date",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "activity",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "activity",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "meta",
@@ -865,21 +852,38 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject_id",
             number: 9,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subjectId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "token_name",
             number: 10,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "tokenName",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -887,31 +891,54 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "AuthenticationLog",
       },
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
@@ -919,11 +946,17 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
@@ -931,6 +964,9 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
@@ -938,74 +974,88 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.authentication_log.AuthenticationLogList",
             outputType:
               ".io.restorecommerce.authentication_log.AuthenticationLogListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/authentication_log.proto",
-    package: "io.restorecommerce.authentication_log",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
-          span: [12, 0, 18, 1],
-          leadingDetachedComments: [],
+          span: [13, 0, 23, 1],
           leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3],
-          span: [40, 0, 51, 1],
-          leadingDetachedComments: [],
+          span: [45, 0, 56, 1],
           leadingComments: "*\n Authentication Log\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 0],
-          span: [41, 2, 16],
-          leadingDetachedComments: [],
+          span: [46, 2, 16],
+          leadingComments: "",
           trailingComments: " log id\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 5],
-          span: [46, 2, 18],
-          leadingDetachedComments: [],
+          span: [51, 2, 18],
+          leadingComments: "",
           trailingComments: " time stamp of login, logout or token update\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 6],
-          span: [47, 2, 22],
-          leadingDetachedComments: [],
+          span: [52, 2, 22],
+          leadingComments: "",
           trailingComments: " login, logout\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 7],
-          span: [48, 2, 40],
-          leadingDetachedComments: [],
+          span: [53, 2, 40],
+          leadingComments: "",
           trailingComments: " meta info\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 8],
-          span: [49, 2, 24],
-          leadingDetachedComments: [],
+          span: [54, 2, 24],
+          leadingComments: "",
           trailingComments: " subject id\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 9],
-          span: [50, 2, 25],
-          leadingDetachedComments: [],
+          span: [55, 2, 25],
+          leadingComments: "",
           trailingComments:
             " token name associated with io.restorecommerce.auth.Token.token_name\n",
+          leadingDetachedComments: [],
         },
       ],
     },
     syntax: "proto3",
   }),
   references: {
-    ".io.restorecommerce.authentication_log.AuthenticationLogList": AuthenticationLogList,
-    ".io.restorecommerce.authentication_log.AuthenticationLogListResponse": AuthenticationLogListResponse,
-    ".io.restorecommerce.authentication_log.AuthenticationLogResponse": AuthenticationLogResponse,
-    ".io.restorecommerce.authentication_log.AuthenticationLog": AuthenticationLog,
+    ".io.restorecommerce.authentication_log.AuthenticationLogList":
+      AuthenticationLogList,
+    ".io.restorecommerce.authentication_log.AuthenticationLogListResponse":
+      AuthenticationLogListResponse,
+    ".io.restorecommerce.authentication_log.AuthenticationLogResponse":
+      AuthenticationLogResponse,
+    ".io.restorecommerce.authentication_log.AuthenticationLog":
+      AuthenticationLog,
     ".io.restorecommerce.authentication_log.Deleted": Deleted,
   },
   dependencies: [
@@ -1013,20 +1063,27 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "authentication_log" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1036,3 +1093,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

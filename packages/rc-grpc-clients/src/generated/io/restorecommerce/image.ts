@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
-import { Writer, Reader } from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.image";
 
@@ -25,19 +26,21 @@ export interface Deleted {
   id: string;
 }
 
-const baseImage: object = {
-  id: "",
-  caption: "",
-  filename: "",
-  contentType: "",
-  url: "",
-  width: 0,
-  height: 0,
-  length: 0,
-};
+function createBaseImage(): Image {
+  return {
+    id: "",
+    caption: "",
+    filename: "",
+    contentType: "",
+    url: "",
+    width: 0,
+    height: 0,
+    length: 0,
+  };
+}
 
 export const Image = {
-  encode(message: Image, writer: Writer = Writer.create()): Writer {
+  encode(message: Image, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -65,10 +68,10 @@ export const Image = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Image {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Image {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseImage) as Image;
+    const message = createBaseImage();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -105,93 +108,16 @@ export const Image = {
   },
 
   fromJSON(object: any): Image {
-    const message = globalThis.Object.create(baseImage) as Image;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.caption !== undefined && object.caption !== null) {
-      message.caption = String(object.caption);
-    } else {
-      message.caption = "";
-    }
-    if (object.filename !== undefined && object.filename !== null) {
-      message.filename = String(object.filename);
-    } else {
-      message.filename = "";
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = String(object.contentType);
-    } else {
-      message.contentType = "";
-    }
-    if (object.url !== undefined && object.url !== null) {
-      message.url = String(object.url);
-    } else {
-      message.url = "";
-    }
-    if (object.width !== undefined && object.width !== null) {
-      message.width = Number(object.width);
-    } else {
-      message.width = 0;
-    }
-    if (object.height !== undefined && object.height !== null) {
-      message.height = Number(object.height);
-    } else {
-      message.height = 0;
-    }
-    if (object.length !== undefined && object.length !== null) {
-      message.length = Number(object.length);
-    } else {
-      message.length = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Image>): Image {
-    const message = { ...baseImage } as Image;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.caption !== undefined && object.caption !== null) {
-      message.caption = object.caption;
-    } else {
-      message.caption = "";
-    }
-    if (object.filename !== undefined && object.filename !== null) {
-      message.filename = object.filename;
-    } else {
-      message.filename = "";
-    }
-    if (object.contentType !== undefined && object.contentType !== null) {
-      message.contentType = object.contentType;
-    } else {
-      message.contentType = "";
-    }
-    if (object.url !== undefined && object.url !== null) {
-      message.url = object.url;
-    } else {
-      message.url = "";
-    }
-    if (object.width !== undefined && object.width !== null) {
-      message.width = object.width;
-    } else {
-      message.width = 0;
-    }
-    if (object.height !== undefined && object.height !== null) {
-      message.height = object.height;
-    } else {
-      message.height = 0;
-    }
-    if (object.length !== undefined && object.length !== null) {
-      message.length = object.length;
-    } else {
-      message.length = 0;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      caption: isSet(object.caption) ? String(object.caption) : "",
+      filename: isSet(object.filename) ? String(object.filename) : "",
+      contentType: isSet(object.contentType) ? String(object.contentType) : "",
+      url: isSet(object.url) ? String(object.url) : "",
+      width: isSet(object.width) ? Number(object.width) : 0,
+      height: isSet(object.height) ? Number(object.height) : 0,
+      length: isSet(object.length) ? Number(object.length) : 0,
+    };
   },
 
   toJSON(message: Image): unknown {
@@ -207,12 +133,30 @@ export const Image = {
     message.length !== undefined && (obj.length = message.length);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Image>): Image {
+    const message = createBaseImage();
+    message.id = object.id ?? "";
+    message.caption = object.caption ?? "";
+    message.filename = object.filename ?? "";
+    message.contentType = object.contentType ?? "";
+    message.url = object.url ?? "";
+    message.width = object.width ?? 0;
+    message.height = object.height ?? 0;
+    message.length = object.length ?? 0;
+    return message;
+  },
 };
 
-const baseImageList: object = { totalCount: 0 };
+function createBaseImageList(): ImageList {
+  return { items: [], totalCount: 0 };
+}
 
 export const ImageList = {
-  encode(message: ImageList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ImageList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Image.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -222,11 +166,10 @@ export const ImageList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ImageList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ImageList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseImageList) as ImageList;
-    message.items = [];
+    const message = createBaseImageList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -245,35 +188,12 @@ export const ImageList = {
   },
 
   fromJSON(object: any): ImageList {
-    const message = globalThis.Object.create(baseImageList) as ImageList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Image.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ImageList>): ImageList {
-    const message = { ...baseImageList } as ImageList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Image.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Image.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+    };
   },
 
   toJSON(message: ImageList): unknown {
@@ -283,25 +203,38 @@ export const ImageList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<ImageList>): ImageList {
+    const message = createBaseImageList();
+    message.items = object.items?.map((e) => Image.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    return message;
   },
 };
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -317,23 +250,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -341,59 +260,172 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/image.proto",
+    package: "io.restorecommerce.image",
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Image",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "caption",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "caption",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "filename",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filename",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "content_type",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contentType",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "url", number: 5, label: 1, type: 9, jsonName: "url" },
-          { name: "width", number: 6, label: 1, type: 1, jsonName: "width" },
-          { name: "height", number: 7, label: 1, type: 1, jsonName: "height" },
-          { name: "length", number: 8, label: 1, type: 1, jsonName: "length" },
+          {
+            name: "url",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "url",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "width",
+            number: 6,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "width",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "height",
+            number: 7,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "height",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "length",
+            number: 8,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "length",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Image",
       },
       {
+        name: "ImageList",
         field: [
           {
             name: "items",
@@ -401,14 +433,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.image.Image",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -416,34 +459,49 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ImageList",
       },
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
     ],
     enumType: [],
     service: [],
     extension: [],
-    name: "io/restorecommerce/image.proto",
-    package: "io.restorecommerce.image",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
           span: [5, 0, 14, 1],
-          leadingDetachedComments: [],
           leadingComments: " ProductCategory resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -457,17 +515,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -477,3 +533,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

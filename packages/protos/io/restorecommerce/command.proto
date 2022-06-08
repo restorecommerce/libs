@@ -6,6 +6,7 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 // command resource
 message Command {
@@ -49,7 +50,11 @@ message CommandResponse {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListResponse);
+  option (io.restorecommerce.options.service_name) = "command";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (CommandList) returns (CommandListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CommandList) returns (CommandListResponse);

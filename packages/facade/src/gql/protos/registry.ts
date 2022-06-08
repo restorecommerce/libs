@@ -9,13 +9,14 @@ import {
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
 import { GraphQLUpload } from 'graphql-upload';
 import { capitalizeProtoName } from "./utils";
-import { authSubjectType, ProtoMetadata } from "./types";
+import { authSubjectType, ProtoMetadata, ProtoMetaMessageOptions } from './types';
 import {
   DescriptorProto,
   EnumDescriptorProto,
   FieldDescriptorProto, FieldDescriptorProto_Label,
   FieldDescriptorProto_Type, MethodDescriptorProto
 } from "ts-proto-descriptors";
+import type { Resolver } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options';
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType | GraphQLScalarType;
@@ -58,16 +59,16 @@ export const IGoogleProtobufAny = new GraphQLInputObjectType({
 
 const DateTime = new GraphQLScalarType({
   name: 'DateTime',
-  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z, 
-                compliant with the date-time format outlined in section 5.6 of 
+  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z,
+                compliant with the date-time format outlined in section 5.6 of
                 the RFC 3339 profile of the ISO 8601 standard for representation
                 of dates and times using the Gregorian calendar.`,
 });
 
 const IDateTime = new GraphQLScalarType({
   name: 'IDateTime',
-  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z, 
-                compliant with the date-time format outlined in section 5.6 of 
+  description: `A date-time string at UTC, such as 2007-12-03T10:15:30Z,
+                compliant with the date-time format outlined in section 5.6 of
                 the RFC 3339 profile of the ISO 8601 standard for representation
                 of dates and times using the Gregorian calendar.`,
 });
@@ -96,8 +97,12 @@ export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => 
   protoMetadata.forEach(meta => {
     meta.dependencies && registerPackagesRecursive(...meta.dependencies);
 
-    meta.fileDescriptor.messageType && registerMessageTypesRecursive(meta.fileDescriptor.package!,
-      meta.fileDescriptor.service[0]?.method, ...meta.fileDescriptor.messageType);
+    meta.fileDescriptor.messageType && registerMessageTypesRecursive(
+      meta.fileDescriptor.package!,
+      meta.fileDescriptor.service[0]?.method,
+      meta.options,
+      ...meta.fileDescriptor.messageType
+    );
 
     meta.fileDescriptor.enumType?.forEach((m) => {
       registerEnumTyping(meta.fileDescriptor.package!, m);
@@ -155,10 +160,14 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
   return enumMap;
 };
 
-const registerMessageTypesRecursive = (packageName: string, methodDef: MethodDescriptorProto[],
-  ...types: DescriptorProto[]) => {
+const registerMessageTypesRecursive = (
+  packageName: string,
+  methodDef: MethodDescriptorProto[],
+  options: ProtoMetadata['options'] | undefined,
+  ...types: DescriptorProto[]
+) => {
   types.forEach(m => {
-    registerTyping(packageName, m, methodDef);
+    registerTyping(packageName, m, methodDef, undefined, undefined, options && options.messages && options.messages[m.name]);
 
     if (m.enumType) {
       m.enumType.forEach((enumType) => {
@@ -167,7 +176,7 @@ const registerMessageTypesRecursive = (packageName: string, methodDef: MethodDes
     }
 
     if (m.nestedType) {
-      registerMessageTypesRecursive(packageName + '.' + m.name, methodDef, ...m.nestedType);
+      registerMessageTypesRecursive(packageName + '.' + m.name, methodDef, options, ...m.nestedType);
     }
   });
 }
@@ -193,6 +202,7 @@ export const registerTyping = (
   methodDef: MethodDescriptorProto[],
   opts?: Omit<Readonly<GraphQLObjectTypeConfig<any, any>>, 'fields'>,
   inputOpts?: Omit<Readonly<GraphQLInputObjectTypeConfig>, 'fields'>,
+  messageOptions?: ProtoMetaMessageOptions
 ) => {
   let insertMode = false;
   let crudOperation = false;
@@ -249,6 +259,22 @@ export const registerTyping = (
         result[field.jsonName!] = {
           type: resolvedMeta
         };
+      }
+
+      if (messageOptions && messageOptions.fields) {
+        if (field.name in messageOptions.fields) {
+          const data = messageOptions.fields[field.name].resolver as Resolver;
+          const resolved = resolveMeta(data.fieldName, {
+            type: FieldDescriptorProto_Type.TYPE_MESSAGE,
+            label: field.label,
+            typeName: data.targetType
+          }, type, name, false);
+          if (resolvedMeta !== null) {
+            result[data.fieldName!] = {
+              type: resolved as GraphQLOutputType
+            };
+          }
+        }
       }
     });
 
@@ -343,7 +369,13 @@ export const getTyping = (type: string): TypingData | undefined => {
   return registeredTypings.get(type);
 }
 
-const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(key: string, field: FieldDescriptorProto, rootObjType: string, objName: string, input: boolean): T | null => {
+const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(
+  key: string,
+  field: Pick<FieldDescriptorProto, 'type' | 'typeName' | 'label'>,
+  rootObjType: string,
+  objName: string,
+  input: boolean
+): T | null => {
   let result;
 
   switch (field.type) {

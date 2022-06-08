@@ -2,8 +2,11 @@ syntax = "proto3";
 package io.restorecommerce.payment;
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
- 
+import "io/restorecommerce/options.proto";
+
 service Service {
+  option (io.restorecommerce.options.service_name) = "payment";
+
   // Wrapper for setup_authorization in ActiveMerchant
   rpc SetupAuthorization (SetupRequest) returns (SetupResponse);
 

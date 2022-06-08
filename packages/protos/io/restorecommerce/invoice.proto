@@ -8,12 +8,17 @@ import "io/restorecommerce/organization.proto";
 import "io/restorecommerce/auth.proto";
 import "google/protobuf/any.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (InvoiceListResponse);
+  option (io.restorecommerce.options.service_name) = "invoice";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (InvoiceListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (InvoiceList) returns (InvoiceListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (InvoiceList) returns (InvoiceListResponse);
@@ -61,7 +66,15 @@ message Invoice {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string timestamp = 4;
-  string customer_id = 5;
+  string customer_id = 5 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.customer.Customer";
+      target_service: "resource";
+      target_sub_service: "customer";
+      target_method: "Read";
+      field_name: "customer";
+    }
+  ];
   string payment_status = 6;
   double total_amount = 7;
   double net_amount = 8;

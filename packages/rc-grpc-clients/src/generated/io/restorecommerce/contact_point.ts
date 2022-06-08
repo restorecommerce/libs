@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
@@ -19,7 +21,10 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as protoMetadata5,
+  Resolver,
+} from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.contact_point";
 
@@ -56,20 +61,25 @@ export interface ContactPoint {
   localeId: string;
 }
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -85,23 +95,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -109,12 +105,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseContactPointList: object = { totalCount: 0 };
+function createBaseContactPointList(): ContactPointList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const ContactPointList = {
-  encode(message: ContactPointList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ContactPointList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ContactPoint.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -127,13 +134,10 @@ export const ContactPointList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ContactPointList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ContactPointList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContactPointList
-    ) as ContactPointList;
-    message.items = [];
+    const message = createBaseContactPointList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -155,47 +159,15 @@ export const ContactPointList = {
   },
 
   fromJSON(object: any): ContactPointList {
-    const message = globalThis.Object.create(
-      baseContactPointList
-    ) as ContactPointList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPoint.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
-    const message = { ...baseContactPointList } as ContactPointList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPoint.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ContactPoint.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: ContactPointList): unknown {
@@ -207,22 +179,36 @@ export const ContactPointList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
+    const message = createBaseContactPointList();
+    message.items = object.items?.map((e) => ContactPoint.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseContactPointListResponse: object = { totalCount: 0 };
+function createBaseContactPointListResponse(): ContactPointListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const ContactPointListResponse = {
   encode(
     message: ContactPointListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ContactPointResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -239,15 +225,12 @@ export const ContactPointListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): ContactPointListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContactPointListResponse
-    ) as ContactPointListResponse;
-    message.items = [];
+    const message = createBaseContactPointListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -274,61 +257,15 @@ export const ContactPointListResponse = {
   },
 
   fromJSON(object: any): ContactPointListResponse {
-    const message = globalThis.Object.create(
-      baseContactPointListResponse
-    ) as ContactPointListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ContactPointListResponse>
-  ): ContactPointListResponse {
-    const message = {
-      ...baseContactPointListResponse,
-    } as ContactPointListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ContactPointResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ContactPointResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: ContactPointListResponse): unknown {
@@ -340,22 +277,39 @@ export const ContactPointListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<ContactPointListResponse>
+  ): ContactPointListResponse {
+    const message = createBaseContactPointListResponse();
+    message.items =
+      object.items?.map((e) => ContactPointResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseContactPointResponse: object = {};
+function createBaseContactPointResponse(): ContactPointResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const ContactPointResponse = {
   encode(
     message: ContactPointResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       ContactPoint.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -365,12 +319,13 @@ export const ContactPointResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ContactPointResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ContactPointResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseContactPointResponse
-    ) as ContactPointResponse;
+    const message = createBaseContactPointResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -389,35 +344,12 @@ export const ContactPointResponse = {
   },
 
   fromJSON(object: any): ContactPointResponse {
-    const message = globalThis.Object.create(
-      baseContactPointResponse
-    ) as ContactPointResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = ContactPoint.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ContactPointResponse>): ContactPointResponse {
-    const message = { ...baseContactPointResponse } as ContactPointResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = ContactPoint.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? ContactPoint.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: ContactPointResponse): unknown {
@@ -430,21 +362,40 @@ export const ContactPointResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ContactPointResponse>): ContactPointResponse {
+    const message = createBaseContactPointResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? ContactPoint.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseContactPoint: object = {
-  id: "",
-  physicalAddressId: "",
-  website: "",
-  email: "",
-  contactPointTypeId: "",
-  telephone: "",
-  timezoneId: "",
-  localeId: "",
-};
+function createBaseContactPoint(): ContactPoint {
+  return {
+    id: "",
+    meta: undefined,
+    physicalAddressId: "",
+    website: "",
+    email: "",
+    contactPointTypeId: "",
+    telephone: "",
+    timezoneId: "",
+    localeId: "",
+  };
+}
 
 export const ContactPoint = {
-  encode(message: ContactPoint, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ContactPoint,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -475,10 +426,10 @@ export const ContactPoint = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ContactPoint {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ContactPoint {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseContactPoint) as ContactPoint;
+    const message = createBaseContactPoint();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -518,115 +469,21 @@ export const ContactPoint = {
   },
 
   fromJSON(object: any): ContactPoint {
-    const message = globalThis.Object.create(baseContactPoint) as ContactPoint;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (
-      object.physicalAddressId !== undefined &&
-      object.physicalAddressId !== null
-    ) {
-      message.physicalAddressId = String(object.physicalAddressId);
-    } else {
-      message.physicalAddressId = "";
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = String(object.website);
-    } else {
-      message.website = "";
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = "";
-    }
-    if (
-      object.contactPointTypeId !== undefined &&
-      object.contactPointTypeId !== null
-    ) {
-      message.contactPointTypeId = String(object.contactPointTypeId);
-    } else {
-      message.contactPointTypeId = "";
-    }
-    if (object.telephone !== undefined && object.telephone !== null) {
-      message.telephone = String(object.telephone);
-    } else {
-      message.telephone = "";
-    }
-    if (object.timezoneId !== undefined && object.timezoneId !== null) {
-      message.timezoneId = String(object.timezoneId);
-    } else {
-      message.timezoneId = "";
-    }
-    if (object.localeId !== undefined && object.localeId !== null) {
-      message.localeId = String(object.localeId);
-    } else {
-      message.localeId = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
-    const message = { ...baseContactPoint } as ContactPoint;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (
-      object.physicalAddressId !== undefined &&
-      object.physicalAddressId !== null
-    ) {
-      message.physicalAddressId = object.physicalAddressId;
-    } else {
-      message.physicalAddressId = "";
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = object.website;
-    } else {
-      message.website = "";
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = "";
-    }
-    if (
-      object.contactPointTypeId !== undefined &&
-      object.contactPointTypeId !== null
-    ) {
-      message.contactPointTypeId = object.contactPointTypeId;
-    } else {
-      message.contactPointTypeId = "";
-    }
-    if (object.telephone !== undefined && object.telephone !== null) {
-      message.telephone = object.telephone;
-    } else {
-      message.telephone = "";
-    }
-    if (object.timezoneId !== undefined && object.timezoneId !== null) {
-      message.timezoneId = object.timezoneId;
-    } else {
-      message.timezoneId = "";
-    }
-    if (object.localeId !== undefined && object.localeId !== null) {
-      message.localeId = object.localeId;
-    } else {
-      message.localeId = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      physicalAddressId: isSet(object.physicalAddressId)
+        ? String(object.physicalAddressId)
+        : "",
+      website: isSet(object.website) ? String(object.website) : "",
+      email: isSet(object.email) ? String(object.email) : "",
+      contactPointTypeId: isSet(object.contactPointTypeId)
+        ? String(object.contactPointTypeId)
+        : "",
+      telephone: isSet(object.telephone) ? String(object.telephone) : "",
+      timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : "",
+      localeId: isSet(object.localeId) ? String(object.localeId) : "",
+    };
   },
 
   toJSON(message: ContactPoint): unknown {
@@ -645,6 +502,23 @@ export const ContactPoint = {
     message.localeId !== undefined && (obj.localeId = message.localeId);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
+    const message = createBaseContactPoint();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.physicalAddressId = object.physicalAddressId ?? "";
+    message.website = object.website ?? "";
+    message.email = object.email ?? "";
+    message.contactPointTypeId = object.contactPointTypeId ?? "";
+    message.telephone = object.telephone ?? "";
+    message.timezoneId = object.timezoneId ?? "";
+    message.localeId = object.localeId ?? "";
+    return message;
+  },
 };
 
 export interface Service {
@@ -655,35 +529,79 @@ export interface Service {
   Upsert(request: ContactPointList): Promise<ContactPointListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/contact_point.proto",
+    package: "io.restorecommerce.contact_point",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
       {
+        name: "ContactPointList",
         field: [
           {
             name: "items",
@@ -691,14 +609,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.contact_point.ContactPoint",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -706,7 +635,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -714,11 +648,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ContactPointList",
       },
       {
+        name: "ContactPointListResponse",
         field: [
           {
             name: "items",
@@ -726,14 +661,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.contact_point.ContactPointResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -741,7 +687,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -749,11 +700,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ContactPointListResponse",
       },
       {
+        name: "ContactPointResponse",
         field: [
           {
             name: "payload",
@@ -761,7 +713,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.contact_point.ContactPoint",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -769,7 +726,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -777,63 +739,161 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ContactPointResponse",
       },
       {
+        name: "ContactPoint",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "physical_address_id",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "physicalAddressId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "website",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "website",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "email", number: 5, label: 1, type: 9, jsonName: "email" },
+          {
+            name: "email",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "contact_point_type_id",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contactPointTypeId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "telephone",
             number: 8,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "telephone",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "timezone_id",
             number: 9,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "timezoneId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "locale_id",
             number: 10,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "localeId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -841,59 +901,80 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ContactPoint",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.contact_point.ContactPointListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.contact_point.ContactPointList",
             outputType:
               ".io.restorecommerce.contact_point.ContactPointListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.contact_point.ContactPointList",
             outputType:
               ".io.restorecommerce.contact_point.ContactPointListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.contact_point.ContactPointList",
             outputType:
               ".io.restorecommerce.contact_point.ContactPointListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/contact_point.proto",
-    package: "io.restorecommerce.contact_point",
+    options: undefined,
     sourceCodeInfo: { location: [] },
     syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.contact_point.Deleted": Deleted,
     ".io.restorecommerce.contact_point.ContactPointList": ContactPointList,
-    ".io.restorecommerce.contact_point.ContactPointListResponse": ContactPointListResponse,
-    ".io.restorecommerce.contact_point.ContactPointResponse": ContactPointResponse,
+    ".io.restorecommerce.contact_point.ContactPointListResponse":
+      ContactPointListResponse,
+    ".io.restorecommerce.contact_point.ContactPointResponse":
+      ContactPointResponse,
     ".io.restorecommerce.contact_point.ContactPoint": ContactPoint,
   },
   dependencies: [
@@ -901,20 +982,65 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    messages: {
+      ContactPoint: {
+        fields: {
+          physical_address_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqD3BoeXNpY2FsQWRkcmVzcw==",
+                "base64"
+              )
+            ),
+          },
+          contact_point_type_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CjcuaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnRfdHlwZS5Db250YWN0UG9pbnRUeXBlEghyZXNvdXJjZRoSY29udGFjdF9wb2ludF90eXBlIgRSZWFkKhBjb250YWN0UG9pbnRUeXBl",
+                "base64"
+              )
+            ),
+          },
+          timezone_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLnRpbWV6b25lLlRpbWV6b25lEghyZXNvdXJjZRoIdGltZXpvbmUiBFJlYWQqCHRpbWV6b25l",
+                "base64"
+              )
+            ),
+          },
+          locale_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiEuaW8ucmVzdG9yZWNvbW1lcmNlLmxvY2FsZS5Mb2NhbGUSCHJlc291cmNlGgZsb2NhbGUiBFJlYWQqBmxvY2FsZQ==",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "contact_point" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -924,3 +1050,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

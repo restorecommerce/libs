@@ -5,4 +5,4 @@ import { namespace } from "../interfaces";
 
 registerTypings();
 
-export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Indexing', cfg, ['Search']);
+export const schema = (cfg: ServiceConfig) => getAndGenerateSchema(protoMetadata.fileDescriptor.service![0], namespace, 'Indexing', cfg, protoMetadata);

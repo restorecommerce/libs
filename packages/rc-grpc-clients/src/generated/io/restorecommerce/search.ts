@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata2,
@@ -8,7 +10,6 @@ import {
   protoMetadata as protoMetadata1,
   Any,
 } from "../../google/protobuf/any";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.search";
 
@@ -23,10 +24,15 @@ export interface SearchResponse {
   data: Any[];
 }
 
-const baseSearchRequest: object = { collection: "", text: "", acl: "" };
+function createBaseSearchRequest(): SearchRequest {
+  return { collection: "", text: "", acl: [], subject: undefined };
+}
 
 export const SearchRequest = {
-  encode(message: SearchRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SearchRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collection !== "") {
       writer.uint32(10).string(message.collection);
     }
@@ -42,13 +48,10 @@ export const SearchRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SearchRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): SearchRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseSearchRequest
-    ) as SearchRequest;
-    message.acl = [];
+    const message = createBaseSearchRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -73,57 +76,16 @@ export const SearchRequest = {
   },
 
   fromJSON(object: any): SearchRequest {
-    const message = globalThis.Object.create(
-      baseSearchRequest
-    ) as SearchRequest;
-    message.acl = [];
-    if (object.collection !== undefined && object.collection !== null) {
-      message.collection = String(object.collection);
-    } else {
-      message.collection = "";
-    }
-    if (object.text !== undefined && object.text !== null) {
-      message.text = String(object.text);
-    } else {
-      message.text = "";
-    }
-    if (object.acl !== undefined && object.acl !== null) {
-      for (const e of object.acl) {
-        message.acl.push(String(e));
-      }
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
-    const message = { ...baseSearchRequest } as SearchRequest;
-    message.acl = [];
-    if (object.collection !== undefined && object.collection !== null) {
-      message.collection = object.collection;
-    } else {
-      message.collection = "";
-    }
-    if (object.text !== undefined && object.text !== null) {
-      message.text = object.text;
-    } else {
-      message.text = "";
-    }
-    if (object.acl !== undefined && object.acl !== null) {
-      for (const e of object.acl) {
-        message.acl.push(e);
-      }
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      collection: isSet(object.collection) ? String(object.collection) : "",
+      text: isSet(object.text) ? String(object.text) : "",
+      acl: Array.isArray(object?.acl)
+        ? object.acl.map((e: any) => String(e))
+        : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: SearchRequest): unknown {
@@ -141,25 +103,39 @@ export const SearchRequest = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
+    const message = createBaseSearchRequest();
+    message.collection = object.collection ?? "";
+    message.text = object.text ?? "";
+    message.acl = object.acl?.map((e) => e) || [];
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseSearchResponse: object = {};
+function createBaseSearchResponse(): SearchResponse {
+  return { data: [] };
+}
 
 export const SearchResponse = {
-  encode(message: SearchResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SearchResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.data) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SearchResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): SearchResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseSearchResponse
-    ) as SearchResponse;
-    message.data = [];
+    const message = createBaseSearchResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,27 +151,11 @@ export const SearchResponse = {
   },
 
   fromJSON(object: any): SearchResponse {
-    const message = globalThis.Object.create(
-      baseSearchResponse
-    ) as SearchResponse;
-    message.data = [];
-    if (object.data !== undefined && object.data !== null) {
-      for (const e of object.data) {
-        message.data.push(Any.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<SearchResponse>): SearchResponse {
-    const message = { ...baseSearchResponse } as SearchResponse;
-    message.data = [];
-    if (object.data !== undefined && object.data !== null) {
-      for (const e of object.data) {
-        message.data.push(Any.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      data: Array.isArray(object?.data)
+        ? object.data.map((e: any) => Any.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: SearchResponse): unknown {
@@ -207,6 +167,12 @@ export const SearchResponse = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<SearchResponse>): SearchResponse {
+    const message = createBaseSearchResponse();
+    message.data = object.data?.map((e) => Any.fromPartial(e)) || [];
+    return message;
+  },
 };
 
 /** Service provides the CRUD operations */
@@ -214,36 +180,99 @@ export interface Service {
   Search(request: SearchRequest): Promise<SearchResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/search.proto",
+    package: "io.restorecommerce.search",
     dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "SearchRequest",
         field: [
           {
             name: "collection",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "collection",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "text", number: 2, label: 1, type: 9, jsonName: "text" },
-          { name: "acl", number: 3, label: 3, type: 9, jsonName: "acl" },
+          {
+            name: "text",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "text",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "acl",
+            number: 3,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "acl",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "subject",
             number: 4,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -251,11 +280,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "SearchRequest",
       },
       {
+        name: "SearchResponse",
         field: [
           {
             name: "data",
@@ -263,7 +293,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -271,34 +306,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "SearchResponse",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Search",
             inputType: ".io.restorecommerce.search.SearchRequest",
             outputType: ".io.restorecommerce.search.SearchResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/search.proto",
-    package: "io.restorecommerce.search",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
           span: [7, 0, 9, 1],
-          leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -311,17 +350,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1, protoMetadata2],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -331,3 +368,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

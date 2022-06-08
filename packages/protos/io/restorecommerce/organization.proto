@@ -7,9 +7,14 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrganizationListResponse);
+  option (io.restorecommerce.options.service_name) = "organization";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrganizationListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (OrganizationList) returns (OrganizationListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (OrganizationList) returns (OrganizationListResponse);
@@ -46,9 +51,33 @@ message OrganizationResponse {
 message Organization {
   string id = 1; /// Organization ID, unique, key
   io.restorecommerce.meta.Meta meta = 2;
-  string address_id = 3; /// Address for the organization
-  string parent_id = 4; //  Hierarchically superior organization; may be null
-  repeated string contact_point_ids = 6; // list of possible legal addresses of different types
+  string address_id = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.address.Address";
+      target_service: "resource";
+      target_sub_service: "address";
+      target_method: "Read";
+      field_name: "address";
+    }
+  ]; /// Address for the organization
+  string parent_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.organization.Organization";
+      target_service: "resource";
+      target_sub_service: "organization";
+      target_method: "Read";
+      field_name: "parent";
+    }
+  ]; //  Hierarchically superior organization; may be null
+  repeated string contact_point_ids = 6 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.contact_point.ContactPoint";
+      target_service: "resource";
+      target_sub_service: "contact_point";
+      target_method: "Read";
+      field_name: "contactPoints";
+    }
+  ]; // list of possible legal addresses of different types
   string website = 7;
   string email = 8;
   string logo = 9; // base64; arangoDB does not support blob storage

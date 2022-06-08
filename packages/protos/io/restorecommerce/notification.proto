@@ -6,10 +6,15 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 // Message structure for Notification
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListResponse);
+  option (io.restorecommerce.options.service_name) = "notification";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (NotificationList) returns (NotificationListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (NotificationList) returns (NotificationListResponse);

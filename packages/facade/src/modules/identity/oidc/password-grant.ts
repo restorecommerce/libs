@@ -160,7 +160,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
         await config.authLogService.Create(AuthenticationLogList.fromPartial({
           items: [authLogItem],
-          subject: Subject.fromPartial({token, scope})
+          subject: Subject.fromPartial({token, scope}) as Subject
         }));
       } catch (ex) {
         if (ex instanceof InvalidPasswordGrant) {

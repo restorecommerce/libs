@@ -6,12 +6,17 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CountryListResponse);
+  option (io.restorecommerce.options.service_name) = "country";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CountryListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (CountryList) returns (CountryListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CountryList) returns (CountryListResponse);
@@ -45,5 +50,5 @@ message Country {
   string name = 3;
   string country_code = 4;
   string geographical_name = 5;
-  repeated string economic_areas = 6; 
+  repeated string economic_areas = 6;
 }

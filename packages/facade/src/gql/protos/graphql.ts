@@ -6,32 +6,39 @@ import {
   GraphQLOutputType,
   GraphQLResolveInfo,
   GraphQLSchema, ThunkObjMap
-} from "graphql";
+} from 'graphql';
 import {
   GraphQLEnumType,
   GraphQLFieldConfig,
   GraphQLFieldConfigMap,
   GraphQLInputObjectType, GraphQLInputType, GraphQLScalarType,
-} from "graphql/type/definition";
-import { authSubjectType, ServiceConfig, SubService, SubSpaceServiceConfig } from "./types";
-import { getTyping } from "./registry";
-import { capitalizeProtoName, getKeys, decodeBufferFields, convertEnumToInt } from "./utils";
-import { Readable } from "stream";
+} from 'graphql/type/definition';
+import { authSubjectType, ProtoMetadata, ServiceConfig, SubSpaceServiceConfig } from './types';
+import { getTyping } from './registry';
+import { capitalizeProtoName, getKeys, decodeBufferFields, convertEnumToInt } from './utils';
+import { Readable } from 'stream';
 import {
   DescriptorProto,
   MethodDescriptorProto,
   ServiceDescriptorProto
-} from "ts-proto-descriptors";
-import * as stream from "stream";
+} from 'ts-proto-descriptors';
+import * as stream from 'stream';
 import * as _ from 'lodash';
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+import { Resolver } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options';
+import { ReadRequest } from '@restorecommerce/rc-grpc-clients';
+import {
+  Filter_Operation,
+  Filter_ValueType, FilterOp_Operator
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base';
+import flat from 'array.prototype.flat';
 
 const typeCache = new Map<string, GraphQLObjectType>();
 const Mutate = ['Create', 'Update', 'Upsert'];
 const inputMethodType = new Map<string, string>();
 
 export const getGQLSchema = <TSource, TContext>
-  (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
+(method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
   const fields: any = {
     // operationStatus: {
     //   type: new GraphQLNonNull(OperationStatusType),
@@ -40,7 +47,7 @@ export const getGQLSchema = <TSource, TContext>
 
   const responseTyping = getTyping(method.outputType!);
   if (!responseTyping) {
-    throw Error("Method doesn't have registered typings: " + method.outputType!);
+    throw Error('Method doesn\'t have registered typings: ' + method.outputType!);
   }
 
   if (method.outputType! !== '.google.protobuf.Empty') {
@@ -49,7 +56,7 @@ export const getGQLSchema = <TSource, TContext>
     }
   }
 
-  const outName = "Proto" + capitalizeProtoName(method.outputType!);
+  const outName = 'Proto' + capitalizeProtoName(method.outputType!);
 
   let out = typeCache.get(outName);
   if (!out) {
@@ -62,7 +69,7 @@ export const getGQLSchema = <TSource, TContext>
 
   const typing = getTyping(method.inputType!);
   if (!typing) {
-    throw Error("Method doesn't have registered typings: " + method.inputType!);
+    throw Error('Method doesn\'t have registered typings: ' + method.inputType!);
   }
 
   return {
@@ -131,7 +138,7 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
 
   if (model instanceof GraphQLScalarType) {
     switch (model.name) {
-      case "Upload":
+      case 'Upload':
         if (typeof data !== 'object') {
           return Buffer.from(data.toString(), 'utf8');
         }
@@ -140,7 +147,7 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
         const upload = await fileData.promise;
         const stream: Readable = upload.createReadStream();
 
-        const chunks = [];
+        const chunks: any[] = [];
         for await (let chunk of stream) {
           chunks.push(chunk)
         }
@@ -206,7 +213,7 @@ type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
+  (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -298,7 +305,7 @@ export const getGQLResolverFunctions =
           const grpcClientConfig = cfg.client;
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {
-            let operationStatus = { code: 0, message: '' };
+            let operationStatus = {code: 0, message: ''};
             let aggregatedResponse: any = await new Promise((resolve, reject) => {
               let response: any = {};
               let combinedChunks: any = {};
@@ -346,7 +353,7 @@ export const getGQLResolverFunctions =
                 }
               });
             });
-            return { details: aggregatedResponse, operationStatus };
+            return {details: aggregatedResponse, operationStatus};
           }
 
           if ('items' in result) {
@@ -385,8 +392,8 @@ type ResolverBaseOrSub =
 const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverBaseOrSub>>>();
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
-    mutation: boolean = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
+(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+ mutation: boolean = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -594,9 +601,24 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
   return new GraphQLSchema(config);
 }
 
-export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto, queries: string[], config: ServiceConfig, entity: string): { queries: Set<string>, mutations: Set<string> } => {
-  const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) < 0) as any)
-  const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queries.indexOf(key) >= 0) as any)
+export const getWhitelistBlacklistConfig = (
+  metaService: ServiceDescriptorProto,
+  config: ServiceConfig,
+  meta: ProtoMetadata,
+  entity: string
+): { queries: Set<string>, mutations: Set<string> } => {
+  const queryList: string[] = [];
+  if (meta.options && meta.options.services && meta.options!.services[metaService.name] && meta.options!.services[metaService.name].methods) {
+    const methods = meta.options!.services[metaService.name].methods!;
+    for (const key of Object.keys(methods)) {
+      if ('is_query' in methods[key] && methods[key]['is_query']) {
+        queryList.push(key);
+      }
+    }
+  }
+
+  const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) < 0) as any)
+  const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) >= 0) as any)
 
   if (config[entity]) {
     if (config[entity]?.methods?.whitelist) {
@@ -654,9 +676,14 @@ export const getWhitelistBlacklistConfig = (metaService: ServiceDescriptorProto,
   };
 }
 
-export const getAndGenerateSchema = <TSource, TContext>
-  (service: ServiceDescriptorProto, namespace: string, prefix: string, cfg: ServiceConfig, queryList: string[]) => {
-  const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg, service.name)
+export const getAndGenerateSchema = <TSource, TContext>(
+  service: ServiceDescriptorProto,
+  namespace: string,
+  prefix: string,
+  cfg: ServiceConfig,
+  meta: ProtoMetadata
+) => {
+  const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta)
 
   const schemas = getGQLSchemas(service);
 
@@ -664,13 +691,13 @@ export const getAndGenerateSchema = <TSource, TContext>
     registerResolverSchema(namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), undefined, cfg)
   })
 
-  return generateSchema([{ prefix, namespace }]);
+  return generateSchema([{prefix, namespace}]);
 }
 
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, queryList: string[], subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(service, queryList, cfg, service.name);
+  (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, meta: ProtoMetadata, subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
+    const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta);
 
     const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg);
 
@@ -681,43 +708,155 @@ export const getAndGenerateResolvers =
     return generateResolver(namespace as string)
   }
 
-export const generateSubServiceSchemas = (subServices: SubService[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
-  subServices.forEach((sub) => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config, sub.name)
+export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
+  subServices.forEach((meta) => {
+    meta.fileDescriptor.service.forEach(service => {
+      if (meta.options && meta.options.services && meta.options.services[service.name]) {
+        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta)
 
-    const schemas = getGQLSchemas(sub.service);
+        const schemas = getGQLSchemas(service);
 
-    Object.keys(schemas).forEach(key => {
-      registerResolverSchema(config.root ? sub.name : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : sub.name, config)
+        const subName = meta.options.services[service.name].options!['service_name'];
+        Object.keys(schemas).forEach(key => {
+          registerResolverSchema(config.root ? subName : namespace, key, schemas[key], !queries.has(key) && mutations.has(key), config.root ? undefined : subName)
+        })
+      }
     })
   });
 
   if (config.root) {
-    return generateSchema(subServices.map(srv => ({
-      prefix: prefix + srv.name.substr(0, 1).toUpperCase() + srv.name.substr(1).toLowerCase(),
-      namespace: srv.name
-    } as any)
-    ));
+    return generateSchema(flat(subServices.map(meta => {
+      return meta.fileDescriptor.service.map(service => {
+        if (meta.options && meta.options.services && meta.options.services[service.name]) {
+          const subName = meta.options.services[service.name].options!['service_name'];
+
+          return ({
+            prefix: prefix + subName.substr(0, 1).toUpperCase() + subName.substr(1).toLowerCase(),
+            namespace: subName
+          } as any);
+        }
+        return null;
+      }).filter(s => s !== null);
+    })));
   }
 
-  return generateSchema([{ prefix, namespace }]);
+  return generateSchema([{prefix, namespace}]);
 }
 
-export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: SubService[], config: SubSpaceServiceConfig, namespace: string): T => {
-  subServices.forEach((sub) => {
-    const { mutations, queries } = getWhitelistBlacklistConfig(sub.service, sub.queries, config, sub.name);
+export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string): T => {
+  subServices.forEach((meta) => {
+    meta.fileDescriptor.service.forEach(service => {
+      if (meta.options && meta.options.services && meta.options.services[service.name]) {
+        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta);
 
-    const func = getGQLResolverFunctions<M, CTX>(sub.service, namespace, sub.name || namespace, config);
-    Object.keys(func).forEach(k => {
-      const regNamespace = config.root ? sub.name : namespace;
-      const regSubspace = config.root ? undefined : sub.name;
-      registerResolverFunction(regNamespace, k, func[k], !queries.has(k) && mutations.has(k), regSubspace, sub.service);
-    });
+        const subName = meta.options.services[service.name].options!['service_name'];
+        const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config.client);
+
+        Object.keys(func).forEach(k => {
+          registerResolverFunction(config.root ? subName : namespace, k, func[k], !queries.has(k) && mutations.has(k), config.root ? undefined : subName);
+        });
+      }
+    })
   });
 
   if (config.root) {
-    return generateResolver(...subServices.map(srv => srv.name));
+    return generateResolver(...flat(subServices.map(meta => {
+      return meta.fileDescriptor.service.map(service => {
+        if (meta.options && meta.options.services && meta.options.services[service.name]) {
+          return meta.options.services[service.name].options!['service_name'];
+        }
+        return null;
+      }).filter(s => s !== null);
+    })));
   }
 
-  return generateResolver(namespace);
+  const finalResolver = generateResolver(namespace);
+
+  subServices.forEach((meta) => {
+    meta.fileDescriptor.service.forEach(service => {
+      if (meta.options && meta.options.messages) {
+        for (const key of Object.keys(meta.options.messages)) {
+          const message = meta.options.messages[key];
+          if (message.fields) {
+            const typing = getTyping('.' + meta.fileDescriptor.package + '.' + key);
+            if (typing) {
+              const result: any = {};
+              for (const fieldName of Object.keys(message.fields)) {
+                const field = message.fields[fieldName];
+                if ('resolver' in field) {
+                  const fieldJsonName = snakeToCamel(fieldName);
+                  const resolver = field['resolver'] as Resolver;
+
+                  // TODO This creates an N+1 problem!
+                  result[resolver.fieldName] = async (parent: any, _: any, ctx: any) => {
+                    if (!parent || !(fieldJsonName in parent) || parent[fieldJsonName] === undefined) {
+                      return undefined;
+                    }
+
+                    const client = ctx[resolver.targetService].client;
+                    const service = client[resolver.targetSubService];
+
+                    const idList: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
+
+                    // TODO Support custom input messages
+                    const req = ReadRequest.fromPartial({
+                      filters: [{
+                        filter: idList.map(id => ({
+                          field: 'id',
+                          operation: Filter_Operation.eq,
+                          value: id,
+                          type: Filter_ValueType.STRING
+                        })),
+                        operator: FilterOp_Operator.or
+                      }]
+                    } as any);
+
+                    req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
+
+                    const authToken = ctx.request!.req.headers['authorization'];
+                    if (authToken && authToken.startsWith('Bearer ')) {
+                      req.subject!.token = authToken.split(' ')[1];
+                    }
+
+                    const result = await service[resolver.targetMethod](req);
+
+                    if (result && result.items && result.items.length) {
+                      if (Array.isArray(parent[fieldJsonName])) {
+                        return result.items.map((item: any) => item.payload);
+                      } else {
+                        return result.items[0].payload;
+                      }
+                    }
+
+                    return undefined
+                  }
+                }
+              }
+              finalResolver[typing.output.name] = result;
+            }
+          }
+        }
+      }
+    })
+  });
+
+  return finalResolver;
+}
+
+const snakeToCamel = (s: string): string => {
+  return s
+    .split('_')
+    .map((word, i) => {
+      if (i === 0) {
+        // if first symbol is "_" then skip it
+        return word ? word[0] + word.substring(1).toLowerCase() : '';
+      } else {
+        return capitalize(word.toLowerCase());
+      }
+    })
+    .join('');
+}
+
+const capitalize = (s: string): string => {
+  return s.substring(0, 1).toUpperCase() + s.substring(1);
 }

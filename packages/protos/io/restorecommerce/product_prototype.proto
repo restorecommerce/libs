@@ -6,12 +6,13 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 // ProductPrototype resource
 message ProductPrototype {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
-  string name = 3; 
+  string name = 3;
   string version = 4;
   string description = 5;
   string category_id = 6;
@@ -39,7 +40,11 @@ message Deleted {
 }
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse);
+  option (io.restorecommerce.options.service_name) = "product_prototype";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (ProductPrototypeList) returns (ProductPrototypeListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductPrototypeList) returns (ProductPrototypeListResponse);

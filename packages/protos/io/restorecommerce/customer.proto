@@ -6,12 +6,17 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /*
 Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerListResponse);
+  option (io.restorecommerce.options.service_name) = "customer";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (CustomerList) returns (CustomerListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CustomerList) returns (CustomerListResponse);
@@ -46,18 +51,74 @@ message Customer {
 }
 
 message IndividualUser {
-  string user_id = 1;
-  string address_id = 2;
-  repeated string contact_point_ids = 3;
+  string user_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.user.User";
+      target_service: "identity";
+      target_sub_service: "user";
+      target_method: "Read";
+      field_name: "user";
+    }
+  ];
+  string address_id = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.address.Address";
+      target_service: "resource";
+      target_sub_service: "address";
+      target_method: "Read";
+      field_name: "address";
+    }
+  ];
+  repeated string contact_point_ids = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.contact_point.ContactPoint";
+      target_service: "resource";
+      target_sub_service: "contact_point";
+      target_method: "Read";
+      field_name: "contactPoints";
+    }
+  ];
 }
 
 message OrgUser {
-  string user_id = 1;
-  string organization_id = 2;
+  string user_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.user.User";
+      target_service: "identity";
+      target_sub_service: "user";
+      target_method: "Read";
+      field_name: "user";
+    }
+  ];
+  string organization_id = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.organization.Organization";
+      target_service: "resource";
+      target_sub_service: "organization";
+      target_method: "Read";
+      field_name: "organization";
+    }
+  ];
 }
 
 message Guest {
   bool guest = 1;
-  string address_id = 2;
-  repeated string contact_point_ids = 3;
+  string address_id = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.address.Address";
+      target_service: "resource";
+      target_sub_service: "address";
+      target_method: "Read";
+      field_name: "address";
+    }
+  ];
+  repeated string contact_point_ids = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.contact_point.ContactPoint";
+      target_service: "resource";
+      target_sub_service: "contact_point";
+      target_method: "Read";
+      field_name: "contactPoints";
+    }
+  ];
 }

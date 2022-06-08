@@ -6,9 +6,14 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse);
+  option (io.restorecommerce.options.service_name) = "order";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (OrderList) returns (OrderListResponse);
@@ -45,8 +50,24 @@ message Order {
   // sum of all the quantity_price will be total_price
   double total_price = 8;
   // shipping address
-  string shipping_contact_point_id = 9;
-  string billing_contact_point_id = 10;
+  string shipping_contact_point_id = 9 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.contact_point.ContactPoint";
+      target_service: "resource";
+      target_sub_service: "contact_point";
+      target_method: "Read";
+      field_name: "shippingContactPoint";
+    }
+  ];
+  string billing_contact_point_id = 10 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.contact_point.ContactPoint";
+      target_service: "resource";
+      target_sub_service: "contact_point";
+      target_method: "Read";
+      field_name: "billingContactPoint";
+    }
+  ];
   double total_weight_in_kg = 11;
 }
 

@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata2,
@@ -8,7 +10,7 @@ import {
   Subject,
   protoMetadata as protoMetadata1,
 } from "../../io/restorecommerce/auth";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata3 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.token";
 
@@ -31,10 +33,21 @@ export interface GrantId {
   subject?: Subject;
 }
 
-const baseTokenData: object = { id: "", expiresIn: 0, type: "" };
+function createBaseTokenData(): TokenData {
+  return {
+    id: "",
+    payload: undefined,
+    expiresIn: 0,
+    type: "",
+    subject: undefined,
+  };
+}
 
 export const TokenData = {
-  encode(message: TokenData, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: TokenData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -53,10 +66,10 @@ export const TokenData = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): TokenData {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): TokenData {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseTokenData) as TokenData;
+    const message = createBaseTokenData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -84,63 +97,15 @@ export const TokenData = {
   },
 
   fromJSON(object: any): TokenData {
-    const message = globalThis.Object.create(baseTokenData) as TokenData;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = Number(object.expiresIn);
-    } else {
-      message.expiresIn = 0;
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = String(object.type);
-    } else {
-      message.type = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<TokenData>): TokenData {
-    const message = { ...baseTokenData } as TokenData;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Any.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = object.expiresIn;
-    } else {
-      message.expiresIn = 0;
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
+      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : 0,
+      type: isSet(object.type) ? String(object.type) : "",
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: TokenData): unknown {
@@ -156,12 +121,33 @@ export const TokenData = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<TokenData>): TokenData {
+    const message = createBaseTokenData();
+    message.id = object.id ?? "";
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
+    message.expiresIn = object.expiresIn ?? 0;
+    message.type = object.type ?? "";
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseIdentifier: object = { id: "", type: "" };
+function createBaseIdentifier(): Identifier {
+  return { id: "", type: "", subject: undefined };
+}
 
 export const Identifier = {
-  encode(message: Identifier, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Identifier,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -174,10 +160,10 @@ export const Identifier = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Identifier {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Identifier {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseIdentifier) as Identifier;
+    const message = createBaseIdentifier();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -199,43 +185,13 @@ export const Identifier = {
   },
 
   fromJSON(object: any): Identifier {
-    const message = globalThis.Object.create(baseIdentifier) as Identifier;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = String(object.type);
-    } else {
-      message.type = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Identifier>): Identifier {
-    const message = { ...baseIdentifier } as Identifier;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      type: isSet(object.type) ? String(object.type) : "",
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: Identifier): unknown {
@@ -248,12 +204,28 @@ export const Identifier = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Identifier>): Identifier {
+    const message = createBaseIdentifier();
+    message.id = object.id ?? "";
+    message.type = object.type ?? "";
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseGrantId: object = { grantId: "" };
+function createBaseGrantId(): GrantId {
+  return { grantId: "", subject: undefined };
+}
 
 export const GrantId = {
-  encode(message: GrantId, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: GrantId,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.grantId !== "") {
       writer.uint32(10).string(message.grantId);
     }
@@ -263,10 +235,10 @@ export const GrantId = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GrantId {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): GrantId {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseGrantId) as GrantId;
+    const message = createBaseGrantId();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -285,33 +257,12 @@ export const GrantId = {
   },
 
   fromJSON(object: any): GrantId {
-    const message = globalThis.Object.create(baseGrantId) as GrantId;
-    if (object.grantId !== undefined && object.grantId !== null) {
-      message.grantId = String(object.grantId);
-    } else {
-      message.grantId = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<GrantId>): GrantId {
-    const message = { ...baseGrantId } as GrantId;
-    if (object.grantId !== undefined && object.grantId !== null) {
-      message.grantId = object.grantId;
-    } else {
-      message.grantId = "";
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      grantId: isSet(object.grantId) ? String(object.grantId) : "",
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: GrantId): unknown {
@@ -323,13 +274,22 @@ export const GrantId = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<GrantId>): GrantId {
+    const message = createBaseGrantId();
+    message.grantId = object.grantId ?? "";
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
 /** Microservice definition. */
 export interface Service {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
   upsert(request: TokenData): Promise<Any>;
-  /** find id_token using access_token identifier (Return previously stored instance of an oidc-provider model) */
   find(request: Identifier): Promise<Any>;
   /** removes the id_token from redis */
   destroy(request: Identifier): Promise<Any>;
@@ -339,44 +299,116 @@ export interface Service {
   consume(request: Identifier): Promise<Any>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
-    dependency: ["io/restorecommerce/auth.proto", "google/protobuf/any.proto"],
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/token.proto",
+    package: "io.restorecommerce.token",
+    dependency: [
+      "io/restorecommerce/auth.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/options.proto",
+    ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "TokenData",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "payload",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "expires_in",
             number: 3,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "expiresIn",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "type", number: 4, label: 1, type: 9, jsonName: "type" },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "subject",
             number: 5,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -384,21 +416,51 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "TokenData",
       },
       {
+        name: "Identifier",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
-          { name: "type", number: 2, label: 1, type: 9, jsonName: "type" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "subject",
             number: 3,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -406,18 +468,25 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Identifier",
       },
       {
+        name: "GrantId",
         field: [
           {
             name: "grant_id",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "grantId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -425,7 +494,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -433,88 +507,105 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "GrantId",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "upsert",
             inputType: ".io.restorecommerce.token.TokenData",
             outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "find",
             inputType: ".io.restorecommerce.token.Identifier",
             outputType: ".google.protobuf.Any",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "destroy",
             inputType: ".io.restorecommerce.token.Identifier",
             outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "revokeByGrantId",
             inputType: ".io.restorecommerce.token.GrantId",
             outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "consume",
             inputType: ".io.restorecommerce.token.Identifier",
             outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/token.proto",
-    package: "io.restorecommerce.token",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
-          span: [10, 0, 16, 1],
-          leadingDetachedComments: [],
+          span: [11, 0, 21, 1],
           leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 0],
-          span: [11, 2, 55],
-          leadingDetachedComments: [],
+          span: [14, 2, 55],
+          leadingComments: "",
           trailingComments:
             " creates or upserts ID_token to `Redis` and returns sucess or failure message\n",
-        },
-        {
-          path: [6, 0, 2, 1],
-          span: [12, 2, 54],
           leadingDetachedComments: [],
-          trailingComments:
-            " find id_token using access_token identifier (Return previously stored instance of an oidc-provider model)  \n",
         },
         {
           path: [6, 0, 2, 2],
-          span: [13, 2, 57],
-          leadingDetachedComments: [],
+          span: [18, 2, 57],
+          leadingComments: "",
           trailingComments: " removes the id_token from redis\n",
+          leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 3],
-          span: [14, 2, 62],
-          leadingDetachedComments: [],
+          span: [19, 2, 62],
+          leadingComments: "",
           trailingComments:
             " Destroy/Drop/Remove a stored id_token by its grantId property reference.\n",
+          leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 4],
-          span: [15, 2, 57],
-          leadingDetachedComments: [],
+          span: [20, 2, 57],
+          leadingComments: "",
           trailingComments:
             ' Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).\n',
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -525,20 +616,26 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.token.Identifier": Identifier,
     ".io.restorecommerce.token.GrantId": GrantId,
   },
-  dependencies: [protoMetadata1, protoMetadata2],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "token" },
+        methods: { find: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -548,3 +645,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

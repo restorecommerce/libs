@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Meta,
   protoMetadata as protoMetadata2,
@@ -23,7 +25,10 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as protoMetadata6,
+  Resolver,
+} from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.product_category";
 
@@ -63,15 +68,23 @@ export interface Parent {
   parentId: string;
 }
 
-const baseProductCategory: object = {
-  id: "",
-  name: "",
-  description: "",
-  priceGroupId: "",
-};
+function createBaseProductCategory(): ProductCategory {
+  return {
+    id: "",
+    meta: undefined,
+    name: "",
+    description: "",
+    priceGroupId: "",
+    image: undefined,
+    parent: undefined,
+  };
+}
 
 export const ProductCategory = {
-  encode(message: ProductCategory, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ProductCategory,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -96,12 +109,10 @@ export const ProductCategory = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductCategory {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductCategory {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseProductCategory
-    ) as ProductCategory;
+    const message = createBaseProductCategory();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -135,85 +146,17 @@ export const ProductCategory = {
   },
 
   fromJSON(object: any): ProductCategory {
-    const message = globalThis.Object.create(
-      baseProductCategory
-    ) as ProductCategory;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
-      message.priceGroupId = String(object.priceGroupId);
-    } else {
-      message.priceGroupId = "";
-    }
-    if (object.image !== undefined && object.image !== null) {
-      message.image = Image.fromJSON(object.image);
-    } else {
-      message.image = undefined;
-    }
-    if (object.parent !== undefined && object.parent !== null) {
-      message.parent = Parent.fromJSON(object.parent);
-    } else {
-      message.parent = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
-    const message = { ...baseProductCategory } as ProductCategory;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (object.priceGroupId !== undefined && object.priceGroupId !== null) {
-      message.priceGroupId = object.priceGroupId;
-    } else {
-      message.priceGroupId = "";
-    }
-    if (object.image !== undefined && object.image !== null) {
-      message.image = Image.fromPartial(object.image);
-    } else {
-      message.image = undefined;
-    }
-    if (object.parent !== undefined && object.parent !== null) {
-      message.parent = Parent.fromPartial(object.parent);
-    } else {
-      message.parent = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      priceGroupId: isSet(object.priceGroupId)
+        ? String(object.priceGroupId)
+        : "",
+      image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
+      parent: isSet(object.parent) ? Parent.fromJSON(object.parent) : undefined,
+    };
   },
 
   toJSON(message: ProductCategory): unknown {
@@ -232,15 +175,38 @@ export const ProductCategory = {
       (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
+    const message = createBaseProductCategory();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
+    message.priceGroupId = object.priceGroupId ?? "";
+    message.image =
+      object.image !== undefined && object.image !== null
+        ? Image.fromPartial(object.image)
+        : undefined;
+    message.parent =
+      object.parent !== undefined && object.parent !== null
+        ? Parent.fromPartial(object.parent)
+        : undefined;
+    return message;
+  },
 };
 
-const baseProductCategoryList: object = { totalCount: 0 };
+function createBaseProductCategoryList(): ProductCategoryList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const ProductCategoryList = {
   encode(
     message: ProductCategoryList,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -253,13 +219,10 @@ export const ProductCategoryList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductCategoryList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductCategoryList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseProductCategoryList
-    ) as ProductCategoryList;
-    message.items = [];
+    const message = createBaseProductCategoryList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -281,47 +244,15 @@ export const ProductCategoryList = {
   },
 
   fromJSON(object: any): ProductCategoryList {
-    const message = globalThis.Object.create(
-      baseProductCategoryList
-    ) as ProductCategoryList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ProductCategory.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
-    const message = { ...baseProductCategoryList } as ProductCategoryList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ProductCategory.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ProductCategory.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: ProductCategoryList): unknown {
@@ -333,22 +264,37 @@ export const ProductCategoryList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
+    const message = createBaseProductCategoryList();
+    message.items =
+      object.items?.map((e) => ProductCategory.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseProductCategoryListResponse: object = { totalCount: 0 };
+function createBaseProductCategoryListResponse(): ProductCategoryListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const ProductCategoryListResponse = {
   encode(
     message: ProductCategoryListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ProductCategoryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -365,15 +311,12 @@ export const ProductCategoryListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): ProductCategoryListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseProductCategoryListResponse
-    ) as ProductCategoryListResponse;
-    message.items = [];
+    const message = createBaseProductCategoryListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -400,61 +343,15 @@ export const ProductCategoryListResponse = {
   },
 
   fromJSON(object: any): ProductCategoryListResponse {
-    const message = globalThis.Object.create(
-      baseProductCategoryListResponse
-    ) as ProductCategoryListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ProductCategoryResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ProductCategoryListResponse>
-  ): ProductCategoryListResponse {
-    const message = {
-      ...baseProductCategoryListResponse,
-    } as ProductCategoryListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(ProductCategoryResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ProductCategoryResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: ProductCategoryListResponse): unknown {
@@ -466,22 +363,39 @@ export const ProductCategoryListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<ProductCategoryListResponse>
+  ): ProductCategoryListResponse {
+    const message = createBaseProductCategoryListResponse();
+    message.items =
+      object.items?.map((e) => ProductCategoryResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseProductCategoryResponse: object = {};
+function createBaseProductCategoryResponse(): ProductCategoryResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const ProductCategoryResponse = {
   encode(
     message: ProductCategoryResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       ProductCategory.encode(
         message.payload,
@@ -494,12 +408,13 @@ export const ProductCategoryResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ProductCategoryResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ProductCategoryResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseProductCategoryResponse
-    ) as ProductCategoryResponse;
+    const message = createBaseProductCategoryResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -518,39 +433,12 @@ export const ProductCategoryResponse = {
   },
 
   fromJSON(object: any): ProductCategoryResponse {
-    const message = globalThis.Object.create(
-      baseProductCategoryResponse
-    ) as ProductCategoryResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = ProductCategory.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<ProductCategoryResponse>
-  ): ProductCategoryResponse {
-    const message = {
-      ...baseProductCategoryResponse,
-    } as ProductCategoryResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = ProductCategory.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? ProductCategory.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: ProductCategoryResponse): unknown {
@@ -563,22 +451,42 @@ export const ProductCategoryResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<ProductCategoryResponse>
+  ): ProductCategoryResponse {
+    const message = createBaseProductCategoryResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? ProductCategory.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -594,23 +502,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -618,22 +512,33 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseParent: object = { parentId: "" };
+function createBaseParent(): Parent {
+  return { parentId: "" };
+}
 
 export const Parent = {
-  encode(message: Parent, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Parent,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.parentId !== "") {
       writer.uint32(10).string(message.parentId);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Parent {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Parent {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseParent) as Parent;
+    const message = createBaseParent();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -649,29 +554,21 @@ export const Parent = {
   },
 
   fromJSON(object: any): Parent {
-    const message = globalThis.Object.create(baseParent) as Parent;
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = String(object.parentId);
-    } else {
-      message.parentId = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Parent>): Parent {
-    const message = { ...baseParent } as Parent;
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = object.parentId;
-    } else {
-      message.parentId = "";
-    }
-    return message;
+    return {
+      parentId: isSet(object.parentId) ? String(object.parentId) : "",
+    };
   },
 
   toJSON(message: Parent): unknown {
     const obj: any = {};
     message.parentId !== undefined && (obj.parentId = message.parentId);
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<Parent>): Parent {
+    const message = createBaseParent();
+    message.parentId = object.parentId ?? "";
+    return message;
   },
 };
 
@@ -683,49 +580,127 @@ export interface Service {
   Upsert(request: ProductCategoryList): Promise<ProductCategoryListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/product_category.proto",
+    package: "io.restorecommerce.product_category",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/image.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "ProductCategory",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "description",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "price_group_id",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "priceGroupId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "image",
@@ -733,7 +708,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.image.Image",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "image",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "parent",
@@ -741,7 +721,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.product_category.Parent",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "parent",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -749,11 +734,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ProductCategory",
       },
       {
+        name: "ProductCategoryList",
         field: [
           {
             name: "items",
@@ -761,14 +747,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.product_category.ProductCategory",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -776,7 +773,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -784,11 +786,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ProductCategoryList",
       },
       {
+        name: "ProductCategoryListResponse",
         field: [
           {
             name: "items",
@@ -797,14 +800,25 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.product_category.ProductCategoryResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -812,7 +826,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -820,11 +839,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ProductCategoryListResponse",
       },
       {
+        name: "ProductCategoryResponse",
         field: [
           {
             name: "payload",
@@ -832,7 +852,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.product_category.ProductCategory",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -840,7 +865,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -848,29 +878,51 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ProductCategoryResponse",
       },
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
       {
+        name: "Parent",
         field: [
           {
             name: "parent_id",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "parentId",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -878,20 +930,28 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Parent",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
@@ -899,11 +959,17 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.product_category.ProductCategoryList",
             outputType:
               ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
@@ -911,6 +977,9 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.product_category.ProductCategoryList",
             outputType:
               ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
@@ -918,21 +987,24 @@ export const protoMetadata: ProtoMetadata = {
               ".io.restorecommerce.product_category.ProductCategoryList",
             outputType:
               ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/product_category.proto",
-    package: "io.restorecommerce.product_category",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
-          span: [11, 0, 19, 1],
-          leadingDetachedComments: [],
+          span: [12, 0, 28, 1],
           leadingComments: " ProductCategory resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -940,9 +1012,12 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.product_category.ProductCategory": ProductCategory,
-    ".io.restorecommerce.product_category.ProductCategoryList": ProductCategoryList,
-    ".io.restorecommerce.product_category.ProductCategoryListResponse": ProductCategoryListResponse,
-    ".io.restorecommerce.product_category.ProductCategoryResponse": ProductCategoryResponse,
+    ".io.restorecommerce.product_category.ProductCategoryList":
+      ProductCategoryList,
+    ".io.restorecommerce.product_category.ProductCategoryListResponse":
+      ProductCategoryListResponse,
+    ".io.restorecommerce.product_category.ProductCategoryResponse":
+      ProductCategoryResponse,
     ".io.restorecommerce.product_category.Deleted": Deleted,
     ".io.restorecommerce.product_category.Parent": Parent,
   },
@@ -952,20 +1027,41 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
+  options: {
+    messages: {
+      ProductCategory: {
+        fields: {
+          price_group_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiouaW8ucmVzdG9yZWNvbW1lcmNlLnByaWNlX2dyb3VwLlByaWNlR3JvdXASB2NhdGFsb2caC3ByaWNlX2dyb3VwIgRSZWFkKgpwcmljZUdyb3Vw",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "product_category" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -975,3 +1071,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

@@ -9,15 +9,20 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
+import "io/restorecommerce/options.proto";
 
 /**
 Microservice definition.
 */
 service Service {
+  option (io.restorecommerce.options.service_name) = "fulfillment";
+
   /**
-  Returns a list of shipment IDs.
-  */
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentResponseList);
+   Returns a list of shipment IDs.
+   */
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentResponseList) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
 
   /**
   Creates and executes fulfillment orders
@@ -27,7 +32,9 @@ service Service {
   /**
   Track a batch of fulfillment orders
   */
-  rpc Track (TrackingRequestList) returns (TrackingResultList);
+  rpc Track (TrackingRequestList) returns (TrackingResultList) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
 
   /**
   Cancel a batch of fulfillment orders
@@ -192,3 +199,4 @@ message CancelRequestList {
 message Deleted {
   string id = 1;
 }
+

@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
-import { Writer, Reader } from "protobufjs/minimal";
+import { FileDescriptorProto } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.filter";
 
@@ -81,8 +82,9 @@ export function filter_OperationToJSON(object: Filter_Operation): string {
       return "in";
     case Filter_Operation.neq:
       return "neq";
+    case Filter_Operation.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -132,8 +134,9 @@ export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
       return "DATE";
     case Filter_ValueType.ARRAY:
       return "ARRAY";
+    case Filter_ValueType.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -169,15 +172,21 @@ export function filterOp_OperatorToJSON(object: FilterOp_Operator): string {
       return "and";
     case FilterOp_Operator.or:
       return "or";
+    case FilterOp_Operator.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
-const baseFilter: object = { field: "", operation: 0, value: "", type: 0 };
+function createBaseFilter(): Filter {
+  return { field: "", operation: 0, value: "", type: 0, filters: [] };
+}
 
 export const Filter = {
-  encode(message: Filter, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Filter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -196,11 +205,10 @@ export const Filter = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Filter {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Filter {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    message.filters = [];
+    const message = createBaseFilter();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -228,65 +236,17 @@ export const Filter = {
   },
 
   fromJSON(object: any): Filter {
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    message.filters = [];
-    if (object.field !== undefined && object.field !== null) {
-      message.field = String(object.field);
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = filter_OperationFromJSON(object.operation);
-    } else {
-      message.operation = 0;
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = filter_ValueTypeFromJSON(object.type);
-    } else {
-      message.type = 0;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(FilterOp.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Filter>): Filter {
-    const message = { ...baseFilter } as Filter;
-    message.filters = [];
-    if (object.field !== undefined && object.field !== null) {
-      message.field = object.field;
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = object.operation;
-    } else {
-      message.operation = 0;
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = 0;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(FilterOp.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      field: isSet(object.field) ? String(object.field) : "",
+      operation: isSet(object.operation)
+        ? filter_OperationFromJSON(object.operation)
+        : 0,
+      value: isSet(object.value) ? String(object.value) : "",
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : 0,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => FilterOp.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Filter): unknown {
@@ -306,12 +266,27 @@ export const Filter = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Filter>): Filter {
+    const message = createBaseFilter();
+    message.field = object.field ?? "";
+    message.operation = object.operation ?? 0;
+    message.value = object.value ?? "";
+    message.type = object.type ?? 0;
+    message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseFilterOp: object = { operator: 0 };
+function createBaseFilterOp(): FilterOp {
+  return { filter: [], operator: 0 };
+}
 
 export const FilterOp = {
-  encode(message: FilterOp, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: FilterOp,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -321,11 +296,10 @@ export const FilterOp = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): FilterOp {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): FilterOp {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseFilterOp) as FilterOp;
-    message.filter = [];
+    const message = createBaseFilterOp();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -344,35 +318,14 @@ export const FilterOp = {
   },
 
   fromJSON(object: any): FilterOp {
-    const message = globalThis.Object.create(baseFilterOp) as FilterOp;
-    message.filter = [];
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromJSON(e));
-      }
-    }
-    if (object.operator !== undefined && object.operator !== null) {
-      message.operator = filterOp_OperatorFromJSON(object.operator);
-    } else {
-      message.operator = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<FilterOp>): FilterOp {
-    const message = { ...baseFilterOp } as FilterOp;
-    message.filter = [];
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromPartial(e));
-      }
-    }
-    if (object.operator !== undefined && object.operator !== null) {
-      message.operator = object.operator;
-    } else {
-      message.operator = 0;
-    }
-    return message;
+    return {
+      filter: Array.isArray(object?.filter)
+        ? object.filter.map((e: any) => Filter.fromJSON(e))
+        : [],
+      operator: isSet(object.operator)
+        ? filterOp_OperatorFromJSON(object.operator)
+        : 0,
+    };
   },
 
   toJSON(message: FilterOp): unknown {
@@ -388,39 +341,108 @@ export const FilterOp = {
       (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
   },
+
+  fromPartial(object: DeepPartial<FilterOp>): FilterOp {
+    const message = createBaseFilterOp();
+    message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
+    message.operator = object.operator ?? 0;
+    return message;
+  },
+};
+
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
 };
 
 export interface ProtoMetadata {
   fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
+    name: "io/restorecommerce/filter.proto",
+    package: "io.restorecommerce.filter",
     dependency: [],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Filter",
         field: [
-          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "operation",
             number: 2,
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.filter.Filter.Operation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operation",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "value", number: 3, label: 1, type: 9, jsonName: "value" },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "type",
             number: 4,
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.filter.Filter.ValueType",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "filters",
@@ -428,48 +450,56 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.filter.FilterOp",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Operation",
             value: [
-              { name: "eq", number: 0 },
-              { name: "lt", number: 1 },
-              { name: "lte", number: 2 },
-              { name: "gt", number: 3 },
-              { name: "gte", number: 4 },
-              { name: "isEmpty", number: 5 },
-              { name: "iLike", number: 6 },
-              { name: "in", number: 7 },
-              { name: "neq", number: 8 },
+              { name: "eq", number: 0, options: undefined },
+              { name: "lt", number: 1, options: undefined },
+              { name: "lte", number: 2, options: undefined },
+              { name: "gt", number: 3, options: undefined },
+              { name: "gte", number: 4, options: undefined },
+              { name: "isEmpty", number: 5, options: undefined },
+              { name: "iLike", number: 6, options: undefined },
+              { name: "in", number: 7, options: undefined },
+              { name: "neq", number: 8, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Operation",
           },
           {
+            name: "ValueType",
             value: [
-              { name: "STRING", number: 0 },
-              { name: "NUMBER", number: 1 },
-              { name: "BOOLEAN", number: 2 },
-              { name: "DATE", number: 3 },
-              { name: "ARRAY", number: 4 },
+              { name: "STRING", number: 0, options: undefined },
+              { name: "NUMBER", number: 1, options: undefined },
+              { name: "BOOLEAN", number: 2, options: undefined },
+              { name: "DATE", number: 3, options: undefined },
+              { name: "ARRAY", number: 4, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "ValueType",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Filter",
       },
       {
+        name: "FilterOp",
         field: [
           {
             name: "filter",
@@ -477,7 +507,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.filter.Filter",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filter",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operator",
@@ -485,41 +520,47 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.filter.FilterOp.Operator",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operator",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Operator",
             value: [
-              { name: "and", number: 0 },
-              { name: "or", number: 1 },
+              { name: "and", number: 0, options: undefined },
+              { name: "or", number: 1, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Operator",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "FilterOp",
       },
     ],
     enumType: [],
     service: [],
     extension: [],
-    name: "io/restorecommerce/filter.proto",
-    package: "io.restorecommerce.filter",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0, 4, 1, 2, 0],
           span: [20, 4, 15],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " default value type if not specified\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -535,17 +576,15 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -555,3 +594,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

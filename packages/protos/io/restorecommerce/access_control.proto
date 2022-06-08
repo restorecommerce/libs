@@ -7,6 +7,7 @@ import "io/restorecommerce/rule.proto";
 import "io/restorecommerce/policy_set.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/options.proto";
 
 /**
 * Access control service interface.
@@ -45,6 +46,12 @@ message ReverseQuery {
 }
 
 service Service {
-  rpc IsAllowed (Request) returns (Response);
-  rpc WhatIsAllowed(Request) returns (ReverseQuery);
+  option (io.restorecommerce.options.service_name) = "access_control";
+
+  rpc IsAllowed (Request) returns (Response) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc WhatIsAllowed(Request) returns (ReverseQuery) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
 }

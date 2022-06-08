@@ -21,11 +21,11 @@ const parse = (stack: string): any[] => {
         return;
       }
 
-      let object = null;
-      let method = null;
-      let functionName = null;
-      let typeName = null;
-      let methodName = null;
+      let object: string | null = null;
+      let method: string | null = null;
+      let functionName: string | null = null;
+      let typeName: string | null = null;
+      let methodName: string | null = null;
       let isNative = (lineMatch[5] === 'native');
 
       if (lineMatch[1]) {

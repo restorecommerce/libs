@@ -6,12 +6,17 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 
 /*
 * Microservice definition.
 */
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AddressListResponse);
+  option (io.restorecommerce.options.service_name) = "address";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AddressListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (AddressList) returns (AddressListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (AddressList) returns (AddressListResponse);
@@ -42,17 +47,25 @@ message AddressResponse {
 message Address {
   message GeoPoint {
     double latitude = 1;
-    double longitude = 2;  
+    double longitude = 2;
   }
 
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string postcode = 3;
-  string country_id = 4;
+  string country_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.country.Country";
+      target_service: "resource";
+      target_sub_service: "country";
+      target_method: "Read";
+      field_name: "country";
+    }
+  ];
   string locality = 5;
   string street = 6;
   string region = 7;
-  
+
   GeoPoint geo_coordinates = 8;
   double altitude = 9;
   string building_number = 10;

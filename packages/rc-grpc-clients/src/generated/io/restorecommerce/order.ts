@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
@@ -19,7 +21,10 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as protoMetadata5,
+  Resolver,
+} from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -128,10 +133,15 @@ export interface ErrorList {
   message: string[];
 }
 
-const baseOrderList: object = { totalCount: 0 };
+function createBaseOrderList(): OrderList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const OrderList = {
-  encode(message: OrderList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -144,11 +154,10 @@ export const OrderList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOrderList) as OrderList;
-    message.items = [];
+    const message = createBaseOrderList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -170,45 +179,15 @@ export const OrderList = {
   },
 
   fromJSON(object: any): OrderList {
-    const message = globalThis.Object.create(baseOrderList) as OrderList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Order.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderList>): OrderList {
-    const message = { ...baseOrderList } as OrderList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Order.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Order.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: OrderList): unknown {
@@ -218,19 +197,36 @@ export const OrderList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderList>): OrderList {
+    const message = createBaseOrderList();
+    message.items = object.items?.map((e) => Order.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrderListResponse: object = { totalCount: 0 };
+function createBaseOrderListResponse(): OrderListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const OrderListResponse = {
-  encode(message: OrderListResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       OrderResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -246,13 +242,10 @@ export const OrderListResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrderListResponse
-    ) as OrderListResponse;
-    message.items = [];
+    const message = createBaseOrderListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -277,57 +270,15 @@ export const OrderListResponse = {
   },
 
   fromJSON(object: any): OrderListResponse {
-    const message = globalThis.Object.create(
-      baseOrderListResponse
-    ) as OrderListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(OrderResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
-    const message = { ...baseOrderListResponse } as OrderListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(OrderResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => OrderResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: OrderListResponse): unknown {
@@ -339,19 +290,37 @@ export const OrderListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
+    const message = createBaseOrderListResponse();
+    message.items =
+      object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrderResponse: object = {};
+function createBaseOrderResponse(): OrderResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const OrderResponse = {
-  encode(message: OrderResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Order.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -361,12 +330,10 @@ export const OrderResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrderResponse
-    ) as OrderResponse;
+    const message = createBaseOrderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -385,35 +352,12 @@ export const OrderResponse = {
   },
 
   fromJSON(object: any): OrderResponse {
-    const message = globalThis.Object.create(
-      baseOrderResponse
-    ) as OrderResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Order.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderResponse>): OrderResponse {
-    const message = { ...baseOrderResponse } as OrderResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Order.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? Order.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: OrderResponse): unknown {
@@ -426,22 +370,39 @@ export const OrderResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderResponse>): OrderResponse {
+    const message = createBaseOrderResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Order.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrder: object = {
-  id: "",
-  name: "",
-  description: "",
-  status: "",
-  customerReference: "",
-  totalPrice: 0,
-  shippingContactPointId: "",
-  billingContactPointId: "",
-  totalWeightInKg: 0,
-};
+function createBaseOrder(): Order {
+  return {
+    id: "",
+    meta: undefined,
+    name: "",
+    description: "",
+    status: "",
+    customerReference: "",
+    items: [],
+    totalPrice: 0,
+    shippingContactPointId: "",
+    billingContactPointId: "",
+    totalWeightInKg: 0,
+  };
+}
 
 export const Order = {
-  encode(message: Order, writer: Writer = Writer.create()): Writer {
+  encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -478,11 +439,10 @@ export const Order = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Order {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Order {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOrder) as Order;
-    message.items = [];
+    const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -528,149 +488,29 @@ export const Order = {
   },
 
   fromJSON(object: any): Order {
-    const message = globalThis.Object.create(baseOrder) as Order;
-    message.items = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = String(object.description);
-    } else {
-      message.description = "";
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = String(object.status);
-    } else {
-      message.status = "";
-    }
-    if (
-      object.customerReference !== undefined &&
-      object.customerReference !== null
-    ) {
-      message.customerReference = String(object.customerReference);
-    } else {
-      message.customerReference = "";
-    }
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Items.fromJSON(e));
-      }
-    }
-    if (object.totalPrice !== undefined && object.totalPrice !== null) {
-      message.totalPrice = Number(object.totalPrice);
-    } else {
-      message.totalPrice = 0;
-    }
-    if (
-      object.shippingContactPointId !== undefined &&
-      object.shippingContactPointId !== null
-    ) {
-      message.shippingContactPointId = String(object.shippingContactPointId);
-    } else {
-      message.shippingContactPointId = "";
-    }
-    if (
-      object.billingContactPointId !== undefined &&
-      object.billingContactPointId !== null
-    ) {
-      message.billingContactPointId = String(object.billingContactPointId);
-    } else {
-      message.billingContactPointId = "";
-    }
-    if (
-      object.totalWeightInKg !== undefined &&
-      object.totalWeightInKg !== null
-    ) {
-      message.totalWeightInKg = Number(object.totalWeightInKg);
-    } else {
-      message.totalWeightInKg = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Order>): Order {
-    const message = { ...baseOrder } as Order;
-    message.items = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.description !== undefined && object.description !== null) {
-      message.description = object.description;
-    } else {
-      message.description = "";
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = object.status;
-    } else {
-      message.status = "";
-    }
-    if (
-      object.customerReference !== undefined &&
-      object.customerReference !== null
-    ) {
-      message.customerReference = object.customerReference;
-    } else {
-      message.customerReference = "";
-    }
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Items.fromPartial(e));
-      }
-    }
-    if (object.totalPrice !== undefined && object.totalPrice !== null) {
-      message.totalPrice = object.totalPrice;
-    } else {
-      message.totalPrice = 0;
-    }
-    if (
-      object.shippingContactPointId !== undefined &&
-      object.shippingContactPointId !== null
-    ) {
-      message.shippingContactPointId = object.shippingContactPointId;
-    } else {
-      message.shippingContactPointId = "";
-    }
-    if (
-      object.billingContactPointId !== undefined &&
-      object.billingContactPointId !== null
-    ) {
-      message.billingContactPointId = object.billingContactPointId;
-    } else {
-      message.billingContactPointId = "";
-    }
-    if (
-      object.totalWeightInKg !== undefined &&
-      object.totalWeightInKg !== null
-    ) {
-      message.totalWeightInKg = object.totalWeightInKg;
-    } else {
-      message.totalWeightInKg = 0;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
+      description: isSet(object.description) ? String(object.description) : "",
+      status: isSet(object.status) ? String(object.status) : "",
+      customerReference: isSet(object.customerReference)
+        ? String(object.customerReference)
+        : "",
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Items.fromJSON(e))
+        : [],
+      totalPrice: isSet(object.totalPrice) ? Number(object.totalPrice) : 0,
+      shippingContactPointId: isSet(object.shippingContactPointId)
+        ? String(object.shippingContactPointId)
+        : "",
+      billingContactPointId: isSet(object.billingContactPointId)
+        ? String(object.billingContactPointId)
+        : "",
+      totalWeightInKg: isSet(object.totalWeightInKg)
+        ? Number(object.totalWeightInKg)
+        : 0,
+    };
   },
 
   toJSON(message: Order): unknown {
@@ -698,12 +538,33 @@ export const Order = {
       (obj.totalWeightInKg = message.totalWeightInKg);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Order>): Order {
+    const message = createBaseOrder();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.name = object.name ?? "";
+    message.description = object.description ?? "";
+    message.status = object.status ?? "";
+    message.customerReference = object.customerReference ?? "";
+    message.items = object.items?.map((e) => Items.fromPartial(e)) || [];
+    message.totalPrice = object.totalPrice ?? 0;
+    message.shippingContactPointId = object.shippingContactPointId ?? "";
+    message.billingContactPointId = object.billingContactPointId ?? "";
+    message.totalWeightInKg = object.totalWeightInKg ?? 0;
+    return message;
+  },
 };
 
-const baseItems: object = { quantityPrice: 0 };
+function createBaseItems(): Items {
+  return { quantityPrice: 0, item: undefined };
+}
 
 export const Items = {
-  encode(message: Items, writer: Writer = Writer.create()): Writer {
+  encode(message: Items, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.quantityPrice !== 0) {
       writer.uint32(9).double(message.quantityPrice);
     }
@@ -713,10 +574,10 @@ export const Items = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Items {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Items {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseItems) as Items;
+    const message = createBaseItems();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -735,33 +596,12 @@ export const Items = {
   },
 
   fromJSON(object: any): Items {
-    const message = globalThis.Object.create(baseItems) as Items;
-    if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
-      message.quantityPrice = Number(object.quantityPrice);
-    } else {
-      message.quantityPrice = 0;
-    }
-    if (object.item !== undefined && object.item !== null) {
-      message.item = Item.fromJSON(object.item);
-    } else {
-      message.item = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Items>): Items {
-    const message = { ...baseItems } as Items;
-    if (object.quantityPrice !== undefined && object.quantityPrice !== null) {
-      message.quantityPrice = object.quantityPrice;
-    } else {
-      message.quantityPrice = 0;
-    }
-    if (object.item !== undefined && object.item !== null) {
-      message.item = Item.fromPartial(object.item);
-    } else {
-      message.item = undefined;
-    }
-    return message;
+    return {
+      quantityPrice: isSet(object.quantityPrice)
+        ? Number(object.quantityPrice)
+        : 0,
+      item: isSet(object.item) ? Item.fromJSON(object.item) : undefined,
+    };
   },
 
   toJSON(message: Items): unknown {
@@ -772,30 +612,42 @@ export const Items = {
       (obj.item = message.item ? Item.toJSON(message.item) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Items>): Items {
+    const message = createBaseItems();
+    message.quantityPrice = object.quantityPrice ?? 0;
+    message.item =
+      object.item !== undefined && object.item !== null
+        ? Item.fromPartial(object.item)
+        : undefined;
+    return message;
+  },
 };
 
-const baseItem: object = {
-  productVariantBundleId: "",
-  productName: "",
-  productDescription: "",
-  manufacturerName: "",
-  manufacturerDescription: "",
-  prototypeName: "",
-  prototypeDescription: "",
-  quantity: 0,
-  vat: 0,
-  price: 0,
-  itemType: "",
-  taricCode: 0,
-  stockKeepingUnit: "",
-  weightInKg: 0,
-  lengthInCm: 0,
-  widthInCm: 0,
-  heightInCm: 0,
-};
+function createBaseItem(): Item {
+  return {
+    productVariantBundleId: "",
+    productName: "",
+    productDescription: "",
+    manufacturerName: "",
+    manufacturerDescription: "",
+    prototypeName: "",
+    prototypeDescription: "",
+    quantity: 0,
+    vat: 0,
+    price: 0,
+    itemType: "",
+    taricCode: 0,
+    stockKeepingUnit: "",
+    weightInKg: 0,
+    lengthInCm: 0,
+    widthInCm: 0,
+    heightInCm: 0,
+  };
+}
 
 export const Item = {
-  encode(message: Item, writer: Writer = Writer.create()): Writer {
+  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.productVariantBundleId !== "") {
       writer.uint32(10).string(message.productVariantBundleId);
     }
@@ -850,10 +702,10 @@ export const Item = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Item {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseItem) as Item;
+    const message = createBaseItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -917,219 +769,39 @@ export const Item = {
   },
 
   fromJSON(object: any): Item {
-    const message = globalThis.Object.create(baseItem) as Item;
-    if (
-      object.productVariantBundleId !== undefined &&
-      object.productVariantBundleId !== null
-    ) {
-      message.productVariantBundleId = String(object.productVariantBundleId);
-    } else {
-      message.productVariantBundleId = "";
-    }
-    if (object.productName !== undefined && object.productName !== null) {
-      message.productName = String(object.productName);
-    } else {
-      message.productName = "";
-    }
-    if (
-      object.productDescription !== undefined &&
-      object.productDescription !== null
-    ) {
-      message.productDescription = String(object.productDescription);
-    } else {
-      message.productDescription = "";
-    }
-    if (
-      object.manufacturerName !== undefined &&
-      object.manufacturerName !== null
-    ) {
-      message.manufacturerName = String(object.manufacturerName);
-    } else {
-      message.manufacturerName = "";
-    }
-    if (
-      object.manufacturerDescription !== undefined &&
-      object.manufacturerDescription !== null
-    ) {
-      message.manufacturerDescription = String(object.manufacturerDescription);
-    } else {
-      message.manufacturerDescription = "";
-    }
-    if (object.prototypeName !== undefined && object.prototypeName !== null) {
-      message.prototypeName = String(object.prototypeName);
-    } else {
-      message.prototypeName = "";
-    }
-    if (
-      object.prototypeDescription !== undefined &&
-      object.prototypeDescription !== null
-    ) {
-      message.prototypeDescription = String(object.prototypeDescription);
-    } else {
-      message.prototypeDescription = "";
-    }
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = Number(object.quantity);
-    } else {
-      message.quantity = 0;
-    }
-    if (object.vat !== undefined && object.vat !== null) {
-      message.vat = Number(object.vat);
-    } else {
-      message.vat = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = Number(object.price);
-    } else {
-      message.price = 0;
-    }
-    if (object.itemType !== undefined && object.itemType !== null) {
-      message.itemType = String(object.itemType);
-    } else {
-      message.itemType = "";
-    }
-    if (object.taricCode !== undefined && object.taricCode !== null) {
-      message.taricCode = Number(object.taricCode);
-    } else {
-      message.taricCode = 0;
-    }
-    if (
-      object.stockKeepingUnit !== undefined &&
-      object.stockKeepingUnit !== null
-    ) {
-      message.stockKeepingUnit = String(object.stockKeepingUnit);
-    } else {
-      message.stockKeepingUnit = "";
-    }
-    if (object.weightInKg !== undefined && object.weightInKg !== null) {
-      message.weightInKg = Number(object.weightInKg);
-    } else {
-      message.weightInKg = 0;
-    }
-    if (object.lengthInCm !== undefined && object.lengthInCm !== null) {
-      message.lengthInCm = Number(object.lengthInCm);
-    } else {
-      message.lengthInCm = 0;
-    }
-    if (object.widthInCm !== undefined && object.widthInCm !== null) {
-      message.widthInCm = Number(object.widthInCm);
-    } else {
-      message.widthInCm = 0;
-    }
-    if (object.heightInCm !== undefined && object.heightInCm !== null) {
-      message.heightInCm = Number(object.heightInCm);
-    } else {
-      message.heightInCm = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Item>): Item {
-    const message = { ...baseItem } as Item;
-    if (
-      object.productVariantBundleId !== undefined &&
-      object.productVariantBundleId !== null
-    ) {
-      message.productVariantBundleId = object.productVariantBundleId;
-    } else {
-      message.productVariantBundleId = "";
-    }
-    if (object.productName !== undefined && object.productName !== null) {
-      message.productName = object.productName;
-    } else {
-      message.productName = "";
-    }
-    if (
-      object.productDescription !== undefined &&
-      object.productDescription !== null
-    ) {
-      message.productDescription = object.productDescription;
-    } else {
-      message.productDescription = "";
-    }
-    if (
-      object.manufacturerName !== undefined &&
-      object.manufacturerName !== null
-    ) {
-      message.manufacturerName = object.manufacturerName;
-    } else {
-      message.manufacturerName = "";
-    }
-    if (
-      object.manufacturerDescription !== undefined &&
-      object.manufacturerDescription !== null
-    ) {
-      message.manufacturerDescription = object.manufacturerDescription;
-    } else {
-      message.manufacturerDescription = "";
-    }
-    if (object.prototypeName !== undefined && object.prototypeName !== null) {
-      message.prototypeName = object.prototypeName;
-    } else {
-      message.prototypeName = "";
-    }
-    if (
-      object.prototypeDescription !== undefined &&
-      object.prototypeDescription !== null
-    ) {
-      message.prototypeDescription = object.prototypeDescription;
-    } else {
-      message.prototypeDescription = "";
-    }
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = object.quantity;
-    } else {
-      message.quantity = 0;
-    }
-    if (object.vat !== undefined && object.vat !== null) {
-      message.vat = object.vat;
-    } else {
-      message.vat = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = object.price;
-    } else {
-      message.price = 0;
-    }
-    if (object.itemType !== undefined && object.itemType !== null) {
-      message.itemType = object.itemType;
-    } else {
-      message.itemType = "";
-    }
-    if (object.taricCode !== undefined && object.taricCode !== null) {
-      message.taricCode = object.taricCode;
-    } else {
-      message.taricCode = 0;
-    }
-    if (
-      object.stockKeepingUnit !== undefined &&
-      object.stockKeepingUnit !== null
-    ) {
-      message.stockKeepingUnit = object.stockKeepingUnit;
-    } else {
-      message.stockKeepingUnit = "";
-    }
-    if (object.weightInKg !== undefined && object.weightInKg !== null) {
-      message.weightInKg = object.weightInKg;
-    } else {
-      message.weightInKg = 0;
-    }
-    if (object.lengthInCm !== undefined && object.lengthInCm !== null) {
-      message.lengthInCm = object.lengthInCm;
-    } else {
-      message.lengthInCm = 0;
-    }
-    if (object.widthInCm !== undefined && object.widthInCm !== null) {
-      message.widthInCm = object.widthInCm;
-    } else {
-      message.widthInCm = 0;
-    }
-    if (object.heightInCm !== undefined && object.heightInCm !== null) {
-      message.heightInCm = object.heightInCm;
-    } else {
-      message.heightInCm = 0;
-    }
-    return message;
+    return {
+      productVariantBundleId: isSet(object.productVariantBundleId)
+        ? String(object.productVariantBundleId)
+        : "",
+      productName: isSet(object.productName) ? String(object.productName) : "",
+      productDescription: isSet(object.productDescription)
+        ? String(object.productDescription)
+        : "",
+      manufacturerName: isSet(object.manufacturerName)
+        ? String(object.manufacturerName)
+        : "",
+      manufacturerDescription: isSet(object.manufacturerDescription)
+        ? String(object.manufacturerDescription)
+        : "",
+      prototypeName: isSet(object.prototypeName)
+        ? String(object.prototypeName)
+        : "",
+      prototypeDescription: isSet(object.prototypeDescription)
+        ? String(object.prototypeDescription)
+        : "",
+      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      vat: isSet(object.vat) ? Number(object.vat) : 0,
+      price: isSet(object.price) ? Number(object.price) : 0,
+      itemType: isSet(object.itemType) ? String(object.itemType) : "",
+      taricCode: isSet(object.taricCode) ? Number(object.taricCode) : 0,
+      stockKeepingUnit: isSet(object.stockKeepingUnit)
+        ? String(object.stockKeepingUnit)
+        : "",
+      weightInKg: isSet(object.weightInKg) ? Number(object.weightInKg) : 0,
+      lengthInCm: isSet(object.lengthInCm) ? Number(object.lengthInCm) : 0,
+      widthInCm: isSet(object.widthInCm) ? Number(object.widthInCm) : 0,
+      heightInCm: isSet(object.heightInCm) ? Number(object.heightInCm) : 0,
+    };
   },
 
   toJSON(message: Item): unknown {
@@ -1148,35 +820,66 @@ export const Item = {
       (obj.prototypeName = message.prototypeName);
     message.prototypeDescription !== undefined &&
       (obj.prototypeDescription = message.prototypeDescription);
-    message.quantity !== undefined && (obj.quantity = message.quantity);
-    message.vat !== undefined && (obj.vat = message.vat);
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
+    message.vat !== undefined && (obj.vat = Math.round(message.vat));
     message.price !== undefined && (obj.price = message.price);
     message.itemType !== undefined && (obj.itemType = message.itemType);
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
     message.stockKeepingUnit !== undefined &&
       (obj.stockKeepingUnit = message.stockKeepingUnit);
     message.weightInKg !== undefined && (obj.weightInKg = message.weightInKg);
-    message.lengthInCm !== undefined && (obj.lengthInCm = message.lengthInCm);
-    message.widthInCm !== undefined && (obj.widthInCm = message.widthInCm);
-    message.heightInCm !== undefined && (obj.heightInCm = message.heightInCm);
+    message.lengthInCm !== undefined &&
+      (obj.lengthInCm = Math.round(message.lengthInCm));
+    message.widthInCm !== undefined &&
+      (obj.widthInCm = Math.round(message.widthInCm));
+    message.heightInCm !== undefined &&
+      (obj.heightInCm = Math.round(message.heightInCm));
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = createBaseItem();
+    message.productVariantBundleId = object.productVariantBundleId ?? "";
+    message.productName = object.productName ?? "";
+    message.productDescription = object.productDescription ?? "";
+    message.manufacturerName = object.manufacturerName ?? "";
+    message.manufacturerDescription = object.manufacturerDescription ?? "";
+    message.prototypeName = object.prototypeName ?? "";
+    message.prototypeDescription = object.prototypeDescription ?? "";
+    message.quantity = object.quantity ?? 0;
+    message.vat = object.vat ?? 0;
+    message.price = object.price ?? 0;
+    message.itemType = object.itemType ?? "";
+    message.taricCode = object.taricCode ?? 0;
+    message.stockKeepingUnit = object.stockKeepingUnit ?? "";
+    message.weightInKg = object.weightInKg ?? 0;
+    message.lengthInCm = object.lengthInCm ?? 0;
+    message.widthInCm = object.widthInCm ?? 0;
+    message.heightInCm = object.heightInCm ?? 0;
+    return message;
   },
 };
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1192,23 +895,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -1216,12 +905,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseOrderDataList: object = {};
+function createBaseOrderDataList(): OrderDataList {
+  return { orderData: [], meta: undefined };
+}
 
 export const OrderDataList = {
-  encode(message: OrderDataList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderDataList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.orderData) {
       OrderData.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1231,13 +931,10 @@ export const OrderDataList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderDataList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderDataList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrderDataList
-    ) as OrderDataList;
-    message.orderData = [];
+    const message = createBaseOrderDataList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1256,37 +953,12 @@ export const OrderDataList = {
   },
 
   fromJSON(object: any): OrderDataList {
-    const message = globalThis.Object.create(
-      baseOrderDataList
-    ) as OrderDataList;
-    message.orderData = [];
-    if (object.orderData !== undefined && object.orderData !== null) {
-      for (const e of object.orderData) {
-        message.orderData.push(OrderData.fromJSON(e));
-      }
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderDataList>): OrderDataList {
-    const message = { ...baseOrderDataList } as OrderDataList;
-    message.orderData = [];
-    if (object.orderData !== undefined && object.orderData !== null) {
-      for (const e of object.orderData) {
-        message.orderData.push(OrderData.fromPartial(e));
-      }
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    return message;
+    return {
+      orderData: Array.isArray(object?.orderData)
+        ? object.orderData.map((e: any) => OrderData.fromJSON(e))
+        : [],
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+    };
   },
 
   toJSON(message: OrderDataList): unknown {
@@ -1302,12 +974,28 @@ export const OrderDataList = {
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderDataList>): OrderDataList {
+    const message = createBaseOrderDataList();
+    message.orderData =
+      object.orderData?.map((e) => OrderData.fromPartial(e)) || [];
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrderData: object = { orderId: "" };
+function createBaseOrderData(): OrderData {
+  return { orderId: "", shipments: [] };
+}
 
 export const OrderData = {
-  encode(message: OrderData, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.orderId !== "") {
       writer.uint32(10).string(message.orderId);
     }
@@ -1317,11 +1005,10 @@ export const OrderData = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderData {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderData {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOrderData) as OrderData;
-    message.shipments = [];
+    const message = createBaseOrderData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1340,35 +1027,12 @@ export const OrderData = {
   },
 
   fromJSON(object: any): OrderData {
-    const message = globalThis.Object.create(baseOrderData) as OrderData;
-    message.shipments = [];
-    if (object.orderId !== undefined && object.orderId !== null) {
-      message.orderId = String(object.orderId);
-    } else {
-      message.orderId = "";
-    }
-    if (object.shipments !== undefined && object.shipments !== null) {
-      for (const e of object.shipments) {
-        message.shipments.push(Shipments.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderData>): OrderData {
-    const message = { ...baseOrderData } as OrderData;
-    message.shipments = [];
-    if (object.orderId !== undefined && object.orderId !== null) {
-      message.orderId = object.orderId;
-    } else {
-      message.orderId = "";
-    }
-    if (object.shipments !== undefined && object.shipments !== null) {
-      for (const e of object.shipments) {
-        message.shipments.push(Shipments.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      orderId: isSet(object.orderId) ? String(object.orderId) : "",
+      shipments: Array.isArray(object?.shipments)
+        ? object.shipments.map((e: any) => Shipments.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: OrderData): unknown {
@@ -1383,21 +1047,34 @@ export const OrderData = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderData>): OrderData {
+    const message = createBaseOrderData();
+    message.orderId = object.orderId ?? "";
+    message.shipments =
+      object.shipments?.map((e) => Shipments.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseShipments: object = {
-  totalWeightInKg: 0,
-  individualWeightInKg: 0,
-  amount: 0,
-  exportType: "",
-  exportDescription: "",
-  customsTariffNumber: "",
-  invoiceNumber: "",
-  customsValue: 0,
-};
+function createBaseShipments(): Shipments {
+  return {
+    totalWeightInKg: 0,
+    individualWeightInKg: 0,
+    amount: 0,
+    exportType: "",
+    exportDescription: "",
+    customsTariffNumber: "",
+    invoiceNumber: "",
+    customsValue: 0,
+  };
+}
 
 export const Shipments = {
-  encode(message: Shipments, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Shipments,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.totalWeightInKg !== 0) {
       writer.uint32(9).double(message.totalWeightInKg);
     }
@@ -1425,10 +1102,10 @@ export const Shipments = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Shipments {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Shipments {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseShipments) as Shipments;
+    const message = createBaseShipments();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1465,117 +1142,28 @@ export const Shipments = {
   },
 
   fromJSON(object: any): Shipments {
-    const message = globalThis.Object.create(baseShipments) as Shipments;
-    if (
-      object.totalWeightInKg !== undefined &&
-      object.totalWeightInKg !== null
-    ) {
-      message.totalWeightInKg = Number(object.totalWeightInKg);
-    } else {
-      message.totalWeightInKg = 0;
-    }
-    if (
-      object.individualWeightInKg !== undefined &&
-      object.individualWeightInKg !== null
-    ) {
-      message.individualWeightInKg = Number(object.individualWeightInKg);
-    } else {
-      message.individualWeightInKg = 0;
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = Number(object.amount);
-    } else {
-      message.amount = 0;
-    }
-    if (object.exportType !== undefined && object.exportType !== null) {
-      message.exportType = String(object.exportType);
-    } else {
-      message.exportType = "";
-    }
-    if (
-      object.exportDescription !== undefined &&
-      object.exportDescription !== null
-    ) {
-      message.exportDescription = String(object.exportDescription);
-    } else {
-      message.exportDescription = "";
-    }
-    if (
-      object.customsTariffNumber !== undefined &&
-      object.customsTariffNumber !== null
-    ) {
-      message.customsTariffNumber = String(object.customsTariffNumber);
-    } else {
-      message.customsTariffNumber = "";
-    }
-    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
-      message.invoiceNumber = String(object.invoiceNumber);
-    } else {
-      message.invoiceNumber = "";
-    }
-    if (object.customsValue !== undefined && object.customsValue !== null) {
-      message.customsValue = Number(object.customsValue);
-    } else {
-      message.customsValue = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Shipments>): Shipments {
-    const message = { ...baseShipments } as Shipments;
-    if (
-      object.totalWeightInKg !== undefined &&
-      object.totalWeightInKg !== null
-    ) {
-      message.totalWeightInKg = object.totalWeightInKg;
-    } else {
-      message.totalWeightInKg = 0;
-    }
-    if (
-      object.individualWeightInKg !== undefined &&
-      object.individualWeightInKg !== null
-    ) {
-      message.individualWeightInKg = object.individualWeightInKg;
-    } else {
-      message.individualWeightInKg = 0;
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = object.amount;
-    } else {
-      message.amount = 0;
-    }
-    if (object.exportType !== undefined && object.exportType !== null) {
-      message.exportType = object.exportType;
-    } else {
-      message.exportType = "";
-    }
-    if (
-      object.exportDescription !== undefined &&
-      object.exportDescription !== null
-    ) {
-      message.exportDescription = object.exportDescription;
-    } else {
-      message.exportDescription = "";
-    }
-    if (
-      object.customsTariffNumber !== undefined &&
-      object.customsTariffNumber !== null
-    ) {
-      message.customsTariffNumber = object.customsTariffNumber;
-    } else {
-      message.customsTariffNumber = "";
-    }
-    if (object.invoiceNumber !== undefined && object.invoiceNumber !== null) {
-      message.invoiceNumber = object.invoiceNumber;
-    } else {
-      message.invoiceNumber = "";
-    }
-    if (object.customsValue !== undefined && object.customsValue !== null) {
-      message.customsValue = object.customsValue;
-    } else {
-      message.customsValue = 0;
-    }
-    return message;
+    return {
+      totalWeightInKg: isSet(object.totalWeightInKg)
+        ? Number(object.totalWeightInKg)
+        : 0,
+      individualWeightInKg: isSet(object.individualWeightInKg)
+        ? Number(object.individualWeightInKg)
+        : 0,
+      amount: isSet(object.amount) ? Number(object.amount) : 0,
+      exportType: isSet(object.exportType) ? String(object.exportType) : "",
+      exportDescription: isSet(object.exportDescription)
+        ? String(object.exportDescription)
+        : "",
+      customsTariffNumber: isSet(object.customsTariffNumber)
+        ? String(object.customsTariffNumber)
+        : "",
+      invoiceNumber: isSet(object.invoiceNumber)
+        ? String(object.invoiceNumber)
+        : "",
+      customsValue: isSet(object.customsValue)
+        ? Number(object.customsValue)
+        : 0,
+    };
   },
 
   toJSON(message: Shipments): unknown {
@@ -1584,7 +1172,7 @@ export const Shipments = {
       (obj.totalWeightInKg = message.totalWeightInKg);
     message.individualWeightInKg !== undefined &&
       (obj.individualWeightInKg = message.individualWeightInKg);
-    message.amount !== undefined && (obj.amount = message.amount);
+    message.amount !== undefined && (obj.amount = Math.round(message.amount));
     message.exportType !== undefined && (obj.exportType = message.exportType);
     message.exportDescription !== undefined &&
       (obj.exportDescription = message.exportDescription);
@@ -1596,28 +1184,40 @@ export const Shipments = {
       (obj.customsValue = message.customsValue);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Shipments>): Shipments {
+    const message = createBaseShipments();
+    message.totalWeightInKg = object.totalWeightInKg ?? 0;
+    message.individualWeightInKg = object.individualWeightInKg ?? 0;
+    message.amount = object.amount ?? 0;
+    message.exportType = object.exportType ?? "";
+    message.exportDescription = object.exportDescription ?? "";
+    message.customsTariffNumber = object.customsTariffNumber ?? "";
+    message.invoiceNumber = object.invoiceNumber ?? "";
+    message.customsValue = object.customsValue ?? 0;
+    return message;
+  },
 };
 
-const baseFulfillmentResults: object = {};
+function createBaseFulfillmentResults(): FulfillmentResults {
+  return { fulfillmentResults: [] };
+}
 
 export const FulfillmentResults = {
   encode(
     message: FulfillmentResults,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.fulfillmentResults) {
       ResponseDetailsList.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): FulfillmentResults {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentResults {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseFulfillmentResults
-    ) as FulfillmentResults;
-    message.fulfillmentResults = [];
+    const message = createBaseFulfillmentResults();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1635,33 +1235,13 @@ export const FulfillmentResults = {
   },
 
   fromJSON(object: any): FulfillmentResults {
-    const message = globalThis.Object.create(
-      baseFulfillmentResults
-    ) as FulfillmentResults;
-    message.fulfillmentResults = [];
-    if (
-      object.fulfillmentResults !== undefined &&
-      object.fulfillmentResults !== null
-    ) {
-      for (const e of object.fulfillmentResults) {
-        message.fulfillmentResults.push(ResponseDetailsList.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<FulfillmentResults>): FulfillmentResults {
-    const message = { ...baseFulfillmentResults } as FulfillmentResults;
-    message.fulfillmentResults = [];
-    if (
-      object.fulfillmentResults !== undefined &&
-      object.fulfillmentResults !== null
-    ) {
-      for (const e of object.fulfillmentResults) {
-        message.fulfillmentResults.push(ResponseDetailsList.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      fulfillmentResults: Array.isArray(object?.fulfillmentResults)
+        ? object.fulfillmentResults.map((e: any) =>
+            ResponseDetailsList.fromJSON(e)
+          )
+        : [],
+    };
   },
 
   toJSON(message: FulfillmentResults): unknown {
@@ -1675,15 +1255,26 @@ export const FulfillmentResults = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<FulfillmentResults>): FulfillmentResults {
+    const message = createBaseFulfillmentResults();
+    message.fulfillmentResults =
+      object.fulfillmentResults?.map((e) =>
+        ResponseDetailsList.fromPartial(e)
+      ) || [];
+    return message;
+  },
 };
 
-const baseResponseDetailsList: object = {};
+function createBaseResponseDetailsList(): ResponseDetailsList {
+  return { Status: undefined, error: undefined };
+}
 
 export const ResponseDetailsList = {
   encode(
     message: ResponseDetailsList,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.Status !== undefined) {
       OrderStatus.encode(message.Status, writer.uint32(10).fork()).ldelim();
     }
@@ -1693,12 +1284,10 @@ export const ResponseDetailsList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ResponseDetailsList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ResponseDetailsList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseResponseDetailsList
-    ) as ResponseDetailsList;
+    const message = createBaseResponseDetailsList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1717,35 +1306,12 @@ export const ResponseDetailsList = {
   },
 
   fromJSON(object: any): ResponseDetailsList {
-    const message = globalThis.Object.create(
-      baseResponseDetailsList
-    ) as ResponseDetailsList;
-    if (object.Status !== undefined && object.Status !== null) {
-      message.Status = OrderStatus.fromJSON(object.Status);
-    } else {
-      message.Status = undefined;
-    }
-    if (object.error !== undefined && object.error !== null) {
-      message.error = ErrorList.fromJSON(object.error);
-    } else {
-      message.error = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ResponseDetailsList>): ResponseDetailsList {
-    const message = { ...baseResponseDetailsList } as ResponseDetailsList;
-    if (object.Status !== undefined && object.Status !== null) {
-      message.Status = OrderStatus.fromPartial(object.Status);
-    } else {
-      message.Status = undefined;
-    }
-    if (object.error !== undefined && object.error !== null) {
-      message.error = ErrorList.fromPartial(object.error);
-    } else {
-      message.error = undefined;
-    }
-    return message;
+    return {
+      Status: isSet(object.Status)
+        ? OrderStatus.fromJSON(object.Status)
+        : undefined,
+      error: isSet(object.error) ? ErrorList.fromJSON(object.error) : undefined,
+    };
   },
 
   toJSON(message: ResponseDetailsList): unknown {
@@ -1758,12 +1324,30 @@ export const ResponseDetailsList = {
       (obj.error = message.error ? ErrorList.toJSON(message.error) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ResponseDetailsList>): ResponseDetailsList {
+    const message = createBaseResponseDetailsList();
+    message.Status =
+      object.Status !== undefined && object.Status !== null
+        ? OrderStatus.fromPartial(object.Status)
+        : undefined;
+    message.error =
+      object.error !== undefined && object.error !== null
+        ? ErrorList.fromPartial(object.error)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrderStatus: object = { OrderId: "", OrderStatus: "" };
+function createBaseOrderStatus(): OrderStatus {
+  return { OrderId: "", OrderStatus: "" };
+}
 
 export const OrderStatus = {
-  encode(message: OrderStatus, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrderStatus,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.OrderId !== "") {
       writer.uint32(10).string(message.OrderId);
     }
@@ -1773,10 +1357,10 @@ export const OrderStatus = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrderStatus {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderStatus {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOrderStatus) as OrderStatus;
+    const message = createBaseOrderStatus();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1795,33 +1379,10 @@ export const OrderStatus = {
   },
 
   fromJSON(object: any): OrderStatus {
-    const message = globalThis.Object.create(baseOrderStatus) as OrderStatus;
-    if (object.OrderId !== undefined && object.OrderId !== null) {
-      message.OrderId = String(object.OrderId);
-    } else {
-      message.OrderId = "";
-    }
-    if (object.OrderStatus !== undefined && object.OrderStatus !== null) {
-      message.OrderStatus = String(object.OrderStatus);
-    } else {
-      message.OrderStatus = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrderStatus>): OrderStatus {
-    const message = { ...baseOrderStatus } as OrderStatus;
-    if (object.OrderId !== undefined && object.OrderId !== null) {
-      message.OrderId = object.OrderId;
-    } else {
-      message.OrderId = "";
-    }
-    if (object.OrderStatus !== undefined && object.OrderStatus !== null) {
-      message.OrderStatus = object.OrderStatus;
-    } else {
-      message.OrderStatus = "";
-    }
-    return message;
+    return {
+      OrderId: isSet(object.OrderId) ? String(object.OrderId) : "",
+      OrderStatus: isSet(object.OrderStatus) ? String(object.OrderStatus) : "",
+    };
   },
 
   toJSON(message: OrderStatus): unknown {
@@ -1831,12 +1392,24 @@ export const OrderStatus = {
       (obj.OrderStatus = message.OrderStatus);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrderStatus>): OrderStatus {
+    const message = createBaseOrderStatus();
+    message.OrderId = object.OrderId ?? "";
+    message.OrderStatus = object.OrderStatus ?? "";
+    return message;
+  },
 };
 
-const baseErrorList: object = { code: "", message: "" };
+function createBaseErrorList(): ErrorList {
+  return { code: [], message: [] };
+}
 
 export const ErrorList = {
-  encode(message: ErrorList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ErrorList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.code) {
       writer.uint32(10).string(v!);
     }
@@ -1846,12 +1419,10 @@ export const ErrorList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ErrorList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ErrorList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseErrorList) as ErrorList;
-    message.code = [];
-    message.message = [];
+    const message = createBaseErrorList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1870,37 +1441,14 @@ export const ErrorList = {
   },
 
   fromJSON(object: any): ErrorList {
-    const message = globalThis.Object.create(baseErrorList) as ErrorList;
-    message.code = [];
-    message.message = [];
-    if (object.code !== undefined && object.code !== null) {
-      for (const e of object.code) {
-        message.code.push(String(e));
-      }
-    }
-    if (object.message !== undefined && object.message !== null) {
-      for (const e of object.message) {
-        message.message.push(String(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ErrorList>): ErrorList {
-    const message = { ...baseErrorList } as ErrorList;
-    message.code = [];
-    message.message = [];
-    if (object.code !== undefined && object.code !== null) {
-      for (const e of object.code) {
-        message.code.push(e);
-      }
-    }
-    if (object.message !== undefined && object.message !== null) {
-      for (const e of object.message) {
-        message.message.push(e);
-      }
-    }
-    return message;
+    return {
+      code: Array.isArray(object?.code)
+        ? object.code.map((e: any) => String(e))
+        : [],
+      message: Array.isArray(object?.message)
+        ? object.message.map((e: any) => String(e))
+        : [],
+    };
   },
 
   toJSON(message: ErrorList): unknown {
@@ -1917,6 +1465,13 @@ export const ErrorList = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ErrorList>): ErrorList {
+    const message = createBaseErrorList();
+    message.code = object.code?.map((e) => e) || [];
+    message.message = object.message?.map((e) => e) || [];
+    return message;
+  },
 };
 
 export interface Service {
@@ -1928,24 +1483,53 @@ export interface Service {
   TriggerFulfillment(request: OrderDataList): Promise<FulfillmentResults>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/order.proto",
+    package: "io.restorecommerce.order",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "OrderList",
         field: [
           {
             name: "items",
@@ -1953,14 +1537,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.Order",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -1968,7 +1563,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1976,11 +1576,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderList",
       },
       {
+        name: "OrderListResponse",
         field: [
           {
             name: "items",
@@ -1988,14 +1589,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.OrderResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -2003,7 +1615,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2011,11 +1628,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderListResponse",
       },
       {
+        name: "OrderResponse",
         field: [
           {
             name: "payload",
@@ -2023,7 +1641,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.order.Order",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -2031,7 +1654,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2039,36 +1667,90 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderResponse",
       },
       {
+        name: "Order",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 3, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "description",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "status", number: 5, label: 1, type: 9, jsonName: "status" },
+          {
+            name: "status",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "customer_reference",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "customerReference",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "items",
@@ -2076,35 +1758,80 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.Items",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_price",
             number: 8,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalPrice",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "shipping_contact_point_id",
             number: 9,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "shippingContactPointId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "billing_contact_point_id",
             number: 10,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "billingContactPointId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "total_weight_in_kg",
             number: 11,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalWeightInKg",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2112,18 +1839,25 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Order",
       },
       {
+        name: "Items",
         field: [
           {
             name: "quantity_price",
             number: 1,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "quantityPrice",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "item",
@@ -2131,7 +1865,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.order.Item",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "item",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2139,118 +1878,233 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Items",
       },
       {
+        name: "Item",
         field: [
           {
             name: "product_variant_bundle_id",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "productVariantBundleId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "product_name",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "productName",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "product_description",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "productDescription",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "manufacturer_name",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "manufacturerName",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "manufacturer_description",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "manufacturerDescription",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "prototype_name",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "prototypeName",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "prototype_description",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "prototypeDescription",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "quantity",
             number: 8,
             label: 1,
             type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "vat", number: 9, label: 1, type: 5, jsonName: "vat" },
-          { name: "price", number: 10, label: 1, type: 1, jsonName: "price" },
+          {
+            name: "vat",
+            number: 9,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vat",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 10,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "item_type",
             number: 11,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "itemType",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "taric_code",
             number: 12,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "taricCode",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "stock_keeping_unit",
             number: 13,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "stockKeepingUnit",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "weight_in_kg",
             number: 14,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "weightInKg",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "length_in_cm",
             number: 15,
             label: 1,
             type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "lengthInCm",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "width_in_cm",
             number: 16,
             label: 1,
             type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "widthInCm",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "height_in_cm",
             number: 17,
             label: 1,
             type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "heightInCm",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2258,22 +2112,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Item",
       },
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Deleted",
       },
       {
+        name: "OrderDataList",
         field: [
           {
             name: "order_data",
@@ -2281,7 +2151,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.OrderData",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "orderData",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "meta",
@@ -2289,7 +2164,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2297,18 +2177,25 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderDataList",
       },
       {
+        name: "OrderData",
         field: [
           {
             name: "order_id",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "orderId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "shipments",
@@ -2316,7 +2203,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.Shipments",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "shipments",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2324,61 +2216,116 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderData",
       },
       {
+        name: "Shipments",
         field: [
           {
             name: "total_weight_in_kg",
             number: 1,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalWeightInKg",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "individual_weight_in_kg",
             number: 2,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "individualWeightInKg",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "amount", number: 3, label: 1, type: 5, jsonName: "amount" },
+          {
+            name: "amount",
+            number: 3,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "amount",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "export_type",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "exportType",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "export_description",
             number: 5,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "exportDescription",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "customs_tariff_number",
             number: 6,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "customsTariffNumber",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "invoice_number",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "invoiceNumber",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "customs_value",
             number: 8,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "customsValue",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2386,11 +2333,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Shipments",
       },
       {
+        name: "FulfillmentResults",
         field: [
           {
             name: "fulfillmentResults",
@@ -2398,7 +2346,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.order.ResponseDetailsList",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "fulfillmentResults",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2406,11 +2359,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "FulfillmentResults",
       },
       {
+        name: "ResponseDetailsList",
         field: [
           {
             name: "Status",
@@ -2418,7 +2372,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.order.OrderStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "Status",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "error",
@@ -2426,7 +2385,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.order.ErrorList",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "error",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2434,25 +2398,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ResponseDetailsList",
       },
       {
+        name: "OrderStatus",
         field: [
           {
             name: "OrderId",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "OrderId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "OrderStatus",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "OrderStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2460,19 +2437,38 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrderStatus",
       },
       {
+        name: "ErrorList",
         field: [
-          { name: "code", number: 1, label: 3, type: 9, jsonName: "code" },
+          {
+            name: "code",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "code",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "message",
             number: 2,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "message",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -2480,87 +2476,113 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ErrorList",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType: ".io.restorecommerce.order.OrderListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.order.OrderList",
             outputType: ".io.restorecommerce.order.OrderListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.order.OrderList",
             outputType: ".io.restorecommerce.order.OrderListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.order.OrderList",
             outputType: ".io.restorecommerce.order.OrderListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "TriggerFulfillment",
             inputType: ".io.restorecommerce.order.OrderDataList",
             outputType: ".io.restorecommerce.order.FulfillmentResults",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/order.proto",
-    package: "io.restorecommerce.order",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 3, 2, 7],
-          span: [45, 2, 25],
-          leadingDetachedComments: [],
+          span: [50, 2, 25],
           leadingComments:
             " sum of all the quantity_price will be total_price\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 8],
-          span: [47, 2, 39],
-          leadingDetachedComments: [],
+          span: [52, 2, 60, 4],
           leadingComments: " shipping address\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 0],
-          span: [59, 2, 39],
-          leadingDetachedComments: [],
+          span: [80, 2, 39],
           leadingComments:
             " below identifier is id of product, variant or bundle\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 9, 2, 1],
-          span: [95, 2, 37],
-          leadingDetachedComments: [],
+          span: [116, 2, 37],
           leadingComments:
             " below properties are used for international packaging\n",
           trailingComments: " each items weight\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 9, 2, 2],
-          span: [96, 2, 19],
-          leadingDetachedComments: [],
+          span: [117, 2, 19],
+          leadingComments: "",
           trailingComments: " number of items\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -2587,20 +2609,49 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata2,
     protoMetadata3,
     protoMetadata4,
+    protoMetadata5,
   ],
+  options: {
+    messages: {
+      Order: {
+        fields: {
+          shipping_contact_point_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoUc2hpcHBpbmdDb250YWN0UG9pbnQ=",
+                "base64"
+              )
+            ),
+          },
+          billing_contact_point_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoTYmlsbGluZ0NvbnRhY3RQb2ludA==",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "order" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -2610,3 +2661,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

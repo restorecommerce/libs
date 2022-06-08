@@ -11,5 +11,5 @@ import { printSchema } from "graphql";
 // See https://github.com/apollographql/apollo-server/pull/4310
 export const FederatedIndexingSchema = (cfg: ServiceConfig) => buildFederatedSchema({
   typeDefs: gql(printSchema(schema(cfg))),
-  resolvers: getAndGenerateResolvers<IndexingSrvGrpcClient, IndexingContext>(protoMetadata.fileDescriptor.service![0], namespace, cfg, ['Search'], undefined, 'search') as any
+  resolvers: getAndGenerateResolvers<IndexingSrvGrpcClient, IndexingContext>(protoMetadata.fileDescriptor.service![0], namespace, cfg, protoMetadata, undefined, 'search') as any
 });

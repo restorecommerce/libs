@@ -10,6 +10,9 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/options.proto";
 
+// Used by resolvers
+import "io/restorecommerce/manufacturer.proto";
+
 service Service {
   option (io.restorecommerce.options.service_name) = "product";
 

@@ -25,6 +25,10 @@ import {
   protoMetadata as protoMetadata5,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/user";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/address";
+import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/contact_point";
+import { protoMetadata as protoMetadata9 } from "../../io/restorecommerce/organization";
 
 export const protobufPackage = "io.restorecommerce.customer";
 
@@ -714,6 +718,10 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/user.proto",
+      "io/restorecommerce/address.proto",
+      "io/restorecommerce/contact_point.proto",
+      "io/restorecommerce/organization.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1197,8 +1205,15 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 5],
+          span: [11, 0, 39],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [6, 0],
-          span: [13, 0, 23, 1],
+          span: [19, 0, 29, 1],
           leadingComments: "\nMicroservice definition.\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -1222,6 +1237,10 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
+    protoMetadata7,
+    protoMetadata8,
+    protoMetadata9,
   ],
   options: {
     messages: {

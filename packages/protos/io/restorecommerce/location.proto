@@ -9,6 +9,10 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
+// Used by resolvers
+import "io/restorecommerce/organization.proto";
+import "io/restorecommerce/address.proto";
+
 /*
 * Microservice definition.
 */

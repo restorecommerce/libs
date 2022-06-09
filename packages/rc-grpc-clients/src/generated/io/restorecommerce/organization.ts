@@ -29,6 +29,8 @@ import {
   protoMetadata as protoMetadata6,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/address";
+import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/contact_point";
 
 export const protobufPackage = "io.restorecommerce.organization";
 
@@ -759,6 +761,8 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/address.proto",
+      "io/restorecommerce/contact_point.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1279,22 +1283,29 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 6],
+          span: [12, 0, 42],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [4, 5, 2, 0],
-          span: [51, 2, 16],
+          span: [55, 2, 16],
           leadingComments: "",
           trailingComments: "/ Organization ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 2],
-          span: [53, 2, 61, 4],
+          span: [57, 2, 65, 4],
           leadingComments: "",
           trailingComments: "/ Address for the organization\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 3],
-          span: [62, 2, 70, 4],
+          span: [66, 2, 74, 4],
           leadingComments: "",
           trailingComments:
             "  Hierarchically superior organization; may be null\n",
@@ -1302,7 +1313,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 5, 2, 4],
-          span: [71, 2, 79, 4],
+          span: [75, 2, 83, 4],
           leadingComments: "",
           trailingComments:
             " list of possible legal addresses of different types\n",
@@ -1310,14 +1321,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 5, 2, 7],
-          span: [82, 2, 18],
+          span: [86, 2, 18],
           leadingComments: "",
           trailingComments: " base64; arangoDB does not support blob storage\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 14],
-          span: [89, 2, 32],
+          span: [93, 2, 32],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],
@@ -1343,6 +1354,8 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
+    protoMetadata8,
   ],
   options: {
     messages: {

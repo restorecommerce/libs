@@ -33,6 +33,7 @@ import {
   protoMetadata as protoMetadata7,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/manufacturer";
 
 export const protobufPackage = "io.restorecommerce.product";
 
@@ -1168,6 +1169,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/manufacturer.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1941,8 +1943,15 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 7],
+          span: [13, 0, 47],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [4, 0],
-          span: [25, 0, 33, 1],
+          span: [28, 0, 36, 1],
           leadingComments: " Product resource\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -1971,6 +1980,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata5,
     protoMetadata6,
     protoMetadata7,
+    protoMetadata8,
   ],
   options: {
     messages: {

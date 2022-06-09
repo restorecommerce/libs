@@ -25,6 +25,7 @@ import {
   protoMetadata as protoMetadata5,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/contact_point";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -1524,6 +1525,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/contact_point.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -2547,8 +2549,15 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 5],
+          span: [11, 0, 48],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [4, 3, 2, 7],
-          span: [50, 2, 25],
+          span: [53, 2, 25],
           leadingComments:
             " sum of all the quantity_price will be total_price\n",
           trailingComments: "",
@@ -2556,14 +2565,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 3, 2, 8],
-          span: [52, 2, 60, 4],
+          span: [55, 2, 63, 4],
           leadingComments: " shipping address\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 0],
-          span: [80, 2, 39],
+          span: [83, 2, 39],
           leadingComments:
             " below identifier is id of product, variant or bundle\n",
           trailingComments: "",
@@ -2571,7 +2580,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 9, 2, 1],
-          span: [116, 2, 37],
+          span: [119, 2, 37],
           leadingComments:
             " below properties are used for international packaging\n",
           trailingComments: " each items weight\n",
@@ -2579,7 +2588,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 9, 2, 2],
-          span: [117, 2, 19],
+          span: [120, 2, 19],
           leadingComments: "",
           trailingComments: " number of items\n",
           leadingDetachedComments: [],
@@ -2610,6 +2619,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
   options: {
     messages: {

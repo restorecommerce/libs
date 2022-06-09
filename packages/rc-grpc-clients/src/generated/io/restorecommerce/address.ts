@@ -25,6 +25,7 @@ import {
   protoMetadata as protoMetadata5,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/country";
 
 export const protobufPackage = "io.restorecommerce.address";
 
@@ -738,6 +739,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/country.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1213,8 +1215,15 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 5],
+          span: [11, 0, 42],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [6, 0],
-          span: [13, 0, 23, 1],
+          span: [16, 0, 26, 1],
           leadingComments: "\n Microservice definition.\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -1238,6 +1247,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
   options: {
     messages: {

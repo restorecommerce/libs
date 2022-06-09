@@ -25,6 +25,10 @@ import {
   protoMetadata as protoMetadata5,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/address";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/contact_point_type";
+import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/timezone";
+import { protoMetadata as protoMetadata9 } from "../../io/restorecommerce/locale";
 
 export const protobufPackage = "io.restorecommerce.contact_point";
 
@@ -570,6 +574,10 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/address.proto",
+      "io/restorecommerce/contact_point_type.proto",
+      "io/restorecommerce/timezone.proto",
+      "io/restorecommerce/locale.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -965,7 +973,17 @@ export const protoMetadata: ProtoMetadata = {
     ],
     extension: [],
     options: undefined,
-    sourceCodeInfo: { location: [] },
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [3, 5],
+          span: [11, 0, 42],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
+    },
     syntax: "proto3",
   }),
   references: {
@@ -983,6 +1001,10 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
+    protoMetadata7,
+    protoMetadata8,
+    protoMetadata9,
   ],
   options: {
     messages: {

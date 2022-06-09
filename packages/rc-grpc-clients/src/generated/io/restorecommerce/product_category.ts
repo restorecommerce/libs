@@ -29,6 +29,7 @@ import {
   protoMetadata as protoMetadata6,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/price_group";
 
 export const protobufPackage = "io.restorecommerce.product_category";
 
@@ -622,6 +623,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/price_group.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1000,8 +1002,15 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 6],
+          span: [12, 0, 46],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [4, 0],
-          span: [12, 0, 28, 1],
+          span: [15, 0, 31, 1],
           leadingComments: " ProductCategory resource\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -1028,6 +1037,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
   ],
   options: {
     messages: {

@@ -8,6 +8,9 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
+// Used by resolvers
+import "io/restorecommerce/contact_point.proto";
+
 service Service {
   option (io.restorecommerce.options.service_name) = "order";
 

@@ -29,6 +29,8 @@ import {
   protoMetadata as protoMetadata6,
   Resolver,
 } from "../../io/restorecommerce/options";
+import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/organization";
+import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/address";
 
 export const protobufPackage = "io.restorecommerce.location";
 
@@ -577,6 +579,8 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/organization.proto",
+      "io/restorecommerce/address.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -963,36 +967,43 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
+          path: [3, 6],
+          span: [12, 0, 47],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
           path: [6, 0],
-          span: [14, 0, 24, 1],
+          span: [18, 0, 28, 1],
           leadingComments: "\n Microservice definition.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 0],
-          span: [48, 2, 16],
+          span: [52, 2, 16],
           leadingComments: "",
           trailingComments: " Location ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 2],
-          span: [50, 2, 18],
+          span: [54, 2, 18],
           leadingComments: "",
           trailingComments: " Location name\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 4],
-          span: [52, 2, 60, 4],
+          span: [56, 2, 64, 4],
           leadingComments: "",
           trailingComments: " Organization to which this location is linked\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 5],
-          span: [61, 2, 69, 4],
+          span: [65, 2, 73, 4],
           leadingComments: "",
           trailingComments:
             "  Location which may contain this location; may be null\n",
@@ -1000,14 +1011,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 4, 2, 7],
-          span: [79, 2, 31],
+          span: [83, 2, 31],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 8],
-          span: [80, 2, 19],
+          span: [84, 2, 19],
           leadingComments: "",
           trailingComments: " location type\n",
           leadingDetachedComments: [],
@@ -1030,6 +1041,8 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
+    protoMetadata7,
+    protoMetadata8,
   ],
   options: {
     messages: {

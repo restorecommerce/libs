@@ -314,8 +314,24 @@ message UserRole {
   string password = 10; /// Raw password, not stored
   string password_hash = 11; /// Encrypted password, stored
   repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
-  string timezone_id = 13;	// timezone_id specifications
-  string locale_id = 14;	// locale specifications
+  string timezone_id = 13 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.timezone.Timezone";
+      target_service: "resource";
+      target_sub_service: "timezone";
+      target_method: "Read";
+      field_name: "timezone";
+    }
+  ];	// timezone_id specifications
+  string locale_id = 14 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.locale.Locale";
+      target_service: "resource";
+      target_sub_service: "locale";
+      target_method: "Read";
+      field_name: "locale";
+    }
+  ];	// locale specifications
   string default_scope = 15; // default hierarchical scope
   bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
   bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.

@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata2,
@@ -17,7 +19,6 @@ import {
   protoMetadata as protoMetadata4,
   Sort,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.graph";
 
@@ -82,8 +83,9 @@ export function options_DirectionToJSON(object: Options_Direction): string {
       return "OUTBOUND";
     case Options_Direction.INBOUND:
       return "INBOUND";
+    case Options_Direction.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -123,8 +125,9 @@ export function filters_OperatorToJSON(object: Filters_Operator): string {
       return "and";
     case Filters_Operator.or:
       return "or";
+    case Filters_Operator.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -205,8 +208,9 @@ export function filter_OperationToJSON(object: Filter_Operation): string {
       return "in";
     case Filter_Operation.neq:
       return "neq";
+    case Filter_Operation.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -256,8 +260,9 @@ export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
       return "DATE";
     case Filter_ValueType.ARRAY:
       return "ARRAY";
+    case Filter_ValueType.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -269,10 +274,22 @@ export interface TraversalResponse {
   operationStatus?: OperationStatus;
 }
 
-const baseTraversalRequest: object = { path: false };
+function createBaseTraversalRequest(): TraversalRequest {
+  return {
+    vertices: undefined,
+    collection: undefined,
+    opts: undefined,
+    path: false,
+    subject: undefined,
+    filters: [],
+  };
+}
 
 export const TraversalRequest = {
-  encode(message: TraversalRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: TraversalRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.vertices !== undefined) {
       Vertices.encode(message.vertices, writer.uint32(10).fork()).ldelim();
     }
@@ -294,13 +311,10 @@ export const TraversalRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): TraversalRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): TraversalRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseTraversalRequest
-    ) as TraversalRequest;
-    message.filters = [];
+    const message = createBaseTraversalRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -331,77 +345,22 @@ export const TraversalRequest = {
   },
 
   fromJSON(object: any): TraversalRequest {
-    const message = globalThis.Object.create(
-      baseTraversalRequest
-    ) as TraversalRequest;
-    message.filters = [];
-    if (object.vertices !== undefined && object.vertices !== null) {
-      message.vertices = Vertices.fromJSON(object.vertices);
-    } else {
-      message.vertices = undefined;
-    }
-    if (object.collection !== undefined && object.collection !== null) {
-      message.collection = Collection.fromJSON(object.collection);
-    } else {
-      message.collection = undefined;
-    }
-    if (object.opts !== undefined && object.opts !== null) {
-      message.opts = Options.fromJSON(object.opts);
-    } else {
-      message.opts = undefined;
-    }
-    if (object.path !== undefined && object.path !== null) {
-      message.path = Boolean(object.path);
-    } else {
-      message.path = false;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(Filters.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
-    const message = { ...baseTraversalRequest } as TraversalRequest;
-    message.filters = [];
-    if (object.vertices !== undefined && object.vertices !== null) {
-      message.vertices = Vertices.fromPartial(object.vertices);
-    } else {
-      message.vertices = undefined;
-    }
-    if (object.collection !== undefined && object.collection !== null) {
-      message.collection = Collection.fromPartial(object.collection);
-    } else {
-      message.collection = undefined;
-    }
-    if (object.opts !== undefined && object.opts !== null) {
-      message.opts = Options.fromPartial(object.opts);
-    } else {
-      message.opts = undefined;
-    }
-    if (object.path !== undefined && object.path !== null) {
-      message.path = object.path;
-    } else {
-      message.path = false;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(Filters.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      vertices: isSet(object.vertices)
+        ? Vertices.fromJSON(object.vertices)
+        : undefined,
+      collection: isSet(object.collection)
+        ? Collection.fromJSON(object.collection)
+        : undefined,
+      opts: isSet(object.opts) ? Options.fromJSON(object.opts) : undefined,
+      path: isSet(object.path) ? Boolean(object.path) : false,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => Filters.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: TraversalRequest): unknown {
@@ -430,12 +389,40 @@ export const TraversalRequest = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
+    const message = createBaseTraversalRequest();
+    message.vertices =
+      object.vertices !== undefined && object.vertices !== null
+        ? Vertices.fromPartial(object.vertices)
+        : undefined;
+    message.collection =
+      object.collection !== undefined && object.collection !== null
+        ? Collection.fromPartial(object.collection)
+        : undefined;
+    message.opts =
+      object.opts !== undefined && object.opts !== null
+        ? Options.fromPartial(object.opts)
+        : undefined;
+    message.path = object.path ?? false;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    message.filters = object.filters?.map((e) => Filters.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseVertices: object = { collectionName: "", startVertexId: "" };
+function createBaseVertices(): Vertices {
+  return { collectionName: "", startVertexId: [] };
+}
 
 export const Vertices = {
-  encode(message: Vertices, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Vertices,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collectionName !== "") {
       writer.uint32(10).string(message.collectionName);
     }
@@ -445,11 +432,10 @@ export const Vertices = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Vertices {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Vertices {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseVertices) as Vertices;
-    message.startVertexId = [];
+    const message = createBaseVertices();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -468,35 +454,14 @@ export const Vertices = {
   },
 
   fromJSON(object: any): Vertices {
-    const message = globalThis.Object.create(baseVertices) as Vertices;
-    message.startVertexId = [];
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = String(object.collectionName);
-    } else {
-      message.collectionName = "";
-    }
-    if (object.startVertexId !== undefined && object.startVertexId !== null) {
-      for (const e of object.startVertexId) {
-        message.startVertexId.push(String(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Vertices>): Vertices {
-    const message = { ...baseVertices } as Vertices;
-    message.startVertexId = [];
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = object.collectionName;
-    } else {
-      message.collectionName = "";
-    }
-    if (object.startVertexId !== undefined && object.startVertexId !== null) {
-      for (const e of object.startVertexId) {
-        message.startVertexId.push(e);
-      }
-    }
-    return message;
+    return {
+      collectionName: isSet(object.collectionName)
+        ? String(object.collectionName)
+        : "",
+      startVertexId: Array.isArray(object?.startVertexId)
+        ? object.startVertexId.map((e: any) => String(e))
+        : [],
+    };
   },
 
   toJSON(message: Vertices): unknown {
@@ -510,12 +475,24 @@ export const Vertices = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Vertices>): Vertices {
+    const message = createBaseVertices();
+    message.collectionName = object.collectionName ?? "";
+    message.startVertexId = object.startVertexId?.map((e) => e) || [];
+    return message;
+  },
 };
 
-const baseCollection: object = { collectionName: "", limit: 0, offset: 0 };
+function createBaseCollection(): Collection {
+  return { collectionName: "", limit: 0, offset: 0, sort: [] };
+}
 
 export const Collection = {
-  encode(message: Collection, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Collection,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collectionName !== "") {
       writer.uint32(10).string(message.collectionName);
     }
@@ -531,11 +508,10 @@ export const Collection = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Collection {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Collection {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseCollection) as Collection;
-    message.sort = [];
+    const message = createBaseCollection();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -560,63 +536,24 @@ export const Collection = {
   },
 
   fromJSON(object: any): Collection {
-    const message = globalThis.Object.create(baseCollection) as Collection;
-    message.sort = [];
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = String(object.collectionName);
-    } else {
-      message.collectionName = "";
-    }
-    if (object.limit !== undefined && object.limit !== null) {
-      message.limit = Number(object.limit);
-    } else {
-      message.limit = 0;
-    }
-    if (object.offset !== undefined && object.offset !== null) {
-      message.offset = Number(object.offset);
-    } else {
-      message.offset = 0;
-    }
-    if (object.sort !== undefined && object.sort !== null) {
-      for (const e of object.sort) {
-        message.sort.push(Sort.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Collection>): Collection {
-    const message = { ...baseCollection } as Collection;
-    message.sort = [];
-    if (object.collectionName !== undefined && object.collectionName !== null) {
-      message.collectionName = object.collectionName;
-    } else {
-      message.collectionName = "";
-    }
-    if (object.limit !== undefined && object.limit !== null) {
-      message.limit = object.limit;
-    } else {
-      message.limit = 0;
-    }
-    if (object.offset !== undefined && object.offset !== null) {
-      message.offset = object.offset;
-    } else {
-      message.offset = 0;
-    }
-    if (object.sort !== undefined && object.sort !== null) {
-      for (const e of object.sort) {
-        message.sort.push(Sort.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      collectionName: isSet(object.collectionName)
+        ? String(object.collectionName)
+        : "",
+      limit: isSet(object.limit) ? Number(object.limit) : 0,
+      offset: isSet(object.offset) ? Number(object.offset) : 0,
+      sort: Array.isArray(object?.sort)
+        ? object.sort.map((e: any) => Sort.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Collection): unknown {
     const obj: any = {};
     message.collectionName !== undefined &&
       (obj.collectionName = message.collectionName);
-    message.limit !== undefined && (obj.limit = message.limit);
-    message.offset !== undefined && (obj.offset = message.offset);
+    message.limit !== undefined && (obj.limit = Math.round(message.limit));
+    message.offset !== undefined && (obj.offset = Math.round(message.offset));
     if (message.sort) {
       obj.sort = message.sort.map((e) => (e ? Sort.toJSON(e) : undefined));
     } else {
@@ -624,18 +561,32 @@ export const Collection = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Collection>): Collection {
+    const message = createBaseCollection();
+    message.collectionName = object.collectionName ?? "";
+    message.limit = object.limit ?? 0;
+    message.offset = object.offset ?? 0;
+    message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseOptions: object = {
-  includeVertex: "",
-  excludeVertex: "",
-  includeEdge: "",
-  excludeEdge: "",
-  direction: 0,
-};
+function createBaseOptions(): Options {
+  return {
+    includeVertex: [],
+    excludeVertex: [],
+    includeEdge: [],
+    excludeEdge: [],
+    direction: 0,
+  };
+}
 
 export const Options = {
-  encode(message: Options, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Options,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.includeVertex) {
       writer.uint32(10).string(v!);
     }
@@ -654,14 +605,10 @@ export const Options = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Options {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Options {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOptions) as Options;
-    message.includeVertex = [];
-    message.excludeVertex = [];
-    message.includeEdge = [];
-    message.excludeEdge = [];
+    const message = createBaseOptions();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -689,71 +636,23 @@ export const Options = {
   },
 
   fromJSON(object: any): Options {
-    const message = globalThis.Object.create(baseOptions) as Options;
-    message.includeVertex = [];
-    message.excludeVertex = [];
-    message.includeEdge = [];
-    message.excludeEdge = [];
-    if (object.includeVertex !== undefined && object.includeVertex !== null) {
-      for (const e of object.includeVertex) {
-        message.includeVertex.push(String(e));
-      }
-    }
-    if (object.excludeVertex !== undefined && object.excludeVertex !== null) {
-      for (const e of object.excludeVertex) {
-        message.excludeVertex.push(String(e));
-      }
-    }
-    if (object.includeEdge !== undefined && object.includeEdge !== null) {
-      for (const e of object.includeEdge) {
-        message.includeEdge.push(String(e));
-      }
-    }
-    if (object.excludeEdge !== undefined && object.excludeEdge !== null) {
-      for (const e of object.excludeEdge) {
-        message.excludeEdge.push(String(e));
-      }
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = options_DirectionFromJSON(object.direction);
-    } else {
-      message.direction = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Options>): Options {
-    const message = { ...baseOptions } as Options;
-    message.includeVertex = [];
-    message.excludeVertex = [];
-    message.includeEdge = [];
-    message.excludeEdge = [];
-    if (object.includeVertex !== undefined && object.includeVertex !== null) {
-      for (const e of object.includeVertex) {
-        message.includeVertex.push(e);
-      }
-    }
-    if (object.excludeVertex !== undefined && object.excludeVertex !== null) {
-      for (const e of object.excludeVertex) {
-        message.excludeVertex.push(e);
-      }
-    }
-    if (object.includeEdge !== undefined && object.includeEdge !== null) {
-      for (const e of object.includeEdge) {
-        message.includeEdge.push(e);
-      }
-    }
-    if (object.excludeEdge !== undefined && object.excludeEdge !== null) {
-      for (const e of object.excludeEdge) {
-        message.excludeEdge.push(e);
-      }
-    }
-    if (object.direction !== undefined && object.direction !== null) {
-      message.direction = object.direction;
-    } else {
-      message.direction = 0;
-    }
-    return message;
+    return {
+      includeVertex: Array.isArray(object?.includeVertex)
+        ? object.includeVertex.map((e: any) => String(e))
+        : [],
+      excludeVertex: Array.isArray(object?.excludeVertex)
+        ? object.excludeVertex.map((e: any) => String(e))
+        : [],
+      includeEdge: Array.isArray(object?.includeEdge)
+        ? object.includeEdge.map((e: any) => String(e))
+        : [],
+      excludeEdge: Array.isArray(object?.excludeEdge)
+        ? object.excludeEdge.map((e: any) => String(e))
+        : [],
+      direction: isSet(object.direction)
+        ? options_DirectionFromJSON(object.direction)
+        : 0,
+    };
   },
 
   toJSON(message: Options): unknown {
@@ -782,12 +681,27 @@ export const Options = {
       (obj.direction = options_DirectionToJSON(message.direction));
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Options>): Options {
+    const message = createBaseOptions();
+    message.includeVertex = object.includeVertex?.map((e) => e) || [];
+    message.excludeVertex = object.excludeVertex?.map((e) => e) || [];
+    message.includeEdge = object.includeEdge?.map((e) => e) || [];
+    message.excludeEdge = object.excludeEdge?.map((e) => e) || [];
+    message.direction = object.direction ?? 0;
+    return message;
+  },
 };
 
-const baseFilters: object = { entity: "", edge: "", operator: 0 };
+function createBaseFilters(): Filters {
+  return { entity: "", edge: "", filter: [], operator: 0 };
+}
 
 export const Filters = {
-  encode(message: Filters, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Filters,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.entity !== "") {
       writer.uint32(10).string(message.entity);
     }
@@ -803,11 +717,10 @@ export const Filters = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Filters {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Filters {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseFilters) as Filters;
-    message.filter = [];
+    const message = createBaseFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -832,55 +745,16 @@ export const Filters = {
   },
 
   fromJSON(object: any): Filters {
-    const message = globalThis.Object.create(baseFilters) as Filters;
-    message.filter = [];
-    if (object.entity !== undefined && object.entity !== null) {
-      message.entity = String(object.entity);
-    } else {
-      message.entity = "";
-    }
-    if (object.edge !== undefined && object.edge !== null) {
-      message.edge = String(object.edge);
-    } else {
-      message.edge = "";
-    }
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromJSON(e));
-      }
-    }
-    if (object.operator !== undefined && object.operator !== null) {
-      message.operator = filters_OperatorFromJSON(object.operator);
-    } else {
-      message.operator = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Filters>): Filters {
-    const message = { ...baseFilters } as Filters;
-    message.filter = [];
-    if (object.entity !== undefined && object.entity !== null) {
-      message.entity = object.entity;
-    } else {
-      message.entity = "";
-    }
-    if (object.edge !== undefined && object.edge !== null) {
-      message.edge = object.edge;
-    } else {
-      message.edge = "";
-    }
-    if (object.filter !== undefined && object.filter !== null) {
-      for (const e of object.filter) {
-        message.filter.push(Filter.fromPartial(e));
-      }
-    }
-    if (object.operator !== undefined && object.operator !== null) {
-      message.operator = object.operator;
-    } else {
-      message.operator = 0;
-    }
-    return message;
+    return {
+      entity: isSet(object.entity) ? String(object.entity) : "",
+      edge: isSet(object.edge) ? String(object.edge) : "",
+      filter: Array.isArray(object?.filter)
+        ? object.filter.map((e: any) => Filter.fromJSON(e))
+        : [],
+      operator: isSet(object.operator)
+        ? filters_OperatorFromJSON(object.operator)
+        : 0,
+    };
   },
 
   toJSON(message: Filters): unknown {
@@ -898,12 +772,26 @@ export const Filters = {
       (obj.operator = filters_OperatorToJSON(message.operator));
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Filters>): Filters {
+    const message = createBaseFilters();
+    message.entity = object.entity ?? "";
+    message.edge = object.edge ?? "";
+    message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
+    message.operator = object.operator ?? 0;
+    return message;
+  },
 };
 
-const baseFilter: object = { field: "", operation: 0, value: "", type: 0 };
+function createBaseFilter(): Filter {
+  return { field: "", operation: 0, value: "", type: 0, filters: [] };
+}
 
 export const Filter = {
-  encode(message: Filter, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Filter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -922,11 +810,10 @@ export const Filter = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Filter {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Filter {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    message.filters = [];
+    const message = createBaseFilter();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -954,65 +841,17 @@ export const Filter = {
   },
 
   fromJSON(object: any): Filter {
-    const message = globalThis.Object.create(baseFilter) as Filter;
-    message.filters = [];
-    if (object.field !== undefined && object.field !== null) {
-      message.field = String(object.field);
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = filter_OperationFromJSON(object.operation);
-    } else {
-      message.operation = 0;
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = filter_ValueTypeFromJSON(object.type);
-    } else {
-      message.type = 0;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(Filters.fromJSON(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Filter>): Filter {
-    const message = { ...baseFilter } as Filter;
-    message.filters = [];
-    if (object.field !== undefined && object.field !== null) {
-      message.field = object.field;
-    } else {
-      message.field = "";
-    }
-    if (object.operation !== undefined && object.operation !== null) {
-      message.operation = object.operation;
-    } else {
-      message.operation = 0;
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = 0;
-    }
-    if (object.filters !== undefined && object.filters !== null) {
-      for (const e of object.filters) {
-        message.filters.push(Filters.fromPartial(e));
-      }
-    }
-    return message;
+    return {
+      field: isSet(object.field) ? String(object.field) : "",
+      operation: isSet(object.operation)
+        ? filter_OperationFromJSON(object.operation)
+        : 0,
+      value: isSet(object.value) ? String(object.value) : "",
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : 0,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => Filters.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Filter): unknown {
@@ -1032,12 +871,27 @@ export const Filter = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Filter>): Filter {
+    const message = createBaseFilter();
+    message.field = object.field ?? "";
+    message.operation = object.operation ?? 0;
+    message.value = object.value ?? "";
+    message.type = object.type ?? 0;
+    message.filters = object.filters?.map((e) => Filters.fromPartial(e)) || [];
+    return message;
+  },
 };
 
-const baseTraversalResponse: object = {};
+function createBaseTraversalResponse(): TraversalResponse {
+  return { data: undefined, paths: undefined, operationStatus: undefined };
+}
 
 export const TraversalResponse = {
-  encode(message: TraversalResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: TraversalResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(10).fork()).ldelim();
     }
@@ -1053,12 +907,10 @@ export const TraversalResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): TraversalResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): TraversalResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseTraversalResponse
-    ) as TraversalResponse;
+    const message = createBaseTraversalResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1083,55 +935,13 @@ export const TraversalResponse = {
   },
 
   fromJSON(object: any): TraversalResponse {
-    const message = globalThis.Object.create(
-      baseTraversalResponse
-    ) as TraversalResponse;
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromJSON(object.data);
-    } else {
-      message.data = undefined;
-    }
-    if (object.paths !== undefined && object.paths !== null) {
-      message.paths = Any.fromJSON(object.paths);
-    } else {
-      message.paths = undefined;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
-    const message = { ...baseTraversalResponse } as TraversalResponse;
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromPartial(object.data);
-    } else {
-      message.data = undefined;
-    }
-    if (object.paths !== undefined && object.paths !== null) {
-      message.paths = Any.fromPartial(object.paths);
-    } else {
-      message.paths = undefined;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
+      paths: isSet(object.paths) ? Any.fromJSON(object.paths) : undefined,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: TraversalResponse): unknown {
@@ -1146,6 +956,23 @@ export const TraversalResponse = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
+    const message = createBaseTraversalResponse();
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
+    message.paths =
+      object.paths !== undefined && object.paths !== null
+        ? Any.fromPartial(object.paths)
+        : undefined;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
 /** Service provides the CRUD operations */
@@ -1153,14 +980,41 @@ export interface Service {
   Traversal(request: TraversalRequest): Observable<TraversalResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/graph.proto",
+    package: "io.restorecommerce.graph",
     dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/auth.proto",
@@ -1171,6 +1025,7 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
+        name: "TraversalRequest",
         field: [
           {
             name: "vertices",
@@ -1178,8 +1033,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.graph.Vertices",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "vertices",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "collection",
@@ -1187,8 +1046,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.graph.Collection",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "collection",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "opts",
@@ -1196,16 +1059,38 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.graph.Options",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "opts",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "path", number: 4, label: 1, type: 8, jsonName: "path" },
+          {
+            name: "path",
+            number: 4,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "path",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "subject",
             number: 5,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "filters",
@@ -1213,33 +1098,51 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.graph.Filters",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [{ name: "vertex" }],
+        oneofDecl: [{ name: "vertex", options: undefined }],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "TraversalRequest",
       },
       {
+        name: "Vertices",
         field: [
           {
             name: "collection_name",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "collectionName",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "start_vertex_id",
             number: 2,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "startVertexId",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1247,28 +1150,64 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Vertices",
       },
       {
+        name: "Collection",
         field: [
           {
             name: "collection_name",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "collectionName",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "limit", number: 2, label: 1, type: 13, jsonName: "limit" },
-          { name: "offset", number: 3, label: 1, type: 13, jsonName: "offset" },
+          {
+            name: "limit",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "limit",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "offset",
+            number: 3,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "offset",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "sort",
             number: 4,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.resourcebase.Sort",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "sort",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1276,39 +1215,64 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Collection",
       },
       {
+        name: "Options",
         field: [
           {
             name: "include_vertex",
             number: 1,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "includeVertex",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "exclude_vertex",
             number: 2,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "excludeVertex",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "include_edge",
             number: 3,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "includeEdge",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "exclude_edge",
             number: 4,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "excludeEdge",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "direction",
@@ -1316,39 +1280,75 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.graph.Options.Direction",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "direction",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Direction",
             value: [
-              { name: "OUTBOUND", number: 0 },
-              { name: "INBOUND", number: 1 },
+              { name: "OUTBOUND", number: 0, options: undefined },
+              { name: "INBOUND", number: 1, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Direction",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Options",
       },
       {
+        name: "Filters",
         field: [
-          { name: "entity", number: 1, label: 1, type: 9, jsonName: "entity" },
-          { name: "edge", number: 2, label: 1, type: 9, jsonName: "edge" },
+          {
+            name: "entity",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "entity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "edge",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "edge",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "filter",
             number: 3,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.graph.Filter",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filter",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operator",
@@ -1356,47 +1356,88 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.graph.Filters.Operator",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operator",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Operator",
             value: [
-              { name: "and", number: 0 },
-              { name: "or", number: 1 },
+              { name: "and", number: 0, options: undefined },
+              { name: "or", number: 1, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Operator",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Filters",
       },
       {
+        name: "Filter",
         field: [
-          { name: "field", number: 1, label: 1, type: 9, jsonName: "field" },
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "operation",
             number: 2,
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.graph.Filter.Operation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operation",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "value", number: 3, label: 1, type: 9, jsonName: "value" },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "type",
             number: 4,
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.graph.Filter.ValueType",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "filters",
@@ -1404,48 +1445,56 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.graph.Filters",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Operation",
             value: [
-              { name: "eq", number: 0 },
-              { name: "lt", number: 1 },
-              { name: "lte", number: 2 },
-              { name: "gt", number: 3 },
-              { name: "gte", number: 4 },
-              { name: "isEmpty", number: 5 },
-              { name: "iLike", number: 6 },
-              { name: "in", number: 7 },
-              { name: "neq", number: 8 },
+              { name: "eq", number: 0, options: undefined },
+              { name: "lt", number: 1, options: undefined },
+              { name: "lte", number: 2, options: undefined },
+              { name: "gt", number: 3, options: undefined },
+              { name: "gte", number: 4, options: undefined },
+              { name: "isEmpty", number: 5, options: undefined },
+              { name: "iLike", number: 6, options: undefined },
+              { name: "in", number: 7, options: undefined },
+              { name: "neq", number: 8, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Operation",
           },
           {
+            name: "ValueType",
             value: [
-              { name: "STRING", number: 0 },
-              { name: "NUMBER", number: 1 },
-              { name: "BOOLEAN", number: 2 },
-              { name: "DATE", number: 3 },
-              { name: "ARRAY", number: 4 },
+              { name: "STRING", number: 0, options: undefined },
+              { name: "NUMBER", number: 1, options: undefined },
+              { name: "BOOLEAN", number: 2, options: undefined },
+              { name: "DATE", number: 3, options: undefined },
+              { name: "ARRAY", number: 4, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "ValueType",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Filter",
       },
       {
+        name: "TraversalResponse",
         field: [
           {
             name: "data",
@@ -1453,7 +1502,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "paths",
@@ -1461,7 +1515,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "paths",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -1469,7 +1528,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1477,103 +1541,117 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "TraversalResponse",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Traversal",
             inputType: ".io.restorecommerce.graph.TraversalRequest",
             outputType: ".io.restorecommerce.graph.TraversalResponse",
+            options: undefined,
+            clientStreaming: false,
             serverStreaming: true,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/graph.proto",
-    package: "io.restorecommerce.graph",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [6, 0],
           span: [9, 0, 11, 1],
-          leadingDetachedComments: [],
           leadingComments: " Service provides the CRUD operations\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 8, 0],
           span: [15, 2, 18, 3],
-          leadingDetachedComments: [],
           leadingComments: " Document handle either _id or _key value\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 0],
           span: [38, 1, 36],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " to include vertices\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 1],
           span: [39, 1, 36],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " to exclude vertices\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 2],
           span: [40, 1, 34],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " to include vertices\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 3],
           span: [41, 1, 34],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " to exclude vertices\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 4],
           span: [42, 1, 25],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             " either inbound or outbound, defaults to outbound direction\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 0],
           span: [51, 2, 20],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " entity on which the filters are applied\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 4, 2, 1],
           span: [52, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             " if edge is specified depending on the direction filter are applied only for those entities\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 4, 1, 2, 0],
           span: [77, 4, 15],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " default value type if not specified\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 6, 2, 0],
           span: [88, 2, 31],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " vertices\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 6, 2, 1],
           span: [89, 2, 32],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " traversed vertices paths\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -1600,17 +1678,15 @@ export const protoMetadata: ProtoMetadata = {
   ],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1620,3 +1696,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

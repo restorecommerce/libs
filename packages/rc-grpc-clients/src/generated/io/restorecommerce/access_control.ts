@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Target,
   protoMetadata as protoMetadata2,
@@ -20,7 +22,7 @@ import {
   protoMetadata as protoMetadata5,
   Attribute,
 } from "../../io/restorecommerce/attribute";
-import { Writer, Reader } from "protobufjs/minimal";
+import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.access_control";
 
@@ -85,8 +87,9 @@ export function response_DecisionToJSON(object: Response_Decision): string {
       return "NOT_APPLICABLE";
     case Response_Decision.INDETERMINATE:
       return "INDETERMINATE";
+    case Response_Decision.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -96,10 +99,15 @@ export interface ReverseQuery {
   operationStatus?: OperationStatus;
 }
 
-const baseRequest: object = {};
+function createBaseRequest(): Request {
+  return { target: undefined, context: undefined };
+}
 
 export const Request = {
-  encode(message: Request, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Request,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(10).fork()).ldelim();
     }
@@ -109,10 +117,10 @@ export const Request = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Request {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Request {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseRequest) as Request;
+    const message = createBaseRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -131,33 +139,12 @@ export const Request = {
   },
 
   fromJSON(object: any): Request {
-    const message = globalThis.Object.create(baseRequest) as Request;
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromJSON(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.context !== undefined && object.context !== null) {
-      message.context = Context.fromJSON(object.context);
-    } else {
-      message.context = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Request>): Request {
-    const message = { ...baseRequest } as Request;
-    if (object.target !== undefined && object.target !== null) {
-      message.target = Target.fromPartial(object.target);
-    } else {
-      message.target = undefined;
-    }
-    if (object.context !== undefined && object.context !== null) {
-      message.context = Context.fromPartial(object.context);
-    } else {
-      message.context = undefined;
-    }
-    return message;
+    return {
+      target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
+      context: isSet(object.context)
+        ? Context.fromJSON(object.context)
+        : undefined,
+    };
   },
 
   toJSON(message: Request): unknown {
@@ -170,12 +157,30 @@ export const Request = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Request>): Request {
+    const message = createBaseRequest();
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Target.fromPartial(object.target)
+        : undefined;
+    message.context =
+      object.context !== undefined && object.context !== null
+        ? Context.fromPartial(object.context)
+        : undefined;
+    return message;
+  },
 };
 
-const baseContext: object = {};
+function createBaseContext(): Context {
+  return { subject: undefined, resources: [], security: undefined };
+}
 
 export const Context = {
-  encode(message: Context, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Context,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.subject !== undefined) {
       Any.encode(message.subject, writer.uint32(10).fork()).ldelim();
     }
@@ -188,11 +193,10 @@ export const Context = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Context {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Context {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseContext) as Context;
-    message.resources = [];
+    const message = createBaseContext();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -214,45 +218,15 @@ export const Context = {
   },
 
   fromJSON(object: any): Context {
-    const message = globalThis.Object.create(baseContext) as Context;
-    message.resources = [];
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Any.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Any.fromJSON(e));
-      }
-    }
-    if (object.security !== undefined && object.security !== null) {
-      message.security = Any.fromJSON(object.security);
-    } else {
-      message.security = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Context>): Context {
-    const message = { ...baseContext } as Context;
-    message.resources = [];
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Any.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Any.fromPartial(e));
-      }
-    }
-    if (object.security !== undefined && object.security !== null) {
-      message.security = Any.fromPartial(object.security);
-    } else {
-      message.security = undefined;
-    }
-    return message;
+    return {
+      subject: isSet(object.subject) ? Any.fromJSON(object.subject) : undefined,
+      resources: Array.isArray(object?.resources)
+        ? object.resources.map((e: any) => Any.fromJSON(e))
+        : [],
+      security: isSet(object.security)
+        ? Any.fromJSON(object.security)
+        : undefined,
+    };
   },
 
   toJSON(message: Context): unknown {
@@ -272,12 +246,36 @@ export const Context = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Context>): Context {
+    const message = createBaseContext();
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Any.fromPartial(object.subject)
+        : undefined;
+    message.resources = object.resources?.map((e) => Any.fromPartial(e)) || [];
+    message.security =
+      object.security !== undefined && object.security !== null
+        ? Any.fromPartial(object.security)
+        : undefined;
+    return message;
+  },
 };
 
-const baseResponse: object = { decision: 0, evaluationCacheable: false };
+function createBaseResponse(): Response {
+  return {
+    decision: 0,
+    obligation: [],
+    evaluationCacheable: false,
+    operationStatus: undefined,
+  };
+}
 
 export const Response = {
-  encode(message: Response, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Response,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.decision !== 0) {
       writer.uint32(8).int32(message.decision);
     }
@@ -296,11 +294,10 @@ export const Response = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Response {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Response {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseResponse) as Response;
-    message.obligation = [];
+    const message = createBaseResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -328,71 +325,20 @@ export const Response = {
   },
 
   fromJSON(object: any): Response {
-    const message = globalThis.Object.create(baseResponse) as Response;
-    message.obligation = [];
-    if (object.decision !== undefined && object.decision !== null) {
-      message.decision = response_DecisionFromJSON(object.decision);
-    } else {
-      message.decision = 0;
-    }
-    if (object.obligation !== undefined && object.obligation !== null) {
-      for (const e of object.obligation) {
-        message.obligation.push(Attribute.fromJSON(e));
-      }
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = Boolean(object.evaluationCacheable);
-    } else {
-      message.evaluationCacheable = false;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Response>): Response {
-    const message = { ...baseResponse } as Response;
-    message.obligation = [];
-    if (object.decision !== undefined && object.decision !== null) {
-      message.decision = object.decision;
-    } else {
-      message.decision = 0;
-    }
-    if (object.obligation !== undefined && object.obligation !== null) {
-      for (const e of object.obligation) {
-        message.obligation.push(Attribute.fromPartial(e));
-      }
-    }
-    if (
-      object.evaluationCacheable !== undefined &&
-      object.evaluationCacheable !== null
-    ) {
-      message.evaluationCacheable = object.evaluationCacheable;
-    } else {
-      message.evaluationCacheable = false;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      decision: isSet(object.decision)
+        ? response_DecisionFromJSON(object.decision)
+        : 0,
+      obligation: Array.isArray(object?.obligation)
+        ? object.obligation.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      evaluationCacheable: isSet(object.evaluationCacheable)
+        ? Boolean(object.evaluationCacheable)
+        : false,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: Response): unknown {
@@ -414,12 +360,30 @@ export const Response = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Response>): Response {
+    const message = createBaseResponse();
+    message.decision = object.decision ?? 0;
+    message.obligation =
+      object.obligation?.map((e) => Attribute.fromPartial(e)) || [];
+    message.evaluationCacheable = object.evaluationCacheable ?? false;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseReverseQuery: object = {};
+function createBaseReverseQuery(): ReverseQuery {
+  return { policySets: [], obligation: [], operationStatus: undefined };
+}
 
 export const ReverseQuery = {
-  encode(message: ReverseQuery, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ReverseQuery,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.policySets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -435,12 +399,10 @@ export const ReverseQuery = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ReverseQuery {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ReverseQuery {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policySets = [];
-    message.obligation = [];
+    const message = createBaseReverseQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -465,57 +427,17 @@ export const ReverseQuery = {
   },
 
   fromJSON(object: any): ReverseQuery {
-    const message = globalThis.Object.create(baseReverseQuery) as ReverseQuery;
-    message.policySets = [];
-    message.obligation = [];
-    if (object.policySets !== undefined && object.policySets !== null) {
-      for (const e of object.policySets) {
-        message.policySets.push(PolicySetRQ.fromJSON(e));
-      }
-    }
-    if (object.obligation !== undefined && object.obligation !== null) {
-      for (const e of object.obligation) {
-        message.obligation.push(Attribute.fromJSON(e));
-      }
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
-    const message = { ...baseReverseQuery } as ReverseQuery;
-    message.policySets = [];
-    message.obligation = [];
-    if (object.policySets !== undefined && object.policySets !== null) {
-      for (const e of object.policySets) {
-        message.policySets.push(PolicySetRQ.fromPartial(e));
-      }
-    }
-    if (object.obligation !== undefined && object.obligation !== null) {
-      for (const e of object.obligation) {
-        message.obligation.push(Attribute.fromPartial(e));
-      }
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      policySets: Array.isArray(object?.policySets)
+        ? object.policySets.map((e: any) => PolicySetRQ.fromJSON(e))
+        : [],
+      obligation: Array.isArray(object?.obligation)
+        ? object.obligation.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: ReverseQuery): unknown {
@@ -540,6 +462,19 @@ export const ReverseQuery = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
+    const message = createBaseReverseQuery();
+    message.policySets =
+      object.policySets?.map((e) => PolicySetRQ.fromPartial(e)) || [];
+    message.obligation =
+      object.obligation?.map((e) => Attribute.fromPartial(e)) || [];
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
 export interface Service {
@@ -547,25 +482,54 @@ export interface Service {
   WhatIsAllowed(request: Request): Promise<ReverseQuery>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/access_control.proto",
+    package: "io.restorecommerce.access_control",
     dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/rule.proto",
       "io/restorecommerce/policy_set.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Request",
         field: [
           {
             name: "target",
@@ -573,7 +537,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.rule.Target",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "target",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "context",
@@ -581,7 +550,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.access_control.Context",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "context",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -589,11 +563,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Request",
       },
       {
+        name: "Context",
         field: [
           {
             name: "subject",
@@ -601,7 +576,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "resources",
@@ -609,7 +589,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "resources",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "security",
@@ -617,7 +602,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "security",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -625,11 +615,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Context",
       },
       {
+        name: "Response",
         field: [
           {
             name: "decision",
@@ -637,7 +628,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 14,
             typeName: ".io.restorecommerce.access_control.Response.Decision",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "decision",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "obligation",
@@ -645,14 +641,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "obligation",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "evaluation_cacheable",
             number: 3,
             label: 1,
             type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "evaluationCacheable",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -660,31 +667,38 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [],
         enumType: [
           {
+            name: "Decision",
             value: [
-              { name: "PERMIT", number: 0 },
-              { name: "DENY", number: 1 },
-              { name: "NOT_APPLICABLE", number: 2 },
-              { name: "INDETERMINATE", number: 3 },
+              { name: "PERMIT", number: 0, options: undefined },
+              { name: "DENY", number: 1, options: undefined },
+              { name: "NOT_APPLICABLE", number: 2, options: undefined },
+              { name: "INDETERMINATE", number: 3, options: undefined },
             ],
+            options: undefined,
             reservedRange: [],
             reservedName: [],
-            name: "Decision",
           },
         ],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Response",
       },
       {
+        name: "ReverseQuery",
         field: [
           {
             name: "policy_sets",
@@ -692,7 +706,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.policy_set.PolicySetRQ",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "policySets",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "obligation",
@@ -700,7 +719,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "obligation",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -708,7 +732,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -716,40 +745,55 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ReverseQuery",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "IsAllowed",
             inputType: ".io.restorecommerce.access_control.Request",
             outputType: ".io.restorecommerce.access_control.Response",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "WhatIsAllowed",
             inputType: ".io.restorecommerce.access_control.Request",
             outputType: ".io.restorecommerce.access_control.ReverseQuery",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/access_control.proto",
-    package: "io.restorecommerce.access_control",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0, 2, 1],
-          span: [18, 2, 22],
-          leadingDetachedComments: [],
+          span: [19, 2, 22],
           leadingComments:
             " generic data structure which can be provided\n to a contextQuery (see io/restorecommerce/rule.proto)\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -768,20 +812,30 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "access_control" },
+        methods: {
+          IsAllowed: { is_query: true },
+          WhatIsAllowed: { is_query: true },
+        },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -791,3 +845,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

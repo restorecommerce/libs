@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   UserResponse,
   protoMetadata as protoMetadata2,
@@ -17,7 +19,6 @@ import {
   protoMetadata as protoMetadata4,
   Empty,
 } from "../../google/protobuf/empty";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.oauth";
 
@@ -56,23 +57,25 @@ export interface GetTokenResponse {
   token?: string | undefined;
 }
 
-const baseServicesResponse: object = { services: "" };
+function createBaseServicesResponse(): ServicesResponse {
+  return { services: [] };
+}
 
 export const ServicesResponse = {
-  encode(message: ServicesResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ServicesResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.services) {
       writer.uint32(10).string(v!);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ServicesResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ServicesResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseServicesResponse
-    ) as ServicesResponse;
-    message.services = [];
+    const message = createBaseServicesResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -88,27 +91,11 @@ export const ServicesResponse = {
   },
 
   fromJSON(object: any): ServicesResponse {
-    const message = globalThis.Object.create(
-      baseServicesResponse
-    ) as ServicesResponse;
-    message.services = [];
-    if (object.services !== undefined && object.services !== null) {
-      for (const e of object.services) {
-        message.services.push(String(e));
-      }
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ServicesResponse>): ServicesResponse {
-    const message = { ...baseServicesResponse } as ServicesResponse;
-    message.services = [];
-    if (object.services !== undefined && object.services !== null) {
-      for (const e of object.services) {
-        message.services.push(e);
-      }
-    }
-    return message;
+    return {
+      services: Array.isArray(object?.services)
+        ? object.services.map((e: any) => String(e))
+        : [],
+    };
   },
 
   toJSON(message: ServicesResponse): unknown {
@@ -120,15 +107,23 @@ export const ServicesResponse = {
     }
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ServicesResponse>): ServicesResponse {
+    const message = createBaseServicesResponse();
+    message.services = object.services?.map((e) => e) || [];
+    return message;
+  },
 };
 
-const baseGenerateLinksResponse: object = {};
+function createBaseGenerateLinksResponse(): GenerateLinksResponse {
+  return { links: {} };
+}
 
 export const GenerateLinksResponse = {
   encode(
     message: GenerateLinksResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     Object.entries(message.links).forEach(([key, value]) => {
       GenerateLinksResponse_LinksEntry.encode(
         { key: key as any, value },
@@ -138,13 +133,13 @@ export const GenerateLinksResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GenerateLinksResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): GenerateLinksResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseGenerateLinksResponse
-    ) as GenerateLinksResponse;
-    message.links = {};
+    const message = createBaseGenerateLinksResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -166,31 +161,17 @@ export const GenerateLinksResponse = {
   },
 
   fromJSON(object: any): GenerateLinksResponse {
-    const message = globalThis.Object.create(
-      baseGenerateLinksResponse
-    ) as GenerateLinksResponse;
-    message.links = {};
-    if (object.links !== undefined && object.links !== null) {
-      Object.entries(object.links).forEach(([key, value]) => {
-        message.links[key] = String(value);
-      });
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<GenerateLinksResponse>
-  ): GenerateLinksResponse {
-    const message = { ...baseGenerateLinksResponse } as GenerateLinksResponse;
-    message.links = {};
-    if (object.links !== undefined && object.links !== null) {
-      Object.entries(object.links).forEach(([key, value]) => {
-        if (value !== undefined) {
-          message.links[key] = String(value);
-        }
-      });
-    }
-    return message;
+    return {
+      links: isObject(object.links)
+        ? Object.entries(object.links).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+              acc[key] = String(value);
+              return acc;
+            },
+            {}
+          )
+        : {},
+    };
   },
 
   toJSON(message: GenerateLinksResponse): unknown {
@@ -203,15 +184,32 @@ export const GenerateLinksResponse = {
     }
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<GenerateLinksResponse>
+  ): GenerateLinksResponse {
+    const message = createBaseGenerateLinksResponse();
+    message.links = Object.entries(object.links ?? {}).reduce<{
+      [key: string]: string;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = String(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
 };
 
-const baseGenerateLinksResponse_LinksEntry: object = { key: "", value: "" };
+function createBaseGenerateLinksResponse_LinksEntry(): GenerateLinksResponse_LinksEntry {
+  return { key: "", value: "" };
+}
 
 export const GenerateLinksResponse_LinksEntry = {
   encode(
     message: GenerateLinksResponse_LinksEntry,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -222,14 +220,12 @@ export const GenerateLinksResponse_LinksEntry = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): GenerateLinksResponse_LinksEntry {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseGenerateLinksResponse_LinksEntry
-    ) as GenerateLinksResponse_LinksEntry;
+    const message = createBaseGenerateLinksResponse_LinksEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -248,39 +244,10 @@ export const GenerateLinksResponse_LinksEntry = {
   },
 
   fromJSON(object: any): GenerateLinksResponse_LinksEntry {
-    const message = globalThis.Object.create(
-      baseGenerateLinksResponse_LinksEntry
-    ) as GenerateLinksResponse_LinksEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<GenerateLinksResponse_LinksEntry>
-  ): GenerateLinksResponse_LinksEntry {
-    const message = {
-      ...baseGenerateLinksResponse_LinksEntry,
-    } as GenerateLinksResponse_LinksEntry;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? String(object.value) : "",
+    };
   },
 
   toJSON(message: GenerateLinksResponse_LinksEntry): unknown {
@@ -289,15 +256,26 @@ export const GenerateLinksResponse_LinksEntry = {
     message.value !== undefined && (obj.value = message.value);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<GenerateLinksResponse_LinksEntry>
+  ): GenerateLinksResponse_LinksEntry {
+    const message = createBaseGenerateLinksResponse_LinksEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
+    return message;
+  },
 };
 
-const baseExchangeCodeRequest: object = { service: "", code: "", state: "" };
+function createBaseExchangeCodeRequest(): ExchangeCodeRequest {
+  return { service: "", code: "", state: "" };
+}
 
 export const ExchangeCodeRequest = {
   encode(
     message: ExchangeCodeRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.service !== "") {
       writer.uint32(10).string(message.service);
     }
@@ -310,12 +288,10 @@ export const ExchangeCodeRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ExchangeCodeRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): ExchangeCodeRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseExchangeCodeRequest
-    ) as ExchangeCodeRequest;
+    const message = createBaseExchangeCodeRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -337,45 +313,11 @@ export const ExchangeCodeRequest = {
   },
 
   fromJSON(object: any): ExchangeCodeRequest {
-    const message = globalThis.Object.create(
-      baseExchangeCodeRequest
-    ) as ExchangeCodeRequest;
-    if (object.service !== undefined && object.service !== null) {
-      message.service = String(object.service);
-    } else {
-      message.service = "";
-    }
-    if (object.code !== undefined && object.code !== null) {
-      message.code = String(object.code);
-    } else {
-      message.code = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = String(object.state);
-    } else {
-      message.state = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ExchangeCodeRequest>): ExchangeCodeRequest {
-    const message = { ...baseExchangeCodeRequest } as ExchangeCodeRequest;
-    if (object.service !== undefined && object.service !== null) {
-      message.service = object.service;
-    } else {
-      message.service = "";
-    }
-    if (object.code !== undefined && object.code !== null) {
-      message.code = object.code;
-    } else {
-      message.code = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = "";
-    }
-    return message;
+    return {
+      service: isSet(object.service) ? String(object.service) : "",
+      code: isSet(object.code) ? String(object.code) : "",
+      state: isSet(object.state) ? String(object.state) : "",
+    };
   },
 
   toJSON(message: ExchangeCodeRequest): unknown {
@@ -385,15 +327,25 @@ export const ExchangeCodeRequest = {
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ExchangeCodeRequest>): ExchangeCodeRequest {
+    const message = createBaseExchangeCodeRequest();
+    message.service = object.service ?? "";
+    message.code = object.code ?? "";
+    message.state = object.state ?? "";
+    return message;
+  },
 };
 
-const baseExchangeCodeResponse: object = { email: "" };
+function createBaseExchangeCodeResponse(): ExchangeCodeResponse {
+  return { user: undefined, email: "", token: undefined };
+}
 
 export const ExchangeCodeResponse = {
   encode(
     message: ExchangeCodeResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.user !== undefined) {
       UserResponse.encode(message.user, writer.uint32(10).fork()).ldelim();
     }
@@ -406,12 +358,13 @@ export const ExchangeCodeResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ExchangeCodeResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ExchangeCodeResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseExchangeCodeResponse
-    ) as ExchangeCodeResponse;
+    const message = createBaseExchangeCodeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -433,45 +386,11 @@ export const ExchangeCodeResponse = {
   },
 
   fromJSON(object: any): ExchangeCodeResponse {
-    const message = globalThis.Object.create(
-      baseExchangeCodeResponse
-    ) as ExchangeCodeResponse;
-    if (object.user !== undefined && object.user !== null) {
-      message.user = UserResponse.fromJSON(object.user);
-    } else {
-      message.user = undefined;
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = Tokens.fromJSON(object.token);
-    } else {
-      message.token = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<ExchangeCodeResponse>): ExchangeCodeResponse {
-    const message = { ...baseExchangeCodeResponse } as ExchangeCodeResponse;
-    if (object.user !== undefined && object.user !== null) {
-      message.user = UserResponse.fromPartial(object.user);
-    } else {
-      message.user = undefined;
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = "";
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = Tokens.fromPartial(object.token);
-    } else {
-      message.token = undefined;
-    }
-    return message;
+    return {
+      user: isSet(object.user) ? UserResponse.fromJSON(object.user) : undefined,
+      email: isSet(object.email) ? String(object.email) : "",
+      token: isSet(object.token) ? Tokens.fromJSON(object.token) : undefined,
+    };
   },
 
   toJSON(message: ExchangeCodeResponse): unknown {
@@ -483,12 +402,31 @@ export const ExchangeCodeResponse = {
       (obj.token = message.token ? Tokens.toJSON(message.token) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<ExchangeCodeResponse>): ExchangeCodeResponse {
+    const message = createBaseExchangeCodeResponse();
+    message.user =
+      object.user !== undefined && object.user !== null
+        ? UserResponse.fromPartial(object.user)
+        : undefined;
+    message.email = object.email ?? "";
+    message.token =
+      object.token !== undefined && object.token !== null
+        ? Tokens.fromPartial(object.token)
+        : undefined;
+    return message;
+  },
 };
 
-const baseGetTokenRequest: object = { service: "" };
+function createBaseGetTokenRequest(): GetTokenRequest {
+  return { subject: undefined, service: "" };
+}
 
 export const GetTokenRequest = {
-  encode(message: GetTokenRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: GetTokenRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(10).fork()).ldelim();
     }
@@ -498,12 +436,10 @@ export const GetTokenRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GetTokenRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetTokenRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseGetTokenRequest
-    ) as GetTokenRequest;
+    const message = createBaseGetTokenRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -522,35 +458,12 @@ export const GetTokenRequest = {
   },
 
   fromJSON(object: any): GetTokenRequest {
-    const message = globalThis.Object.create(
-      baseGetTokenRequest
-    ) as GetTokenRequest;
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.service !== undefined && object.service !== null) {
-      message.service = String(object.service);
-    } else {
-      message.service = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<GetTokenRequest>): GetTokenRequest {
-    const message = { ...baseGetTokenRequest } as GetTokenRequest;
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    if (object.service !== undefined && object.service !== null) {
-      message.service = object.service;
-    } else {
-      message.service = "";
-    }
-    return message;
+    return {
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+      service: isSet(object.service) ? String(object.service) : "",
+    };
   },
 
   toJSON(message: GetTokenRequest): unknown {
@@ -562,12 +475,27 @@ export const GetTokenRequest = {
     message.service !== undefined && (obj.service = message.service);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<GetTokenRequest>): GetTokenRequest {
+    const message = createBaseGetTokenRequest();
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    message.service = object.service ?? "";
+    return message;
+  },
 };
 
-const baseGetTokenResponse: object = {};
+function createBaseGetTokenResponse(): GetTokenResponse {
+  return { status: undefined, token: undefined };
+}
 
 export const GetTokenResponse = {
-  encode(message: GetTokenResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: GetTokenResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(10).fork()).ldelim();
     }
@@ -577,12 +505,10 @@ export const GetTokenResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GetTokenResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): GetTokenResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseGetTokenResponse
-    ) as GetTokenResponse;
+    const message = createBaseGetTokenResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -601,35 +527,10 @@ export const GetTokenResponse = {
   },
 
   fromJSON(object: any): GetTokenResponse {
-    const message = globalThis.Object.create(
-      baseGetTokenResponse
-    ) as GetTokenResponse;
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<GetTokenResponse>): GetTokenResponse {
-    const message = { ...baseGetTokenResponse } as GetTokenResponse;
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = undefined;
-    }
-    return message;
+    return {
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
+    };
   },
 
   toJSON(message: GetTokenResponse): unknown {
@@ -638,6 +539,16 @@ export const GetTokenResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     message.token !== undefined && (obj.token = message.token);
     return obj;
+  },
+
+  fromPartial(object: DeepPartial<GetTokenResponse>): GetTokenResponse {
+    const message = createBaseGetTokenResponse();
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    message.token = object.token ?? undefined;
+    return message;
   },
 };
 
@@ -648,14 +559,41 @@ export interface Service {
   GetToken(request: GetTokenRequest): Promise<GetTokenResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/oauth.proto",
+    package: "io.restorecommerce.oauth",
     dependency: [
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/user.proto",
@@ -666,13 +604,20 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
+        name: "ServicesResponse",
         field: [
           {
             name: "services",
             number: 1,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "services",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -680,11 +625,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ServicesResponse",
       },
       {
+        name: "GenerateLinksResponse",
         field: [
           {
             name: "links",
@@ -693,20 +639,44 @@ export const protoMetadata: ProtoMetadata = {
             type: 11,
             typeName:
               ".io.restorecommerce.oauth.GenerateLinksResponse.LinksEntry",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "links",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
         nestedType: [
           {
+            name: "LinksEntry",
             field: [
-              { name: "key", number: 1, label: 1, type: 9, jsonName: "key" },
+              {
+                name: "key",
+                number: 1,
+                label: 1,
+                type: 9,
+                typeName: "",
+                extendee: "",
+                defaultValue: "",
+                oneofIndex: 0,
+                jsonName: "key",
+                options: undefined,
+                proto3Optional: false,
+              },
               {
                 name: "value",
                 number: 2,
                 label: 1,
                 type: 9,
+                typeName: "",
+                extendee: "",
+                defaultValue: "",
+                oneofIndex: 0,
                 jsonName: "value",
+                options: undefined,
+                proto3Optional: false,
               },
             ],
             extension: [],
@@ -714,41 +684,78 @@ export const protoMetadata: ProtoMetadata = {
             enumType: [],
             extensionRange: [],
             oneofDecl: [],
+            options: {
+              messageSetWireFormat: false,
+              noStandardDescriptorAccessor: false,
+              deprecated: false,
+              mapEntry: true,
+              uninterpretedOption: [],
+            },
             reservedRange: [],
             reservedName: [],
-            name: "LinksEntry",
-            options: { uninterpretedOption: [], mapEntry: true },
           },
         ],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "GenerateLinksResponse",
       },
       {
+        name: "ExchangeCodeRequest",
         field: [
           {
             name: "service",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "service",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "code", number: 2, label: 1, type: 9, jsonName: "code" },
-          { name: "state", number: 3, label: 1, type: 9, jsonName: "state" },
+          {
+            name: "code",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "code",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "state",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "state",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ExchangeCodeRequest",
       },
       {
+        name: "ExchangeCodeResponse",
         field: [
           {
             name: "user",
@@ -756,16 +763,38 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.user.UserResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "user",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "email", number: 2, label: 1, type: 9, jsonName: "email" },
+          {
+            name: "email",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "token",
             number: 3,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Tokens",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "token",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -773,11 +802,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "ExchangeCodeResponse",
       },
       {
+        name: "GetTokenRequest",
         field: [
           {
             name: "subject",
@@ -785,14 +815,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "service",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "service",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -800,11 +841,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "GetTokenRequest",
       },
       {
+        name: "GetTokenResponse",
         field: [
           {
             name: "status",
@@ -812,15 +854,24 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "token",
             number: 2,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
             oneofIndex: 0,
             jsonName: "token",
+            options: undefined,
             proto3Optional: true,
           },
         ],
@@ -828,50 +879,63 @@ export const protoMetadata: ProtoMetadata = {
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [{ name: "_token" }],
+        oneofDecl: [{ name: "_token", options: undefined }],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "GetTokenResponse",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "AvailableServices",
             inputType: ".google.protobuf.Empty",
             outputType: ".io.restorecommerce.oauth.ServicesResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "GenerateLinks",
             inputType: ".google.protobuf.Empty",
             outputType: ".io.restorecommerce.oauth.GenerateLinksResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "ExchangeCode",
             inputType: ".io.restorecommerce.oauth.ExchangeCodeRequest",
             outputType: ".io.restorecommerce.oauth.ExchangeCodeResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "GetToken",
             inputType: ".io.restorecommerce.oauth.GetTokenRequest",
             outputType: ".io.restorecommerce.oauth.GetTokenResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: undefined,
       },
     ],
     extension: [],
-    name: "io/restorecommerce/oauth.proto",
-    package: "io.restorecommerce.oauth",
+    options: undefined,
     sourceCodeInfo: { location: [] },
     syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.oauth.ServicesResponse": ServicesResponse,
     ".io.restorecommerce.oauth.GenerateLinksResponse": GenerateLinksResponse,
-    ".io.restorecommerce.oauth.GenerateLinksResponse.LinksEntry": GenerateLinksResponse_LinksEntry,
+    ".io.restorecommerce.oauth.GenerateLinksResponse.LinksEntry":
+      GenerateLinksResponse_LinksEntry,
     ".io.restorecommerce.oauth.ExchangeCodeRequest": ExchangeCodeRequest,
     ".io.restorecommerce.oauth.ExchangeCodeResponse": ExchangeCodeResponse,
     ".io.restorecommerce.oauth.GetTokenRequest": GetTokenRequest,
@@ -885,17 +949,15 @@ export const protoMetadata: ProtoMetadata = {
   ],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -905,3 +967,18 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

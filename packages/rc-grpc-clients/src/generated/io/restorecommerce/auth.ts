@@ -1,10 +1,11 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   protoMetadata as protoMetadata1,
   Attribute,
 } from "../../io/restorecommerce/attribute";
-import { Writer, Reader } from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.auth";
 
@@ -68,15 +69,22 @@ export interface HierarchicalScopesResponse {
   token: string;
 }
 
-const baseSubject: object = {
-  id: "",
-  scope: "",
-  unauthenticated: false,
-  token: "",
-};
+function createBaseSubject(): Subject {
+  return {
+    id: "",
+    scope: "",
+    roleAssociations: [],
+    hierarchicalScopes: [],
+    unauthenticated: false,
+    token: "",
+  };
+}
 
 export const Subject = {
-  encode(message: Subject, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Subject,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -98,12 +106,10 @@ export const Subject = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Subject {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Subject {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseSubject) as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
+    const message = createBaseSubject();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -138,95 +144,22 @@ export const Subject = {
   },
 
   fromJSON(object: any): Subject {
-    const message = globalThis.Object.create(baseSubject) as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.scope !== undefined && object.scope !== null) {
-      message.scope = String(object.scope);
-    } else {
-      message.scope = "";
-    }
-    if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
-    ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromJSON(e));
-      }
-    }
-    if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
-    ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
-      }
-    }
-    if (
-      object.unauthenticated !== undefined &&
-      object.unauthenticated !== null
-    ) {
-      message.unauthenticated = Boolean(object.unauthenticated);
-    } else {
-      message.unauthenticated = false;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Subject>): Subject {
-    const message = { ...baseSubject } as Subject;
-    message.roleAssociations = [];
-    message.hierarchicalScopes = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.scope !== undefined && object.scope !== null) {
-      message.scope = object.scope;
-    } else {
-      message.scope = "";
-    }
-    if (
-      object.roleAssociations !== undefined &&
-      object.roleAssociations !== null
-    ) {
-      for (const e of object.roleAssociations) {
-        message.roleAssociations.push(RoleAssociation.fromPartial(e));
-      }
-    }
-    if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
-    ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
-      }
-    }
-    if (
-      object.unauthenticated !== undefined &&
-      object.unauthenticated !== null
-    ) {
-      message.unauthenticated = object.unauthenticated;
-    } else {
-      message.unauthenticated = false;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      scope: isSet(object.scope) ? String(object.scope) : "",
+      roleAssociations: Array.isArray(object?.roleAssociations)
+        ? object.roleAssociations.map((e: any) => RoleAssociation.fromJSON(e))
+        : [],
+      hierarchicalScopes: Array.isArray(object?.hierarchicalScopes)
+        ? object.hierarchicalScopes.map((e: any) =>
+            HierarchicalScope.fromJSON(e)
+          )
+        : [],
+      unauthenticated: isSet(object.unauthenticated)
+        ? Boolean(object.unauthenticated)
+        : false,
+      token: isSet(object.token) ? String(object.token) : "",
+    };
   },
 
   toJSON(message: Subject): unknown {
@@ -252,20 +185,39 @@ export const Subject = {
     message.token !== undefined && (obj.token = message.token);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Subject>): Subject {
+    const message = createBaseSubject();
+    message.id = object.id ?? "";
+    message.scope = object.scope ?? "";
+    message.roleAssociations =
+      object.roleAssociations?.map((e) => RoleAssociation.fromPartial(e)) || [];
+    message.hierarchicalScopes =
+      object.hierarchicalScopes?.map((e) => HierarchicalScope.fromPartial(e)) ||
+      [];
+    message.unauthenticated = object.unauthenticated ?? false;
+    message.token = object.token ?? "";
+    return message;
+  },
 };
 
-const baseTokens: object = {
-  name: "",
-  expiresIn: 0,
-  token: "",
-  scopes: "",
-  type: "",
-  interactive: false,
-  lastLogin: 0,
-};
+function createBaseTokens(): Tokens {
+  return {
+    name: "",
+    expiresIn: 0,
+    token: "",
+    scopes: [],
+    type: "",
+    interactive: false,
+    lastLogin: 0,
+  };
+}
 
 export const Tokens = {
-  encode(message: Tokens, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Tokens,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -290,11 +242,10 @@ export const Tokens = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Tokens {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Tokens {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseTokens) as Tokens;
-    message.scopes = [];
+    const message = createBaseTokens();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -328,85 +279,19 @@ export const Tokens = {
   },
 
   fromJSON(object: any): Tokens {
-    const message = globalThis.Object.create(baseTokens) as Tokens;
-    message.scopes = [];
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = Number(object.expiresIn);
-    } else {
-      message.expiresIn = 0;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    if (object.scopes !== undefined && object.scopes !== null) {
-      for (const e of object.scopes) {
-        message.scopes.push(String(e));
-      }
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = String(object.type);
-    } else {
-      message.type = "";
-    }
-    if (object.interactive !== undefined && object.interactive !== null) {
-      message.interactive = Boolean(object.interactive);
-    } else {
-      message.interactive = false;
-    }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = Number(object.lastLogin);
-    } else {
-      message.lastLogin = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Tokens>): Tokens {
-    const message = { ...baseTokens } as Tokens;
-    message.scopes = [];
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.expiresIn !== undefined && object.expiresIn !== null) {
-      message.expiresIn = object.expiresIn;
-    } else {
-      message.expiresIn = 0;
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    if (object.scopes !== undefined && object.scopes !== null) {
-      for (const e of object.scopes) {
-        message.scopes.push(e);
-      }
-    }
-    if (object.type !== undefined && object.type !== null) {
-      message.type = object.type;
-    } else {
-      message.type = "";
-    }
-    if (object.interactive !== undefined && object.interactive !== null) {
-      message.interactive = object.interactive;
-    } else {
-      message.interactive = false;
-    }
-    if (object.lastLogin !== undefined && object.lastLogin !== null) {
-      message.lastLogin = object.lastLogin;
-    } else {
-      message.lastLogin = 0;
-    }
-    return message;
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : 0,
+      token: isSet(object.token) ? String(object.token) : "",
+      scopes: Array.isArray(object?.scopes)
+        ? object.scopes.map((e: any) => String(e))
+        : [],
+      type: isSet(object.type) ? String(object.type) : "",
+      interactive: isSet(object.interactive)
+        ? Boolean(object.interactive)
+        : false,
+      lastLogin: isSet(object.lastLogin) ? Number(object.lastLogin) : 0,
+    };
   },
 
   toJSON(message: Tokens): unknown {
@@ -425,12 +310,29 @@ export const Tokens = {
     message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Tokens>): Tokens {
+    const message = createBaseTokens();
+    message.name = object.name ?? "";
+    message.expiresIn = object.expiresIn ?? 0;
+    message.token = object.token ?? "";
+    message.scopes = object.scopes?.map((e) => e) || [];
+    message.type = object.type ?? "";
+    message.interactive = object.interactive ?? false;
+    message.lastLogin = object.lastLogin ?? 0;
+    return message;
+  },
 };
 
-const baseHierarchicalScope: object = { id: "", role: "" };
+function createBaseHierarchicalScope(): HierarchicalScope {
+  return { id: "", children: [], role: "" };
+}
 
 export const HierarchicalScope = {
-  encode(message: HierarchicalScope, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: HierarchicalScope,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -443,13 +345,10 @@ export const HierarchicalScope = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): HierarchicalScope {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): HierarchicalScope {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseHierarchicalScope
-    ) as HierarchicalScope;
-    message.children = [];
+    const message = createBaseHierarchicalScope();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -473,47 +372,13 @@ export const HierarchicalScope = {
   },
 
   fromJSON(object: any): HierarchicalScope {
-    const message = globalThis.Object.create(
-      baseHierarchicalScope
-    ) as HierarchicalScope;
-    message.children = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.children !== undefined && object.children !== null) {
-      for (const e of object.children) {
-        message.children.push(HierarchicalScope.fromJSON(e));
-      }
-    }
-    if (object.role !== undefined && object.role !== null) {
-      message.role = String(object.role);
-    } else {
-      message.role = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<HierarchicalScope>): HierarchicalScope {
-    const message = { ...baseHierarchicalScope } as HierarchicalScope;
-    message.children = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.children !== undefined && object.children !== null) {
-      for (const e of object.children) {
-        message.children.push(HierarchicalScope.fromPartial(e));
-      }
-    }
-    if (object.role !== undefined && object.role !== null) {
-      message.role = object.role;
-    } else {
-      message.role = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      children: Array.isArray(object?.children)
+        ? object.children.map((e: any) => HierarchicalScope.fromJSON(e))
+        : [],
+      role: isSet(object.role) ? String(object.role) : "",
+    };
   },
 
   toJSON(message: HierarchicalScope): unknown {
@@ -529,12 +394,26 @@ export const HierarchicalScope = {
     message.role !== undefined && (obj.role = message.role);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<HierarchicalScope>): HierarchicalScope {
+    const message = createBaseHierarchicalScope();
+    message.id = object.id ?? "";
+    message.children =
+      object.children?.map((e) => HierarchicalScope.fromPartial(e)) || [];
+    message.role = object.role ?? "";
+    return message;
+  },
 };
 
-const baseRoleAssociation: object = { role: "", id: "", created: 0 };
+function createBaseRoleAssociation(): RoleAssociation {
+  return { role: "", attributes: [], id: "", created: 0 };
+}
 
 export const RoleAssociation = {
-  encode(message: RoleAssociation, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: RoleAssociation,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.role !== "") {
       writer.uint32(10).string(message.role);
     }
@@ -550,13 +429,10 @@ export const RoleAssociation = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): RoleAssociation {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): RoleAssociation {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseRoleAssociation
-    ) as RoleAssociation;
-    message.attributes = [];
+    const message = createBaseRoleAssociation();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -581,57 +457,14 @@ export const RoleAssociation = {
   },
 
   fromJSON(object: any): RoleAssociation {
-    const message = globalThis.Object.create(
-      baseRoleAssociation
-    ) as RoleAssociation;
-    message.attributes = [];
-    if (object.role !== undefined && object.role !== null) {
-      message.role = String(object.role);
-    } else {
-      message.role = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.created !== undefined && object.created !== null) {
-      message.created = Number(object.created);
-    } else {
-      message.created = 0;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<RoleAssociation>): RoleAssociation {
-    const message = { ...baseRoleAssociation } as RoleAssociation;
-    message.attributes = [];
-    if (object.role !== undefined && object.role !== null) {
-      message.role = object.role;
-    } else {
-      message.role = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.created !== undefined && object.created !== null) {
-      message.created = object.created;
-    } else {
-      message.created = 0;
-    }
-    return message;
+    return {
+      role: isSet(object.role) ? String(object.role) : "",
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      id: isSet(object.id) ? String(object.id) : "",
+      created: isSet(object.created) ? Number(object.created) : 0,
+    };
   },
 
   toJSON(message: RoleAssociation): unknown {
@@ -648,15 +481,27 @@ export const RoleAssociation = {
     message.created !== undefined && (obj.created = message.created);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<RoleAssociation>): RoleAssociation {
+    const message = createBaseRoleAssociation();
+    message.role = object.role ?? "";
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.id = object.id ?? "";
+    message.created = object.created ?? 0;
+    return message;
+  },
 };
 
-const baseHierarchicalScopesRequest: object = { token: "" };
+function createBaseHierarchicalScopesRequest(): HierarchicalScopesRequest {
+  return { token: "" };
+}
 
 export const HierarchicalScopesRequest = {
   encode(
     message: HierarchicalScopesRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.token !== "") {
       writer.uint32(10).string(message.token);
     }
@@ -664,14 +509,12 @@ export const HierarchicalScopesRequest = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): HierarchicalScopesRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseHierarchicalScopesRequest
-    ) as HierarchicalScopesRequest;
+    const message = createBaseHierarchicalScopesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -687,29 +530,9 @@ export const HierarchicalScopesRequest = {
   },
 
   fromJSON(object: any): HierarchicalScopesRequest {
-    const message = globalThis.Object.create(
-      baseHierarchicalScopesRequest
-    ) as HierarchicalScopesRequest;
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<HierarchicalScopesRequest>
-  ): HierarchicalScopesRequest {
-    const message = {
-      ...baseHierarchicalScopesRequest,
-    } as HierarchicalScopesRequest;
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    return message;
+    return {
+      token: isSet(object.token) ? String(object.token) : "",
+    };
   },
 
   toJSON(message: HierarchicalScopesRequest): unknown {
@@ -717,15 +540,25 @@ export const HierarchicalScopesRequest = {
     message.token !== undefined && (obj.token = message.token);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<HierarchicalScopesRequest>
+  ): HierarchicalScopesRequest {
+    const message = createBaseHierarchicalScopesRequest();
+    message.token = object.token ?? "";
+    return message;
+  },
 };
 
-const baseHierarchicalScopesResponse: object = { subjectId: "", token: "" };
+function createBaseHierarchicalScopesResponse(): HierarchicalScopesResponse {
+  return { subjectId: "", hierarchicalScopes: [], token: "" };
+}
 
 export const HierarchicalScopesResponse = {
   encode(
     message: HierarchicalScopesResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.subjectId !== "") {
       writer.uint32(10).string(message.subjectId);
     }
@@ -739,15 +572,12 @@ export const HierarchicalScopesResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): HierarchicalScopesResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseHierarchicalScopesResponse
-    ) as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
+    const message = createBaseHierarchicalScopesResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -771,57 +601,15 @@ export const HierarchicalScopesResponse = {
   },
 
   fromJSON(object: any): HierarchicalScopesResponse {
-    const message = globalThis.Object.create(
-      baseHierarchicalScopesResponse
-    ) as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = String(object.subjectId);
-    } else {
-      message.subjectId = "";
-    }
-    if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
-    ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromJSON(e));
-      }
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = String(object.token);
-    } else {
-      message.token = "";
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<HierarchicalScopesResponse>
-  ): HierarchicalScopesResponse {
-    const message = {
-      ...baseHierarchicalScopesResponse,
-    } as HierarchicalScopesResponse;
-    message.hierarchicalScopes = [];
-    if (object.subjectId !== undefined && object.subjectId !== null) {
-      message.subjectId = object.subjectId;
-    } else {
-      message.subjectId = "";
-    }
-    if (
-      object.hierarchicalScopes !== undefined &&
-      object.hierarchicalScopes !== null
-    ) {
-      for (const e of object.hierarchicalScopes) {
-        message.hierarchicalScopes.push(HierarchicalScope.fromPartial(e));
-      }
-    }
-    if (object.token !== undefined && object.token !== null) {
-      message.token = object.token;
-    } else {
-      message.token = "";
-    }
-    return message;
+    return {
+      subjectId: isSet(object.subjectId) ? String(object.subjectId) : "",
+      hierarchicalScopes: Array.isArray(object?.hierarchicalScopes)
+        ? object.hierarchicalScopes.map((e: any) =>
+            HierarchicalScope.fromJSON(e)
+          )
+        : [],
+      token: isSet(object.token) ? String(object.token) : "",
+    };
   },
 
   toJSON(message: HierarchicalScopesResponse): unknown {
@@ -837,31 +625,100 @@ export const HierarchicalScopesResponse = {
     message.token !== undefined && (obj.token = message.token);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<HierarchicalScopesResponse>
+  ): HierarchicalScopesResponse {
+    const message = createBaseHierarchicalScopesResponse();
+    message.subjectId = object.subjectId ?? "";
+    message.hierarchicalScopes =
+      object.hierarchicalScopes?.map((e) => HierarchicalScope.fromPartial(e)) ||
+      [];
+    message.token = object.token ?? "";
+    return message;
+  },
+};
+
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
 };
 
 export interface ProtoMetadata {
   fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
+    name: "io/restorecommerce/auth.proto",
+    package: "io.restorecommerce.auth",
     dependency: ["io/restorecommerce/attribute.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
+        name: "Subject",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
-          { name: "scope", number: 2, label: 1, type: 9, jsonName: "scope" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "scope",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "scope",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "role_associations",
             number: 3,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.auth.RoleAssociation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "roleAssociations",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "hierarchical_scopes",
@@ -869,52 +726,142 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "hierarchicalScopes",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "unauthenticated",
             number: 5,
             label: 1,
             type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "unauthenticated",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "token", number: 6, label: 1, type: 9, jsonName: "token" },
+          {
+            name: "token",
+            number: 6,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "token",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Subject",
       },
       {
+        name: "Tokens",
         field: [
-          { name: "name", number: 1, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "expires_in",
             number: 2,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "expiresIn",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "token", number: 3, label: 1, type: 9, jsonName: "token" },
-          { name: "scopes", number: 4, label: 3, type: 9, jsonName: "scopes" },
-          { name: "type", number: 5, label: 1, type: 9, jsonName: "type" },
+          {
+            name: "token",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "token",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "scopes",
+            number: 4,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "scopes",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "interactive",
             number: 6,
             label: 1,
             type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "interactive",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "last_login",
             number: 7,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "lastLogin",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -922,50 +869,116 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Tokens",
       },
       {
+        name: "HierarchicalScope",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "children",
             number: 2,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "children",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "role", number: 3, label: 1, type: 9, jsonName: "role" },
+          {
+            name: "role",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "role",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "HierarchicalScope",
       },
       {
+        name: "RoleAssociation",
         field: [
-          { name: "role", number: 1, label: 1, type: 9, jsonName: "role" },
+          {
+            name: "role",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "role",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "attributes",
             number: 2,
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "attributes",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "id", number: 3, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "created",
             number: 4,
             label: 1,
             type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "created",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -973,31 +986,51 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "RoleAssociation",
       },
       {
+        name: "HierarchicalScopesRequest",
         field: [
-          { name: "token", number: 1, label: 1, type: 9, jsonName: "token" },
+          {
+            name: "token",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "token",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "HierarchicalScopesRequest",
       },
       {
+        name: "HierarchicalScopesResponse",
         field: [
           {
             name: "subject_id",
             number: 1,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subjectId",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "hierarchical_scopes",
@@ -1005,136 +1038,170 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.auth.HierarchicalScope",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "hierarchicalScopes",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "token", number: 3, label: 1, type: 9, jsonName: "token" },
+          {
+            name: "token",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "token",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "HierarchicalScopesResponse",
       },
     ],
     enumType: [],
     service: [],
     extension: [],
-    name: "io/restorecommerce/auth.proto",
-    package: "io.restorecommerce.auth",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 0],
           span: [8, 0, 15, 1],
-          leadingDetachedComments: [],
           leadingComments: "*\n Subject of creating User\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 0],
           span: [9, 2, 16],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " user id\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 1],
           span: [10, 2, 19],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " target scope\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 2],
           span: [11, 2, 49],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: "  role_associations of user creating the user\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 3],
           span: [12, 2, 53],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " HR scope of user creating the User\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 4],
           span: [13, 2, 27],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " for unauthenticated context\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
           span: [18, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " token name\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 1],
           span: [19, 2, 24],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " expiration date for token\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 2],
           span: [20, 2, 19],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " token\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 3],
           span: [21, 2, 29],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " identifier for role_association\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 4],
           span: [22, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " type of token eg: access_token, refresh_token\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 0],
           span: [28, 2, 16],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " root node\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 1],
           span: [29, 2, 42],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " children nodes\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 2],
           span: [30, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             " role identifier associated with root node scope\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 0],
           span: [34, 2, 18],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " role ID\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 1],
           span: [35, 2, 65],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments:
             " useful attributes for RBAC/ABAC like organizational scope\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 2],
           span: [36, 2, 16],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " identifier for role_association\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 3],
           span: [37, 2, 21],
-          leadingDetachedComments: [],
+          leadingComments: "",
           trailingComments: " timestamp when the role was created\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -1145,23 +1212,23 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.auth.Tokens": Tokens,
     ".io.restorecommerce.auth.HierarchicalScope": HierarchicalScope,
     ".io.restorecommerce.auth.RoleAssociation": RoleAssociation,
-    ".io.restorecommerce.auth.HierarchicalScopesRequest": HierarchicalScopesRequest,
-    ".io.restorecommerce.auth.HierarchicalScopesResponse": HierarchicalScopesResponse,
+    ".io.restorecommerce.auth.HierarchicalScopesRequest":
+      HierarchicalScopesRequest,
+    ".io.restorecommerce.auth.HierarchicalScopesResponse":
+      HierarchicalScopesResponse,
   },
   dependencies: [protoMetadata1],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1171,3 +1238,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

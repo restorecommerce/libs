@@ -683,7 +683,7 @@ export const getAndGenerateSchema = <TSource, TContext>(
   cfg: ServiceConfig,
   meta: ProtoMetadata
 ) => {
-  const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta)
+  const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta, service.name)
 
   const schemas = getGQLSchemas(service);
 
@@ -697,7 +697,7 @@ export const getAndGenerateSchema = <TSource, TContext>(
 export const getAndGenerateResolvers =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, NS extends keyof CTX = any>
   (service: ServiceDescriptorProto, namespace: NS, cfg: ServiceConfig, meta: ProtoMetadata, subspace: string | undefined = undefined, serviceKey: string | undefined = undefined): { [key in keyof SRV]: R } => {
-    const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta);
+    const {mutations, queries} = getWhitelistBlacklistConfig(service, cfg, meta, service.name);
 
     const func = getGQLResolverFunctions<T, CTX>(service, namespace, serviceKey || subspace || namespace, cfg);
 
@@ -712,13 +712,13 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (meta.options && meta.options.services && meta.options.services[service.name]) {
-        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta)
+        const subName = meta.options.services[service.name].options!['service_name'];
+        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName)
 
         const schemas = getGQLSchemas(service);
 
-        const subName = meta.options.services[service.name].options!['service_name'];
         Object.keys(schemas).forEach(key => {
-          registerResolverSchema(config.root ? subName : namespace, key, schemas[key], !queries.has(key) && mutations.has(key), config.root ? undefined : subName)
+          registerResolverSchema(config.root ? subName : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : subName, config)
         })
       }
     })
@@ -747,13 +747,15 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (meta.options && meta.options.services && meta.options.services[service.name]) {
-        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta);
-
         const subName = meta.options.services[service.name].options!['service_name'];
-        const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config.client);
+        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName);
+
+        const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config);
 
         Object.keys(func).forEach(k => {
-          registerResolverFunction(config.root ? subName : namespace, k, func[k], !queries.has(k) && mutations.has(k), config.root ? undefined : subName);
+          const regNamespace = config.root ? subName : namespace;
+          const regSubspace = config.root ? undefined : subName;
+          registerResolverFunction(regNamespace, k, func[k] as any, !queries.has(k) && mutations.has(k), regSubspace, service);
         });
       }
     })

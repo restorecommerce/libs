@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors/google/protobuf/descriptor";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata4,
@@ -23,7 +25,10 @@ import {
   ReadRequest,
   DeleteRequest,
 } from "../../io/restorecommerce/resource_base";
-import { Writer, Reader } from "protobufjs/minimal";
+import {
+  protoMetadata as protoMetadata6,
+  Resolver,
+} from "../../io/restorecommerce/options";
 
 export const protobufPackage = "io.restorecommerce.organization";
 
@@ -78,20 +83,25 @@ export interface Organization {
   data?: Any;
 }
 
-const baseDeleted: object = { id: "" };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
 
 export const Deleted = {
-  encode(message: Deleted, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -107,23 +117,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    const message = globalThis.Object.create(baseDeleted) as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Deleted>): Deleted {
-    const message = { ...baseDeleted } as Deleted;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -131,12 +127,23 @@ export const Deleted = {
     message.id !== undefined && (obj.id = message.id);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
 };
 
-const baseDeleteOrgData: object = { orgIds: "", userIds: "" };
+function createBaseDeleteOrgData(): DeleteOrgData {
+  return { orgIds: [], userIds: [], subject: undefined };
+}
 
 export const DeleteOrgData = {
-  encode(message: DeleteOrgData, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeleteOrgData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.orgIds) {
       writer.uint32(10).string(v!);
     }
@@ -149,14 +156,10 @@ export const DeleteOrgData = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DeleteOrgData {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeleteOrgData {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseDeleteOrgData
-    ) as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
+    const message = createBaseDeleteOrgData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -178,49 +181,17 @@ export const DeleteOrgData = {
   },
 
   fromJSON(object: any): DeleteOrgData {
-    const message = globalThis.Object.create(
-      baseDeleteOrgData
-    ) as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
-    if (object.orgIds !== undefined && object.orgIds !== null) {
-      for (const e of object.orgIds) {
-        message.orgIds.push(String(e));
-      }
-    }
-    if (object.userIds !== undefined && object.userIds !== null) {
-      for (const e of object.userIds) {
-        message.userIds.push(String(e));
-      }
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<DeleteOrgData>): DeleteOrgData {
-    const message = { ...baseDeleteOrgData } as DeleteOrgData;
-    message.orgIds = [];
-    message.userIds = [];
-    if (object.orgIds !== undefined && object.orgIds !== null) {
-      for (const e of object.orgIds) {
-        message.orgIds.push(e);
-      }
-    }
-    if (object.userIds !== undefined && object.userIds !== null) {
-      for (const e of object.userIds) {
-        message.userIds.push(e);
-      }
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      orgIds: Array.isArray(object?.orgIds)
+        ? object.orgIds.map((e: any) => String(e))
+        : [],
+      userIds: Array.isArray(object?.userIds)
+        ? object.userIds.map((e: any) => String(e))
+        : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: DeleteOrgData): unknown {
@@ -241,12 +212,28 @@ export const DeleteOrgData = {
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<DeleteOrgData>): DeleteOrgData {
+    const message = createBaseDeleteOrgData();
+    message.orgIds = object.orgIds?.map((e) => e) || [];
+    message.userIds = object.userIds?.map((e) => e) || [];
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrganizationList: object = { totalCount: 0 };
+function createBaseOrganizationList(): OrganizationList {
+  return { items: [], totalCount: 0, subject: undefined };
+}
 
 export const OrganizationList = {
-  encode(message: OrganizationList, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: OrganizationList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Organization.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -259,13 +246,10 @@ export const OrganizationList = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrganizationList {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrganizationList
-    ) as OrganizationList;
-    message.items = [];
+    const message = createBaseOrganizationList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -287,47 +271,15 @@ export const OrganizationList = {
   },
 
   fromJSON(object: any): OrganizationList {
-    const message = globalThis.Object.create(
-      baseOrganizationList
-    ) as OrganizationList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Organization.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromJSON(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrganizationList>): OrganizationList {
-    const message = { ...baseOrganizationList } as OrganizationList;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(Organization.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (object.subject !== undefined && object.subject !== null) {
-      message.subject = Subject.fromPartial(object.subject);
-    } else {
-      message.subject = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Organization.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
   },
 
   toJSON(message: OrganizationList): unknown {
@@ -339,22 +291,36 @@ export const OrganizationList = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined &&
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrganizationList>): OrganizationList {
+    const message = createBaseOrganizationList();
+    message.items = object.items?.map((e) => Organization.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrganizationListResponse: object = { totalCount: 0 };
+function createBaseOrganizationListResponse(): OrganizationListResponse {
+  return { items: [], totalCount: 0, operationStatus: undefined };
+}
 
 export const OrganizationListResponse = {
   encode(
     message: OrganizationListResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       OrganizationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -371,15 +337,12 @@ export const OrganizationListResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): OrganizationListResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrganizationListResponse
-    ) as OrganizationListResponse;
-    message.items = [];
+    const message = createBaseOrganizationListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -406,61 +369,15 @@ export const OrganizationListResponse = {
   },
 
   fromJSON(object: any): OrganizationListResponse {
-    const message = globalThis.Object.create(
-      baseOrganizationListResponse
-    ) as OrganizationListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(OrganizationResponse.fromJSON(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = Number(object.totalCount);
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromJSON(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(
-    object: DeepPartial<OrganizationListResponse>
-  ): OrganizationListResponse {
-    const message = {
-      ...baseOrganizationListResponse,
-    } as OrganizationListResponse;
-    message.items = [];
-    if (object.items !== undefined && object.items !== null) {
-      for (const e of object.items) {
-        message.items.push(OrganizationResponse.fromPartial(e));
-      }
-    }
-    if (object.totalCount !== undefined && object.totalCount !== null) {
-      message.totalCount = object.totalCount;
-    } else {
-      message.totalCount = 0;
-    }
-    if (
-      object.operationStatus !== undefined &&
-      object.operationStatus !== null
-    ) {
-      message.operationStatus = OperationStatus.fromPartial(
-        object.operationStatus
-      );
-    } else {
-      message.operationStatus = undefined;
-    }
-    return message;
+    return {
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => OrganizationResponse.fromJSON(e))
+        : [],
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
+    };
   },
 
   toJSON(message: OrganizationListResponse): unknown {
@@ -472,22 +389,39 @@ export const OrganizationListResponse = {
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = message.totalCount);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus
         ? OperationStatus.toJSON(message.operationStatus)
         : undefined);
     return obj;
   },
+
+  fromPartial(
+    object: DeepPartial<OrganizationListResponse>
+  ): OrganizationListResponse {
+    const message = createBaseOrganizationListResponse();
+    message.items =
+      object.items?.map((e) => OrganizationResponse.fromPartial(e)) || [];
+    message.totalCount = object.totalCount ?? 0;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrganizationResponse: object = {};
+function createBaseOrganizationResponse(): OrganizationResponse {
+  return { payload: undefined, status: undefined };
+}
 
 export const OrganizationResponse = {
   encode(
     message: OrganizationResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Organization.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -497,12 +431,13 @@ export const OrganizationResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): OrganizationResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): OrganizationResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(
-      baseOrganizationResponse
-    ) as OrganizationResponse;
+    const message = createBaseOrganizationResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -521,35 +456,12 @@ export const OrganizationResponse = {
   },
 
   fromJSON(object: any): OrganizationResponse {
-    const message = globalThis.Object.create(
-      baseOrganizationResponse
-    ) as OrganizationResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Organization.fromJSON(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromJSON(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<OrganizationResponse>): OrganizationResponse {
-    const message = { ...baseOrganizationResponse } as OrganizationResponse;
-    if (object.payload !== undefined && object.payload !== null) {
-      message.payload = Organization.fromPartial(object.payload);
-    } else {
-      message.payload = undefined;
-    }
-    if (object.status !== undefined && object.status !== null) {
-      message.status = Status.fromPartial(object.status);
-    } else {
-      message.status = undefined;
-    }
-    return message;
+    return {
+      payload: isSet(object.payload)
+        ? Organization.fromJSON(object.payload)
+        : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
+    };
   },
 
   toJSON(message: OrganizationResponse): unknown {
@@ -562,26 +474,46 @@ export const OrganizationResponse = {
       (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<OrganizationResponse>): OrganizationResponse {
+    const message = createBaseOrganizationResponse();
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Organization.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
+    return message;
+  },
 };
 
-const baseOrganization: object = {
-  id: "",
-  addressId: "",
-  parentId: "",
-  contactPointIds: "",
-  website: "",
-  email: "",
-  logo: "",
-  vatId: "",
-  isicV4: "",
-  registration: "",
-  registrationCourt: "",
-  name: "",
-  paymentMethodIds: "",
-};
+function createBaseOrganization(): Organization {
+  return {
+    id: "",
+    meta: undefined,
+    addressId: "",
+    parentId: "",
+    contactPointIds: [],
+    website: "",
+    email: "",
+    logo: "",
+    vatId: "",
+    isicV4: "",
+    registration: "",
+    registrationCourt: "",
+    name: "",
+    paymentMethodIds: [],
+    data: undefined,
+  };
+}
 
 export const Organization = {
-  encode(message: Organization, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Organization,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -630,12 +562,10 @@ export const Organization = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Organization {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+  decode(input: _m0.Reader | Uint8Array, length?: number): Organization {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
+    const message = createBaseOrganization();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -693,185 +623,31 @@ export const Organization = {
   },
 
   fromJSON(object: any): Organization {
-    const message = globalThis.Object.create(baseOrganization) as Organization;
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id);
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromJSON(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = String(object.addressId);
-    } else {
-      message.addressId = "";
-    }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = String(object.parentId);
-    } else {
-      message.parentId = "";
-    }
-    if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
-    ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(String(e));
-      }
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = String(object.website);
-    } else {
-      message.website = "";
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = "";
-    }
-    if (object.logo !== undefined && object.logo !== null) {
-      message.logo = String(object.logo);
-    } else {
-      message.logo = "";
-    }
-    if (object.vatId !== undefined && object.vatId !== null) {
-      message.vatId = String(object.vatId);
-    } else {
-      message.vatId = "";
-    }
-    if (object.isicV4 !== undefined && object.isicV4 !== null) {
-      message.isicV4 = String(object.isicV4);
-    } else {
-      message.isicV4 = "";
-    }
-    if (object.registration !== undefined && object.registration !== null) {
-      message.registration = String(object.registration);
-    } else {
-      message.registration = "";
-    }
-    if (
-      object.registrationCourt !== undefined &&
-      object.registrationCourt !== null
-    ) {
-      message.registrationCourt = String(object.registrationCourt);
-    } else {
-      message.registrationCourt = "";
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (
-      object.paymentMethodIds !== undefined &&
-      object.paymentMethodIds !== null
-    ) {
-      for (const e of object.paymentMethodIds) {
-        message.paymentMethodIds.push(String(e));
-      }
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromJSON(object.data);
-    } else {
-      message.data = undefined;
-    }
-    return message;
-  },
-
-  fromPartial(object: DeepPartial<Organization>): Organization {
-    const message = { ...baseOrganization } as Organization;
-    message.contactPointIds = [];
-    message.paymentMethodIds = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id;
-    } else {
-      message.id = "";
-    }
-    if (object.meta !== undefined && object.meta !== null) {
-      message.meta = Meta.fromPartial(object.meta);
-    } else {
-      message.meta = undefined;
-    }
-    if (object.addressId !== undefined && object.addressId !== null) {
-      message.addressId = object.addressId;
-    } else {
-      message.addressId = "";
-    }
-    if (object.parentId !== undefined && object.parentId !== null) {
-      message.parentId = object.parentId;
-    } else {
-      message.parentId = "";
-    }
-    if (
-      object.contactPointIds !== undefined &&
-      object.contactPointIds !== null
-    ) {
-      for (const e of object.contactPointIds) {
-        message.contactPointIds.push(e);
-      }
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = object.website;
-    } else {
-      message.website = "";
-    }
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = "";
-    }
-    if (object.logo !== undefined && object.logo !== null) {
-      message.logo = object.logo;
-    } else {
-      message.logo = "";
-    }
-    if (object.vatId !== undefined && object.vatId !== null) {
-      message.vatId = object.vatId;
-    } else {
-      message.vatId = "";
-    }
-    if (object.isicV4 !== undefined && object.isicV4 !== null) {
-      message.isicV4 = object.isicV4;
-    } else {
-      message.isicV4 = "";
-    }
-    if (object.registration !== undefined && object.registration !== null) {
-      message.registration = object.registration;
-    } else {
-      message.registration = "";
-    }
-    if (
-      object.registrationCourt !== undefined &&
-      object.registrationCourt !== null
-    ) {
-      message.registrationCourt = object.registrationCourt;
-    } else {
-      message.registrationCourt = "";
-    }
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (
-      object.paymentMethodIds !== undefined &&
-      object.paymentMethodIds !== null
-    ) {
-      for (const e of object.paymentMethodIds) {
-        message.paymentMethodIds.push(e);
-      }
-    }
-    if (object.data !== undefined && object.data !== null) {
-      message.data = Any.fromPartial(object.data);
-    } else {
-      message.data = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      addressId: isSet(object.addressId) ? String(object.addressId) : "",
+      parentId: isSet(object.parentId) ? String(object.parentId) : "",
+      contactPointIds: Array.isArray(object?.contactPointIds)
+        ? object.contactPointIds.map((e: any) => String(e))
+        : [],
+      website: isSet(object.website) ? String(object.website) : "",
+      email: isSet(object.email) ? String(object.email) : "",
+      logo: isSet(object.logo) ? String(object.logo) : "",
+      vatId: isSet(object.vatId) ? String(object.vatId) : "",
+      isicV4: isSet(object.isicV4) ? String(object.isicV4) : "",
+      registration: isSet(object.registration)
+        ? String(object.registration)
+        : "",
+      registrationCourt: isSet(object.registrationCourt)
+        ? String(object.registrationCourt)
+        : "",
+      name: isSet(object.name) ? String(object.name) : "",
+      paymentMethodIds: Array.isArray(object?.paymentMethodIds)
+        ? object.paymentMethodIds.map((e: any) => String(e))
+        : [],
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
+    };
   },
 
   toJSON(message: Organization): unknown {
@@ -905,6 +681,32 @@ export const Organization = {
       (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
+
+  fromPartial(object: DeepPartial<Organization>): Organization {
+    const message = createBaseOrganization();
+    message.id = object.id ?? "";
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
+    message.addressId = object.addressId ?? "";
+    message.parentId = object.parentId ?? "";
+    message.contactPointIds = object.contactPointIds?.map((e) => e) || [];
+    message.website = object.website ?? "";
+    message.email = object.email ?? "";
+    message.logo = object.logo ?? "";
+    message.vatId = object.vatId ?? "";
+    message.isicV4 = object.isicV4 ?? "";
+    message.registration = object.registration ?? "";
+    message.registrationCourt = object.registrationCourt ?? "";
+    message.name = object.name ?? "";
+    message.paymentMethodIds = object.paymentMethodIds?.map((e) => e) || [];
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
+    return message;
+  },
 };
 
 export interface Service {
@@ -915,52 +717,67 @@ export interface Service {
   Upsert(request: OrganizationList): Promise<OrganizationListResponse>;
 }
 
+type ProtoMetaMessageOptions = {
+  options?: { [key: string]: any };
+  fields?: { [key: string]: { [key: string]: any } };
+  oneof?: { [key: string]: { [key: string]: any } };
+  nested?: { [key: string]: ProtoMetaMessageOptions };
+};
+
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
+  fileDescriptor: FileDescriptorProto1;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
+  options?: {
+    options?: { [key: string]: any };
+    services?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
+    };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
+  };
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto.fromPartial({
+  fileDescriptor: FileDescriptorProto1.fromPartial({
+    name: "io/restorecommerce/organization.proto",
+    package: "io.restorecommerce.organization",
     dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
       {
-        field: [{ name: "id", number: 1, label: 1, type: 9, jsonName: "id" }],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        reservedRange: [],
-        reservedName: [],
         name: "Deleted",
-      },
-      {
         field: [
-          { name: "org_ids", number: 1, label: 3, type: 9, jsonName: "orgIds" },
           {
-            name: "user_ids",
-            number: 2,
-            label: 3,
-            type: 9,
-            jsonName: "userIds",
-          },
-          {
-            name: "subject",
-            number: 3,
+            name: "id",
+            number: 1,
             label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            jsonName: "subject",
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -968,11 +785,64 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "DeleteOrgData",
       },
       {
+        name: "DeleteOrgData",
+        field: [
+          {
+            name: "org_ids",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "orgIds",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "user_ids",
+            number: 2,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "userIds",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "OrganizationList",
         field: [
           {
             name: "items",
@@ -980,14 +850,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.organization.Organization",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "subject",
@@ -995,7 +876,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1003,11 +889,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrganizationList",
       },
       {
+        name: "OrganizationListResponse",
         field: [
           {
             name: "items",
@@ -1015,14 +902,25 @@ export const protoMetadata: ProtoMetadata = {
             label: 3,
             type: 11,
             typeName: ".io.restorecommerce.organization.OrganizationResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "total_count",
             number: 2,
             label: 1,
             type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "operation_status",
@@ -1030,7 +928,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1038,11 +941,12 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrganizationListResponse",
       },
       {
+        name: "OrganizationResponse",
         field: [
           {
             name: "payload",
@@ -1050,7 +954,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.organization.Organization",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "status",
@@ -1058,7 +967,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1066,80 +980,218 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "OrganizationResponse",
       },
       {
+        name: "Organization",
         field: [
-          { name: "id", number: 1, label: 1, type: 9, jsonName: "id" },
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "meta",
             number: 2,
             label: 1,
             type: 11,
             typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "address_id",
             number: 3,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "addressId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "parent_id",
             number: 4,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "parentId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "contact_point_ids",
             number: 6,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "contactPointIds",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
           },
           {
             name: "website",
             number: 7,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "website",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "email", number: 8, label: 1, type: 9, jsonName: "email" },
-          { name: "logo", number: 9, label: 1, type: 9, jsonName: "logo" },
-          { name: "vat_id", number: 10, label: 1, type: 9, jsonName: "vatId" },
+          {
+            name: "email",
+            number: 8,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "logo",
+            number: 9,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "logo",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "vat_id",
+            number: 10,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vatId",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "isic_v4",
             number: 11,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "isicV4",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "registration",
             number: 12,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "registration",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "registration_court",
             number: 13,
             label: 1,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "registrationCourt",
+            options: undefined,
+            proto3Optional: false,
           },
-          { name: "name", number: 14, label: 1, type: 9, jsonName: "name" },
+          {
+            name: "name",
+            number: 14,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
           {
             name: "payment_method_ids",
             number: 15,
             label: 3,
             type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "paymentMethodIds",
+            options: undefined,
+            proto3Optional: false,
           },
           {
             name: "data",
@@ -1147,7 +1199,12 @@ export const protoMetadata: ProtoMetadata = {
             label: 1,
             type: 11,
             typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
             jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
           },
         ],
         extension: [],
@@ -1155,90 +1212,115 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
+        options: undefined,
         reservedRange: [],
         reservedName: [],
-        name: "Organization",
       },
     ],
     enumType: [],
     service: [
       {
+        name: "Service",
         method: [
           {
             name: "Read",
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.organization.OrganizationListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Create",
             inputType: ".io.restorecommerce.organization.OrganizationList",
             outputType:
               ".io.restorecommerce.organization.OrganizationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Delete",
             inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
             outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Update",
             inputType: ".io.restorecommerce.organization.OrganizationList",
             outputType:
               ".io.restorecommerce.organization.OrganizationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
           {
             name: "Upsert",
             inputType: ".io.restorecommerce.organization.OrganizationList",
             outputType:
               ".io.restorecommerce.organization.OrganizationListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
           },
         ],
-        name: "Service",
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
-    name: "io/restorecommerce/organization.proto",
-    package: "io.restorecommerce.organization",
+    options: undefined,
     sourceCodeInfo: {
       location: [
         {
           path: [4, 5, 2, 0],
-          span: [46, 2, 16],
-          leadingDetachedComments: [],
+          span: [51, 2, 16],
+          leadingComments: "",
           trailingComments: "/ Organization ID, unique, key\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 2],
-          span: [48, 2, 24],
-          leadingDetachedComments: [],
+          span: [53, 2, 61, 4],
+          leadingComments: "",
           trailingComments: "/ Address for the organization\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 3],
-          span: [49, 2, 23],
-          leadingDetachedComments: [],
+          span: [62, 2, 70, 4],
+          leadingComments: "",
           trailingComments:
             "  Hierarchically superior organization; may be null\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 4],
-          span: [50, 2, 40],
-          leadingDetachedComments: [],
+          span: [71, 2, 79, 4],
+          leadingComments: "",
           trailingComments:
             " list of possible legal addresses of different types\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 7],
-          span: [53, 2, 18],
-          leadingDetachedComments: [],
+          span: [82, 2, 18],
+          leadingComments: "",
           trailingComments: " base64; arangoDB does not support blob storage\n",
+          leadingDetachedComments: [],
         },
         {
           path: [4, 5, 2, 14],
-          span: [60, 2, 32],
-          leadingDetachedComments: [],
+          span: [89, 2, 32],
+          leadingComments: "",
           trailingComments: "/ additional data\n",
+          leadingDetachedComments: [],
         },
       ],
     },
@@ -1248,8 +1330,10 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.organization.Deleted": Deleted,
     ".io.restorecommerce.organization.DeleteOrgData": DeleteOrgData,
     ".io.restorecommerce.organization.OrganizationList": OrganizationList,
-    ".io.restorecommerce.organization.OrganizationListResponse": OrganizationListResponse,
-    ".io.restorecommerce.organization.OrganizationResponse": OrganizationResponse,
+    ".io.restorecommerce.organization.OrganizationListResponse":
+      OrganizationListResponse,
+    ".io.restorecommerce.organization.OrganizationResponse":
+      OrganizationResponse,
     ".io.restorecommerce.organization.Organization": Organization,
   },
   dependencies: [
@@ -1258,20 +1342,57 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata3,
     protoMetadata4,
     protoMetadata5,
+    protoMetadata6,
   ],
+  options: {
+    messages: {
+      Organization: {
+        fields: {
+          address_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
+                "base64"
+              )
+            ),
+          },
+          parent_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqBnBhcmVudA==",
+                "base64"
+              )
+            ),
+          },
+          contact_point_ids: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "organization" },
+        methods: { Read: { is_query: true } },
+      },
+    },
+  },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1281,3 +1402,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}

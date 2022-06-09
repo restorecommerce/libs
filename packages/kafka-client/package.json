@@ -53,7 +53,7 @@
     "test": "npm run lint && nyc npm run mocha",
     "test-debug": "mocha -R spec ./test/index.js --inspect-brk",
     "lint": "eslint './src/**/*.ts' ",
-    "mocha": "cross-env NODE_ENV=test; mocha --exit",
+    "mocha": "cross-env NODE_ENV=test; mocha --exit --timeout 10000",
     "lcov-report": "nyc report --reporter=lcov",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib/",

@@ -20,7 +20,7 @@ describe("proto-meta", () => {
 
     expect(obj).toBeTruthy();
 
-    const output = obj.output;
+    const output = obj!.output;
 
     expect(output).toBeInstanceOf(GraphQLObjectType)
     expect(output.name).toEqual('IoRestorecommerceOrderOrder');
@@ -41,9 +41,9 @@ describe("proto-meta", () => {
     expect(fields.items.type).toBeInstanceOf(GraphQLList);
     expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLNonNull);
     expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items').output)
+    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items')!.output)
 
-    expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta').output);
+    expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta')!.output);
   });
 
   it('should produce a correct GQL function', () => {

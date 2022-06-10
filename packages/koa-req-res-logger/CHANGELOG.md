@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.19](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@0.1.18...@restorecommerce/koa-req-res-logger@0.1.19) (2022-06-10)
+
+
+### Bug Fixes
+
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/koa-req-res-logger/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+
+
+
+
+
 ## [0.1.18](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@0.1.17...@restorecommerce/koa-req-res-logger@0.1.18) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/koa-req-res-logger

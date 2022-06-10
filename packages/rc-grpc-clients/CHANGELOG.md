@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.4.9...@restorecommerce/rc-grpc-clients@0.5.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+* **protos:** include resolved fields in imports ([a2289e6](https://github.com/restorecommerce/libs/commit/a2289e64d3d383c0031c0a6006b20f494c69d0cb))
+
+
+### Features
+
+* **facade:** support nested resolvers from proto options ([d319a5b](https://github.com/restorecommerce/libs/commit/d319a5bbf0066d9200d1c6bf38303461496bfa3a))
+
+
+
+
+
 ## [0.4.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@0.4.8...@restorecommerce/rc-grpc-clients@0.4.9) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@0.3.4...@restorecommerce/cart@0.3.5) (2022-06-10)
+
+
+### Bug Fixes
+
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+
+
+
+
+
 ## [0.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@0.3.3...@restorecommerce/cart@0.3.4) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/cart

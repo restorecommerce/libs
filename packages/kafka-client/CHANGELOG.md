@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.4.0...@restorecommerce/kafka-client@0.4.1) (2022-06-10)
+
+
+### Bug Fixes
+
+* **facade:** fix building tests ([82485bf](https://github.com/restorecommerce/kafka-client/commit/82485bfb7c6e19e0bc56f665538bf65d427a1178))
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/kafka-client/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+
+
+
+
+
 # [0.4.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.3.2...@restorecommerce/kafka-client@0.4.0) (2022-05-16)
 
 

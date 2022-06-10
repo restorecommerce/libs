@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.4.1...@restorecommerce/facade@0.5.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* **facade:** fix building tests ([82485bf](https://github.com/restorecommerce/libs/commit/82485bfb7c6e19e0bc56f665538bf65d427a1178))
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+
+
+### Features
+
+* **facade:** support nested resolvers from proto options ([d319a5b](https://github.com/restorecommerce/libs/commit/d319a5bbf0066d9200d1c6bf38303461496bfa3a))
+
+
+
+
+
 ## [0.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.4.0...@restorecommerce/facade@0.4.1) (2022-05-16)
 
 

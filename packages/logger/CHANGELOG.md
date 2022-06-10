@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.2...@restorecommerce/logger@0.13.0) (2022-06-10)
+
+
+### Bug Fixes
+
+* fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
+
+
+### Features
+
+* **facade:** support nested resolvers from proto options ([d319a5b](https://github.com/restorecommerce/libs/commit/d319a5bbf0066d9200d1c6bf38303461496bfa3a))
+
+
+
+
+
 ## [0.12.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.1...@restorecommerce/logger@0.12.2) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/logger

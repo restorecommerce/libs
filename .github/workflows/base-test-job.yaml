@@ -42,6 +42,7 @@ jobs:
         uses: restorecommerce/setup-system-action@v1
         with:
           backing-only: ${{ inputs.backing-only }}
+          shutdown: ${{ inputs.shutdown }}
 
       - name: Install Dependencies
         run: npm ci && npm run install:ci -- --scope="@restorecommerce/${{ inputs.package }}" --include-dependencies

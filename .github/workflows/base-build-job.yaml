@@ -25,5 +25,13 @@ jobs:
       - name: Install Dependencies
         run: npm ci && npm run install:ci -- --scope="@restorecommerce/${{ inputs.package }}" --include-dependencies
 
+      - name: Cache Nx
+        uses: actions/cache@v2
+        with:
+          path: node_modules/.cache/nx
+          key: cache-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            cache-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-
+
       - name: Build
         run: npm run build -- --scope="@restorecommerce/${{ inputs.package }}" --include-dependencies

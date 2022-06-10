@@ -16,5 +16,6 @@
     "version": {
       "message": "chore(release): publish"
     }
-  }
+  },
+  "useNx": true
 }

@@ -51,9 +51,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules/.cache/nx
-          key: cache-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          key: cache-1-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
           restore-keys: |
-            cache-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-
+            cache-1-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-
 
       - name: Build
         run: npm run build -- --scope="@restorecommerce/${{ inputs.package }}" --include-dependencies

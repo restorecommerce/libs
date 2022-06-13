@@ -60,5 +60,14 @@
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc && cp -r ./src/views ./lib/views"
   },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "./lib"
+        ]
+      }
+    }
+  },
   "gitHead": "0a6f7c94bfb1811c5dd60ab8c4912a41299b3717"
 }

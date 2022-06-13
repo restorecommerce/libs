@@ -48,5 +48,14 @@
   "publishConfig": {
     "access": "public"
   },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "./dist"
+        ]
+      }
+    }
+  },
   "gitHead": "fa738e4aa4f851a393a6222e70bbeff1a4052339"
 }

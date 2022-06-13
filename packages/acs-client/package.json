@@ -62,5 +62,14 @@
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "./lib"
+        ]
+      }
+    }
+  },
   "gitHead": "d4ac2692c0d2552b209cd49a73afc754ccf6cdf3"
 }

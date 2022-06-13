@@ -5,59 +5,25 @@ on:
     paths:
       - 'packages/facade/**'
       - '.github/workflows/build-test-facade.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
   pull_request:
     paths:
       - 'packages/facade/**'
       - '.github/workflows/build-test-facade.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.15'
-
-      - name: Upgrade npm
-        run: npm i -g npm
-
-      - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
-
-      - name: Build
-        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
+    uses: ./.github/workflows/base-build-job.yaml
+    with:
+      package: facade
 
   test:
-    runs-on: ubuntu-20.04
     needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v1
-        with:
-          node-version: '14.15'
-
-      - name: Upgrade npm
-        run: npm i -g npm
-
-      - name: Setup System
-        uses: restorecommerce/setup-system-action@v1
-        with:
-          backing-only: false
-          shutdown: facade-srv
-
-      - name: Install Dependencies
-        run: npm ci && npm run install:ci -- --scope="@restorecommerce/facade" --include-filtered-dependencies
-
-      - name: Build
-        run: npm run build -- --scope="@restorecommerce/facade" --include-filtered-dependencies
-
-      - name: Test
-        run: npm run test
-        working-directory: ./packages/facade
+    uses: ./.github/workflows/base-test-job.yaml
+    with:
+      package: facade
+      system: true
+      shutdown: facade-srv

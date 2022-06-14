@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.0...@restorecommerce/protos@0.7.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* change semicolon to comma in options ([9e4b9e1](https://github.com/restorecommerce/libs/commit/9e4b9e190c31edadc414dba6b5311fe931e2f372))
+
+
+
+
+
 # [0.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.9...@restorecommerce/protos@0.7.0) (2022-06-10)
 
 

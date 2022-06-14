@@ -52,41 +52,41 @@ message ContactPoint {
   io.restorecommerce.meta.Meta meta = 2;
   string physical_address_id = 3 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address";
-      target_service: "resource";
-      target_sub_service: "address";
-      target_method: "Read";
-      field_name: "physicalAddress";
+      target_type: ".io.restorecommerce.address.Address",
+      target_service: "resource",
+      target_sub_service: "address",
+      target_method: "Read",
+      field_name: "physicalAddress",
     }
   ];
   string website = 4;
   string email = 5;
   string contact_point_type_id = 6 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point_type.ContactPointType";
-      target_service: "resource";
-      target_sub_service: "contact_point_type";
-      target_method: "Read";
-      field_name: "contactPointType";
+      target_type: ".io.restorecommerce.contact_point_type.ContactPointType",
+      target_service: "resource",
+      target_sub_service: "contact_point_type",
+      target_method: "Read",
+      field_name: "contactPointType",
     }
   ];
   string telephone = 8;
   string timezone_id = 9 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.timezone.Timezone";
-      target_service: "resource";
-      target_sub_service: "timezone";
-      target_method: "Read";
-      field_name: "timezone";
+      target_type: ".io.restorecommerce.timezone.Timezone",
+      target_service: "resource",
+      target_sub_service: "timezone",
+      target_method: "Read",
+      field_name: "timezone",
     }
   ];
   string locale_id = 10 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.locale.Locale";
-      target_service: "resource";
-      target_sub_service: "locale";
-      target_method: "Read";
-      field_name: "locale";
+      target_type: ".io.restorecommerce.locale.Locale",
+      target_service: "resource",
+      target_sub_service: "locale",
+      target_method: "Read",
+      field_name: "locale",
     }
   ];
 }

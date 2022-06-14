@@ -71,11 +71,11 @@ message Invoice {
   string timestamp = 4;
   string customer_id = 5 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.customer.Customer";
-      target_service: "resource";
-      target_sub_service: "customer";
-      target_method: "Read";
-      field_name: "customer";
+      target_type: ".io.restorecommerce.customer.Customer",
+      target_service: "resource",
+      target_sub_service: "customer",
+      target_method: "Read",
+      field_name: "customer",
     }
   ];
   string payment_status = 6;

@@ -56,29 +56,29 @@ message Location {
   string description = 4;
   string organization_id = 5 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.organization.Organization";
-      target_service: "resource";
-      target_sub_service: "organization";
-      target_method: "Read";
-      field_name: "organization";
+      target_type: ".io.restorecommerce.organization.Organization",
+      target_service: "resource",
+      target_sub_service: "organization",
+      target_method: "Read",
+      field_name: "organization",
     }
   ]; // Organization to which this location is linked
   string parent_id = 6 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.location.Location";
-      target_service: "resource";
-      target_sub_service: "location";
-      target_method: "Read";
-      field_name: "parent";
+      target_type: ".io.restorecommerce.location.Location",
+      target_service: "resource",
+      target_sub_service: "location",
+      target_method: "Read",
+      field_name: "parent",
     }
   ];  //  Location which may contain this location; may be null
   string address_id = 8 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address";
-      target_service: "resource";
-      target_sub_service: "address";
-      target_method: "Read";
-      field_name: "address";
+      target_type: ".io.restorecommerce.address.Address",
+      target_service: "resource",
+      target_sub_service: "address",
+      target_method: "Read",
+      field_name: "address",
     }
   ];
   google.protobuf.Any data = 9; /// additional data

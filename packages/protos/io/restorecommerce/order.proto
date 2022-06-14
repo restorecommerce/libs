@@ -55,20 +55,20 @@ message Order {
   // shipping address
   string shipping_contact_point_id = 9 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint";
-      target_service: "resource";
-      target_sub_service: "contact_point";
-      target_method: "Read";
-      field_name: "shippingContactPoint";
+      target_type: ".io.restorecommerce.contact_point.ContactPoint",
+      target_service: "resource",
+      target_sub_service: "contact_point",
+      target_method: "Read",
+      field_name: "shippingContactPoint",
     }
   ];
   string billing_contact_point_id = 10 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint";
-      target_service: "resource";
-      target_sub_service: "contact_point";
-      target_method: "Read";
-      field_name: "billingContactPoint";
+      target_type: ".io.restorecommerce.contact_point.ContactPoint",
+      target_service: "resource",
+      target_sub_service: "contact_point",
+      target_method: "Read",
+      field_name: "billingContactPoint",
     }
   ];
   double total_weight_in_kg = 11;

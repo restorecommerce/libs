@@ -42,11 +42,11 @@ message Product {
   string description = 3;
   string manufacturer_id = 4 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.manufacturer.Manufacturer";
-      target_service: "catalog";
-      target_sub_service: "manufacturer";
-      target_method: "Read";
-      field_name: "manufacturer";
+      target_type: ".io.restorecommerce.manufacturer.Manufacturer",
+      target_service: "catalog",
+      target_sub_service: "manufacturer",
+      target_method: "Read",
+      field_name: "manufacturer",
     }
   ];
   string taric_code = 5;

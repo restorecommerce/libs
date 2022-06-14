@@ -20,11 +20,11 @@ message ProductCategory {
   string description = 4;
   string price_group_id = 5 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.price_group.PriceGroup";
-      target_service: "catalog";
-      target_sub_service: "price_group";
-      target_method: "Read";
-      field_name: "priceGroup";
+      target_type: ".io.restorecommerce.price_group.PriceGroup",
+      target_service: "catalog",
+      target_sub_service: "price_group",
+      target_method: "Read",
+      field_name: "priceGroup",
     }
   ];
   io.restorecommerce.image.Image image = 6;

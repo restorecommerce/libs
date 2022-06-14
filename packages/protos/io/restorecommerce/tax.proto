@@ -53,22 +53,22 @@ message Tax {
   io.restorecommerce.meta.Meta meta = 2;
   string country_id = 3 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.country.Country";
-      target_service: "resource";
-      target_sub_service: "country";
-      target_method: "Read";
-      field_name: "country";
+      target_type: ".io.restorecommerce.country.Country",
+      target_service: "resource",
+      target_sub_service: "country",
+      target_method: "Read",
+      field_name: "country",
     }
   ];
   double rate = 4;
   string variant = 5;
   string type_id = 6 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax_type.TaxType";
-      target_service: "resource";
-      target_sub_service: "tax_type";
-      target_method: "Read";
-      field_name: "type";
+      target_type: ".io.restorecommerce.tax_type.TaxType",
+      target_service: "resource",
+      target_sub_service: "tax_type",
+      target_method: "Read",
+      field_name: "type",
     }
   ];
 }

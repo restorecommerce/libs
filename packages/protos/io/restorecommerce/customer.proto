@@ -59,29 +59,29 @@ message Customer {
 message IndividualUser {
   string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.user.User";
-      target_service: "identity";
-      target_sub_service: "user";
-      target_method: "Read";
-      field_name: "user";
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
+      target_method: "Read",
+      field_name: "user",
     }
   ];
   string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address";
-      target_service: "resource";
-      target_sub_service: "address";
-      target_method: "Read";
-      field_name: "address";
+      target_type: ".io.restorecommerce.address.Address",
+      target_service: "resource",
+      target_sub_service: "address",
+      target_method: "Read",
+      field_name: "address",
     }
   ];
   repeated string contact_point_ids = 3 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint";
-      target_service: "resource";
-      target_sub_service: "contact_point";
-      target_method: "Read";
-      field_name: "contactPoints";
+      target_type: ".io.restorecommerce.contact_point.ContactPoint",
+      target_service: "resource",
+      target_sub_service: "contact_point",
+      target_method: "Read",
+      field_name: "contactPoints",
     }
   ];
 }
@@ -89,20 +89,20 @@ message IndividualUser {
 message OrgUser {
   string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.user.User";
-      target_service: "identity";
-      target_sub_service: "user";
-      target_method: "Read";
-      field_name: "user";
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
+      target_method: "Read",
+      field_name: "user",
     }
   ];
   string organization_id = 2 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.organization.Organization";
-      target_service: "resource";
-      target_sub_service: "organization";
-      target_method: "Read";
-      field_name: "organization";
+      target_type: ".io.restorecommerce.organization.Organization",
+      target_service: "resource",
+      target_sub_service: "organization",
+      target_method: "Read",
+      field_name: "organization",
     }
   ];
 }
@@ -111,20 +111,20 @@ message Guest {
   bool guest = 1;
   string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address";
-      target_service: "resource";
-      target_sub_service: "address";
-      target_method: "Read";
-      field_name: "address";
+      target_type: ".io.restorecommerce.address.Address",
+      target_service: "resource",
+      target_sub_service: "address",
+      target_method: "Read",
+      field_name: "address",
     }
   ];
   repeated string contact_point_ids = 3 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint";
-      target_service: "resource";
-      target_sub_service: "contact_point";
-      target_method: "Read";
-      field_name: "contactPoints";
+      target_type: ".io.restorecommerce.contact_point.ContactPoint",
+      target_service: "resource",
+      target_sub_service: "contact_point",
+      target_method: "Read",
+      field_name: "contactPoints",
     }
   ];
 }

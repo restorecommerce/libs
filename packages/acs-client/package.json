@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "0.6.32",
+  "version": "0.6.33",
   "description": "Access Control Service Client",
   "author": "n-fuse GmbH",
   "repository": {
@@ -20,7 +20,7 @@
     "@restorecommerce/grpc-client": "^0.4.2",
     "@restorecommerce/kafka-client": "^0.4.1",
     "@restorecommerce/logger": "^0.13.0",
-    "@restorecommerce/protos": "^0.7.1",
+    "@restorecommerce/protos": "^0.7.2",
     "@restorecommerce/service-config": "^0.4.27",
     "lodash": "^4.17.21",
     "node-eval": "^2.0.0",

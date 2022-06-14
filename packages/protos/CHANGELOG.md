@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.7.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.1...@restorecommerce/protos@0.7.2) (2022-06-14)
+
+
+### Bug Fixes
+
+* remove optional from protos ([dee7264](https://github.com/restorecommerce/libs/commit/dee7264ec862bbe7fa5ada55dcb3fd9227e06ef8))
+
+
+
+
+
 ## [0.7.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.0...@restorecommerce/protos@0.7.1) (2022-06-14)
 
 

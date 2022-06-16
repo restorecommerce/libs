@@ -24,7 +24,7 @@
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
     "lerna": "^5.1.1",
-    "nx": "^14.2.4"
+    "nx": "^14.3.5"
   },
   "config": {
     "commitizen": {

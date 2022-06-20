@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.5.2...@restorecommerce/facade@0.5.3) (2022-06-20)
+
+
+### Bug Fixes
+
+* move array.prototype.flat to dependencies ([c73d585](https://github.com/restorecommerce/libs/commit/c73d5852a5e1a225f9626ad8d79fd235373af48e))
+
+
+
+
+
 ## [0.5.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@0.5.1...@restorecommerce/facade@0.5.2) (2022-06-14)
 
 **Note:** Version bump only for package @restorecommerce/facade

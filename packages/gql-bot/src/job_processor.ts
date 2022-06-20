@@ -5,36 +5,7 @@ import * as through2 from 'through2';
 import * as readdirp from 'readdirp';
 import * as path from 'path';
 import { EventEmitter } from 'events';
-import { stringToChalk } from './utils';
-
-const unwrap = (data: any): any => {
-  let result = data;
-  while (typeof result === 'object' && Object.keys(result).length == 1) {
-    result = result[Object.keys(result)[0]];
-  }
-  return result;
-};
-
-const removeType = (data: any): any => {
-  if (typeof data === 'object') {
-    if (Array.isArray(data)) {
-      data = data.map(removeType);
-    } else {
-      delete data['__typename'];
-      Object.keys(data).forEach(k => data[k] = removeType(data[k]));
-    }
-  }
-  return data;
-};
-
-const processResponse = (body: any | any[]): any => {
-  const result = [];
-  for (const response of Array.isArray(body) ? body : [body]) {
-    const clean = unwrap(removeType(response));
-    result.push(clean);
-  }
-  return result;
-};
+import { stringToChalk, processResponse } from './utils';
 
 export class ReadArrayStream extends Readable {
   array: any[];
@@ -112,9 +83,9 @@ export class JobProcessor {
 
         if (verbose) {
           const processed = processResponse(body);
-          console.log(`[${logColor(task.name)}] Completed successfully`, JSON.stringify(processed));
+          console.log(`[${logColor(task.name)}] Completed`, JSON.stringify(processed));
         } else {
-          console.log(`[${logColor(task.name)}] Completed successfully`);
+          console.log(`[${logColor(task.name)}] Completed`);
         }
 
         task.inputTask.processing--;

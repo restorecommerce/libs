@@ -7,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch'; // required for apollo-link-http
 import { createHttpLink, HttpLink } from 'apollo-link-http';
 import * as https from 'https';
+import { processResponse } from './utils';
 
 const _checkVariableMutation = (mutation: string): Boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
@@ -38,7 +39,7 @@ const _createQueryVariables = (inputVarName: string, queryVarKey: string, varVal
 };
 
 const checkError = (data: any): any => {
-  if (typeof data === 'object') {
+  if (typeof data === 'object' && data !== null) {
     if (Array.isArray(data)) {
       const result = data.map(value => {
         const inner = checkError(value);
@@ -139,7 +140,7 @@ export class Client {
     return url.resolve(this.entryBaseUrl, extendURL);
   }
 
-  async post(source: any, job?: any, verbose = false, ignoreSelfSigned = false): Promise<any> {
+  async post(source: any, job?: any, verbose = false, ignoreErrors = false, ignoreSelfSigned = false): Promise<any> {
     const normalUrl = this._normalizeUrl();
 
     let mutation;
@@ -209,6 +210,9 @@ export class Client {
           variables,
           response
         }));
+      } else if (ignoreErrors) {
+        const processed = processResponse(response);
+        console.error(JSON.stringify(processed));
       }
       throw new Error(JSON.stringify(error));
     }

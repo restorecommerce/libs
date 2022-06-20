@@ -115,10 +115,10 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const filesToBeFound = 1;
       let filesFound = 0;
 
-      const createRulesRespMessage = {
+      const createUsersRespMessage = {
         data: {
           createUsers: {
-            regStatus: ['All Rules imported successfully'],
+            regStatus: ['All users imported successfully'],
             error: [],
             __typename: 'Sample'
           }
@@ -131,7 +131,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       });
 
       nock('http://example.com').persist()
-        .post('/graphql').reply(200, createRulesRespMessage);
+        .post('/graphql').reply(200, createUsersRespMessage);
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -150,10 +150,10 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
   it('a job should error when encountering IoRestorecommerceStatusOperationStatus',
     async (): Promise<void> => {
-      const createRulesRespMessage = {
+      const createUsersRespMessage = {
         data: {
           createUsers: {
-            regStatus: ['Failed to import rules'],
+            regStatus: ['Failed to import users'],
             error: {
               code: 403,
               message: 'Access denied',
@@ -170,7 +170,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       });
 
       nock('http://example.com').persist()
-        .post('/graphql').reply(200, createRulesRespMessage);
+        .post('/graphql').reply(200, createUsersRespMessage);
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -185,10 +185,10 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
   it('a job should error when encountering IoRestorecommerceStatusStatus',
     async (): Promise<void> => {
-      const createRulesRespMessage = {
+      const createUsersRespMessage = {
         data: {
           createUsers: {
-            regStatus: ['Failed to import rules'],
+            regStatus: ['Failed to import users'],
             error: {
               code: 403,
               message: 'Access denied',
@@ -205,7 +205,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       });
 
       nock('http://example.com').persist()
-        .post('/graphql').reply(200, createRulesRespMessage);
+        .post('/graphql').reply(200, createUsersRespMessage);
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -252,5 +252,66 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       should(resultError).not.undefined();
       should((resultError as Error).message).equal('Network error: Unexpected token < in JSON at position 0');
+    });
+
+  it('a job should skip errors when ignored',
+    async (): Promise<void> => {
+      const userMessage = {
+        data: {
+          createUsers: {
+            regStatus: ['All users imported successfully'],
+            error: [],
+            __typename: 'Sample'
+          }
+        }
+      };
+
+      const successMessage = {
+        data: {
+          createOrganizations: {
+            regStatus: ['All organizations imported successfully'],
+            error: [],
+            __typename: 'Sample'
+          }
+        }
+      };
+
+      const errorMessage = {
+        data: {
+          createOrganizations: {
+            regStatus: ['Failed to import organizations'],
+            error: {
+              code: 403,
+              message: 'Access denied',
+              __typename: 'IoRestorecommerceStatusStatus'
+            },
+            __typename: 'Sample'
+          }
+        }
+      };
+
+      const job2 = JSON.parse(fs.readFileSync('./test/job2.json', 'utf8'));
+      job2.options.processor = new GraphQLProcessor({
+        entry: 'http://example.com/graphql'
+      });
+      job2.options.concurrency = 1;
+      job2.tasks[1].batchSize = 1;
+
+      nock('http://example.com')
+        .post('/graphql').reply(200, userMessage)
+        .post('/graphql').reply(200, userMessage)
+        .post('/graphql').reply(200, successMessage)
+        .post('/graphql').reply(200, errorMessage)
+        .post('/graphql').reply(200, errorMessage)
+        .post('/graphql').reply(200, successMessage);
+
+      const jobProcessor = new JobProcessor(job2);
+      const jobResult = new Job();
+
+      await jobProcessor.start(null, jobResult, true, true);
+
+      const resultError = await jobResult.wait().catch(err => err);
+
+      should(resultError).undefined();
     });
 });

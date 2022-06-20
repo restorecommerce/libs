@@ -64,7 +64,7 @@ export class GraphQLProcessor {
                   counter = 0;
                   let batchText = '';
                   if (batchsize > 0) {
-                    const from = batchCounter * batchsize;
+                    const from = batchCounter * batchsize + 1;
                     const to = from + (docArr.length - 1);
                     batchText = from == to ? ` (${from})` : ` (${from} - ${to})`;
                   }
@@ -89,6 +89,7 @@ export class GraphQLProcessor {
                 yamlStream.resume();
               } catch (e) {
                 !ignoreErrors && reject(e);
+                ignoreErrors && yamlStream.resume();
               }
             });
 
@@ -111,7 +112,7 @@ export class GraphQLProcessor {
               if (docArr && !_.isEmpty(docArr)) {
                 let batchText = '';
                 if (batchsize > 0) {
-                  const from = batchCounter * batchsize;
+                  const from = batchCounter * batchsize + 1;
                   const to = from + (docArr.length - 1);
                   batchText = from == to ? ` (${from})` : ` (${from} - ${to})`;
                 }

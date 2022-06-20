@@ -10,6 +10,7 @@
       "src": "./test/folder/",
       "filter": "createUsers.yaml",
       "mutation": "mutation{createUsers(input:{listOfUsers: ${resource_list}, apiKey: ${apiKey} }) {regStatus, error{code, message} }}",
+      "batchSize": 1,
       "depth": 0,
       "prefix": "graphql",
       "metaData": {
@@ -22,6 +23,7 @@
       "src": "./test/folder/",
       "filter": "createOrganizations.yaml",
       "mutation": "mutation{createOrganizations(input: {listOfOrganizations: ${resource_list}, apiKey: ${apiKey} }) { regStatus, error{code,message}} }",
+      "batchSize": 2,
       "depth": 0,
       "prefix": "graphql",
       "metaData": {

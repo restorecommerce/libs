@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch'; // required for apollo-link-http
 import { createHttpLink } from 'apollo-link-http';
 
-function _checkVariableMutation(mutation: string): Boolean {
+const _checkVariableMutation = (mutation: string): Boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
     mutation.indexOf('($'));
   if (mutationName.indexOf('$') > 0) {
@@ -15,14 +15,14 @@ function _checkVariableMutation(mutation: string): Boolean {
   } else {
     return new RegExp('\\b' + mutationName + '\\(', 'i').test(mutation);
   }
-}
+};
 
-function _replaceInlineVars(mutation: string, args: any): string {
+const _replaceInlineVars = (mutation: string, args: any): string => {
   if (mutation)
     return mutation.replace(/\${(\w+)}/g, (_, v) => args[v]);
-}
+};
 
-function _createQueryVariables(inputVarName: string, queryVarKey: string, varValue: any): Object {
+const _createQueryVariables = (inputVarName: string, queryVarKey: string, varValue: any): Object => {
   if (queryVarKey) {
     return {
       [inputVarName]: {
@@ -34,7 +34,45 @@ function _createQueryVariables(inputVarName: string, queryVarKey: string, varVal
   return {
     [inputVarName]: JSON.parse(varValue)
   };
-}
+};
+
+const checkError = (data: any): any => {
+  if (typeof data === 'object') {
+    if (Array.isArray(data)) {
+      const result = data.map(value => {
+        const inner = checkError(value);
+        if (inner) {
+          return inner;
+        }
+      }).filter(value => !!value);
+      if (result.length > 0) {
+        return result;
+      }
+    } else {
+      if ('__typename' in data) {
+        switch (data['__typename']) {
+          case 'IoRestorecommerceStatusOperationStatus':
+          case 'IoRestorecommerceStatusStatus':
+            if ('code' in data) {
+              const code = data['code'];
+              if (code != '' && code != '200' && code != 0 && code != 200) {
+                return data;
+              }
+            }
+            break;
+        }
+      }
+
+      for (const value of Object.values(data)) {
+        const inner = checkError(value);
+        if (inner) {
+          return inner;
+        }
+      }
+    }
+  }
+  return undefined;
+};
 
 export class Client {
   opts: any;
@@ -100,16 +138,14 @@ export class Client {
     return url.resolve(this.entryBaseUrl, extendURL);
   }
 
-  async post(source: any, job?: any, accessControl?: any,
-    formOptions?: any): Promise<any> {
-
+  async post(source: any, job?: any, verbose = false): Promise<any> {
     const normalUrl = this._normalizeUrl();
 
     let mutation;
     if (job && job.mutation) {
       mutation = JSON.stringify(job.mutation);
     } else {
-      throw new Error('mutation not present in job config');
+      throw new Error(`mutation not present in job config (${job.name})`);
     }
 
     const apiKey = JSON.stringify(this.opts.apiKey);
@@ -153,10 +189,23 @@ export class Client {
       link: apolloLink
     });
 
-    return apolloClient.mutate({
+    const response = await apolloClient.mutate({
       mutation: gql`${mutation}`,
       variables
     });
 
+    const error = checkError(response);
+    if (error) {
+      if (verbose) {
+        console.error(JSON.stringify({
+          request: mutation,
+          variables,
+          response
+        }));
+      }
+      throw new Error(JSON.stringify(error));
+    }
+
+    return response;
   }
 }

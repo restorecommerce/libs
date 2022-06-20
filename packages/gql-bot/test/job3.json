@@ -10,6 +10,7 @@
       "src": "./test/folder/",
       "filter": "createUsers.yaml",
       "mutation": "mutation{createUsers(input:{listOfUsers: ${resource_list}, apiKey: ${apiKey} }) {regStatus, error{code, message} }}",
+      "batchSize": 1,
       "depth": 0,
       "prefix": "graphql",
       "metaData": {

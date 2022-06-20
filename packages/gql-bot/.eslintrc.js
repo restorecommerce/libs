@@ -7,15 +7,30 @@ module.exports = {
   },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": "tsconfig.json",
+    "project": [
+      "tsconfig.json",
+      "tsconfig.test.json"
+    ],
     "sourceType": "module"
   },
   "plugins": [
     "@typescript-eslint",
-    "@typescript-eslint/eslint-plugin"
+    "@typescript-eslint/eslint-plugin",
+    "prefer-arrow-functions"
   ],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        "selector": "class",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": "interface",
+        "format": ["PascalCase"]
+      }
+    ],
     "@typescript-eslint/indent": ["error", 2],
     "@typescript-eslint/member-delimiter-style": [
       "error",
@@ -47,6 +62,16 @@ module.exports = {
     "no-trailing-spaces": "error",
     "no-var": "error",
     "object-shorthand": "error",
+    "prefer-arrow-functions/prefer-arrow-functions": [
+      "warn",
+      {
+        "classPropertiesAllowed": false,
+        "disallowPrototype": false,
+        "returnStyle": "unchanged",
+        "singleReturnOnly": false
+      }
+    ],
+    "prefer-arrow-callback": "error",
     "quote-props": [
       "error",
       "as-needed"

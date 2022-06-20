@@ -5,9 +5,40 @@ import * as through2 from 'through2';
 import * as readdirp from 'readdirp';
 import * as path from 'path';
 import { EventEmitter } from 'events';
+import { stringToChalk } from './utils';
+
+const unwrap = (data: any): any => {
+  let result = data;
+  while (typeof result === 'object' && Object.keys(result).length == 1) {
+    result = result[Object.keys(result)[0]];
+  }
+  return result;
+};
+
+const removeType = (data: any): any => {
+  if (typeof data === 'object') {
+    if (Array.isArray(data)) {
+      data = data.map(removeType);
+    } else {
+      delete data['__typename'];
+      Object.keys(data).forEach(k => data[k] = removeType(data[k]));
+    }
+  }
+  return data;
+};
+
+const processResponse = (body: any | any[]): any => {
+  const result = [];
+  for (const response of Array.isArray(body) ? body : [body]) {
+    const clean = unwrap(removeType(response));
+    result.push(clean);
+  }
+  return result;
+};
 
 export class ReadArrayStream extends Readable {
   array: any[];
+
   constructor(opts: any, array: any[]) {
     super(opts);
     this.array = _.clone(array);
@@ -29,21 +60,40 @@ export class ReadArrayStream extends Readable {
  */
 export class Job extends EventEmitter {
   opts: any;
+  done = false;
+  error = undefined;
+
   constructor(opts?: any) {
     super();
     this.setMaxListeners(100);
     this.opts = opts || {};
+    this.once('done', () => this.done = true);
+    this.once('error', (err) => this.error = err);
+  }
+
+  async wait() {
+    if (this.error) {
+      throw this.error;
+    }
+
+    if (this.done) {
+      return;
+    }
+
+    return new Promise((resolve, reject) => {
+      this.once('done', resolve);
+      this.once('error', reject);
+    });
   }
 }
 
 export class JobProcessor {
   jobInfo: any;
-  processed: number;
   processedTasks: number;
-  taskStream: any;
+  taskStream: ps.PromiseStream<any>;
+
   constructor(jobInfo: any) {
     this.jobInfo = jobInfo;
-    this.processed = 0;
 
     _.defaults(this.jobInfo, {
       concurrency: 3,
@@ -51,15 +101,22 @@ export class JobProcessor {
     });
   }
 
-  async start(tasks?: any, job?: Job): Promise<any> {
+  async start(tasks?: any, job?: Job, verbose = false, ignoreErrors = false): Promise<any> {
     job = job || new Job();
     tasks = tasks || this.jobInfo.tasks;
 
     const concurrency = this.jobInfo.options.concurrency;
-    this.taskStream = ps.map({ concurrent: concurrency }, (task: any) => {
-      return this.jobInfo.options.processor.process(task).then((body) => {
-        console.log('Processed task [' + this.processed + '] and status is:' + JSON.stringify(body));
-        this.processed++;
+    this.taskStream = ps.map({concurrent: concurrency}, (task: any) => {
+      return this.jobInfo.options.processor.process(task, verbose, ignoreErrors).then((body) => {
+        const logColor = stringToChalk(task.name);
+
+        if (verbose) {
+          const processed = processResponse(body);
+          console.log(`[${logColor(task.name)}] Completed successfully`, JSON.stringify(processed));
+        } else {
+          console.log(`[${logColor(task.name)}] Completed successfully`);
+        }
+
         task.inputTask.processing--;
         task.progress.value = 100; // task complete
         job.emit('progress', task);
@@ -79,9 +136,8 @@ export class JobProcessor {
 
     await ps.wait(inputTaskStream);
 
-    this.taskStream.on('error', (err) => { throw err; });
-    this.taskStream.on('end', () => {
-      // console.log('Stream ended');
+    this.taskStream.on('error', (err) => {
+      job.emit('error', err);
     });
 
     const tasksStreamEnded = ps.wait(this.taskStream);
@@ -96,7 +152,9 @@ export class JobProcessor {
 
   async sync(task: any, job: Job): Promise<any> {
     const pathOptions = {
-      fileFilter: (entry) => { return true; },
+      fileFilter: (entry) => {
+        return true;
+      },
       depth: 1,
       lstat: true
     };
@@ -147,11 +205,12 @@ export class JobProcessor {
           // Check processedTasks tasks
           // Manually emit `end` event for all tasks finished
           if (this.processedTasks === this.jobInfo.tasks.length) {
-            this.taskStream._flush(() => { });
-            this.taskStream.emit('end');
+            this.taskStream._flush(() => {
+            });
+            this.taskStream.end();
           }
         })
-        .pipe(this.taskStream, { end: false });
+        .pipe(this.taskStream, {end: false});
     });
   }
 }

@@ -5,7 +5,8 @@ import gql from 'graphql-tag';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import fetch from 'node-fetch'; // required for apollo-link-http
-import { createHttpLink } from 'apollo-link-http';
+import { createHttpLink, HttpLink } from 'apollo-link-http';
+import * as https from 'https';
 
 const _checkVariableMutation = (mutation: string): Boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
@@ -138,7 +139,7 @@ export class Client {
     return url.resolve(this.entryBaseUrl, extendURL);
   }
 
-  async post(source: any, job?: any, verbose = false): Promise<any> {
+  async post(source: any, job?: any, verbose = false, ignoreSelfSigned = false): Promise<any> {
     const normalUrl = this._normalizeUrl();
 
     let mutation;
@@ -172,13 +173,19 @@ export class Client {
       mutation = _replaceInlineVars(mutation, { resource_list, apiKey });
     }
 
-    const apolloLinkOpts = {
+    const apolloLinkOpts: HttpLink.Options = {
       uri: normalUrl,
       fetch
     };
 
     if (this.opts.headers) {
       apolloLinkOpts['headers'] = this.opts.headers;
+    }
+
+    if (ignoreSelfSigned) {
+      apolloLinkOpts.fetchOptions = {
+        agent: new https.Agent({rejectUnauthorized: false}),
+      };
     }
 
     let apolloLink = createHttpLink(apolloLinkOpts);

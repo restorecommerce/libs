@@ -217,4 +217,40 @@ describe('jobproc-grapqhl-proc:', (): void => {
       should(resultError).not.undefined();
       should((resultError as Error).message).equal('{"code":403,"message":"Access denied","__typename":"IoRestorecommerceStatusStatus"}');
     });
+
+  it('a job should error when encountering a self-signed certificate',
+    async (): Promise<void> => {
+      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
+      job3.options.processor = new GraphQLProcessor({
+        entry: 'https://self-signed.badssl.com/'
+      });
+
+      const jobProcessor = new JobProcessor(job3);
+      const jobResult = new Job();
+
+      await jobProcessor.start(null, jobResult, true);
+
+      const resultError = await jobResult.wait().catch(err => err);
+
+      should(resultError).not.undefined();
+      should((resultError as Error).message).equal('Network error: request to https://self-signed.badssl.com/ failed, reason: self signed certificate');
+    });
+
+  it('a job should pass when ignoring a self-signed certificate',
+    async (): Promise<void> => {
+      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
+      job3.options.processor = new GraphQLProcessor({
+        entry: 'https://self-signed.badssl.com/'
+      });
+
+      const jobProcessor = new JobProcessor(job3);
+      const jobResult = new Job();
+
+      await jobProcessor.start(null, jobResult, true, false, true);
+
+      const resultError = await jobResult.wait().catch(err => err);
+
+      should(resultError).not.undefined();
+      should((resultError as Error).message).equal('Network error: Unexpected token < in JSON at position 0');
+    });
 });

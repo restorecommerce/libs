@@ -23,7 +23,7 @@ export class GraphQLProcessor {
     this.client = new Client(opts);
   }
 
-  async process(task: any, verbose = false, ignoreErrors = false): Promise<any> {
+  async process(task: any, verbose = false, ignoreErrors = false, ignoreSelfSigned = false): Promise<any> {
     let yamlStream = new YamlStreamReadTransformer();
     let jobPath = task.path;
     let data = false;
@@ -85,7 +85,7 @@ export class GraphQLProcessor {
             // 'yamlStream' readable stream.
             yamlStream.on('pause', async () => {
               try {
-                resultArr.push(await this.client.post(docArr, task, verbose));
+                resultArr.push(await this.client.post(docArr, task, verbose, ignoreSelfSigned));
                 yamlStream.resume();
               } catch (e) {
                 !ignoreErrors && reject(e);
@@ -118,7 +118,7 @@ export class GraphQLProcessor {
                 batchCounter++;
                 console.log(`[${logColor(task.name)}] Processing batch: ${batchCounter}${batchText}`);
                 try {
-                  resultArr.push(await this.client.post(docArr, task, verbose));
+                  resultArr.push(await this.client.post(docArr, task, verbose, ignoreSelfSigned));
                 } catch (e) {
                   !ignoreErrors && reject(e);
                 }

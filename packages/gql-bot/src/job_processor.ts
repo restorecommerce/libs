@@ -101,13 +101,13 @@ export class JobProcessor {
     });
   }
 
-  async start(tasks?: any, job?: Job, verbose = false, ignoreErrors = false): Promise<any> {
+  async start(tasks?: any, job?: Job, verbose = false, ignoreErrors = false, ignoreSelfSigned = false): Promise<any> {
     job = job || new Job();
     tasks = tasks || this.jobInfo.tasks;
 
     const concurrency = this.jobInfo.options.concurrency;
     this.taskStream = ps.map({concurrent: concurrency}, (task: any) => {
-      return this.jobInfo.options.processor.process(task, verbose, ignoreErrors).then((body) => {
+      return this.jobInfo.options.processor.process(task, verbose, ignoreErrors, ignoreSelfSigned).then((body) => {
         const logColor = stringToChalk(task.name);
 
         if (verbose) {

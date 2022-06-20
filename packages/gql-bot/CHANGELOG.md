@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.0...@restorecommerce/gql-bot@0.2.1) (2022-06-20)
+
+
+### Bug Fixes
+
+* **gql-bot:** add option to ignore ssl errors ([b82d302](https://github.com/restorecommerce/libs/commit/b82d3020318ec5495ad1c6143cd5c80cb1657f80))
+
+
+
+
+
 # [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.1.18...@restorecommerce/gql-bot@0.2.0) (2022-06-20)
 
 

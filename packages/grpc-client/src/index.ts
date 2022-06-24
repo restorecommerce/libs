@@ -87,6 +87,7 @@ export type GrpcServiceMethods<TService extends GrpcService> = {
   [P in keyof TService]: GrpcClientRpcMethodDefinition<ExtractRpcArgument<TService[P]>, ExtractRpcReturnType<TService[P]>>;
 }
 
+let interceptor_logger: Logger;
 /**
  * Basic wrapper for grpc
  */
@@ -125,6 +126,7 @@ export class GrpcClient {
       Object.assign(this, protoServices);
     }
     this.logger = logger;
+    interceptor_logger = logger;
     this.omittedFields = omittedFields;
   }
 
@@ -136,8 +138,7 @@ export class GrpcClient {
       this.logRequestMessage(data, methodPath);
       const options = {
         deadline: Date.now() + this.timeout,
-        interceptors: [this.retry_interceptor],
-        logger: this.logger
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
@@ -201,8 +202,8 @@ export class GrpcClient {
                 onReceiveStatus: async function (status: StatusObject) {
                   if (status.code !== grpcStatus.OK) {
                     if (retries <= maxRetries) {
-                      if (options && (options as any).logger) {
-                        (options as any).logger.error('Retrying request', { retries, options });
+                      if (interceptor_logger) {
+                        interceptor_logger.error('Retrying request', { retries, options });
                       }
                       retry(message, metadata);
                     } else if (savedMessageNext) {
@@ -223,8 +224,8 @@ export class GrpcClient {
               newCall.halfClose();
             };
             if (status.code !== grpcStatus.OK) {
-              if (options && (options as any).logger) {
-                (options as any).logger.error('Retrying due to status', status);
+              if (interceptor_logger) {
+                interceptor_logger.error('Retrying due to status', status);
               }
               retry(savedSendMessage, savedMetadata);
             } else {
@@ -252,8 +253,7 @@ export class GrpcClient {
     this.logRequestMessage(data, methodPath);
     const options = {
       deadline: Date.now() + this.timeout,
-      interceptors: [this.retry_interceptor],
-      logger: this.logger
+      interceptors: [this.retry_interceptor]
     };
     const meta = new Metadata();
     const rid: any = rTracer.id();
@@ -280,8 +280,7 @@ export class GrpcClient {
       this.logRequestMessage(data, methodPath);
       const options = {
         deadline: Date.now() + this.timeout,
-        interceptors: [this.retry_interceptor],
-        logger: this.logger
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
@@ -316,8 +315,7 @@ export class GrpcClient {
       this.logRequestMessage(data, methodPath);
       const options = {
         deadline: Date.now() + this.timeout,
-        interceptors: [this.retry_interceptor],
-        logger: this.logger
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
@@ -365,8 +363,7 @@ export class GrpcClient {
       this.logRequestMessage(data, methodPath);
       const options = {
         deadline: Date.now() + this.timeout,
-        interceptors: [this.retry_interceptor],
-        logger: this.logger
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();
@@ -416,8 +413,7 @@ export class GrpcClient {
       this.logRequestMessage(data, methodPath);
       const options = {
         deadline: Date.now() + this.timeout,
-        interceptors: [this.retry_interceptor],
-        logger: this.logger
+        interceptors: [this.retry_interceptor]
       };
       const meta = new Metadata();
       const rid: any = rTracer.id();

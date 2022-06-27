@@ -22,7 +22,7 @@ describe('converting to filter to object', () => {
   it('should convert proto filter to valid DB filter object', () => {
     const protoFilter =
     {
-      filters: {
+      filters: [{
         filter: [
           {
             field: 'device_id',
@@ -61,13 +61,81 @@ describe('converting to filter to object', () => {
           }
         ], // Default And case
         operator: 'or'
-      }
+      }]
     };
     /* eslint-disable */
     const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
-    const dbFilter = toObject(protoFilter, undefined, undefined);
+    const dbFilter = toObject(protoFilter);
     dbFilter.should.deepEqual(expectedDBObject);
   });
+
+  it('should convert nested proto filter to valid DB filter object', () => {
+    const protoFilter =
+    {
+      filters: [
+        {
+          filter: [
+            {
+              filters: [
+                {
+                  filter: [
+                    {
+                      field: 'user_type',
+                      operation: 'neq',
+                      value: 'TECHNICAL_USER'
+                    },
+                    {
+                      filters: {
+                        filter: [
+                          {
+                            field: 'first_name',
+                            operation: 'iLike',
+                            value: '%test%'
+                          },
+                          {
+                            field: 'last_name',
+                            operation: 'iLike',
+                            value: '%test%'
+                          }
+                        ],
+                        operator: 'or'
+                      }
+                    }
+                  ],
+                  operator: 'and'
+                }
+              ]
+            },
+            {
+              filters: [
+                {
+                  filter: [
+                    {
+                      field: 'state',
+                      operation: 'eq',
+                      value: 'BW'
+                    },
+                    {
+                      field: 'city',
+                      operation: 'eq',
+                      value: 'Stuttgart'
+                    },
+                  ],
+                  operator: 'and'
+                }
+              ]
+            }
+          ],
+          operator: 'or' // Final Or operator
+        }
+      ]
+    };
+    /* eslint-disable */
+    const expectedDBObject = {"$or":[{"$and":[{"user_type":{"$not":{"$eq":"TECHNICAL_USER"}}},{"$or":[{"first_name":{"$iLike":"%test%"}},{"last_name":{"$iLike":"%test%"}}]}]},{"$and":[{"state":"BW"},{"city":"Stuttgart"}]}]}
+    const dbFilter = toObject(protoFilter);
+    dbFilter.should.deepEqual(expectedDBObject);
+  });
+
 });
 
 const now = Date.now();

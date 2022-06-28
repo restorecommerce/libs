@@ -154,8 +154,7 @@ export class GrpcClient {
         options,
         (err, value) => {
           if (err) {
-            this.logger.error('Error serving unary request', { message: err.message });
-            this.logger.error('Error stack', { stack: err.stack });
+            this.logger.error('Error serving unary request', { code: err.code, message: err.message, stack: err.stack });
             return resolve({
               operationStatus: {
                 code: err.code,
@@ -331,7 +330,7 @@ export class GrpcClient {
           options,
           (err, value) => {
             if (err) {
-              this.logger.error('Error client stream request', err);
+              this.logger.error('Error client stream request',  { code: err.code, message: err.message, stack: err.stack });
               return resolve({
                 operationStatus: {
                   code: err.code,
@@ -344,7 +343,7 @@ export class GrpcClient {
           }
         );
       (data as Stream).on('error', (err) => {
-        this.logger.error('Error on client streaming', err);
+        this.logger.error('Error on client streaming',  { code: err.code, message: err.message, stack: err.stack });
       });
       (data as Stream).on('data', (data) => {
         clientStream.write(data);
@@ -379,8 +378,7 @@ export class GrpcClient {
           options,
           (err, value) => {
             if (err) {
-              this.logger.error('Error client stream request', { message: err.message });
-              this.logger.error('Error stack', { stack: err.stack });
+              this.logger.error('Error client stream request',  { code: err.code, message: err.message, stack: err.stack });
               return resolve({
                 operationStatus: {
                   code: err.code,

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.4.3...@restorecommerce/grpc-client@0.4.4) (2022-06-28)
+
+
+### Bug Fixes
+
+* **grpc-client:** to print error message and stack instead of entire error object ([0ed98ea](https://github.com/restorecommerce/libs/commit/0ed98ea2ebdeda8490679ff3cbe68fe408373423))
+
+
+
+
+
 ## [0.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.4.2...@restorecommerce/grpc-client@0.4.3) (2022-06-24)
 
 

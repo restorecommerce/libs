@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.4.1...@restorecommerce/kafka-client@0.4.2) (2022-06-28)
+
+
+### Bug Fixes
+
+* **kafka-client:** to print error message and stack instead of entire error object ([a7ee20f](https://github.com/restorecommerce/kafka-client/commit/a7ee20f77a464589b5935ccd780f74b96dbc68a1))
+
+
+
+
+
 ## [0.4.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@0.4.0...@restorecommerce/kafka-client@0.4.1) (2022-06-10)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",

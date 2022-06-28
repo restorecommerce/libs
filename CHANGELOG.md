@@ -1,3 +1,7 @@
+### 0.2.14 (June 28th, 2022)
+
+- added empty check for filter
+
 ### 0.2.13 (June 28th, 2022)
 
 - fixed nested filter to json conversion

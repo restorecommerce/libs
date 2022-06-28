@@ -1,3 +1,9 @@
+### 0.2.13 (June 28th, 2022)
+
+- fixed nested filter to json conversion
+- fixed logger messages
+- up deps
+
 ### 0.2.12 (May 27th, 2022)
 
 - up dependencies

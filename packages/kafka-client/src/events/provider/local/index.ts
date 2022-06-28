@@ -79,7 +79,7 @@ export class Topic {
     return new Promise<protobuf.Root>((resolve, reject) => {
       root.load(protoFilePath, { keepCase: true }, (err, root) => {
         if (err) {
-          that.logger.error('Error loading protobuf definition', err);
+          that.logger.error('Error loading protobuf definition',  { message: err.message, stack: err.stack });
           reject(err);
         }
         resolve(root);

@@ -75,7 +75,7 @@ export class Topic {
             this.provider.logger.info(`Topic ${this.name} created successfully`);
             resolve();
           }).catch(err => {
-            this.provider.logger.error(`Cannot create topic ${this.name}:`, err);
+            this.provider.logger.error(`Cannot create topic ${this.name}:`,  { code: err.code, message: err.message, stack: err.stack });
             reject(err);
           });
         } else {
@@ -156,7 +156,7 @@ export class Topic {
         return this.provider.admin.fetchTopicOffsets(this.name).then(data => {
           resolve(parseInt(data[0].offset, 10));
         }).catch(err => {
-          this.provider.logger.error('Error occurred retrieving topic offset:', err);
+          this.provider.logger.error('Error occurred retrieving topic offset:',  { code: err.code, message: err.message, stack: err.stack });
           reject(err);
         });
       }
@@ -164,7 +164,7 @@ export class Topic {
       return this.provider.admin.fetchTopicOffsetsByTimestamp(this.name, time).then(data => {
         resolve(parseInt(data[0].offset, 10));
       }).catch(err => {
-        this.provider.logger.error('Error occurred retrieving topic offset:', err);
+        this.provider.logger.error('Error occurred retrieving topic offset:',  { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
     });
@@ -245,7 +245,7 @@ export class Topic {
         this.provider.logger.info(`Consumer disconnected from topic ${this.name}`);
         this.consumer = undefined;
       }).catch((err) => {
-        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`, err);
+        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`,  { code: err.code, message: err.message, stack: err.stack });
       });
     }
   }
@@ -268,7 +268,7 @@ export class Topic {
         this.commit();
       } catch (error) {
         // do not commit offset
-        logger.error(`topic ${context.topic} error`, error);
+        logger.error(`topic ${context.topic} error`,  { code: error.code, message: error.message, stack: error.stack });
         throw error;
       }
     }
@@ -303,7 +303,7 @@ export class Topic {
       await this.consumer.connect().then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' connected`);
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' connection error: ${err}`);
+        this.provider.logger.error(`Consumer for topic '${this.name}' connection error`,  { code: err.code, message: err.message, stack: err.stack });
       });
 
       await this.consumer.subscribe({
@@ -311,7 +311,7 @@ export class Topic {
       }).then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error: ${err}`);
+        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error`,  { code: err.code, message: err.message, stack: err.stack });
       });
 
       // On receiving the message on Kafka consumer put the message to async Queue.
@@ -329,7 +329,7 @@ export class Topic {
           }
         }
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' failed to run: ${err}`);
+        this.provider.logger.error(`Consumer for topic '${this.name}' failed to run`,  { code: err.code, message: err.message, stack: err.stack });
       });
 
       this.consumer.seek({
@@ -411,7 +411,7 @@ export class Topic {
           partition: 0 // ?
         }
       ]).then(resolve).catch(err => {
-        this.provider.logger.error('Error committing offset:', err);
+        this.provider.logger.error('Error committing offset',  { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
     });
@@ -634,7 +634,7 @@ export class Kafka {
     try {
       decodedMsg = MessageClass.decode(msg);
     } catch (err) {
-      this.logger.error(`error on decoding message with event ${eventName}:`, {message: msg, error: err});
+      this.logger.error(`error on decoding message with event ${eventName}`, { message: msg, errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
     }
     return decodedMsg;
   }
@@ -686,12 +686,12 @@ export class Kafka {
           }
           resolve(data);
         }).catch((err) => {
-          this.logger.error(`error sending event ${eventName} to topic ${topicName}`, err);
+          this.logger.error(`error sending event ${eventName} to topic ${topicName}`,  { code: err.code, message: err.message, stack: err.stack });
           reject(err);
         });
       });
     } catch (err) {
-      this.logger.error(`error on sending event ${eventName} to topic ${topicName}`, err);
+      this.logger.error(`error on sending event ${eventName} to topic ${topicName}`,  { code: err.code, message: err.message, stack: err.stack });
       throw err;
     }
   }

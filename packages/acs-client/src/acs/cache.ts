@@ -33,7 +33,7 @@ export const initializeCache = async () => {
     if (redisConfig) {
       redisConfig.database = cfg.get('authorization:cache:db-index');
       redisInstance = createClient(redisConfig);
-      redisInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache', err));
+      redisInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
       await redisInstance.connect();
       ttl = cfg.get('authorization:cache:ttl');
     }
@@ -41,7 +41,7 @@ export const initializeCache = async () => {
       // init redis subject instance
       redisSubConfig.database = redisSubConfig['db-indexes']['db-subject'];
       redisSubjectInstance = createClient(redisSubConfig);
-      redisSubjectInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache', err));
+      redisSubjectInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
       await redisSubjectInstance.connect();
     }
   }
@@ -153,7 +153,7 @@ export const flushCache = async (prefix?: string) => {
       logger.debug(`Successfully flushed cache pattern ${flushPattern}`);
       return;
     } catch (err) {
-      logger.error('Error flushing ACS cache', { message: err.message });
+      logger.error('Error flushing ACS cache',  { code: err.code, message: err.message, stack: err.stack });
       return;
     }
   }

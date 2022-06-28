@@ -181,8 +181,7 @@ export class UnAuthZ implements IAuthZ {
         return await this.acs.isAllowed(authZRequest);
       }, useCache, 'UnAuthZ:isAllowed');
     } catch (err) {
-      logger.error('Error invoking access-control-srv isAllowed operation', err);
-      logger.error('error stack', err.stack);
+      logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -226,8 +225,7 @@ export class UnAuthZ implements IAuthZ {
         return await this.acs.whatIsAllowed(authZRequest);
       }, useCache, 'UnAuthZ:whatIsAllowed');
     } catch (err) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation', err);
-      logger.error('error stack', err.stack);
+      logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -301,8 +299,7 @@ export class ACSAuthZ implements IAuthZ {
         return await this.acs.isAllowed(authZRequest);
       }, useCache, cachePrefix + ':isAllowed');
     } catch (err) {
-      logger.error('Error invoking access-control-srv isAllowed operation', err);
-      logger.error('error stack', err.stack);
+      logger.error('Error invoking access-control-srv isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -356,8 +353,7 @@ export class ACSAuthZ implements IAuthZ {
         return await this.acs.whatIsAllowed(authZRequest);
       }, useCache, cachePrefix + ':whatIsAllowed');
     } catch (err) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation', err);
-      logger.error('error stack', err.stack);
+      logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }

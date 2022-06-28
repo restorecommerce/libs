@@ -172,8 +172,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
       // Note: it is assumed that there is only one policy set
       policySetResponse = await whatIsAllowedRequest(subClone, resource, action, ctx, useCache);
     } catch (err) {
-      logger.error('Error calling whatIsAllowed operation', { message: err.message });
-      logger.error('Error stack', err.stack);
+      logger.error('Error calling whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -227,8 +226,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
     try {
       decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err) {
-      logger.error('Error calling isAllowed operation', { message: err.message });
-      logger.error('Error stack', err.stack);
+      logger.error('Error calling isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -277,8 +275,7 @@ export const isAllowed = async (request: ACSRequest,
       isAllowedResponse.obligation = mapResourceURNObligationProperties(isAllowedResponse.obligation);
     }
   } catch (err) {
-    logger.error('Error invoking acs-srv isAllowed method', err.message);
-    logger.error('Error Stack', err.stack);
+    logger.error('Error invoking acs-srv isAllowed method',  { code: err.code, message: err.message, stack: err.stack });
     return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
 
@@ -301,8 +298,7 @@ export const whatIsAllowed = async (request: ACSRequest,
       whatIsAllowedResponse.obligation = mapResourceURNObligationProperties(whatIsAllowedResponse.obligation);
     }
   } catch (err) {
-    logger.error('Error invoking acs-srv whatIsAllowed method', err.message);
-    logger.error('Error Stack', err.stack);
+    logger.error('Error invoking acs-srv whatIsAllowed method',  { code: err.code, message: err.message, stack: err.stack });
     return { decision: Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
   }
 

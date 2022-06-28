@@ -258,7 +258,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       }
     } catch (err) {
       logger.error('Error caught evaluating condition:', { condition });
-      logger.error('Error', { err });
+      logger.error('Error', { code: err.code, message: err.message, stack: err.stack });
       return;
     }
   }

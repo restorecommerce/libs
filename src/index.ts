@@ -208,19 +208,26 @@ export const toObject = (input) => {
   if (_.isArray(filtersArr)) {
     for (let filterArr of filtersArr) {
       let t = filterArr?.filter;
-      let operator = filterArr?.operator;
-      if (!operator) {
-        operator = '$and';
-        finalObj = { $and: [] };
-      } else {
-        operator = `$${operator}`; // append $ to operator
+      let operatorValue;
+      if (typeof filterArr?.operator === 'string' || filterArr?.operator instanceof String) {
+        operatorValue = filterArr?.operator;
+      } else if (Number.isInteger(filterArr?.operator)) {
+        operatorValue = filterOperatorMap.get(filterArr?.operator);
+      }
+      // default operator is `and`
+      if (!operatorValue) {
+        operatorValue = 'and';
       }
       for (let filter of t) {
         let obj = {};
         obj = convertToObject(filter, obj);
-        convertedObject.push(obj);
+        if(!_.isEmpty(obj)) {
+          convertedObject.push(obj);
+        }
       }
-      finalObj[operator] = convertedObject;
+      if (!_.isEmpty(convertedObject)) {
+        finalObj[`$${operatorValue}`] = convertedObject;
+      }
     }
   }
   return finalObj;

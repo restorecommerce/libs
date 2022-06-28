@@ -102,8 +102,7 @@ export class GraphResourcesServiceBase {
           options, filters);
         this.logger.debug('Received traversal ArrayCursor from DB');
       } catch (err) {
-        this.logger.error('Error stack', err);
-        this.logger.error('Error executing DB Traversal', { error: err.message });
+        this.logger.error('Error executing DB Traversal', { code: err.code, message: err.message, stack: err.stack });
         await call.write({
           operation_status: { code: err.code ? err.code : 500, message: err.message }
         });
@@ -179,8 +178,7 @@ export class GraphResourcesServiceBase {
       this.logger.debug('Traversal request ended');
       return;
     } catch (err) {
-      this.logger.error('Error caught executing traversal', { err: err.message });
-      this.logger.error('Error stack', err);
+      this.logger.error('Error caught executing traversal', { code: err.code, message: err.message, stack: err.stack });
       return {
         operation_status: { code: err.code ? err.code : 500, message: err.message }
       };

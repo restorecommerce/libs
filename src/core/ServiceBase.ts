@@ -140,8 +140,7 @@ export class ServiceBase {
       };
       return docs;
     } catch (e) {
-      const { code, message } = e;
-      this.logger.error('Error caught while processing read request', { code, message });
+      this.logger.error('Error caught while processing read request', { code: e.code, message: e.message, stack: e.stack });
       if (!docs.status) {
         docs.status = {};
       }
@@ -273,8 +272,7 @@ export class ServiceBase {
       this.logger.info(this.name + ' create response', docs);
       return docs;
     } catch (e) {
-      const { code, message } = e;
-      this.logger.error('Error caught while processing create request', { code, message });
+      this.logger.error('Error caught while processing create request', { code: e.code, message: e.message, stack: e.stack });
       docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
@@ -339,8 +337,7 @@ export class ServiceBase {
       };
       return { status: statusArray, operation_status };
     } catch (e) {
-      const { code, message } = e;
-      this.logger.error('Error caught while processing delete request', { code, message });
+      this.logger.error('Error caught while processing delete request', { code: e.code, message: e.message, stack: e.stack });
       deleteResponse.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
@@ -379,8 +376,7 @@ export class ServiceBase {
       this.logger.info(this.name + ' update response', docs);
       return docs;
     } catch (e) {
-      const { code, message } = e;
-      this.logger.error('Error caught while processing update request', { code, message });
+      this.logger.error('Error caught while processing update request', { code: e.code, message: e.message, stack: e.stack });
       docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message
@@ -410,8 +406,7 @@ export class ServiceBase {
       this.logger.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs;
     } catch (e) {
-      const { code, message } = e;
-      this.logger.error('Error caught while processing upsert request', { code, message });
+      this.logger.error('Error caught while processing upsert request', { code: e.code, message: e.message, stack: e.stack });
       docs.operation_status = {
         code: e.code,
         message: e.details ? e.details : e.message

@@ -298,7 +298,7 @@ export class ResourcesAPIBase {
         return result;
       }
     } catch (e) {
-      this.logger.error('Error creating documents', { error: e.message });
+      this.logger.error('Error creating documents', { code: e.code, message: e.message, stack: e.stack });
       result.push({
         error: true,
         errorNum: e.code,
@@ -367,7 +367,7 @@ export class ResourcesAPIBase {
       return deleteResponse;
     }
     catch (err) {
-      this.logger.error('Error deleting documents', { error: err.message });
+      this.logger.error('Error deleting documents', { code: err.code, message: err.message, stack: err.stack });
       deleteResponse.push({
         error: true,
         errorNum: err.code,
@@ -452,7 +452,7 @@ export class ResourcesAPIBase {
 
       return result;
     } catch (error) {
-      this.logger.error('Error upserting documents', { error: error.message });
+      this.logger.error('Error upserting documents', { code: error.code, message: error.message, stack: error.stack });
       result.push({
         error: true,
         errorNum: error.code,
@@ -555,7 +555,7 @@ export class ResourcesAPIBase {
       }
       return updateResponse;
     } catch (e) {
-      this.logger.error('Error updating documents', { error: e.message });
+      this.logger.error('Error updating documents', { code: e.code, message: e.message, stack: e.stack });
       updateResponse.push({
         error: true,
         errorNum: e.code,

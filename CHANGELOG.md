@@ -1,3 +1,7 @@
+### 0.2.15 (July 7th, 2022)
+
+- Up deps
+
 ### 0.2.14 (June 28th, 2022)
 
 - added empty check for filter

@@ -136,6 +136,38 @@ describe('converting to filter to object', () => {
     dbFilter.should.deepEqual(expectedDBObject);
   });
 
+  it('should convert filters array to valid DB filter object', () => {
+    const protoFilter =
+    {
+      filters: [
+        {
+          filter: [
+            {
+              field: 'id',
+              operation: 'in',
+              value: 'test1'
+            }
+          ],
+          operator: 'and'
+        },
+        {
+          filter: [
+            {
+              field: 'id',
+              operation: 'eq',
+              value: 'test2'
+            }
+          ],
+          operator: 'or'
+        }
+      ]
+    };
+    /* eslint-disable */
+    const expectedDBObject = [{"$and":[{"id":{"$in":"test1"}}]},{"$or":[{"id":"test2"}]}]
+    const dbFilter = toObject(protoFilter);
+    dbFilter.should.deepEqual(expectedDBObject);
+  });
+
 });
 
 const now = Date.now();

@@ -204,10 +204,13 @@ export const toObject = (input) => {
     filtersArr = input;
   }
   let finalObj = {};
-  let convertedObject = [];
   if (_.isArray(filtersArr)) {
+    if (filtersArr.length > 1) {
+      finalObj = [];
+    }
     for (let filterArr of filtersArr) {
-      let t = filterArr?.filter;
+      let convertedObject = [];
+      let filterObj = filterArr?.filter;
       let operatorValue;
       if (typeof filterArr?.operator === 'string' || filterArr?.operator instanceof String) {
         operatorValue = filterArr?.operator;
@@ -218,14 +221,18 @@ export const toObject = (input) => {
       if (!operatorValue) {
         operatorValue = 'and';
       }
-      for (let filter of t) {
-        let obj = {};
-        obj = convertToObject(filter, obj);
-        if(!_.isEmpty(obj)) {
-          convertedObject.push(obj);
+      if (_.isArray(filterObj)) {
+        for (let filter of filterObj) {
+          let obj = {};
+          obj = convertToObject(filter, obj);
+          if (!_.isEmpty(obj)) {
+            convertedObject.push(obj);
+          }
         }
       }
-      if (!_.isEmpty(convertedObject)) {
+      if (_.isArray(finalObj) && (!_.isEmpty(convertedObject))) {
+        finalObj.push({ [`$${operatorValue}`]: convertedObject });
+      } else if (!_.isEmpty(convertedObject)) {
         finalObj[`$${operatorValue}`] = convertedObject;
       }
     }

@@ -233,7 +233,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).equal('Network error: request to https://self-signed.badssl.com/ failed, reason: self-signed certificate');
+      should((resultError as Error).message).match(/Network error: request to https:\/\/self-signed\.badssl\.com\/ failed, reason: self.signed certificate/);
     });
 
   it('a job should pass when ignoring a self-signed certificate',
@@ -330,6 +330,6 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).match(/^Network error: request to http:\/\/localhost:65534\/ failed, reason: connect ECONNREFUSED 127.0.0.1:65534$/);
+      should((resultError as Error).message).match(/^Network error: request to http:\/\/localhost:65534\/ failed, reason: connect ECONNREFUSED 127\.0\.0\.1:65534$/);
     });
 });

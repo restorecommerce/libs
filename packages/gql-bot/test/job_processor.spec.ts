@@ -233,7 +233,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).equal('Network error: request to https://self-signed.badssl.com/ failed, reason: self signed certificate');
+      should((resultError as Error).message).equal('Network error: request to https://self-signed.badssl.com/ failed, reason: self-signed certificate');
     });
 
   it('a job should pass when ignoring a self-signed certificate',
@@ -313,5 +313,23 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).undefined();
+    });
+
+  it('a job should error when backend does not exist',
+    async (): Promise<void> => {
+      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
+      job3.options.processor = new GraphQLProcessor({
+        entry: 'http://localhost:65534/'
+      });
+
+      const jobProcessor = new JobProcessor(job3);
+      const jobResult = new Job();
+
+      await jobProcessor.start(null, jobResult, true);
+
+      const resultError = await jobResult.wait().catch(err => err);
+
+      should(resultError).not.undefined();
+      should((resultError as Error).message).equal('Network error: request to http://localhost:65534/ failed, reason: connect ECONNREFUSED 127.0.0.1:65534');
     });
 });

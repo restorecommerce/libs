@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const accessControlModule = createFacadeModuleFactory<AccessControlConfig, AccessControlModule>(namespace, (facade, config) => {
   const accessControl = {
-    client: new AccessControlSrvGrpcClient(config.config.client, facade.logger)
+    client: new AccessControlSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

@@ -1,16 +1,13 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
-import {
-  Subject,
-  protoMetadata as protoMetadata1,
-} from "../../io/restorecommerce/auth";
-import { protoMetadata as protoMetadata3 } from "../../io/restorecommerce/options";
+import { Subject, protoMetadata as protoMetadata1 } from "./auth";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata3 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.token";
 
@@ -287,16 +284,110 @@ export const GrantId = {
 };
 
 /** Microservice definition. */
-export interface Service {
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.token.Service",
+  methods: {
+    /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
+    upsert: {
+      name: "upsert",
+      requestType: TokenData,
+      requestStream: false,
+      responseType: Any,
+      responseStream: false,
+      options: {},
+    },
+    find: {
+      name: "find",
+      requestType: Identifier,
+      requestStream: false,
+      responseType: Any,
+      responseStream: false,
+      options: {},
+    },
+    /** removes the id_token from redis */
+    destroy: {
+      name: "destroy",
+      requestType: Identifier,
+      requestStream: false,
+      responseType: Any,
+      responseStream: false,
+      options: {},
+    },
+    /** Destroy/Drop/Remove a stored id_token by its grantId property reference. */
+    revokeByGrantId: {
+      name: "revokeByGrantId",
+      requestType: GrantId,
+      requestStream: false,
+      responseType: Any,
+      responseStream: false,
+      options: {},
+    },
+    /** Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc). */
+    consume: {
+      name: "consume",
+      requestType: Identifier,
+      requestStream: false,
+      responseType: Any,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
-  upsert(request: TokenData): Promise<Any>;
-  find(request: Identifier): Promise<Any>;
+  upsert(
+    request: TokenData,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
+  find(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** removes the id_token from redis */
-  destroy(request: Identifier): Promise<Any>;
+  destroy(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** Destroy/Drop/Remove a stored id_token by its grantId property reference. */
-  revokeByGrantId(request: GrantId): Promise<Any>;
+  revokeByGrantId(
+    request: GrantId,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc). */
-  consume(request: Identifier): Promise<Any>;
+  consume(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
+  upsert(
+    request: DeepPartial<TokenData>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
+  find(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
+  /** removes the id_token from redis */
+  destroy(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
+  /** Destroy/Drop/Remove a stored id_token by its grantId property reference. */
+  revokeByGrantId(
+    request: DeepPartial<GrantId>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
+  /** Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc). */
+  consume(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -645,13 +736,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

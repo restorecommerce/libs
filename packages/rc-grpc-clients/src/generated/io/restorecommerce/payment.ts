@@ -1,17 +1,14 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata1,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata1 } from "./auth";
 import {
   Status,
   OperationStatus,
   protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/status";
-import { protoMetadata as protoMetadata3 } from "../../io/restorecommerce/options";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata3 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment";
 
@@ -2109,17 +2106,113 @@ export const Item = {
   },
 };
 
-export interface Service {
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.payment.Service",
+  methods: {
+    /** Wrapper for setup_authorization in ActiveMerchant */
+    setupAuthorization: {
+      name: "SetupAuthorization",
+      requestType: SetupRequest,
+      requestStream: false,
+      responseType: SetupResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Wrapper for setup_purchase in ActiveMerchant */
+    setupPurchase: {
+      name: "SetupPurchase",
+      requestType: SetupRequest,
+      requestStream: false,
+      responseType: SetupResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+    authorize: {
+      name: "Authorize",
+      requestType: PaymentRequest,
+      requestStream: false,
+      responseType: PaymentResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+    purchase: {
+      name: "Purchase",
+      requestType: PaymentRequest,
+      requestStream: false,
+      responseType: PaymentResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Can capture both cardless and standard authorization. */
+    capture: {
+      name: "Capture",
+      requestType: CaptureRequest,
+      requestStream: false,
+      responseType: PaymentResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   /** Wrapper for setup_authorization in ActiveMerchant */
-  SetupAuthorization(request: SetupRequest): Promise<SetupResponse>;
+  setupAuthorization(
+    request: SetupRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<SetupResponse>>;
   /** Wrapper for setup_purchase in ActiveMerchant */
-  SetupPurchase(request: SetupRequest): Promise<SetupResponse>;
+  setupPurchase(
+    request: SetupRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<SetupResponse>>;
   /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
-  Authorize(request: PaymentRequest): Promise<PaymentResponse>;
+  authorize(
+    request: PaymentRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentResponse>>;
   /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
-  Purchase(request: PaymentRequest): Promise<PaymentResponse>;
+  purchase(
+    request: PaymentRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentResponse>>;
   /** Can capture both cardless and standard authorization. */
-  Capture(request: CaptureRequest): Promise<PaymentResponse>;
+  capture(
+    request: CaptureRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  /** Wrapper for setup_authorization in ActiveMerchant */
+  setupAuthorization(
+    request: DeepPartial<SetupRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<SetupResponse>;
+  /** Wrapper for setup_purchase in ActiveMerchant */
+  setupPurchase(
+    request: DeepPartial<SetupRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<SetupResponse>;
+  /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+  authorize(
+    request: DeepPartial<PaymentRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentResponse>;
+  /** Gets payment details by token or transaction. Only supported by PayPal Express Checkout. */
+  purchase(
+    request: DeepPartial<PaymentRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentResponse>;
+  /** Can capture both cardless and standard authorization. */
+  capture(
+    request: DeepPartial<CaptureRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -3316,13 +3409,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

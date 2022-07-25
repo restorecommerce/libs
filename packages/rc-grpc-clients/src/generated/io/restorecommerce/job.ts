@@ -1,31 +1,25 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/status";
+} from "./status";
 import {
   Any,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
-import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
   FieldFilter,
-  DeleteResponse,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/options";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata6 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.job";
 
@@ -1550,12 +1544,98 @@ export const JobFilter = {
  * The microservice for scheduling jobs.
  * Provides CRUD operations.
  */
-export interface Service {
-  Read(request: JobReadRequest): Promise<JobListResponse>;
-  Create(request: JobList): Promise<JobListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: JobList): Promise<JobListResponse>;
-  Upsert(request: JobList): Promise<JobListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.job.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: JobReadRequest,
+      requestStream: false,
+      responseType: JobListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: JobList,
+      requestStream: false,
+      responseType: JobListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: JobList,
+      requestStream: false,
+      responseType: JobListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: JobList,
+      requestStream: false,
+      responseType: JobListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: JobReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  create(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  upsert(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<JobReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  create(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  upsert(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -2956,13 +3036,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

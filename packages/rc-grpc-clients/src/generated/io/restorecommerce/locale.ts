@@ -1,27 +1,21 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata5 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.locale";
 
@@ -442,12 +436,98 @@ export const Locale = {
 };
 
 /** Microservice definition. */
-export interface Service {
-  Read(request: ReadRequest): Promise<LocaleListResponse>;
-  Create(request: LocaleList): Promise<LocaleListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: LocaleList): Promise<LocaleListResponse>;
-  Upsert(request: LocaleList): Promise<LocaleListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.locale.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: LocaleListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: LocaleList,
+      requestStream: false,
+      responseType: LocaleListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: LocaleList,
+      requestStream: false,
+      responseType: LocaleListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: LocaleList,
+      requestStream: false,
+      responseType: LocaleListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  create(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  upsert(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  create(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  upsert(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -840,13 +920,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

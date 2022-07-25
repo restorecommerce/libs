@@ -1,3 +1,16 @@
+import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
+import {
+  RoleAssociation,
+  Subject,
+  DeepPartial
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta';
+import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import {
+  Response_Decision
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+
 export enum AuthZAction {
   CREATE = 'CREATE',
   READ = 'READ',
@@ -31,7 +44,7 @@ export interface CtxResource {
 }
 
 export interface ACSClientContext {
-  subject?: Subject;
+  subject?: DeepPartial<Subject>;
   resources?: CtxResource[];
 }
 
@@ -59,26 +72,13 @@ export interface ResolvedSubject {
   hierarchical_scopes?: HierarchicalScope[]; // HR scope for user
 }
 
-export interface Subject {
-  id?: string;
-  scope?: string; // target scope
-  unauthenticated?: boolean;
-  token?: string;
-}
-
-export enum Decision {
-  PERMIT = 'PERMIT',
-  DENY = 'DENY',
-  INDETERMINATE = 'INDETERMINATE'
-}
-
 export interface Obligation {
   resource: string;
   property: string[];
 }
 
 export interface DecisionResponse {
-  decision: Decision;
+  decision: Response_Decision;
   obligation?: Obligation[];
   operation_status: {
     code: number;
@@ -98,7 +98,7 @@ export interface Request<TTarget, TContext> {
 }
 
 export interface Response {
-  decision: Decision;
+  decision: Response_Decision;
 }
 
 /**
@@ -130,7 +130,7 @@ export interface AuthZContext {
 
 export interface ResourceData {
   id: string;
-  meta: MetaInfo;
+  meta: Meta;
   [key: string]: any; // any other fields
 }
 
@@ -140,7 +140,7 @@ export interface AuthZRequest extends Request<AuthZTarget, AuthZContext> {
 }
 
 export interface AuthZResponse extends Response {
-  decision: Decision;
+  decision: Response_Decision;
   obligation: string;
 }
 
@@ -171,24 +171,6 @@ export interface UnauthenticatedData {
   unauthenticated: true;
 }
 
-export interface Attribute {
-  id: string;
-  value: string;
-  attribute?: Attribute[];
-}
-
-export interface RoleAssociation {
-  role: string;
-  attributes?: Attribute[];
-}
-
-export interface MetaInfo {
-  created: number;
-  modified: number;
-  modified_by: string;
-  owner: Attribute[]; // list of entities who own a resource
-}
-
 export interface UserScope {
   role_associations: RoleAssociation[];
   // the ID from the chosen organization; defaults to `default_scope`
@@ -210,30 +192,9 @@ export interface PolicySetRQ extends AccessControlObjectInterface {
   policies?: PolicyRQ[];
 }
 
-export enum FilterValueType {
-  STRING = 0,
-  NUMBER = 1,
-  BOOLEAN = 2,
-  DATE = 3,
-  ARRAY = 4,
-};
-
-export interface Filter {
-  field: string;
-  operation: FilterOperation;
-  value: string;
-  type?: FilterValueType; // defaults to string data type if not provided
-  filters?: Filters[];
-}
-
-export interface Filters {
-  filter?: Filter[];
-  operator?: OperatorType;
-}
-
 export interface ResourceFilterMap {
   resource: string;
-  filters: Filters[];
+  filters: FilterOp[];
 }
 
 export interface CustomQueryArgs {
@@ -248,7 +209,7 @@ export interface PolicySetRQResponse extends AccessControlObjectInterface {
   filters?: ResourceFilterMap[];
   custom_query_args?: CustomQueryArgs[];
   obligation?: Obligation[];
-  decision: Decision;
+  decision: Response_Decision;
   operation_status: {
     code: number;
     message: string;
@@ -270,17 +231,6 @@ export interface AttributeTarget {
   action: Attribute[];
 }
 
-export enum Effect {
-  PERMIT = 'PERMIT',
-  DENY = 'DENY',
-  INDETERMINATE = 'INDETERMINATE'
-}
-
-export interface ACSRequest {
-  target: TargetReq;
-  context: Context;
-}
-
 export interface TargetReq {
   subject: Attribute[];
   resources: Attribute[];
@@ -292,20 +242,3 @@ export interface Context {
   resources: any[];
   security: any;
 }
-
-export enum FilterOperation {
-  eq = 0,
-  lt = 1,
-  lte = 2,
-  gt = 3,
-  gte = 4,
-  isEmpty = 5,
-  iLike = 6,
-  in = 7,
-  neq = 8
-};
-
-export enum OperatorType {
-  and = 0,
-  or = 1,
-};

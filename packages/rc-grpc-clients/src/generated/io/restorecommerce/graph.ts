@@ -1,24 +1,14 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata2 } from "./auth";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
-import {
-  OperationStatus,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/status";
-import { Observable } from "rxjs";
-import {
-  protoMetadata as protoMetadata4,
-  Sort,
-} from "../../io/restorecommerce/resource_base";
+import { OperationStatus, protoMetadata as protoMetadata3 } from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata4, Sort } from "./resource_base";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.graph";
 
@@ -976,8 +966,34 @@ export const TraversalResponse = {
 };
 
 /** Service provides the CRUD operations */
-export interface Service {
-  Traversal(request: TraversalRequest): Observable<TraversalResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.graph.Service",
+  methods: {
+    traversal: {
+      name: "Traversal",
+      requestType: TraversalRequest,
+      requestStream: false,
+      responseType: TraversalResponse,
+      responseStream: true,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  traversal(
+    request: TraversalRequest,
+    context: CallContext & CallContextExt
+  ): ServerStreamingMethodResult<DeepPartial<TraversalResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  traversal(
+    request: DeepPartial<TraversalRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): AsyncIterable<TraversalResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1697,13 +1713,10 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
-
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
+
+export type ServerStreamingMethodResult<Response> = {
+  [Symbol.asyncIterator](): AsyncIterator<Response, void>;
+};

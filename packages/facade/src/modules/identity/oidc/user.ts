@@ -1,6 +1,6 @@
 import { OIDCBodyLoginFn, AuthUserKeyWhitelist, AuthUser, OIDCLoginFn, OIDCBodyLoginCredentials } from './interfaces';
 import {
-  Service as userService,
+  ServiceClient as userService,
   LoginRequest,
   FindRequest,
   User
@@ -72,7 +72,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
 }
 
 export async function findUserById(service: userService, id: string): Promise<AuthUser> {
-  const result = await service.Find(FindRequest.fromPartial({
+  const result = await service.find(FindRequest.fromPartial({
     id,
   }));
 

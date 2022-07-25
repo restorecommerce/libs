@@ -1,14 +1,21 @@
 import * as _ from 'lodash';
 import {
-  UnauthenticatedContext, Decision, ACSRequest, Subject, ACSClientContext, Filters,
+  UnauthenticatedContext, ACSClientContext,
   UnauthenticatedData, DecisionResponse, PolicySetRQResponse, Operation, Resource
 } from './interfaces';
 import { AuthZAction } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
 import { generateOperationStatus, createResourceFilterMap, FilterMapResponse, mapResourceURNObligationProperties } from '../utils';
-import { GrpcClient } from '@restorecommerce/grpc-client';
+import { createClient, createChannel } from '@restorecommerce/grpc-client';
 import { UnAuthZ, ACSAuthZ, authZ } from './authz';
+import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import {
+  Request,
+  Response_Decision
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import { ServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
@@ -16,13 +23,16 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
     && 'unauthenticated' in subject && subject['unauthenticated'];
 };
 
-const whatIsAllowedRequest = async (subject: Subject, resource: Resource[],
+const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new GrpcClient(grpcConfig, logger);
-    const acs = acsClient['acs-srv'];
-    return await new UnAuthZ(acs).whatIsAllowed({
+    const channel = createChannel(grpcConfig.address);
+    const acsClient = createClient({
+      ...grpcConfig,
+      logger
+    }, ServiceDefinition, channel);
+    return await new UnAuthZ(acsClient).whatIsAllowed({
       target: {
         subject: (subject as UnauthenticatedData), resource, action
       },
@@ -36,7 +46,7 @@ const whatIsAllowedRequest = async (subject: Subject, resource: Resource[],
         security: {}
       },
       target: {
-        subject,
+        subject: subject as Subject,
         resource,
         action
       }
@@ -48,9 +58,12 @@ export const isAllowedRequest = async (subject: Subject,
   resource: Resource[], action: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
-    const acsClient = new GrpcClient(grpcConfig, logger);
-    const acs = acsClient['acs-srv'];
-    return await new UnAuthZ(acs).isAllowed({
+    const channel = createChannel(grpcConfig.address);
+    const acsClient = createClient({
+      ...grpcConfig,
+      logger
+    }, ServiceDefinition, channel);
+    return await new UnAuthZ(acsClient).isAllowed({
       target: {
         subject: (subject as UnauthenticatedData), resource, action
       },
@@ -90,7 +103,7 @@ export const isAllowedRequest = async (subject: Subject,
  * is not used and ACS request is made to `access-control-srv`
  * @returns {DecisionResponse | PolicySetRQResponse}
  */
-export const accessRequest = async (subject: Subject, resource: Resource[],
+export const accessRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
   database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
   // when subject is not passed (if auth header is not set)
@@ -106,7 +119,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
   if (token) {
     const configuredApiKey = cfg.get('authentication:apiKey');
     if (configuredApiKey === token) {
-      return { decision: Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
+      return { decision: Response_Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
     }
   }
   let authzEnabled = cfg.get('authorization:enabled');
@@ -121,11 +134,11 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
   }
   // if authorization is disabled
   if (!authzEnabled) {
-    return { decision: Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
+    return { decision: Response_Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
   }
 
   if (_.isEmpty(subject)) {
-    return { decision: Decision.DENY, operation_status: generateOperationStatus(errors.USER_NOT_LOGGED_IN.code, errors.USER_NOT_LOGGED_IN.message) };
+    return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(errors.USER_NOT_LOGGED_IN.code, errors.USER_NOT_LOGGED_IN.message) };
   }
 
   let subjectID;
@@ -145,7 +158,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
     const details = 'Entity missing';
     logger.verbose(msg);
     logger.verbose('Details:', { details });
-    return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+    return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
   }
 
   // default ACS operation is isAllowed
@@ -173,7 +186,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
       policySetResponse = await whatIsAllowedRequest(subClone, resource, action, ctx, useCache);
     } catch (err) {
       logger.error('Error calling whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
     // handle case if policySet is empty
@@ -183,7 +196,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
 
     if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && !authzEnforced) {
@@ -203,7 +216,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
 
     policySetResponse.filters = (resourceFilters as FilterMapResponse).resourceFilterMap;
     policySetResponse.custom_query_args = (resourceFilters as FilterMapResponse).customQueryArgs;
-    policySetResponse.decision = Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
+    policySetResponse.decision = Response_Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
     policySetResponse.operation_status = generateOperationStatus(200, 'success');
     return policySetResponse;
   }
@@ -219,7 +232,7 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
     resourceString = JSON.stringify(resourceList);
   }
   // default deny
-  let decisionResponse: DecisionResponse = { decision: Decision.DENY, operation_status: { code: 0, message: '' } };
+  let decisionResponse: DecisionResponse = { decision: Response_Decision.DENY, operation_status: { code: 0, message: '' } };
   // isAllowed operation
   if (operation === Operation.isAllowed) {
     // authorization
@@ -227,34 +240,34 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
       decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err) {
       logger.error('Error calling isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
-    if (decisionResponse && decisionResponse.decision != Decision.PERMIT && authzEnforced) {
+    if (decisionResponse && decisionResponse.decision != Response_Decision.PERMIT && authzEnforced) {
       let details = '';
-      if (decisionResponse.decision === Decision.INDETERMINATE) {
+      if (decisionResponse.decision === Response_Decision.INDETERMINATE) {
         details = 'No matching policy / rule was found';
-      } else if (decisionResponse.decision === Decision.DENY) {
+      } else if (decisionResponse.decision === Response_Decision.DENY) {
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`;
+        `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${Response_Decision[decisionResponse.decision]}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
   }
-  if (!authzEnforced && decisionResponse && decisionResponse.decision != Decision.PERMIT) {
+  if (!authzEnforced && decisionResponse && decisionResponse.decision != Response_Decision.PERMIT) {
     let details = '';
-    if (decisionResponse.decision === Decision.INDETERMINATE) {
+    if (decisionResponse.decision === Response_Decision.INDETERMINATE) {
       details = 'No matching policy / rule was found';
-    } else if (decisionResponse.decision === Decision.DENY) {
+    } else if (decisionResponse.decision === Response_Decision.DENY) {
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
     logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${decisionResponse.decision}`);
+      `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${Response_Decision[decisionResponse.decision]}`);
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
-    decisionResponse.decision = Decision.PERMIT;
+    decisionResponse.decision = Response_Decision.PERMIT;
   }
   return decisionResponse;
 };
@@ -266,20 +279,21 @@ export const accessRequest = async (subject: Subject, resource: Resource[],
  * @param {ACSContext} ctx Context Object containing requester's subject information
  * @return {Decision} PERMIT or DENY or INDETERMINATE
  */
-export const isAllowed = async (request: ACSRequest,
-  authZ: ACSAuthZ): Promise<DecisionResponse> => {
-  let isAllowedResponse: DecisionResponse;
+export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<DecisionResponse> => {
+  let response: DecisionResponse;
   try {
-    isAllowedResponse = await authZ.acs.isAllowed(request);
-    if(isAllowedResponse && isAllowedResponse.obligation && isAllowedResponse.obligation.length >0) {
-      isAllowedResponse.obligation = mapResourceURNObligationProperties(isAllowedResponse.obligation);
-    }
+    const isAllowedResponse = await authZ.acs.isAllowed(request);
+    response = {
+      decision: isAllowedResponse.decision,
+      obligation: mapResourceURNObligationProperties(isAllowedResponse.obligation),
+      operation_status: isAllowedResponse.operation_status
+    };
   } catch (err) {
     logger.error('Error invoking acs-srv isAllowed method',  { code: err.code, message: err.message, stack: err.stack });
-    return { decision: Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
+    return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
 
-  return isAllowedResponse;
+  return response;
 };
 
 /**
@@ -287,22 +301,22 @@ export const isAllowed = async (request: ACSRequest,
  * a policy set reverse query `PolicySetRQ`
  * @param {ACSRequest} authZRequest input authorization request
  * @param {ACSContext} ctx Context Object containing requester's subject information
- * @return {PolicySetRQ} set of applicalbe policies and rules for the input request
+ * @return {PolicySetRQ} set of applicable policies and rules for the input request
  */
-export const whatIsAllowed = async (request: ACSRequest,
-  authZ: ACSAuthZ): Promise<PolicySetRQResponse> => {
-  let whatIsAllowedResponse: PolicySetRQResponse;
+export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<PolicySetRQResponse> => {
+  let response: PolicySetRQResponse;
   try {
-    whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
-    if(whatIsAllowedResponse && whatIsAllowedResponse.obligation && whatIsAllowedResponse.obligation.length >0) {
-      whatIsAllowedResponse.obligation = mapResourceURNObligationProperties(whatIsAllowedResponse.obligation);
-    }
+    const whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
+    response = {
+      ...whatIsAllowedResponse,
+      obligation: mapResourceURNObligationProperties(whatIsAllowedResponse.obligation)
+    } as any; // TODO Decision?
   } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method',  { code: err.code, message: err.message, stack: err.stack });
-    return { decision: Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
+    return { decision: Response_Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
   }
 
-  return whatIsAllowedResponse;
+  return response;
 };
 
 export interface Output {
@@ -334,7 +348,7 @@ export interface LoginError {
 }
 
 export interface QueryArguments {
-  filters?: Filters[];
+  filters?: FilterOp[];
   limit?: any;
   sort?: any;
   offset?: any;
@@ -349,10 +363,4 @@ export interface UserQueryArguments extends QueryArguments {
 export interface RoleRequest {
   role: string; // role ID
   organizations: string[]; //
-}
-
-export interface FilterType {
-  field?: string;
-  value?: string;
-  operation: Object;
 }

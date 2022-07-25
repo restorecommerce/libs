@@ -12,7 +12,10 @@ export { IdentityModule, IdentityConfig, IdentityContext } from './interfaces';
 const mount = eval('require("koa-mount")');
 
 export const identityModule = createFacadeModuleFactory<IdentityConfig, IdentityModule>('identity', (facade, config) => {
-  const identitySrvClient = new IdentitySrvGrpcClient(config.identitySrvClientConfig, facade.logger);
+  const identitySrvClient = new IdentitySrvGrpcClient(config.config.client.address, {
+    ...config.config.client,
+    logger: facade.logger,
+  });
 
   if (!!config.apiKey) {
     const apiKey = setupApiKey({

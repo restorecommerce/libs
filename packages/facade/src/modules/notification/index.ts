@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const notificationModule = createFacadeModuleFactory<NotificationConfig, NotificationModule>(namespace, (facade, config) => {
   const notification = {
-    client: new NotificationSrvGrpcClient(config.config.client, facade.logger)
+    client: new NotificationSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

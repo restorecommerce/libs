@@ -1,7 +1,7 @@
 import {
-  RoleAssociation, UserScope, Subject, PolicySetRQ, Effect, PolicySetRQResponse,
-  AttributeTarget, Attribute, HierarchicalScope, FilterOperation, OperatorType,
-  ResourceFilterMap, CustomQueryArgs, Decision, DecisionResponse, Resource, AuthZAction, ResolvedSubject, Obligation
+  UserScope, PolicySetRQ, PolicySetRQResponse,
+  AttributeTarget, HierarchicalScope,
+  ResourceFilterMap, CustomQueryArgs, DecisionResponse, Resource, AuthZAction, ResolvedSubject, Obligation
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -10,6 +10,19 @@ import nodeEval from 'node-eval';
 import logger from './logger';
 import { get } from './acs/cache';
 import { formatResourceType } from './acs/authz';
+import {
+  RoleAssociation,
+  Subject,
+  DeepPartial
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
+import {
+  Filter_Operation, FilterOp_Operator
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import {
+  Response_Decision
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 
 export const reduceRoleAssociations = async (roleAssociations: RoleAssociation[],
   scopeID: string): Promise<UserScope> => {
@@ -177,11 +190,11 @@ const validateCondition = (condition: string, request: any): any => {
 
 const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   userTotalScope: string[], urns: any, scopingUpdated, reqResources,
-  condition?: string, reqSubject?: Subject, database?: string): QueryParams => {
+  condition?: string, reqSubject?: DeepPartial<Subject>, database?: string): QueryParams => {
   const { subject, resources } = target;
   let ruleCondition = false;
   let filter = [];
-  const query: any = {};
+  const query: QueryParams = {};
   let filterId;
   let filterOperator;
 
@@ -220,7 +233,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
               ruleCondition = true;
               filter.push({
                 field: 'id',
-                operation: FilterOperation.eq,
+                operation: Filter_Operation.eq,
                 value: filterId
               });
             }
@@ -228,7 +241,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
             ruleCondition = true;
             filter.push({
               field: 'id',
-              operation: FilterOperation.eq,
+              operation: Filter_Operation.eq,
               value: filterId
             });
           }
@@ -250,7 +263,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
         ruleCondition = true;
         filter.push({
           field: 'id',
-          operation: FilterOperation.eq,
+          operation: Filter_Operation.eq,
           value: filterId
         });
       } else {
@@ -295,13 +308,13 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       if (effect == Effect.PERMIT) {
         filter.push({
           field: 'id',
-          operation: FilterOperation.eq,
+          operation: Filter_Operation.eq,
           value: attribute.value
         });
       } else {
         filter.push({
           field: 'id',
-          operation: FilterOperation.neq,
+          operation: Filter_Operation.neq,
           value: attribute.value
         });
       }
@@ -318,7 +331,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     }
   }
 
-  const key = effect == Effect.PERMIT ? OperatorType.or : OperatorType.and;
+  const key = effect == Effect.PERMIT ? FilterOp_Operator.or : FilterOp_Operator.and;
   if (query.filter && !query.filters) {
     query.filters = { filter: query['filter'] };
     // and or operator comparision
@@ -328,7 +341,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       query.filters.operator = filterOperator;
     }
     delete query['filter'];
-  } else if (!_.isEmpty(filter) || key == OperatorType.or) {
+  } else if (!_.isEmpty(filter) || key == FilterOp_Operator.or) {
     query['filters'] = {
       filter
     };
@@ -401,7 +414,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
           }
         }
 
-        if (!effect) {
+        if (effect === undefined) {
           effect = algorithm == urns.permitOverrides ? Effect.DENY : Effect.PERMIT;
         }
 
@@ -530,7 +543,7 @@ export const generateOperationStatus = (code?: number, message?: string) => {
  * @param ruleAttributes
  * @param requestAttributes
  */
-export const attributesMatch = (ruleAttributes: Attribute[], requestAttributes: Attribute[]): boolean => {
+export const attributesMatch = (ruleAttributes: DeepPartial<Attribute>[], requestAttributes: DeepPartial<Attribute>[]): boolean => {
   for (let attribute of ruleAttributes) {
     const id = attribute.id;
     const value = attribute.value;
@@ -612,7 +625,7 @@ export interface FilterMapResponse {
  */
 export const createResourceFilterMap = async (resource: Resource[],
   policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,
-  subject: Subject, subjectID: string, authzEnforced: boolean,
+  subject: DeepPartial<Subject>, subjectID: string, authzEnforced: boolean,
   targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
   let resourceFilterMap = [];
   let customQueryArgs = [];
@@ -673,14 +686,14 @@ export const createResourceFilterMap = async (resource: Resource[],
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      return { decision: Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
 
     if (!permissionArguments && !authzEnforced) {
       logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
         `resource:${resourceName}, action:${action}, target_scope:${targetScope}, ` +
         `but since ACS enforcement config is disabled overriding the ACS result`);
-      return { decision: Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
+      return { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
     }
 
     if (permissionArguments) {
@@ -710,7 +723,7 @@ export const createResourceFilterMap = async (resource: Resource[],
  * to property[].
  *
  */
-export const mapResourceURNObligationProperties = (obligation: any): Obligation[] => {
+export const mapResourceURNObligationProperties = (obligation: Attribute[]): Obligation[] => {
   let mappedResourceObligation: Obligation[] = [];
   const urns = cfg.get('authorization:urns');
   for (let obligationObj of obligation) {

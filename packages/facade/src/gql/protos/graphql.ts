@@ -299,7 +299,8 @@ export const getGQLResolverFunctions =
             }
           }
 
-          const rawResult = await service[realMethod](req);
+          const methodFunc = service[camelCase(realMethod)] || service[realMethod];
+          const rawResult = await methodFunc(req);
           const result = postProcessGQLValue(rawResult, outputTyping.output);
 
           const grpcClientConfig = cfg.client;
@@ -820,7 +821,8 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       req.subject!.token = authToken.split(' ')[1];
                     }
 
-                    const result = await service[resolver.targetMethod](req);
+                    const methodFunc = service[camelCase(resolver.targetMethod)] || service[resolver.targetMethod];
+                    const result = await methodFunc(req);
 
                     if (result && result.items && result.items.length) {
                       if (Array.isArray(parent[fieldJsonName])) {
@@ -861,4 +863,8 @@ const snakeToCamel = (s: string): string => {
 
 const capitalize = (s: string): string => {
   return s.substring(0, 1).toUpperCase() + s.substring(1);
+}
+
+export function camelCase(s: string): string {
+  return s.substring(0, 1).toLowerCase() + s.substring(1);
 }

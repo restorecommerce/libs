@@ -1,31 +1,25 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
-import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   Status,
   OperationStatus,
   protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/status";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata2,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/options";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata6 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_courier";
 
@@ -527,18 +521,98 @@ export const Deleted = {
   },
 };
 
-export interface Service {
-  Read(request: ReadRequest): Promise<FulfillmentCourierResponseList>;
-  Create(
-    request: FulfillmentCourierList
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.fulfillment_courier.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: FulfillmentCourierResponseList,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: FulfillmentCourierList,
+      requestStream: false,
+      responseType: FulfillmentCourierResponseList,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: FulfillmentCourierList,
+      requestStream: false,
+      responseType: FulfillmentCourierResponseList,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: FulfillmentCourierList,
+      requestStream: false,
+      responseType: FulfillmentCourierResponseList,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  create(
+    request: FulfillmentCourierList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  update(
+    request: FulfillmentCourierList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  upsert(
+    request: FulfillmentCourierList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentCourierResponseList>;
-  Update(
-    request: FulfillmentCourierList
+  create(
+    request: DeepPartial<FulfillmentCourierList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentCourierResponseList>;
-  Upsert(
-    request: FulfillmentCourierList
+  update(
+    request: DeepPartial<FulfillmentCourierList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentCourierResponseList>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
+  upsert(
+    request: DeepPartial<FulfillmentCourierList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentCourierResponseList>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -989,13 +1063,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

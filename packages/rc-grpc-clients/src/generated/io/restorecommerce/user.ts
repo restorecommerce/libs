@@ -1,51 +1,36 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
   RoleAssociation,
   Tokens,
-} from "../../io/restorecommerce/auth";
+} from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata6,
   OperationStatusObj,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
-import {
-  Image,
-  protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/image";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Image, protoMetadata as protoMetadata5 } from "./image";
 import {
   Any,
   protoMetadata as protoMetadata7,
 } from "../../google/protobuf/any";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata4,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
-import {
-  protoMetadata as protoMetadata8,
-  Role,
-} from "../../io/restorecommerce/role";
-import {
-  protoMetadata as protoMetadata9,
-  Resolver,
-} from "../../io/restorecommerce/options";
-import { protoMetadata as protoMetadata10 } from "../../io/restorecommerce/timezone";
-import { protoMetadata as protoMetadata11 } from "../../io/restorecommerce/locale";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata4, Attribute } from "./attribute";
+import { protoMetadata as protoMetadata8, Role } from "./role";
+import { protoMetadata as protoMetadata9, Resolver } from "./options";
+import { protoMetadata as protoMetadata10 } from "./timezone";
+import { protoMetadata as protoMetadata11 } from "./locale";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.user";
 
@@ -3394,39 +3379,353 @@ export const UserRole = {
 };
 
 /** The microservice for the user resource. */
-export interface Service {
-  Read(request: ReadRequest): Promise<UserListWithRoleResponse>;
-  Create(request: UserList): Promise<UserListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: UserList): Promise<UserListResponse>;
-  Upsert(request: UserList): Promise<UserListResponse>;
-  Find(request: FindRequest): Promise<UserListResponse>;
-  Register(request: RegisterRequest): Promise<UserResponse>;
-  Activate(request: ActivateRequest): Promise<OperationStatusObj>;
-  ChangePassword(request: ChangePasswordRequest): Promise<OperationStatusObj>;
-  RequestPasswordChange(
-    request: RequestPasswordChangeRequest
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.user.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: UserListWithRoleResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    find: {
+      name: "Find",
+      requestType: FindRequest,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    register: {
+      name: "Register",
+      requestType: RegisterRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    activate: {
+      name: "Activate",
+      requestType: ActivateRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    changePassword: {
+      name: "ChangePassword",
+      requestType: ChangePasswordRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    requestPasswordChange: {
+      name: "RequestPasswordChange",
+      requestType: RequestPasswordChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    requestEmailChange: {
+      name: "RequestEmailChange",
+      requestType: ChangeEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    confirmPasswordChange: {
+      name: "ConfirmPasswordChange",
+      requestType: ConfirmPasswordChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    confirmEmailChange: {
+      name: "ConfirmEmailChange",
+      requestType: ConfirmEmailChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    unregister: {
+      name: "Unregister",
+      requestType: UnregisterRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    login: {
+      name: "Login",
+      requestType: LoginRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    findByRole: {
+      name: "FindByRole",
+      requestType: FindByRoleRequest,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    deleteUsersByOrg: {
+      name: "DeleteUsersByOrg",
+      requestType: OrgIDRequest,
+      requestStream: false,
+      responseType: DeleteUsersByOrgResponse,
+      responseStream: false,
+      options: {},
+    },
+    confirmUserInvitation: {
+      name: "ConfirmUserInvitation",
+      requestType: ConfirmUserInvitationRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    sendInvitationEmail: {
+      name: "SendInvitationEmail",
+      requestType: SendInvitationEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    findByToken: {
+      name: "FindByToken",
+      requestType: FindByTokenRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    sendActivationEmail: {
+      name: "SendActivationEmail",
+      requestType: SendActivationEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListWithRoleResponse>>;
+  create(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  upsert(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  find(
+    request: FindRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  register(
+    request: RegisterRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  activate(
+    request: ActivateRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  changePassword(
+    request: ChangePasswordRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  requestPasswordChange(
+    request: RequestPasswordChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  requestEmailChange(
+    request: ChangeEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  confirmPasswordChange(
+    request: ConfirmPasswordChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  confirmEmailChange(
+    request: ConfirmEmailChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  unregister(
+    request: UnregisterRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  login(
+    request: LoginRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  findByRole(
+    request: FindByRoleRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  deleteUsersByOrg(
+    request: OrgIDRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteUsersByOrgResponse>>;
+  confirmUserInvitation(
+    request: ConfirmUserInvitationRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  sendInvitationEmail(
+    request: SendInvitationEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  findByToken(
+    request: FindByTokenRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  sendActivationEmail(
+    request: SendActivationEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListWithRoleResponse>;
+  create(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  upsert(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  find(
+    request: DeepPartial<FindRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  register(
+    request: DeepPartial<RegisterRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  activate(
+    request: DeepPartial<ActivateRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  RequestEmailChange(request: ChangeEmailRequest): Promise<OperationStatusObj>;
-  ConfirmPasswordChange(
-    request: ConfirmPasswordChangeRequest
+  changePassword(
+    request: DeepPartial<ChangePasswordRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  ConfirmEmailChange(
-    request: ConfirmEmailChangeRequest
+  requestPasswordChange(
+    request: DeepPartial<RequestPasswordChangeRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  Unregister(request: UnregisterRequest): Promise<OperationStatusObj>;
-  Login(request: LoginRequest): Promise<UserResponse>;
-  FindByRole(request: FindByRoleRequest): Promise<UserListResponse>;
-  DeleteUsersByOrg(request: OrgIDRequest): Promise<DeleteUsersByOrgResponse>;
-  ConfirmUserInvitation(
-    request: ConfirmUserInvitationRequest
+  requestEmailChange(
+    request: DeepPartial<ChangeEmailRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  SendInvitationEmail(
-    request: SendInvitationEmailRequest
+  confirmPasswordChange(
+    request: DeepPartial<ConfirmPasswordChangeRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  FindByToken(request: FindByTokenRequest): Promise<UserResponse>;
-  SendActivationEmail(
-    request: SendActivationEmailRequest
+  confirmEmailChange(
+    request: DeepPartial<ConfirmEmailChangeRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  unregister(
+    request: DeepPartial<UnregisterRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  login(
+    request: DeepPartial<LoginRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  findByRole(
+    request: DeepPartial<FindByRoleRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  deleteUsersByOrg(
+    request: DeepPartial<OrgIDRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteUsersByOrgResponse>;
+  confirmUserInvitation(
+    request: DeepPartial<ConfirmUserInvitationRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  sendInvitationEmail(
+    request: DeepPartial<SendInvitationEmailRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  findByToken(
+    request: DeepPartial<FindByTokenRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  sendActivationEmail(
+    request: DeepPartial<SendActivationEmailRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
 }
 
@@ -6466,13 +6765,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

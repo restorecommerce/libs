@@ -1,10 +1,13 @@
+import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+import { ReverseQuery, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+
 export const permitLocationRule = {
   id: 'location_rule_id',
   target: {
     subject: [
       {
-        'id': 'urn:restorecommerce:acs:names:role',
-        'value': 'test-role'
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
       },
       {
         id: 'urn:restorecommerce:acs:names:roleScopingEntity',
@@ -16,11 +19,11 @@ export const permitLocationRule = {
       }],
     resources: [{
       id: 'urn:restorecommerce:acs:names:model:entity',
-      'value': 'urn:test:acs:model:Location.Location'
+      value: 'urn:test:acs:model:Location.Location'
     }],
     action: []
   },
-  effect: 'PERMIT'
+  effect: Effect.PERMIT
 };
 
 export const permitLocationRuleProperty = {
@@ -28,8 +31,8 @@ export const permitLocationRuleProperty = {
   target: {
     subject: [
       {
-        'id': 'urn:restorecommerce:acs:names:role',
-        'value': 'test-role'
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
       },
       {
         id: 'urn:restorecommerce:acs:names:roleScopingEntity',
@@ -41,7 +44,7 @@ export const permitLocationRuleProperty = {
       }],
     resources: [{
       id: 'urn:restorecommerce:acs:names:model:entity',
-      'value': 'urn:test:acs:model:Location.Location'
+      value: 'urn:test:acs:model:Location.Location'
     }, {
       id: 'urn:restorecommerce:acs:names:model:property',
       value: 'urn:test:acs:model:Location.Location#name'
@@ -51,7 +54,7 @@ export const permitLocationRuleProperty = {
     }],
     action: []
   },
-  effect: 'PERMIT'
+  effect: Effect.PERMIT
 };
 
 export const fallbackRule = {
@@ -61,7 +64,7 @@ export const fallbackRule = {
     resources: [],
     subject: []
   },
-  effect: 'DENY'
+  effect: Effect.DENY
 };
 
 export const permitAddressRule = {
@@ -69,8 +72,8 @@ export const permitAddressRule = {
   target: {
     subject: [
       {
-        'id': 'urn:restorecommerce:acs:names:role',
-        'value': 'test-role'
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
       },
       {
         id: 'urn:restorecommerce:acs:names:roleScopingEntity',
@@ -82,11 +85,11 @@ export const permitAddressRule = {
       }],
     resources: [{
       id: 'urn:restorecommerce:acs:names:model:entity',
-      'value': 'urn:test:acs:model:Address.Address'
+      value: 'urn:test:acs:model:Address.Address'
     }],
     action: []
   },
-  effect: 'PERMIT'
+  effect: Effect.PERMIT
 };
 
 export const permitAddressRuleProperty = {
@@ -94,8 +97,8 @@ export const permitAddressRuleProperty = {
   target: {
     subject: [
       {
-        'id': 'urn:restorecommerce:acs:names:role',
-        'value': 'test-role'
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
       },
       {
         id: 'urn:restorecommerce:acs:names:roleScopingEntity',
@@ -107,7 +110,7 @@ export const permitAddressRuleProperty = {
       }],
     resources: [{
       id: 'urn:restorecommerce:acs:names:model:entity',
-      'value': 'urn:test:acs:model:Address.Address'
+      value: 'urn:test:acs:model:Address.Address'
     }, {
       id: 'urn:restorecommerce:acs:names:model:property',
       value: 'urn:test:acs:model:Address.Address#name'
@@ -117,7 +120,7 @@ export const permitAddressRuleProperty = {
     }],
     action: []
   },
-  effect: 'PERMIT'
+  effect: Effect.PERMIT
 };
 
 export const addressAndLocationObligation = [{
@@ -150,7 +153,7 @@ export const addressAndLocationObligation = [{
 }
 ];
 
-export let policySetRQ = {
+export let policySetRQ: DeepPartial<ReverseQuery> = {
   policy_sets:
     [{
       combining_algorithm: 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-overrides',
@@ -166,7 +169,7 @@ export let policySetRQ = {
               value: 'urn:test:acs:model:Location.Location'
             }],
             subject: []
-          }, effect: 'PERMIT',
+          }, effect: Effect.PERMIT,
           rules: [ // permit or deny rule will be added
           ],
           has_rules: true
@@ -181,7 +184,7 @@ export let policySetRQ = {
               value: 'urn:test:acs:model:Address.Address'
             }],
             subject: []
-          }, effect: 'PERMIT',
+          }, effect: Effect.PERMIT,
           rules: [ // permit or deny rule will be added
           ],
           has_rules: true
@@ -201,16 +204,16 @@ export const unauthenticatedSubject = [
   }];
 export const authenticatedSubject = [
   { // authenticated user
-    id: "urn:oasis:names:tc:xacml:1.0:subject:subject-id",
-    value: "test_user_id"
+    id: 'urn:oasis:names:tc:xacml:1.0:subject:subject-id',
+    value: 'test_user_id'
   },
   {
-    id: "urn:restorecommerce:acs:names:roleScopingEntity",
-    value: "urn:test:acs:model:organization.Organization"
+    id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+    value: 'urn:test:acs:model:organization.Organization'
   },
   {
-    id: "urn:restorecommerce:acs:names:roleScopingInstance",
-    value: "targetScope"
+    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+    value: 'targetScope'
   }
 ];
 export const locationAddressResources = [

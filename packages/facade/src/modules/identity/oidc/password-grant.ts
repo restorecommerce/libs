@@ -158,7 +158,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           tokenName: token_name
         })
 
-        await config.authLogService.Create(AuthenticationLogList.fromPartial({
+        await config.authLogService.create(AuthenticationLogList.fromPartial({
           items: [authLogItem],
           subject: Subject.fromPartial({token, scope}) as Subject
         }));

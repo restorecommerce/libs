@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const paymentModule = createFacadeModuleFactory<PaymentConfig, PaymentModule>(namespace, (facade, config) => {
   const payment = {
-    client: new PaymentSrvGrpcClient(config.config.client, facade.logger)
+    client: new PaymentSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

@@ -1,39 +1,27 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata5,
 } from "../../google/protobuf/any";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata6,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
-import {
-  Organization,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/organization";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Organization, protoMetadata as protoMetadata3 } from "./organization";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata7,
-  Resolver,
-} from "../../io/restorecommerce/options";
-import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/customer";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata7, Resolver } from "./options";
+import { protoMetadata as protoMetadata8 } from "./customer";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.invoice";
 
@@ -1643,14 +1631,113 @@ export const TriggerInvoices = {
 };
 
 /** Microservice definition. */
-export interface Service {
-  Read(request: ReadRequest): Promise<InvoiceListResponse>;
-  Create(request: InvoiceList): Promise<InvoiceListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: InvoiceList): Promise<InvoiceListResponse>;
-  Upsert(request: InvoiceList): Promise<InvoiceListResponse>;
-  GenerateInvoiceNumber(
-    request: RequestInvoiceNumber
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.invoice.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: InvoiceList,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: InvoiceList,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: InvoiceList,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    generateInvoiceNumber: {
+      name: "GenerateInvoiceNumber",
+      requestType: RequestInvoiceNumber,
+      requestStream: false,
+      responseType: InvoiceNumberResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<InvoiceListResponse>>;
+  create(
+    request: InvoiceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<InvoiceListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: InvoiceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<InvoiceListResponse>>;
+  upsert(
+    request: InvoiceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<InvoiceListResponse>>;
+  generateInvoiceNumber(
+    request: RequestInvoiceNumber,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<InvoiceNumberResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<InvoiceListResponse>;
+  create(
+    request: DeepPartial<InvoiceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<InvoiceListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<InvoiceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<InvoiceListResponse>;
+  upsert(
+    request: DeepPartial<InvoiceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<InvoiceListResponse>;
+  generateInvoiceNumber(
+    request: DeepPartial<RequestInvoiceNumber>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<InvoiceNumberResponse>;
 }
 
@@ -2938,13 +3025,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

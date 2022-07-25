@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const catalogModule = createFacadeModuleFactory<CatalogConfig, CatalogModule>(namespace, (facade, config) => {
   const catalog = {
-    client: new CatalogSrvGrpcClient(config.config.client, facade.logger)
+    client: new CatalogSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

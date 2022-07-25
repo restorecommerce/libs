@@ -1,35 +1,36 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata as access_controlMetaService,
-  protobufPackage as access_controlProtobufPackage,
-  Service as access_controlService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control";
+  ServiceClient as access_controlClient,
+  ServiceDefinition as access_controlService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control';
 import {
-  protoMetadata as policyMetaService,
-  protobufPackage as policyProtobufPackage,
-  Service as policyService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy";
+  ServiceClient as policyClient,
+  ServiceDefinition as policyService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy';
 import {
-  protoMetadata as ruleMetaService,
-  protobufPackage as ruleProtobufPackage,
-  Service as ruleService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule";
+  ServiceClient as ruleClient,
+  ServiceDefinition as ruleService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule';
 import {
-  protoMetadata as policy_setMetaService,
-  protobufPackage as policy_setProtobufPackage,
-  Service as policy_setService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient as policy_setClient,
+  ServiceDefinition as policy_setService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class AccessControlSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly access_control: access_controlClient;
+  readonly policy: policyClient;
+  readonly rule: ruleClient;
+  readonly policy_set: policy_setClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.access_control = this.createClient(cfg, access_controlService, this.channel);
+    this.policy = this.createClient(cfg, policyService, this.channel);
+    this.rule = this.createClient(cfg, ruleService, this.channel);
+    this.policy_set = this.createClient(cfg, policy_setService, this.channel);
   }
 
-  access_control = getGRPCService<access_controlService>(this, access_controlProtobufPackage, access_controlMetaService.fileDescriptor.service![0]);
-  policy = getGRPCService<policyService>(this, policyProtobufPackage, policyMetaService.fileDescriptor.service![0]);
-  rule = getGRPCService<ruleService>(this, ruleProtobufPackage, ruleMetaService.fileDescriptor.service![0]);
-  policy_set = getGRPCService<policy_setService>(this, policy_setProtobufPackage, policy_setMetaService.fileDescriptor.service![0]);
 }

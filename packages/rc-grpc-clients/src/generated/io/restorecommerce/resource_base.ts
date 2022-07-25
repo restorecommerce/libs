@@ -1,28 +1,22 @@
 /* eslint-disable */
 import { FileDescriptorProto } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata5,
   FilterOp as FilterOp6,
-} from "../../io/restorecommerce/filter";
+} from "./filter";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.resourcebase";
 
@@ -309,11 +303,6 @@ export interface ResourceResponse {
 export interface Resource {
   id: string;
   meta?: Meta;
-  value: number;
-  text: string;
-  active: boolean;
-  created: number;
-  status: string;
 }
 
 function createBaseFieldFilter(): FieldFilter {
@@ -1234,15 +1223,7 @@ export const ResourceResponse = {
 };
 
 function createBaseResource(): Resource {
-  return {
-    id: "",
-    meta: undefined,
-    value: 0,
-    text: "",
-    active: false,
-    created: 0,
-    status: "",
-  };
+  return { id: "", meta: undefined };
 }
 
 export const Resource = {
@@ -1255,21 +1236,6 @@ export const Resource = {
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.value !== 0) {
-      writer.uint32(24).int32(message.value);
-    }
-    if (message.text !== "") {
-      writer.uint32(34).string(message.text);
-    }
-    if (message.active === true) {
-      writer.uint32(40).bool(message.active);
-    }
-    if (message.created !== 0) {
-      writer.uint32(49).double(message.created);
-    }
-    if (message.status !== "") {
-      writer.uint32(58).string(message.status);
     }
     return writer;
   },
@@ -1287,21 +1253,6 @@ export const Resource = {
         case 2:
           message.meta = Meta.decode(reader, reader.uint32());
           break;
-        case 3:
-          message.value = reader.int32();
-          break;
-        case 4:
-          message.text = reader.string();
-          break;
-        case 5:
-          message.active = reader.bool();
-          break;
-        case 6:
-          message.created = reader.double();
-          break;
-        case 7:
-          message.status = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1314,11 +1265,6 @@ export const Resource = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      value: isSet(object.value) ? Number(object.value) : 0,
-      text: isSet(object.text) ? String(object.text) : "",
-      active: isSet(object.active) ? Boolean(object.active) : false,
-      created: isSet(object.created) ? Number(object.created) : 0,
-      status: isSet(object.status) ? String(object.status) : "",
     };
   },
 
@@ -1327,11 +1273,6 @@ export const Resource = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.value !== undefined && (obj.value = Math.round(message.value));
-    message.text !== undefined && (obj.text = message.text);
-    message.active !== undefined && (obj.active = message.active);
-    message.created !== undefined && (obj.created = message.created);
-    message.status !== undefined && (obj.status = message.status);
     return obj;
   },
 
@@ -1342,22 +1283,103 @@ export const Resource = {
       object.meta !== undefined && object.meta !== null
         ? Meta.fromPartial(object.meta)
         : undefined;
-    message.value = object.value ?? 0;
-    message.text = object.text ?? "";
-    message.active = object.active ?? false;
-    message.created = object.created ?? 0;
-    message.status = object.status ?? "";
     return message;
   },
 };
 
 /** Service provides the CRUD operations */
-export interface Service {
-  Read(request: ReadRequest): Promise<ResourceListResponse>;
-  Create(request: ResourceList): Promise<ResourceListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: ResourceList): Promise<ResourceListResponse>;
-  Upsert(request: ResourceList): Promise<ResourceListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.resourcebase.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: ResourceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: ResourceList,
+      requestStream: false,
+      responseType: ResourceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: ResourceList,
+      requestStream: false,
+      responseType: ResourceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: ResourceList,
+      requestStream: false,
+      responseType: ResourceListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  create(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  upsert(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  create(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  upsert(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -2060,71 +2082,6 @@ export const protoMetadata: ProtoMetadata = {
             options: undefined,
             proto3Optional: false,
           },
-          {
-            name: "value",
-            number: 3,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "text",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "text",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "active",
-            number: 5,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "active",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "created",
-            number: 6,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "created",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "status",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
         ],
         extension: [],
         nestedType: [],
@@ -2271,7 +2228,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 10],
-          span: [128, 0, 136, 1],
+          span: [128, 0, 131, 1],
           leadingComments: "/ Example resource\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -2325,13 +2282,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -1,30 +1,24 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import {
   Any,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
+  DeleteResponse,
+} from "./resource_base";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.payment_method";
 
@@ -563,12 +557,98 @@ export const PaymentMethod = {
 };
 
 /** Microservice definition. */
-export interface Service {
-  Read(request: ReadRequest): Promise<PaymentMethodListResponse>;
-  Create(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
-  Upsert(request: PaymentMethodList): Promise<PaymentMethodListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.payment_method.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: PaymentMethodListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: PaymentMethodList,
+      requestStream: false,
+      responseType: PaymentMethodListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: PaymentMethodList,
+      requestStream: false,
+      responseType: PaymentMethodListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: PaymentMethodList,
+      requestStream: false,
+      responseType: PaymentMethodListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentMethodListResponse>>;
+  create(
+    request: PaymentMethodList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentMethodListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: PaymentMethodList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentMethodListResponse>>;
+  upsert(
+    request: PaymentMethodList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PaymentMethodListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentMethodListResponse>;
+  create(
+    request: DeepPartial<PaymentMethodList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentMethodListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<PaymentMethodList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentMethodListResponse>;
+  upsert(
+    request: DeepPartial<PaymentMethodList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PaymentMethodListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -994,13 +1074,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

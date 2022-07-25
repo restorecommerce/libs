@@ -49,7 +49,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
 
-    const user = await ids.user.FindByToken({
+    const user = await ids.user.findByToken({
       token: token
     });
 
@@ -67,7 +67,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
     const body = ctx.request.body;
 
-    const user = await ids.user.Register(RegisterRequest.fromPartial({
+    const user = await ids.user.register(RegisterRequest.fromPartial({
       email: body.email,
       name: body.username,
       firstName: body.first_name,
@@ -96,7 +96,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 
   router.get('/oauth2/:service', async (ctx, next) => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
-    const user = await ids.oauth.ExchangeCode({
+    const user = await ids.oauth.exchangeCode({
       service: ctx.params.service,
       code: ctx.request.query['code'] as string,
       state: ctx.request.query['state'] as string

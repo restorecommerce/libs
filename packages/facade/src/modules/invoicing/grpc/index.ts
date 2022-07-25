@@ -1,16 +1,18 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata,
-  protobufPackage,
-  Service
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/invoice";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient,
+  ServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/invoice';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class InvoicingSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly invoice: ServiceClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.invoice = this.createClient(cfg, ServiceDefinition, this.channel);
   }
-  invoice = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+
 }

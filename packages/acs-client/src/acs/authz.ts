@@ -1,15 +1,40 @@
 import * as _ from 'lodash';
 import {
-  AuthZContext, Attribute, AuthZAction, AuthZTarget, AuthZWhatIsAllowedTarget,
-  IAuthZ, NoAuthTarget, NoAuthWhatIsAllowedTarget, Request,
-  Decision, Subject, DecisionResponse, PolicySetRQResponse, ACSClientContext, Resource
+  ACSClientContext,
+  AuthZAction,
+  AuthZContext,
+  AuthZTarget,
+  AuthZWhatIsAllowedTarget,
+  DecisionResponse,
+  IAuthZ,
+  NoAuthTarget,
+  NoAuthWhatIsAllowedTarget,
+  PolicySetRQResponse,
+  Request,
+  Resource,
 } from './interfaces';
-import { GrpcClient } from '@restorecommerce/grpc-client';
+import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
 import logger from '../logger';
-import { getOrFill, flushCache } from './cache';
-import { Events } from '@restorecommerce/kafka-client';
+import { flushCache, getOrFill } from './cache';
+import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { mapResourceURNObligationProperties } from '../utils';
+import {
+  ServiceClient,
+  ServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import { Response_Decision } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control';
+import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
+import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import { protoMetadata as ruleMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+import { protoMetadata as policyMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy';
+import { protoMetadata as policySetMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set';
+
+registerProtoMeta(
+  ruleMeta,
+  policyMeta,
+  policySetMeta
+);
 
 export declare type Authorizer = ACSAuthZ;
 export let authZ: Authorizer;
@@ -30,36 +55,41 @@ export const createActionTarget = (action: any): Attribute[] => {
   else {
     return [{
       id: urns.actionID,
-      value: urns.action + `:${action.valueOf().toLowerCase()}`
+      value: urns.action + `:${action.valueOf().toLowerCase()}`,
+      attribute: []
     }];
   }
 };
 
-export const createSubjectTarget = (subject: Subject): Attribute[] => {
+export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] => {
   if (subject.unauthenticated) {
     return [{
       id: urns.unauthenticated_user,
-      value: 'true'
+      value: 'true',
+      attribute: []
     }];
   }
-  let flattened = [
+  let flattened: Attribute[] = [
     {
       id: urns.subjectID,
-      value: subject.id
-    }];
+      value: subject.id,
+      attribute: []
+    }
+  ];
 
   if (subject.scope) {
-    let attributes = [
+    flattened = flattened.concat([
       {
         id: urns.roleScopingEntity,
-        value: urns.orgScope
+        value: urns.orgScope,
+        attribute: []
       },
       {
         id: urns.roleScopingInstance,
-        value: subject.scope
+        value: subject.scope,
+        attribute: []
       }
-    ];
-    flattened = flattened.concat(attributes);
+    ]);
   }
   return flattened;
 };
@@ -101,7 +131,8 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
       if (resourceType) {
         flattened.push({
           id: urns.entity,
-          value: urns.model + `:${resourceType}`
+          value: urns.model + `:${resourceType}`,
+          attribute: []
         });
       }
 
@@ -109,13 +140,15 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
       if (resourceInstance && typeof resourceInstance === 'string') {
         flattened.push({
           id: urns.resourceID,
-          value: resourceInstance
+          value: resourceInstance,
+          attribute: []
         });
       } else if (resourceInstance && _.isArray(resourceInstance) && resourceInstance.length > 0) {
         resourceInstance.forEach((instance) => {
           flattened.push({
             id: urns.resourceID,
-            value: instance
+            value: instance,
+            attribute: []
           });
         });
       }
@@ -125,14 +158,16 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
         resourceProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
-            value: urns.model + `:${resourceType}#${property}`
+            value: urns.model + `:${resourceType}#${property}`,
+            attribute: []
           });
         });
       }
     } else {
       flattened.push({
         id: urns.operation,
-        value: resourceObj.resource
+        value: resourceObj.resource,
+        attribute: []
       });
     }
   });
@@ -141,12 +176,12 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
 };
 
 export class UnAuthZ implements IAuthZ {
-  acs: any;
+  acs: ServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
    */
-  constructor(acs: any) {
+  constructor(acs: ServiceClient) {
     this.acs = acs;
   }
 
@@ -177,16 +212,22 @@ export class UnAuthZ implements IAuthZ {
 
     let response: DecisionResponse;
     try {
-      response = await getOrFill(authZRequest, async (req) => {
+      const isAllowed = await getOrFill(authZRequest, async (req) => {
         return await this.acs.isAllowed(authZRequest);
       }, useCache, 'UnAuthZ:isAllowed');
+
+      response = {
+        decision: isAllowed.decision,
+        obligation: mapResourceURNObligationProperties(isAllowed.obligation),
+        operation_status: isAllowed.operation_status
+      };
     } catch (err) {
       logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
       response = {
-        decision: Decision.DENY,
+        decision: Response_Decision.DENY,
         operation_status: {
           code: err.code,
           message: err.message
@@ -196,10 +237,6 @@ export class UnAuthZ implements IAuthZ {
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    }
-
-    if(response.obligation && response.obligation.length >0) {
-      response.obligation = mapResourceURNObligationProperties(response.obligation);
     }
 
     return response;
@@ -221,16 +258,21 @@ export class UnAuthZ implements IAuthZ {
     };
     let response: PolicySetRQResponse;
     try {
-      response = await getOrFill(authZRequest, async (req) => {
+      const whatIsAllowed = await getOrFill(authZRequest, async (req) => {
         return await this.acs.whatIsAllowed(authZRequest);
       }, useCache, 'UnAuthZ:whatIsAllowed');
+
+      response = {
+        ...whatIsAllowed,
+        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligation)
+      } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
       response = {
-        decision: Decision.DENY,
+        decision: Response_Decision.DENY,
         operation_status: {
           code: err.code,
           message: err.message
@@ -242,10 +284,6 @@ export class UnAuthZ implements IAuthZ {
       logger.error('Unexpected empty response from ACS');
     }
 
-    if(response.obligation && response.obligation.length >0) {
-      response.obligation = mapResourceURNObligationProperties(response.obligation);
-    }
-
     return response;
   }
 }
@@ -254,13 +292,12 @@ export class UnAuthZ implements IAuthZ {
  * General authorizer. Marshalls data and requests access to the Access Control Service (ACS).
  */
 export class ACSAuthZ implements IAuthZ {
-  acs: any;
-  ids: any;
+  acs: ServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
    */
-  constructor(acs: any, ids?: any) {
+  constructor(acs: ServiceClient, ids?: any) {
     this.acs = acs;
   }
 
@@ -295,16 +332,22 @@ export class ACSAuthZ implements IAuthZ {
     };
     let response: DecisionResponse;
     try {
-      response = await getOrFill(cacheKey, async (req) => {
+      const isAllowed = await getOrFill(cacheKey, async (req) => {
         return await this.acs.isAllowed(authZRequest);
       }, useCache, cachePrefix + ':isAllowed');
+
+      response = {
+        decision: isAllowed.decision,
+        obligation: mapResourceURNObligationProperties(isAllowed.obligation),
+        operation_status: isAllowed.operation_status
+      };
     } catch (err) {
       logger.error('Error invoking access-control-srv isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
       response = {
-        decision: Decision.DENY,
+        decision: Response_Decision.DENY,
         operation_status: {
           code: err.code,
           message: err.message
@@ -314,10 +357,6 @@ export class ACSAuthZ implements IAuthZ {
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    }
-
-    if(response.obligation && response.obligation.length >0) {
-      response.obligation = mapResourceURNObligationProperties(response.obligation);
     }
     return response;
   }
@@ -349,16 +388,21 @@ export class ACSAuthZ implements IAuthZ {
 
     let response: PolicySetRQResponse;
     try {
-      response = await getOrFill(authZRequest, async (req) => {
+      const whatIsAllowed = await getOrFill(authZRequest, async (req) => {
         return await this.acs.whatIsAllowed(authZRequest);
       }, useCache, cachePrefix + ':whatIsAllowed');
+
+      response = {
+        ...whatIsAllowed,
+        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligation)
+      } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
       response = {
-        decision: Decision.DENY,
+        decision: Response_Decision.DENY,
         operation_status: {
           code: err.code,
           message: err.message
@@ -368,10 +412,6 @@ export class ACSAuthZ implements IAuthZ {
 
     if (_.isEmpty(response)) {
       logger.error('Unexpected empty response from ACS');
-    }
-
-    if(response.obligation && response.obligation.length >0) {
-      response.obligation = mapResourceURNObligationProperties(response.obligation);
     }
 
     return response;
@@ -434,9 +474,12 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
     if (authzCfg.enabled) {
       const grpcClientConfig = cfg.get('client');
       const grpcACSConfig = grpcClientConfig['acs-srv'];
-      const acsClient = new GrpcClient(grpcACSConfig, logger);
-      const acs = acsClient['acs-srv'];
-      authZ = new ACSAuthZ(acs);
+      const channel = createChannel(grpcACSConfig.address);
+      const acsClient: ServiceClient = createClient({
+        ...grpcACSConfig,
+        logger
+      }, ServiceDefinition, channel);
+      authZ = new ACSAuthZ(acsClient);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified
       if (kafkaCfg && kafkaCfg.evictACSCache) {

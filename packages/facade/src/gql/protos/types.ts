@@ -70,7 +70,7 @@ export interface MethodConfig {
 }
 
 export interface ServiceConfig {
-  client: GrpcClientConfig;
+  client: Omit<GrpcClientConfig, 'logger'> & { address: string };
   [key: string]: any;
 }
 

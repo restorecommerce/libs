@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const schedulingModule = createFacadeModuleFactory<SchedulingConfig, SchedulingModule>(namespace, (facade, config) => {
   const scheduling = {
-    client: new SchedulingSrvGrpcClient(config.config.client, facade.logger)
+    client: new SchedulingSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

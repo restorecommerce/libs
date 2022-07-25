@@ -1,27 +1,21 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata5 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.price_group";
 
@@ -451,12 +445,98 @@ export const Deleted = {
   },
 };
 
-export interface Service {
-  Read(request: ReadRequest): Promise<PriceGroupListResponse>;
-  Create(request: PriceGroupList): Promise<PriceGroupListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: PriceGroupList): Promise<PriceGroupListResponse>;
-  Upsert(request: PriceGroupList): Promise<PriceGroupListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.price_group.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: PriceGroupListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: PriceGroupList,
+      requestStream: false,
+      responseType: PriceGroupListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: PriceGroupList,
+      requestStream: false,
+      responseType: PriceGroupListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: PriceGroupList,
+      requestStream: false,
+      responseType: PriceGroupListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PriceGroupListResponse>>;
+  create(
+    request: PriceGroupList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PriceGroupListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: PriceGroupList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PriceGroupListResponse>>;
+  upsert(
+    request: PriceGroupList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PriceGroupListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PriceGroupListResponse>;
+  create(
+    request: DeepPartial<PriceGroupList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PriceGroupListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<PriceGroupList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PriceGroupListResponse>;
+  upsert(
+    request: DeepPartial<PriceGroupList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PriceGroupListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -854,13 +934,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

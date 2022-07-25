@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import { protoMetadata as protoMetadata1 } from "../../google/protobuf/descriptor";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.options";
 
@@ -249,7 +248,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "resolver",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
       },
       {
         name: "is_query",
@@ -262,7 +261,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "isQuery",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
       },
       {
         name: "service_name",
@@ -275,7 +274,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "serviceName",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
       },
     ],
     options: undefined,
@@ -304,13 +303,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

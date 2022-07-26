@@ -1,16 +1,20 @@
 import * as _ from 'lodash';
-import { GraphDatabaseProvider, TraversalResponse } from '@restorecommerce/chassis-srv';
+import { GraphDatabaseProvider, TraversalResponse as DBTraversalResponse } from '@restorecommerce/chassis-srv';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
-import { TraversalRequest } from './interfaces';
 import { Stream } from 'stream';
-import { SortOrder } from '@restorecommerce/chassis-srv/lib/database/provider/arango/interface';
+import {
+  DeepPartial, ServerStreamingMethodResult,
+  ServiceServiceImplementation,
+  TraversalRequest,
+  TraversalResponse
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
  * creating or modifying Vertices/Edges, graph traversal etc.
  */
-export class GraphResourcesServiceBase {
+export class GraphResourcesServiceBase implements ServiceServiceImplementation {
   bufferedCollections: any;
   dateTimeFieldcfg: any;
   logger: Logger;
@@ -46,33 +50,28 @@ export class GraphResourcesServiceBase {
   * collection traversal - Performs a traversal starting from the given
   * startVertex and following edges contained in this edge collection.
   *
-  * @param {any} call request object containing start_vertex, opts and collection name.
   * The start_vertex can be either the _id of a document in the database,
   * the _key of an edge in the collection, or a document
   * (i.e. an object with an _id or _key property).
   * opts contains the options such as opts.direction, opts.filter, opts.visitor,
   * opts.init, opts.expander, opts.sort
-  * @param  {any} context context.
-  * @return  {TraversalResponse} TraversalResponse containing VertexFields,
-  * traversed pahts and materialized data
   */
-  async traversal(call: any, context?: any): Promise<any> {
+  async* traversal(request: TraversalRequest, context): ServerStreamingMethodResult<DeepPartial<TraversalResponse>> {
     try {
-      const request: TraversalRequest = call.request?.request;
       const vertices = request?.vertices;
       const collection = request?.collection;
       const options = request?.opts;
       if (!vertices && !collection) {
         const message = 'missing start vertex or collection_name for graph traversal';
         this.logger.error(message);
-        await call.write({
+        yield {
           operation_status: { code: 400, message }
-        });
-        return await call.end();
+        };
+        return;
       }
       const filters = request?.filters;
       let path = request?.path ? request.path : false;
-      let traversalCursor: TraversalResponse;
+      let traversalCursor: DBTraversalResponse;
 
       let sort;
       if (collection && !_.isEmpty(collection.sort)) {
@@ -103,15 +102,14 @@ export class GraphResourcesServiceBase {
         this.logger.debug('Received traversal ArrayCursor from DB');
       } catch (err) {
         this.logger.error('Error executing DB Traversal', { code: err.code, message: err.message, stack: err.stack });
-        await call.write({
+        yield {
           operation_status: { code: err.code ? err.code : 500, message: err.message }
-        });
-        return await call.end();
+        };
+        return;
       }
 
       let rootCursor = traversalCursor.rootCursor;
       let associationCursor = traversalCursor.associationCursor;
-      const traversalStream = new Stream.Readable({ objectMode: true });
       // root entity data batches
       if (rootCursor && rootCursor.batches) {
         for await (const batch of rootCursor.batches) {
@@ -124,7 +122,7 @@ export class GraphResourcesServiceBase {
               delete elem._rev;
             }
           }
-          traversalStream.push({ data: { value: Buffer.from(JSON.stringify(batch)) } });
+          yield ({ data: { value: Buffer.from(JSON.stringify(batch)) } });
         }
       }
       // association entity data batches
@@ -162,26 +160,25 @@ export class GraphResourcesServiceBase {
           }
           if (!_.isEmpty(associationData)) {
             // associated entity data, encoding before pushing data
-            traversalStream.push({ data: { value: Buffer.from(JSON.stringify(associationData)) } });
+            yield ({ data: { value: Buffer.from(JSON.stringify(associationData)) } });
           }
           // paths
           if (!_.isEmpty(traversedPaths)) {
             // traversed paths, encoding before pushing paths
-            traversalStream.push({ paths: { value: Buffer.from(JSON.stringify(traversedPaths)) } });
+            yield ({ paths: { value: Buffer.from(JSON.stringify(traversedPaths)) } });
           }
         }
       }
 
-      traversalStream.push({ operation_status: { code: 200, message: 'success' } });
-      traversalStream.push(null);
-      traversalStream.pipe(call.request);
+      yield ({ operation_status: { code: 200, message: 'success' } });
       this.logger.debug('Traversal request ended');
       return;
     } catch (err) {
       this.logger.error('Error caught executing traversal', { code: err.code, message: err.message, stack: err.stack });
-      return {
+      yield {
         operation_status: { code: err.code ? err.code : 500, message: err.message }
       };
+      return;
     }
   }
 

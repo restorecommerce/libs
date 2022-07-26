@@ -1,12 +1,18 @@
 import * as _ from 'lodash';
-import * as chassis from '@restorecommerce/chassis-srv';
 import { toObject } from '../index';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic } from '@restorecommerce/kafka-client';
-import { ServiceCall, ReadRequest, CreateRequest, DeleteRequest, UpdateRequest, UpsertRequest } from './interfaces';
 import { Logger } from 'winston';
-
-const errors = chassis.errors;
+import {
+  DeepPartial,
+  DeleteRequest,
+  DeleteResponse,
+  ReadRequest,
+  ResourceList,
+  ResourceListResponse,
+  ServiceServiceImplementation,
+  Sort_SortOrder
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 
 // Mapping of arangodb error codes to standard HTTP error codes
 const arangoHttpErrCodeMap = new Map([
@@ -25,7 +31,7 @@ const arangoHttpErrCodeMap = new Map([
  * A microservice chassis ready class which provides endpoints for
  * CRUD resource operations.
  */
-export class ServiceBase {
+export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceServiceImplementation {
   logger: Logger;
   name: string;
   events: any;
@@ -33,10 +39,11 @@ export class ServiceBase {
   isEventsEnabled: boolean;
   /**
    * @constructor
-   * @param [string] entityName Name of the resource.
-   * @param [object] entityEvents Event topic for the resource.
-   * @param [object] logger Chassis logger.
-   * @param [object] resourceapi ResourceAPI object.
+   * @param entityName entityName Name of the resource.
+   * @param entityEvents entityEvents Event topic for the resource.
+   * @param logger logger Chassis logger.
+   * @param resourceapi resourceapi ResourceAPI object.
+   * @param isEventsEnabled.
    */
   constructor(entityName: string, entityEvents: any, logger: Logger,
     resourceapi: ResourcesAPIBase, isEventsEnabled?: boolean) {
@@ -53,62 +60,56 @@ export class ServiceBase {
   /**
    * Endpoint read.
    * Return resources based on provided filter and options.
-   * @param call request containing filter,limit, offset and sort options
-   * @param context
    */
-  async read(call: ServiceCall<ReadRequest>, context?: any): Promise<any> {
+  async read(request: ReadRequest, context): Promise<DeepPartial<T>> {
     let docs: any = {};
-    if (!_.isEmpty(call.request.search)) {
-      docs.operation_status = {
-        code: 404,
-        message: 'Full-text search is not implemented'
+    if (!_.isEmpty(request.search)) {
+      return {
+        ...docs,
+        operation_status: {
+          code: 404,
+          message: 'Full-text search is not implemented'
+        }
       };
-      return docs;
     }
 
     try {
       let objectEntities = [];
       let sort;
-      if (!_.isEmpty(call.request.sort)) {
+      if (!_.isEmpty(request.sort)) {
         sort = {};
-        _.forEach(call.request.sort, (s) => {
+        _.forEach(request.sort, (s) => {
           switch (s.order) {
-            case 'ASCENDING':
-            case 1:
+            case Sort_SortOrder.ASCENDING:
               sort[s.field] = 'ASC';
               break;
-            case 2:
-            case 'DESCENDING':
+            case Sort_SortOrder.DESCENDING:
               sort[s.field] = 'DESC';
-              break;
-            case 'UNSORTED':
-            case 0:
-            default:
               break;
           }
         });
       }
 
-      let limit = call.request.limit;
-      if (call.request.limit <= 0) {
+      let limit = request.limit;
+      if (request.limit <= 0) {
         limit = 1000;
       }
-      const offset = call.request.offset;
+      const offset = request.offset;
       let filter = {};
       // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
-      if (!_.isEmpty(call.request.filters)) {
-        filter = toObject(call.request.filters);
+      if (!_.isEmpty(request.filters)) {
+        filter = toObject(request.filters);
       }
       const field = {};
-      _.forEach(call.request.field, (f) => {
+      _.forEach(request.field, (f) => {
         if (f.include) {
           field[f.name] = 1;
           return;
         }
         field[f.name] = 0;
       });
-      const customQueries = call.request.custom_queries;
-      const customArgs = call.request.custom_arguments || {};
+      const customQueries = request.custom_queries;
+      const customArgs = request.custom_arguments || {};
 
       objectEntities = (await this.resourceapi.read(
         filter,
@@ -130,15 +131,15 @@ export class ServiceBase {
           }
         });
       }
-      docs = {
+
+      return {
         items: readResponseWithStatus,
         total_count: objectEntities.length,
         operation_status: {
           code: 200,
           message: 'success'
         }
-      };
-      return docs;
+      } as DeepPartial<T>;
     } catch (e) {
       this.logger.error('Error caught while processing read request', { code: e.code, message: e.message, stack: e.stack });
       if (!docs.status) {
@@ -245,13 +246,11 @@ export class ServiceBase {
   /**
    * Endpoint create.
    * Inserts resources.
-   * @param call contains a list of resources to be created
-   * @param context
    */
-  async create(call: ServiceCall<CreateRequest>, context?: any): Promise<any> {
+  async create(request: M, context): Promise<DeepPartial<T>> {
     let docs: any = {};
     try {
-      const createDocs = _.cloneDeep(call.request.items);
+      const createDocs = _.cloneDeep(request.items);
       let createResponse = await this.resourceapi.create(createDocs);
       const dispatch = [];
       const events: Topic = this.events.entity;
@@ -261,7 +260,7 @@ export class ServiceBase {
             dispatch.push(events.emit(`${this.name}Created`, item));
           }
         });
-        await dispatch;
+        await Promise.all(dispatch);
       }
       let createResponseWithStatus = this.generateResponseWithStatus(createResponse, createDocs);
       const operation_status = {
@@ -273,37 +272,37 @@ export class ServiceBase {
       return docs;
     } catch (e) {
       this.logger.error('Error caught while processing create request', { code: e.code, message: e.message, stack: e.stack });
-      docs.operation_status = {
-        code: e.code,
-        message: e.details ? e.details : e.message
+      return {
+        ...docs,
+        operation_status: {
+          code: e.code,
+          message: e.details ? e.details : e.message
+        }
       };
-      return docs;
     }
   }
+
   /**
    * Endpoint delete.
    * Removes resources specified by id or all resources.
-   * @param call contains list of resource IDs to be deleted
-   * @param context
    */
-  async delete(call: ServiceCall<DeleteRequest>, context?: any): Promise<any> {
+  async delete(request: DeleteRequest, context): Promise<DeepPartial<DeleteResponse>> {
     let deleteResponse = { status: [], operation_status: {} };
     try {
       const events = this.events.entity;
       let docs: any;
-      if (call.request.collection) {
+      if (request.collection) {
         docs = await this.resourceapi.deleteCollection();
         this.logger.info(`${this.name} deleted`);
       } else {
-        docs = await this.resourceapi.delete(call.request.ids);
+        docs = await this.resourceapi.delete(request.ids);
       }
 
       // sanitize delete response for docs
       for (let doc of docs) {
         if (doc._id && doc._key && doc._rev) {
           delete doc._id;
-          const id = doc._key;
-          doc.id = id;
+          doc.id = doc._key;
           delete doc._key;
           delete doc._rev;
         }
@@ -319,18 +318,18 @@ export class ServiceBase {
             dispatch.push(events.emit(`${this.name}Deleted`, id));
           }
         });
-        await dispatch;
+        await Promise.all(dispatch);
       }
 
       // if complete collection is dropped then there are no input ids provided,
       // iterate docs and put ids to call.request.ids
-      if (call.request.collection && (_.isNil(call.request.ids) || _.isEmpty(call.request.ids))) {
-        call.request.ids = [];
+      if (request.collection && (_.isNil(request.ids) || _.isEmpty(request.ids))) {
+        request.ids = [];
         for (let doc of docs) {
-          call.request.ids.push(doc.id);
+          request.ids.push(doc.id);
         }
       }
-      let statusArray = this.generateStatusResponse(docs, call.request.ids, true);
+      let statusArray = this.generateStatusResponse(docs, request.ids, true);
       const operation_status = {
         code: 200,
         message: 'success'
@@ -338,24 +337,24 @@ export class ServiceBase {
       return { status: statusArray, operation_status };
     } catch (e) {
       this.logger.error('Error caught while processing delete request', { code: e.code, message: e.message, stack: e.stack });
-      deleteResponse.operation_status = {
-        code: e.code,
-        message: e.details ? e.details : e.message
+      return {
+        ...deleteResponse,
+        operation_status: {
+          code: e.code,
+          message: e.details ? e.details : e.message
+        }
       };
-      return deleteResponse;
     }
   }
 
   /**
    * Endpoint update.
    * Updates resources.
-   * @param call contains list of resources to be modified
-   * @param context
    */
-  async update(call: ServiceCall<UpdateRequest>, context?: any): Promise<any> {
+  async update(request: M, context): Promise<DeepPartial<T>> {
     let docs: any = {};
     try {
-      let updateDocs = _.cloneDeep(call.request.items);
+      let updateDocs = _.cloneDeep(request.items);
       let updateResponse = await this.resourceapi.update(updateDocs);
       if (this.isEventsEnabled) {
         const dispatch = [];
@@ -365,7 +364,7 @@ export class ServiceBase {
             dispatch.push(events.emit(`${this.name}Modified`, update));
           }
         });
-        await dispatch;
+        await Promise.all(dispatch);
       }
       let responseWithStatus = this.generateResponseWithStatus(updateResponse, updateDocs);
       const operation_status = {
@@ -377,24 +376,24 @@ export class ServiceBase {
       return docs;
     } catch (e) {
       this.logger.error('Error caught while processing update request', { code: e.code, message: e.message, stack: e.stack });
-      docs.operation_status = {
-        code: e.code,
-        message: e.details ? e.details : e.message
+      return {
+        ...docs,
+        operation_status: {
+          code: e.code,
+          message: e.details ? e.details : e.message
+        }
       };
-      return docs;
     }
   }
 
   /**
    * Endpoint upsert.
    * Upserts resources.
-   * @param call contains list of resources to be created or modified
-   * @param context
    */
-  async upsert(call: ServiceCall<UpsertRequest>, context?: any): Promise<any> {
+  async upsert(request: M, context): Promise<DeepPartial<T>> {
     let docs: any = {};
     try {
-      let upsertDocs = _.cloneDeep(call.request.items);
+      let upsertDocs = _.cloneDeep(request.items);
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
         this.events.entity, this.name);
       let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
@@ -407,11 +406,13 @@ export class ServiceBase {
       return docs;
     } catch (e) {
       this.logger.error('Error caught while processing upsert request', { code: e.code, message: e.message, stack: e.stack });
-      docs.operation_status = {
-        code: e.code,
-        message: e.details ? e.details : e.message
+      return {
+        ...docs,
+        operation_status: {
+          code: e.code,
+          message: e.details ? e.details : e.message
+        }
       };
-      return docs;
     }
   }
 }

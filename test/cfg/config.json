@@ -74,43 +74,13 @@
   },
   "client": {
     "test": {
-      "address": "localhost:50051",
-      "proto": {
-        "protoRoot": "node_modules/@restorecommerce/protos/",
-        "protoPath": "io/restorecommerce/resource_base.proto",
-        "services": {
-          "test": {
-            "packageName": "io.restorecommerce.resourcebase",
-            "serviceName": "Service"
-          }
-        }
-      }
+      "address": "localhost:50051"
     },
     "testBufferedService": {
-      "address": "localhost:50051",
-      "proto": {
-        "protoRoot": "node_modules/@restorecommerce/protos/",
-        "protoPath": "test/test.proto",
-        "services": {
-          "testBufferedService": {
-            "packageName": "test",
-            "serviceName": "Test"
-          }
-        }
-      }
+      "address": "localhost:50052"
     },
     "graphsTestService": {
-      "address": "localhost:50051",
-      "proto": {
-        "protoRoot": "node_modules/@restorecommerce/protos/",
-        "protoPath": "io/restorecommerce/graph.proto",
-        "services": {
-          "graphsTestService": {
-            "packageName": "io.restorecommerce.graph",
-            "serviceName": "Service"
-          }
-        }
-      }
+      "address": "localhost:50051"
     }
   },
   "events": {
@@ -124,31 +94,15 @@
         ]
       },
       "ResourceCreated": {
-        "protos": [
-          "io/restorecommerce/resource_base.proto"
-        ],
-        "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
       "ResourceModified": {
-        "protos": [
-          "io/restorecommerce/resource_base.proto"
-        ],
-        "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
       "ResourceDeleted": {
-        "protos": [
-          "io/restorecommerce/resource_base.proto"
-        ],
-        "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
       "testBufferedDataCreated": {
-        "protos": [
-          "test/test.proto"
-        ],
-        "protoRoot": "node_modules/@restorecommerce/protos/",
         "messageObject": "test.TestBufferedData"
       }
     },
@@ -158,7 +112,7 @@
     "logger": {
       "console": {
         "handleExceptions": false,
-        "level": "crit",
+        "level": "silly",
         "colorize": true,
         "prettyPrint": true
       }
@@ -220,18 +174,77 @@
       {
         "name": "pipeline",
         "provider": "grpc",
-        "services": {
-          "test": "io.restorecommerce.resourcebase.Service",
-          "testBufferedService": "test.Test",
-          "graphsTestService": "io.restorecommerce.graph.Service"
-        },
-        "protos": [
-          "io/restorecommerce/resource_base.proto",
-          "test/test.proto",
-          "io/restorecommerce/graph.proto"
-        ],
-        "protoRoot": "node_modules/@restorecommerce/protos/",
         "addr": "localhost:50051"
+      }
+    ]
+  },
+  "bufferedServer": {
+    "logger": {
+      "console": {
+        "handleExceptions": false,
+        "level": "silly",
+        "colorize": true,
+        "prettyPrint": true
+      }
+    },
+    "services": {
+      "test": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "update": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "upsert": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "testBufferedService": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "graphsTestService": {
+        "traversal": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    "transports": [
+      {
+        "name": "pipeline",
+        "provider": "grpc",
+        "addr": "localhost:50052"
       }
     ]
   },

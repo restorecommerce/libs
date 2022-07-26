@@ -1,12 +1,3 @@
-import { Vertices, Collection } from '@restorecommerce/chassis-srv';
-
-export type TRequest = CreateRequest | DeleteRequest | UpdateRequest | UpsertRequest | ReadRequest;
-export interface ServiceCall<TRequest> {
-  request: TRequest;
-}
-
-export type SortType = 'ASCENDING' | 'DESCENDING' | 'UNSORTED' | 2 | 1 | 0;
-
 export enum FilterOperation {
   eq = 0,
   lt = 1,
@@ -17,7 +8,7 @@ export enum FilterOperation {
   iLike = 6,
   in = 7,
   neq = 8
-};
+}
 
 export enum FilterValueType {
   STRING = 0,
@@ -25,12 +16,12 @@ export enum FilterValueType {
   BOOLEAN = 2,
   DATE = 3,
   ARRAY = 4,
-};
+}
 
 export enum OperatorType {
   and = 0,
   or = 1,
-};
+}
 
 export interface Filter {
   field: string;
@@ -43,26 +34,6 @@ export interface Filter {
 export interface FilterOp {
   filter?: Filter[];
   operator?: OperatorType;
-}
-
-export interface ReadRequest {
-  search?: string; // fulltext search
-  sort?: { field: string; order: SortType }[];
-  limit?: number;
-  offset?: number;
-  field?: { name: string; include: boolean }[];
-  filters?: FilterOp[];
-  custom_queries?: string[];
-  custom_arguments?: any;
-}
-
-export interface DeleteRequest {
-  collection?: boolean;
-  ids?: string[];
-}
-
-export interface UpdateRequest {
-  items: BaseDocument[];
 }
 
 export interface BaseDocument {
@@ -78,16 +49,10 @@ export interface DocumentMetadata {
   owner: { id: string; value: string }[];
 }
 
-export interface UpsertRequest extends UpdateRequest { }
-
-export interface CreateRequest {
-  items: BaseDocument[];
-}
-
 export enum Direction {
   OUTBOUND = 'OUTBOUND',
   INBOUND = 'INBOUND'
-};
+}
 
 export interface TraversalOptions {
   include_vertex?: string[];
@@ -95,7 +60,7 @@ export interface TraversalOptions {
   include_edge?: string[];
   exclude_edge?: string[];
   direction?: Direction;
-};
+}
 
 export interface GraphFilter {
   field: string;
@@ -112,10 +77,3 @@ export interface GraphFilters {
   operator?: OperatorType;
 }
 
-export interface TraversalRequest {
-  vertices?: Vertices;
-  collection?: Collection;
-  opts?: TraversalOptions;
-  path?: boolean;
-  filters?: GraphFilters[];
-}

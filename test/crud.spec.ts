@@ -1,16 +1,28 @@
 'use strict';
 
-import * as mocha from 'mocha';
-import { ServiceBase } from '../lib';
-import { ResourcesAPIBase } from '../lib';
-import { FilterOperation, FilterValueType } from '../lib/core/interfaces';
-import { toObject } from '../lib';
+import { ResourcesAPIBase, ServiceBase, toObject } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
-import { GrpcClient } from '@restorecommerce/grpc-client';
-import { Events, Topic } from '@restorecommerce/kafka-client';
+import { Channel, createChannel, createClient } from '@restorecommerce/grpc-client';
+import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
 import * as _ from 'lodash';
+import {
+  Filter_Operation,
+  Filter_ValueType,
+  protoMetadata as resourceProto,
+  Sort_SortOrder
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import {
+  protoMetadata as testProto,
+  CRUDDefinition,
+  CRUDClient
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
+
+registerProtoMeta(
+  resourceProto,
+  testProto
+);
 
 /*
  * Note: To run this test, a running ArangoDB and Kafka instance is required.
@@ -192,9 +204,10 @@ let meta = {
 describe('ServiceBase', () => {
   let db: chassis.GraphDatabaseProvider;
   let server: chassis.Server;
+  let bufferedServer: chassis.Server;
   let events: Events;
-  let client: GrpcClient;
-  let testService;
+  let channel: Channel;
+  let testService: CRUDClient;
   let testData: any;
   let cfg;
   const today = new Date();
@@ -202,7 +215,10 @@ describe('ServiceBase', () => {
   before(async () => {
     // Load test config from chassis service config
     cfg = createServiceConfig(process.cwd() + '/test');
+
     server = new chassis.Server(cfg.get('server'));
+    bufferedServer = new chassis.Server(cfg.get('bufferedServer'));
+
     events = new Events(cfg.get('events:testevents'), server.logger);
     await events.start();
     const resourceName = 'resource';
@@ -233,24 +249,35 @@ describe('ServiceBase', () => {
     } else { // Undefined means events not enabled
       isEventsEnabled = false;
     }
-    const service: ServiceBase = new ServiceBase('Resource', testEvents,
+    const service = new ServiceBase<any, any>('Resource', testEvents,
       server.logger, resourceAPI, isEventsEnabled);
-    await server.bind('test', service);
+    await server.bind('test', {
+      service: CRUDDefinition,
+      implementation: service as any
+    });
 
     // Create buffered service and bind it to gRPC server
     const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'testBufferedDatas', resourceFieldConfig);
-    const bufferService: ServiceBase = new ServiceBase('testBufferedData', testEvents,
-      server.logger, resourceBufferAPI, isEventsEnabled);
-    await server.bind('testBufferedService', bufferService);
+    const bufferService = new ServiceBase<any, any>('testBufferedData', testEvents,
+      bufferedServer.logger, resourceBufferAPI, isEventsEnabled);
+    await bufferedServer.bind('testBufferedService', {
+      service: CRUDDefinition,
+      implementation: bufferService as any
+    });
 
     await server.start();
+    await bufferedServer.start();
 
-    client = new GrpcClient(cfg.get('client:test'), server.logger);
-    testService = client.test;
+    channel = createChannel(cfg.get('client:test').address);
+    testService = createClient({
+      ...cfg.get('client:test'),
+      logger: server.logger
+    }, CRUDDefinition, channel);
   });
   after(async () => {
-    await client.close();
+    await channel.close();
     await server.stop();
+    await bufferedServer.stop();
     await events.stop();
   });
   describe('endpoints', () => {
@@ -259,9 +286,9 @@ describe('ServiceBase', () => {
       await db.truncate();
       const now: number = Date.now();
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD' },
-        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD' },
-        { id: 'test_zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN' }];
+        { id: 'test_xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD', data: undefined },
+        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD', data: undefined },
+        { id: 'test_zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN', data: undefined }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
@@ -314,7 +341,7 @@ describe('ServiceBase', () => {
         const result = await testService.read({
           sort: [{
             field: 'id',
-            order: 2, // DESCENDING
+            order: Sort_SortOrder.DESCENDING,
           }],
         });
         should.exist(result);
@@ -334,7 +361,7 @@ describe('ServiceBase', () => {
           return 0;
         });
         // match the descending order
-        for (let i = 0; i < result.items.lenght; i++) {
+        for (let i = 0; i < result.items.length; i++) {
           result.items[i].payload.should.deepEqual(testDataDescending[i]);
         }
         result.operation_status.code.should.equal(200);
@@ -344,9 +371,9 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'value',
-            operation: FilterOperation.gt,
+            operation: Filter_Operation.gt,
             value: '10',
-            type: FilterValueType.NUMBER
+            type: Filter_ValueType.NUMBER
           }]
         }];
         const result = await testService.read({
@@ -366,7 +393,7 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'id',
-            operation: FilterOperation.eq,
+            operation: Filter_Operation.eq,
             value: 'test_xy'
           }]
         }];
@@ -387,9 +414,9 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'active',
-            operation: FilterOperation.eq,
+            operation: Filter_Operation.eq,
             value: 'true',
-            type: FilterValueType.BOOLEAN
+            type: Filter_ValueType.BOOLEAN
           }]
         }];
         const result = await testService.read({
@@ -409,9 +436,9 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'created',
-            operation: FilterOperation.lt,
+            operation: Filter_Operation.lt,
             value: today.toString(),
-            type: FilterValueType.DATE,
+            type: Filter_ValueType.DATE,
           }]
         }];
         const result = await testService.read({
@@ -437,9 +464,9 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'status',
-            operation: FilterOperation.in,
+            operation: Filter_Operation.in,
             value: '["BAD", "UNKNOWN"]',
-            type: FilterValueType.ARRAY,
+            type: Filter_ValueType.ARRAY,
           }]
         }];
         const result = await testService.read({
@@ -465,7 +492,7 @@ describe('ServiceBase', () => {
         const filters = [{
           filter: [{
             field: 'id',
-            operation: FilterOperation.neq,
+            operation: Filter_Operation.neq,
             value: 'test_xy',
           }]
         }];
@@ -502,9 +529,9 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(3);
         const testDataReduced = [
-          { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
-          { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
-          { id: '', text: '', meta: null, value: testData[2].value, active: false, created: 0, status: '' },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: 0, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: 0, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: 0, status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -534,8 +561,8 @@ describe('ServiceBase', () => {
         result.items.should.length(2);
 
         const testDataReduced = [
-          { id: '', text: '', meta: null, value: testData[0].value, active: false, created: 0, status: '' },
-          { id: '', text: '', meta: null, value: testData[1].value, active: false, created: 0, status: '' },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: 0, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: 0, status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -750,12 +777,12 @@ describe('ServiceBase', () => {
           { id: 'test_xy', value: 1, meta },
           { id: 'test_xyz', value: 3, meta },
           { id: 'test_zy', value: 12, meta }];
-        result = await testService.create({ items: objectMissingField });
-        should.exist(result);
-        should.exist(result.operation_status);
-        should.exist(result.items);
-        result.items.should.length(3);
-        for (let item of result.items) {
+        const result2 = await testService.create({ items: objectMissingField });
+        should.exist(result2);
+        should.exist(result2.operation_status);
+        should.exist(result2.items);
+        result2.items.should.length(3);
+        for (let item of result2.items) {
           item.status.code.should.equal(400);
           item.status.message.should.startWith('Field text is necessary for resource for documentID');
         }
@@ -765,15 +792,18 @@ describe('ServiceBase', () => {
     describe('check buffered fileds', () => {
       it('should decode the buffered field before storing in DB',
         async () => {
-          client = new GrpcClient(cfg.get('client:testBufferedService'), server.logger);
-          let testBufferService = client.testBufferedService;
+          const channel = createChannel(cfg.get('client:testBufferedService').address)
+          const testBufferService: CRUDClient = createClient({
+            ...cfg.get('client:testBufferedService'),
+            logger: server.logger
+          }, CRUDDefinition, channel);
           const bufData = {
             type_url: '',
             value: Buffer.from(JSON.stringify({ testkey: 'testValue' }))
           };
           const bufferObjects = [
-            { value: 'testValue1', count: 1, data: bufData, meta },
-            { value: 'testValue2', count: 1, data: bufData, meta }];
+            { value: 1, data: bufData, meta },
+            { value: 2, data: bufData, meta }];
           await testBufferService.create({ items: bufferObjects });
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.

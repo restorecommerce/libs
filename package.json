@@ -20,7 +20,7 @@
     "@restorecommerce/chassis-srv": "^0.3.12",
     "@restorecommerce/grpc-client": "^0.4.5",
     "@restorecommerce/kafka-client": "^0.4.3",
-    "@restorecommerce/protos": "^0.7.2",
+    "@restorecommerce/rc-grpc-clients": "^0.5.6",
     "@restorecommerce/service-config": "^0.4.27",
     "lodash": "^4.17.21",
     "redis": "^4.2.0"
@@ -32,6 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/eslint-plugin-tslint": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
+    "arangojs": "^7.8.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.19.0",
     "eslint-plugin-prefer-arrow-functions": "^3.1.4",
@@ -54,6 +55,7 @@
     "mocha-debug": "cross-env NODE_ENV=test; mocha --full-trace --inspect-brk",
     "lcov-report": "nyc report --reporter=lcov",
     "build:tsc": "tsc -d",
+    "build:tsc:watch": "tsc -d --watch",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc"
   },

@@ -204,14 +204,14 @@ export class Client {
 
     const error = checkError(response);
     if (error) {
+      const processed = processResponse(response);
       if (verbose) {
         console.error(JSON.stringify({
           request: mutation,
           variables,
-          response
+          response: processed
         }));
       } else if (ignoreErrors) {
-        const processed = processResponse(response);
         console.error(JSON.stringify(processed));
       }
       throw new Error(JSON.stringify(error));

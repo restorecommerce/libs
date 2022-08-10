@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.13.0...@restorecommerce/logger@0.13.1) (2022-08-10)
+
+
+### Bug Fixes
+
+* **logger:** do not crash on circular json ([3fdd200](https://github.com/restorecommerce/libs/commit/3fdd200e986d69768dc60825ef64e7cf64300a82))
+
+
+
+
+
 # [0.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.2...@restorecommerce/logger@0.13.0) (2022-06-10)
 
 

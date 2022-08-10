@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@0.1.13...@restorecommerce/cluster-service@0.1.14) (2022-08-10)
+
+**Note:** Version bump only for package @restorecommerce/cluster-service
+
+
+
+
+
 ## [0.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@0.1.12...@restorecommerce/cluster-service@0.1.13) (2022-06-10)
 
 

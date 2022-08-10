@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.5...@restorecommerce/gql-bot@0.2.6) (2022-08-10)
+
+
+### Bug Fixes
+
+* **gql-bot:** fix null type error ([22db1dc](https://github.com/restorecommerce/libs/commit/22db1dce1d3e31658852cb80194aa2140ecc0970))
+
+
+
+
+
 ## [0.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.4...@restorecommerce/gql-bot@0.2.5) (2022-08-10)
 
 **Note:** Version bump only for package @restorecommerce/gql-bot

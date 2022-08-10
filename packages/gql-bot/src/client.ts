@@ -51,7 +51,7 @@ const checkError = (data: any): any => {
         return result;
       }
     } else {
-      if ('__typename' in data) {
+      if (data && '__typename' in data) {
         switch (data['__typename']) {
           case 'IoRestorecommerceStatusOperationStatus':
           case 'IoRestorecommerceStatusStatus':

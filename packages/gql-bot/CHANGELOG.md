@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.6...@restorecommerce/gql-bot@0.2.7) (2022-08-10)
+
+
+### Bug Fixes
+
+* **gql-bot:** always pre-process response before logging ([ff6963e](https://github.com/restorecommerce/libs/commit/ff6963e0f2c7c5c0d61a3d1f890706f52fe02d91))
+
+
+
+
+
 ## [0.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.5...@restorecommerce/gql-bot@0.2.6) (2022-08-10)
 
 

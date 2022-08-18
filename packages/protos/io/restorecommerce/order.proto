@@ -7,6 +7,8 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
+import "io/restorecommerce/fulfillment.proto";
+import "io/restorecommerce/fulfillment_product.proto";
 
 // Used by resolvers
 import "io/restorecommerce/contact_point.proto";
@@ -18,12 +20,22 @@ service Service {
     option (io.restorecommerce.options.is_query) = true;
   };
   rpc Create (OrderList) returns (OrderListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
-  rpc TriggerFulfillment (OrderDataList) returns (FulfillmentResults);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc TriggerFulfillment (TriggerFulfillmentRequestList) returns (io.restorecommerce.status.Status);
 }
 
+enum State {
+  Undefined = 0;
+  Invalid = 1;
+  Created = 2;
+  Ordered = 3;
+  Shipping = 4;
+  Done= 5;
+  Cancelled = 6;
+  Failed = 7;
+}
 
 message OrderList {
   repeated Order items = 1;
@@ -42,7 +54,35 @@ message OrderResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
+message ContactPerson {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
 message Order {
+  message Items {
+    // below identifier is id of product, variant or bundle
+    string product_variant_bundle_id = 1;
+    string product_name = 2;
+    string product_description = 3;
+    string manufacturer_name = 4;
+    string manufacturer_description = 5;
+    string prototype_name = 6;
+    string prototype_description = 7;
+    int32 quantity = 8;
+    int32 vat = 9;
+    double price = 10;
+    double quantity_price = 11;
+    string item_type = 12;
+    double taric_code = 13;
+    string stock_keeping_unit = 14;
+    double weight_in_kg = 15;
+    int32 length_in_cm = 16;
+    int32 width_in_cm = 17;
+    int32 height_in_cm = 18;
+  }
+
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string name = 3;
@@ -52,58 +92,67 @@ message Order {
   repeated Items items = 7;
   // sum of all the quantity_price will be total_price
   double total_price = 8;
-  // shipping address
-  string shipping_contact_point_id = 9 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
-      target_sub_service: "contact_point",
-      target_method: "Read",
-      field_name: "shippingContactPoint",
-    }
-  ];
-  string billing_contact_point_id = 10 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
-      target_sub_service: "contact_point",
-      target_method: "Read",
-      field_name: "billingContactPoint",
-    }
-  ];
-  double total_weight_in_kg = 11;
+  oneof shipping_contact_point_type {
+    string shipping_contact_point_id = 10 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.contact_point.ContactPoint",
+        target_service: "resource",
+        target_sub_service: "contact_point",
+        target_method: "Read",
+        field_name: "shippingContactPoint",
+      }
+    ];
+    io.restorecommerce.contact_point.ContactPoint shipping_contact_point = 11;
+  }
+  
+  oneof billing_contact_point_type {
+    string billing_contact_point_id = 12 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.contact_point.ContactPoint",
+        target_service: "resource",
+        target_sub_service: "contact_point",
+        target_method: "Read",
+        field_name: "billingContactPoint",
+      }
+    ];
+    io.restorecommerce.contact_point.ContactPoint billing_contact_point = 13;
+  }
+  ContactPerson contact_person = 14;
+  string notification_email = 15;
+  //repeated string fulfillment_ids = 13;
 }
 
-message Items {
-  double quantity_price = 1;
-  Item item = 2;
+message TriggerFulfillmentRequest {
+  message ShippingDetails {
+    string export_type = 4;
+    string export_description = 5;
+    string customs_tariff_number = 6;
+    string invoice_number = 7;
+    double customs_value = 8;
+    oneof sender_address {
+      io.restorecommerce.contact_point.ContactPoint contact_point = 9;
+      io.restorecommerce.contact_point.Address address = 10;
+    }
+    ContactPerson contact_person = 12;
+  }
+
+  Order order = 1;
+  ShippingDetails shipping_details = 2;
+  repeated io.restorecommerce.fulfillment.Parcels parcels = 4;
 }
 
-message Item {
-  // below identifier is id of product, variant or bundle
-  string product_variant_bundle_id = 1;
-  string product_name = 2;
-  string product_description = 3;
-  string manufacturer_name = 4;
-  string manufacturer_description = 5;
-  string prototype_name = 6;
-  string prototype_description = 7;
-  int32 quantity = 8;
-  int32 vat = 9;
-  double price = 10;
-  string item_type = 11;
-  double taric_code = 12;
-  string stock_keeping_unit = 13;
-  double weight_in_kg = 14;
-  int32 length_in_cm = 15;
-  int32 width_in_cm = 16;
-  int32 height_in_cm = 17;
+message TriggerFulfillmentRequestList {
+  repeated TriggerFulfillmentRequest items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+
 }
 
 message Deleted {
   string id = 1;
 }
 
+/*
 message OrderDataList {
   repeated OrderData order_data = 1;
   io.restorecommerce.meta.Meta meta = 2;
@@ -144,3 +193,5 @@ message ErrorList {
   repeated string code = 1;
   repeated string message = 2;
 }
+
+*/

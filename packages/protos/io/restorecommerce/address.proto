@@ -53,6 +53,28 @@ message Address {
     double longitude = 2;
   }
 
+  message AddressAddition {
+    string field1 = 1;
+    string field2 = 2;
+  }
+
+  message BusinessAddress {
+    string name = 1;
+  }
+
+  message ResidentialAddress {
+    string title = 1;
+    string first_name = 2;
+    string mid_name = 3;
+    string last_name = 4;
+  }
+
+  message Packstation {
+    string provider = 1;
+    string station_number = 2;
+    string post_number = 3;
+  }
+
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string postcode = 3;
@@ -73,9 +95,9 @@ message Address {
   double altitude = 9;
   string building_number = 10;
   AddressAddition address_addition = 11;
-}
-
-message AddressAddition {
-  string field1 = 1;
-  string field2 = 2;
+  oneof type {
+    BusinessAddress bussinessAddress = 12;
+    ResidentialAddress residentialAddress = 13;
+    Packstation packstation = 14;
+  }
 }

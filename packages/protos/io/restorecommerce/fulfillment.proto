@@ -25,9 +25,24 @@ service Service {
   };
 
   /**
-  Creates and executes fulfillment orders
+  Creates fulfillment orders
   */
   rpc Create (FulfillmentRequestList) returns (FulfillmentResponseList);
+
+  /**
+  Updates fulfillment orders unless Status is beyond Ordered
+  */
+  rpc Update (FulfillmentRequestList) returns (FulfillmentResponseList);
+
+  /**
+  Creates or Updates fulfillment orders unless Status is beyond Ordered
+  */
+  rpc Upsert (FulfillmentRequestList) returns (FulfillmentResponseList);
+
+  /**
+  Creates, Executes and Updates fulfillment orders against API
+  */
+  rpc Order (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders
@@ -50,13 +65,15 @@ service Service {
 enum State {
   Undefined = 0;
   Invalid = 1;
-  Ordered = 2;
-  Shipping = 3;
-  Done= 4;
-  Cancelled = 5;
-  Failed = 6;
+  Created = 2;
+  Ordered = 3;
+  Shipping = 4;
+  Done= 5;
+  Cancelled = 6;
+  Failed = 7;
 }
 
+/*
 message Contact {
   string name = 1;
   string email = 2;
@@ -86,11 +103,15 @@ message Address {
   io.restorecommerce.country.Country country = 6;
   Contact contact = 7;
 }
+*/
 
 message Parcel {
   message Item {
     string item_id = 1;
-    int32 quantity = 2;
+    string name = 2;
+    string description = 3;
+    string taric_code = 4;
+    int32 quantity = 5;
   }
 
   string product_id = 1;
@@ -102,11 +123,11 @@ message Parcel {
   float length_in_cm = 7;
 }
 
-message Order {
+message Packing {
   string reference_id = 1;
   repeated Parcel parcels = 2;
-  Address sender = 3;
-  Address receiver = 4;
+  io.restorecommerce.address.Address sender = 3;
+  io.restorecommerce.address.Address receiver = 4;
   string notify = 5;
 }
 
@@ -123,7 +144,7 @@ message Label {
 
 message FulfillmentRequest {
   string id = 1;
-  Order order = 2;
+  Packing packing = 2;
   io.restorecommerce.meta.Meta meta = 3;
 }
 
@@ -138,7 +159,7 @@ This is the message how it get stored to the database
 */
 message Fulfillment {
   string id = 1;
-  Order order = 2;
+  Packing packing = 2;
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   bool fulfilled = 5;

@@ -22,6 +22,7 @@ service Service {
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
+  rpc Submit (OrderList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc TriggerFulfillment (TriggerFulfillmentRequestList) returns (io.restorecommerce.status.Status);
 }
@@ -30,28 +31,11 @@ enum State {
   Undefined = 0;
   Invalid = 1;
   Created = 2;
-  Ordered = 3;
+  Submitted = 3;
   Shipping = 4;
   Done= 5;
   Cancelled = 6;
   Failed = 7;
-}
-
-message OrderList {
-  repeated Order items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
-}
-
-message OrderListResponse {
-  repeated OrderResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
-}
-
-message OrderResponse {
-  Order payload = 1;
-  io.restorecommerce.status.Status status = 2;
 }
 
 message ContactPerson {
@@ -60,6 +44,9 @@ message ContactPerson {
   string phone = 3;
 }
 
+/**
+  Database Entity
+*/
 message Order {
   message Items {
     // below identifier is id of product, variant or bundle
@@ -87,12 +74,12 @@ message Order {
   io.restorecommerce.meta.Meta meta = 2;
   string name = 3;
   string description = 4;
-  string status = 5;
+  State state = 5;
   string customer_reference = 6;
   repeated Items items = 7;
   // sum of all the quantity_price will be total_price
   double total_price = 8;
-  oneof shipping_contact_point_type {
+  oneof shipping_address_type {
     string shipping_contact_point_id = 10 [
       (io.restorecommerce.options.resolver) = {
         target_type: ".io.restorecommerce.contact_point.ContactPoint",
@@ -103,10 +90,20 @@ message Order {
       }
     ];
     io.restorecommerce.contact_point.ContactPoint shipping_contact_point = 11;
+    string shipping_address_id = 12 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.address.Address",
+        target_service: "resource",
+        target_sub_service: "address",
+        target_method: "Read",
+        field_name: "shippingAddress",
+      }
+    ];
+    io.restorecommerce.address.Address shipping_address = 13;
   }
   
-  oneof billing_contact_point_type {
-    string billing_contact_point_id = 12 [
+  oneof billing_address_type {
+    string billing_contact_point_id = 14 [
       (io.restorecommerce.options.resolver) = {
         target_type: ".io.restorecommerce.contact_point.ContactPoint",
         target_service: "resource",
@@ -116,29 +113,39 @@ message Order {
       }
     ];
     io.restorecommerce.contact_point.ContactPoint billing_contact_point = 13;
+    string billing_address_id = 14 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.address.Address",
+        target_service: "resource",
+        target_sub_service: "address",
+        target_method: "Read",
+        field_name: "billingAddress",
+      }
+    ];
+    io.restorecommerce.address.Address billing_address = 15;
   }
-  ContactPerson contact_person = 14;
-  string notification_email = 15;
-  //repeated string fulfillment_ids = 13;
+  io.restorecommerce.fulfillment.ContactPerson contact_person = 16;
+  string notification_email = 17;
+  repeated string fulfillment_ids = 18;
 }
 
 message TriggerFulfillmentRequest {
   message ShippingDetails {
     string export_type = 4;
     string export_description = 5;
-    string customs_tariff_number = 6;
+    string custom_tariff_number = 6;
     string invoice_number = 7;
-    double customs_value = 8;
+    double custom_value = 8;
     oneof sender_address {
       io.restorecommerce.contact_point.ContactPoint contact_point = 9;
       io.restorecommerce.contact_point.Address address = 10;
     }
-    ContactPerson contact_person = 12;
+    io.restorecommerce.fulfillment.ContactPerson contact_person = 12;
   }
 
   Order order = 1;
   ShippingDetails shipping_details = 2;
-  repeated io.restorecommerce.fulfillment.Parcels parcels = 4;
+  repeated io.restorecommerce.fulfillment.Parcels parcels = 3;
 }
 
 message TriggerFulfillmentRequestList {
@@ -146,6 +153,23 @@ message TriggerFulfillmentRequestList {
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 
+}
+
+message OrderList {
+  repeated Order items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message OrderListResponse {
+  repeated OrderResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message OrderResponse {
+  Order payload = 1;
+  io.restorecommerce.status.Status status = 2;
 }
 
 message Deleted {

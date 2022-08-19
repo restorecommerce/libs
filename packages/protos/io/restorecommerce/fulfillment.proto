@@ -42,7 +42,7 @@ service Service {
   /**
   Creates, Executes and Updates fulfillment orders against API
   */
-  rpc Order (FulfillmentRequestList) returns (FulfillmentResponseList);
+  rpc Submit (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders
@@ -66,44 +66,23 @@ enum State {
   Undefined = 0;
   Invalid = 1;
   Created = 2;
-  Ordered = 3;
+  Submitted = 3;
   Shipping = 4;
   Done= 5;
   Cancelled = 6;
   Failed = 7;
 }
 
-/*
-message Contact {
+message ContactPerson {
   string name = 1;
   string email = 2;
   string phone = 3;
 }
 
-message Branch {
-  string provider = 1;
-  string branch_number = 2;
-  string post_number = 3;
-}
-
-message Packstation {
-  string provider = 1;
-  string station_number = 2;
-  string post_number = 3;
-}
-
 message Address {
-  string title = 1;
-  repeated string name = 2;
-  oneof type {
-    io.restorecommerce.address.Address address = 3;
-    Packstation packstation = 4;
-    Branch branch = 5;
-  };
-  io.restorecommerce.country.Country country = 6;
-  Contact contact = 7;
+  io.restorecommerce.address.Address address = 3;
+  ContactPerson contact_person = 7;
 }
-*/
 
 message Parcel {
   message Item {
@@ -123,11 +102,11 @@ message Parcel {
   float length_in_cm = 7;
 }
 
-message Packing {
+message Order {
   string reference_id = 1;
   repeated Parcel parcels = 2;
-  io.restorecommerce.address.Address sender = 3;
-  io.restorecommerce.address.Address receiver = 4;
+  Address sender = 3;
+  Address receiver = 4;
   string notify = 5;
 }
 
@@ -144,7 +123,7 @@ message Label {
 
 message FulfillmentRequest {
   string id = 1;
-  Packing packing = 2;
+  Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
 }
 
@@ -159,7 +138,7 @@ This is the message how it get stored to the database
 */
 message Fulfillment {
   string id = 1;
-  Packing packing = 2;
+  Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   bool fulfilled = 5;

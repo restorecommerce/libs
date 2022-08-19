@@ -130,7 +130,7 @@ message Fulfillment {
   };
 
   string id = 1;
-  Packing packing = 2;
+  Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   State state = 5;

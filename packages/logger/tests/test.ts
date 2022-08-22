@@ -67,6 +67,12 @@ describe('a logger', () => {
       logger.error('Generic Error!');
       done();
     });
+    it('a circular object', (done) => {
+      const obj: any = {name: "Bob"};
+      obj.child = obj;
+      logger.info(obj);
+      done();
+    });
         esTransport.bulkWriter.stop();
   });
 });

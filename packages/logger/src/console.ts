@@ -1,6 +1,6 @@
 import { format, transports } from 'winston';
 import * as rTracer from 'cls-rtracer';
-import { globalLoggerCtxKey, traceFormatter } from './utils';
+import { getCircularReplacer, globalLoggerCtxKey, traceFormatter } from './utils';
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
   prettyPrint?:  boolean | any;
@@ -23,10 +23,10 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     delete info.timestamp;
     let object = {};
     if (splat) {
-      object = JSON.stringify(splat);
+      object = JSON.stringify(splat, getCircularReplacer());
     }
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      message = JSON.stringify(message);
+      message = JSON.stringify(message, getCircularReplacer());
     }
     let ret: string[] = [];
     ret.push(`${level}: ${time}`);

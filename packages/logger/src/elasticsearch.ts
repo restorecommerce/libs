@@ -1,7 +1,7 @@
 import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from 'winston-elasticsearch';
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
-import { globalLoggerCtxKey, getRealTrace } from './utils';
+import { globalLoggerCtxKey, getRealTrace, getCircularReplacer } from './utils';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
@@ -42,7 +42,7 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     transformed.source_host = os.hostname();
     transformed.message = logData.message;
     if (typeof transformed.message === 'object') {
-      transformed.message = JSON.stringify(transformed.message);
+      transformed.message = JSON.stringify(transformed.message, getCircularReplacer());
     }
     transformed.severity = logData.level;
     transformed.fields = logData.meta;

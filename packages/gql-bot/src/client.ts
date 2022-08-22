@@ -51,7 +51,7 @@ const checkError = (data: any): any => {
         return result;
       }
     } else {
-      if ('__typename' in data) {
+      if (data && '__typename' in data) {
         switch (data['__typename']) {
           case 'IoRestorecommerceStatusOperationStatus':
           case 'IoRestorecommerceStatusStatus':
@@ -204,14 +204,14 @@ export class Client {
 
     const error = checkError(response);
     if (error) {
+      const processed = processResponse(response);
       if (verbose) {
         console.error(JSON.stringify({
           request: mutation,
           variables,
-          response
+          response: processed
         }));
       } else if (ignoreErrors) {
-        const processed = processResponse(response);
         console.error(JSON.stringify(processed));
       }
       throw new Error(JSON.stringify(error));

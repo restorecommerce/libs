@@ -409,7 +409,11 @@ export class ResourcesAPIBase {
   async upsert(documents: BaseDocument[],
     events: Topic, resourceName: string): Promise<BaseDocument[]> {
     let result = [];
+    let createDocsResult = [];
+    let updateDocsResult = [];
     try {
+      let createDocuments = [];
+      let updateDocuments = [];
       const dispatch = []; // CRUD events to be dispatched
       for (let i = 0; i < documents.length; i += 1) {
         let doc = documents[i];
@@ -428,24 +432,34 @@ export class ResourcesAPIBase {
         if (_.isEmpty(foundDocs)) {
           // insert
           setDefaults(doc, this.collectionName);
+          createDocuments.push(doc);
           eventName = 'Created';
         } else {
           // update
           const dbDoc = foundDocs[0];
           updateMetadata(dbDoc.meta, doc);
+          updateDocuments.push(doc);
           eventName = 'Modified';
         }
 
         dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
       }
 
-      // config fix to be removed after ts-proto is used
-      documents = this.convertSecondsNanosToms(documents);
-      result = await this.db.upsert(this.collectionName, documents);
-      await dispatch;
+      if (createDocuments.length > 0) {
+        createDocuments = this.convertSecondsNanosToms(createDocuments);
+        createDocsResult = await this.create(createDocuments);
+      }
 
+      if (updateDocuments.length > 0) {
+        updateDocuments = this.convertSecondsNanosToms(updateDocuments);
+        updateDocsResult = await this.update(updateDocuments);
+      }
+
+      result = _.union(createDocuments, updateDocuments);
       // config fix to be removed after ts-proto is used
       result = this.convertmsToSecondsNanos(result);
+      await Promise.all(dispatch);
+
       if (this.bufferField) {
         return _.map(result, doc => encodeMsgObj(doc, this.bufferField));
       }

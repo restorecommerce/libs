@@ -143,7 +143,7 @@ describe('converting to filter to object', () => {
       ]
     };
     /* eslint-disable */
-    const expectedDBObject = {"$or":[{"$and":[{"user_type":{"$not":{"$eq":"TECHNICAL_USER"}}},{"$or":[{"first_name":{"$iLike":"%test%"}},{"last_name":{"$iLike":"%test%"}}]}]},{"$and":[{"state":"BW"},{"city":"Stuttgart"}]}]}
+    const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "$or": [{ "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } }] }] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
     const dbFilter = toObject(protoFilter);
     dbFilter.should.deepEqual(expectedDBObject);
   });
@@ -175,7 +175,7 @@ describe('converting to filter to object', () => {
       ]
     };
     /* eslint-disable */
-    const expectedDBObject = [{"$and":[{"id":{"$in":"test1"}}]},{"$or":[{"id":"test2"}]}]
+    const expectedDBObject = [{ "$and": [{ "id": { "$in": "test1" } }] }, { "$or": [{ "id": "test2" }] }]
     const dbFilter = toObject(protoFilter);
     dbFilter.should.deepEqual(expectedDBObject);
   });
@@ -792,29 +792,26 @@ describe('ServiceBase', () => {
     describe('check buffered fileds', () => {
       it('should decode the buffered field before storing in DB',
         async () => {
-          const channel = createChannel(cfg.get('client:testBufferedService').address)
-          const testBufferService: CRUDClient = createClient({
-            ...cfg.get('client:testBufferedService'),
-            logger: server.logger
-          }, CRUDDefinition, channel);
+          // delete existing data and create new bufferdata message
+          await testService.delete({ collection: true });
           const bufData = {
             type_url: '',
             value: Buffer.from(JSON.stringify({ testkey: 'testValue' }))
           };
           const bufferObjects = [
-            { value: 1, data: bufData, meta },
-            { value: 2, data: bufData, meta }];
-          await testBufferService.create({ items: bufferObjects });
+            { value: 1, data: bufData, meta, text: 'test1' },
+            { value: 2, data: bufData, meta, text: 'test2' }];
+          let resp = await testService.create({ items: bufferObjects });
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.
           // This way, we check if the data was actually encoded by reading it fromt the DB.
-          const result = await db.find('testBufferedDatas');
+          const result = await db.find('resources');
           should.exist(result);
           should.exist(result[0]);
           should.exist(result[0].data.testkey);
           result[0].data.testkey.should.equal('testValue');
           // delete the collection
-          await db.truncate('testBufferedDatas');
+          await db.truncate('resources');
         });
     });
   });

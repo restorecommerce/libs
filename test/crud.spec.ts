@@ -751,6 +751,8 @@ describe('ServiceBase', () => {
         }];
         const result = await testService.upsert({ items: replace });
         should.exist(result);
+        result.items.length.should.equal(3);
+        result.items[0].payload.id.should.equal('test_newput');
         should.exist(result.operation_status);
         should.exist(result.items);
         result.items.should.matchEach((e) => {

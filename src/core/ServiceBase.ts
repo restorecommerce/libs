@@ -122,15 +122,13 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       )) || [];
 
       let readResponseWithStatus = [];
-      for (let object of objectEntities) {
-        readResponseWithStatus.push({
-          payload: object,
-          status: {
-            code: 200,
-            message: 'success'
-          }
-        });
-      }
+      objectEntities.map((object) => readResponseWithStatus.push({
+        payload: object,
+        status: {
+          code: 200,
+          message: 'success'
+        }
+      }));
 
       return {
         items: readResponseWithStatus,
@@ -299,14 +297,14 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       }
 
       // sanitize delete response for docs
-      for (let doc of docs) {
+      docs.map((doc) => {
         if (doc._id && doc._key && doc._rev) {
           delete doc._id;
-          doc.id = doc._key;
+          doc.id = doc._key;;
           delete doc._key;
           delete doc._rev;
         }
-      }
+      });
 
       if (this.isEventsEnabled) {
         const dispatch = [];
@@ -325,9 +323,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       // iterate docs and put ids to call.request.ids
       if (request.collection && (_.isNil(request.ids) || _.isEmpty(request.ids))) {
         request.ids = [];
-        for (let doc of docs) {
-          request.ids.push(doc.id);
-        }
+        docs.map((doc) => request.ids.push(doc.id));
       }
       let statusArray = this.generateStatusResponse(docs, request.ids, true);
       const operation_status = {

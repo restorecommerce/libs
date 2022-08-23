@@ -369,13 +369,13 @@ const testProvider = (providerCfg) => {
           path: true
         });
         const expectedVertices = [{ name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
-          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j' },
-          { car: 'bmw', id: 'c', place_id: 'e' },
-          { place: 'Munich', id: 'e', state_id: 'g' },
-          { state: 'Bayern', id: 'g' },
-          { state: 'Saxony', id: 'h' },
-          { state: 'BW', id: 'i' },
-          { state: 'Hessen', id: 'j' }];
+        { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j' },
+        { car: 'bmw', id: 'c', place_id: 'e' },
+        { place: 'Munich', id: 'e', state_id: 'g' },
+        { state: 'Bayern', id: 'g' },
+        { state: 'Saxony', id: 'h' },
+        { state: 'BW', id: 'i' },
+        { state: 'Hessen', id: 'j' }];
 
         // traverse graph
         await fetchAndEquals(testService.traversal(traversalRequest), expectedVertices, 6);
@@ -670,8 +670,8 @@ const testProvider = (providerCfg) => {
         async () => {
           // Deleting the ids of vertexCollection 'cars' should remove
           // both 'person_has_car'  and 'car_has_org' both edges
-          await service_2.delete({ request: { collection: 'cars' } });
-          // await service_2.delete({ request: { ids: ['c', 'd'] } });
+          await service_2.delete({ collection: 'cars' });
+          // await service_2.delete({ ids: ['c', 'd'] });
         });
     });
   });

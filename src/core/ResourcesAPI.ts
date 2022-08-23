@@ -216,7 +216,7 @@ export class ResourcesAPIBase {
   */
   async create(documents: BaseDocument[]): Promise<any> {
     const collection = this.collectionName;
-    const toInsert = [];
+    let toInsert = [];
     let result = [];
     try {
       let result = [];
@@ -228,13 +228,15 @@ export class ResourcesAPIBase {
         result = requiredFieldsResult.result;
       }
 
-      for (let i = 0; i < documents.length; i += 1) {
-        documents[i] = await setDefaults(documents[i], collection);
+      toInsert = await Promise.all(documents.map(async (doc) => {
+        doc = await setDefaults(doc, collection);
         // decode the buffer and store it to DB
         if (this.bufferField) {
-          toInsert.push(decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField));
+          return (decodeBufferObj(_.cloneDeep(doc), this.bufferField));
+        } else {
+          return doc;
         }
-      }
+      }));
 
       // config fix to be removed after ts-proto is used
       documents = this.convertSecondsNanosToms(documents);
@@ -272,9 +274,7 @@ export class ResourcesAPIBase {
           }
         }
         if (_.isArray(createVertexResp)) {
-          for (let eachVertexResp of createVertexResp) {
-            result.push(eachVertexResp);
-          }
+          createVertexResp.forEach((eachVertexResp) => result.push(eachVertexResp));
         } else {
           result.push(createVertexResp);
         }
@@ -289,9 +289,7 @@ export class ResourcesAPIBase {
         }
         result = await this.db.insert(collection, this.bufferField ? toInsert : documents);
         if (!_.isEmpty(checkReqFieldResult)) {
-          for (let reqFieldResult of checkReqFieldResult) {
-            result.push(reqFieldResult);
-          }
+          checkReqFieldResult.forEach((reqFieldResult) => result.push(reqFieldResult));
         }
         // config fix to be removed after ts-proto is used
         result = this.convertmsToSecondsNanos(result);
@@ -318,8 +316,8 @@ export class ResourcesAPIBase {
    * @param documents
    */
   checkRequiredFields(requiredFields: string[], documents: any, result: any[]): any {
-    for (let document of documents) {
-      for (let eachField of requiredFields) {
+    documents.forEach((document) => {
+      requiredFields.forEach((eachField) => {
         const isArray = _.isArray(eachField);
         if (!document[eachField]) {
           result.push({
@@ -337,8 +335,8 @@ export class ResourcesAPIBase {
           });
           documents = documents.filter(doc => doc.id != document.id);
         }
-      }
-    }
+      });
+    });
     return { documents, result };
   }
 
@@ -414,11 +412,8 @@ export class ResourcesAPIBase {
     try {
       let createDocuments = [];
       let updateDocuments = [];
-      const dispatch = []; // CRUD events to be dispatched
-      for (let i = 0; i < documents.length; i += 1) {
-        let doc = documents[i];
+      let dispatch = documents.map(async (doc) => {
         decodeBufferObj(doc, this.bufferField);
-
         let foundDocs;
         if (doc && doc.id) {
           foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
@@ -427,7 +422,6 @@ export class ResourcesAPIBase {
             }
           });
         }
-
         let eventName: string;
         if (_.isEmpty(foundDocs)) {
           // insert
@@ -441,9 +435,8 @@ export class ResourcesAPIBase {
           updateDocuments.push(doc);
           eventName = 'Modified';
         }
-
-        dispatch.push(events.emit(`${resourceName}${eventName}`, doc));
-      }
+        return events.emit(`${resourceName}${eventName}`, doc);
+      });
 
       if (createDocuments.length > 0) {
         createDocuments = this.convertSecondsNanosToms(createDocuments);
@@ -486,13 +479,10 @@ export class ResourcesAPIBase {
     let updateResponse = [];
     try {
       const collectionName = this.collectionName;
-      let docsWithUpMetadata = [];
-      for (let i = 0; i < documents.length; i += 1) {
-        let doc = documents[i];
+      let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
         if (this.bufferField) {
-          doc = decodeBufferObj(_.cloneDeep(documents[i]), this.bufferField);
+          doc = decodeBufferObj(_.cloneDeep(doc), this.bufferField);
         }
-
         const foundDocs = await this.db.find(collectionName, { id: doc.id });
         let dbDoc;
         if (foundDocs && foundDocs.length === 1) {
@@ -504,8 +494,7 @@ export class ResourcesAPIBase {
 
         if (this.isGraphDB(this.db)) {
           const db = this.db;
-
-          for (let eachEdgeCfg of this.edgeCfg) {
+          await Promise.all(this.edgeCfg.map(async (eachEdgeCfg) => {
             const toIDkey = eachEdgeCfg.to;
             let modified_to_idValues = doc[toIDkey];
             let db_to_idValues = dbDoc[toIDkey];
@@ -517,7 +506,7 @@ export class ResourcesAPIBase {
             }
             // delete and recreate only if there is a difference in references
             if (!_.isEqual(modified_to_idValues, db_to_idValues)) {
-              // TODO delete and recreate the edge (since there is no way to update the edge as we dont add id to the edge as for doc)
+              // delete and recreate the edge (since there is no way to update the edge as we dont add id to the edge as for doc)
               const fromIDkey = eachEdgeCfg.from;
               const from_id = doc[fromIDkey];
               let fromVerticeName = collectionName;
@@ -531,34 +520,27 @@ export class ResourcesAPIBase {
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               if (_.isArray(outgoingEdges.edges)) {
-                for (let outgoingEdge of outgoingEdges.edges) {
-                  await db.removeEdge(edgeCollectionName, outgoingEdge._id);
-                }
+                await Promise.all(outgoingEdges.edges.map((outgoingEdge) => db.removeEdge(edgeCollectionName, outgoingEdge._id)));
               }
               let incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               if (_.isArray(incomingEdges.edges)) {
-                for (let incomingEdge of incomingEdges.edges) {
-                  await db.removeEdge(edgeCollectionName, incomingEdge._id);
-                }
+                await Promise.all(incomingEdges.edges.map((incomingEdge) => db.removeEdge(edgeCollectionName, incomingEdge._id)));
               }
               // Create new edges
               if (from_id && modified_to_idValues) {
                 if (_.isArray(modified_to_idValues)) {
-                  for (let toID of modified_to_idValues) {
-                    await db.createEdge(eachEdgeCfg.edgeName, null,
-                      `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
-                  }
+                  await Promise.all(modified_to_idValues.map((toID) => db.createEdge(eachEdgeCfg.edgeName, null,
+                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`)));
                 } else {
                   await db.createEdge(edgeCollectionName, null,
                     `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
                 }
               }
             }
-          }
+          }));
         }
-
-        docsWithUpMetadata.push(doc);
-      }
+        return doc;
+      }));
 
       // config fix to be removed after ts-proto is used
       docsWithUpMetadata = this.convertSecondsNanosToms(docsWithUpMetadata);

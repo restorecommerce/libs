@@ -666,6 +666,105 @@ const testProvider = (providerCfg) => {
         traversalResponse.data[0].name.should.equal('Bob');
         traversalResponse.data[1].name.should.equal('Alice');
       });
+
+      // update the edge data for car_id for persons
+      // then do a traversal request for Alice Person and for Bob person 
+      // separately and verify the cars are interchanged
+      it('should validate update person vertices with updated car id', async () => {
+        // update meta as well
+        let meta = {
+          owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'NewAdmin' }]
+        };
+        const updatedPersonsVertices = [
+          { name: 'Alice', id: 'a', car_id: 'd', state_id: 'i', meta },
+          { name: 'Bob', id: 'b', car_id: 'c', state_id: 'j', meta }
+        ];
+        result_1 = await service_1.update({ items: updatedPersonsVertices });
+
+        // Alice traversal request
+        const traversalRequest = TraversalRequest.fromPartial({
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
+          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          path: true
+        });
+        const expectedVertices = [
+          { name: 'Alice', id: 'a', car_id: 'd', state_id: 'i' },
+          { car: 'vw', id: 'd', place_id: 'f' }];
+
+        // traverse graph
+        await fetchAndEquals(testService.traversal(traversalRequest), expectedVertices, 1);
+
+        // Bob traversal request
+        const traversalRequest1 = TraversalRequest.fromPartial({
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['b']
+          },
+          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          path: true
+        });
+        const expectedVertices1 = [
+          { name: 'Bob', id: 'b', car_id: 'c', state_id: 'j' },
+          { car: 'bmw', id: 'c', place_id: 'e' }];
+
+        // traverse graph
+        await fetchAndEquals(testService.traversal(traversalRequest1), expectedVertices1, 1);
+      });
+
+      // do an upsert api for Person with interchanging the car_id again and then inserting a new person
+      // Read Alice again and verify it has old car
+      // Read new Person and only person should exist
+      it('should validate upsert person vertices with updated car id and inserting new person vertice', async () => {
+        // update meta as well
+        let meta = {
+          owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
+        };
+        const upsertedPersonsVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i', meta },
+          { name: 'Bob', id: 'b', car_id: 'd', state_id: 'j', meta },
+          { name: 'NewPerson', id: 'newPersonID', car_id: 'c', state_id: 'i', meta }
+        ];
+        result_1 = await service_1.upsert({ items: upsertedPersonsVertices });
+
+        // Alice traversal request to verify car_id is reverted
+        const traversalRequest = TraversalRequest.fromPartial({
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['a']
+          },
+          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          path: true
+        });
+        const expectedVertices = [
+          { name: 'Alice', id: 'a', car_id: 'c', state_id: 'i' },
+          { car: 'bmw', id: 'c', place_id: 'e' }];
+
+        // traverse graph
+        await fetchAndEquals(testService.traversal(traversalRequest), expectedVertices, 1);
+
+        // NewPerson traversal request to verify connected edges
+        const traversalRequest1 = TraversalRequest.fromPartial({
+          vertices: {
+            collection_name: 'persons',
+            start_vertex_id: ['newPersonID']
+          },
+          opts: { direction: Direction.OUTBOUND },
+          path: true
+        });
+        const expectedVertices1 = [
+          { car: 'bmw', id: 'c', place_id: 'e' },
+          { place: 'Munich', id: 'e', state_id: 'g' },
+          { state: 'Bayern', id: 'g' },
+          { state: 'BW', id: 'i' },
+          { name: 'NewPerson', id: 'newPersonID', car_id: 'c', state_id: 'i' }];
+
+        // traverse graph
+        await fetchAndEquals(testService.traversal(traversalRequest1), expectedVertices1, 4);
+      });
+
       it('delete vertices, should delete the edges associated as well',
         async () => {
           // Deleting the ids of vertexCollection 'cars' should remove

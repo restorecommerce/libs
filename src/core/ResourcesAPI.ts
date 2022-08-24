@@ -412,7 +412,8 @@ export class ResourcesAPIBase {
     try {
       let createDocuments = [];
       let updateDocuments = [];
-      let dispatch = await Promise.all(documents.map(async (doc) => {
+      let dispatch = [];
+      dispatch = await Promise.all(documents.map(async (doc) => {
         decodeBufferObj(doc, this.bufferField);
         let foundDocs;
         if (doc && doc.id) {
@@ -435,7 +436,9 @@ export class ResourcesAPIBase {
           updateDocuments.push(doc);
           eventName = 'Modified';
         }
-        return events.emit(`${resourceName}${eventName}`, doc);
+        if (events) {
+          return events.emit(`${resourceName}${eventName}`, doc);
+        }
       }));
 
       if (createDocuments.length > 0) {

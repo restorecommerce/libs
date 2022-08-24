@@ -23,10 +23,10 @@ import * as _m0 from "protobufjs/minimal";
 export const protobufPackage = "io.restorecommerce.payment_method";
 
 export enum PaymentMethodEnum {
-  WIRE_TRANSFER = 0,
-  DIRECT_DEBIT = 1,
-  PAYPAL = 2,
-  UNRECOGNIZED = -1,
+  WIRE_TRANSFER = "WIRE_TRANSFER",
+  DIRECT_DEBIT = "DIRECT_DEBIT",
+  PAYPAL = "PAYPAL",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function paymentMethodEnumFromJSON(object: any): PaymentMethodEnum {
@@ -61,11 +61,25 @@ export function paymentMethodEnumToJSON(object: PaymentMethodEnum): string {
   }
 }
 
+export function paymentMethodEnumToNumber(object: PaymentMethodEnum): number {
+  switch (object) {
+    case PaymentMethodEnum.WIRE_TRANSFER:
+      return 0;
+    case PaymentMethodEnum.DIRECT_DEBIT:
+      return 1;
+    case PaymentMethodEnum.PAYPAL:
+      return 2;
+    case PaymentMethodEnum.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum TransferTypeEnum {
-  RECEIVE = 0,
-  SEND = 1,
-  BOTH = 2,
-  UNRECOGNIZED = -1,
+  RECEIVE = "RECEIVE",
+  SEND = "SEND",
+  BOTH = "BOTH",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function transferTypeEnumFromJSON(object: any): TransferTypeEnum {
@@ -97,6 +111,20 @@ export function transferTypeEnumToJSON(object: TransferTypeEnum): string {
     case TransferTypeEnum.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function transferTypeEnumToNumber(object: TransferTypeEnum): number {
+  switch (object) {
+    case TransferTypeEnum.RECEIVE:
+      return 0;
+    case TransferTypeEnum.SEND:
+      return 1;
+    case TransferTypeEnum.BOTH:
+      return 2;
+    case TransferTypeEnum.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -452,8 +480,8 @@ function createBasePaymentMethod(): PaymentMethod {
   return {
     id: "",
     meta: undefined,
-    payment_method: 0,
-    transfer_type: 0,
+    payment_method: PaymentMethodEnum.WIRE_TRANSFER,
+    transfer_type: TransferTypeEnum.RECEIVE,
     data: undefined,
   };
 }
@@ -469,11 +497,13 @@ export const PaymentMethod = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.payment_method !== 0) {
-      writer.uint32(24).int32(message.payment_method);
+    if (message.payment_method !== PaymentMethodEnum.WIRE_TRANSFER) {
+      writer
+        .uint32(24)
+        .int32(paymentMethodEnumToNumber(message.payment_method));
     }
-    if (message.transfer_type !== 0) {
-      writer.uint32(32).int32(message.transfer_type);
+    if (message.transfer_type !== TransferTypeEnum.RECEIVE) {
+      writer.uint32(32).int32(transferTypeEnumToNumber(message.transfer_type));
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(42).fork()).ldelim();
@@ -495,10 +525,10 @@ export const PaymentMethod = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.payment_method = reader.int32() as any;
+          message.payment_method = paymentMethodEnumFromJSON(reader.int32());
           break;
         case 4:
-          message.transfer_type = reader.int32() as any;
+          message.transfer_type = transferTypeEnumFromJSON(reader.int32());
           break;
         case 5:
           message.data = Any.decode(reader, reader.uint32());
@@ -517,10 +547,10 @@ export const PaymentMethod = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       payment_method: isSet(object.payment_method)
         ? paymentMethodEnumFromJSON(object.payment_method)
-        : 0,
+        : PaymentMethodEnum.WIRE_TRANSFER,
       transfer_type: isSet(object.transfer_type)
         ? transferTypeEnumFromJSON(object.transfer_type)
-        : 0,
+        : TransferTypeEnum.RECEIVE,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
@@ -546,8 +576,9 @@ export const PaymentMethod = {
       object.meta !== undefined && object.meta !== null
         ? Meta.fromPartial(object.meta)
         : undefined;
-    message.payment_method = object.payment_method ?? 0;
-    message.transfer_type = object.transfer_type ?? 0;
+    message.payment_method =
+      object.payment_method ?? PaymentMethodEnum.WIRE_TRANSFER;
+    message.transfer_type = object.transfer_type ?? TransferTypeEnum.RECEIVE;
     message.data =
       object.data !== undefined && object.data !== null
         ? Any.fromPartial(object.data)

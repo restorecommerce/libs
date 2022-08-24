@@ -82,12 +82,12 @@ export interface JobOptions {
 }
 
 export enum JobOptions_Priority {
-  NORMAL = 0,
-  LOW = 10,
-  MEDIUM = -5,
-  HIGH = -10,
-  CRITICAL = -15,
-  UNRECOGNIZED = -1,
+  NORMAL = "NORMAL",
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  CRITICAL = "CRITICAL",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function jobOptions_PriorityFromJSON(object: any): JobOptions_Priority {
@@ -129,6 +129,26 @@ export function jobOptions_PriorityToJSON(object: JobOptions_Priority): string {
     case JobOptions_Priority.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function jobOptions_PriorityToNumber(
+  object: JobOptions_Priority
+): number {
+  switch (object) {
+    case JobOptions_Priority.NORMAL:
+      return 0;
+    case JobOptions_Priority.LOW:
+      return 10;
+    case JobOptions_Priority.MEDIUM:
+      return -5;
+    case JobOptions_Priority.HIGH:
+      return -10;
+    case JobOptions_Priority.CRITICAL:
+      return -15;
+    case JobOptions_Priority.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -207,10 +227,10 @@ export interface Backoff {
 
 export enum Backoff_Type {
   /** FIXED - Retry with the same delay */
-  FIXED = 0,
+  FIXED = "FIXED",
   /** EXPONENTIAL - Exponential delay increase between retries */
-  EXPONENTIAL = 1,
-  UNRECOGNIZED = -1,
+  EXPONENTIAL = "EXPONENTIAL",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function backoff_TypeFromJSON(object: any): Backoff_Type {
@@ -240,6 +260,18 @@ export function backoff_TypeToJSON(object: Backoff_Type): string {
   }
 }
 
+export function backoff_TypeToNumber(object: Backoff_Type): number {
+  switch (object) {
+    case Backoff_Type.FIXED:
+      return 0;
+    case Backoff_Type.EXPONENTIAL:
+      return 1;
+    case Backoff_Type.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 /** Job-specific read request */
 export interface JobReadRequest {
   limit: number;
@@ -253,10 +285,10 @@ export interface JobReadRequest {
 
 /** only possible to sort jobs by creation date */
 export enum JobReadRequest_SortOrder {
-  UNSORTED = 0,
-  ASCENDING = 1,
-  DESCENDING = 2,
-  UNRECOGNIZED = -1,
+  UNSORTED = "UNSORTED",
+  ASCENDING = "ASCENDING",
+  DESCENDING = "DESCENDING",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function jobReadRequest_SortOrderFromJSON(
@@ -292,6 +324,22 @@ export function jobReadRequest_SortOrderToJSON(
     case JobReadRequest_SortOrder.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function jobReadRequest_SortOrderToNumber(
+  object: JobReadRequest_SortOrder
+): number {
+  switch (object) {
+    case JobReadRequest_SortOrder.UNSORTED:
+      return 0;
+    case JobReadRequest_SortOrder.ASCENDING:
+      return 1;
+    case JobReadRequest_SortOrder.DESCENDING:
+      return 2;
+    case JobReadRequest_SortOrder.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -699,7 +747,7 @@ export const Job = {
 
 function createBaseJobOptions(): JobOptions {
   return {
-    priority: 0,
+    priority: JobOptions_Priority.NORMAL,
     attempts: 0,
     backoff: undefined,
     timeout: 0,
@@ -714,8 +762,8 @@ export const JobOptions = {
     message: JobOptions,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.priority !== 0) {
-      writer.uint32(104).int32(message.priority);
+    if (message.priority !== JobOptions_Priority.NORMAL) {
+      writer.uint32(104).int32(jobOptions_PriorityToNumber(message.priority));
     }
     if (message.attempts !== 0) {
       writer.uint32(112).uint32(message.attempts);
@@ -746,7 +794,7 @@ export const JobOptions = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 13:
-          message.priority = reader.int32() as any;
+          message.priority = jobOptions_PriorityFromJSON(reader.int32());
           break;
         case 14:
           message.attempts = reader.uint32();
@@ -778,7 +826,7 @@ export const JobOptions = {
     return {
       priority: isSet(object.priority)
         ? jobOptions_PriorityFromJSON(object.priority)
-        : 0,
+        : JobOptions_Priority.NORMAL,
       attempts: isSet(object.attempts) ? Number(object.attempts) : 0,
       backoff: isSet(object.backoff)
         ? Backoff.fromJSON(object.backoff)
@@ -814,7 +862,7 @@ export const JobOptions = {
 
   fromPartial(object: DeepPartial<JobOptions>): JobOptions {
     const message = createBaseJobOptions();
-    message.priority = object.priority ?? 0;
+    message.priority = object.priority ?? JobOptions_Priority.NORMAL;
     message.attempts = object.attempts ?? 0;
     message.backoff =
       object.backoff !== undefined && object.backoff !== null
@@ -1292,7 +1340,7 @@ export const JobFailed = {
 };
 
 function createBaseBackoff(): Backoff {
-  return { delay: 0, type: 0 };
+  return { delay: 0, type: Backoff_Type.FIXED };
 }
 
 export const Backoff = {
@@ -1303,8 +1351,8 @@ export const Backoff = {
     if (message.delay !== 0) {
       writer.uint32(9).double(message.delay);
     }
-    if (message.type !== 0) {
-      writer.uint32(16).int32(message.type);
+    if (message.type !== Backoff_Type.FIXED) {
+      writer.uint32(16).int32(backoff_TypeToNumber(message.type));
     }
     return writer;
   },
@@ -1320,7 +1368,7 @@ export const Backoff = {
           message.delay = reader.double();
           break;
         case 2:
-          message.type = reader.int32() as any;
+          message.type = backoff_TypeFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1333,7 +1381,9 @@ export const Backoff = {
   fromJSON(object: any): Backoff {
     return {
       delay: isSet(object.delay) ? Number(object.delay) : 0,
-      type: isSet(object.type) ? backoff_TypeFromJSON(object.type) : 0,
+      type: isSet(object.type)
+        ? backoff_TypeFromJSON(object.type)
+        : Backoff_Type.FIXED,
     };
   },
 
@@ -1347,7 +1397,7 @@ export const Backoff = {
   fromPartial(object: DeepPartial<Backoff>): Backoff {
     const message = createBaseBackoff();
     message.delay = object.delay ?? 0;
-    message.type = object.type ?? 0;
+    message.type = object.type ?? Backoff_Type.FIXED;
     return message;
   },
 };
@@ -1355,7 +1405,7 @@ export const Backoff = {
 function createBaseJobReadRequest(): JobReadRequest {
   return {
     limit: 0,
-    sort: 0,
+    sort: JobReadRequest_SortOrder.UNSORTED,
     filter: undefined,
     field: [],
     subject: undefined,
@@ -1370,8 +1420,8 @@ export const JobReadRequest = {
     if (message.limit !== 0) {
       writer.uint32(8).uint32(message.limit);
     }
-    if (message.sort !== 0) {
-      writer.uint32(16).int32(message.sort);
+    if (message.sort !== JobReadRequest_SortOrder.UNSORTED) {
+      writer.uint32(16).int32(jobReadRequest_SortOrderToNumber(message.sort));
     }
     if (message.filter !== undefined) {
       JobFilter.encode(message.filter, writer.uint32(34).fork()).ldelim();
@@ -1396,7 +1446,7 @@ export const JobReadRequest = {
           message.limit = reader.uint32();
           break;
         case 2:
-          message.sort = reader.int32() as any;
+          message.sort = jobReadRequest_SortOrderFromJSON(reader.int32());
           break;
         case 4:
           message.filter = JobFilter.decode(reader, reader.uint32());
@@ -1420,7 +1470,7 @@ export const JobReadRequest = {
       limit: isSet(object.limit) ? Number(object.limit) : 0,
       sort: isSet(object.sort)
         ? jobReadRequest_SortOrderFromJSON(object.sort)
-        : 0,
+        : JobReadRequest_SortOrder.UNSORTED,
       filter: isSet(object.filter)
         ? JobFilter.fromJSON(object.filter)
         : undefined,
@@ -1459,7 +1509,7 @@ export const JobReadRequest = {
   fromPartial(object: DeepPartial<JobReadRequest>): JobReadRequest {
     const message = createBaseJobReadRequest();
     message.limit = object.limit ?? 0;
-    message.sort = object.sort ?? 0;
+    message.sort = object.sort ?? JobReadRequest_SortOrder.UNSORTED;
     message.filter =
       object.filter !== undefined && object.filter !== null
         ? JobFilter.fromPartial(object.filter)

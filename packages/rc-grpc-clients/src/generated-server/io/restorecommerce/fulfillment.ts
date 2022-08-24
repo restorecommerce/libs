@@ -30,14 +30,14 @@ import * as _m0 from "protobufjs/minimal";
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
 export enum State {
-  Undefined = 0,
-  Invalid = 1,
-  Ordered = 2,
-  Shipping = 3,
-  Done = 4,
-  Cancelled = 5,
-  Failed = 6,
-  UNRECOGNIZED = -1,
+  Undefined = "Undefined",
+  Invalid = "Invalid",
+  Ordered = "Ordered",
+  Shipping = "Shipping",
+  Done = "Done",
+  Cancelled = "Cancelled",
+  Failed = "Failed",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function stateFromJSON(object: any): State {
@@ -89,6 +89,28 @@ export function stateToJSON(object: State): string {
     case State.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function stateToNumber(object: State): number {
+  switch (object) {
+    case State.Undefined:
+      return 0;
+    case State.Invalid:
+      return 1;
+    case State.Ordered:
+      return 2;
+    case State.Shipping:
+      return 3;
+    case State.Done:
+      return 4;
+    case State.Cancelled:
+      return 5;
+    case State.Failed:
+      return 6;
+    case State.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -932,7 +954,7 @@ function createBaseLabel(): Label {
     pdf: undefined,
     png: undefined,
     shipment_number: "",
-    state: 0,
+    state: State.Undefined,
     status: undefined,
   };
 }
@@ -951,8 +973,8 @@ export const Label = {
     if (message.shipment_number !== "") {
       writer.uint32(34).string(message.shipment_number);
     }
-    if (message.state !== 0) {
-      writer.uint32(40).int32(message.state);
+    if (message.state !== State.Undefined) {
+      writer.uint32(40).int32(stateToNumber(message.state));
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(50).fork()).ldelim();
@@ -980,7 +1002,7 @@ export const Label = {
           message.shipment_number = reader.string();
           break;
         case 5:
-          message.state = reader.int32() as any;
+          message.state = stateFromJSON(reader.int32());
           break;
         case 6:
           message.status = Status.decode(reader, reader.uint32());
@@ -1001,7 +1023,9 @@ export const Label = {
       shipment_number: isSet(object.shipment_number)
         ? String(object.shipment_number)
         : "",
-      state: isSet(object.state) ? stateFromJSON(object.state) : 0,
+      state: isSet(object.state)
+        ? stateFromJSON(object.state)
+        : State.Undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
@@ -1025,7 +1049,7 @@ export const Label = {
     message.pdf = object.pdf ?? undefined;
     message.png = object.png ?? undefined;
     message.shipment_number = object.shipment_number ?? "";
-    message.state = object.state ?? 0;
+    message.state = object.state ?? State.Undefined;
     message.status =
       object.status !== undefined && object.status !== null
         ? Status.fromPartial(object.status)

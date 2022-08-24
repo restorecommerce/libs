@@ -14,154 +14,154 @@ export const protobufPackage = "io.restorecommerce.payment";
 
 /** Possible service providers. Provider names must be exactly as in config.yml. */
 export enum Provider {
-  NO_PROVIDER = 0,
-  Adyen = 1,
-  AuthorizeNetCIM = 2,
-  AuthorizeNet = 3,
-  AxcessMS = 4,
-  Balanced = 5,
-  BamboraAsiaPacific = 6,
-  BankFrick = 7,
-  Banwire = 8,
-  BarclaysePDQExtraPlus = 9,
-  Be2Bill = 10,
-  Beanstreamcom = 11,
-  BluePay = 12,
-  Borgun = 13,
-  Braintree = 14,
-  BridgePay = 15,
-  Cardknox = 16,
-  CardSave = 17,
-  CardStream = 18,
-  Cashnet = 19,
-  Cecabank = 20,
-  Cenpos = 21,
-  CAMSCentralAccountManagementSystem = 22,
-  Checkoutcom = 23,
-  Clearhaus = 24,
-  Commercegate = 25,
-  Conekta = 26,
-  CyberSource = 27,
-  DIBS = 28,
-  DataCash = 29,
-  Efsnet = 30,
-  ElavonMyVirtualMerchant = 31,
-  ePay = 32,
-  EVOCanada = 33,
-  eWAY = 34,
-  eWAYRapid = 35,
-  Exact = 36,
-  Ezic = 37,
-  FatZebra = 38,
-  FederatedCanada = 39,
-  FinansbankWebPOS = 40,
-  Flo2Cash = 41,
-  stPayGatewayNet = 42,
-  FirstDataGlobalGatewaye4 = 43,
-  FirstGiving = 44,
-  GarantiSanalPOS = 45,
-  GlobalTransport = 46,
-  HDFC = 47,
-  HeartlandPaymentSystems = 48,
-  iATSPayments = 49,
-  InspireCommerce = 50,
-  InstaPay = 51,
-  IPP = 52,
-  Iridium = 53,
-  iTransact = 54,
-  JetPay = 55,
-  Komoju = 56,
-  LinkPoint = 57,
-  LitleCo = 58,
-  maxiPago = 59,
-  MerchanteSolutions = 60,
-  MerchantOneGateway = 61,
-  MerchantWARE = 62,
-  MerchantWarrior = 63,
-  Mercury = 64,
-  MetricsGlobal = 65,
-  MasterCardInternetGatewayServiceMiGS = 66,
-  ModernPayments = 67,
-  MONEI = 68,
-  Moneris = 69,
-  MoneyMovers = 70,
-  NABTransact = 71,
-  NELiXTransaX = 72,
-  NetRegistry = 73,
-  BBSNetaxept = 74,
-  NETbilling = 75,
-  NETPAYGateway = 76,
-  NMI = 77,
-  Ogone = 78,
-  Omise = 79,
-  Openpay = 80,
-  OptimalPayments = 81,
-  OrbitalPaymentech = 82,
-  Pagarme = 83,
-  PagoFacil = 84,
-  PayConex = 85,
-  PayGatePayXML = 86,
-  PayHub = 87,
-  PayJunction = 89,
-  PaySecure = 90,
-  PayboxDirect = 91,
-  Payeezy = 92,
-  Payex = 93,
-  PaymentExpress = 94,
-  PAYMILL = 95,
-  PayPalExpressCheckout = 96,
-  PayPalExpressCheckoutUK = 97,
-  PayPalPayflowPro = 98,
-  PayPalPaymentsProUS = 99,
-  PayPalPaymentsProUK = 100,
-  PayPalWebsitePaymentsProCA = 101,
-  PayPalExpressCheckoutforDigitalGoods = 102,
-  Payscout = 103,
-  Paystation = 104,
-  PayWay = 105,
-  PayUIndia = 106,
-  PinPayments = 107,
-  PlugnPay = 108,
-  Psigate = 109,
-  PSLPaymentSolutions = 110,
-  QuickBooksMerchantServices = 111,
-  QuickBooksPayments = 112,
-  QuantumGateway = 113,
-  QuickPay = 114,
-  Qvalent = 115,
-  Raven = 116,
-  Realex = 117,
-  Redsys = 118,
-  S5 = 119,
-  SagePay = 120,
-  SagePaymentSolutions = 121,
-  SallieMae = 122,
-  SecureNet = 123,
-  SecurePay = 124,
-  SecurePayTech = 125,
-  SecurionPay = 126,
-  SkipJack = 127,
-  SoEasyPay = 128,
-  Spreedly = 129,
-  Stripe = 130,
-  Swipe = 131,
-  TNS = 132,
-  TransactPro = 133,
-  TransFirst = 134,
-  Transnational = 135,
-  Trexle = 136,
-  TrustCommerce = 137,
-  USAePay = 138,
-  VancoPaymentSolutions = 139,
-  Verifi = 140,
-  ViaKLIX = 141,
-  WebPay = 142,
-  WePay = 143,
-  Wirecard = 144,
-  WorldpayGlobal = 145,
-  WorldpayOnline = 146,
-  WorldpayUS = 147,
-  UNRECOGNIZED = -1,
+  NO_PROVIDER = "NO_PROVIDER",
+  Adyen = "Adyen",
+  AuthorizeNetCIM = "AuthorizeNetCIM",
+  AuthorizeNet = "AuthorizeNet",
+  AxcessMS = "AxcessMS",
+  Balanced = "Balanced",
+  BamboraAsiaPacific = "BamboraAsiaPacific",
+  BankFrick = "BankFrick",
+  Banwire = "Banwire",
+  BarclaysePDQExtraPlus = "BarclaysePDQExtraPlus",
+  Be2Bill = "Be2Bill",
+  Beanstreamcom = "Beanstreamcom",
+  BluePay = "BluePay",
+  Borgun = "Borgun",
+  Braintree = "Braintree",
+  BridgePay = "BridgePay",
+  Cardknox = "Cardknox",
+  CardSave = "CardSave",
+  CardStream = "CardStream",
+  Cashnet = "Cashnet",
+  Cecabank = "Cecabank",
+  Cenpos = "Cenpos",
+  CAMSCentralAccountManagementSystem = "CAMSCentralAccountManagementSystem",
+  Checkoutcom = "Checkoutcom",
+  Clearhaus = "Clearhaus",
+  Commercegate = "Commercegate",
+  Conekta = "Conekta",
+  CyberSource = "CyberSource",
+  DIBS = "DIBS",
+  DataCash = "DataCash",
+  Efsnet = "Efsnet",
+  ElavonMyVirtualMerchant = "ElavonMyVirtualMerchant",
+  ePay = "ePay",
+  EVOCanada = "EVOCanada",
+  eWAY = "eWAY",
+  eWAYRapid = "eWAYRapid",
+  Exact = "Exact",
+  Ezic = "Ezic",
+  FatZebra = "FatZebra",
+  FederatedCanada = "FederatedCanada",
+  FinansbankWebPOS = "FinansbankWebPOS",
+  Flo2Cash = "Flo2Cash",
+  stPayGatewayNet = "stPayGatewayNet",
+  FirstDataGlobalGatewaye4 = "FirstDataGlobalGatewaye4",
+  FirstGiving = "FirstGiving",
+  GarantiSanalPOS = "GarantiSanalPOS",
+  GlobalTransport = "GlobalTransport",
+  HDFC = "HDFC",
+  HeartlandPaymentSystems = "HeartlandPaymentSystems",
+  iATSPayments = "iATSPayments",
+  InspireCommerce = "InspireCommerce",
+  InstaPay = "InstaPay",
+  IPP = "IPP",
+  Iridium = "Iridium",
+  iTransact = "iTransact",
+  JetPay = "JetPay",
+  Komoju = "Komoju",
+  LinkPoint = "LinkPoint",
+  LitleCo = "LitleCo",
+  maxiPago = "maxiPago",
+  MerchanteSolutions = "MerchanteSolutions",
+  MerchantOneGateway = "MerchantOneGateway",
+  MerchantWARE = "MerchantWARE",
+  MerchantWarrior = "MerchantWarrior",
+  Mercury = "Mercury",
+  MetricsGlobal = "MetricsGlobal",
+  MasterCardInternetGatewayServiceMiGS = "MasterCardInternetGatewayServiceMiGS",
+  ModernPayments = "ModernPayments",
+  MONEI = "MONEI",
+  Moneris = "Moneris",
+  MoneyMovers = "MoneyMovers",
+  NABTransact = "NABTransact",
+  NELiXTransaX = "NELiXTransaX",
+  NetRegistry = "NetRegistry",
+  BBSNetaxept = "BBSNetaxept",
+  NETbilling = "NETbilling",
+  NETPAYGateway = "NETPAYGateway",
+  NMI = "NMI",
+  Ogone = "Ogone",
+  Omise = "Omise",
+  Openpay = "Openpay",
+  OptimalPayments = "OptimalPayments",
+  OrbitalPaymentech = "OrbitalPaymentech",
+  Pagarme = "Pagarme",
+  PagoFacil = "PagoFacil",
+  PayConex = "PayConex",
+  PayGatePayXML = "PayGatePayXML",
+  PayHub = "PayHub",
+  PayJunction = "PayJunction",
+  PaySecure = "PaySecure",
+  PayboxDirect = "PayboxDirect",
+  Payeezy = "Payeezy",
+  Payex = "Payex",
+  PaymentExpress = "PaymentExpress",
+  PAYMILL = "PAYMILL",
+  PayPalExpressCheckout = "PayPalExpressCheckout",
+  PayPalExpressCheckoutUK = "PayPalExpressCheckoutUK",
+  PayPalPayflowPro = "PayPalPayflowPro",
+  PayPalPaymentsProUS = "PayPalPaymentsProUS",
+  PayPalPaymentsProUK = "PayPalPaymentsProUK",
+  PayPalWebsitePaymentsProCA = "PayPalWebsitePaymentsProCA",
+  PayPalExpressCheckoutforDigitalGoods = "PayPalExpressCheckoutforDigitalGoods",
+  Payscout = "Payscout",
+  Paystation = "Paystation",
+  PayWay = "PayWay",
+  PayUIndia = "PayUIndia",
+  PinPayments = "PinPayments",
+  PlugnPay = "PlugnPay",
+  Psigate = "Psigate",
+  PSLPaymentSolutions = "PSLPaymentSolutions",
+  QuickBooksMerchantServices = "QuickBooksMerchantServices",
+  QuickBooksPayments = "QuickBooksPayments",
+  QuantumGateway = "QuantumGateway",
+  QuickPay = "QuickPay",
+  Qvalent = "Qvalent",
+  Raven = "Raven",
+  Realex = "Realex",
+  Redsys = "Redsys",
+  S5 = "S5",
+  SagePay = "SagePay",
+  SagePaymentSolutions = "SagePaymentSolutions",
+  SallieMae = "SallieMae",
+  SecureNet = "SecureNet",
+  SecurePay = "SecurePay",
+  SecurePayTech = "SecurePayTech",
+  SecurionPay = "SecurionPay",
+  SkipJack = "SkipJack",
+  SoEasyPay = "SoEasyPay",
+  Spreedly = "Spreedly",
+  Stripe = "Stripe",
+  Swipe = "Swipe",
+  TNS = "TNS",
+  TransactPro = "TransactPro",
+  TransFirst = "TransFirst",
+  Transnational = "Transnational",
+  Trexle = "Trexle",
+  TrustCommerce = "TrustCommerce",
+  USAePay = "USAePay",
+  VancoPaymentSolutions = "VancoPaymentSolutions",
+  Verifi = "Verifi",
+  ViaKLIX = "ViaKLIX",
+  WebPay = "WebPay",
+  WePay = "WePay",
+  Wirecard = "Wirecard",
+  WorldpayGlobal = "WorldpayGlobal",
+  WorldpayOnline = "WorldpayOnline",
+  WorldpayUS = "WorldpayUS",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function providerFromJSON(object: any): Provider {
@@ -916,12 +916,314 @@ export function providerToJSON(object: Provider): string {
   }
 }
 
+export function providerToNumber(object: Provider): number {
+  switch (object) {
+    case Provider.NO_PROVIDER:
+      return 0;
+    case Provider.Adyen:
+      return 1;
+    case Provider.AuthorizeNetCIM:
+      return 2;
+    case Provider.AuthorizeNet:
+      return 3;
+    case Provider.AxcessMS:
+      return 4;
+    case Provider.Balanced:
+      return 5;
+    case Provider.BamboraAsiaPacific:
+      return 6;
+    case Provider.BankFrick:
+      return 7;
+    case Provider.Banwire:
+      return 8;
+    case Provider.BarclaysePDQExtraPlus:
+      return 9;
+    case Provider.Be2Bill:
+      return 10;
+    case Provider.Beanstreamcom:
+      return 11;
+    case Provider.BluePay:
+      return 12;
+    case Provider.Borgun:
+      return 13;
+    case Provider.Braintree:
+      return 14;
+    case Provider.BridgePay:
+      return 15;
+    case Provider.Cardknox:
+      return 16;
+    case Provider.CardSave:
+      return 17;
+    case Provider.CardStream:
+      return 18;
+    case Provider.Cashnet:
+      return 19;
+    case Provider.Cecabank:
+      return 20;
+    case Provider.Cenpos:
+      return 21;
+    case Provider.CAMSCentralAccountManagementSystem:
+      return 22;
+    case Provider.Checkoutcom:
+      return 23;
+    case Provider.Clearhaus:
+      return 24;
+    case Provider.Commercegate:
+      return 25;
+    case Provider.Conekta:
+      return 26;
+    case Provider.CyberSource:
+      return 27;
+    case Provider.DIBS:
+      return 28;
+    case Provider.DataCash:
+      return 29;
+    case Provider.Efsnet:
+      return 30;
+    case Provider.ElavonMyVirtualMerchant:
+      return 31;
+    case Provider.ePay:
+      return 32;
+    case Provider.EVOCanada:
+      return 33;
+    case Provider.eWAY:
+      return 34;
+    case Provider.eWAYRapid:
+      return 35;
+    case Provider.Exact:
+      return 36;
+    case Provider.Ezic:
+      return 37;
+    case Provider.FatZebra:
+      return 38;
+    case Provider.FederatedCanada:
+      return 39;
+    case Provider.FinansbankWebPOS:
+      return 40;
+    case Provider.Flo2Cash:
+      return 41;
+    case Provider.stPayGatewayNet:
+      return 42;
+    case Provider.FirstDataGlobalGatewaye4:
+      return 43;
+    case Provider.FirstGiving:
+      return 44;
+    case Provider.GarantiSanalPOS:
+      return 45;
+    case Provider.GlobalTransport:
+      return 46;
+    case Provider.HDFC:
+      return 47;
+    case Provider.HeartlandPaymentSystems:
+      return 48;
+    case Provider.iATSPayments:
+      return 49;
+    case Provider.InspireCommerce:
+      return 50;
+    case Provider.InstaPay:
+      return 51;
+    case Provider.IPP:
+      return 52;
+    case Provider.Iridium:
+      return 53;
+    case Provider.iTransact:
+      return 54;
+    case Provider.JetPay:
+      return 55;
+    case Provider.Komoju:
+      return 56;
+    case Provider.LinkPoint:
+      return 57;
+    case Provider.LitleCo:
+      return 58;
+    case Provider.maxiPago:
+      return 59;
+    case Provider.MerchanteSolutions:
+      return 60;
+    case Provider.MerchantOneGateway:
+      return 61;
+    case Provider.MerchantWARE:
+      return 62;
+    case Provider.MerchantWarrior:
+      return 63;
+    case Provider.Mercury:
+      return 64;
+    case Provider.MetricsGlobal:
+      return 65;
+    case Provider.MasterCardInternetGatewayServiceMiGS:
+      return 66;
+    case Provider.ModernPayments:
+      return 67;
+    case Provider.MONEI:
+      return 68;
+    case Provider.Moneris:
+      return 69;
+    case Provider.MoneyMovers:
+      return 70;
+    case Provider.NABTransact:
+      return 71;
+    case Provider.NELiXTransaX:
+      return 72;
+    case Provider.NetRegistry:
+      return 73;
+    case Provider.BBSNetaxept:
+      return 74;
+    case Provider.NETbilling:
+      return 75;
+    case Provider.NETPAYGateway:
+      return 76;
+    case Provider.NMI:
+      return 77;
+    case Provider.Ogone:
+      return 78;
+    case Provider.Omise:
+      return 79;
+    case Provider.Openpay:
+      return 80;
+    case Provider.OptimalPayments:
+      return 81;
+    case Provider.OrbitalPaymentech:
+      return 82;
+    case Provider.Pagarme:
+      return 83;
+    case Provider.PagoFacil:
+      return 84;
+    case Provider.PayConex:
+      return 85;
+    case Provider.PayGatePayXML:
+      return 86;
+    case Provider.PayHub:
+      return 87;
+    case Provider.PayJunction:
+      return 89;
+    case Provider.PaySecure:
+      return 90;
+    case Provider.PayboxDirect:
+      return 91;
+    case Provider.Payeezy:
+      return 92;
+    case Provider.Payex:
+      return 93;
+    case Provider.PaymentExpress:
+      return 94;
+    case Provider.PAYMILL:
+      return 95;
+    case Provider.PayPalExpressCheckout:
+      return 96;
+    case Provider.PayPalExpressCheckoutUK:
+      return 97;
+    case Provider.PayPalPayflowPro:
+      return 98;
+    case Provider.PayPalPaymentsProUS:
+      return 99;
+    case Provider.PayPalPaymentsProUK:
+      return 100;
+    case Provider.PayPalWebsitePaymentsProCA:
+      return 101;
+    case Provider.PayPalExpressCheckoutforDigitalGoods:
+      return 102;
+    case Provider.Payscout:
+      return 103;
+    case Provider.Paystation:
+      return 104;
+    case Provider.PayWay:
+      return 105;
+    case Provider.PayUIndia:
+      return 106;
+    case Provider.PinPayments:
+      return 107;
+    case Provider.PlugnPay:
+      return 108;
+    case Provider.Psigate:
+      return 109;
+    case Provider.PSLPaymentSolutions:
+      return 110;
+    case Provider.QuickBooksMerchantServices:
+      return 111;
+    case Provider.QuickBooksPayments:
+      return 112;
+    case Provider.QuantumGateway:
+      return 113;
+    case Provider.QuickPay:
+      return 114;
+    case Provider.Qvalent:
+      return 115;
+    case Provider.Raven:
+      return 116;
+    case Provider.Realex:
+      return 117;
+    case Provider.Redsys:
+      return 118;
+    case Provider.S5:
+      return 119;
+    case Provider.SagePay:
+      return 120;
+    case Provider.SagePaymentSolutions:
+      return 121;
+    case Provider.SallieMae:
+      return 122;
+    case Provider.SecureNet:
+      return 123;
+    case Provider.SecurePay:
+      return 124;
+    case Provider.SecurePayTech:
+      return 125;
+    case Provider.SecurionPay:
+      return 126;
+    case Provider.SkipJack:
+      return 127;
+    case Provider.SoEasyPay:
+      return 128;
+    case Provider.Spreedly:
+      return 129;
+    case Provider.Stripe:
+      return 130;
+    case Provider.Swipe:
+      return 131;
+    case Provider.TNS:
+      return 132;
+    case Provider.TransactPro:
+      return 133;
+    case Provider.TransFirst:
+      return 134;
+    case Provider.Transnational:
+      return 135;
+    case Provider.Trexle:
+      return 136;
+    case Provider.TrustCommerce:
+      return 137;
+    case Provider.USAePay:
+      return 138;
+    case Provider.VancoPaymentSolutions:
+      return 139;
+    case Provider.Verifi:
+      return 140;
+    case Provider.ViaKLIX:
+      return 141;
+    case Provider.WebPay:
+      return 142;
+    case Provider.WePay:
+      return 143;
+    case Provider.Wirecard:
+      return 144;
+    case Provider.WorldpayGlobal:
+      return 145;
+    case Provider.WorldpayOnline:
+      return 146;
+    case Provider.WorldpayUS:
+      return 147;
+    case Provider.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 /** Possible payment identifiers. */
 export enum PaymentIdType {
-  NO_IDENTIFIER_TYPE = 0,
-  TOKEN = 1,
-  TRANSACTION_ID = 2,
-  UNRECOGNIZED = -1,
+  NO_IDENTIFIER_TYPE = "NO_IDENTIFIER_TYPE",
+  TOKEN = "TOKEN",
+  TRANSACTION_ID = "TRANSACTION_ID",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function paymentIdTypeFromJSON(object: any): PaymentIdType {
@@ -953,6 +1255,20 @@ export function paymentIdTypeToJSON(object: PaymentIdType): string {
     case PaymentIdType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function paymentIdTypeToNumber(object: PaymentIdType): number {
+  switch (object) {
+    case PaymentIdType.NO_IDENTIFIER_TYPE:
+      return 0;
+    case PaymentIdType.TOKEN:
+      return 1;
+    case PaymentIdType.TRANSACTION_ID:
+      return 2;
+    case PaymentIdType.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -1058,7 +1374,7 @@ function createBaseSetupRequest(): SetupRequest {
     return_url: "",
     cancel_return_url: "",
     allow_guest_checkout: false,
-    provider: 0,
+    provider: Provider.NO_PROVIDER,
     subject: undefined,
   };
 }
@@ -1098,8 +1414,8 @@ export const SetupRequest = {
     if (message.allow_guest_checkout === true) {
       writer.uint32(80).bool(message.allow_guest_checkout);
     }
-    if (message.provider !== 0) {
-      writer.uint32(88).int32(message.provider);
+    if (message.provider !== Provider.NO_PROVIDER) {
+      writer.uint32(88).int32(providerToNumber(message.provider));
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(98).fork()).ldelim();
@@ -1145,7 +1461,7 @@ export const SetupRequest = {
           message.allow_guest_checkout = reader.bool();
           break;
         case 11:
-          message.provider = reader.int32() as any;
+          message.provider = providerFromJSON(reader.int32());
           break;
         case 12:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1176,7 +1492,9 @@ export const SetupRequest = {
       allow_guest_checkout: isSet(object.allow_guest_checkout)
         ? Boolean(object.allow_guest_checkout)
         : false,
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : 0,
+      provider: isSet(object.provider)
+        ? providerFromJSON(object.provider)
+        : Provider.NO_PROVIDER,
       subject: isSet(object.subject)
         ? Subject.fromJSON(object.subject)
         : undefined,
@@ -1225,7 +1543,7 @@ export const SetupRequest = {
     message.return_url = object.return_url ?? "";
     message.cancel_return_url = object.cancel_return_url ?? "";
     message.allow_guest_checkout = object.allow_guest_checkout ?? false;
-    message.provider = object.provider ?? 0;
+    message.provider = object.provider ?? Provider.NO_PROVIDER;
     message.subject =
       object.subject !== undefined && object.subject !== null
         ? Subject.fromPartial(object.subject)
@@ -1471,7 +1789,7 @@ export const SetupResponse = {
 
 function createBasePaymentRequest(): PaymentRequest {
   return {
-    provider: 0,
+    provider: Provider.NO_PROVIDER,
     payment_sum: 0,
     currency: "",
     payment_id: "",
@@ -1486,8 +1804,8 @@ export const PaymentRequest = {
     message: PaymentRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.provider !== 0) {
-      writer.uint32(8).int32(message.provider);
+    if (message.provider !== Provider.NO_PROVIDER) {
+      writer.uint32(8).int32(providerToNumber(message.provider));
     }
     if (message.payment_sum !== 0) {
       writer.uint32(16).int32(message.payment_sum);
@@ -1518,7 +1836,7 @@ export const PaymentRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.provider = reader.int32() as any;
+          message.provider = providerFromJSON(reader.int32());
           break;
         case 2:
           message.payment_sum = reader.int32();
@@ -1548,7 +1866,9 @@ export const PaymentRequest = {
 
   fromJSON(object: any): PaymentRequest {
     return {
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : 0,
+      provider: isSet(object.provider)
+        ? providerFromJSON(object.provider)
+        : Provider.NO_PROVIDER,
       payment_sum: isSet(object.payment_sum) ? Number(object.payment_sum) : 0,
       currency: isSet(object.currency) ? String(object.currency) : "",
       payment_id: isSet(object.payment_id) ? String(object.payment_id) : "",
@@ -1579,7 +1899,7 @@ export const PaymentRequest = {
 
   fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
     const message = createBasePaymentRequest();
-    message.provider = object.provider ?? 0;
+    message.provider = object.provider ?? Provider.NO_PROVIDER;
     message.payment_sum = object.payment_sum ?? 0;
     message.currency = object.currency ?? "";
     message.payment_id = object.payment_id ?? "";
@@ -1595,7 +1915,7 @@ export const PaymentRequest = {
 
 function createBaseCaptureRequest(): CaptureRequest {
   return {
-    provider: 0,
+    provider: Provider.NO_PROVIDER,
     payment_sum: 0,
     currency: "",
     payment_id: "",
@@ -1608,8 +1928,8 @@ export const CaptureRequest = {
     message: CaptureRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.provider !== 0) {
-      writer.uint32(8).int32(message.provider);
+    if (message.provider !== Provider.NO_PROVIDER) {
+      writer.uint32(8).int32(providerToNumber(message.provider));
     }
     if (message.payment_sum !== 0) {
       writer.uint32(16).int32(message.payment_sum);
@@ -1634,7 +1954,7 @@ export const CaptureRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.provider = reader.int32() as any;
+          message.provider = providerFromJSON(reader.int32());
           break;
         case 2:
           message.payment_sum = reader.int32();
@@ -1658,7 +1978,9 @@ export const CaptureRequest = {
 
   fromJSON(object: any): CaptureRequest {
     return {
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : 0,
+      provider: isSet(object.provider)
+        ? providerFromJSON(object.provider)
+        : Provider.NO_PROVIDER,
       payment_sum: isSet(object.payment_sum) ? Number(object.payment_sum) : 0,
       currency: isSet(object.currency) ? String(object.currency) : "",
       payment_id: isSet(object.payment_id) ? String(object.payment_id) : "",
@@ -1685,7 +2007,7 @@ export const CaptureRequest = {
 
   fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
     const message = createBaseCaptureRequest();
-    message.provider = object.provider ?? 0;
+    message.provider = object.provider ?? Provider.NO_PROVIDER;
     message.payment_sum = object.payment_sum ?? 0;
     message.currency = object.currency ?? "";
     message.payment_id = object.payment_id ?? "";

@@ -35,11 +35,11 @@ import * as _m0 from "protobufjs/minimal";
 export const protobufPackage = "io.restorecommerce.user";
 
 export enum UserType {
-  ORG_USER = 0,
-  INDIVIDUAL_USER = 1,
-  GUEST = 2,
-  TECHNICAL_USER = 3,
-  UNRECOGNIZED = -1,
+  ORG_USER = "ORG_USER",
+  INDIVIDUAL_USER = "INDIVIDUAL_USER",
+  GUEST = "GUEST",
+  TECHNICAL_USER = "TECHNICAL_USER",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function userTypeFromJSON(object: any): UserType {
@@ -76,6 +76,22 @@ export function userTypeToJSON(object: UserType): string {
     case UserType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function userTypeToNumber(object: UserType): number {
+  switch (object) {
+    case UserType.ORG_USER:
+      return 0;
+    case UserType.INDIVIDUAL_USER:
+      return 1;
+    case UserType.GUEST:
+      return 2;
+    case UserType.TECHNICAL_USER:
+      return 3;
+    case UserType.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -765,7 +781,7 @@ function createBaseRegisterRequest(): RegisterRequest {
     timezone_id: "",
     locale_id: "",
     default_scope: "",
-    user_type: 0,
+    user_type: UserType.ORG_USER,
     captcha_code: "",
   };
 }
@@ -808,8 +824,8 @@ export const RegisterRequest = {
     if (message.default_scope !== "") {
       writer.uint32(90).string(message.default_scope);
     }
-    if (message.user_type !== 0) {
-      writer.uint32(96).int32(message.user_type);
+    if (message.user_type !== UserType.ORG_USER) {
+      writer.uint32(96).int32(userTypeToNumber(message.user_type));
     }
     if (message.captcha_code !== "") {
       writer.uint32(106).string(message.captcha_code);
@@ -858,7 +874,7 @@ export const RegisterRequest = {
           message.default_scope = reader.string();
           break;
         case 12:
-          message.user_type = reader.int32() as any;
+          message.user_type = userTypeFromJSON(reader.int32());
           break;
         case 13:
           message.captcha_code = reader.string();
@@ -888,7 +904,7 @@ export const RegisterRequest = {
         : "",
       user_type: isSet(object.user_type)
         ? userTypeFromJSON(object.user_type)
-        : 0,
+        : UserType.ORG_USER,
       captcha_code: isSet(object.captcha_code)
         ? String(object.captcha_code)
         : "",
@@ -934,7 +950,7 @@ export const RegisterRequest = {
     message.timezone_id = object.timezone_id ?? "";
     message.locale_id = object.locale_id ?? "";
     message.default_scope = object.default_scope ?? "";
-    message.user_type = object.user_type ?? 0;
+    message.user_type = object.user_type ?? UserType.ORG_USER;
     message.captcha_code = object.captcha_code ?? "";
     return message;
   },
@@ -2679,7 +2695,7 @@ function createBaseUser(): User {
     unauthenticated: false,
     guest: false,
     image: undefined,
-    user_type: 0,
+    user_type: UserType.ORG_USER,
     invite: false,
     invited_by_user_name: "",
     invited_by_user_first_name: "",
@@ -2746,8 +2762,8 @@ export const User = {
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    if (message.user_type !== 0) {
-      writer.uint32(152).int32(message.user_type);
+    if (message.user_type !== UserType.ORG_USER) {
+      writer.uint32(152).int32(userTypeToNumber(message.user_type));
     }
     if (message.invite === true) {
       writer.uint32(160).bool(message.invite);
@@ -2837,7 +2853,7 @@ export const User = {
           message.image = Image.decode(reader, reader.uint32());
           break;
         case 19:
-          message.user_type = reader.int32() as any;
+          message.user_type = userTypeFromJSON(reader.int32());
           break;
         case 20:
           message.invite = reader.bool();
@@ -2900,7 +2916,7 @@ export const User = {
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
       user_type: isSet(object.user_type)
         ? userTypeFromJSON(object.user_type)
-        : 0,
+        : UserType.ORG_USER,
       invite: isSet(object.invite) ? Boolean(object.invite) : false,
       invited_by_user_name: isSet(object.invited_by_user_name)
         ? String(object.invited_by_user_name)
@@ -3003,7 +3019,7 @@ export const User = {
       object.image !== undefined && object.image !== null
         ? Image.fromPartial(object.image)
         : undefined;
-    message.user_type = object.user_type ?? 0;
+    message.user_type = object.user_type ?? UserType.ORG_USER;
     message.invite = object.invite ?? false;
     message.invited_by_user_name = object.invited_by_user_name ?? "";
     message.invited_by_user_first_name =
@@ -3039,7 +3055,7 @@ function createBaseUserRole(): UserRole {
     unauthenticated: false,
     guest: false,
     image: undefined,
-    user_type: 0,
+    user_type: UserType.ORG_USER,
     invite: false,
     invited_by_user_name: "",
     invited_by_user_first_name: "",
@@ -3110,8 +3126,8 @@ export const UserRole = {
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    if (message.user_type !== 0) {
-      writer.uint32(152).int32(message.user_type);
+    if (message.user_type !== UserType.ORG_USER) {
+      writer.uint32(152).int32(userTypeToNumber(message.user_type));
     }
     if (message.invite === true) {
       writer.uint32(160).bool(message.invite);
@@ -3204,7 +3220,7 @@ export const UserRole = {
           message.image = Image.decode(reader, reader.uint32());
           break;
         case 19:
-          message.user_type = reader.int32() as any;
+          message.user_type = userTypeFromJSON(reader.int32());
           break;
         case 20:
           message.invite = reader.bool();
@@ -3270,7 +3286,7 @@ export const UserRole = {
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
       user_type: isSet(object.user_type)
         ? userTypeFromJSON(object.user_type)
-        : 0,
+        : UserType.ORG_USER,
       invite: isSet(object.invite) ? Boolean(object.invite) : false,
       invited_by_user_name: isSet(object.invited_by_user_name)
         ? String(object.invited_by_user_name)
@@ -3381,7 +3397,7 @@ export const UserRole = {
       object.image !== undefined && object.image !== null
         ? Image.fromPartial(object.image)
         : undefined;
-    message.user_type = object.user_type ?? 0;
+    message.user_type = object.user_type ?? UserType.ORG_USER;
     message.invite = object.invite ?? false;
     message.invited_by_user_name = object.invited_by_user_name ?? "";
     message.invited_by_user_first_name =

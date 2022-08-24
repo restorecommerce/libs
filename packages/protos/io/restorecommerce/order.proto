@@ -7,11 +7,10 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
+import "io/restorecommerce/address.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/fulfillment_product.proto";
 
-// Used by resolvers
-import "io/restorecommerce/contact_point.proto";
 
 service Service {
   option (io.restorecommerce.options.service_name) = "order";
@@ -23,6 +22,7 @@ service Service {
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
   rpc Submit (OrderList) returns (OrderListResponse);
+  rpc Cancel (CancelRequestList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc TriggerFulfillment (TriggerFulfillmentRequestList) returns (io.restorecommerce.status.Status);
 }
@@ -30,67 +30,50 @@ service Service {
 enum State {
   Undefined = 0;
   Invalid = 1;
-  Created = 2;
-  Submitted = 3;
-  Shipping = 4;
-  Done= 5;
-  Cancelled = 6;
-  Failed = 7;
+  Failed = 2;
+  Cancelled = 3;
+  Created = 4;
+  Submitted = 5;
+  Shipping = 6;
+  Done = 7;
 }
 
-message ContactPerson {
-  string name = 1;
-  string email = 2;
-  string phone = 3;
+message Item {
+  // below identifier is id of product, variant or bundle
+  string product_variant_bundle_id = 1;
+  string product_name = 2;
+  string product_description = 3;
+  string manufacturer_name = 4;
+  string manufacturer_description = 5;
+  string prototype_name = 6;
+  string prototype_description = 7;
+  int32 quantity = 8;
+  int32 vat = 9;
+  double price = 10;
+  double quantity_price = 11;
+  string item_type = 12;
+  double taric_code = 13;
+  string stock_keeping_unit = 14;
+  double weight_in_kg = 15;
+  int32 length_in_cm = 16;
+  int32 width_in_cm = 17;
+  int32 height_in_cm = 18;
 }
 
 /**
   Database Entity
 */
 message Order {
-  message Items {
-    // below identifier is id of product, variant or bundle
-    string product_variant_bundle_id = 1;
-    string product_name = 2;
-    string product_description = 3;
-    string manufacturer_name = 4;
-    string manufacturer_description = 5;
-    string prototype_name = 6;
-    string prototype_description = 7;
-    int32 quantity = 8;
-    int32 vat = 9;
-    double price = 10;
-    double quantity_price = 11;
-    string item_type = 12;
-    double taric_code = 13;
-    string stock_keeping_unit = 14;
-    double weight_in_kg = 15;
-    int32 length_in_cm = 16;
-    int32 width_in_cm = 17;
-    int32 height_in_cm = 18;
-  }
-
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string name = 3;
   string description = 4;
   State state = 5;
   string customer_reference = 6;
-  repeated Items items = 7;
-  // sum of all the quantity_price will be total_price
+  repeated Item items = 7;
   double total_price = 8;
   oneof shipping_address_type {
-    string shipping_contact_point_id = 10 [
-      (io.restorecommerce.options.resolver) = {
-        target_type: ".io.restorecommerce.contact_point.ContactPoint",
-        target_service: "resource",
-        target_sub_service: "contact_point",
-        target_method: "Read",
-        field_name: "shippingContactPoint",
-      }
-    ];
-    io.restorecommerce.contact_point.ContactPoint shipping_contact_point = 11;
-    string shipping_address_id = 12 [
+    string shipping_address_id = 10 [
       (io.restorecommerce.options.resolver) = {
         target_type: ".io.restorecommerce.address.Address",
         target_service: "resource",
@@ -99,60 +82,45 @@ message Order {
         field_name: "shippingAddress",
       }
     ];
-    io.restorecommerce.address.Address shipping_address = 13;
+    //However, it will always resolve to on shipping_address storage!
+    io.restorecommerce.address.Address shipping_address = 11;
   }
-  
-  oneof billing_address_type {
-    string billing_contact_point_id = 14 [
+  oneof billing_contact_point_type {
+    string billing_address_id = 12 [
       (io.restorecommerce.options.resolver) = {
-        target_type: ".io.restorecommerce.contact_point.ContactPoint",
+        target_type: ".io.restorecommerce.address.Address",
         target_service: "resource",
         target_sub_service: "contact_point",
         target_method: "Read",
         field_name: "billingContactPoint",
       }
     ];
-    io.restorecommerce.contact_point.ContactPoint billing_contact_point = 13;
-    string billing_address_id = 14 [
-      (io.restorecommerce.options.resolver) = {
-        target_type: ".io.restorecommerce.address.Address",
-        target_service: "resource",
-        target_sub_service: "address",
-        target_method: "Read",
-        field_name: "billingAddress",
-      }
-    ];
-    io.restorecommerce.address.Address billing_address = 15;
+    //However, it will always resolve to on billing_address storage!
+    io.restorecommerce.address.Address billing_address = 13;
   }
-  io.restorecommerce.fulfillment.ContactPerson contact_person = 16;
-  string notification_email = 17;
-  repeated string fulfillment_ids = 18;
+  string billing_email = 14;
+  io.restorecommerce.fulfillment.ContactPerson contact_person = 15;
+  string notification_email = 16;
+  repeated string fulfillment_ids = 17;
+}
+
+message ShippingDetails {
+  string export_type = 1;
+  string export_description = 2;
+  string invoice_number = 3;
+  io.restorecommerce.address.Address sender_address = 5;
 }
 
 message TriggerFulfillmentRequest {
-  message ShippingDetails {
-    string export_type = 4;
-    string export_description = 5;
-    string custom_tariff_number = 6;
-    string invoice_number = 7;
-    double custom_value = 8;
-    oneof sender_address {
-      io.restorecommerce.contact_point.ContactPoint contact_point = 9;
-      io.restorecommerce.contact_point.Address address = 10;
-    }
-    io.restorecommerce.fulfillment.ContactPerson contact_person = 12;
-  }
-
   Order order = 1;
   ShippingDetails shipping_details = 2;
-  repeated io.restorecommerce.fulfillment.Parcels parcels = 3;
+  repeated io.restorecommerce.fulfillment.Parcel parcels = 3;
 }
 
 message TriggerFulfillmentRequestList {
   repeated TriggerFulfillmentRequest items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
-
 }
 
 message OrderList {
@@ -172,50 +140,11 @@ message OrderResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
+message CancelRequestList {
+  repeated string ids = 1;
+  io.restorecommerce.auth.Subject subject = 2;
+}
+
 message Deleted {
   string id = 1;
 }
-
-/*
-message OrderDataList {
-  repeated OrderData order_data = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-}
-
-message OrderData {
-  string order_id = 1;
-  repeated Shipments shipments = 2;
-}
-
-message Shipments {
-  double total_weight_in_kg = 1;
-  // below properties are used for international packaging
-  double individual_weight_in_kg = 2; // each items weight
-  int32 amount = 3; // number of items
-  string export_type = 4;
-  string export_description = 5;
-  string customs_tariff_number = 6;
-  string invoice_number = 7;
-  double customs_value = 8;
-}
-
-message FulfillmentResults {
-  repeated ResponseDetailsList fulfillmentResults =1;
-}
-
-message ResponseDetailsList {
-  OrderStatus Status = 1;
-  ErrorList error = 2;
-}
-
-message OrderStatus {
-  string OrderId = 1;
-  string OrderStatus =2;
-}
-
-message ErrorList {
-  repeated string code = 1;
-  repeated string message = 2;
-}
-
-*/

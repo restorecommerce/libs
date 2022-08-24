@@ -8,7 +8,6 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/country.proto";
 import "io/restorecommerce/options.proto";
 
 /**
@@ -65,12 +64,12 @@ service Service {
 enum State {
   Undefined = 0;
   Invalid = 1;
-  Created = 2;
-  Submitted = 3;
-  Shipping = 4;
-  Done= 5;
-  Cancelled = 6;
-  Failed = 7;
+  Failed = 2;
+  Cancelled = 3;
+  Created = 4;
+  Submitted = 5;
+  Shipping = 6;
+  Done = 7;
 }
 
 message ContactPerson {
@@ -80,19 +79,19 @@ message ContactPerson {
 }
 
 message Address {
-  io.restorecommerce.address.Address address = 3;
-  ContactPerson contact_person = 7;
+  io.restorecommerce.address.Address address = 1;
+  ContactPerson contact_person = 2;
+}
+
+message Item {
+  string item_id = 1;
+  string name = 2;
+  string description = 3;
+  string taric_code = 4;
+  int32 quantity = 5;
 }
 
 message Parcel {
-  message Item {
-    string item_id = 1;
-    string name = 2;
-    string description = 3;
-    string taric_code = 4;
-    int32 quantity = 5;
-  }
-
   string product_id = 1;
   string product_variant_id = 2;
   repeated Item items = 3;
@@ -100,14 +99,6 @@ message Parcel {
   float height_in_cm = 5;
   float width_in_cm = 6;
   float length_in_cm = 7;
-}
-
-message Order {
-  string reference_id = 1;
-  repeated Parcel parcels = 2;
-  Address sender = 3;
-  Address receiver = 4;
-  string notify = 5;
 }
 
 message Label {
@@ -121,16 +112,12 @@ message Label {
   io.restorecommerce.status.Status status = 6; //API status
 }
 
-message FulfillmentRequest {
-  string id = 1;
-  Order order = 2;
-  io.restorecommerce.meta.Meta meta = 3;
-}
-
-message FulfillmentRequestList {
-  repeated FulfillmentRequest items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+message Order {
+  string reference_id = 1;
+  repeated Parcel parcels = 2;
+  Address sender = 3;
+  Address receiver = 4;
+  string notify = 5;
 }
 
 /**
@@ -141,7 +128,19 @@ message Fulfillment {
   Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
-  bool fulfilled = 5;
+  State state = 5;
+}
+
+message FulfillmentRequest {
+  string id = 1;
+  Order order = 2;
+  io.restorecommerce.meta.Meta meta = 3;
+}
+
+message FulfillmentRequestList {
+  repeated FulfillmentRequest items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message FulfillmentResponse {

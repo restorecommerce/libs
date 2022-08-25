@@ -23,7 +23,7 @@
     "@restorecommerce/rc-grpc-clients": "^0.5.6",
     "@restorecommerce/service-config": "^0.4.27",
     "lodash": "^4.17.21",
-    "redis": "^4.2.0"
+    "redis": "^4.3.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.184",

@@ -180,7 +180,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).equal('{"code":403,"message":"Access denied","__typename":"IoRestorecommerceStatusOperationStatus"}');
+      should((resultError as Error).message).equal('{"code":403,"message":"Access denied"}');
     });
 
   it('a job should error when encountering IoRestorecommerceStatusStatus',
@@ -215,7 +215,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).equal('{"code":403,"message":"Access denied","__typename":"IoRestorecommerceStatusStatus"}');
+      should((resultError as Error).message).equal('{"code":403,"message":"Access denied"}');
     });
 
   it('a job should error when encountering a self-signed certificate',

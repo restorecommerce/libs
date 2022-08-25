@@ -20,7 +20,8 @@
     "nice-grpc": "^1.2.0",
     "nice-grpc-common": "^1.1.0",
     "protobufjs": "^6.10.2",
-    "rxjs": "^7.5.5"
+    "rxjs": "^7.5.5",
+    "ts-proto-descriptors": "^1.7.1"
   },
   "devDependencies": {
     "@restorecommerce/protos": "^1.0.0",
@@ -32,7 +33,6 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.1",
     "ts-proto": "^1.117.0",
-    "ts-proto-descriptors": "^1.7.1",
     "typescript": "^4.7.4"
   },
   "scripts": {

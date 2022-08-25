@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.4.6...@restorecommerce/grpc-client@1.0.0) (2022-08-25)
+
+
+### Features
+
+* move to fully typed grpc client and server ([ec9be2d](https://github.com/restorecommerce/libs/commit/ec9be2daff0823e9ba440a2845b7b1a7f2d74b50))
+* move to fully typed grpc client and server ([aeee2f2](https://github.com/restorecommerce/libs/commit/aeee2f2b7ca470223d7bc42fd7cafd4bb8387796))
+
+
+### Reverts
+
+* Revert "BREAKING CHANGE: move to fully typed grpc client and server" ([2d584a7](https://github.com/restorecommerce/libs/commit/2d584a709632ae608f595a2c836deabd34f671d9))
+
+
+### BREAKING CHANGES
+
+* move to fully typed grpc client and server
+
+
+
+
+
 ## [0.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@0.4.5...@restorecommerce/grpc-client@0.4.6) (2022-08-10)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

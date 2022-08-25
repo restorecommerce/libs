@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@0.1.12...@restorecommerce/koa-health-check@1.0.0) (2022-08-25)
+
+
+### Features
+
+* move to fully typed grpc client and server ([ec9be2d](https://github.com/restorecommerce/koa-cloud-health/commit/ec9be2daff0823e9ba440a2845b7b1a7f2d74b50))
+
+
+### Reverts
+
+* Revert "BREAKING CHANGE: move to fully typed grpc client and server" ([2d584a7](https://github.com/restorecommerce/koa-cloud-health/commit/2d584a709632ae608f595a2c836deabd34f671d9))
+
+
+### BREAKING CHANGES
+
+* move to fully typed grpc client and server
+
+
+
+
+
 ## [0.1.12](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@0.1.11...@restorecommerce/koa-health-check@0.1.12) (2022-06-10)
 
 

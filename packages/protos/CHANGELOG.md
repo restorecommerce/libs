@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.2...@restorecommerce/protos@1.0.0) (2022-08-25)
+
+
+### Features
+
+* move to fully typed grpc client and server ([aeee2f2](https://github.com/restorecommerce/libs/commit/aeee2f2b7ca470223d7bc42fd7cafd4bb8387796))
+
+
+
+
+
 ## [0.7.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.1...@restorecommerce/protos@0.7.2) (2022-06-14)
 
 

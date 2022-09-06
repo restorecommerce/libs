@@ -8,7 +8,7 @@ import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
 import { facadeStatusModule } from './modules';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
-import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
@@ -254,7 +254,9 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       introspection: true,
       plugins: [
         ApolloServerPluginDrainHttpServer({ httpServer: this._server }),
-        ApolloServerPluginLandingPageGraphQLPlayground(),
+        ApolloServerPluginLandingPageLocalDefault({
+          embed: true
+        }),
         {
           async serverWillStart() {
             return {

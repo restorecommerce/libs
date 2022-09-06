@@ -23,3 +23,15 @@ message Resolver {
   string target_method = 4;
   string field_name = 5;
 }
+
+extend google.protobuf.MessageOptions {
+  KafkaSubscription kafka_subscriber = 31003;
+}
+
+message KafkaSubscription {
+  string plural = 1;
+  string topic = 2;
+  string created = 3;
+  string updated = 4;
+  string deleted = 5;
+}

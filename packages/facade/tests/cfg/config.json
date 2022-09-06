@@ -12,7 +12,12 @@
       "secret"
     ],
     "hostname": "0.0.0.0",
-    "port": 5000
+    "port": 5000,
+    "kafka": {
+      "brokers": [
+        "localhost:29092"
+      ]
+    }
   },
   "resources": {
     "client": {

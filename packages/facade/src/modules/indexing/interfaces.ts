@@ -1,9 +1,9 @@
 import { IndexingSrvGrpcClient } from "./grpc";
-import { ServiceConfig } from "../../gql/protos";
+import { SubSpaceServiceConfig } from '../../gql/protos';
 import { FacadeModule, FacadeContext } from "../../interfaces";
 
 export interface IndexingConfig {
-  config: ServiceConfig;
+  config: SubSpaceServiceConfig;
 }
 
 export interface IndexingContext extends FacadeContext {

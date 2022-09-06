@@ -6,6 +6,7 @@ import {
   protoMetadata as protoMetadata1,
   Any,
 } from "../../google/protobuf/any";
+import { protoMetadata as protoMetadata3 } from "./options";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.search";
@@ -238,7 +239,11 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     name: "io/restorecommerce/search.proto",
     package: "io.restorecommerce.search",
-    dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
+    dependency: [
+      "google/protobuf/any.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/options.proto",
+    ],
     publicDependency: [],
     weakDependency: [],
     messageType: [
@@ -348,7 +353,7 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: false,
           },
         ],
-        options: undefined,
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
@@ -357,7 +362,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [7, 0, 9, 1],
+          span: [8, 0, 12, 1],
           leadingComments: " Service provides the CRUD operations\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -370,7 +375,15 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.search.SearchRequest": SearchRequest,
     ".io.restorecommerce.search.SearchResponse": SearchResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "search" },
+        methods: {},
+      },
+    },
+  },
 };
 
 type Builtin =

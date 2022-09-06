@@ -1,14 +1,26 @@
 import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
-import { Server } from 'http';
+import { Server, ServerResponse } from 'http';
 import { ApolloServer } from 'apollo-server-koa';
 import { AddressInfo } from 'net';
-import { GraphQLSchema } from 'graphql';
+import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
-import { facadeStatusModule } from './modules/facade-status/index';
+import { facadeStatusModule } from './modules';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import { ApolloServerPluginLandingPageGraphQLPlayground, ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+
+import { createServer } from 'http';
+import { WebSocketServer } from 'ws';
+import { useServer } from 'graphql-ws/lib/use/ws';
+import { Disposable } from 'graphql-ws';
+import _ from 'lodash';
+import { makeExecutableSchema } from "graphql-tools";
+import { gql } from 'graphql-tag';
+import { GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos';
+import compose from 'koa-compose';
+import { KafkaProviderConfig } from '@restorecommerce/kafka-client';
+import { setUseSubscriptions } from './gql/protos/utils';
 
 export * from './modules/index';
 export * from './middlewares/index';
@@ -22,6 +34,7 @@ interface RestoreCommerceFacadeImplConfig {
   port?: number;
   hostname?: string;
   env?: string;
+  kafka?: KafkaProviderConfig['kafka'];
 }
 
 interface FacadeApolloServiceMap {
@@ -31,14 +44,10 @@ interface FacadeApolloServiceMap {
   }
 }
 
-export type ApolloServiceArg = {
-  name: string;
-} & ({ url: string } | { schema: any })
-
-
 export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> implements Facade<TModules> {
 
   private apolloServices: FacadeApolloServiceMap = {};
+  private allResolvers: GraphQLResolverMap<any> = {};
 
   private _server?: Server;
   private _initialized = false;
@@ -48,16 +57,20 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   readonly koa: Koa<any, FacadeModulesContext<TModules>>;
   readonly env: string;
   readonly modules: FacadeModule[] = [];
+  readonly kafkaConfig?: KafkaProviderConfig['kafka'];
 
   private startFns: Array<(() => Promise<void>)> = [];
   private stopFns: Array<(() => Promise<void>)> = [];
 
-  constructor({ koa, logger, port, hostname, env }: RestoreCommerceFacadeImplConfig) {
+  constructor({ koa, logger, port, hostname, env, kafka }: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
     this.koa = koa;
     this.env = env ?? 'development';
+    this.kafkaConfig = kafka;
+
+    setUseSubscriptions(!!kafka);
   }
   get server() {
     return this._server;
@@ -94,7 +107,12 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   }
 
   addApolloService({ name, schema, url }: { name: string, schema: any, url: string }) {
-    this.apolloServices[name] = { schema, url };
+    if (schema instanceof GraphQLSchema) {
+      this.apolloServices[name] = { schema, url };
+    } else if ('federatedSchema' in schema && 'resolvers' in schema) {
+      this.apolloServices[name] = { schema: schema.federatedSchema, url };
+      this.allResolvers = _.merge(this.allResolvers, schema.resolvers);
+    }
   }
 
   onStart(fn: () => Promise<void>): void {
@@ -129,7 +147,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     }
     return new Promise<void>((resolve, reject) => {
       try {
-        this._server = this.koa.listen(this.port, this.hostname, () => {
+        this.server?.listen(this.port, this.hostname, () => {
           const address = this.address;
           if (address) {
             this.logger.info(`Service is listening on ${address.address}:${address.port}`);
@@ -172,6 +190,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const gateway = new ApolloGateway({
       logger: this.logger,
       serviceList,
+      debug: true,
       buildService: ({ name, url }) => {
         if (url !== 'local') {
           return new RemoteGraphQLDataSource({
@@ -189,12 +208,64 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       }
     });
 
+    this._server = createServer(this.koa.callback());
+
+    const wsServer = new WebSocketServer({
+      server: this._server,
+      path: '/graphql',
+    });
+
+    let serverCleanup: Disposable;
+    gateway.onSchemaLoadOrUpdate(schemaContext => {
+      const typeDefs = printSchema(new GraphQLSchema({
+        subscription: schemaContext.apiSchema.getSubscriptionType()
+      }));
+
+      let schema = makeExecutableSchema({
+        typeDefs: gql(typeDefs + `
+        type Query { sample: String }
+        `),
+        resolvers: {
+          Subscription: {
+            ...this.allResolvers['Subscription']
+          }
+        }
+      });
+
+      if ('Subscription' in this.allResolvers) {
+        mergeSubscribeIntoSchema(schema.getSubscriptionType(), this.allResolvers['Subscription']);
+      }
+
+      serverCleanup = useServer({
+        schema,
+        context: async (ctx, message, args) => {
+          const newCtx = this.koa.createContext(ctx.extra.request, new ServerResponse(ctx.extra.request));
+          const fn = await (compose(this.koa.middleware) as any);
+          await fn(newCtx);
+          newCtx.kafkaConfig = this.kafkaConfig;
+          newCtx.logger = this.logger;
+          return newCtx
+        },
+      }, wsServer);
+    });
+
     const gqlServer = new ApolloServer({
       gateway,
       introspection: true,
       plugins: [
-        ApolloServerPluginLandingPageGraphQLPlayground()
+        ApolloServerPluginDrainHttpServer({ httpServer: this._server }),
+        ApolloServerPluginLandingPageGraphQLPlayground(),
+        {
+          async serverWillStart() {
+            return {
+              async drainServer() {
+                await serverCleanup.dispose();
+              },
+            };
+          },
+        },
       ],
+      debug: true,
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
         this.logger.debug('Error while processing request', { error });
@@ -227,9 +298,10 @@ export interface FacadeConfig {
   hostname?: string;
   env?: string;
   keys?: string[];
+  kafka?: KafkaProviderConfig['kafka'];
 }
 
-export function createFacade(config: FacadeConfig): Facade<[]> {
+export function createFacade(config: FacadeConfig): Facade {
   const koa = new Koa<any, any>();
 
   if (config.env) {
@@ -256,6 +328,7 @@ export function createFacade(config: FacadeConfig): Facade<[]> {
     logger,
     port: config.port,
     hostname: config.hostname,
-    env: config.env
+    env: config.env,
+    kafka: config.kafka
   }).useModule(facadeStatusModule);
 }

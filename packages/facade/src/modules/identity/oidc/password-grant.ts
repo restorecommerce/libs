@@ -115,7 +115,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
   config.provider.registerGrantType(
     'password',
-    async (ctx: Koa.Context, next: () => Promise<any>) => {
+    async (ctx: any, next: () => Promise<any>) => {
       try {
         const {body, client} = ctx.oidc;
         ctx.type = 'json';

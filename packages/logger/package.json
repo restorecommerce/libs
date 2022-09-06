@@ -19,7 +19,7 @@
     "cls-hooked": "^4.2.2",
     "cls-rtracer": "^2.6.0",
     "source-map-support": "^0.5.21",
-    "winston": "^3.7.2",
+    "winston": "^3.8.1",
     "winston-elasticsearch": "^0.17.1"
   },
   "devDependencies": {

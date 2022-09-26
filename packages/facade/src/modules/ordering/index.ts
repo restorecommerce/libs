@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>(namespace, (facade, config) => {
   const ordering = {
-    client: new OrderingSrvGrpcClient(config.config.client, facade.logger)
+    client: new OrderingSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

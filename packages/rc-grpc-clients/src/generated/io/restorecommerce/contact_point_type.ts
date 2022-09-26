@@ -1,27 +1,21 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/auth";
-import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
+import { Subject, protoMetadata as protoMetadata2 } from "./auth";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata5 } from "../../io/restorecommerce/options";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata5 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.contact_point_type";
 
@@ -452,12 +446,98 @@ export const ContactPointTypeResponse = {
 };
 
 /** Microservice definition. */
-export interface Service {
-  Read(request: ReadRequest): Promise<ContactPointTypeListResponse>;
-  Create(request: ContactPointTypeList): Promise<ContactPointTypeListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: ContactPointTypeList): Promise<ContactPointTypeListResponse>;
-  Upsert(request: ContactPointTypeList): Promise<ContactPointTypeListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.contact_point_type.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: ContactPointTypeListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: ContactPointTypeList,
+      requestStream: false,
+      responseType: ContactPointTypeListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: ContactPointTypeList,
+      requestStream: false,
+      responseType: ContactPointTypeListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: ContactPointTypeList,
+      requestStream: false,
+      responseType: ContactPointTypeListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ContactPointTypeListResponse>>;
+  create(
+    request: ContactPointTypeList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ContactPointTypeListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ContactPointTypeList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ContactPointTypeListResponse>>;
+  upsert(
+    request: ContactPointTypeList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ContactPointTypeListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ContactPointTypeListResponse>;
+  create(
+    request: DeepPartial<ContactPointTypeList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ContactPointTypeListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ContactPointTypeList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ContactPointTypeListResponse>;
+  upsert(
+    request: DeepPartial<ContactPointTypeList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ContactPointTypeListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -848,13 +928,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

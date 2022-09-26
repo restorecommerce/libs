@@ -1,35 +1,23 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
-import {
-  Image,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/image";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Image, protoMetadata as protoMetadata3 } from "./image";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/status";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata6,
-  Resolver,
-} from "../../io/restorecommerce/options";
-import { protoMetadata as protoMetadata7 } from "../../io/restorecommerce/price_group";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata6, Resolver } from "./options";
+import { protoMetadata as protoMetadata7 } from "./price_group";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product_category";
 
@@ -573,12 +561,98 @@ export const Parent = {
   },
 };
 
-export interface Service {
-  Read(request: ReadRequest): Promise<ProductCategoryListResponse>;
-  Create(request: ProductCategoryList): Promise<ProductCategoryListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: ProductCategoryList): Promise<ProductCategoryListResponse>;
-  Upsert(request: ProductCategoryList): Promise<ProductCategoryListResponse>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.product_category.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: ProductCategoryListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: ProductCategoryList,
+      requestStream: false,
+      responseType: ProductCategoryListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: ProductCategoryList,
+      requestStream: false,
+      responseType: ProductCategoryListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: ProductCategoryList,
+      requestStream: false,
+      responseType: ProductCategoryListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductCategoryListResponse>>;
+  create(
+    request: ProductCategoryList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductCategoryListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ProductCategoryList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductCategoryListResponse>>;
+  upsert(
+    request: ProductCategoryList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductCategoryListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductCategoryListResponse>;
+  create(
+    request: DeepPartial<ProductCategoryList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductCategoryListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ProductCategoryList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductCategoryListResponse>;
+  upsert(
+    request: DeepPartial<ProductCategoryList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductCategoryListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1081,13 +1155,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

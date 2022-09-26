@@ -1,51 +1,40 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Subject,
   protoMetadata as protoMetadata3,
   RoleAssociation,
   Tokens,
-} from "../../io/restorecommerce/auth";
+} from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata6,
   OperationStatusObj,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
-import {
-  Image,
-  protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/image";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Image, protoMetadata as protoMetadata5 } from "./image";
 import {
   Any,
   protoMetadata as protoMetadata7,
 } from "../../google/protobuf/any";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata4,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
-import {
-  protoMetadata as protoMetadata8,
-  Role,
-} from "../../io/restorecommerce/role";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata4, Attribute } from "./attribute";
+import { protoMetadata as protoMetadata8, Role } from "./role";
 import {
   protoMetadata as protoMetadata9,
+  KafkaSubscription,
   Resolver,
-} from "../../io/restorecommerce/options";
-import { protoMetadata as protoMetadata10 } from "../../io/restorecommerce/timezone";
-import { protoMetadata as protoMetadata11 } from "../../io/restorecommerce/locale";
+} from "./options";
+import { protoMetadata as protoMetadata10 } from "./timezone";
+import { protoMetadata as protoMetadata11 } from "./locale";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.user";
 
@@ -3394,39 +3383,353 @@ export const UserRole = {
 };
 
 /** The microservice for the user resource. */
-export interface Service {
-  Read(request: ReadRequest): Promise<UserListWithRoleResponse>;
-  Create(request: UserList): Promise<UserListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: UserList): Promise<UserListResponse>;
-  Upsert(request: UserList): Promise<UserListResponse>;
-  Find(request: FindRequest): Promise<UserListResponse>;
-  Register(request: RegisterRequest): Promise<UserResponse>;
-  Activate(request: ActivateRequest): Promise<OperationStatusObj>;
-  ChangePassword(request: ChangePasswordRequest): Promise<OperationStatusObj>;
-  RequestPasswordChange(
-    request: RequestPasswordChangeRequest
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.user.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: UserListWithRoleResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: UserList,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    find: {
+      name: "Find",
+      requestType: FindRequest,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    register: {
+      name: "Register",
+      requestType: RegisterRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    activate: {
+      name: "Activate",
+      requestType: ActivateRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    changePassword: {
+      name: "ChangePassword",
+      requestType: ChangePasswordRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    requestPasswordChange: {
+      name: "RequestPasswordChange",
+      requestType: RequestPasswordChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    requestEmailChange: {
+      name: "RequestEmailChange",
+      requestType: ChangeEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    confirmPasswordChange: {
+      name: "ConfirmPasswordChange",
+      requestType: ConfirmPasswordChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    confirmEmailChange: {
+      name: "ConfirmEmailChange",
+      requestType: ConfirmEmailChangeRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    unregister: {
+      name: "Unregister",
+      requestType: UnregisterRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    login: {
+      name: "Login",
+      requestType: LoginRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    findByRole: {
+      name: "FindByRole",
+      requestType: FindByRoleRequest,
+      requestStream: false,
+      responseType: UserListResponse,
+      responseStream: false,
+      options: {},
+    },
+    deleteUsersByOrg: {
+      name: "DeleteUsersByOrg",
+      requestType: OrgIDRequest,
+      requestStream: false,
+      responseType: DeleteUsersByOrgResponse,
+      responseStream: false,
+      options: {},
+    },
+    confirmUserInvitation: {
+      name: "ConfirmUserInvitation",
+      requestType: ConfirmUserInvitationRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    sendInvitationEmail: {
+      name: "SendInvitationEmail",
+      requestType: SendInvitationEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+    findByToken: {
+      name: "FindByToken",
+      requestType: FindByTokenRequest,
+      requestStream: false,
+      responseType: UserResponse,
+      responseStream: false,
+      options: {},
+    },
+    sendActivationEmail: {
+      name: "SendActivationEmail",
+      requestType: SendActivationEmailRequest,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListWithRoleResponse>>;
+  create(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  upsert(
+    request: UserList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  find(
+    request: FindRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  register(
+    request: RegisterRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  activate(
+    request: ActivateRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  changePassword(
+    request: ChangePasswordRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  requestPasswordChange(
+    request: RequestPasswordChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  requestEmailChange(
+    request: ChangeEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  confirmPasswordChange(
+    request: ConfirmPasswordChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  confirmEmailChange(
+    request: ConfirmEmailChangeRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  unregister(
+    request: UnregisterRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  login(
+    request: LoginRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  findByRole(
+    request: FindByRoleRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserListResponse>>;
+  deleteUsersByOrg(
+    request: OrgIDRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteUsersByOrgResponse>>;
+  confirmUserInvitation(
+    request: ConfirmUserInvitationRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  sendInvitationEmail(
+    request: SendInvitationEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+  findByToken(
+    request: FindByTokenRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<UserResponse>>;
+  sendActivationEmail(
+    request: SendActivationEmailRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListWithRoleResponse>;
+  create(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  upsert(
+    request: DeepPartial<UserList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  find(
+    request: DeepPartial<FindRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  register(
+    request: DeepPartial<RegisterRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  activate(
+    request: DeepPartial<ActivateRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  RequestEmailChange(request: ChangeEmailRequest): Promise<OperationStatusObj>;
-  ConfirmPasswordChange(
-    request: ConfirmPasswordChangeRequest
+  changePassword(
+    request: DeepPartial<ChangePasswordRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  ConfirmEmailChange(
-    request: ConfirmEmailChangeRequest
+  requestPasswordChange(
+    request: DeepPartial<RequestPasswordChangeRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  Unregister(request: UnregisterRequest): Promise<OperationStatusObj>;
-  Login(request: LoginRequest): Promise<UserResponse>;
-  FindByRole(request: FindByRoleRequest): Promise<UserListResponse>;
-  DeleteUsersByOrg(request: OrgIDRequest): Promise<DeleteUsersByOrgResponse>;
-  ConfirmUserInvitation(
-    request: ConfirmUserInvitationRequest
+  requestEmailChange(
+    request: DeepPartial<ChangeEmailRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  SendInvitationEmail(
-    request: SendInvitationEmailRequest
+  confirmPasswordChange(
+    request: DeepPartial<ConfirmPasswordChangeRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
-  FindByToken(request: FindByTokenRequest): Promise<UserResponse>;
-  SendActivationEmail(
-    request: SendActivationEmailRequest
+  confirmEmailChange(
+    request: DeepPartial<ConfirmEmailChangeRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  unregister(
+    request: DeepPartial<UnregisterRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  login(
+    request: DeepPartial<LoginRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  findByRole(
+    request: DeepPartial<FindByRoleRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserListResponse>;
+  deleteUsersByOrg(
+    request: DeepPartial<OrgIDRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteUsersByOrgResponse>;
+  confirmUserInvitation(
+    request: DeepPartial<ConfirmUserInvitationRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  sendInvitationEmail(
+    request: DeepPartial<SendInvitationEmailRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
+  findByToken(
+    request: DeepPartial<FindByTokenRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<UserResponse>;
+  sendActivationEmail(
+    request: DeepPartial<SendActivationEmailRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<OperationStatusObj>;
 }
 
@@ -5261,7 +5564,13 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
-        options: undefined,
+        options: {
+          messageSetWireFormat: false,
+          noStandardDescriptorAccessor: false,
+          deprecated: false,
+          mapEntry: false,
+          uninterpretedOption: [],
+        },
         reservedRange: [],
         reservedName: [],
       },
@@ -6043,35 +6352,35 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28],
-          span: [259, 0, 302, 1],
+          span: [259, 0, 310, 1],
           leadingComments: "*\n A User resource.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 0],
-          span: [260, 2, 16],
+          span: [268, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 2],
-          span: [262, 2, 18],
+          span: [270, 2, 18],
           leadingComments: "",
           trailingComments: " The name of the user, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 5],
-          span: [265, 2, 19],
+          span: [273, 2, 19],
           leadingComments: "",
           trailingComments: "/ Email address, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 6],
-          span: [266, 2, 23],
+          span: [274, 2, 23],
           leadingComments: "",
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
@@ -6079,7 +6388,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 7],
-          span: [267, 2, 18],
+          span: [275, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ If the user was activated via the activation process\n",
@@ -6087,7 +6396,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 8],
-          span: [268, 2, 29],
+          span: [276, 2, 29],
           leadingComments: "",
           trailingComments:
             "/ Activation code used in the activation process\n",
@@ -6095,21 +6404,21 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 9],
-          span: [269, 2, 23],
+          span: [277, 2, 23],
           leadingComments: "",
           trailingComments: "/ Raw password, not stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 10],
-          span: [270, 2, 28],
+          span: [278, 2, 28],
           leadingComments: "",
           trailingComments: "/ Encrypted password, stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 11],
-          span: [271, 2, 74],
+          span: [279, 2, 74],
           leadingComments: "",
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
@@ -6117,28 +6426,28 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 12],
-          span: [272, 2, 280, 4],
+          span: [280, 2, 288, 4],
           leadingComments: "",
           trailingComments: " timezone_id specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 13],
-          span: [281, 2, 289, 4],
+          span: [289, 2, 297, 4],
           leadingComments: "",
           trailingComments: " locale specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 14],
-          span: [290, 2, 28],
+          span: [298, 2, 28],
           leadingComments: "",
           trailingComments: " default hierarchical scope\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 15],
-          span: [291, 2, 28],
+          span: [299, 2, 28],
           leadingComments: "",
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
@@ -6146,7 +6455,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 16],
-          span: [292, 2, 18],
+          span: [300, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
@@ -6154,70 +6463,70 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 19],
-          span: [295, 2, 19],
+          span: [303, 2, 19],
           leadingComments: "",
           trailingComments: " For user invitation\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 20],
-          span: [296, 2, 35],
+          span: [304, 2, 35],
           leadingComments: "",
           trailingComments: " user who is inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 21],
-          span: [297, 2, 41],
+          span: [305, 2, 41],
           leadingComments: "",
           trailingComments: " First name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 22],
-          span: [298, 2, 40],
+          span: [306, 2, 40],
           leadingComments: "",
           trailingComments: " Last name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 25],
-          span: [301, 2, 32],
+          span: [309, 2, 32],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29],
-          span: [307, 0, 351, 1],
+          span: [315, 0, 359, 1],
           leadingComments: "*\n A User resource with role\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 0],
-          span: [308, 2, 16],
+          span: [316, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 2],
-          span: [310, 2, 18],
+          span: [318, 2, 18],
           leadingComments: "",
           trailingComments: " The name of the user, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 5],
-          span: [313, 2, 19],
+          span: [321, 2, 19],
           leadingComments: "",
           trailingComments: "/ Email address, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 6],
-          span: [314, 2, 23],
+          span: [322, 2, 23],
           leadingComments: "",
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
@@ -6225,7 +6534,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 7],
-          span: [315, 2, 18],
+          span: [323, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ If the user was activated via the activation process\n",
@@ -6233,7 +6542,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 8],
-          span: [316, 2, 29],
+          span: [324, 2, 29],
           leadingComments: "",
           trailingComments:
             "/ Activation code used in the activation process\n",
@@ -6241,21 +6550,21 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 9],
-          span: [317, 2, 23],
+          span: [325, 2, 23],
           leadingComments: "",
           trailingComments: "/ Raw password, not stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 10],
-          span: [318, 2, 28],
+          span: [326, 2, 28],
           leadingComments: "",
           trailingComments: "/ Encrypted password, stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 11],
-          span: [319, 2, 74],
+          span: [327, 2, 74],
           leadingComments: "",
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
@@ -6263,28 +6572,28 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 12],
-          span: [320, 2, 328, 4],
+          span: [328, 2, 336, 4],
           leadingComments: "",
           trailingComments: " timezone_id specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 13],
-          span: [329, 2, 337, 4],
+          span: [337, 2, 345, 4],
           leadingComments: "",
           trailingComments: " locale specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 14],
-          span: [338, 2, 28],
+          span: [346, 2, 28],
           leadingComments: "",
           trailingComments: " default hierarchical scope\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 15],
-          span: [339, 2, 28],
+          span: [347, 2, 28],
           leadingComments: "",
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
@@ -6292,7 +6601,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 16],
-          span: [340, 2, 18],
+          span: [348, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
@@ -6300,35 +6609,35 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 19],
-          span: [343, 2, 19],
+          span: [351, 2, 19],
           leadingComments: "",
           trailingComments: " For user invitation\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 20],
-          span: [344, 2, 35],
+          span: [352, 2, 35],
           leadingComments: "",
           trailingComments: " user who is inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 21],
-          span: [345, 2, 41],
+          span: [353, 2, 41],
           leadingComments: "",
           trailingComments: " First name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 22],
-          span: [346, 2, 40],
+          span: [354, 2, 40],
           leadingComments: "",
           trailingComments: " Last name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 25],
-          span: [349, 2, 32],
+          span: [357, 2, 32],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],
@@ -6394,6 +6703,14 @@ export const protoMetadata: ProtoMetadata = {
   options: {
     messages: {
       User: {
+        options: {
+          kafka_subscriber: KafkaSubscription.decode(
+            Buffer.from(
+              "CgV1c2VycxIhaW8ucmVzdG9yZWNvbW1lcmNlLnVzZXJzLnJlc291cmNlGgt1c2VyQ3JlYXRlZCILdXNlclVwZGF0ZWQqC3VzZXJEZWxldGVk",
+              "base64"
+            )
+          ),
+        },
         fields: {
           timezone_id: {
             resolver: Resolver.decode(
@@ -6466,13 +6783,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

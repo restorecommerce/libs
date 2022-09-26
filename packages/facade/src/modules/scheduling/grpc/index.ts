@@ -1,16 +1,18 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata,
-  protobufPackage,
-  Service
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient,
+  ServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class SchedulingSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly job: ServiceClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.job = this.createClient(cfg, ServiceDefinition, this.channel);
   }
-  job = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+
 }

@@ -1,38 +1,25 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata6,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import {
   Any,
   protoMetadata as protoMetadata2,
 } from "../../google/protobuf/any";
-import {
-  FilterOp,
-  protoMetadata as protoMetadata1,
-} from "../../io/restorecommerce/filter";
-import { Observable } from "rxjs";
-import {
-  protoMetadata as protoMetadata5,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
+import { FilterOp, protoMetadata as protoMetadata1 } from "./filter";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
 import {
   protoMetadata as protoMetadata7,
   DeleteResponse,
-} from "../../io/restorecommerce/resource_base";
-import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/options";
+} from "./resource_base";
+import { protoMetadata as protoMetadata8 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.ostorage";
 
@@ -2624,13 +2611,114 @@ export const MoveResponseItem = {
   },
 };
 
-export interface Service {
-  Get(request: GetRequest): Observable<ObjectResponse>;
-  Put(request: Observable<Object>): Promise<PutResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  List(request: ListRequest): Promise<ListResponse>;
-  Copy(request: CopyRequestList): Promise<CopyResponseList>;
-  Move(request: MoveRequestList): Promise<MoveResponseList>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.ostorage.Service",
+  methods: {
+    get: {
+      name: "Get",
+      requestType: GetRequest,
+      requestStream: false,
+      responseType: ObjectResponse,
+      responseStream: true,
+      options: {},
+    },
+    put: {
+      name: "Put",
+      requestType: Object,
+      requestStream: true,
+      responseType: PutResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    list: {
+      name: "List",
+      requestType: ListRequest,
+      requestStream: false,
+      responseType: ListResponse,
+      responseStream: false,
+      options: {},
+    },
+    copy: {
+      name: "Copy",
+      requestType: CopyRequestList,
+      requestStream: false,
+      responseType: CopyResponseList,
+      responseStream: false,
+      options: {},
+    },
+    move: {
+      name: "Move",
+      requestType: MoveRequestList,
+      requestStream: false,
+      responseType: MoveResponseList,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  get(
+    request: GetRequest,
+    context: CallContext & CallContextExt
+  ): ServerStreamingMethodResult<DeepPartial<ObjectResponse>>;
+  put(
+    request: AsyncIterable<Object>,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PutResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  list(
+    request: ListRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ListResponse>>;
+  copy(
+    request: CopyRequestList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<CopyResponseList>>;
+  move(
+    request: MoveRequestList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<MoveResponseList>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  get(
+    request: DeepPartial<GetRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): AsyncIterable<ObjectResponse>;
+  put(
+    request: AsyncIterable<DeepPartial<Object>>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PutResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  list(
+    request: DeepPartial<ListRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ListResponse>;
+  copy(
+    request: DeepPartial<CopyRequestList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<CopyResponseList>;
+  move(
+    request: DeepPartial<MoveRequestList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<MoveResponseList>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -4424,13 +4512,10 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
-
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
+
+export type ServerStreamingMethodResult<Response> = {
+  [Symbol.asyncIterator](): AsyncIterator<Response, void>;
+};

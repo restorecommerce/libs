@@ -1,31 +1,22 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata5,
-  Resolver,
-} from "../../io/restorecommerce/options";
-import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/contact_point";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata5, Resolver } from "./options";
+import { protoMetadata as protoMetadata6 } from "./contact_point";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -1475,13 +1466,114 @@ export const ErrorList = {
   },
 };
 
-export interface Service {
-  Read(request: ReadRequest): Promise<OrderListResponse>;
-  Create(request: OrderList): Promise<OrderListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(request: OrderList): Promise<OrderListResponse>;
-  Upsert(request: OrderList): Promise<OrderListResponse>;
-  TriggerFulfillment(request: OrderDataList): Promise<FulfillmentResults>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.order.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: OrderList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: OrderList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: OrderList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
+    triggerFulfillment: {
+      name: "TriggerFulfillment",
+      requestType: OrderDataList,
+      requestStream: false,
+      responseType: FulfillmentResults,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OrderListResponse>>;
+  create(
+    request: OrderList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OrderListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: OrderList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OrderListResponse>>;
+  upsert(
+    request: OrderList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OrderListResponse>>;
+  triggerFulfillment(
+    request: OrderDataList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentResults>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OrderListResponse>;
+  create(
+    request: DeepPartial<OrderList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OrderListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<OrderList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OrderListResponse>;
+  upsert(
+    request: DeepPartial<OrderList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OrderListResponse>;
+  triggerFulfillment(
+    request: DeepPartial<OrderDataList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentResults>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -2671,13 +2763,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

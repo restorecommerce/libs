@@ -1,11 +1,8 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata1, OperationStatusObj } from "./status";
 import * as _m0 from "protobufjs/minimal";
-import {
-  protoMetadata as protoMetadata1,
-  OperationStatusObj,
-} from "../../io/restorecommerce/status";
 
 export const protobufPackage = "io.restorecommerce.notification_req";
 
@@ -455,9 +452,37 @@ export const Log = {
   },
 };
 
-export interface Service {
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.notification_req.Service",
+  methods: {
+    /** direct notifications */
+    send: {
+      name: "Send",
+      requestType: NotificationReq,
+      requestStream: false,
+      responseType: OperationStatusObj,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   /** direct notifications */
-  Send(request: NotificationReq): Promise<OperationStatusObj>;
+  send(
+    request: NotificationReq,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OperationStatusObj>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  /** direct notifications */
+  send(
+    request: DeepPartial<NotificationReq>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OperationStatusObj>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -985,13 +1010,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

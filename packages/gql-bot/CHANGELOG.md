@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.7...@restorecommerce/gql-bot@1.0.0) (2022-08-25)
+
+
+### Bug Fixes
+
+* **gql-bot:** unit test ([ff69432](https://github.com/restorecommerce/libs/commit/ff69432fb60238b76aec9f0dd0b5a95c6197bcdf))
+
+
+### Features
+
+* move to fully typed grpc client and server ([ec9be2d](https://github.com/restorecommerce/libs/commit/ec9be2daff0823e9ba440a2845b7b1a7f2d74b50))
+
+
+### Reverts
+
+* Revert "BREAKING CHANGE: move to fully typed grpc client and server" ([2d584a7](https://github.com/restorecommerce/libs/commit/2d584a709632ae608f595a2c836deabd34f671d9))
+
+
+### BREAKING CHANGES
+
+* move to fully typed grpc client and server
+
+
+
+
+
 ## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@0.2.6...@restorecommerce/gql-bot@0.2.7) (2022-08-10)
 
 

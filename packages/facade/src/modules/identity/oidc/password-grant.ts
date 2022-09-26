@@ -115,7 +115,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
   config.provider.registerGrantType(
     'password',
-    async (ctx: Koa.Context, next: () => Promise<any>) => {
+    async (ctx: any, next: () => Promise<any>) => {
       try {
         const {body, client} = ctx.oidc;
         ctx.type = 'json';
@@ -158,7 +158,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           tokenName: token_name
         })
 
-        await config.authLogService.Create(AuthenticationLogList.fromPartial({
+        await config.authLogService.create(AuthenticationLogList.fromPartial({
           items: [authLogItem],
           subject: Subject.fromPartial({token, scope}) as Subject
         }));

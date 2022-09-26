@@ -4,7 +4,6 @@
     },
     "extends": "./tsconfig.json",
     "include": [
-      "./test/acs_test.ts"
+      "./test/**/*.ts"
     ]
   }
-  

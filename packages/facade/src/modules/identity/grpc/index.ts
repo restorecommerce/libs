@@ -1,41 +1,42 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata as userMetaService,
-  protobufPackage as userProtobufPackage,
-  Service as userService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+  ServiceClient as userClient,
+  ServiceDefinition as userService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user';
 import {
-  protoMetadata as roleMetaService,
-  protobufPackage as roleProtobufPackage,
-  Service as roleService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
+  ServiceClient as roleClient,
+  ServiceDefinition as roleService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role';
 import {
-  protoMetadata as authentication_logMetaService,
-  protobufPackage as authentication_logProtobufPackage,
-  Service as authentication_logService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
+  ServiceClient as authentication_logClient,
+  ServiceDefinition as authentication_logService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
 import {
-  protoMetadata as tokenMetaService,
-  protobufPackage as tokenProtobufPackage,
-  Service as tokenService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+  ServiceClient as tokenClient,
+  ServiceDefinition as tokenService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token';
 import {
-  protoMetadata as oauthMetaService,
-  protobufPackage as oauthProtobufPackage,
-  Service as oauthService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient as oauthClient,
+  ServiceDefinition as oauthService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly user: userClient;
+  readonly role: roleClient;
+  readonly authentication_log: authentication_logClient;
+  readonly token: tokenClient;
+  readonly oauth: oauthClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.user = this.createClient(cfg, userService, this.channel);
+    this.role = this.createClient(cfg, roleService, this.channel);
+    this.authentication_log = this.createClient(cfg, authentication_logService, this.channel);
+    this.token = this.createClient(cfg, tokenService, this.channel);
+    this.oauth = this.createClient(cfg, oauthService, this.channel);
   }
 
-  user = getGRPCService<userService>(this, userProtobufPackage, userMetaService.fileDescriptor.service![0]);
-  role = getGRPCService<roleService>(this, roleProtobufPackage, roleMetaService.fileDescriptor.service![0]);
-  authentication_log = getGRPCService<authentication_logService>(this, authentication_logProtobufPackage, authentication_logMetaService.fileDescriptor.service![0]);
-  token = getGRPCService<tokenService>(this, tokenProtobufPackage, tokenMetaService.fileDescriptor.service![0]);
-  oauth = getGRPCService<oauthService>(this, oauthProtobufPackage, oauthMetaService.fileDescriptor.service![0]);
 }

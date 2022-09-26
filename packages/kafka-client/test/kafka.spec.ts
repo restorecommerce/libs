@@ -1,6 +1,9 @@
-import { Events, Topic } from '../src';
+import { Events, registerProtoMeta, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
+import { protoMetadata } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
+
+registerProtoMeta(protoMetadata);
 
 const kafkaConfig = {
   events: {
@@ -14,8 +17,6 @@ const kafkaConfig = {
         ],
       },
       exampleEvent: {
-        protos: ['test/test.proto'],
-        protoRoot: 'protos/',
         messageObject: 'test.TestEvent'
       }
     }

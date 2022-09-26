@@ -3,7 +3,7 @@ import { Adapter, AdapterConstructor, AdapterPayload } from 'oidc-provider';
 import { marshallProtobufAny, unmarshallProtobufAny } from './utils';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth';
 import { InMemoryAdapter } from './in-memory-adapter';
-import { Service as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { ServiceClient as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
 
 const delegateToRemoteService = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "0.6.37",
+  "version": "1.0.1",
   "description": "Access Control Service Client",
   "author": "n-fuse GmbH",
   "repository": {
@@ -17,16 +17,17 @@
   ],
   "main": "./lib/index.js",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^0.4.6",
-    "@restorecommerce/kafka-client": "^0.4.4",
-    "@restorecommerce/logger": "^0.13.1",
-    "@restorecommerce/protos": "^0.7.2",
-    "@restorecommerce/service-config": "^0.4.28",
+    "@restorecommerce/grpc-client": "^1.0.0",
+    "@restorecommerce/kafka-client": "^1.0.1",
+    "@restorecommerce/logger": "^1.0.0",
+    "@restorecommerce/rc-grpc-clients": "^1.0.1",
+    "@restorecommerce/service-config": "^1.0.0",
     "lodash": "^4.17.21",
     "node-eval": "^2.0.0",
     "redis": "^4.2.0"
   },
   "devDependencies": {
+    "@restorecommerce/protos": "^1.0.0",
     "@types/koa": "^2.13.4",
     "@types/lodash": "^4.14.182",
     "@types/mocha": "^9.1.1",
@@ -41,6 +42,7 @@
     "eslint-plugin-prefer-arrow-functions": "^3.1.4",
     "grpc-mock": "^0.7.0",
     "mocha": "^10.0.0",
+    "nice-grpc": "^1.2.0",
     "nodemon": "^2.0.19",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",

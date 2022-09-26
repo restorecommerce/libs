@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as protobuf from 'protobufjs';
 import { Logger } from 'winston';
 
 /**
@@ -42,49 +41,12 @@ export class Topic {
   /**
    * Encode the given message object using protobufjs (pbjs).
    *
-   * @param  {string} eventName
    * @param  {Object} msg
-   * @param  {string} protoFilePath
    * @param  {string} messageObject
    * @return {Object} buffer
    */
-  async encodeObject(eventName: string, msg: Object, protoFilePath: string,
-    messageObject: string, protoRoot: string): Promise<any> {
-    let root: any = new protobuf.Root();
-
-    root.resolvePath = (origin, target) => {
-      // ignore the same file
-      if (target == protoFilePath) {
-        return protoFilePath;
-      }
-      // Resolved target path for the import files
-      return protoRoot + target;
-    };
-    const logger = this.logger;
-    root = await this.resolveRoot(root, protoFilePath);
-    const MessageClass = root.lookup(messageObject);
-    const convertedMessage = MessageClass.create(msg);
-    const buffer = MessageClass.encode(convertedMessage).finish();
+  async encodeObject(msg: Object, messageObject: string): Promise<any> {
     return msg;
-  }
-
-  /**
-* Resolve the protobuf root object using the proto file path.
-* @param root
-* @param protoFilePath
-* @return protobuf.Root object
-*/
-  async resolveRoot(root: protobuf.Root, protoFilePath: string): Promise<protobuf.Root> {
-    const that = this;
-    return new Promise<protobuf.Root>((resolve, reject) => {
-      root.load(protoFilePath, { keepCase: true }, (err, root) => {
-        if (err) {
-          that.logger.error('Error loading protobuf definition',  { message: err.message, stack: err.stack });
-          reject(err);
-        }
-        resolve(root);
-      });
-    });
   }
 
   /**
@@ -110,7 +72,6 @@ export class Topic {
     e.message = _.concat(e.message, message);
     const listeners = e.listeners;
     const logger = this.logger;
-    const protoFilePath = this.config[eventName].protoRoot + this.config[eventName].protos;
     const messageObject = this.config[eventName].messageObject;
     for (let i = 0; i < listeners.length; i += 1) {
       const listener = listeners[i];
@@ -122,8 +83,7 @@ export class Topic {
         };
 
         const msg = messages[j];
-        bufferObj = await this.encodeObject(eventName, msg,
-          protoFilePath, messageObject, this.config[eventName].protoRoot);
+        bufferObj = await this.encodeObject(msg, messageObject);
 
         await listener(bufferObj, context, this.config, eventName);
       }

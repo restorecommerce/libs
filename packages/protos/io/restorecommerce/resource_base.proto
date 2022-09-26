@@ -129,9 +129,4 @@ message ResourceResponse {
 message Resource {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
-  int32 value = 3;
-  string text = 4;
-  bool active = 5;
-  double created = 6;
-  string status = 7;
 }

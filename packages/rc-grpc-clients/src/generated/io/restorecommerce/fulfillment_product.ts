@@ -1,39 +1,27 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import {
   Address,
   protoMetadata as protoMetadata7,
   Parcel,
-} from "../../io/restorecommerce/fulfillment";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
+} from "./fulfillment";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import {
   Status,
   OperationStatus,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
-import {
-  protoMetadata as protoMetadata5,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
-import {
-  protoMetadata as protoMetadata6,
-  Item,
-} from "../../io/restorecommerce/order";
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
+import { protoMetadata as protoMetadata6, Item } from "./order";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
 
@@ -1373,19 +1361,114 @@ export const Deleted = {
   },
 };
 
-export interface Service {
-  Read(request: ReadRequest): Promise<FulfillmentProductResponseList>;
-  Find(request: QueryList): Promise<PackingSolutionResponseList>;
-  Create(
-    request: FulfillmentProductList
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.fulfillment_product.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: FulfillmentProductResponseList,
+      responseStream: false,
+      options: {},
+    },
+    find: {
+      name: "Find",
+      requestType: QueryList,
+      requestStream: false,
+      responseType: PackingSolutionResponseList,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: FulfillmentProductList,
+      requestStream: false,
+      responseType: FulfillmentProductResponseList,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: FulfillmentProductList,
+      requestStream: false,
+      responseType: FulfillmentProductResponseList,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: FulfillmentProductList,
+      requestStream: false,
+      responseType: FulfillmentProductResponseList,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  find(
+    request: QueryList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<PackingSolutionResponseList>>;
+  create(
+    request: FulfillmentProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  update(
+    request: FulfillmentProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  upsert(
+    request: FulfillmentProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentProductResponseList>;
-  Update(
-    request: FulfillmentProductList
+  find(
+    request: DeepPartial<QueryList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<PackingSolutionResponseList>;
+  create(
+    request: DeepPartial<FulfillmentProductList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentProductResponseList>;
-  Upsert(
-    request: FulfillmentProductList
+  update(
+    request: DeepPartial<FulfillmentProductList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentProductResponseList>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
+  upsert(
+    request: DeepPartial<FulfillmentProductList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentProductResponseList>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -2404,13 +2487,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

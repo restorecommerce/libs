@@ -1,5 +1,23 @@
 import { GrpcClientConfig } from "@restorecommerce/grpc-client";
 import { FileDescriptorProto } from "ts-proto-descriptors";
+import { GraphQLSchema, GraphQLFieldResolver, GraphQLScalarType } from 'graphql';
+
+export interface GraphQLResolverMap<TContext = {}> {
+  [typeName: string]:
+    | {
+    [fieldName: string]:
+      | GraphQLFieldResolver<any, TContext, any>
+      | {
+      requires?: string;
+      resolve: GraphQLFieldResolver<any, TContext, any>;
+    };
+  }
+    | GraphQLScalarType
+    | {
+    [enumValue: string]: string | number;
+  };
+}
+
 
 export const authSubjectType = '.io.restorecommerce.auth.Subject';
 
@@ -70,10 +88,21 @@ export interface MethodConfig {
 }
 
 export interface ServiceConfig {
-  client: GrpcClientConfig;
+  client: Omit<GrpcClientConfig, 'logger'> & { address: string };
   [key: string]: any;
 }
 
 export interface SubSpaceServiceConfig extends ServiceConfig {
   root: boolean;
+}
+
+export type ServiceClient<Context extends Pick<Context, Key>, Key extends keyof Context, T extends Record<string, any>> = {
+  [V in Key]: {
+    client: T
+  };
+};
+
+export type FederatedSchemaWithResolvers = {
+  federatedSchema: GraphQLSchema;
+  resolvers: GraphQLResolverMap<any>;
 }

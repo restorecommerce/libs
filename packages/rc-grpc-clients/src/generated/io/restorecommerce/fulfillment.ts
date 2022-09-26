@@ -1,39 +1,31 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Country,
-  protoMetadata as protoMetadata7,
-} from "../../io/restorecommerce/country";
+import { Country, protoMetadata as protoMetadata7 } from "./country";
 import {
   Status,
   OperationStatus,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata5,
-} from "../../io/restorecommerce/meta";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata5 } from "./meta";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata2,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
+  DeleteResponse,
+} from "./resource_base";
 import {
   protoMetadata as protoMetadata6,
   Address as Address9,
-} from "../../io/restorecommerce/address";
-import { protoMetadata as protoMetadata8 } from "../../io/restorecommerce/options";
+} from "./address";
+import { protoMetadata as protoMetadata8 } from "./options";
+import * as Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
@@ -2135,17 +2127,113 @@ export const Deleted = {
 };
 
 /** Microservice definition. */
-export interface Service {
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.fulfillment.Service",
+  methods: {
+    /** Returns a list of shipment IDs. */
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: FulfillmentResponseList,
+      responseStream: false,
+      options: {},
+    },
+    /** Creates and executes fulfillment orders */
+    create: {
+      name: "Create",
+      requestType: FulfillmentRequestList,
+      requestStream: false,
+      responseType: FulfillmentResponseList,
+      responseStream: false,
+      options: {},
+    },
+    /** Track a batch of fulfillment orders */
+    track: {
+      name: "Track",
+      requestType: TrackingRequestList,
+      requestStream: false,
+      responseType: TrackingResultList,
+      responseStream: false,
+      options: {},
+    },
+    /** Cancel a batch of fulfillment orders */
+    cancel: {
+      name: "Cancel",
+      requestType: CancelRequestList,
+      requestStream: false,
+      responseType: FulfillmentResponseList,
+      responseStream: false,
+      options: {},
+    },
+    /** Delete a batch of fulfillments from the database */
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   /** Returns a list of shipment IDs. */
-  Read(request: ReadRequest): Promise<FulfillmentResponseList>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentResponseList>>;
   /** Creates and executes fulfillment orders */
-  Create(request: FulfillmentRequestList): Promise<FulfillmentResponseList>;
+  create(
+    request: FulfillmentRequestList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentResponseList>>;
   /** Track a batch of fulfillment orders */
-  Track(request: TrackingRequestList): Promise<TrackingResultList>;
+  track(
+    request: TrackingRequestList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TrackingResultList>>;
   /** Cancel a batch of fulfillment orders */
-  Cancel(request: CancelRequestList): Promise<FulfillmentResponseList>;
+  cancel(
+    request: CancelRequestList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<FulfillmentResponseList>>;
   /** Delete a batch of fulfillments from the database */
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  /** Returns a list of shipment IDs. */
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentResponseList>;
+  /** Creates and executes fulfillment orders */
+  create(
+    request: DeepPartial<FulfillmentRequestList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentResponseList>;
+  /** Track a batch of fulfillment orders */
+  track(
+    request: DeepPartial<TrackingRequestList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<TrackingResultList>;
+  /** Cancel a batch of fulfillment orders */
+  cancel(
+    request: DeepPartial<CancelRequestList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<FulfillmentResponseList>;
+  /** Delete a batch of fulfillments from the database */
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
 }
 
 type ProtoMetaMessageOptions = {

@@ -2,6 +2,7 @@ import { AdapterConstructor, Adapter, AdapterPayload } from 'oidc-provider';
 import { RedisClientType } from 'redis';
 import { cfg } from './config';
 import * as _ from 'lodash';
+import { ServiceClient } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
 
 const unmarshallProtobufAny = (msg: any): any => JSON.parse(msg.value.toString());
 const marshallProtobufAny = (msg: any): any => {
@@ -17,44 +18,9 @@ const epochTime = () =>  {
   return Math.floor(Date.now() / 1000);
 };
 
-export interface FindRequest {
-  type: string;
-  id: string;
-}
-
-export interface DestroyRequest {
-  type: string;
-  id: string;
-}
-
-export interface ConsumeRequest {
-  type?: string;
-  id: string;
-  subject?: any;
-}
-
-export interface UpsertRequest {
-  type: string;
-  id: string;
-  payload: any;
-  expires_in: number;
-}
-
-export interface RevokeByGrantIdRequest {
-  grant_id: string;
-}
-
-interface TokenService {
-  consume(args: ConsumeRequest): Promise<void>;
-  destroy(args: DestroyRequest): Promise<void>;
-  find(args: FindRequest): Promise<any | undefined>;
-  upsert(args: UpsertRequest): Promise<void>;
-  revokeByGrantId(args: RevokeByGrantIdRequest): Promise<void>;
-}
-
 const delegate = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 
-export function createIdentityServiceAdapterClass(tokenService: TokenService, logger: any, redisClient: RedisClientType<any, any>): AdapterConstructor {
+export function createIdentityServiceAdapterClass(tokenService: ServiceClient, logger: any, redisClient: RedisClientType<any, any>): AdapterConstructor {
   return class IdentityServiceAdapter implements Adapter {
 
     constructor(public type: string) { }
@@ -89,8 +55,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
 
       if (delegate(this.type)) {
         logger.debug('Invoking token service upsert', { type: this.type });
-        tokenService = await tokenService;
-        return await tokenService.upsert({
+        await tokenService.upsert({
           expires_in: expiresIn,
           id,
           payload: marshallProtobufAny(payload),
@@ -110,11 +75,10 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
       };
       if (delegate(this.type)) {
         logger.debug('Invoking token service find', { type: this.type });
-        tokenService = await tokenService;
         const response = await tokenService.find(findReq);
         let tokenResponse;
-        if (!_.isEmpty(response?.data?.value)) {
-          tokenResponse = unmarshallProtobufAny(response.data);
+        if (!_.isEmpty(response?.value)) {
+          tokenResponse = unmarshallProtobufAny(response);
           tokenResponse.clientId = cfg.get('oidc:client_id');
         }
         return tokenResponse;
@@ -147,7 +111,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
 
       if (delegate(this.type)) {
         logger.debug('Invoking token service destory', { type: this.type });
-        return tokenService.destroy(destroyReq);
+        await tokenService.destroy(destroyReq);
       } else {
         logger.debug('Redis Cache token delete', { type: this.type });
         await redisClient.del(this.key(id));
@@ -168,7 +132,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
       }
       if (delegate(this.type)) {
         logger.debug('Invoking token service revokeByGrantId', { type: this.type });
-        return tokenService.revokeByGrantId(revokeReq);
+        await tokenService.revokeByGrantId(revokeReq);
       }
     }
 
@@ -176,7 +140,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenService, lo
       await tokenService.consume({ id });
       if (delegate(this.type)) {
         logger.debug('Invoking token service consume', { type: this.type });
-        return tokenService.consume({
+        await tokenService.consume({
           id,
           type: this.type,
           subject: { token: id }

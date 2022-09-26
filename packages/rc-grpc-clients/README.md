@@ -1,1 +1,1 @@
-# @restorecommerce/grpc-client
+# @restorecommerce/rc-grpc-clients

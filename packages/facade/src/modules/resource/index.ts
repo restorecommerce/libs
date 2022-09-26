@@ -5,7 +5,10 @@ import { createFacadeModuleFactory } from "../../utils";
 
 export const resourceModule = createFacadeModuleFactory<ResourceConfig, ResourceModule>(namespace, (facade, config) => {
   const resource = {
-    client: new ResourceSrvGrpcClient(config.config.client, facade.logger)
+    client: new ResourceSrvGrpcClient(config.config.client.address, {
+      ...config.config.client,
+      logger: facade.logger,
+    })
   };
 
   facade.addApolloService({

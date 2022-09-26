@@ -1,83 +1,78 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata as addressMetaService,
-  protobufPackage as addressProtobufPackage,
-  Service as addressService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address";
+  ServiceClient as addressClient,
+  ServiceDefinition as addressService,
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address';
 import {
-  protoMetadata as countryMetaService,
-  protobufPackage as countryProtobufPackage,
-  Service as countryService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country";
+  ServiceClient as countryClient,
+  ServiceDefinition as countryService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country';
 import {
-  protoMetadata as timezoneMetaService,
-  protobufPackage as timezoneProtobufPackage,
-  Service as timezoneService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone";
+  ServiceClient as timezoneClient,
+  ServiceDefinition as timezoneService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone';
 import {
-  protoMetadata as contact_point_typeMetaService,
-  protobufPackage as contact_point_typeProtobufPackage,
-  Service as contact_point_typeService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type";
+  ServiceClient as contact_point_typeClient,
+  ServiceDefinition as contact_point_typeService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type';
 import {
-  protoMetadata as customerMetaService,
-  protobufPackage as customerProtobufPackage,
-  Service as customerService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer";
+  ServiceClient as customerClient,
+  ServiceDefinition as customerService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer';
 import {
-  protoMetadata as contact_pointMetaService,
-  protobufPackage as contact_pointProtobufPackage,
-  Service as contact_pointService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point";
+  ServiceClient as contact_pointClient,
+  ServiceDefinition as contact_pointService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point';
 import {
-  protoMetadata as localeMetaService,
-  protobufPackage as localeProtobufPackage,
-  Service as localeService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale";
+  ServiceClient as localeClient,
+  ServiceDefinition as localeService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale';
 import {
-  protoMetadata as locationMetaService,
-  protobufPackage as locationProtobufPackage,
-  Service as locationService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location";
+  ServiceClient as locationClient,
+  ServiceDefinition as locationService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location';
 import {
-  protoMetadata as organizationMetaService,
-  protobufPackage as organizationProtobufPackage,
-  Service as organizationService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization";
+  ServiceClient as organizationClient,
+  ServiceDefinition as organizationService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization';
 import {
-  protoMetadata as taxMetaService,
-  protobufPackage as taxProtobufPackage,
-  Service as taxService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
+  ServiceClient as taxClient,
+  ServiceDefinition as taxService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax';
 import {
-  protoMetadata as tax_typeMetaService,
-  protobufPackage as tax_typeProtobufPackage,
-  Service as tax_typeService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
-import {
-  protoMetadata as commandMetaService,
-  protobufPackage as commandProtobufPackage,
-  Service as commandService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient as tax_typeClient,
+  ServiceDefinition as tax_typeService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly address: addressClient;
+  readonly country: countryClient;
+  readonly timezone: timezoneClient;
+  readonly contact_point_type: contact_point_typeClient;
+  readonly customer: customerClient;
+  readonly contact_point: contact_pointClient;
+  readonly locale: localeClient;
+  readonly location: locationClient;
+  readonly organization: organizationClient;
+  readonly tax: taxClient;
+  readonly tax_type: tax_typeClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.address = this.createClient(cfg, addressService, this.channel);
+    this.country = this.createClient(cfg, countryService, this.channel);
+    this.timezone = this.createClient(cfg, timezoneService, this.channel);
+    this.contact_point_type = this.createClient(cfg, contact_point_typeService, this.channel);
+    this.customer = this.createClient(cfg, customerService, this.channel);
+    this.contact_point = this.createClient(cfg, contact_pointService, this.channel);
+    this.locale = this.createClient(cfg, localeService, this.channel);
+    this.location = this.createClient(cfg, locationService, this.channel);
+    this.organization = this.createClient(cfg, organizationService, this.channel);
+    this.tax = this.createClient(cfg, taxService, this.channel);
+    this.tax_type = this.createClient(cfg, tax_typeService, this.channel);
   }
 
-  address = getGRPCService<addressService>(this, addressProtobufPackage, addressMetaService.fileDescriptor.service![0]);
-  country = getGRPCService<countryService>(this, countryProtobufPackage, countryMetaService.fileDescriptor.service![0]);
-  timezone = getGRPCService<timezoneService>(this, timezoneProtobufPackage, timezoneMetaService.fileDescriptor.service![0]);
-  contact_point_type = getGRPCService<contact_point_typeService>(this, contact_point_typeProtobufPackage, contact_point_typeMetaService.fileDescriptor.service![0]);
-  customer = getGRPCService<customerService>(this, customerProtobufPackage, customerMetaService.fileDescriptor.service![0]);
-  contact_point = getGRPCService<contact_pointService>(this, contact_pointProtobufPackage, contact_pointMetaService.fileDescriptor.service![0]);
-  locale = getGRPCService<localeService>(this, localeProtobufPackage, localeMetaService.fileDescriptor.service![0]);
-  location = getGRPCService<locationService>(this, locationProtobufPackage, locationMetaService.fileDescriptor.service![0]);
-  organization = getGRPCService<organizationService>(this, organizationProtobufPackage, organizationMetaService.fileDescriptor.service![0]);
-  tax = getGRPCService<taxService>(this, taxProtobufPackage, taxMetaService.fileDescriptor.service![0]);
-  tax_type = getGRPCService<tax_typeService>(this, tax_typeProtobufPackage, tax_typeMetaService.fileDescriptor.service![0]);
-  command: any = getGRPCService<commandService>(this, commandProtobufPackage, commandMetaService.fileDescriptor.service![0]);
 }

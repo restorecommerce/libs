@@ -39,6 +39,12 @@ import { namespace as identityNamespace } from "./src/modules/identity/interface
 
 import { createServiceConfig } from "@restorecommerce/service-config";
 import { join } from "path";
+import { setUseSubscriptions } from './src/gql/protos/utils';
+
+// TODO Configurable
+const cfg = createServiceConfig(join(process.cwd(), 'tests'));
+
+setUseSubscriptions(!!cfg.get('facade:kafka'));
 
 generateSchemaTypings({
   schema: facadeStatusSchema,
@@ -47,9 +53,6 @@ generateSchemaTypings({
     contextType: '../interfaces#FacadeStatusContext'
   }
 });
-
-// TODO Configurable
-const cfg = createServiceConfig(join(process.cwd(), 'tests'));
 
 generateSchemaTypings({
   schema: orderingSchema(cfg.get(orderingNamespace)),

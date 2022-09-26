@@ -1,9 +1,13 @@
-import { GrpcClient } from '../src/index';
+import { createChannel, createClient } from '../src/index';
 import { createMockServer } from './mock/index'
 import { randomBytes } from 'crypto';
 import { Observable } from 'rxjs';
 import { createLogger } from '@restorecommerce/logger';
-import { Readable, Transform } from 'stream';
+import {
+  EchoServiceDefinition,
+  EchoServiceClient,
+  DeepPartial
+} from './generated/echo/echo';
 
 const ADDRESS = '127.0.0.1:50001';
 const mockServer = createMockServer(ADDRESS)
@@ -43,6 +47,12 @@ export const marshallProtobufAny = (data: any): any => {
   };
 };
 
+const toAsync = async function* <T>(requests: DeepPartial<T>[]): AsyncIterable<DeepPartial<T>> {
+  for (const request of requests) {
+    yield request;
+  }
+};
+
 describe('grpc client', () => {
   const loggerConfig = {
     console: {
@@ -53,143 +63,67 @@ describe('grpc client', () => {
     }
   };
   const logger = createLogger(loggerConfig);
-  const grpcClient = new GrpcClient({
-    address: ADDRESS,
-    proto: {
-      protoRoot: './tests/protos',
-      protoPath: './echo/echo.proto',
-      services: {
-        echo: {
-          packageName: 'echo',
-          serviceName: 'EchoService',
-        }
-      }
-    },
-    omittedFields: {
-      EchoRequest: ['message', 'test']
-    }
-  }, logger);
-
-  // observable config set to true
-  const observableGrpcClient = new GrpcClient({
-    address: ADDRESS,
-    proto: {
-      protoRoot: './tests/protos',
-      protoPath: './echo/echo.proto',
-      services: {
-        echo: {
-          packageName: 'echo',
-          serviceName: 'EchoService',
-        }
-      }
-    },
+  const channel = createChannel(ADDRESS);
+  const grpcClient: EchoServiceClient = createClient({
     omittedFields: {
       EchoRequest: ['message', 'test']
     },
-    observable: true,
-  }, logger);
+    logger
+  }, EchoServiceDefinition, channel);
 
   it('should send a unary request and receive response', async () => {
     const data = 'Test String message';
 
-    const result = await grpcClient.echo.echoUnary({
+    const result = await grpcClient.echoUnary({
       message: data,
       test: marshallProtobufAny({ testAny: 'testMessage' })
     });
 
     expect(result).toHaveProperty('message');
     expect(result.message).toEqual(data);
-    const decodedAnyData = JSON.parse(result.test.value.toString());
+    const decodedAnyData = JSON.parse(result.test!.value.toString());
     expect(decodedAnyData.testAny).toEqual('testMessage');
     return Promise.resolve({});
   });
 
   it('should send a client-stream request and receive response', async () => {
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-    const transformBuffObj = () => {
-      return new Transform({
-        objectMode: true,
-        transform: (chunk, _, done) => {
-          const data = {
-            message: chunk,
-          };
-          done(null, data);
-        }
-      });
-    };
-    const clientStream = Readable.from(buffer.toString());
-    const result = await grpcClient.echo.echoClientStream(clientStream.pipe(transformBuffObj()));
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex')).toString();
+    const result = await grpcClient.echoClientStream(toAsync([{
+      message: buffer
+    }]));
 
     expect(result).toHaveProperty('message');
-    expect(result.message).toEqual(buffer.toString('utf-8'));
+    expect(result.message).toEqual(buffer);
     return Promise.resolve({});
   });
 
   it('should send request and receive a server-stream response', async () => {
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-    const result = await grpcClient.echo.echoServerStream({
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex')).toString();
+    const result = grpcClient.echoServerStream({
       message: buffer
     });
-    let response = '';
-    result.on('data', (data) => {
-      response += data.message;
-    });
 
-    await new Promise((resolve, reject) => {
-      result.on('end', () => {
-        resolve(0);
-      });
-    });
-    expect(response).toEqual(buffer.toString('utf-8'));
+    let response = '';
+    for await (const data of result) {
+      response += data.message;
+    }
+
+    expect(response).toEqual(buffer);
     return Promise.resolve({});
   });
 
-  it('should send observable client-stream request and receive response', async () => {
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-
-    const result = await observableGrpcClient.echo.echoClientStream(bufferToObservable(buffer));
-
-    expect(result).toHaveProperty('message');
-    expect(result.message).toEqual(buffer.toString('utf-8'));
-  });
-
-  it('should send request and receive a observable server-stream response', async () => {
-    let done: (value?: any) => void;
-    const callbackResolved = new Promise((resolve) => { done = resolve; });
-
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-
-    const result = await observableGrpcClient.echo.echoServerStream({
-      message: buffer
-    });
-
-    let response = '';
-    result.subscribe(data => {
-      expect(data).toHaveProperty('message');
-      response += data.message;
-    }, undefined, () => {
-      expect(response).toEqual(buffer.toString('utf-8'));
-      done();
-    });
-    await callbackResolved;
-  });
-
   it('should send and receive a bidi-stream request', async () => {
-    let done: (value?: any) => void;
-    const callbackResolved = new Promise((resolve) => { done = resolve; });
+    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex')).toString();
 
-    const buffer = Buffer.from(randomBytes(1 << 16).toString('hex'));
-
-    const result = await grpcClient.echo.echoBidiStream(bufferToObservable(buffer));
+    const result = grpcClient.echoBidiStream(toAsync([{
+      message: buffer
+    }]));
 
     let response = '';
-    result.subscribe(data => {
-      expect(data).toHaveProperty('message');
+    for await (const data of result) {
       response += data.message;
-    }, undefined, () => {
-      expect(response).toEqual(buffer.toString('utf-8'));
-      done();
-    })
-    await callbackResolved;
+    }
+
+    expect(response).toEqual(buffer);
   });
 });

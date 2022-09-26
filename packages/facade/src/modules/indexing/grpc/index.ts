@@ -1,16 +1,18 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata,
-  protobufPackage,
-  Service
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient,
+  ServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IndexingSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly search: ServiceClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.search = this.createClient(cfg, ServiceDefinition, this.channel);
   }
-  search = getGRPCService<Service>(this, protobufPackage, protoMetadata.fileDescriptor.service![0]);
+
 }

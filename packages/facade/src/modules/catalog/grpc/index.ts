@@ -1,41 +1,42 @@
-import { RestoreCommerceGrpcClient } from "@restorecommerce/rc-grpc-clients";
+import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  protoMetadata as productMetaService,
-  protobufPackage as productProtobufPackage,
-  Service as productService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product";
+  ServiceClient as productClient,
+  ServiceDefinition as productService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product';
 import {
-  protoMetadata as product_prototypeMetaService,
-  protobufPackage as product_prototypeProtobufPackage,
-  Service as product_prototypeService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype";
+  ServiceClient as product_prototypeClient,
+  ServiceDefinition as product_prototypeService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype';
 import {
-  protoMetadata as product_categoryMetaService,
-  protobufPackage as product_categoryProtobufPackage,
-  Service as product_categoryService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category";
+  ServiceClient as product_categoryClient,
+  ServiceDefinition as product_categoryService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category';
 import {
-  protoMetadata as price_groupMetaService,
-  protobufPackage as price_groupProtobufPackage,
-  Service as price_groupService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group";
+  ServiceClient as price_groupClient,
+  ServiceDefinition as price_groupService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group';
 import {
-  protoMetadata as manufacturerMetaService,
-  protobufPackage as manufacturerProtobufPackage,
-  Service as manufacturerService
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer";
-import { getGRPCService } from "../../../gql/protos";
-import { GrpcClientConfig } from "@restorecommerce/grpc-client";
-import { Logger } from "winston";
+  ServiceClient as manufacturerClient,
+  ServiceDefinition as manufacturerService
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer';
+import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
-  constructor(cfg: GrpcClientConfig, logger: Logger) {
-    super(cfg, logger);
+
+  readonly product: productClient;
+  readonly product_prototype: product_prototypeClient;
+  readonly product_category: product_categoryClient;
+  readonly price_group: price_groupClient;
+  readonly manufacturer: manufacturerClient;
+
+  constructor(address: string, cfg: GrpcClientConfig) {
+    super(address, cfg);
+
+    this.product = this.createClient(cfg, productService, this.channel);
+    this.product_prototype = this.createClient(cfg, product_prototypeService, this.channel);
+    this.product_category = this.createClient(cfg, product_categoryService, this.channel);
+    this.price_group = this.createClient(cfg, price_groupService, this.channel);
+    this.manufacturer = this.createClient(cfg, manufacturerService, this.channel);
   }
 
-  product = getGRPCService<productService>(this, productProtobufPackage, productMetaService.fileDescriptor.service![0]);
-  product_prototype = getGRPCService<product_prototypeService>(this, product_prototypeProtobufPackage, product_prototypeMetaService.fileDescriptor.service![0]);
-  product_category = getGRPCService<product_categoryService>(this, product_categoryProtobufPackage, product_categoryMetaService.fileDescriptor.service![0]);
-  price_group = getGRPCService<price_groupService>(this, price_groupProtobufPackage, price_groupMetaService.fileDescriptor.service![0]);
-  manufacturer = getGRPCService<manufacturerService>(this, manufacturerProtobufPackage, manufacturerMetaService.fileDescriptor.service![0]);
 }

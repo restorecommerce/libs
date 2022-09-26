@@ -1,7 +1,7 @@
 import { Adapter, errors, Provider } from 'oidc-provider';
 import { IdentityContext } from '../interfaces';
-import { Service as authLogService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
-import { Service as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { ServiceClient as authLogService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
+import { ServiceClient as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
 import { User } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
 
 export interface OIDCHbsTemplates {

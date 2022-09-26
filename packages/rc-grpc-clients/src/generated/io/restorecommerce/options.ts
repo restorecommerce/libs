@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
 import { protoMetadata as protoMetadata1 } from "../../google/protobuf/descriptor";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.options";
 
@@ -12,6 +11,14 @@ export interface Resolver {
   targetSubService: string;
   targetMethod: string;
   fieldName: string;
+}
+
+export interface KafkaSubscription {
+  plural: string;
+  topic: string;
+  created: string;
+  updated: string;
+  deleted: string;
 }
 
 function createBaseResolver(): Resolver {
@@ -113,6 +120,94 @@ export const Resolver = {
     message.targetSubService = object.targetSubService ?? "";
     message.targetMethod = object.targetMethod ?? "";
     message.fieldName = object.fieldName ?? "";
+    return message;
+  },
+};
+
+function createBaseKafkaSubscription(): KafkaSubscription {
+  return { plural: "", topic: "", created: "", updated: "", deleted: "" };
+}
+
+export const KafkaSubscription = {
+  encode(
+    message: KafkaSubscription,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.plural !== "") {
+      writer.uint32(10).string(message.plural);
+    }
+    if (message.topic !== "") {
+      writer.uint32(18).string(message.topic);
+    }
+    if (message.created !== "") {
+      writer.uint32(26).string(message.created);
+    }
+    if (message.updated !== "") {
+      writer.uint32(34).string(message.updated);
+    }
+    if (message.deleted !== "") {
+      writer.uint32(42).string(message.deleted);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): KafkaSubscription {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseKafkaSubscription();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.plural = reader.string();
+          break;
+        case 2:
+          message.topic = reader.string();
+          break;
+        case 3:
+          message.created = reader.string();
+          break;
+        case 4:
+          message.updated = reader.string();
+          break;
+        case 5:
+          message.deleted = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): KafkaSubscription {
+    return {
+      plural: isSet(object.plural) ? String(object.plural) : "",
+      topic: isSet(object.topic) ? String(object.topic) : "",
+      created: isSet(object.created) ? String(object.created) : "",
+      updated: isSet(object.updated) ? String(object.updated) : "",
+      deleted: isSet(object.deleted) ? String(object.deleted) : "",
+    };
+  },
+
+  toJSON(message: KafkaSubscription): unknown {
+    const obj: any = {};
+    message.plural !== undefined && (obj.plural = message.plural);
+    message.topic !== undefined && (obj.topic = message.topic);
+    message.created !== undefined && (obj.created = message.created);
+    message.updated !== undefined && (obj.updated = message.updated);
+    message.deleted !== undefined && (obj.deleted = message.deleted);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<KafkaSubscription>): KafkaSubscription {
+    const message = createBaseKafkaSubscription();
+    message.plural = object.plural ?? "";
+    message.topic = object.topic ?? "";
+    message.created = object.created ?? "";
+    message.updated = object.updated ?? "";
+    message.deleted = object.deleted ?? "";
     return message;
   },
 };
@@ -234,6 +329,84 @@ export const protoMetadata: ProtoMetadata = {
         reservedRange: [],
         reservedName: [],
       },
+      {
+        name: "KafkaSubscription",
+        field: [
+          {
+            name: "plural",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "plural",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "topic",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "topic",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "created",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "created",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "updated",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "updated",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "deleted",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "deleted",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
     ],
     enumType: [],
     service: [],
@@ -249,7 +422,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "resolver",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
       },
       {
         name: "is_query",
@@ -262,7 +435,7 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "isQuery",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
       },
       {
         name: "service_name",
@@ -275,14 +448,30 @@ export const protoMetadata: ProtoMetadata = {
         oneofIndex: 0,
         jsonName: "serviceName",
         options: undefined,
-        proto3Optional: true,
+        proto3Optional: false,
+      },
+      {
+        name: "kafka_subscriber",
+        number: 31003,
+        label: 1,
+        type: 11,
+        typeName: ".io.restorecommerce.options.KafkaSubscription",
+        extendee: ".google.protobuf.MessageOptions",
+        defaultValue: "",
+        oneofIndex: 0,
+        jsonName: "kafkaSubscriber",
+        options: undefined,
+        proto3Optional: false,
       },
     ],
     options: undefined,
     sourceCodeInfo: { location: [] },
     syntax: "proto3",
   }),
-  references: { ".io.restorecommerce.options.Resolver": Resolver },
+  references: {
+    ".io.restorecommerce.options.Resolver": Resolver,
+    ".io.restorecommerce.options.KafkaSubscription": KafkaSubscription,
+  },
   dependencies: [protoMetadata1],
 };
 
@@ -304,13 +493,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -1,26 +1,20 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Subject,
-  protoMetadata as protoMetadata3,
-} from "../../io/restorecommerce/auth";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
 import {
   OperationStatus,
   Status,
   protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  Meta,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/meta";
+} from "./status";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import {
   protoMetadata as protoMetadata1,
-  DeleteResponse,
   ReadRequest,
   DeleteRequest,
-} from "../../io/restorecommerce/resource_base";
+  DeleteResponse,
+} from "./resource_base";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.notification_channel";
 
@@ -505,17 +499,97 @@ export const NotificationChannel = {
 };
 
 /** Message structure for Notification Channel */
-export interface Service {
-  Read(request: ReadRequest): Promise<NotificationChannelListResponse>;
-  Create(
-    request: NotificationChannelList
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.notification_channel.Service",
+  methods: {
+    read: {
+      name: "Read",
+      requestType: ReadRequest,
+      requestStream: false,
+      responseType: NotificationChannelListResponse,
+      responseStream: false,
+      options: {},
+    },
+    create: {
+      name: "Create",
+      requestType: NotificationChannelList,
+      requestStream: false,
+      responseType: NotificationChannelListResponse,
+      responseStream: false,
+      options: {},
+    },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    update: {
+      name: "Update",
+      requestType: NotificationChannelList,
+      requestStream: false,
+      responseType: NotificationChannelListResponse,
+      responseStream: false,
+      options: {},
+    },
+    upsert: {
+      name: "Upsert",
+      requestType: NotificationChannelList,
+      requestStream: false,
+      responseType: NotificationChannelListResponse,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<NotificationChannelListResponse>>;
+  create(
+    request: NotificationChannelList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<NotificationChannelListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: NotificationChannelList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<NotificationChannelListResponse>>;
+  upsert(
+    request: NotificationChannelList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<NotificationChannelListResponse>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<NotificationChannelListResponse>;
-  Delete(request: DeleteRequest): Promise<DeleteResponse>;
-  Update(
-    request: NotificationChannelList
+  create(
+    request: DeepPartial<NotificationChannelList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<NotificationChannelListResponse>;
-  Upsert(
-    request: NotificationChannelList
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<NotificationChannelList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<NotificationChannelListResponse>;
+  upsert(
+    request: DeepPartial<NotificationChannelList>,
+    options?: CallOptions & CallOptionsExt
   ): Promise<NotificationChannelListResponse>;
 }
 
@@ -948,13 +1022,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

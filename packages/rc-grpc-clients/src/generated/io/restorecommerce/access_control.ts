@@ -1,28 +1,16 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import * as Long from "long";
-import * as _m0 from "protobufjs/minimal";
-import {
-  Target,
-  protoMetadata as protoMetadata2,
-} from "../../io/restorecommerce/rule";
+import { Target, protoMetadata as protoMetadata2 } from "./rule";
 import {
   Any,
   protoMetadata as protoMetadata1,
 } from "../../google/protobuf/any";
-import {
-  OperationStatus,
-  protoMetadata as protoMetadata4,
-} from "../../io/restorecommerce/status";
-import {
-  protoMetadata as protoMetadata3,
-  PolicySetRQ,
-} from "../../io/restorecommerce/policy_set";
-import {
-  protoMetadata as protoMetadata5,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
-import { protoMetadata as protoMetadata6 } from "../../io/restorecommerce/options";
+import { OperationStatus, protoMetadata as protoMetadata4 } from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata3, PolicySetRQ } from "./policy_set";
+import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
+import { protoMetadata as protoMetadata6 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.access_control";
 
@@ -477,9 +465,50 @@ export const ReverseQuery = {
   },
 };
 
-export interface Service {
-  IsAllowed(request: Request): Promise<Response>;
-  WhatIsAllowed(request: Request): Promise<ReverseQuery>;
+export type ServiceDefinition = typeof ServiceDefinition;
+export const ServiceDefinition = {
+  name: "Service",
+  fullName: "io.restorecommerce.access_control.Service",
+  methods: {
+    isAllowed: {
+      name: "IsAllowed",
+      requestType: Request,
+      requestStream: false,
+      responseType: Response,
+      responseStream: false,
+      options: {},
+    },
+    whatIsAllowed: {
+      name: "WhatIsAllowed",
+      requestType: Request,
+      requestStream: false,
+      responseType: ReverseQuery,
+      responseStream: false,
+      options: {},
+    },
+  },
+} as const;
+
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  isAllowed(
+    request: Request,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Response>>;
+  whatIsAllowed(
+    request: Request,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ReverseQuery>>;
+}
+
+export interface ServiceClient<CallOptionsExt = {}> {
+  isAllowed(
+    request: DeepPartial<Request>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Response>;
+  whatIsAllowed(
+    request: DeepPartial<Request>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ReverseQuery>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -845,13 +874,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

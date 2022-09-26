@@ -900,6 +900,27 @@ export type IIoRestorecommerceTokenGrantId = {
   grantId?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  identityUsers?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionIdentityUsersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -1071,6 +1092,9 @@ export type ResolversTypes = ResolversObject<{
   IdentityTokenMutation: ResolverTypeWrapper<IdentityTokenMutation>;
   IIoRestorecommerceTokenTokenData: IIoRestorecommerceTokenTokenData;
   IIoRestorecommerceTokenGrantId: IIoRestorecommerceTokenGrantId;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1167,6 +1191,8 @@ export type ResolversParentTypes = ResolversObject<{
   IdentityTokenMutation: IdentityTokenMutation;
   IIoRestorecommerceTokenTokenData: IIoRestorecommerceTokenTokenData;
   IIoRestorecommerceTokenGrantId: IIoRestorecommerceTokenGrantId;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -1563,6 +1589,15 @@ export type IdentityTokenMutationResolvers<ContextType = IdentityContext, Parent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  identityUsers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "identityUsers", ParentType, ContextType, Partial<SubscriptionIdentityUsersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   IdentityQuery?: IdentityQueryResolvers<ContextType>;
@@ -1620,5 +1655,7 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IdentityRoleMutation?: IdentityRoleMutationResolvers<ContextType>;
   IdentityAuthenticationLogMutation?: IdentityAuthenticationLogMutationResolvers<ContextType>;
   IdentityTokenMutation?: IdentityTokenMutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

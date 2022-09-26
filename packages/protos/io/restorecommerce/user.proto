@@ -258,6 +258,14 @@ message FindByRoleRequest {
  * A User resource.
  */
 message User {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "users"
+    topic: "io.restorecommerce.users.resource"
+    created: "userCreated"
+    updated: "userUpdated"
+    deleted: "userDeleted"
+  };
+
   string id = 1; /// User ID, unique, key
   io.restorecommerce.meta.Meta meta = 2;
   string name = 3; // The name of the user, can be used for login

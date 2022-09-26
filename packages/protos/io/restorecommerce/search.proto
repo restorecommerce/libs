@@ -3,9 +3,12 @@ package io.restorecommerce.search;
 
 import "google/protobuf/any.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/options.proto";
 
 // Service provides the CRUD operations
 service Service {
+  option (io.restorecommerce.options.service_name) = "search";
+
   rpc Search (SearchRequest) returns (SearchResponse);
 }
 

@@ -1,11 +1,7 @@
 /* eslint-disable */
 import { FileDescriptorProto } from "ts-proto-descriptors";
-import * as Long from "long";
+import { protoMetadata as protoMetadata1, Attribute } from "./attribute";
 import * as _m0 from "protobufjs/minimal";
-import {
-  protoMetadata as protoMetadata1,
-  Attribute,
-} from "../../io/restorecommerce/attribute";
 
 export const protobufPackage = "io.restorecommerce.auth";
 
@@ -1238,13 +1234,6 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

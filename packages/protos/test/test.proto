@@ -5,6 +5,7 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/auth.proto";
 
 service Test {
   rpc Test (TestRequest) returns (TestResponse);
@@ -22,6 +23,14 @@ service Stream {
   rpc BiStream (stream TestRequest) returns (stream StreamTestResponse);
   rpc ResponseStream (TestRequest) returns (stream StreamTestResponse);
   rpc RequestStream (stream TestRequest) returns (TestResponse);
+}
+
+service CRUD {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ResourceListResponse);
+  rpc Create (ResourceList) returns (ResourceListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (ResourceList) returns (ResourceListResponse);
+  rpc Upsert (ResourceList) returns (ResourceListResponse);
 }
 
 message TestRequest {
@@ -68,4 +77,33 @@ message TestBufferedDataListResponse {
 
 message ExtendMe {
   int32 bar = 126;
+}
+
+message ResourceList {
+  repeated Resource items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ResourceListResponse {
+  repeated ResourceResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message ResourceResponse {
+  Resource payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+/// Example resource
+message Resource {
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  int32 value = 3;
+  string text = 4;
+  bool active = 5;
+  double created = 6;
+  string status = 7;
+  optional google.protobuf.Any data = 8;
 }

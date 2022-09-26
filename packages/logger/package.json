@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/logger",
-  "version": "0.13.1",
+  "version": "1.0.0",
   "description": "Opinionated wrapper and configurator for the winston logging toolkit",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -19,7 +19,7 @@
     "cls-hooked": "^4.2.2",
     "cls-rtracer": "^2.6.0",
     "source-map-support": "^0.5.21",
-    "winston": "^3.7.2",
+    "winston": "^3.8.1",
     "winston-elasticsearch": "^0.17.1"
   },
   "devDependencies": {

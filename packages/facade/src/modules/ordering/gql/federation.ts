@@ -2,7 +2,7 @@ import { gql } from "apollo-server-koa";
 import { buildFederatedSchema } from "@apollo/federation";
 import { schema } from "./schema";
 import { namespace, OrderingServiceConfig } from "../interfaces";
-import { generateSubServiceResolvers } from "../../../gql/protos/graphql";
+import { generateSubServiceResolvers } from "../../../gql/protos";
 import { subServices } from "./types";
 import { printSchema } from "graphql";
 

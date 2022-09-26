@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/koa-req-res-logger",
-  "version": "0.1.19",
+  "version": "1.0.0",
   "description": "Koa 2 middleware which logs incoming requests and outgoing responses",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "winston": "^3.7.2"
+    "winston": "^3.8.1"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.1",

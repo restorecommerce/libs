@@ -1,10 +1,10 @@
 import * as retry from 'retry';
 import * as _ from 'lodash';
 import { EventEmitter } from 'events';
-import * as protobuf from 'protobufjs';
 import * as async from 'async';
 import { Logger } from 'winston';
 import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer } from 'kafkajs';
+import { decodeMessage, encodeMessage } from '../../../protos';
 
 const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
   return (origin: string, target: string): string => {
@@ -431,8 +431,7 @@ export class Topic {
         eventName, message);
       if (decodedMsg) {
         decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // hack around messy protobuf.js object
-        this.provider.logger.info(`kafka received event with
-        topic ${context.topic} and event name ${eventName}`);
+        this.provider.logger.info(`kafka received event with topic ${context.topic} and event name ${eventName}`);
         this.emitter.emit(eventName, decodedMsg, context,
           this.config, eventName);
       }
@@ -598,20 +597,12 @@ export class Kafka {
   /**
    * Encode the given message object using protobuf.js.
    *
-   * @param  {string} eventName
    * @param  {Object} msg
-   * @param  {string} protoFilePath
    * @param  {string} messageObject
-   * @param  {string} protoRoot
    * @return {Object} buffer
    */
-  private static encodeObject(eventName: string, msg: Object, protoFilePath: string, messageObject: string, protoRoot: string): Uint8Array {
-    let root = new protobuf.Root();
-    root.resolvePath = makeProtoResolver(protoFilePath, protoRoot);
-    root = root.loadSync(protoFilePath, {keepCase: true});
-    const MessageClass: protobuf.Type = root.lookupType(messageObject);
-    const convertedMessage: protobuf.Message<Object> = MessageClass.create(msg);
-    return MessageClass.encode(convertedMessage).finish();
+  private static encodeObject(msg: Object, messageObject: string): Uint8Array {
+    return encodeMessage(msg, messageObject);
   }
 
   /**
@@ -620,23 +611,12 @@ export class Kafka {
    * @param eventName
    * @param msg
    */
-  decodeObject(config: any, eventName: string, msg: any): protobuf.Message<Object> {
-    const protoFilePath = config[eventName].protoRoot + config[eventName].protos;
-    const protoRoot = config[eventName].protoRoot;
-    const messageObject = config[eventName].messageObject;
-
-    let root = new protobuf.Root();
-    root.resolvePath = makeProtoResolver(protoFilePath, protoRoot);
-    root = root.loadSync(protoFilePath, {keepCase: true});
-
-    const MessageClass = root.lookupType(messageObject);
-    let decodedMsg;
+  decodeObject(config: any, eventName: string, msg: any): any {
     try {
-      decodedMsg = MessageClass.decode(msg);
+      return decodeMessage(msg, config[eventName].messageObject);
     } catch (err) {
       this.logger.error(`error on decoding message with event ${eventName}`, { message: msg, errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
     }
-    return decodedMsg;
   }
 
   /**
@@ -649,7 +629,6 @@ export class Kafka {
    */
   async $send(topicName: string, eventName: string, message: any): Promise<any> {
     let messages = message;
-    const protoFilePath = this.config[eventName].protoRoot + this.config[eventName].protos;
     const messageObject = this.config[eventName].messageObject;
     if (!_.isArray(message)) {
       messages = [message];
@@ -660,8 +639,7 @@ export class Kafka {
         //  get the binary representation of the message using serializeBinary()
         //  and build a Buffer from it.
         const msg = messages[i];
-        const bufferObj = Kafka.encodeObject(eventName, msg,
-          protoFilePath, messageObject, this.config[eventName].protoRoot);
+        const bufferObj = Kafka.encodeObject(msg, messageObject);
 
         values.push({
           key: eventName,

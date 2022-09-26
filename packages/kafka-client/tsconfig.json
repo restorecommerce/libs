@@ -10,7 +10,8 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "sourceMap": true
   },
   "include": [
      "./src/**/*.ts"

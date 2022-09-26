@@ -80,7 +80,20 @@ message ContactPerson {
 
 message Address {
   io.restorecommerce.address.Address address = 1;
-  ContactPerson contact_person = 2;
+  oneof address_type {
+    string shipping_address_id = 1 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.address.Address",
+        target_service: "resource",
+        target_sub_service: "address",
+        target_method: "Read",
+        field_name: "shippingAddress",
+      }
+    ];
+    //However, it will always resolve to a persistent address in storage!
+    io.restorecommerce.address.Address address = 2;
+  }
+  ContactPerson contact_person = 3;
 }
 
 message Item {
@@ -129,6 +142,12 @@ message Fulfillment {
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   State state = 5;
+}
+
+message FulfillmentList {
+  repeated Fulfillment items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message FulfillmentRequest {

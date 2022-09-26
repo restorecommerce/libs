@@ -64,6 +64,14 @@ message Item {
   Database Entity
 */
 message Order {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "orders"
+    topic: "io.restorecommerce.orders.resource"
+    created: "orderCreated"
+    updated: "orderUpdated"
+    deleted: "orderDeleted"
+  };
+
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string name = 3;
@@ -82,7 +90,7 @@ message Order {
         field_name: "shippingAddress",
       }
     ];
-    //However, it will always resolve to on shipping_address storage!
+    //However, it will always resolve to a persistent shipping_address in storage!
     io.restorecommerce.address.Address shipping_address = 11;
   }
   oneof billing_contact_point_type {
@@ -95,7 +103,7 @@ message Order {
         field_name: "billingContactPoint",
       }
     ];
-    //However, it will always resolve to on billing_address storage!
+    //However, it will always resolve to a persistent billing_address in storage!
     io.restorecommerce.address.Address billing_address = 13;
   }
   string billing_email = 14;
@@ -108,7 +116,19 @@ message ShippingDetails {
   string export_type = 1;
   string export_description = 2;
   string invoice_number = 3;
-  io.restorecommerce.address.Address sender_address = 5;
+  oneof sender_address_type {
+    string sender_address_id = 4[
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.address.Address",
+        target_service: "resource",
+        target_sub_service: "address",
+        target_method: "Read",
+        field_name: "senderAddress",
+      }
+    ];
+    //However, it will always resolve to a persistent sender_address in storage!
+    io.restorecommerce.address.Address sender_address = 5;
+  }
 }
 
 message TriggerFulfillmentRequest {

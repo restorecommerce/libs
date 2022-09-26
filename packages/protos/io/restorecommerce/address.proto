@@ -78,22 +78,18 @@ message Address {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string postcode = 3;
-  oneof country_type {
-    string country_id = 4 [
-      (io.restorecommerce.options.resolver) = {
-        target_type: ".io.restorecommerce.country.Country",
-        target_service: "resource",
-        target_sub_service: "country",
-        target_method: "Read",
-        field_name: "country",
-      }
-    ];
-    io.restorecommerce.country.Country country = 5;
-  }
+  string country_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.country.Country",
+      target_service: "resource",
+      target_sub_service: "country",
+      target_method: "Read",
+      field_name: "country",
+    }
+  ];
   string locality = 6;
   string street = 7;
   string region = 8;
-
   GeoPoint geo_coordinates = 9;
   double altitude = 10;
   string building_number = 11;

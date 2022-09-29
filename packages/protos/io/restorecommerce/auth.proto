@@ -7,12 +7,9 @@ import "io/restorecommerce/attribute.proto";
  * Subject of creating User
  */
 message Subject {
-  string id = 1; // user id
-  string scope = 2; // target scope
-  repeated RoleAssociation role_associations = 3; //  role_associations of user creating the user
-  repeated HierarchicalScope hierarchical_scopes = 4; // HR scope of user creating the User
-  bool unauthenticated = 5; // for unauthenticated context
-  string token = 6;
+  string scope = 1; // target scope (ID of the target scoping entity)
+  bool unauthenticated = 2; // for unauthenticated context
+  string token = 3;
 }
 
 message Tokens {

@@ -7,9 +7,10 @@ import "io/restorecommerce/attribute.proto";
  * Subject of creating User
  */
 message Subject {
-  string scope = 1; // target scope (ID of the target scoping entity)
-  bool unauthenticated = 2; // for unauthenticated context
-  string token = 3;
+  string id = 1; // user id
+  string scope = 2; // target scope (ID of the target scoping entity)
+  bool unauthenticated = 3; // for unauthenticated context
+  string token = 4;
 }
 
 message Tokens {

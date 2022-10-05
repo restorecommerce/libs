@@ -4,6 +4,8 @@ import * as uuid from 'uuid';
 import { Topic } from '@restorecommerce/kafka-client';
 import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
+import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
+import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 
 let redisClient: any;
 
@@ -185,14 +187,15 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read(filter: Object = {}, limit = 1000, offset = 0,
-    sort: any = {}, field: any = {}, customQueries: string[] = [], customArgs: any = {}): Promise<BaseDocument[]> {
+    sort: any = {}, field: any = {}, customQueries: string[] = [], customArgs: any = {}, search: DeepPartial<Search>): Promise<BaseDocument[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
       sort,
       fields: field,
       customQueries,
-      customArguments: customArgs.value ? JSON.parse(customArgs.value.toString()) : {}
+      customArguments: customArgs.value ? JSON.parse(customArgs.value.toString()) : {},
+      search
     };
     let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferField) {

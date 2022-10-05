@@ -1,0 +1,72 @@
+{
+    "view": {
+      "collectionName": "resources",
+      "viewName": "resources_view",
+      "similarityThreshold": 0.1,
+      "options": {
+        "links": {
+          "resources": {
+            "includeAllFields": true,
+            "fields": {
+              "text": {
+                "analyzers": [
+                  "trigram",
+                  "trigram_norm"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "analyzers": [
+      "trigram",
+      "trigram_norm"
+    ],
+    "analyzerOptions": [
+      {
+        "trigram": {
+          "type": "ngram",
+          "properties": {
+            "min": 3,
+            "max": 3,
+            "preserveOriginal": true
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      },
+      {
+        "trigram_norm": {
+          "type": "pipeline",
+          "properties": {
+            "pipeline": [
+              {
+                "type": "norm",
+                "properties": {
+                  "locale": "de.utf-8",
+                  "case": "lower"
+                }
+              },
+              {
+                "type": "ngram",
+                "properties": {
+                  "min": 3,
+                  "max": 3,
+                  "preserveOriginal": true
+                }
+              }
+            ]
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      }
+    ]
+  }

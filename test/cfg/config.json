@@ -5,7 +5,13 @@
       "host": "127.0.0.1",
       "port": 8529,
       "database": "resource-base-test",
-      "autoCreate": true
+      "autoCreate": true,
+      "arangoSearch": [
+        {
+          "collectionName": "resources",
+          "path": "test/views/resources_view.json"
+        }
+      ]
     }
   },
   "graph": {
@@ -112,7 +118,7 @@
     "logger": {
       "console": {
         "handleExceptions": false,
-        "level": "silly",
+        "level": "error",
         "colorize": true,
         "prettyPrint": true
       }

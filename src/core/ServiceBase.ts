@@ -63,16 +63,6 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
    */
   async read(request: ReadRequest, context): Promise<DeepPartial<T>> {
     let docs: any = {};
-    if (!_.isEmpty(request.search)) {
-      return {
-        ...docs,
-        operation_status: {
-          code: 404,
-          message: 'Full-text search is not implemented'
-        }
-      };
-    }
-
     try {
       let objectEntities = [];
       let sort;
@@ -110,6 +100,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       });
       const customQueries = request.custom_queries;
       const customArgs = request.custom_arguments || {};
+      const search = request?.search;
 
       objectEntities = (await this.resourceapi.read(
         filter,
@@ -118,7 +109,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         sort,
         field,
         customQueries,
-        customArgs
+        customArgs,
+        search
       )) || [];
 
       let readResponseWithStatus = [];

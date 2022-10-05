@@ -17,7 +17,7 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "^1.0.2",
+    "@restorecommerce/chassis-srv": "^1.1.0",
     "@restorecommerce/grpc-client": "^1.0.1",
     "@restorecommerce/kafka-client": "^1.0.2",
     "@restorecommerce/rc-grpc-clients": "^1.1.0",
@@ -41,6 +41,7 @@
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "should": "^13.2.3",
+    "sleep": "^6.3.0",
     "ts-node": "^10.9.1",
     "tslint": "^6.1.3",
     "typescript": "^4.8.4"

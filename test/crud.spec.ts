@@ -11,13 +11,14 @@ import {
   Filter_Operation,
   Filter_ValueType,
   protoMetadata as resourceProto,
-  Sort_SortOrder
+  Sort_SortOrder,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   protoMetadata as testProto,
   CRUDDefinition,
   CRUDClient
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
+const sleep = require('sleep');
 
 registerProtoMeta(
   resourceProto,
@@ -284,11 +285,10 @@ describe('ServiceBase', () => {
     beforeEach(async () => {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
-      const now: number = Date.now();
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'a xy', active: true, created: today.getTime(), status: 'GOOD', data: undefined },
+        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today.getTime(), status: 'GOOD', data: undefined },
         { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD', data: undefined },
-        { id: 'test_zy', meta, value: 12, text: 'yz test data', active: false, created: tomorrow.getTime(), status: 'UNKNOWN', data: undefined }];
+        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow.getTime(), status: 'UNKNOWN', data: undefined }];
       await db.insert('resources', testData);
     });
     describe('read', () => {
@@ -514,7 +514,7 @@ describe('ServiceBase', () => {
         }), 'id'));
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
-      });
+      }).timeout(4000);
       it('should return elements only with field value', async () => {
         const result = await testService.read({
           field: [{
@@ -572,6 +572,44 @@ describe('ServiceBase', () => {
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
       });
+      it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
+        await sleep.sleep(2);
+        const result = await testService.read({
+          search: {
+            search: 'EaRc' // will match search text from above `text` data and return 2 documents
+          }
+        });
+        result.items.length.should.equal(2);
+        result.items[0].payload.id.should.equal('test_xy');
+        result.items[0].payload.text.should.equal('first simple sentence for searching');
+        result.items[1].payload.id.should.equal('test_zy');
+        result.items[1].payload.text.should.equal('third search data string');
+      }).timeout(3000);
+
+      it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
+        await sleep.sleep(2);
+        const result = await testService.read({
+          search: {
+            search: 'data' // will match search text from above `text` data and return 2 documents
+          }
+        });
+        result.items.length.should.equal(2);
+        result.items[0].payload.id.should.equal('test_xyz');
+        result.items[0].payload.text.should.equal('second test data');
+        result.items[1].payload.id.should.equal('test_zy');
+        result.items[1].payload.text.should.equal('third search data string');
+      }).timeout(3000);
+
+      it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
+        await sleep.sleep(2);
+        const result = await testService.read({
+          search: {
+            search: 'DATA', // will match search text from above `text` data and return 2 documents
+            case_sensitive: true
+          }
+        });
+        result.items.length.should.equal(0);
+      }).timeout(3000);
     });
     describe('create', () => {
       it('should create new documents and validate duplicate element error', async () => {

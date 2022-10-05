@@ -584,7 +584,7 @@ describe('ServiceBase', () => {
         result.items[0].payload.text.should.equal('first simple sentence for searching');
         result.items[1].payload.id.should.equal('test_zy');
         result.items[1].payload.text.should.equal('third search data string');
-      }).timeout(3000);
+      }).timeout(5000);
 
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
         await sleep.sleep(2);
@@ -598,7 +598,7 @@ describe('ServiceBase', () => {
         result.items[0].payload.text.should.equal('second test data');
         result.items[1].payload.id.should.equal('test_zy');
         result.items[1].payload.text.should.equal('third search data string');
-      }).timeout(3000);
+      }).timeout(5000);
 
       it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
         await sleep.sleep(2);
@@ -609,7 +609,7 @@ describe('ServiceBase', () => {
           }
         });
         result.items.length.should.equal(0);
-      }).timeout(3000);
+      }).timeout(5000);
     });
     describe('create', () => {
       it('should create new documents and validate duplicate element error', async () => {

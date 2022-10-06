@@ -59,9 +59,9 @@ message ContactPoint {
       field_name: "physicalAddress",
     }
   ];
-  string website = 4;
-  string email = 5;
-  string contact_point_type_id = 6 [
+  string website = 5;
+  string email = 6;
+  string contact_point_type_id = 7 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point_type.ContactPointType",
       target_service: "resource",

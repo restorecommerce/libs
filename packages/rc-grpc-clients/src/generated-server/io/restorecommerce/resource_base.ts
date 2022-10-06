@@ -313,15 +313,6 @@ export function filterOp_OperatorToNumber(object: FilterOp_Operator): number {
   }
 }
 
-export interface Search {
-  /** search string */
-  search: string;
-  /** list of fields to be searched on entity (if not specified all indexed fields will be searched) */
-  fields: string[];
-  /** default search is case insensitive */
-  case_sensitive: boolean;
-}
-
 export interface ReadRequest {
   offset: number;
   limit: number;
@@ -330,6 +321,7 @@ export interface ReadRequest {
   filters: FilterOp[];
   /** / Fields selector */
   field: FieldFilter[];
+  search: string[];
   /**
    * Check the query parameters of HTTP request.
    * If query parameter `locales` is given,
@@ -342,7 +334,6 @@ export interface ReadRequest {
   custom_queries: string[];
   custom_arguments?: Any;
   subject?: Subject;
-  search?: Search;
 }
 
 export interface DeleteRequest {
@@ -351,10 +342,6 @@ export interface DeleteRequest {
   /** / Delete specified documents */
   ids: string[];
   subject?: Subject;
-  /** list of views to be dropped */
-  view: string[];
-  /** list of analyzers to be deleted */
-  analyzer: string[];
 }
 
 export interface DeleteResponse {
@@ -691,85 +678,6 @@ export const FilterOp = {
   },
 };
 
-function createBaseSearch(): Search {
-  return { search: "", fields: [], case_sensitive: false };
-}
-
-export const Search = {
-  encode(
-    message: Search,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.search !== "") {
-      writer.uint32(10).string(message.search);
-    }
-    for (const v of message.fields) {
-      writer.uint32(18).string(v!);
-    }
-    if (message.case_sensitive === true) {
-      writer.uint32(24).bool(message.case_sensitive);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Search {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSearch();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.search = reader.string();
-          break;
-        case 2:
-          message.fields.push(reader.string());
-          break;
-        case 3:
-          message.case_sensitive = reader.bool();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Search {
-    return {
-      search: isSet(object.search) ? String(object.search) : "",
-      fields: Array.isArray(object?.fields)
-        ? object.fields.map((e: any) => String(e))
-        : [],
-      case_sensitive: isSet(object.case_sensitive)
-        ? Boolean(object.case_sensitive)
-        : false,
-    };
-  },
-
-  toJSON(message: Search): unknown {
-    const obj: any = {};
-    message.search !== undefined && (obj.search = message.search);
-    if (message.fields) {
-      obj.fields = message.fields.map((e) => e);
-    } else {
-      obj.fields = [];
-    }
-    message.case_sensitive !== undefined &&
-      (obj.case_sensitive = message.case_sensitive);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<Search>): Search {
-    const message = createBaseSearch();
-    message.search = object.search ?? "";
-    message.fields = object.fields?.map((e) => e) || [];
-    message.case_sensitive = object.case_sensitive ?? false;
-    return message;
-  },
-};
-
 function createBaseReadRequest(): ReadRequest {
   return {
     offset: 0,
@@ -777,11 +685,11 @@ function createBaseReadRequest(): ReadRequest {
     sort: [],
     filters: [],
     field: [],
+    search: [],
     locales_limiter: [],
     custom_queries: [],
     custom_arguments: undefined,
     subject: undefined,
-    search: undefined,
   };
 }
 
@@ -805,6 +713,9 @@ export const ReadRequest = {
     for (const v of message.field) {
       FieldFilter.encode(v!, writer.uint32(42).fork()).ldelim();
     }
+    for (const v of message.search) {
+      writer.uint32(50).string(v!);
+    }
     for (const v of message.locales_limiter) {
       writer.uint32(58).string(v!);
     }
@@ -816,9 +727,6 @@ export const ReadRequest = {
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(82).fork()).ldelim();
-    }
-    if (message.search !== undefined) {
-      Search.encode(message.search, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -845,6 +753,9 @@ export const ReadRequest = {
         case 5:
           message.field.push(FieldFilter.decode(reader, reader.uint32()));
           break;
+        case 6:
+          message.search.push(reader.string());
+          break;
         case 7:
           message.locales_limiter.push(reader.string());
           break;
@@ -856,9 +767,6 @@ export const ReadRequest = {
           break;
         case 10:
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.search = Search.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -881,6 +789,9 @@ export const ReadRequest = {
       field: Array.isArray(object?.field)
         ? object.field.map((e: any) => FieldFilter.fromJSON(e))
         : [],
+      search: Array.isArray(object?.search)
+        ? object.search.map((e: any) => String(e))
+        : [],
       locales_limiter: Array.isArray(object?.locales_limiter)
         ? object.locales_limiter.map((e: any) => String(e))
         : [],
@@ -893,7 +804,6 @@ export const ReadRequest = {
       subject: isSet(object.subject)
         ? Subject.fromJSON(object.subject)
         : undefined,
-      search: isSet(object.search) ? Search.fromJSON(object.search) : undefined,
     };
   },
 
@@ -920,6 +830,11 @@ export const ReadRequest = {
     } else {
       obj.field = [];
     }
+    if (message.search) {
+      obj.search = message.search.map((e) => e);
+    } else {
+      obj.search = [];
+    }
     if (message.locales_limiter) {
       obj.locales_limiter = message.locales_limiter.map((e) => e);
     } else {
@@ -938,8 +853,6 @@ export const ReadRequest = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
-    message.search !== undefined &&
-      (obj.search = message.search ? Search.toJSON(message.search) : undefined);
     return obj;
   },
 
@@ -950,6 +863,7 @@ export const ReadRequest = {
     message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
     message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
+    message.search = object.search?.map((e) => e) || [];
     message.locales_limiter = object.locales_limiter?.map((e) => e) || [];
     message.custom_queries = object.custom_queries?.map((e) => e) || [];
     message.custom_arguments =
@@ -960,22 +874,12 @@ export const ReadRequest = {
       object.subject !== undefined && object.subject !== null
         ? Subject.fromPartial(object.subject)
         : undefined;
-    message.search =
-      object.search !== undefined && object.search !== null
-        ? Search.fromPartial(object.search)
-        : undefined;
     return message;
   },
 };
 
 function createBaseDeleteRequest(): DeleteRequest {
-  return {
-    collection: false,
-    ids: [],
-    subject: undefined,
-    view: [],
-    analyzer: [],
-  };
+  return { collection: false, ids: [], subject: undefined };
 }
 
 export const DeleteRequest = {
@@ -991,12 +895,6 @@ export const DeleteRequest = {
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
-    }
-    for (const v of message.view) {
-      writer.uint32(34).string(v!);
-    }
-    for (const v of message.analyzer) {
-      writer.uint32(42).string(v!);
     }
     return writer;
   },
@@ -1017,12 +915,6 @@ export const DeleteRequest = {
         case 3:
           message.subject = Subject.decode(reader, reader.uint32());
           break;
-        case 4:
-          message.view.push(reader.string());
-          break;
-        case 5:
-          message.analyzer.push(reader.string());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1040,12 +932,6 @@ export const DeleteRequest = {
       subject: isSet(object.subject)
         ? Subject.fromJSON(object.subject)
         : undefined,
-      view: Array.isArray(object?.view)
-        ? object.view.map((e: any) => String(e))
-        : [],
-      analyzer: Array.isArray(object?.analyzer)
-        ? object.analyzer.map((e: any) => String(e))
-        : [],
     };
   },
 
@@ -1061,16 +947,6 @@ export const DeleteRequest = {
       (obj.subject = message.subject
         ? Subject.toJSON(message.subject)
         : undefined);
-    if (message.view) {
-      obj.view = message.view.map((e) => e);
-    } else {
-      obj.view = [];
-    }
-    if (message.analyzer) {
-      obj.analyzer = message.analyzer.map((e) => e);
-    } else {
-      obj.analyzer = [];
-    }
     return obj;
   },
 
@@ -1082,8 +958,6 @@ export const DeleteRequest = {
       object.subject !== undefined && object.subject !== null
         ? Subject.fromPartial(object.subject)
         : undefined;
-    message.view = object.view?.map((e) => e) || [];
-    message.analyzer = object.analyzer?.map((e) => e) || [];
     return message;
   },
 };
@@ -1883,58 +1757,6 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
-        name: "Search",
-        field: [
-          {
-            name: "search",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "search",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "fields",
-            number: 2,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "fields",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "case_sensitive",
-            number: 3,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "caseSensitive",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
         name: "ReadRequest",
         field: [
           {
@@ -2003,6 +1825,19 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
+            name: "search",
+            number: 6,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "search",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
             name: "locales_limiter",
             number: 7,
             label: 3,
@@ -2051,19 +1886,6 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "search",
-            number: 11,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.resourcebase.Search",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "search",
             options: undefined,
             proto3Optional: false,
           },
@@ -2116,32 +1938,6 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "view",
-            number: 4,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "view",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "analyzer",
-            number: 5,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "analyzer",
             options: undefined,
             proto3Optional: false,
           },
@@ -2453,102 +2249,66 @@ export const protoMetadata: ProtoMetadata = {
           leadingDetachedComments: [],
         },
         {
-          path: [4, 4, 2, 0],
-          span: [69, 2, 20],
-          leadingComments: "",
-          trailingComments: " search string\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 4, 2, 1],
-          span: [70, 2, 29],
-          leadingComments: "",
-          trailingComments:
-            " list of fields to be searched on entity (if not specified all indexed fields will be searched)\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 4, 2, 2],
-          span: [71, 2, 26],
-          leadingComments: "",
-          trailingComments: " default search is case insensitive\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5, 2, 3],
-          span: [80, 2, 32],
+          path: [4, 4, 2, 3],
+          span: [74, 2, 32],
           leadingComments:
             "/ Filter based on fieldName|operation, value|list\n",
           trailingComments: " repeated filters\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 5, 2, 4],
-          span: [83, 2, 33],
+          path: [4, 4, 2, 4],
+          span: [77, 2, 33],
           leadingComments: "/ Fields selector\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 5, 2, 5],
-          span: [92, 2, 38],
+          path: [4, 4, 2, 6],
+          span: [87, 2, 38],
           leadingComments:
             "* Check the query parameters of HTTP request.\n If query parameter `locales` is given,\n return all corresponding localized values.\n Otherwise, return always the localized value\n with highest priority.\n Can be empty, single locale or multiple locales.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 0],
-          span: [102, 2, 22],
+          path: [4, 5, 2, 0],
+          span: [96, 2, 22],
           leadingComments: "/ Request to purge the whole collection\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 1],
-          span: [104, 2, 26],
+          path: [4, 5, 2, 1],
+          span: [98, 2, 26],
           leadingComments: "/ Delete specified documents\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 3],
-          span: [106, 2, 27],
-          leadingComments: "",
-          trailingComments: " list of views to be dropped\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 6, 2, 4],
-          span: [107, 2, 31],
-          leadingComments: "",
-          trailingComments: " list of analyzers to be deleted\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8],
-          span: [116, 0, 120, 1],
+          path: [4, 7],
+          span: [108, 0, 112, 1],
           leadingComments: "/ List of resources\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 9],
-          span: [123, 0, 127, 1],
+          path: [4, 8],
+          span: [115, 0, 119, 1],
           leadingComments: " ResourceList response\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 10],
-          span: [130, 0, 133, 1],
+          path: [4, 9],
+          span: [122, 0, 125, 1],
           leadingComments: " resource read response\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 11],
-          span: [136, 0, 139, 1],
+          path: [4, 10],
+          span: [128, 0, 131, 1],
           leadingComments: "/ Example resource\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -2566,7 +2326,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.Filter.ValueType": Filter_ValueType,
     ".io.restorecommerce.resourcebase.FilterOp": FilterOp,
     ".io.restorecommerce.resourcebase.FilterOp.Operator": FilterOp_Operator,
-    ".io.restorecommerce.resourcebase.Search": Search,
     ".io.restorecommerce.resourcebase.ReadRequest": ReadRequest,
     ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
     ".io.restorecommerce.resourcebase.DeleteResponse": DeleteResponse,

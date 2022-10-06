@@ -9,8 +9,12 @@ export const protobufPackage = "io.restorecommerce.auth";
 export interface Subject {
   /** user id */
   id: string;
-  /** target scope (ID of the target scoping entity) */
+  /** target scope */
   scope: string;
+  /** role_associations of user creating the user */
+  roleAssociations: RoleAssociation[];
+  /** HR scope of user creating the User */
+  hierarchicalScopes: HierarchicalScope[];
   /** for unauthenticated context */
   unauthenticated: boolean;
   token: string;
@@ -62,7 +66,14 @@ export interface HierarchicalScopesResponse {
 }
 
 function createBaseSubject(): Subject {
-  return { id: "", scope: "", unauthenticated: false, token: "" };
+  return {
+    id: "",
+    scope: "",
+    roleAssociations: [],
+    hierarchicalScopes: [],
+    unauthenticated: false,
+    token: "",
+  };
 }
 
 export const Subject = {
@@ -76,11 +87,17 @@ export const Subject = {
     if (message.scope !== "") {
       writer.uint32(18).string(message.scope);
     }
+    for (const v of message.roleAssociations) {
+      RoleAssociation.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.hierarchicalScopes) {
+      HierarchicalScope.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
     if (message.unauthenticated === true) {
-      writer.uint32(24).bool(message.unauthenticated);
+      writer.uint32(40).bool(message.unauthenticated);
     }
     if (message.token !== "") {
-      writer.uint32(34).string(message.token);
+      writer.uint32(50).string(message.token);
     }
     return writer;
   },
@@ -99,9 +116,19 @@ export const Subject = {
           message.scope = reader.string();
           break;
         case 3:
-          message.unauthenticated = reader.bool();
+          message.roleAssociations.push(
+            RoleAssociation.decode(reader, reader.uint32())
+          );
           break;
         case 4:
+          message.hierarchicalScopes.push(
+            HierarchicalScope.decode(reader, reader.uint32())
+          );
+          break;
+        case 5:
+          message.unauthenticated = reader.bool();
+          break;
+        case 6:
           message.token = reader.string();
           break;
         default:
@@ -116,6 +143,14 @@ export const Subject = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       scope: isSet(object.scope) ? String(object.scope) : "",
+      roleAssociations: Array.isArray(object?.roleAssociations)
+        ? object.roleAssociations.map((e: any) => RoleAssociation.fromJSON(e))
+        : [],
+      hierarchicalScopes: Array.isArray(object?.hierarchicalScopes)
+        ? object.hierarchicalScopes.map((e: any) =>
+            HierarchicalScope.fromJSON(e)
+          )
+        : [],
       unauthenticated: isSet(object.unauthenticated)
         ? Boolean(object.unauthenticated)
         : false,
@@ -127,6 +162,20 @@ export const Subject = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.scope !== undefined && (obj.scope = message.scope);
+    if (message.roleAssociations) {
+      obj.roleAssociations = message.roleAssociations.map((e) =>
+        e ? RoleAssociation.toJSON(e) : undefined
+      );
+    } else {
+      obj.roleAssociations = [];
+    }
+    if (message.hierarchicalScopes) {
+      obj.hierarchicalScopes = message.hierarchicalScopes.map((e) =>
+        e ? HierarchicalScope.toJSON(e) : undefined
+      );
+    } else {
+      obj.hierarchicalScopes = [];
+    }
     message.unauthenticated !== undefined &&
       (obj.unauthenticated = message.unauthenticated);
     message.token !== undefined && (obj.token = message.token);
@@ -137,6 +186,11 @@ export const Subject = {
     const message = createBaseSubject();
     message.id = object.id ?? "";
     message.scope = object.scope ?? "";
+    message.roleAssociations =
+      object.roleAssociations?.map((e) => RoleAssociation.fromPartial(e)) || [];
+    message.hierarchicalScopes =
+      object.hierarchicalScopes?.map((e) => HierarchicalScope.fromPartial(e)) ||
+      [];
     message.unauthenticated = object.unauthenticated ?? false;
     message.token = object.token ?? "";
     return message;
@@ -650,8 +704,34 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "unauthenticated",
+            name: "role_associations",
             number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.RoleAssociation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "roleAssociations",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "hierarchical_scopes",
+            number: 4,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.HierarchicalScope",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "hierarchicalScopes",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "unauthenticated",
+            number: 5,
             label: 1,
             type: 8,
             typeName: "",
@@ -664,7 +744,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "token",
-            number: 4,
+            number: 6,
             label: 1,
             type: 9,
             typeName: "",
@@ -993,7 +1073,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [8, 0, 13, 1],
+          span: [8, 0, 15, 1],
           leadingComments: "*\n Subject of creating User\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -1009,68 +1089,82 @@ export const protoMetadata: ProtoMetadata = {
           path: [4, 0, 2, 1],
           span: [10, 2, 19],
           leadingComments: "",
-          trailingComments: " target scope (ID of the target scoping entity)\n",
+          trailingComments: " target scope\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 2],
-          span: [11, 2, 27],
+          span: [11, 2, 49],
+          leadingComments: "",
+          trailingComments: "  role_associations of user creating the user\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 3],
+          span: [12, 2, 53],
+          leadingComments: "",
+          trailingComments: " HR scope of user creating the User\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 4],
+          span: [13, 2, 27],
           leadingComments: "",
           trailingComments: " for unauthenticated context\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
-          span: [16, 2, 18],
+          span: [18, 2, 18],
           leadingComments: "",
           trailingComments: " token name\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 1],
-          span: [17, 2, 24],
+          span: [19, 2, 24],
           leadingComments: "",
           trailingComments: " expiration date for token\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 2],
-          span: [18, 2, 19],
+          span: [20, 2, 19],
           leadingComments: "",
           trailingComments: " token\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 3],
-          span: [19, 2, 29],
+          span: [21, 2, 29],
           leadingComments: "",
           trailingComments: " identifier for role_association\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 4],
-          span: [20, 2, 18],
+          span: [22, 2, 18],
           leadingComments: "",
           trailingComments: " type of token eg: access_token, refresh_token\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 0],
-          span: [26, 2, 16],
+          span: [28, 2, 16],
           leadingComments: "",
           trailingComments: " root node\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 1],
-          span: [27, 2, 42],
+          span: [29, 2, 42],
           leadingComments: "",
           trailingComments: " children nodes\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 2, 2, 2],
-          span: [28, 2, 18],
+          span: [30, 2, 18],
           leadingComments: "",
           trailingComments:
             " role identifier associated with root node scope\n",
@@ -1078,14 +1172,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 3, 2, 0],
-          span: [32, 2, 18],
+          span: [34, 2, 18],
           leadingComments: "",
           trailingComments: " role ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 1],
-          span: [33, 2, 65],
+          span: [35, 2, 65],
           leadingComments: "",
           trailingComments:
             " useful attributes for RBAC/ABAC like organizational scope\n",
@@ -1093,14 +1187,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 3, 2, 2],
-          span: [34, 2, 16],
+          span: [36, 2, 16],
           leadingComments: "",
           trailingComments: " identifier for role_association\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 3],
-          span: [35, 2, 21],
+          span: [37, 2, 21],
           leadingComments: "",
           trailingComments: " timestamp when the role was created\n",
           leadingDetachedComments: [],

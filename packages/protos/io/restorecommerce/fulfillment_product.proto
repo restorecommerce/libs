@@ -7,17 +7,22 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
-import "io/restorecommerce/order.proto";
+import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
-
 
 /**
 Microservice defination
 */
 
 service Service {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductResponseList);
-  rpc Find (QueryList) returns (PackingSolutionResponseList);
+  option (io.restorecommerce.options.service_name) = "fulfillment_product";
+
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductResponseList) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Find (QueryList) returns (PackingSolutionResponseList) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Create (FulfillmentProductList) returns (FulfillmentProductResponseList);
   rpc Update (FulfillmentProductList) returns (FulfillmentProductResponseList);
   rpc Upsert (FulfillmentProductList) returns (FulfillmentProductResponseList);
@@ -34,7 +39,7 @@ message Preferences {
 message Query {
   io.restorecommerce.fulfillment.Address sender = 1;
   io.restorecommerce.fulfillment.Address receiver = 2;
-  repeated io.restorecommerce.order.Item goods = 3;
+  repeated io.restorecommerce.fulfillment.Item goods = 3;
   Preferences preferences = 4;
   string reference_id = 5;
 }
@@ -46,13 +51,27 @@ message QueryList {
 }
 
 message FulfillmentProduct {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "fulfillmentProduct"
+    topic: "io.restorecommerce.fulfillment_product.resource"
+    created: "fulfillmentProductCreated"
+    updated: "fulfillmentProductUpdated"
+    deleted: "fulfillmentProductDeleted"
+  };
+
   string id = 1;
   string name = 2;
   string description = 3;
-  string courier_id = 4;
-  //repeated io.restorecommerce.country.Country start_country = 5;
+  string courier_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.fulfillment_courier.FulfillmentCourier",
+      target_service: "resource",
+      target_sub_service: "fulfillment_courier",
+      target_method: "Read",
+      field_name: "courier",
+    }
+  ];
   repeated string start_zones = 6;
-  //repeated io.restorecommerce.country.Country destination_country = 7;
   repeated string destination_zones = 8;
   repeated string tax_ids = 9;
   repeated io.restorecommerce.attribute.Attribute attributes = 10;

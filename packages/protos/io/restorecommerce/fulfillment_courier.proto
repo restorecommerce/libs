@@ -26,6 +26,14 @@ service Service {
 }
 
 message FulfillmentCourier {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "fulfillmentCouriers"
+    topic: "io.restorecommerce.fulfillment_courier.resource"
+    created: "fulfillmentCourierCreated"
+    updated: "fulfillmentCourierUpdated"
+    deleted: "fulfillmentCourierDeleted"
+  };
+
   string id = 1;
   string name = 4;
   string description = 5;

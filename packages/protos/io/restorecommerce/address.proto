@@ -47,12 +47,43 @@ message AddressResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message Address {
-  message GeoPoint {
-    double latitude = 1;
-    double longitude = 2;
-  }
+message GeoPoint {
+  double latitude = 1;
+  double longitude = 2;
+}
 
+message AddressAddition {
+  string field1 = 1;
+  string field2 = 2;
+}
+
+message BusinessAddress {
+  string name = 1;
+}
+
+message ResidentialAddress {
+  string title = 1;
+  string given_name = 2;
+  string mid_name = 3;
+  string family_name = 4;
+}
+
+message PackStation {
+  string provider = 1;
+  string station_number = 2;
+  string post_number = 3;
+}
+
+/**
+  Uses by Order-Srv and Fulfillment-Srv
+**/
+message ContactPerson {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
+message Address {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
   string postcode = 3;
@@ -65,17 +96,16 @@ message Address {
       field_name: "country",
     }
   ];
-  string locality = 5;
-  string street = 6;
-  string region = 7;
-
-  GeoPoint geo_coordinates = 8;
-  double altitude = 9;
-  string building_number = 10;
-  AddressAddition address_addition = 11;
-}
-
-message AddressAddition {
-  string field1 = 1;
-  string field2 = 2;
+  string locality = 6;
+  string street = 7;
+  string region = 8;
+  GeoPoint geo_coordinates = 9;
+  double altitude = 10;
+  string building_number = 11;
+  AddressAddition address_addition = 12;
+  oneof type {
+    BusinessAddress business_address = 13;
+    ResidentialAddress residential_address = 14;
+    PackStation pack_station = 15;
+  }
 }

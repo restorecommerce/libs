@@ -74,6 +74,15 @@ message PackStation {
   string post_number = 3;
 }
 
+/**
+  Uses by Order-Srv and Fulfillment-Srv
+**/
+message ContactPerson {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
 message Address {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;

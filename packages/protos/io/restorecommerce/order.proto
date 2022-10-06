@@ -9,7 +9,6 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/fulfillment.proto";
-import "io/restorecommerce/fulfillment_product.proto";
 
 
 service Service {
@@ -83,7 +82,7 @@ message Order {
   io.restorecommerce.address.Address shipping_address = 11;
   io.restorecommerce.address.Address billing_address = 13;
   string billing_email = 14;
-  io.restorecommerce.fulfillment.ContactPerson contact_person = 15;
+  io.restorecommerce.address.ContactPerson contact_person = 15;
   string notification_email = 16;
   repeated string fulfillment_ids = 17;
 }
@@ -93,6 +92,7 @@ message ShippingDetails {
   string export_description = 2;
   string invoice_number = 3;
   io.restorecommerce.address.Address sender_address = 5;
+  io.restorecommerce.address.ContactPerson contact_person = 15;
 }
 
 message TriggerFulfillmentRequest {

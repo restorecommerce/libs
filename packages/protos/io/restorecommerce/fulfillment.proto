@@ -72,15 +72,9 @@ enum State {
   Done = 7;
 }
 
-message ContactPerson {
-  string name = 1;
-  string email = 2;
-  string phone = 3;
-}
-
-message Address {
+message ShippingAddress {
   io.restorecommerce.address.Address address = 1;
-  ContactPerson contact_person = 2;
+  io.restorecommerce.address.ContactPerson contact_person = 2;
 }
 
 message Item {
@@ -96,8 +90,8 @@ message Parcel {
   string product_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
-      target_service: "fulfillment_product",
-      //target_sub_service: "fulfillment_product",
+      target_service: "resource",
+      target_sub_service: "fulfillment_product",
       target_method: "Read",
       field_name: "product",
     }
@@ -124,8 +118,8 @@ message Label {
 message Order {
   string reference_id = 1;
   repeated Parcel parcels = 2;
-  Address sender = 3;
-  Address receiver = 4;
+  ShippingAddress sender = 3;
+  ShippingAddress receiver = 4;
   string notify = 5;
 }
 
@@ -194,8 +188,8 @@ message TrackingResult {
   Fulfillment fulfillment = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment.Fulfillment",
-      target_service: "fulfillment",
-      //target_sub_service: "fulfillment",
+      target_service: "resource",
+      target_sub_service: "fulfillment",
       target_method: "Read",
       field_name: "fulfillment",
     }

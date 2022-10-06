@@ -63,9 +63,9 @@ message BusinessAddress {
 
 message ResidentialAddress {
   string title = 1;
-  string first_name = 2;
+  string given_name = 2;
   string mid_name = 3;
-  string last_name = 4;
+  string family_name = 4;
 }
 
 message PackStation {

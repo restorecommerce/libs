@@ -84,6 +84,7 @@ message Address {
 }
 
 message Item {
+  //Catalog item!
   string item_id = 1;
   string name = 2;
   string description = 3;
@@ -92,7 +93,15 @@ message Item {
 }
 
 message Parcel {
-  string product_id = 1;
+  string product_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
+      target_service: "fulfillment_product",
+      //target_sub_service: "fulfillment_product",
+      target_method: "Read",
+      field_name: "product",
+    }
+  ];
   string product_variant_id = 2;
   repeated Item items = 3;
   float weight_in_kg = 4;
@@ -124,6 +133,14 @@ message Order {
 This is the message how it get stored to the database
 */
 message Fulfillment {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "fulfillment"
+    topic: "io.restorecommerce.fulfillment.resource"
+    created: "fulfillmentCreated"
+    updated: "fulfillmentUpdated"
+    deleted: "fulfillmentDeleted"
+  };
+
   string id = 1;
   Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
@@ -174,7 +191,15 @@ message Tracking {
 }
 
 message TrackingResult {
-  Fulfillment fulfillment = 1;
+  Fulfillment fulfillment = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.fulfillment.Fulfillment",
+      target_service: "fulfillment",
+      //target_sub_service: "fulfillment",
+      target_method: "Read",
+      field_name: "fulfillment",
+    }
+  ];
   repeated Tracking tracks = 2;
   io.restorecommerce.status.Status status = 3;
 }

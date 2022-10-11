@@ -7,10 +7,11 @@ export interface RestoreLoggerConsoleTransportOptions extends transports.Console
   prettyPrint?:  boolean | any;
   colorize?: boolean | any;
   sourcePointer?: boolean;
+  fieldOptions?: RestoreFieldsOptions;
 }
 
 // a custom format that outputs request id
-function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, fieldOpts?: RestoreFieldsOptions) {
+function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
   return format.printf((info) => {
     const rid = rTracer.id();
     const time = info.timestamp;
@@ -24,11 +25,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, fieldOpt
     delete info.timestamp;
     let object = {};
     if (splat) {
-      logFieldsHandler(splat, fieldOpts);
+      logFieldsHandler(splat, opts.fieldOptions);
       object = JSON.stringify(splat, getCircularReplacer());
     }
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      logFieldsHandler(message, fieldOpts);
+      logFieldsHandler(message, opts.fieldOptions);
       message = JSON.stringify(message, getCircularReplacer());
     }
     let ret: string[] = [];
@@ -72,11 +73,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, fieldOpt
   });
 }
 
-export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}, fieldOpts: RestoreFieldsOptions = {}) {
+export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
   let formats: any[] = [
     format.simple(),
     format.timestamp(),
-    createTracerFormat(opts, fieldOpts),
+    createTracerFormat(opts),
   ]
 
   if (opts.prettyPrint !== false) {

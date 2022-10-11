@@ -12,6 +12,7 @@ export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   esTransformer?: Function,
   loggerName?: string;
   sourcePointer?: boolean;
+  fieldOptions?: RestoreFieldsOptions;
 }
 
 export interface BufferField {
@@ -19,19 +20,15 @@ export interface BufferField {
   enableLogging?: boolean; // default value is false 
 }
 
-export interface RestoreBufferFieldMaskOptions {
+export interface RestoreFieldsOptions {
   bufferFields?: BufferField[];
   maskFields?: string[];
   omitFields?: string[];
 }
 
-export interface RestoreFieldsOptions {
-  fieldOptions?: RestoreBufferFieldMaskOptions;
-}
-
 export type TransportStreamArray = Logger['transports'];
 
-export function createLogger(opts: RestoreLoggerOptions = {}, fieldOpts: RestoreFieldsOptions = {}): Logger {
+export function createLogger(opts: RestoreLoggerOptions = {}): Logger {
   // TODO reason for setting namespaces flag?
   (log as any).namespaces = true;
 
@@ -44,14 +41,14 @@ export function createLogger(opts: RestoreLoggerOptions = {}, fieldOpts: Restore
   }
 
   if (opts.console) {
-    transports.push(createConsoleTransport({ ...opts.console, sourcePointer: opts.sourcePointer }, fieldOpts));
+    transports.push(createConsoleTransport({ ...opts.console, sourcePointer: opts.sourcePointer, fieldOptions: opts.fieldOptions }));
   }
   if (opts.file) {
     transports.push(createFileTransport({ ...opts.file, sourcePointer: opts.sourcePointer }));
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer, esTransformer: opts.esTransformer }, fieldOpts);
+    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer, esTransformer: opts.esTransformer, fieldOptions: opts.fieldOptions });
     esTransport.on('error', (error) => {
       console.error('Elasticsearch indexing error', error);
     });

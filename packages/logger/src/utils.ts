@@ -186,20 +186,20 @@ export const setNestedPath = (object: any, fieldPath: string, operation: string,
   }
 };
 
-export const logFieldsHandler = (object: any, fieldOpts?: RestoreFieldsOptions) => {
-  if (!fieldOpts) {
+export const logFieldsHandler = (object: any, fieldOptions?: RestoreFieldsOptions) => {
+  if (!fieldOptions) {
     return;
   }
   // if nonoe of bufferFields or maskFields or omitFields are set then do not proceed further
-  if (_.isEmpty(fieldOpts?.fieldOptions?.maskFields) && _.isEmpty(fieldOpts?.fieldOptions?.omitFields) && _.isEmpty(fieldOpts?.fieldOptions?.bufferFields)) {
+  if (_.isEmpty(fieldOptions?.maskFields) && _.isEmpty(fieldOptions?.omitFields) && _.isEmpty(fieldOptions?.bufferFields)) {
     return;
   }
 
   // since multiple comma separated  objects can be passed as fields for logging
   for (let obj of object) {
     // iterate to check each mask field
-    if (!_.isEmpty(fieldOpts?.fieldOptions?.maskFields)) {
-      fieldOpts.fieldOptions?.maskFields?.forEach((fieldPath) => {
+    if (!_.isEmpty(fieldOptions?.maskFields)) {
+      fieldOptions?.maskFields?.forEach((fieldPath) => {
         let fieldExists = _.get(obj, fieldPath);
         if (fieldExists) {
           const maskLength = fieldExists.length;
@@ -214,8 +214,8 @@ export const logFieldsHandler = (object: any, fieldOpts?: RestoreFieldsOptions) 
     }
 
     // iterate to check each omit field
-    if (!_.isEmpty(fieldOpts?.fieldOptions?.omitFields)) {
-      fieldOpts.fieldOptions?.omitFields?.forEach((fieldPath) => {
+    if (!_.isEmpty(fieldOptions?.omitFields)) {
+      fieldOptions?.omitFields?.forEach((fieldPath) => {
         let fieldExists = _.get(obj, fieldPath);
         if (fieldExists) {
           _.unset(obj, fieldPath);
@@ -228,8 +228,8 @@ export const logFieldsHandler = (object: any, fieldOpts?: RestoreFieldsOptions) 
     }
 
     // iterate to check each buffer field
-    if (!_.isEmpty(fieldOpts?.fieldOptions?.bufferFields)) {
-      fieldOpts.fieldOptions?.bufferFields?.forEach((bufferFieldObj) => {
+    if (!_.isEmpty(fieldOptions?.bufferFields)) {
+      fieldOptions?.bufferFields?.forEach((bufferFieldObj) => {
         const fieldPath = bufferFieldObj.fieldPath;
         const enableLogging = bufferFieldObj?.enableLogging ? bufferFieldObj.enableLogging : false;
         let fieldExists = _.get(obj, fieldPath);

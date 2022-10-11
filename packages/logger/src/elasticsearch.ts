@@ -6,7 +6,7 @@ import { RestoreFieldsOptions } from './index';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
-function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, fieldOpts?: RestoreFieldsOptions) {
+function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
   /**
    Transformer function to transform logged data into a
   the message structure used in restore for storage in ES.
@@ -43,13 +43,13 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, fie
     transformed.source_host = os.hostname();
     transformed.message = logData.message;
     if (typeof transformed.message === 'object') {
-      logFieldsHandler(transformed.message, fieldOpts);
+      logFieldsHandler(transformed.message, opts.fieldOptions);
       transformed.message = JSON.stringify(transformed.message, getCircularReplacer());
     }
     transformed.severity = logData.level;
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
-      logFieldsHandler(JSON.parse(transformed.fields), fieldOpts);
+      logFieldsHandler(JSON.parse(transformed.fields), opts.fieldOptions);
       transformed.fields ={ message: transformed.fields };
     }
 
@@ -75,10 +75,11 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, fie
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
   esTransformer?: Function;
+  fieldOptions?: RestoreFieldsOptions;
 }
 
-export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions, fieldOpts: RestoreFieldsOptions = {}) {
-  const transformer = createTransformer(opts, fieldOpts);
+export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
+  const transformer = createTransformer(opts);
   return new ElasticsearchTransport({
     indexTemplate,
     transformer,

@@ -1,6 +1,7 @@
 import { format, transports } from 'winston';
 import * as rTracer from 'cls-rtracer';
-import { getCircularReplacer, globalLoggerCtxKey, traceFormatter } from './utils';
+import { getCircularReplacer, globalLoggerCtxKey, traceFormatter, logFieldsHandler } from './utils';
+import { RestoreFieldsOptions } from './index';
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
   prettyPrint?:  boolean | any;
@@ -9,7 +10,7 @@ export interface RestoreLoggerConsoleTransportOptions extends transports.Console
 }
 
 // a custom format that outputs request id
-function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
+function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, fieldOpts?: RestoreFieldsOptions) {
   return format.printf((info) => {
     const rid = rTracer.id();
     const time = info.timestamp;
@@ -23,9 +24,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     delete info.timestamp;
     let object = {};
     if (splat) {
+      logFieldsHandler(splat, fieldOpts);
       object = JSON.stringify(splat, getCircularReplacer());
     }
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
+      logFieldsHandler(message, fieldOpts);
       message = JSON.stringify(message, getCircularReplacer());
     }
     let ret: string[] = [];
@@ -69,11 +72,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
   });
 }
 
-export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
+export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}, fieldOpts: RestoreFieldsOptions = {}) {
   let formats: any[] = [
     format.simple(),
     format.timestamp(),
-    createTracerFormat(opts),
+    createTracerFormat(opts, fieldOpts),
   ]
 
   if (opts.prettyPrint !== false) {

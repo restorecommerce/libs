@@ -1,11 +1,12 @@
 import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from 'winston-elasticsearch';
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
-import { globalLoggerCtxKey, getRealTrace, getCircularReplacer } from './utils';
+import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler } from './utils';
+import { RestoreFieldsOptions } from './index';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
-function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
+function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, fieldOpts?: RestoreFieldsOptions) {
   /**
    Transformer function to transform logged data into a
   the message structure used in restore for storage in ES.
@@ -42,11 +43,13 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     transformed.source_host = os.hostname();
     transformed.message = logData.message;
     if (typeof transformed.message === 'object') {
+      logFieldsHandler(transformed.message, fieldOpts);
       transformed.message = JSON.stringify(transformed.message, getCircularReplacer());
     }
     transformed.severity = logData.level;
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
+      logFieldsHandler(JSON.parse(transformed.fields), fieldOpts);
       transformed.fields ={ message: transformed.fields };
     }
 
@@ -74,8 +77,8 @@ export interface RestoreLoggerElasticsearchTransportOptions extends Elasticsearc
   esTransformer?: Function;
 }
 
-export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
-  const transformer = createTransformer(opts);
+export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions, fieldOpts: RestoreFieldsOptions = {}) {
+  const transformer = createTransformer(opts, fieldOpts);
   return new ElasticsearchTransport({
     indexTemplate,
     transformer,

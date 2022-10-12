@@ -154,6 +154,7 @@ export const getCircularReplacer = () => {
 
 interface PrecompiledData {
   fieldPath: string;
+  fieldList: string[];
   array: boolean;
   enableLogging?: boolean;
 }
@@ -173,24 +174,36 @@ const precompiled: PrecompiledFieldOptions = {
 // This gets called when logger is initialized
 export const precompile = (fieldOptions?: RestoreFieldsOptions) => {
   fieldOptions?.maskFields?.forEach(fieldPath => {
+    let fieldList: any = fieldPath.split('.[').join('.');
+    fieldList = fieldList.split('].').join('.');
+    fieldList = fieldList.split('.');
     precompiled.maskFields.push({
       fieldPath,
-      array: fieldPath.indexOf('.[') > 0
+      array: fieldPath.indexOf('.[') > 0,
+      fieldList
     });
   });
 
   fieldOptions?.omitFields?.forEach(fieldPath => {
+    let fieldList: any = fieldPath.split('.[').join('.');
+    fieldList = fieldList.split('].').join('.');
+    fieldList = fieldList.split('.');
     precompiled.omitFields.push({
       fieldPath,
-      array: fieldPath.indexOf('.[') > 0
+      array: fieldPath.indexOf('.[') > 0,
+      fieldList
     });
   });
 
   fieldOptions?.bufferFields?.forEach(bufferObj => {
+    let fieldList: any = bufferObj.fieldPath.split('.[').join('.');
+    fieldList = fieldList.split('].').join('.');
+    fieldList = fieldList.split('.');
     precompiled.bufferFields.push({
       fieldPath: bufferObj.fieldPath,
       array: bufferObj.fieldPath.indexOf('.[') > 0,
-      enableLogging: bufferObj.enableLogging
+      enableLogging: bufferObj.enableLogging,
+      fieldList
     });
   });
   return precompiled;
@@ -225,7 +238,7 @@ export const setNestedPath = (object: any, fieldPath: string, operation: string,
     array.forEach((obj: any) => {
       let fieldExists = _.get(obj, suffix);
       // maskFields or omitFields or handle bufferFields depending on operation
-      if(fieldExists) {
+      if (fieldExists) {
         updateObject(obj, suffix, fieldExists, operation, enableLogging);
       }
       // recursive call
@@ -245,11 +258,9 @@ const baseGet = (object: any, path: string[]): any => {
   return (index && index == length) ? object : undefined;
 };
 
-const setIfExists = (obj: any, fieldPath: string, operation: string, array?: boolean, enableLogging?: boolean): void => {
-  // split the fieldPath to individual fields and break when the first field do not exist
-  let fieldList: any = fieldPath.split('.[').join('.');
-  fieldList = fieldList.split('].').join('.');
-  fieldList = fieldList.split('.');
+const setIfExists = (obj: any, fieldPath: string, fieldList: string[], operation: string, array?: boolean, enableLogging?: boolean): void => {
+  // fieldList contains the split Path to individual fields for fieldPath
+  // and the baseGet breaks when the first field do not exist
   let fieldExists = baseGet(obj, fieldList);
   // only if the configured field exist check recursively for all entries in object
   if (fieldExists && array) {
@@ -275,21 +286,21 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
     // iterate to check each mask field
     if (!_.isEmpty(precompiled?.maskFields)) {
       precompiled?.maskFields?.forEach((maskCfg) => {
-        setIfExists(obj, maskCfg.fieldPath, 'maskFields', maskCfg.array);
+        setIfExists(obj, maskCfg.fieldPath, maskCfg.fieldList, 'maskFields', maskCfg.array);
       });
     }
 
     // iterate to check each omit field
     if (!_.isEmpty(precompiled?.omitFields)) {
       precompiled?.omitFields?.forEach((omitCfg) => {
-        setIfExists(obj, omitCfg.fieldPath, 'omitFields', omitCfg.array);
+        setIfExists(obj, omitCfg.fieldPath, omitCfg.fieldList, 'omitFields', omitCfg.array);
       });
     }
 
     // iterate to check each buffer field
     if (!_.isEmpty(precompiled?.bufferFields)) {
       precompiled?.bufferFields?.forEach((bufferFieldObj) => {
-        setIfExists(obj, bufferFieldObj.fieldPath, 'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging,);
+        setIfExists(obj, bufferFieldObj.fieldPath, bufferFieldObj.fieldList,  'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging);
       });
     }
   }

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.1.0...@restorecommerce/rc-grpc-clients@2.0.0) (2022-10-12)
+
+
+### Code Refactoring
+
+* **protos:** refactor protos for fulfillment-srv, ordering-srv, ready for migration tests ([bf8bfd3](https://github.com/restorecommerce/libs/commit/bf8bfd3a00e614857f6f4be35fb00224634ed066))
+
+
+### BREAKING CHANGES
+
+* **protos:** Address has new fields. Compatiblity must be checked.
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.0.1...@restorecommerce/rc-grpc-clients@1.1.0) (2022-10-04)
 
 

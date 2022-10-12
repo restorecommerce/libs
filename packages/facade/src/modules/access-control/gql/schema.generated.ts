@@ -274,10 +274,10 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
-  search?: InputMaybe<IIoRestorecommerceResourcebaseSearch>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -347,12 +347,6 @@ export enum IoRestorecommerceResourcebaseFilterOpOperator {
 export type IIoRestorecommerceResourcebaseFieldFilter = {
   name?: InputMaybe<Scalars['String']>;
   include?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type IIoRestorecommerceResourcebaseSearch = {
-  search?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<Array<Scalars['String']>>;
-  caseSensitive?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type AccessControlRuleQuery = {
@@ -515,8 +509,6 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -595,6 +587,27 @@ export type IIoRestorecommercePolicySetPolicySet = {
   combiningAlgorithm?: InputMaybe<Scalars['String']>;
   policies?: InputMaybe<Array<Scalars['String']>>;
 };
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -716,7 +729,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   AccessControlRuleQuery: ResolverTypeWrapper<AccessControlRuleQuery>;
   ProtoIoRestorecommerceRuleRuleListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceRuleRuleListResponse>;
   IoRestorecommerceRuleRuleListResponse: ResolverTypeWrapper<IoRestorecommerceRuleRuleListResponse>;
@@ -745,6 +757,9 @@ export type ResolversTypes = ResolversObject<{
   AccessControlPolicySetMutation: ResolverTypeWrapper<AccessControlPolicySetMutation>;
   IIoRestorecommercePolicySetPolicySetList: IIoRestorecommercePolicySetPolicySetList;
   IIoRestorecommercePolicySetPolicySet: IIoRestorecommercePolicySetPolicySet;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -790,7 +805,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFilterFilterOp: IIoRestorecommerceFilterFilterOp;
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   AccessControlRuleQuery: AccessControlRuleQuery;
   ProtoIoRestorecommerceRuleRuleListResponse: ProtoIoRestorecommerceRuleRuleListResponse;
   IoRestorecommerceRuleRuleListResponse: IoRestorecommerceRuleRuleListResponse;
@@ -818,6 +832,8 @@ export type ResolversParentTypes = ResolversObject<{
   AccessControlPolicySetMutation: AccessControlPolicySetMutation;
   IIoRestorecommercePolicySetPolicySetList: IIoRestorecommercePolicySetPolicySetList;
   IIoRestorecommercePolicySetPolicySet: IIoRestorecommercePolicySetPolicySet;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -1123,6 +1139,15 @@ export type AccessControlPolicySetMutationResolvers<ContextType = AccessControlC
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   AccessControlQuery?: AccessControlQueryResolvers<ContextType>;
@@ -1175,5 +1200,7 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   AccessControlRuleMutation?: AccessControlRuleMutationResolvers<ContextType>;
   AccessControlPolicySetMutation?: AccessControlPolicySetMutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

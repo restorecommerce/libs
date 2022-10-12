@@ -306,6 +306,27 @@ export type IIoRestorecommercePaymentCaptureRequest = {
   paymentId?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -397,6 +418,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommercePaymentPaymentPayload: ResolverTypeWrapper<IoRestorecommercePaymentPaymentPayload>;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
   IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -421,6 +445,8 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommercePaymentPaymentPayload: IoRestorecommercePaymentPaymentPayload;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
   IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type MutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -503,6 +529,15 @@ export type IoRestorecommercePaymentPaymentPayloadResolvers<ContextType = Paymen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   PaymentMutation?: PaymentMutationResolvers<ContextType>;
@@ -518,5 +553,7 @@ export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   IoRestorecommercePaymentPaymentResponse?: IoRestorecommercePaymentPaymentResponseResolvers<ContextType>;
   IoRestorecommercePaymentPaymentPayloadStatus?: IoRestorecommercePaymentPaymentPayloadStatusResolvers<ContextType>;
   IoRestorecommercePaymentPaymentPayload?: IoRestorecommercePaymentPaymentPayloadResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

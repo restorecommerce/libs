@@ -58,6 +58,27 @@ export type IIoRestorecommerceSearchSearchRequest = {
   acl?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -137,6 +158,9 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 }>;
 
@@ -151,6 +175,8 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
   IIoRestorecommerceSearchSearchRequest: IIoRestorecommerceSearchSearchRequest;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
   Boolean: Scalars['Boolean'];
 }>;
 
@@ -188,6 +214,15 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
   name: 'GoogleProtobufAnyValue';
 }
 
+export type SubscriptionResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   IndexingMutation?: IndexingMutationResolvers<ContextType>;
@@ -196,5 +231,7 @@ export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
   IoRestorecommerceSearchSearchResponse?: IoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

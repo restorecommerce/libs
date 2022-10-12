@@ -107,10 +107,10 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
-  search?: InputMaybe<IIoRestorecommerceResourcebaseSearch>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -212,12 +212,6 @@ export type IGoogleProtobufAny = {
   value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
 };
 
-export type IIoRestorecommerceResourcebaseSearch = {
-  search?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<Array<Scalars['String']>>;
-  caseSensitive?: InputMaybe<Scalars['Boolean']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   notification: NotificationMutation;
@@ -302,11 +296,30 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -410,7 +423,6 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: ResolverTypeWrapper<{}>;
   NotificationMutation: ResolverTypeWrapper<NotificationMutation>;
   NotificationNotificationMutation: ResolverTypeWrapper<NotificationNotificationMutation>;
@@ -423,6 +435,9 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -452,7 +467,6 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: {};
   NotificationMutation: NotificationMutation;
   NotificationNotificationMutation: NotificationNotificationMutation;
@@ -464,6 +478,8 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -589,6 +605,15 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = N
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   NotificationQuery?: NotificationQueryResolvers<ContextType>;
@@ -615,5 +640,7 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   NotificationNotificationMutation?: NotificationNotificationMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

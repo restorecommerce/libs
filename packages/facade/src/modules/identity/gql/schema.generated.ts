@@ -216,10 +216,10 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
-  search?: InputMaybe<IIoRestorecommerceResourcebaseSearch>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -319,12 +319,6 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
-};
-
-export type IIoRestorecommerceResourcebaseSearch = {
-  search?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<Array<Scalars['String']>>;
-  caseSensitive?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ProtoIoRestorecommerceUserUserListResponse = {
@@ -697,8 +691,6 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -910,7 +902,13 @@ export type IIoRestorecommerceTokenGrantId = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
   identityUsers?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
 };
 
 
@@ -1039,7 +1037,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   ProtoIoRestorecommerceUserUserListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUserUserListResponse>;
   IoRestorecommerceUserUserListResponse: ResolverTypeWrapper<IoRestorecommerceUserUserListResponse>;
   IoRestorecommerceUserUserResponse: ResolverTypeWrapper<IoRestorecommerceUserUserResponse>;
@@ -1140,7 +1137,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   ProtoIoRestorecommerceUserUserListResponse: ProtoIoRestorecommerceUserUserListResponse;
   IoRestorecommerceUserUserListResponse: IoRestorecommerceUserUserListResponse;
   IoRestorecommerceUserUserResponse: IoRestorecommerceUserUserResponse;
@@ -1600,6 +1596,7 @@ export type IdentityTokenMutationResolvers<ContextType = IdentityContext, Parent
 }>;
 
 export type SubscriptionResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
   identityUsers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "identityUsers", ParentType, ContextType, Partial<SubscriptionIdentityUsersArgs>>;
 }>;
 

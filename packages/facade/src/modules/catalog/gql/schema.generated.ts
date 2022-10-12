@@ -178,10 +178,10 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  search?: InputMaybe<Array<Scalars['String']>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
-  search?: InputMaybe<IIoRestorecommerceResourcebaseSearch>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -281,12 +281,6 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
-};
-
-export type IIoRestorecommerceResourcebaseSearch = {
-  search?: InputMaybe<Scalars['String']>;
-  fields?: InputMaybe<Array<Scalars['String']>>;
-  caseSensitive?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CatalogProductPrototypeQuery = {
@@ -576,8 +570,6 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -715,6 +707,27 @@ export type IIoRestorecommerceManufacturerManufacturer = {
   description?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -824,7 +837,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   CatalogProductPrototypeQuery: ResolverTypeWrapper<CatalogProductPrototypeQuery>;
   ProtoIoRestorecommerceProductPrototypeProductPrototypeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceProductPrototypeProductPrototypeListResponse>;
   IoRestorecommerceProductPrototypeProductPrototypeListResponse: ResolverTypeWrapper<IoRestorecommerceProductPrototypeProductPrototypeListResponse>;
@@ -876,6 +888,9 @@ export type ResolversTypes = ResolversObject<{
   CatalogManufacturerMutation: ResolverTypeWrapper<CatalogManufacturerMutation>;
   IIoRestorecommerceManufacturerManufacturerList: IIoRestorecommerceManufacturerManufacturerList;
   IIoRestorecommerceManufacturerManufacturer: IIoRestorecommerceManufacturerManufacturer;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -912,7 +927,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
-  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   CatalogProductPrototypeQuery: CatalogProductPrototypeQuery;
   ProtoIoRestorecommerceProductPrototypeProductPrototypeListResponse: ProtoIoRestorecommerceProductPrototypeProductPrototypeListResponse;
   IoRestorecommerceProductPrototypeProductPrototypeListResponse: IoRestorecommerceProductPrototypeProductPrototypeListResponse;
@@ -963,6 +977,8 @@ export type ResolversParentTypes = ResolversObject<{
   CatalogManufacturerMutation: CatalogManufacturerMutation;
   IIoRestorecommerceManufacturerManufacturerList: IIoRestorecommerceManufacturerManufacturerList;
   IIoRestorecommerceManufacturerManufacturer: IIoRestorecommerceManufacturerManufacturer;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -1314,6 +1330,15 @@ export type CatalogManufacturerMutationResolvers<ContextType = CatalogContext, P
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   CatalogQuery?: CatalogQueryResolvers<ContextType>;
@@ -1371,5 +1396,7 @@ export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   CatalogProductCategoryMutation?: CatalogProductCategoryMutationResolvers<ContextType>;
   CatalogPriceGroupMutation?: CatalogPriceGroupMutationResolvers<ContextType>;
   CatalogManufacturerMutation?: CatalogManufacturerMutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

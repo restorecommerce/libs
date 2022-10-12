@@ -3,7 +3,7 @@ import { createLogger as createWinsonLogger, LoggerOptions as WinstonLoggerOptio
 import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './console';
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';
 import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport } from './elasticsearch';
-import { globalLoggerCtxKey } from './utils';
+import { globalLoggerCtxKey, precompile } from './utils';
 
 export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
@@ -40,15 +40,17 @@ export function createLogger(opts: RestoreLoggerOptions = {}): Logger {
     transports = opts.transports;
   }
 
+  // precompile field options
+  const precompiled = precompile(opts?.fieldOptions);
   if (opts.console) {
-    transports.push(createConsoleTransport({ ...opts.console, sourcePointer: opts.sourcePointer, fieldOptions: opts.fieldOptions }));
+    transports.push(createConsoleTransport({ ...opts.console, sourcePointer: opts.sourcePointer }, precompiled));
   }
   if (opts.file) {
     transports.push(createFileTransport({ ...opts.file, sourcePointer: opts.sourcePointer }));
   }
   if (opts.elasticsearch) {
     opts.elasticsearch.dataStream = true;
-    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer, esTransformer: opts.esTransformer, fieldOptions: opts.fieldOptions });
+    const esTransport = createElasticSearchTransport({ ...opts.elasticsearch, sourcePointer: opts.sourcePointer, esTransformer: opts.esTransformer }, precompiled);
     esTransport.on('error', (error) => {
       console.error('Elasticsearch indexing error', error);
     });

@@ -1,6 +1,6 @@
 import { format, transports } from 'winston';
 import * as rTracer from 'cls-rtracer';
-import { getCircularReplacer, globalLoggerCtxKey, traceFormatter, logFieldsHandler } from './utils';
+import { getCircularReplacer, globalLoggerCtxKey, traceFormatter, logFieldsHandler, PrecompiledFieldOptions } from './utils';
 import { RestoreFieldsOptions } from './index';
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
@@ -11,7 +11,7 @@ export interface RestoreLoggerConsoleTransportOptions extends transports.Console
 }
 
 // a custom format that outputs request id
-function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
+function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompiled?: PrecompiledFieldOptions) {
   return format.printf((info) => {
     const rid = rTracer.id();
     const time = info.timestamp;
@@ -25,11 +25,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     delete info.timestamp;
     let object = {};
     if (splat) {
-      const transformedFields = logFieldsHandler(splat, opts.fieldOptions);
+      const transformedFields = logFieldsHandler(splat, precompiled);
       object = JSON.stringify(transformedFields, getCircularReplacer());
     }
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      const transformedFields = logFieldsHandler(message, opts.fieldOptions);
+      const transformedFields = logFieldsHandler(message, precompiled);
       message = JSON.stringify(transformedFields, getCircularReplacer());
     }
     let ret: string[] = [];
@@ -73,11 +73,11 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
   });
 }
 
-export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}) {
+export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}, precompiled?: PrecompiledFieldOptions ) {
   let formats: any[] = [
     format.simple(),
     format.timestamp(),
-    createTracerFormat(opts),
+    createTracerFormat(opts, precompiled),
   ]
 
   if (opts.prettyPrint !== false) {

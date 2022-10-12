@@ -43,14 +43,14 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     transformed.source_host = os.hostname();
     transformed.message = logData.message;
     if (typeof transformed.message === 'object') {
-      logFieldsHandler(transformed.message, opts.fieldOptions);
-      transformed.message = JSON.stringify(transformed.message, getCircularReplacer());
+      const transformedFields = logFieldsHandler(transformed.message, opts.fieldOptions);
+      transformed.message = JSON.stringify(transformedFields, getCircularReplacer());
     }
     transformed.severity = logData.level;
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
-      logFieldsHandler(JSON.parse(transformed.fields), opts.fieldOptions);
-      transformed.fields ={ message: transformed.fields };
+      const transformedFields = logFieldsHandler(JSON.parse(transformed.fields), opts.fieldOptions);
+      transformed.fields ={ message: transformedFields };
     }
 
     if (opts.esTransformer && typeof opts.esTransformer === 'function') {

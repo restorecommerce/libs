@@ -187,16 +187,17 @@ export const setNestedPath = (object: any, fieldPath: string, operation: string,
 };
 
 export const logFieldsHandler = (object: any, fieldOptions?: RestoreFieldsOptions) => {
+  let ObjectFieldsMod = _.cloneDeep(object);
   if (!fieldOptions) {
-    return;
+    return object;
   }
   // if nonoe of bufferFields or maskFields or omitFields are set then do not proceed further
   if (_.isEmpty(fieldOptions?.maskFields) && _.isEmpty(fieldOptions?.omitFields) && _.isEmpty(fieldOptions?.bufferFields)) {
-    return;
+    return object;
   }
 
   // since multiple comma separated  objects can be passed as fields for logging
-  for (let obj of object) {
+  for (let obj of ObjectFieldsMod) {
     // iterate to check each mask field
     if (!_.isEmpty(fieldOptions?.maskFields)) {
       fieldOptions?.maskFields?.forEach((fieldPath) => {
@@ -248,5 +249,5 @@ export const logFieldsHandler = (object: any, fieldOptions?: RestoreFieldsOption
       });
     }
   }
-  return object;
+  return ObjectFieldsMod;
 };

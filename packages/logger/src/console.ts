@@ -25,12 +25,12 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions) {
     delete info.timestamp;
     let object = {};
     if (splat) {
-      logFieldsHandler(splat, opts.fieldOptions);
-      object = JSON.stringify(splat, getCircularReplacer());
+      const transformedFields = logFieldsHandler(splat, opts.fieldOptions);
+      object = JSON.stringify(transformedFields, getCircularReplacer());
     }
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      logFieldsHandler(message, opts.fieldOptions);
-      message = JSON.stringify(message, getCircularReplacer());
+      const transformedFields = logFieldsHandler(message, opts.fieldOptions);
+      message = JSON.stringify(transformedFields, getCircularReplacer());
     }
     let ret: string[] = [];
     ret.push(`${level}: ${time}`);

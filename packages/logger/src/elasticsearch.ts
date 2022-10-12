@@ -1,7 +1,7 @@
-import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from 'winston-elasticsearch';
+import { ElasticsearchTransport, ElasticsearchTransportOptions } from 'winston-elasticsearch';
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
-import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler, PrecompiledFieldOptions, precompile } from './utils';
+import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler, PrecompiledFieldOptions } from './utils';
 import { RestoreFieldsOptions } from './index';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');

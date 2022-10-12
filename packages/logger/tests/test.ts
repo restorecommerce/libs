@@ -26,6 +26,12 @@ const opts: RestoreLoggerOptions = {
     },
     dataStream: true,
     source: "logger-test"
+  },
+  fieldOptions: {
+    maskFields: ['password'],
+    bufferFields: [{
+      fieldPath: 'test.data'
+    }]
   }
 };
 
@@ -68,11 +74,31 @@ describe('a logger', () => {
       done();
     });
     it('a circular object', (done) => {
-      const obj: any = {name: "Bob"};
+      const obj: any = { name: "Bob" };
       obj.child = obj;
       logger.info(obj);
       done();
     });
-        esTransport.bulkWriter.stop();
+    it('should mask configured password field', (done) => {
+      logger.log('debug', 'Message with password field in object masked',
+        { login_name: 'test', password: 'Test1234' },
+        { login_name: 'test2', password: 'Test1234' });
+      done();
+    });
+    it('should skip logging buffer fields', (done) => {
+      logger.log('debug', 'Message with buffer fields skipped in object',
+        {
+          login_name: 'test', test: {
+            data: { value: Buffer.from('Test1234') }
+          }
+        },
+        {
+          login_name: 'test2', test: {
+            data: { value: Buffer.from('Test1234') }
+          }
+        });
+      done();
+    });
+    esTransport.bulkWriter.stop();
   });
 });

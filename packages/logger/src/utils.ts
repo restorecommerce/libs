@@ -280,9 +280,12 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
   if (_.isEmpty(precompiled?.maskFields) && _.isEmpty(precompiled?.omitFields) && _.isEmpty(precompiled?.bufferFields)) {
     return object;
   }
-  let ObjectFieldsMod = _.cloneDeep(object);
+  let objectFieldsMod = _.cloneDeep(object);
   // since multiple comma separated  objects can be passed as fields for logging
-  for (let obj of ObjectFieldsMod) {
+  if (!_.isArray(objectFieldsMod)) {
+    objectFieldsMod = [objectFieldsMod];
+  }
+  for (let obj of objectFieldsMod) {
     // iterate to check each mask field
     if (!_.isEmpty(precompiled?.maskFields)) {
       precompiled?.maskFields?.forEach((maskCfg) => {
@@ -300,9 +303,9 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
     // iterate to check each buffer field
     if (!_.isEmpty(precompiled?.bufferFields)) {
       precompiled?.bufferFields?.forEach((bufferFieldObj) => {
-        setIfExists(obj, bufferFieldObj.fieldPath, bufferFieldObj.fieldList,  'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging);
+        setIfExists(obj, bufferFieldObj.fieldPath, bufferFieldObj.fieldList, 'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging);
       });
     }
   }
-  return ObjectFieldsMod;
+  return objectFieldsMod;
 };

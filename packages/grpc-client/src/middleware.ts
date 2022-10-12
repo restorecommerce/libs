@@ -36,24 +36,7 @@ export const loggingMiddleware = (logger: ReturnType<typeof createLogger>, omitt
     const {path} = call.method;
 
     logger.info(`[rid: ${options.rid}] Invoking endpoint ${path}`);
-
-
-    const cloned: any = _.cloneDeep(call);
-    if (omittedFields && !_.isEmpty(cloned)) {
-      const keys = Object.keys(omittedFields);
-      for (let key of keys) {
-        const bufferField = omittedFields[key];
-        if (Array.isArray(bufferField)) {
-          for (let eachBufField of bufferField) {
-            delete cloned[eachBufField];
-          }
-        } else if (cloned[bufferField]) {
-          delete cloned[bufferField];
-        }
-      }
-    }
-
-    logger.debug(`[rid: ${options.rid}] invoking ${path} endpoint with data:`, { request: cloned });
+    logger.debug(`[rid: ${options.rid}] invoking ${path} endpoint with data`, { request: call.request });
 
     try {
       return yield* call.next(call.request, options);

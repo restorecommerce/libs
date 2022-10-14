@@ -1,3 +1,7 @@
+### 1.1.1 (October 14th, 2022)
+
+- updated dependencies 
+
 ### 1.1.0 (October 5th, 2022)
 
 - integrated full text search

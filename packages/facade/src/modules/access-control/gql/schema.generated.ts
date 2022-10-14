@@ -867,7 +867,7 @@ export type IoRestorecommerceAccessControlResponseResolvers<ContextType = Access
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAccessControlResponseDecisionResolvers = { PERMIT: 'undefined', DENY: 1, NOT_APPLICABLE: 2, INDETERMINATE: 3 };
+export type IoRestorecommerceAccessControlResponseDecisionResolvers = { PERMIT: 0, DENY: 1, NOT_APPLICABLE: 2, INDETERMINATE: 3 };
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -935,7 +935,7 @@ export type IoRestorecommerceRuleRuleRqResolvers<ContextType = AccessControlCont
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceRuleEffectResolvers = { PERMIT: 'undefined', DENY: 1 };
+export type IoRestorecommerceRuleEffectResolvers = { PERMIT: 0, DENY: 1 };
 
 export type IoRestorecommerceRuleContextQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceRuleContextQuery'] = ResolversParentTypes['IoRestorecommerceRuleContextQuery']> = ResolversObject<{
   filters?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFilterFilterOp']>>, ParentType, ContextType>;
@@ -958,11 +958,11 @@ export type IoRestorecommerceFilterFilterResolvers<ContextType = AccessControlCo
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 0, lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
-export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 0, NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
-export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 0, or: 1 };
 
 export type AccessControlPolicyQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyQuery'] = ResolversParentTypes['AccessControlPolicyQuery']> = ResolversObject<{
   Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyQueryReadArgs, 'input'>>;
@@ -1021,13 +1021,13 @@ export type IoRestorecommerceStatusStatusResolvers<ContextType = AccessControlCo
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 0, ASCENDING: 1, DESCENDING: 2 };
 
-export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 0, lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
-export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 0, NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
-export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 0, or: 1 };
 
 export type AccessControlRuleQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleQuery'] = ResolversParentTypes['AccessControlRuleQuery']> = ResolversObject<{
   Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleListResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleQueryReadArgs, 'input'>>;

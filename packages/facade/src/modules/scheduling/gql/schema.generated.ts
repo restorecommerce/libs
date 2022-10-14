@@ -575,7 +575,7 @@ export type IoRestorecommerceJobJobOptionsResolvers<ContextType = SchedulingCont
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobJobOptionsPriorityResolvers = { NORMAL: 'undefined', LOW: 10, MEDIUM: -5, HIGH: -10, CRITICAL: -15 };
+export type IoRestorecommerceJobJobOptionsPriorityResolvers = { NORMAL: 0, LOW: 10, MEDIUM: -5, HIGH: -10, CRITICAL: -15 };
 
 export type IoRestorecommerceJobBackoffResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobBackoff'] = ResolversParentTypes['IoRestorecommerceJobBackoff']> = ResolversObject<{
   delay?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -583,7 +583,7 @@ export type IoRestorecommerceJobBackoffResolvers<ContextType = SchedulingContext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobBackoffTypeResolvers = { FIXED: 'undefined', EXPONENTIAL: 1 };
+export type IoRestorecommerceJobBackoffTypeResolvers = { FIXED: 0, EXPONENTIAL: 1 };
 
 export type IoRestorecommerceJobRepeatResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobRepeat'] = ResolversParentTypes['IoRestorecommerceJobRepeat']> = ResolversObject<{
   every?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -608,7 +608,7 @@ export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = Schedu
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobJobReadRequestSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+export type IoRestorecommerceJobJobReadRequestSortOrderResolvers = { UNSORTED: 0, ASCENDING: 1, DESCENDING: 2 };
 
 export type MutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   scheduling?: Resolver<ResolversTypes['SchedulingMutation'], ParentType, ContextType>;

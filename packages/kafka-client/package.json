@@ -24,14 +24,14 @@
     "events": "^3.3.0",
     "kafkajs": "^2.1.0",
     "lodash": "^4.17.21",
-    "protobufjs": "^6.11.3",
+    "protobufjs": "^7.1.2",
     "retry": "^0.13.1",
     "winston": "^3.8.1"
   },
   "devDependencies": {
     "@types/async": "^3.2.15",
     "@types/long": "^4.0.2",
-    "@types/mocha": "^9.1.1",
+    "@types/mocha": "^10.0.0",
     "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/eslint-plugin-tslint": "^5.30.5",

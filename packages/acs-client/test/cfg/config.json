@@ -5,6 +5,16 @@
       "level": "silly",
       "colorize": true,
       "prettyPrint": true
+    },
+    "fieldOptions": {
+      "bufferFields": [
+        {
+          "fieldPath": "request.target.context.subject"
+        },
+        {
+          "fieldPath": "request.target.context.resources"
+        }
+      ]
     }
   },
   "redis": {

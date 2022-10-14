@@ -1,20 +1,11 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Subject, protoMetadata as protoMetadata3 } from "./auth";
-import {
-  OperationStatus,
-  Status,
-  protoMetadata as protoMetadata4,
-} from "./status";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { CallContext, CallOptions } from "nice-grpc-common";
-import {
-  protoMetadata as protoMetadata1,
-  ReadRequest,
-  DeleteRequest,
-  DeleteResponse,
-} from "./resource_base";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata3, Subject } from "./auth";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.notification_channel";
 
@@ -54,10 +45,7 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(
-    message: Deleted,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -83,9 +71,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-    };
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
   toJSON(message: Deleted): unknown {
@@ -106,10 +92,7 @@ function createBaseNotificationChannelList(): NotificationChannelList {
 }
 
 export const NotificationChannelList = {
-  encode(
-    message: NotificationChannelList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: NotificationChannelList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       NotificationChannel.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -122,10 +105,7 @@ export const NotificationChannelList = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): NotificationChannelList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): NotificationChannelList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNotificationChannelList();
@@ -133,9 +113,7 @@ export const NotificationChannelList = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(
-            NotificationChannel.decode(reader, reader.uint32())
-          );
+          message.items.push(NotificationChannel.decode(reader, reader.uint32()));
           break;
         case 2:
           message.total_count = reader.uint32();
@@ -153,45 +131,31 @@ export const NotificationChannelList = {
 
   fromJSON(object: any): NotificationChannelList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => NotificationChannel.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => NotificationChannel.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: NotificationChannelList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? NotificationChannel.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? NotificationChannel.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<NotificationChannelList>
-  ): NotificationChannelList {
+  fromPartial(object: DeepPartial<NotificationChannelList>): NotificationChannelList {
     const message = createBaseNotificationChannelList();
-    message.items =
-      object.items?.map((e) => NotificationChannel.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => NotificationChannel.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -201,10 +165,7 @@ function createBaseNotificationChannelListResponse(): NotificationChannelListRes
 }
 
 export const NotificationChannelListResponse = {
-  encode(
-    message: NotificationChannelListResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: NotificationChannelListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       NotificationChannelResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -212,18 +173,12 @@ export const NotificationChannelListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(
-        message.operation_status,
-        writer.uint32(26).fork()
-      ).ldelim();
+      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): NotificationChannelListResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): NotificationChannelListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNotificationChannelListResponse();
@@ -231,18 +186,13 @@ export const NotificationChannelListResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(
-            NotificationChannelResponse.decode(reader, reader.uint32())
-          );
+          message.items.push(NotificationChannelResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
-            reader,
-            reader.uint32()
-          );
+          message.operation_status = OperationStatus.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -254,46 +204,32 @@ export const NotificationChannelListResponse = {
 
   fromJSON(object: any): NotificationChannelListResponse {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => NotificationChannelResponse.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => NotificationChannelResponse.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status)
-        ? OperationStatus.fromJSON(object.operation_status)
-        : undefined,
+      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
     };
   },
 
   toJSON(message: NotificationChannelListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? NotificationChannelResponse.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? NotificationChannelResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
-        : undefined);
+      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<NotificationChannelListResponse>
-  ): NotificationChannelListResponse {
+  fromPartial(object: DeepPartial<NotificationChannelListResponse>): NotificationChannelListResponse {
     const message = createBaseNotificationChannelListResponse();
-    message.items =
-      object.items?.map((e) => NotificationChannelResponse.fromPartial(e)) ||
-      [];
+    message.items = object.items?.map((e) => NotificationChannelResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status =
-      object.operation_status !== undefined && object.operation_status !== null
-        ? OperationStatus.fromPartial(object.operation_status)
-        : undefined;
+    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
+      ? OperationStatus.fromPartial(object.operation_status)
+      : undefined;
     return message;
   },
 };
@@ -303,15 +239,9 @@ function createBaseNotificationChannelResponse(): NotificationChannelResponse {
 }
 
 export const NotificationChannelResponse = {
-  encode(
-    message: NotificationChannelResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: NotificationChannelResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.items !== undefined) {
-      NotificationChannel.encode(
-        message.items,
-        writer.uint32(10).fork()
-      ).ldelim();
+      NotificationChannel.encode(message.items, writer.uint32(10).fork()).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -319,10 +249,7 @@ export const NotificationChannelResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): NotificationChannelResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): NotificationChannelResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNotificationChannelResponse();
@@ -345,57 +272,36 @@ export const NotificationChannelResponse = {
 
   fromJSON(object: any): NotificationChannelResponse {
     return {
-      items: isSet(object.items)
-        ? NotificationChannel.fromJSON(object.items)
-        : undefined,
+      items: isSet(object.items) ? NotificationChannel.fromJSON(object.items) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: NotificationChannelResponse): unknown {
     const obj: any = {};
-    message.items !== undefined &&
-      (obj.items = message.items
-        ? NotificationChannel.toJSON(message.items)
-        : undefined);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.items !== undefined && (obj.items = message.items ? NotificationChannel.toJSON(message.items) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<NotificationChannelResponse>
-  ): NotificationChannelResponse {
+  fromPartial(object: DeepPartial<NotificationChannelResponse>): NotificationChannelResponse {
     const message = createBaseNotificationChannelResponse();
-    message.items =
-      object.items !== undefined && object.items !== null
-        ? NotificationChannel.fromPartial(object.items)
-        : undefined;
-    message.status =
-      object.status !== undefined && object.status !== null
-        ? Status.fromPartial(object.status)
-        : undefined;
+    message.items = (object.items !== undefined && object.items !== null)
+      ? NotificationChannel.fromPartial(object.items)
+      : undefined;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? Status.fromPartial(object.status)
+      : undefined;
     return message;
   },
 };
 
 function createBaseNotificationChannel(): NotificationChannel {
-  return {
-    id: "",
-    meta: undefined,
-    name: "",
-    description: "",
-    email: undefined,
-    sms: undefined,
-    webhook: undefined,
-  };
+  return { id: "", meta: undefined, name: "", description: "", email: undefined, sms: undefined, webhook: undefined };
 }
 
 export const NotificationChannel = {
-  encode(
-    message: NotificationChannel,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: NotificationChannel, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -471,11 +377,9 @@ export const NotificationChannel = {
   toJSON(message: NotificationChannel): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined &&
-      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
+    message.description !== undefined && (obj.description = message.description);
     message.email !== undefined && (obj.email = message.email);
     message.sms !== undefined && (obj.sms = message.sms);
     message.webhook !== undefined && (obj.webhook = message.webhook);
@@ -485,10 +389,7 @@ export const NotificationChannel = {
   fromPartial(object: DeepPartial<NotificationChannel>): NotificationChannel {
     const message = createBaseNotificationChannel();
     message.id = object.id ?? "";
-    message.meta =
-      object.meta !== undefined && object.meta !== null
-        ? Meta.fromPartial(object.meta)
-        : undefined;
+    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.email = object.email ?? undefined;
@@ -550,46 +451,40 @@ export const ServiceDefinition = {
 export interface ServiceServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<NotificationChannelListResponse>>;
   create(
     request: NotificationChannelList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<NotificationChannelListResponse>>;
-  delete(
-    request: DeleteRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<DeleteResponse>>;
+  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
   update(
     request: NotificationChannelList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<NotificationChannelListResponse>>;
   upsert(
     request: NotificationChannelList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<NotificationChannelListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<NotificationChannelListResponse>;
   create(
     request: DeepPartial<NotificationChannelList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<NotificationChannelListResponse>;
-  delete(
-    request: DeepPartial<DeleteRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<DeleteResponse>;
+  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
   update(
     request: DeepPartial<NotificationChannelList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<NotificationChannelListResponse>;
   upsert(
     request: DeepPartial<NotificationChannelList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<NotificationChannelListResponse>;
 }
 
@@ -607,420 +502,342 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/notification_channel.proto",
-    package: "io.restorecommerce.notification_channel",
-    dependency: [
+    "name": "io/restorecommerce/notification_channel.proto",
+    "package": "io.restorecommerce.notification_channel",
+    "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
     ],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "NotificationChannelList",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName:
-              ".io.restorecommerce.notification_channel.NotificationChannel",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "NotificationChannelListResponse",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName:
-              ".io.restorecommerce.notification_channel.NotificationChannelResponse",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "operation_status",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.OperationStatus",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "operationStatus",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "NotificationChannelResponse",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName:
-              ".io.restorecommerce.notification_channel.NotificationChannel",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "status",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "NotificationChannel",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "meta",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.meta.Meta",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "meta",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "name",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "description",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "description",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "email",
-            number: 5,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "email",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "sms",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "sms",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "webhook",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "webhook",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [{ name: "configuration_type", options: undefined }],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [
-      {
-        name: "Service",
-        method: [
-          {
-            name: "Read",
-            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Create",
-            inputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelList",
-            outputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Delete",
-            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Update",
-            inputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelList",
-            outputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Upsert",
-            inputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelList",
-            outputType:
-              ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-        ],
-        options: undefined,
-      },
-    ],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [6, 0],
-          span: [10, 0, 16, 1],
-          leadingComments: " Message structure for Notification Channel\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-      ],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Deleted",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "NotificationChannelList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_channel.NotificationChannel",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "NotificationChannelListResponse",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_channel.NotificationChannelResponse",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "operation_status",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.OperationStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "operationStatus",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "NotificationChannelResponse",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_channel.NotificationChannel",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "status",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "NotificationChannel",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "meta",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.meta.Meta",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "meta",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "name",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "description",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "description",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "email",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "email",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "sms",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "sms",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "webhook",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "webhook",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "configuration_type", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [{
+      "name": "Service",
+      "method": [{
+        "name": "Read",
+        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
+        "outputType": ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Create",
+        "inputType": ".io.restorecommerce.notification_channel.NotificationChannelList",
+        "outputType": ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Delete",
+        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
+        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Update",
+        "inputType": ".io.restorecommerce.notification_channel.NotificationChannelList",
+        "outputType": ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Upsert",
+        "inputType": ".io.restorecommerce.notification_channel.NotificationChannelList",
+        "outputType": ".io.restorecommerce.notification_channel.NotificationChannelListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": undefined,
+    }],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [6, 0],
+        "span": [10, 0, 16, 1],
+        "leadingComments": " Message structure for Notification Channel\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.notification_channel.Deleted": Deleted,
-    ".io.restorecommerce.notification_channel.NotificationChannelList":
-      NotificationChannelList,
-    ".io.restorecommerce.notification_channel.NotificationChannelListResponse":
-      NotificationChannelListResponse,
-    ".io.restorecommerce.notification_channel.NotificationChannelResponse":
-      NotificationChannelResponse,
-    ".io.restorecommerce.notification_channel.NotificationChannel":
-      NotificationChannel,
+    ".io.restorecommerce.notification_channel.NotificationChannelList": NotificationChannelList,
+    ".io.restorecommerce.notification_channel.NotificationChannelListResponse": NotificationChannelListResponse,
+    ".io.restorecommerce.notification_channel.NotificationChannelResponse": NotificationChannelResponse,
+    ".io.restorecommerce.notification_channel.NotificationChannel": NotificationChannel,
   },
-  dependencies: [
-    protoMetadata1,
-    protoMetadata2,
-    protoMetadata3,
-    protoMetadata4,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4],
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

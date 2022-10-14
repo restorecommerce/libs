@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "io.restorecommerce.image";
 
@@ -26,16 +26,7 @@ export interface Deleted {
 }
 
 function createBaseImage(): Image {
-  return {
-    id: "",
-    caption: "",
-    filename: "",
-    contentType: "",
-    url: "",
-    width: 0,
-    height: 0,
-    length: 0,
-  };
+  return { id: "", caption: "", filename: "", contentType: "", url: "", width: 0, height: 0, length: 0 };
 }
 
 export const Image = {
@@ -124,8 +115,7 @@ export const Image = {
     message.id !== undefined && (obj.id = message.id);
     message.caption !== undefined && (obj.caption = message.caption);
     message.filename !== undefined && (obj.filename = message.filename);
-    message.contentType !== undefined &&
-      (obj.contentType = message.contentType);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
     message.url !== undefined && (obj.url = message.url);
     message.width !== undefined && (obj.width = message.width);
     message.height !== undefined && (obj.height = message.height);
@@ -152,10 +142,7 @@ function createBaseImageList(): ImageList {
 }
 
 export const ImageList = {
-  encode(
-    message: ImageList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ImageList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       Image.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -188,9 +175,7 @@ export const ImageList = {
 
   fromJSON(object: any): ImageList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Image.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Image.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
     };
   },
@@ -198,12 +183,11 @@ export const ImageList = {
   toJSON(message: ImageList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Image.toJSON(e) : undefined));
+      obj.items = message.items.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     return obj;
   },
 
@@ -220,10 +204,7 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(
-    message: Deleted,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -249,9 +230,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-    };
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
   toJSON(message: Deleted): unknown {
@@ -281,230 +260,200 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/image.proto",
-    package: "io.restorecommerce.image",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Image",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "caption",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "caption",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "filename",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "filename",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "content_type",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contentType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "url",
-            number: 5,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "url",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "width",
-            number: 6,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "width",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "height",
-            number: 7,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "height",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "length",
-            number: 8,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "length",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "ImageList",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.image.Image",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [4, 0],
-          span: [5, 0, 14, 1],
-          leadingComments: " ProductCategory resource\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-      ],
+    "name": "io/restorecommerce/image.proto",
+    "package": "io.restorecommerce.image",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Image",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "caption",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "caption",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "filename",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "filename",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "content_type",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contentType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "url",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "url",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "width",
+        "number": 6,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "width",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "height",
+        "number": 7,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "height",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "length",
+        "number": 8,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "length",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ImageList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.image.Image",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Deleted",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [4, 0],
+        "span": [5, 0, 14, 1],
+        "leadingComments": " ProductCategory resource\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.image.Image": Image,
@@ -514,23 +463,11 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

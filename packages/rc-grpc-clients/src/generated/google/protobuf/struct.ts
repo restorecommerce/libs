@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "google.protobuf";
 
@@ -68,13 +68,21 @@ export interface Struct_FieldsEntry {
  */
 export interface Value {
   /** / Represents a null value. */
-  nullValue: NullValue | undefined;
+  nullValue:
+    | NullValue
+    | undefined;
   /** / Represents a double value. */
-  numberValue: number | undefined;
+  numberValue:
+    | number
+    | undefined;
   /** / Represents a string value. */
-  stringValue: string | undefined;
+  stringValue:
+    | string
+    | undefined;
   /** / Represents a boolean value. */
-  boolValue: boolean | undefined;
+  boolValue:
+    | boolean
+    | undefined;
   /** / Represents a structured value. */
   structValue?: { [key: string]: any };
   /** / Represents a repeated `Value`. */
@@ -96,16 +104,10 @@ function createBaseStruct(): Struct {
 }
 
 export const Struct = {
-  encode(
-    message: Struct,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Struct, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     Object.entries(message.fields).forEach(([key, value]) => {
       if (value !== undefined) {
-        Struct_FieldsEntry.encode(
-          { key: key as any, value },
-          writer.uint32(10).fork()
-        ).ldelim();
+        Struct_FieldsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).ldelim();
       }
     });
     return writer;
@@ -135,13 +137,10 @@ export const Struct = {
   fromJSON(object: any): Struct {
     return {
       fields: isObject(object.fields)
-        ? Object.entries(object.fields).reduce<{ [key: string]: any }>(
-            (acc, [key, value]) => {
-              acc[key] = value as any;
-              return acc;
-            },
-            {}
-          )
+        ? Object.entries(object.fields).reduce<{ [key: string]: any }>((acc, [key, value]) => {
+          acc[key] = value as any;
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -159,9 +158,7 @@ export const Struct = {
 
   fromPartial(object: DeepPartial<Struct>): Struct {
     const message = createBaseStruct();
-    message.fields = Object.entries(object.fields ?? {}).reduce<{
-      [key: string]: any;
-    }>((acc, [key, value]) => {
+    message.fields = Object.entries(object.fields ?? {}).reduce<{ [key: string]: any }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = value;
       }
@@ -194,18 +191,12 @@ function createBaseStruct_FieldsEntry(): Struct_FieldsEntry {
 }
 
 export const Struct_FieldsEntry = {
-  encode(
-    message: Struct_FieldsEntry,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Struct_FieldsEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
     if (message.value !== undefined) {
-      Value.encode(
-        Value.wrap(message.value),
-        writer.uint32(18).fork()
-      ).ldelim();
+      Value.encode(Value.wrap(message.value), writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -232,10 +223,7 @@ export const Struct_FieldsEntry = {
   },
 
   fromJSON(object: any): Struct_FieldsEntry {
-    return {
-      key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object?.value) ? object.value : undefined,
-    };
+    return { key: isSet(object.key) ? String(object.key) : "", value: isSet(object?.value) ? object.value : undefined };
   },
 
   toJSON(message: Struct_FieldsEntry): unknown {
@@ -279,16 +267,10 @@ export const Value = {
       writer.uint32(32).bool(message.boolValue);
     }
     if (message.structValue !== undefined) {
-      Struct.encode(
-        Struct.wrap(message.structValue),
-        writer.uint32(42).fork()
-      ).ldelim();
+      Struct.encode(Struct.wrap(message.structValue), writer.uint32(42).fork()).ldelim();
     }
     if (message.listValue !== undefined) {
-      ListValue.encode(
-        ListValue.wrap(message.listValue),
-        writer.uint32(50).fork()
-      ).ldelim();
+      ListValue.encode(ListValue.wrap(message.listValue), writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -313,14 +295,10 @@ export const Value = {
           message.boolValue = reader.bool();
           break;
         case 5:
-          message.structValue = Struct.unwrap(
-            Struct.decode(reader, reader.uint32())
-          );
+          message.structValue = Struct.unwrap(Struct.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.listValue = ListValue.unwrap(
-            ListValue.decode(reader, reader.uint32())
-          );
+          message.listValue = ListValue.unwrap(ListValue.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -332,41 +310,23 @@ export const Value = {
 
   fromJSON(object: any): Value {
     return {
-      nullValue: isSet(object.nullValue)
-        ? nullValueFromJSON(object.nullValue)
-        : undefined,
-      numberValue: isSet(object.numberValue)
-        ? Number(object.numberValue)
-        : undefined,
-      stringValue: isSet(object.stringValue)
-        ? String(object.stringValue)
-        : undefined,
-      boolValue: isSet(object.boolValue)
-        ? Boolean(object.boolValue)
-        : undefined,
-      structValue: isObject(object.structValue)
-        ? object.structValue
-        : undefined,
-      listValue: Array.isArray(object.listValue)
-        ? [...object.listValue]
-        : undefined,
+      nullValue: isSet(object.nullValue) ? nullValueFromJSON(object.nullValue) : undefined,
+      numberValue: isSet(object.numberValue) ? Number(object.numberValue) : undefined,
+      stringValue: isSet(object.stringValue) ? String(object.stringValue) : undefined,
+      boolValue: isSet(object.boolValue) ? Boolean(object.boolValue) : undefined,
+      structValue: isObject(object.structValue) ? object.structValue : undefined,
+      listValue: Array.isArray(object.listValue) ? [...object.listValue] : undefined,
     };
   },
 
   toJSON(message: Value): unknown {
     const obj: any = {};
     message.nullValue !== undefined &&
-      (obj.nullValue =
-        message.nullValue !== undefined
-          ? nullValueToJSON(message.nullValue)
-          : undefined);
-    message.numberValue !== undefined &&
-      (obj.numberValue = message.numberValue);
-    message.stringValue !== undefined &&
-      (obj.stringValue = message.stringValue);
+      (obj.nullValue = message.nullValue !== undefined ? nullValueToJSON(message.nullValue) : undefined);
+    message.numberValue !== undefined && (obj.numberValue = message.numberValue);
+    message.stringValue !== undefined && (obj.stringValue = message.stringValue);
     message.boolValue !== undefined && (obj.boolValue = message.boolValue);
-    message.structValue !== undefined &&
-      (obj.structValue = message.structValue);
+    message.structValue !== undefined && (obj.structValue = message.structValue);
     message.listValue !== undefined && (obj.listValue = message.listValue);
     return obj;
   },
@@ -404,9 +364,7 @@ export const Value = {
     return result;
   },
 
-  unwrap(
-    message: Value
-  ): string | number | boolean | Object | null | Array<any> | undefined {
+  unwrap(message: Value): string | number | boolean | Object | null | Array<any> | undefined {
     if (message?.stringValue !== undefined) {
       return message.stringValue;
     } else if (message?.numberValue !== undefined) {
@@ -429,10 +387,7 @@ function createBaseListValue(): ListValue {
 }
 
 export const ListValue = {
-  encode(
-    message: ListValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ListValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.values) {
       Value.encode(Value.wrap(v!), writer.uint32(10).fork()).ldelim();
     }
@@ -447,9 +402,7 @@ export const ListValue = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.values.push(
-            Value.unwrap(Value.decode(reader, reader.uint32()))
-          );
+          message.values.push(Value.unwrap(Value.decode(reader, reader.uint32())));
           break;
         default:
           reader.skipType(tag & 7);
@@ -460,9 +413,7 @@ export const ListValue = {
   },
 
   fromJSON(object: any): ListValue {
-    return {
-      values: Array.isArray(object?.values) ? [...object.values] : [],
-    };
+    return { values: Array.isArray(object?.values) ? [...object.values] : [] };
   },
 
   toJSON(message: ListValue): unknown {
@@ -508,362 +459,315 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "google/protobuf/struct.proto",
-    package: "google.protobuf",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Struct",
-        field: [
-          {
-            name: "fields",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.Struct.FieldsEntry",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "fields",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [
-          {
-            name: "FieldsEntry",
-            field: [
-              {
-                name: "key",
-                number: 1,
-                label: 1,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "key",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "value",
-                number: 2,
-                label: 1,
-                type: 11,
-                typeName: ".google.protobuf.Value",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "value",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: {
-              messageSetWireFormat: false,
-              noStandardDescriptorAccessor: false,
-              deprecated: false,
-              mapEntry: true,
-              uninterpretedOption: [],
-            },
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Value",
-        field: [
-          {
-            name: "null_value",
-            number: 1,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.NullValue",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "nullValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "number_value",
-            number: 2,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "numberValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "string_value",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "stringValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "bool_value",
-            number: 4,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "boolValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "struct_value",
-            number: 5,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.Struct",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "structValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "list_value",
-            number: 6,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.ListValue",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "listValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [{ name: "kind", options: undefined }],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "ListValue",
-        field: [
-          {
-            name: "values",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.Value",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "values",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [
-      {
-        name: "NullValue",
-        value: [{ name: "NULL_VALUE", number: 0, options: undefined }],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    service: [],
-    extension: [],
-    options: {
-      javaPackage: "com.google.protobuf",
-      javaOuterClassname: "StructProto",
-      javaMultipleFiles: true,
-      javaGenerateEqualsAndHash: true,
-      javaStringCheckUtf8: false,
-      optimizeFor: 1,
-      goPackage: "github.com/golang/protobuf/ptypes/struct;structpb",
-      ccGenericServices: false,
-      javaGenericServices: false,
-      pyGenericServices: false,
-      phpGenericServices: false,
-      deprecated: false,
-      ccEnableArenas: false,
-      objcClassPrefix: "GPB",
-      csharpNamespace: "Google.Protobuf.WellKnownTypes",
-      swiftPrefix: "",
-      phpClassPrefix: "",
-      phpNamespace: "",
-      phpMetadataNamespace: "",
-      rubyPackage: "",
-      uninterpretedOption: [],
+    "name": "google/protobuf/struct.proto",
+    "package": "google.protobuf",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Struct",
+      "field": [{
+        "name": "fields",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.Struct.FieldsEntry",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "fields",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [{
+        "name": "FieldsEntry",
+        "field": [{
+          "name": "key",
+          "number": 1,
+          "label": 1,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "key",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "value",
+          "number": 2,
+          "label": 1,
+          "type": 11,
+          "typeName": ".google.protobuf.Value",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "value",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": {
+          "messageSetWireFormat": false,
+          "noStandardDescriptorAccessor": false,
+          "deprecated": false,
+          "mapEntry": true,
+          "uninterpretedOption": [],
+        },
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Value",
+      "field": [{
+        "name": "null_value",
+        "number": 1,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.NullValue",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "nullValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "number_value",
+        "number": 2,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "numberValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "string_value",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "stringValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "bool_value",
+        "number": 4,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "boolValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "struct_value",
+        "number": 5,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Struct",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "structValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "list_value",
+        "number": 6,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.ListValue",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "listValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "kind", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ListValue",
+      "field": [{
+        "name": "values",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.Value",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "values",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [{
+      "name": "NullValue",
+      "value": [{ "name": "NULL_VALUE", "number": 0, "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "service": [],
+    "extension": [],
+    "options": {
+      "javaPackage": "com.google.protobuf",
+      "javaOuterClassname": "StructProto",
+      "javaMultipleFiles": true,
+      "javaGenerateEqualsAndHash": true,
+      "javaStringCheckUtf8": false,
+      "optimizeFor": 1,
+      "goPackage": "github.com/golang/protobuf/ptypes/struct;structpb",
+      "ccGenericServices": false,
+      "javaGenericServices": false,
+      "pyGenericServices": false,
+      "phpGenericServices": false,
+      "deprecated": false,
+      "ccEnableArenas": false,
+      "objcClassPrefix": "GPB",
+      "csharpNamespace": "Google.Protobuf.WellKnownTypes",
+      "swiftPrefix": "",
+      "phpClassPrefix": "",
+      "phpNamespace": "",
+      "phpMetadataNamespace": "",
+      "rubyPackage": "",
+      "uninterpretedOption": [],
     },
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [4, 0],
-          span: [51, 0, 54, 1],
-          leadingComments:
-            "/ `Struct` represents a structured data value, consisting of fields\n/ which map to dynamically typed values. In some languages, `Struct`\n/ might be supported by a native representation. For example, in\n/ scripting languages like JS a struct is represented as an\n/ object. The details of that representation are described together\n/ with the proto support for the language.\n/\n/ The JSON representation for `Struct` is JSON object.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0, 2, 0],
-          span: [53, 2, 32],
-          leadingComments: "/ Unordered map of dynamically typed values.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1],
-          span: [62, 0, 78, 1],
-          leadingComments:
-            "/ `Value` represents a dynamically typed value which can be either\n/ null, a number, a string, a boolean, a recursive struct value, or a\n/ list of values. A producer of value is expected to set one of that\n/ variants, absence of any variant indicates an error.\n/\n/ The JSON representation for `Value` is JSON value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 8, 0],
-          span: [64, 2, 77, 3],
-          leadingComments: "/ The kind of value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 0],
-          span: [66, 4, 29],
-          leadingComments: "/ Represents a null value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 1],
-          span: [68, 4, 28],
-          leadingComments: "/ Represents a double value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 2],
-          span: [70, 4, 28],
-          leadingComments: "/ Represents a string value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 3],
-          span: [72, 4, 24],
-          leadingComments: "/ Represents a boolean value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 4],
-          span: [74, 4, 28],
-          leadingComments: "/ Represents a structured value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 5],
-          span: [76, 4, 29],
-          leadingComments: "/ Represents a repeated `Value`.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [5, 0],
-          span: [84, 0, 87, 1],
-          leadingComments:
-            "/ `NullValue` is a singleton enumeration to represent the null value for the\n/ `Value` type union.\n/\n/  The JSON representation for `NullValue` is JSON `null`.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [5, 0, 2, 0],
-          span: [86, 2, 17],
-          leadingComments: "/ Null value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2],
-          span: [92, 0, 95, 1],
-          leadingComments:
-            "/ `ListValue` is a wrapper around a repeated field of values.\n/\n/ The JSON representation for `ListValue` is JSON array.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 0],
-          span: [94, 2, 28],
-          leadingComments: "/ Repeated field of dynamically typed values.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-      ],
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [4, 0],
+        "span": [51, 0, 54, 1],
+        "leadingComments":
+          "/ `Struct` represents a structured data value, consisting of fields\n/ which map to dynamically typed values. In some languages, `Struct`\n/ might be supported by a native representation. For example, in\n/ scripting languages like JS a struct is represented as an\n/ object. The details of that representation are described together\n/ with the proto support for the language.\n/\n/ The JSON representation for `Struct` is JSON object.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 0],
+        "span": [53, 2, 32],
+        "leadingComments": "/ Unordered map of dynamically typed values.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1],
+        "span": [62, 0, 78, 1],
+        "leadingComments":
+          "/ `Value` represents a dynamically typed value which can be either\n/ null, a number, a string, a boolean, a recursive struct value, or a\n/ list of values. A producer of value is expected to set one of that\n/ variants, absence of any variant indicates an error.\n/\n/ The JSON representation for `Value` is JSON value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 8, 0],
+        "span": [64, 2, 77, 3],
+        "leadingComments": "/ The kind of value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 0],
+        "span": [66, 4, 29],
+        "leadingComments": "/ Represents a null value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 1],
+        "span": [68, 4, 28],
+        "leadingComments": "/ Represents a double value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 2],
+        "span": [70, 4, 28],
+        "leadingComments": "/ Represents a string value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 3],
+        "span": [72, 4, 24],
+        "leadingComments": "/ Represents a boolean value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 4],
+        "span": [74, 4, 28],
+        "leadingComments": "/ Represents a structured value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 5],
+        "span": [76, 4, 29],
+        "leadingComments": "/ Represents a repeated `Value`.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [5, 0],
+        "span": [84, 0, 87, 1],
+        "leadingComments":
+          "/ `NullValue` is a singleton enumeration to represent the null value for the\n/ `Value` type union.\n/\n/  The JSON representation for `NullValue` is JSON `null`.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [5, 0, 2, 0],
+        "span": [86, 2, 17],
+        "leadingComments": "/ Null value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2],
+        "span": [92, 0, 95, 1],
+        "leadingComments":
+          "/ `ListValue` is a wrapper around a repeated field of values.\n/\n/ The JSON representation for `ListValue` is JSON array.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 0],
+        "span": [94, 2, 28],
+        "leadingComments": "/ Repeated field of dynamically typed values.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".google.protobuf.NullValue": NullValue,
@@ -875,23 +779,11 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isObject(value: any): boolean {

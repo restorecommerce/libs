@@ -1,27 +1,15 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Subject, protoMetadata as protoMetadata4 } from "./auth";
-import {
-  OperationStatus,
-  Status,
-  protoMetadata as protoMetadata5,
-} from "./status";
-import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import {
-  Any,
-  protoMetadata as protoMetadata2,
-} from "../../google/protobuf/any";
-import { CallContext, CallOptions } from "nice-grpc-common";
-import {
-  protoMetadata as protoMetadata1,
-  ReadRequest,
-  DeleteRequest,
-  DeleteResponse,
-} from "./resource_base";
-import { protoMetadata as protoMetadata6, Resolver } from "./options";
-import { protoMetadata as protoMetadata7 } from "./address";
-import { protoMetadata as protoMetadata8 } from "./contact_point";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { Any, protoMetadata as protoMetadata2 } from "../../google/protobuf/any";
+import { protoMetadata as protoMetadata7 } from "./address";
+import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { protoMetadata as protoMetadata8 } from "./contact_point";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { protoMetadata as protoMetadata6, Resolver } from "./options";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.organization";
 
@@ -81,10 +69,7 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(
-    message: Deleted,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -110,9 +95,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-    };
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
   toJSON(message: Deleted): unknown {
@@ -133,10 +116,7 @@ function createBaseDeleteOrgData(): DeleteOrgData {
 }
 
 export const DeleteOrgData = {
-  encode(
-    message: DeleteOrgData,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DeleteOrgData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.orgIds) {
       writer.uint32(10).string(v!);
     }
@@ -175,15 +155,9 @@ export const DeleteOrgData = {
 
   fromJSON(object: any): DeleteOrgData {
     return {
-      orgIds: Array.isArray(object?.orgIds)
-        ? object.orgIds.map((e: any) => String(e))
-        : [],
-      userIds: Array.isArray(object?.userIds)
-        ? object.userIds.map((e: any) => String(e))
-        : [],
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      orgIds: Array.isArray(object?.orgIds) ? object.orgIds.map((e: any) => String(e)) : [],
+      userIds: Array.isArray(object?.userIds) ? object.userIds.map((e: any) => String(e)) : [],
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
@@ -199,10 +173,7 @@ export const DeleteOrgData = {
     } else {
       obj.userIds = [];
     }
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
@@ -210,10 +181,9 @@ export const DeleteOrgData = {
     const message = createBaseDeleteOrgData();
     message.orgIds = object.orgIds?.map((e) => e) || [];
     message.userIds = object.userIds?.map((e) => e) || [];
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -223,10 +193,7 @@ function createBaseOrganizationList(): OrganizationList {
 }
 
 export const OrganizationList = {
-  encode(
-    message: OrganizationList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrganizationList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       Organization.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -265,31 +232,21 @@ export const OrganizationList = {
 
   fromJSON(object: any): OrganizationList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Organization.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Organization.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: OrganizationList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? Organization.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? Organization.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
@@ -297,10 +254,9 @@ export const OrganizationList = {
     const message = createBaseOrganizationList();
     message.items = object.items?.map((e) => Organization.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -310,10 +266,7 @@ function createBaseOrganizationListResponse(): OrganizationListResponse {
 }
 
 export const OrganizationListResponse = {
-  encode(
-    message: OrganizationListResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrganizationListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       OrganizationResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -321,18 +274,12 @@ export const OrganizationListResponse = {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
-      OperationStatus.encode(
-        message.operationStatus,
-        writer.uint32(26).fork()
-      ).ldelim();
+      OperationStatus.encode(message.operationStatus, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): OrganizationListResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganizationListResponse();
@@ -340,18 +287,13 @@ export const OrganizationListResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(
-            OrganizationResponse.decode(reader, reader.uint32())
-          );
+          message.items.push(OrganizationResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
-            reader,
-            reader.uint32()
-          );
+          message.operationStatus = OperationStatus.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -363,45 +305,32 @@ export const OrganizationListResponse = {
 
   fromJSON(object: any): OrganizationListResponse {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => OrganizationResponse.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => OrganizationResponse.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      operationStatus: isSet(object.operationStatus)
-        ? OperationStatus.fromJSON(object.operationStatus)
-        : undefined,
+      operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
 
   toJSON(message: OrganizationListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? OrganizationResponse.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? OrganizationResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
-        : undefined);
+      (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<OrganizationListResponse>
-  ): OrganizationListResponse {
+  fromPartial(object: DeepPartial<OrganizationListResponse>): OrganizationListResponse {
     const message = createBaseOrganizationListResponse();
-    message.items =
-      object.items?.map((e) => OrganizationResponse.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => OrganizationResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.operationStatus =
-      object.operationStatus !== undefined && object.operationStatus !== null
-        ? OperationStatus.fromPartial(object.operationStatus)
-        : undefined;
+    message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
+      ? OperationStatus.fromPartial(object.operationStatus)
+      : undefined;
     return message;
   },
 };
@@ -411,10 +340,7 @@ function createBaseOrganizationResponse(): OrganizationResponse {
 }
 
 export const OrganizationResponse = {
-  encode(
-    message: OrganizationResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrganizationResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload !== undefined) {
       Organization.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -424,10 +350,7 @@ export const OrganizationResponse = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): OrganizationResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganizationResponse();
@@ -450,34 +373,26 @@ export const OrganizationResponse = {
 
   fromJSON(object: any): OrganizationResponse {
     return {
-      payload: isSet(object.payload)
-        ? Organization.fromJSON(object.payload)
-        : undefined,
+      payload: isSet(object.payload) ? Organization.fromJSON(object.payload) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: OrganizationResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined &&
-      (obj.payload = message.payload
-        ? Organization.toJSON(message.payload)
-        : undefined);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined && (obj.payload = message.payload ? Organization.toJSON(message.payload) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<OrganizationResponse>): OrganizationResponse {
     const message = createBaseOrganizationResponse();
-    message.payload =
-      object.payload !== undefined && object.payload !== null
-        ? Organization.fromPartial(object.payload)
-        : undefined;
-    message.status =
-      object.status !== undefined && object.status !== null
-        ? Status.fromPartial(object.status)
-        : undefined;
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? Organization.fromPartial(object.payload)
+      : undefined;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? Status.fromPartial(object.status)
+      : undefined;
     return message;
   },
 };
@@ -503,10 +418,7 @@ function createBaseOrganization(): Organization {
 }
 
 export const Organization = {
-  encode(
-    message: Organization,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Organization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -621,20 +533,14 @@ export const Organization = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       addressId: isSet(object.addressId) ? String(object.addressId) : "",
       parentId: isSet(object.parentId) ? String(object.parentId) : "",
-      contactPointIds: Array.isArray(object?.contactPointIds)
-        ? object.contactPointIds.map((e: any) => String(e))
-        : [],
+      contactPointIds: Array.isArray(object?.contactPointIds) ? object.contactPointIds.map((e: any) => String(e)) : [],
       website: isSet(object.website) ? String(object.website) : "",
       email: isSet(object.email) ? String(object.email) : "",
       logo: isSet(object.logo) ? String(object.logo) : "",
       vatId: isSet(object.vatId) ? String(object.vatId) : "",
       isicV4: isSet(object.isicV4) ? String(object.isicV4) : "",
-      registration: isSet(object.registration)
-        ? String(object.registration)
-        : "",
-      registrationCourt: isSet(object.registrationCourt)
-        ? String(object.registrationCourt)
-        : "",
+      registration: isSet(object.registration) ? String(object.registration) : "",
+      registrationCourt: isSet(object.registrationCourt) ? String(object.registrationCourt) : "",
       name: isSet(object.name) ? String(object.name) : "",
       paymentMethodIds: Array.isArray(object?.paymentMethodIds)
         ? object.paymentMethodIds.map((e: any) => String(e))
@@ -646,8 +552,7 @@ export const Organization = {
   toJSON(message: Organization): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined &&
-      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.addressId !== undefined && (obj.addressId = message.addressId);
     message.parentId !== undefined && (obj.parentId = message.parentId);
     if (message.contactPointIds) {
@@ -660,28 +565,22 @@ export const Organization = {
     message.logo !== undefined && (obj.logo = message.logo);
     message.vatId !== undefined && (obj.vatId = message.vatId);
     message.isicV4 !== undefined && (obj.isicV4 = message.isicV4);
-    message.registration !== undefined &&
-      (obj.registration = message.registration);
-    message.registrationCourt !== undefined &&
-      (obj.registrationCourt = message.registrationCourt);
+    message.registration !== undefined && (obj.registration = message.registration);
+    message.registrationCourt !== undefined && (obj.registrationCourt = message.registrationCourt);
     message.name !== undefined && (obj.name = message.name);
     if (message.paymentMethodIds) {
       obj.paymentMethodIds = message.paymentMethodIds.map((e) => e);
     } else {
       obj.paymentMethodIds = [];
     }
-    message.data !== undefined &&
-      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = createBaseOrganization();
     message.id = object.id ?? "";
-    message.meta =
-      object.meta !== undefined && object.meta !== null
-        ? Meta.fromPartial(object.meta)
-        : undefined;
+    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.addressId = object.addressId ?? "";
     message.parentId = object.parentId ?? "";
     message.contactPointIds = object.contactPointIds?.map((e) => e) || [];
@@ -694,10 +593,7 @@ export const Organization = {
     message.registrationCourt = object.registrationCourt ?? "";
     message.name = object.name ?? "";
     message.paymentMethodIds = object.paymentMethodIds?.map((e) => e) || [];
-    message.data =
-      object.data !== undefined && object.data !== null
-        ? Any.fromPartial(object.data)
-        : undefined;
+    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
 };
@@ -751,48 +647,36 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(
-    request: ReadRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrganizationListResponse>>;
+  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrganizationListResponse>>;
   create(
     request: OrganizationList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<OrganizationListResponse>>;
-  delete(
-    request: DeleteRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<DeleteResponse>>;
+  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
   update(
     request: OrganizationList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<OrganizationListResponse>>;
   upsert(
     request: OrganizationList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<OrganizationListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(
-    request: DeepPartial<ReadRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrganizationListResponse>;
+  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<OrganizationListResponse>;
   create(
     request: DeepPartial<OrganizationList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<OrganizationListResponse>;
-  delete(
-    request: DeepPartial<DeleteRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<DeleteResponse>;
+  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
   update(
     request: DeepPartial<OrganizationList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<OrganizationListResponse>;
   upsert(
     request: DeepPartial<OrganizationList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<OrganizationListResponse>;
 }
 
@@ -810,28 +694,18 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/organization.proto",
-    package: "io.restorecommerce.organization",
-    dependency: [
+    "name": "io/restorecommerce/organization.proto",
+    "package": "io.restorecommerce.organization",
+    "dependency": [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
@@ -841,587 +715,519 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/address.proto",
       "io/restorecommerce/contact_point.proto",
     ],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "DeleteOrgData",
-        field: [
-          {
-            name: "org_ids",
-            number: 1,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "orgIds",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "user_ids",
-            number: 2,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "userIds",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrganizationList",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.organization.Organization",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrganizationListResponse",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.organization.OrganizationResponse",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "operation_status",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.OperationStatus",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "operationStatus",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrganizationResponse",
-        field: [
-          {
-            name: "payload",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.organization.Organization",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "payload",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "status",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Organization",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "meta",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.meta.Meta",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "meta",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "address_id",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "addressId",
-            options: {
-              ctype: 0,
-              packed: false,
-              jstype: 0,
-              lazy: false,
-              deprecated: false,
-              weak: false,
-              uninterpretedOption: [],
-            },
-            proto3Optional: false,
-          },
-          {
-            name: "parent_id",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "parentId",
-            options: {
-              ctype: 0,
-              packed: false,
-              jstype: 0,
-              lazy: false,
-              deprecated: false,
-              weak: false,
-              uninterpretedOption: [],
-            },
-            proto3Optional: false,
-          },
-          {
-            name: "contact_point_ids",
-            number: 6,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contactPointIds",
-            options: {
-              ctype: 0,
-              packed: false,
-              jstype: 0,
-              lazy: false,
-              deprecated: false,
-              weak: false,
-              uninterpretedOption: [],
-            },
-            proto3Optional: false,
-          },
-          {
-            name: "website",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "website",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "email",
-            number: 8,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "email",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "logo",
-            number: 9,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "logo",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "vat_id",
-            number: 10,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "vatId",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "isic_v4",
-            number: 11,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "isicV4",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "registration",
-            number: 12,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "registration",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "registration_court",
-            number: 13,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "registrationCourt",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "name",
-            number: 14,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "payment_method_ids",
-            number: 15,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "paymentMethodIds",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "data",
-            number: 16,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.Any",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "data",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [
-      {
-        name: "Service",
-        method: [
-          {
-            name: "Read",
-            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType:
-              ".io.restorecommerce.organization.OrganizationListResponse",
-            options: {
-              deprecated: false,
-              idempotencyLevel: 0,
-              uninterpretedOption: [],
-            },
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Create",
-            inputType: ".io.restorecommerce.organization.OrganizationList",
-            outputType:
-              ".io.restorecommerce.organization.OrganizationListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Delete",
-            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Update",
-            inputType: ".io.restorecommerce.organization.OrganizationList",
-            outputType:
-              ".io.restorecommerce.organization.OrganizationListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Upsert",
-            inputType: ".io.restorecommerce.organization.OrganizationList",
-            outputType:
-              ".io.restorecommerce.organization.OrganizationListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-        ],
-        options: { deprecated: false, uninterpretedOption: [] },
-      },
-    ],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [3, 6],
-          span: [12, 0, 42],
-          leadingComments: " Used by resolvers\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Deleted",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "DeleteOrgData",
+      "field": [{
+        "name": "org_ids",
+        "number": 1,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "orgIds",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "user_ids",
+        "number": 2,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "userIds",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrganizationList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.organization.Organization",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrganizationListResponse",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.organization.OrganizationResponse",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "operation_status",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.OperationStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "operationStatus",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrganizationResponse",
+      "field": [{
+        "name": "payload",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.organization.Organization",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "payload",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "status",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Organization",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "meta",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.meta.Meta",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "meta",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "address_id",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "addressId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
         },
-        {
-          path: [4, 5, 2, 0],
-          span: [55, 2, 16],
-          leadingComments: "",
-          trailingComments: "/ Organization ID, unique, key\n",
-          leadingDetachedComments: [],
+        "proto3Optional": false,
+      }, {
+        "name": "parent_id",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "parentId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
         },
-        {
-          path: [4, 5, 2, 2],
-          span: [57, 2, 65, 4],
-          leadingComments: "",
-          trailingComments: "/ Address for the organization\n",
-          leadingDetachedComments: [],
+        "proto3Optional": false,
+      }, {
+        "name": "contact_point_ids",
+        "number": 6,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contactPointIds",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
         },
-        {
-          path: [4, 5, 2, 3],
-          span: [66, 2, 74, 4],
-          leadingComments: "",
-          trailingComments:
-            "  Hierarchically superior organization; may be null\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5, 2, 4],
-          span: [75, 2, 83, 4],
-          leadingComments: "",
-          trailingComments:
-            " list of possible legal addresses of different types\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5, 2, 7],
-          span: [86, 2, 18],
-          leadingComments: "",
-          trailingComments: " base64; arangoDB does not support blob storage\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5, 2, 14],
-          span: [93, 2, 32],
-          leadingComments: "",
-          trailingComments: "/ additional data\n",
-          leadingDetachedComments: [],
-        },
-      ],
+        "proto3Optional": false,
+      }, {
+        "name": "website",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "website",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "email",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "email",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "logo",
+        "number": 9,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "logo",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "vat_id",
+        "number": 10,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vatId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "isic_v4",
+        "number": 11,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "isicV4",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "registration",
+        "number": 12,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "registration",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "registration_court",
+        "number": 13,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "registrationCourt",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "name",
+        "number": 14,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "payment_method_ids",
+        "number": 15,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "paymentMethodIds",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "data",
+        "number": 16,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Any",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "data",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [{
+      "name": "Service",
+      "method": [{
+        "name": "Read",
+        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
+        "outputType": ".io.restorecommerce.organization.OrganizationListResponse",
+        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Create",
+        "inputType": ".io.restorecommerce.organization.OrganizationList",
+        "outputType": ".io.restorecommerce.organization.OrganizationListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Delete",
+        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
+        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Update",
+        "inputType": ".io.restorecommerce.organization.OrganizationList",
+        "outputType": ".io.restorecommerce.organization.OrganizationListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Upsert",
+        "inputType": ".io.restorecommerce.organization.OrganizationList",
+        "outputType": ".io.restorecommerce.organization.OrganizationListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": { "deprecated": false, "uninterpretedOption": [] },
+    }],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [3, 6],
+        "span": [12, 0, 42],
+        "leadingComments": " Used by resolvers\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 0],
+        "span": [55, 2, 16],
+        "leadingComments": "",
+        "trailingComments": "/ Organization ID, unique, key\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 2],
+        "span": [57, 2, 65, 4],
+        "leadingComments": "",
+        "trailingComments": "/ Address for the organization\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 3],
+        "span": [66, 2, 74, 4],
+        "leadingComments": "",
+        "trailingComments": "  Hierarchically superior organization; may be null\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 4],
+        "span": [75, 2, 83, 4],
+        "leadingComments": "",
+        "trailingComments": " list of possible legal addresses of different types\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 7],
+        "span": [86, 2, 18],
+        "leadingComments": "",
+        "trailingComments": " base64; arangoDB does not support blob storage\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 14],
+        "span": [93, 2, 32],
+        "leadingComments": "",
+        "trailingComments": "/ additional data\n",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.organization.Deleted": Deleted,
     ".io.restorecommerce.organization.DeleteOrgData": DeleteOrgData,
     ".io.restorecommerce.organization.OrganizationList": OrganizationList,
-    ".io.restorecommerce.organization.OrganizationListResponse":
-      OrganizationListResponse,
-    ".io.restorecommerce.organization.OrganizationResponse":
-      OrganizationResponse,
+    ".io.restorecommerce.organization.OrganizationListResponse": OrganizationListResponse,
+    ".io.restorecommerce.organization.OrganizationResponse": OrganizationResponse,
     ".io.restorecommerce.organization.Organization": Organization,
   },
   dependencies: [
@@ -1436,61 +1242,44 @@ export const protoMetadata: ProtoMetadata = {
   ],
   options: {
     messages: {
-      Organization: {
+      "Organization": {
         fields: {
-          address_id: {
-            resolver: Resolver.decode(
+          "address_id": {
+            "resolver": Resolver.decode(
               Buffer.from(
                 "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
-                "base64"
-              )
+                "base64",
+              ),
             ),
           },
-          parent_id: {
-            resolver: Resolver.decode(
+          "parent_id": {
+            "resolver": Resolver.decode(
               Buffer.from(
                 "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqBnBhcmVudA==",
-                "base64"
-              )
+                "base64",
+              ),
             ),
           },
-          contact_point_ids: {
-            resolver: Resolver.decode(
+          "contact_point_ids": {
+            "resolver": Resolver.decode(
               Buffer.from(
                 "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
-                "base64"
-              )
+                "base64",
+              ),
             ),
           },
         },
       },
     },
-    services: {
-      Service: {
-        options: { service_name: "organization" },
-        methods: { Read: { is_query: true } },
-      },
-    },
+    services: { "Service": { options: { "service_name": "organization" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

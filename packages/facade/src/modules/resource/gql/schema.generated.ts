@@ -135,9 +135,9 @@ export type IoRestorecommerceAddressBusinessAddress = {
 export type IoRestorecommerceAddressResidentialAddress = {
   __typename?: 'IoRestorecommerceAddressResidentialAddress';
   title?: Maybe<Scalars['String']>;
-  firstName?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
   midName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceAddressPackStation = {
@@ -166,10 +166,10 @@ export type IIoRestorecommerceResourcebaseReadRequest = {
   sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
   field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
-  search?: InputMaybe<Array<Scalars['String']>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
+  search?: InputMaybe<IIoRestorecommerceResourcebaseSearch>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -269,6 +269,12 @@ export type IIoRestorecommerceResourcebaseFieldFilter = {
 export type IGoogleProtobufAny = {
   typeUrl?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
+};
+
+export type IIoRestorecommerceResourcebaseSearch = {
+  search?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<Array<Scalars['String']>>;
+  caseSensitive?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ResourceCountryQuery = {
@@ -909,9 +915,9 @@ export type IIoRestorecommerceAddressBusinessAddress = {
 
 export type IIoRestorecommerceAddressResidentialAddress = {
   title?: InputMaybe<Scalars['String']>;
-  firstName?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
   midName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
 };
 
 export type IIoRestorecommerceAddressPackStation = {
@@ -940,6 +946,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
+  view?: InputMaybe<Array<Scalars['String']>>;
+  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -1463,6 +1471,7 @@ export type ResolversTypes = ResolversObject<{
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
+  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   ResourceCountryQuery: ResolverTypeWrapper<ResourceCountryQuery>;
   ProtoIoRestorecommerceCountryCountryListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceCountryCountryListResponse>;
   IoRestorecommerceCountryCountryListResponse: ResolverTypeWrapper<IoRestorecommerceCountryCountryListResponse>;
@@ -1620,6 +1629,7 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
   IGoogleProtobufAny: IGoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
+  IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   ResourceCountryQuery: ResourceCountryQuery;
   ProtoIoRestorecommerceCountryCountryListResponse: ProtoIoRestorecommerceCountryCountryListResponse;
   IoRestorecommerceCountryCountryListResponse: IoRestorecommerceCountryCountryListResponse;
@@ -1852,9 +1862,9 @@ export type IoRestorecommerceAddressBusinessAddressResolvers<ContextType = Resou
 
 export type IoRestorecommerceAddressResidentialAddressResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressResidentialAddress'] = ResolversParentTypes['IoRestorecommerceAddressResidentialAddress']> = ResolversObject<{
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  givenName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   midName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  familyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

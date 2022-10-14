@@ -65,7 +65,6 @@ export type IoRestorecommerceJobJob = {
 
 export type IoRestorecommerceJobData = {
   __typename?: 'IoRestorecommerceJobData';
-  timezone?: Maybe<Scalars['String']>;
   payload?: Maybe<GoogleProtobufAny>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   subjectId?: Maybe<Scalars['String']>;
@@ -136,6 +135,7 @@ export type IoRestorecommerceJobRepeat = {
   endDate?: Maybe<Scalars['String']>;
   count?: Maybe<Scalars['Int']>;
   jobId?: Maybe<Scalars['String']>;
+  tz?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -219,7 +219,6 @@ export type IIoRestorecommerceJobJob = {
 };
 
 export type IIoRestorecommerceJobData = {
-  timezone?: InputMaybe<Scalars['String']>;
   payload?: InputMaybe<IGoogleProtobufAny>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   subjectId?: InputMaybe<Scalars['String']>;
@@ -270,6 +269,7 @@ export type IIoRestorecommerceJobRepeat = {
   endDate?: InputMaybe<Scalars['String']>;
   count?: InputMaybe<Scalars['Int']>;
   jobId?: InputMaybe<Scalars['String']>;
+  tz?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -292,6 +292,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
+  view?: InputMaybe<Array<Scalars['String']>>;
+  analyzer?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -299,10 +301,28 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
 };
 
 
 export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentProductArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -526,7 +546,6 @@ export type IoRestorecommerceJobJobResolvers<ContextType = SchedulingContext, Pa
 }>;
 
 export type IoRestorecommerceJobDataResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobData'] = ResolversParentTypes['IoRestorecommerceJobData']> = ResolversObject<{
-  timezone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   payload?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   subjectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -592,6 +611,7 @@ export type IoRestorecommerceJobRepeatResolvers<ContextType = SchedulingContext,
   endDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   jobId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tz?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -638,6 +658,9 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = S
 
 export type SubscriptionResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
+  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
 }>;
 
 export type SubscriptionOutputResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{

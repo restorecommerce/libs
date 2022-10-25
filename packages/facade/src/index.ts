@@ -5,7 +5,7 @@ import { Server, ServerResponse } from 'http';
 import { ApolloServer } from 'apollo-server-koa';
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
-import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource } from '@apollo/gateway';
+import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
 import { facadeStatusModule } from './modules';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
 import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
@@ -14,7 +14,7 @@ import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { Disposable } from 'graphql-ws';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { makeExecutableSchema } from "graphql-tools";
 import { gql } from 'graphql-tag';
 import { GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos';
@@ -189,7 +189,10 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     const gateway = new ApolloGateway({
       logger: this.logger,
-      serviceList,
+      // serviceList,
+      supergraphSdl: new IntrospectAndCompose({
+        subgraphs: serviceList
+      }),
       debug: true,
       buildService: ({ name, url }) => {
         if (url !== 'local') {

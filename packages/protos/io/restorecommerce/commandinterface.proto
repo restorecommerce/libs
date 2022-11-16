@@ -4,6 +4,7 @@ package io.restorecommerce.commandinterface;
 
 import "google/protobuf/any.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/options.proto";
 
 // used to send requests through Kafka or gRPC
 message CommandRequest {
@@ -26,5 +27,6 @@ message CommandResponse {
 * RPC service for executing commands
 */
 service Service {
+  option (io.restorecommerce.options.service_name) = "commandinterface";
   rpc Command(CommandRequest) returns (google.protobuf.Any);
 }

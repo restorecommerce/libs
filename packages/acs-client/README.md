@@ -19,17 +19,19 @@ Features:
 
 ## Configuration
 
-The `access-control-srv` [URN configurations](https://github.com/restorecommerce/access-control-srv/blob/master/restorecommerce_ABAC.md#urn-reference) needs to be set using [authorization](cfg/config.json#L85) configuration to `acs-client` from access requesting microservice.
+The `access-control-srv` [URN configurations](https://github.com/restorecommerce/access-control-srv/blob/master/restorecommerce_ABAC.md#urn-reference) needs to be set using [authorization](cfg/config.json#L106) configuration to `acs-client` from access requesting microservice.
 The URN for the [role scoping entity](https://github.com/restorecommerce/access-control-srv/blob/master/restorecommerce_ABAC.md#role-scoping) for Organization/ business units must be set using the configuration property `authorization.urns.orgScope`.
 
 `orgScope: 'urn:\<organization\>:acs:model:<Entity_Name>`
 
 ex: `orgScope: urn:restorecommerce:acs:model:organization.Organization`
 
-The caching configurations for `redis` can be set using [`authorization:cache`](cfg/config.json#L121) configuration.
+The caching configurations for `redis` can be set using [`authorization:cache`](cfg/config.json#L148) configuration.
 
-For testing and debugging the access control checking can be dsiabled as a whole via the [`enabled`](cfg/config.json#L184) flag. This will supress the access control checking via the ACS and always permit any request.
-If the ACS checks should be performed (and thus logged) but not enforced, the [`enforce`](cfg/config.json#L185) flag can be set to false which is useful for debugging the ruleset.
+For testing and debugging the access control checking can be dsiabled as a whole via the [`enabled`](cfg/config.json#L108) flag. This will supress the access control checking via the ACS and always permit any request.
+If the ACS checks should be performed (and thus logged) but not enforced, the [`enforce`](cfg/config.json#L109) flag can be set to false which is useful for debugging the ruleset.
+
+It is also possible to configure [`authorization:unauthenticated_user`](cfg/config.json#L155) as subject with identifiter and token in the configuration, if the subject is empty then the token from this configuration will be used.
 
 ## API
 
@@ -119,7 +121,7 @@ This API exposes the [`whatIsAllowed`](https://github.com/restorecommerce/access
 
 ## Caching
 
-This client supports caching for `isAllowed` and `whatIsAllowed` access request operations if [`authorization:cache`](cfg/config.json#L121) options are set. The time to live for redis key can be set using [`authorization:cache:ttl`](cfg/config.json#L125) configuration. The hash key for caching the request is generated using [`MD5`](https://en.wikipedia.org/wiki/MD5) hash algorithm. 
+This client supports caching for `isAllowed` and `whatIsAllowed` access request operations if [`authorization:cache`](cfg/config.json#L148) options are set. The time to live for redis key can be set using [`authorization:cache:ttl`](cfg/config.json#L152) configuration. The hash key for caching the request is generated using [`MD5`](https://en.wikipedia.org/wiki/MD5) hash algorithm. 
 For `whatIsAllowed` operations `Request` Object is used to generate the hash key and for `isAllowed` operations [`io.restorecommerce.access_control.Target`](https://github.com/restorecommerce/access-control-srv#isallowed) Object is used since the resource data changes.
 Each of the ACS request is associated with an ID of [`subject`](https://github.com/restorecommerce/access-control-srv/blob/master/restorecommerce_ABAC.md#xacml), this subject ID is included in the hash key as prefix to keep track of mapping between ACS requests and cached data.
 The cache can be invalidated by invoking [`flushCache`](./src/acs/cache.ts#L104) api with subject ID as prefix parameter.

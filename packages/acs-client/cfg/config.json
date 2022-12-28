@@ -151,6 +151,10 @@
       "db-index": 5,
       "ttl": 3600,
       "prefix": "acs:"
+    },
+    "unauthenticated_user": {
+      "id": "",
+      "token": ""
     }
   },
   "errors": {

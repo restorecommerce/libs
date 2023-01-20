@@ -93,6 +93,29 @@ export interface BundleProduct {
   quantity: number;
 }
 
+/** Used by Fulfillment-Srv and Order-Srv */
+export interface Item {
+  /** below identifier is id of product, variant or bundle */
+  product_variant_bundle_id: string;
+  product_name: string;
+  product_description: string;
+  manufacturer_name: string;
+  manufacturer_description: string;
+  prototype_name: string;
+  prototype_description: string;
+  quantity: number;
+  vat: number;
+  price: number;
+  quantity_price: number;
+  item_type: string;
+  taric_code: number;
+  stock_keeping_unit: string;
+  weight_in_kg: number;
+  length_in_cm: number;
+  width_in_cm: number;
+  height_in_cm: number;
+}
+
 export interface Deleted {
   id: string;
 }
@@ -1051,6 +1074,265 @@ export const BundleProduct = {
   },
 };
 
+function createBaseItem(): Item {
+  return {
+    product_variant_bundle_id: "",
+    product_name: "",
+    product_description: "",
+    manufacturer_name: "",
+    manufacturer_description: "",
+    prototype_name: "",
+    prototype_description: "",
+    quantity: 0,
+    vat: 0,
+    price: 0,
+    quantity_price: 0,
+    item_type: "",
+    taric_code: 0,
+    stock_keeping_unit: "",
+    weight_in_kg: 0,
+    length_in_cm: 0,
+    width_in_cm: 0,
+    height_in_cm: 0,
+  };
+}
+
+export const Item = {
+  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_variant_bundle_id !== "") {
+      writer.uint32(10).string(message.product_variant_bundle_id);
+    }
+    if (message.product_name !== "") {
+      writer.uint32(18).string(message.product_name);
+    }
+    if (message.product_description !== "") {
+      writer.uint32(26).string(message.product_description);
+    }
+    if (message.manufacturer_name !== "") {
+      writer.uint32(34).string(message.manufacturer_name);
+    }
+    if (message.manufacturer_description !== "") {
+      writer.uint32(42).string(message.manufacturer_description);
+    }
+    if (message.prototype_name !== "") {
+      writer.uint32(50).string(message.prototype_name);
+    }
+    if (message.prototype_description !== "") {
+      writer.uint32(58).string(message.prototype_description);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(64).int32(message.quantity);
+    }
+    if (message.vat !== 0) {
+      writer.uint32(72).int32(message.vat);
+    }
+    if (message.price !== 0) {
+      writer.uint32(81).double(message.price);
+    }
+    if (message.quantity_price !== 0) {
+      writer.uint32(89).double(message.quantity_price);
+    }
+    if (message.item_type !== "") {
+      writer.uint32(98).string(message.item_type);
+    }
+    if (message.taric_code !== 0) {
+      writer.uint32(105).double(message.taric_code);
+    }
+    if (message.stock_keeping_unit !== "") {
+      writer.uint32(114).string(message.stock_keeping_unit);
+    }
+    if (message.weight_in_kg !== 0) {
+      writer.uint32(121).double(message.weight_in_kg);
+    }
+    if (message.length_in_cm !== 0) {
+      writer.uint32(128).int32(message.length_in_cm);
+    }
+    if (message.width_in_cm !== 0) {
+      writer.uint32(136).int32(message.width_in_cm);
+    }
+    if (message.height_in_cm !== 0) {
+      writer.uint32(144).int32(message.height_in_cm);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.product_variant_bundle_id = reader.string();
+          break;
+        case 2:
+          message.product_name = reader.string();
+          break;
+        case 3:
+          message.product_description = reader.string();
+          break;
+        case 4:
+          message.manufacturer_name = reader.string();
+          break;
+        case 5:
+          message.manufacturer_description = reader.string();
+          break;
+        case 6:
+          message.prototype_name = reader.string();
+          break;
+        case 7:
+          message.prototype_description = reader.string();
+          break;
+        case 8:
+          message.quantity = reader.int32();
+          break;
+        case 9:
+          message.vat = reader.int32();
+          break;
+        case 10:
+          message.price = reader.double();
+          break;
+        case 11:
+          message.quantity_price = reader.double();
+          break;
+        case 12:
+          message.item_type = reader.string();
+          break;
+        case 13:
+          message.taric_code = reader.double();
+          break;
+        case 14:
+          message.stock_keeping_unit = reader.string();
+          break;
+        case 15:
+          message.weight_in_kg = reader.double();
+          break;
+        case 16:
+          message.length_in_cm = reader.int32();
+          break;
+        case 17:
+          message.width_in_cm = reader.int32();
+          break;
+        case 18:
+          message.height_in_cm = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Item {
+    return {
+      product_variant_bundle_id: isSet(object.product_variant_bundle_id)
+        ? String(object.product_variant_bundle_id)
+        : "",
+      product_name: isSet(object.product_name)
+        ? String(object.product_name)
+        : "",
+      product_description: isSet(object.product_description)
+        ? String(object.product_description)
+        : "",
+      manufacturer_name: isSet(object.manufacturer_name)
+        ? String(object.manufacturer_name)
+        : "",
+      manufacturer_description: isSet(object.manufacturer_description)
+        ? String(object.manufacturer_description)
+        : "",
+      prototype_name: isSet(object.prototype_name)
+        ? String(object.prototype_name)
+        : "",
+      prototype_description: isSet(object.prototype_description)
+        ? String(object.prototype_description)
+        : "",
+      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      vat: isSet(object.vat) ? Number(object.vat) : 0,
+      price: isSet(object.price) ? Number(object.price) : 0,
+      quantity_price: isSet(object.quantity_price)
+        ? Number(object.quantity_price)
+        : 0,
+      item_type: isSet(object.item_type) ? String(object.item_type) : "",
+      taric_code: isSet(object.taric_code) ? Number(object.taric_code) : 0,
+      stock_keeping_unit: isSet(object.stock_keeping_unit)
+        ? String(object.stock_keeping_unit)
+        : "",
+      weight_in_kg: isSet(object.weight_in_kg)
+        ? Number(object.weight_in_kg)
+        : 0,
+      length_in_cm: isSet(object.length_in_cm)
+        ? Number(object.length_in_cm)
+        : 0,
+      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
+      height_in_cm: isSet(object.height_in_cm)
+        ? Number(object.height_in_cm)
+        : 0,
+    };
+  },
+
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.product_variant_bundle_id !== undefined &&
+      (obj.product_variant_bundle_id = message.product_variant_bundle_id);
+    message.product_name !== undefined &&
+      (obj.product_name = message.product_name);
+    message.product_description !== undefined &&
+      (obj.product_description = message.product_description);
+    message.manufacturer_name !== undefined &&
+      (obj.manufacturer_name = message.manufacturer_name);
+    message.manufacturer_description !== undefined &&
+      (obj.manufacturer_description = message.manufacturer_description);
+    message.prototype_name !== undefined &&
+      (obj.prototype_name = message.prototype_name);
+    message.prototype_description !== undefined &&
+      (obj.prototype_description = message.prototype_description);
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
+    message.vat !== undefined && (obj.vat = Math.round(message.vat));
+    message.price !== undefined && (obj.price = message.price);
+    message.quantity_price !== undefined &&
+      (obj.quantity_price = message.quantity_price);
+    message.item_type !== undefined && (obj.item_type = message.item_type);
+    message.taric_code !== undefined && (obj.taric_code = message.taric_code);
+    message.stock_keeping_unit !== undefined &&
+      (obj.stock_keeping_unit = message.stock_keeping_unit);
+    message.weight_in_kg !== undefined &&
+      (obj.weight_in_kg = message.weight_in_kg);
+    message.length_in_cm !== undefined &&
+      (obj.length_in_cm = Math.round(message.length_in_cm));
+    message.width_in_cm !== undefined &&
+      (obj.width_in_cm = Math.round(message.width_in_cm));
+    message.height_in_cm !== undefined &&
+      (obj.height_in_cm = Math.round(message.height_in_cm));
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = createBaseItem();
+    message.product_variant_bundle_id = object.product_variant_bundle_id ?? "";
+    message.product_name = object.product_name ?? "";
+    message.product_description = object.product_description ?? "";
+    message.manufacturer_name = object.manufacturer_name ?? "";
+    message.manufacturer_description = object.manufacturer_description ?? "";
+    message.prototype_name = object.prototype_name ?? "";
+    message.prototype_description = object.prototype_description ?? "";
+    message.quantity = object.quantity ?? 0;
+    message.vat = object.vat ?? 0;
+    message.price = object.price ?? 0;
+    message.quantity_price = object.quantity_price ?? 0;
+    message.item_type = object.item_type ?? "";
+    message.taric_code = object.taric_code ?? 0;
+    message.stock_keeping_unit = object.stock_keeping_unit ?? "";
+    message.weight_in_kg = object.weight_in_kg ?? 0;
+    message.length_in_cm = object.length_in_cm ?? 0;
+    message.width_in_cm = object.width_in_cm ?? 0;
+    message.height_in_cm = object.height_in_cm ?? 0;
+    return message;
+  },
+};
+
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -1930,6 +2212,253 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
+        name: "Item",
+        field: [
+          {
+            name: "product_variant_bundle_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productVariantBundleId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_name",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_description",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_name",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_description",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_name",
+            number: 6,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_description",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 8,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "vat",
+            number: 9,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vat",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 10,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity_price",
+            number: 11,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantityPrice",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "item_type",
+            number: 12,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "itemType",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "taric_code",
+            number: 13,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taricCode",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 14,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "stockKeepingUnit",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "weight_in_kg",
+            number: 15,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "weightInKg",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "length_in_cm",
+            number: 16,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "lengthInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "width_in_cm",
+            number: 17,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "widthInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "height_in_cm",
+            number: 18,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "heightInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
         name: "Deleted",
         field: [
           {
@@ -2027,6 +2556,21 @@ export const protoMetadata: ProtoMetadata = {
           trailingComments: "",
           leadingDetachedComments: [],
         },
+        {
+          path: [4, 9],
+          span: [113, 0, 133, 1],
+          leadingComments: "*\nUsed by Fulfillment-Srv and Order-Srv\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 9, 2, 0],
+          span: [115, 2, 39],
+          leadingComments:
+            " below identifier is id of product, variant or bundle\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
       ],
     },
     syntax: "proto3",
@@ -2041,6 +2585,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product.Variant": Variant,
     ".io.restorecommerce.product.Bundle": Bundle,
     ".io.restorecommerce.product.BundleProduct": BundleProduct,
+    ".io.restorecommerce.product.Item": Item,
     ".io.restorecommerce.product.Deleted": Deleted,
   },
   dependencies: [

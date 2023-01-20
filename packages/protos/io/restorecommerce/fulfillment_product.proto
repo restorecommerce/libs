@@ -7,8 +7,10 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/product.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
+import "io/restorecommerce/options.proto";
 
 /**
 Microservice defination
@@ -37,9 +39,9 @@ message Preferences {
 }
 
 message Query {
-  io.restorecommerce.fulfillment.Address sender = 1;
-  io.restorecommerce.fulfillment.Address receiver = 2;
-  repeated io.restorecommerce.fulfillment.Item goods = 3;
+  io.restorecommerce.fulfillment.FulfillmentAddress sender = 1;
+  io.restorecommerce.fulfillment.FulfillmentAddress receiver = 2;
+  repeated io.restorecommerce.product.Item goods = 3;
   Preferences preferences = 4;
   string reference_id = 5;
 }
@@ -52,7 +54,7 @@ message QueryList {
 
 message FulfillmentProduct {
   option (restorecommerce.options.kafka_subscriber) = {
-    plural: "fulfillmentProduct"
+    plural: "fulfillment_products"
     topic: "io.restorecommerce.fulfillment_product.resource"
     created: "fulfillmentProductCreated"
     updated: "fulfillmentProductUpdated"

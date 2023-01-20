@@ -57,15 +57,22 @@ export interface BusinessAddress {
 
 export interface ResidentialAddress {
   title: string;
-  first_name: string;
+  given_name: string;
   mid_name: string;
-  last_name: string;
+  family_name: string;
 }
 
 export interface PackStation {
   provider: string;
   station_number: string;
   post_number: string;
+}
+
+/** Uses by Order-Srv and Fulfillment-Srv */
+export interface ContactPerson {
+  name: string;
+  email: string;
+  phone: string;
 }
 
 export interface Address {
@@ -564,7 +571,7 @@ export const BusinessAddress = {
 };
 
 function createBaseResidentialAddress(): ResidentialAddress {
-  return { title: "", first_name: "", mid_name: "", last_name: "" };
+  return { title: "", given_name: "", mid_name: "", family_name: "" };
 }
 
 export const ResidentialAddress = {
@@ -575,14 +582,14 @@ export const ResidentialAddress = {
     if (message.title !== "") {
       writer.uint32(10).string(message.title);
     }
-    if (message.first_name !== "") {
-      writer.uint32(18).string(message.first_name);
+    if (message.given_name !== "") {
+      writer.uint32(18).string(message.given_name);
     }
     if (message.mid_name !== "") {
       writer.uint32(26).string(message.mid_name);
     }
-    if (message.last_name !== "") {
-      writer.uint32(34).string(message.last_name);
+    if (message.family_name !== "") {
+      writer.uint32(34).string(message.family_name);
     }
     return writer;
   },
@@ -598,13 +605,13 @@ export const ResidentialAddress = {
           message.title = reader.string();
           break;
         case 2:
-          message.first_name = reader.string();
+          message.given_name = reader.string();
           break;
         case 3:
           message.mid_name = reader.string();
           break;
         case 4:
-          message.last_name = reader.string();
+          message.family_name = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -617,27 +624,28 @@ export const ResidentialAddress = {
   fromJSON(object: any): ResidentialAddress {
     return {
       title: isSet(object.title) ? String(object.title) : "",
-      first_name: isSet(object.first_name) ? String(object.first_name) : "",
+      given_name: isSet(object.given_name) ? String(object.given_name) : "",
       mid_name: isSet(object.mid_name) ? String(object.mid_name) : "",
-      last_name: isSet(object.last_name) ? String(object.last_name) : "",
+      family_name: isSet(object.family_name) ? String(object.family_name) : "",
     };
   },
 
   toJSON(message: ResidentialAddress): unknown {
     const obj: any = {};
     message.title !== undefined && (obj.title = message.title);
-    message.first_name !== undefined && (obj.first_name = message.first_name);
+    message.given_name !== undefined && (obj.given_name = message.given_name);
     message.mid_name !== undefined && (obj.mid_name = message.mid_name);
-    message.last_name !== undefined && (obj.last_name = message.last_name);
+    message.family_name !== undefined &&
+      (obj.family_name = message.family_name);
     return obj;
   },
 
   fromPartial(object: DeepPartial<ResidentialAddress>): ResidentialAddress {
     const message = createBaseResidentialAddress();
     message.title = object.title ?? "";
-    message.first_name = object.first_name ?? "";
+    message.given_name = object.given_name ?? "";
     message.mid_name = object.mid_name ?? "";
-    message.last_name = object.last_name ?? "";
+    message.family_name = object.family_name ?? "";
     return message;
   },
 };
@@ -712,6 +720,76 @@ export const PackStation = {
     message.provider = object.provider ?? "";
     message.station_number = object.station_number ?? "";
     message.post_number = object.post_number ?? "";
+    return message;
+  },
+};
+
+function createBaseContactPerson(): ContactPerson {
+  return { name: "", email: "", phone: "" };
+}
+
+export const ContactPerson = {
+  encode(
+    message: ContactPerson,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    if (message.name !== "") {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
+    if (message.phone !== "") {
+      writer.uint32(26).string(message.phone);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ContactPerson {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseContactPerson();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.name = reader.string();
+          break;
+        case 2:
+          message.email = reader.string();
+          break;
+        case 3:
+          message.phone = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ContactPerson {
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      email: isSet(object.email) ? String(object.email) : "",
+      phone: isSet(object.phone) ? String(object.phone) : "",
+    };
+  },
+
+  toJSON(message: ContactPerson): unknown {
+    const obj: any = {};
+    message.name !== undefined && (obj.name = message.name);
+    message.email !== undefined && (obj.email = message.email);
+    message.phone !== undefined && (obj.phone = message.phone);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<ContactPerson>): ContactPerson {
+    const message = createBaseContactPerson();
+    message.name = object.name ?? "";
+    message.email = object.email ?? "";
+    message.phone = object.phone ?? "";
     return message;
   },
 };
@@ -1403,7 +1481,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "first_name",
+            name: "given_name",
             number: 2,
             label: 1,
             type: 9,
@@ -1411,7 +1489,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "firstName",
+            jsonName: "givenName",
             options: undefined,
             proto3Optional: false,
           },
@@ -1429,7 +1507,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "last_name",
+            name: "family_name",
             number: 4,
             label: 1,
             type: 9,
@@ -1437,7 +1515,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "lastName",
+            jsonName: "familyName",
             options: undefined,
             proto3Optional: false,
           },
@@ -1490,6 +1568,58 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "postNumber",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ContactPerson",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "email",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "email",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "phone",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "phone",
             options: undefined,
             proto3Optional: false,
           },
@@ -1778,6 +1908,13 @@ export const protoMetadata: ProtoMetadata = {
           trailingComments: "",
           leadingDetachedComments: [],
         },
+        {
+          path: [4, 9],
+          span: [79, 0, 83, 1],
+          leadingComments: "*\nUses by Order-Srv and Fulfillment-Srv\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
       ],
     },
     syntax: "proto3",
@@ -1792,6 +1929,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.address.BusinessAddress": BusinessAddress,
     ".io.restorecommerce.address.ResidentialAddress": ResidentialAddress,
     ".io.restorecommerce.address.PackStation": PackStation,
+    ".io.restorecommerce.address.ContactPerson": ContactPerson,
     ".io.restorecommerce.address.Address": Address,
   },
   dependencies: [

@@ -2,7 +2,8 @@
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import {
   Address,
-  protoMetadata as protoMetadata7,
+  protoMetadata as protoMetadata6,
+  Item,
   Parcel,
 } from "./fulfillment";
 import { Subject, protoMetadata as protoMetadata3 } from "./auth";
@@ -20,7 +21,6 @@ import {
   DeleteResponse,
 } from "./resource_base";
 import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
-import { protoMetadata as protoMetadata6, Item } from "./order";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
@@ -1512,7 +1512,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
-      "io/restorecommerce/order.proto",
       "io/restorecommerce/fulfillment.proto",
     ],
     publicDependency: [],
@@ -1617,7 +1616,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 3,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.order.Item",
+            typeName: ".io.restorecommerce.fulfillment.Item",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -2413,14 +2412,14 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 0],
-          span: [27, 2, 63],
+          span: [26, 2, 63],
           leadingComments: "",
           trailingComments: "ID, name or type\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 3, 2, 4],
-          span: [53, 2, 34],
+          span: [52, 2, 34],
           leadingComments:
             "repeated io.restorecommerce.country.Country start_country = 5;\n",
           trailingComments: "",
@@ -2428,7 +2427,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 3, 2, 5],
-          span: [55, 2, 40],
+          span: [54, 2, 40],
           leadingComments:
             "repeated io.restorecommerce.country.Country destination_country = 7;\n",
           trailingComments: "",
@@ -2465,7 +2464,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata4,
     protoMetadata5,
     protoMetadata6,
-    protoMetadata7,
   ],
 };
 

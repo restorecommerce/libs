@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.0.1...@restorecommerce/rc-grpc-clients@1.1.0) (2022-10-04)
+
+
+### Features
+
+* **facade:** add subscriptions ([d9006e9](https://github.com/restorecommerce/libs/commit/d9006e9ebcd1522a67373f8ca8bfa751c551b36f))
+
+
+
+
+
 ## [1.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.0.0...@restorecommerce/rc-grpc-clients@1.0.1) (2022-08-25)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

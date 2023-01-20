@@ -66,6 +66,12 @@ message FilterOp {
   Operator operator = 2;
 }
 
+message Search {
+  string search = 1; // search string
+  repeated string fields = 2; // list of fields to be searched on entity (if not specified all indexed fields will be searched)
+  bool case_sensitive = 3; // default search is case insensitive
+}
+
 message ReadRequest {
   uint32 offset = 1;
   uint32 limit = 2;
@@ -76,7 +82,6 @@ message ReadRequest {
 
   /// Fields selector
   repeated FieldFilter field = 5;
-  repeated string search = 6;
 
   /** Check the query parameters of HTTP request.
     * If query parameter `locales` is given,
@@ -90,6 +95,7 @@ message ReadRequest {
   repeated string custom_queries = 8;
   google.protobuf.Any custom_arguments = 9;
   io.restorecommerce.auth.Subject subject = 10;
+  Search search = 11;
 }
 
 message DeleteRequest {
@@ -98,6 +104,8 @@ message DeleteRequest {
   /// Delete specified documents
   repeated string ids = 2;
   io.restorecommerce.auth.Subject subject = 3;
+  repeated string view = 4; // list of views to be dropped
+  repeated string analyzer = 5; // list of analyzers to be deleted
 }
 
 message DeleteResponse {

@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import {
-  Address,
-  protoMetadata as protoMetadata7,
+  FulfillmentAddress,
+  protoMetadata as protoMetadata8,
   Parcel,
 } from "./fulfillment";
 import { Subject, protoMetadata as protoMetadata3 } from "./auth";
@@ -20,7 +20,13 @@ import {
   DeleteResponse,
 } from "./resource_base";
 import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
-import { protoMetadata as protoMetadata6, Item } from "./order";
+import { protoMetadata as protoMetadata6, Item } from "./product";
+import { protoMetadata as protoMetadata7 } from "./fulfillment_courier";
+import {
+  protoMetadata as protoMetadata9,
+  KafkaSubscription,
+  Resolver,
+} from "./options";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
@@ -34,8 +40,8 @@ export interface Preferences {
 }
 
 export interface Query {
-  sender?: Address;
-  receiver?: Address;
+  sender?: FulfillmentAddress;
+  receiver?: FulfillmentAddress;
   goods: Item[];
   preferences?: Preferences;
   reference_id: string;
@@ -52,9 +58,7 @@ export interface FulfillmentProduct {
   name: string;
   description: string;
   courier_id: string;
-  /** repeated io.restorecommerce.country.Country start_country = 5; */
   start_zones: string[];
-  /** repeated io.restorecommerce.country.Country destination_country = 7; */
   destination_zones: string[];
   tax_ids: string[];
   attributes: Attribute[];
@@ -218,10 +222,16 @@ function createBaseQuery(): Query {
 export const Query = {
   encode(message: Query, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.sender !== undefined) {
-      Address.encode(message.sender, writer.uint32(10).fork()).ldelim();
+      FulfillmentAddress.encode(
+        message.sender,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.receiver !== undefined) {
-      Address.encode(message.receiver, writer.uint32(18).fork()).ldelim();
+      FulfillmentAddress.encode(
+        message.receiver,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     for (const v of message.goods) {
       Item.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -246,10 +256,10 @@ export const Query = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.sender = Address.decode(reader, reader.uint32());
+          message.sender = FulfillmentAddress.decode(reader, reader.uint32());
           break;
         case 2:
-          message.receiver = Address.decode(reader, reader.uint32());
+          message.receiver = FulfillmentAddress.decode(reader, reader.uint32());
           break;
         case 3:
           message.goods.push(Item.decode(reader, reader.uint32()));
@@ -271,10 +281,10 @@ export const Query = {
   fromJSON(object: any): Query {
     return {
       sender: isSet(object.sender)
-        ? Address.fromJSON(object.sender)
+        ? FulfillmentAddress.fromJSON(object.sender)
         : undefined,
       receiver: isSet(object.receiver)
-        ? Address.fromJSON(object.receiver)
+        ? FulfillmentAddress.fromJSON(object.receiver)
         : undefined,
       goods: Array.isArray(object?.goods)
         ? object.goods.map((e: any) => Item.fromJSON(e))
@@ -292,11 +302,11 @@ export const Query = {
     const obj: any = {};
     message.sender !== undefined &&
       (obj.sender = message.sender
-        ? Address.toJSON(message.sender)
+        ? FulfillmentAddress.toJSON(message.sender)
         : undefined);
     message.receiver !== undefined &&
       (obj.receiver = message.receiver
-        ? Address.toJSON(message.receiver)
+        ? FulfillmentAddress.toJSON(message.receiver)
         : undefined);
     if (message.goods) {
       obj.goods = message.goods.map((e) => (e ? Item.toJSON(e) : undefined));
@@ -316,11 +326,11 @@ export const Query = {
     const message = createBaseQuery();
     message.sender =
       object.sender !== undefined && object.sender !== null
-        ? Address.fromPartial(object.sender)
+        ? FulfillmentAddress.fromPartial(object.sender)
         : undefined;
     message.receiver =
       object.receiver !== undefined && object.receiver !== null
-        ? Address.fromPartial(object.receiver)
+        ? FulfillmentAddress.fromPartial(object.receiver)
         : undefined;
     message.goods = object.goods?.map((e) => Item.fromPartial(e)) || [];
     message.preferences =
@@ -1516,8 +1526,10 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
-      "io/restorecommerce/order.proto",
+      "io/restorecommerce/product.proto",
+      "io/restorecommerce/fulfillment_courier.proto",
       "io/restorecommerce/fulfillment.proto",
+      "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
     weakDependency: [],
@@ -1595,7 +1607,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 1,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment.Address",
+            typeName: ".io.restorecommerce.fulfillment.FulfillmentAddress",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -1608,7 +1620,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 2,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment.Address",
+            typeName: ".io.restorecommerce.fulfillment.FulfillmentAddress",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -1621,7 +1633,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 3,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.order.Item",
+            typeName: ".io.restorecommerce.product.Item",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -1769,7 +1781,15 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "courierId",
-            options: undefined,
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
             proto3Optional: false,
           },
           {
@@ -1856,7 +1876,13 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
-        options: undefined,
+        options: {
+          messageSetWireFormat: false,
+          noStandardDescriptorAccessor: false,
+          deprecated: false,
+          mapEntry: false,
+          uninterpretedOption: [],
+        },
         reservedRange: [],
         reservedName: [],
       },
@@ -2356,7 +2382,11 @@ export const protoMetadata: ProtoMetadata = {
             inputType: ".io.restorecommerce.resourcebase.ReadRequest",
             outputType:
               ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
-            options: undefined,
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
             clientStreaming: false,
             serverStreaming: false,
           },
@@ -2365,7 +2395,11 @@ export const protoMetadata: ProtoMetadata = {
             inputType: ".io.restorecommerce.fulfillment_product.QueryList",
             outputType:
               ".io.restorecommerce.fulfillment_product.PackingSolutionResponseList",
-            options: undefined,
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
             clientStreaming: false,
             serverStreaming: false,
           },
@@ -2408,7 +2442,7 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: false,
           },
         ],
-        options: undefined,
+        options: { deprecated: false, uninterpretedOption: [] },
       },
     ],
     extension: [],
@@ -2417,25 +2451,9 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 0],
-          span: [27, 2, 63],
+          span: [34, 2, 63],
           leadingComments: "",
           trailingComments: "ID, name or type\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 4],
-          span: [53, 2, 34],
-          leadingComments:
-            "repeated io.restorecommerce.country.Country start_country = 5;\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 5],
-          span: [55, 2, 40],
-          leadingComments:
-            "repeated io.restorecommerce.country.Country destination_country = 7;\n",
-          trailingComments: "",
           leadingDetachedComments: [],
         },
       ],
@@ -2470,7 +2488,39 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata5,
     protoMetadata6,
     protoMetadata7,
+    protoMetadata8,
+    protoMetadata9,
   ],
+  options: {
+    messages: {
+      FulfillmentProduct: {
+        options: {
+          kafka_subscriber: KafkaSubscription.decode(
+            Buffer.from(
+              "ChRmdWxmaWxsbWVudF9wcm9kdWN0cxIvaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X3Byb2R1Y3QucmVzb3VyY2UaGWZ1bGZpbGxtZW50UHJvZHVjdENyZWF0ZWQiGWZ1bGZpbGxtZW50UHJvZHVjdFVwZGF0ZWQqGWZ1bGZpbGxtZW50UHJvZHVjdERlbGV0ZWQ=",
+              "base64"
+            )
+          ),
+        },
+        fields: {
+          courier_id: {
+            resolver: Resolver.decode(
+              Buffer.from(
+                "CjouaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X2NvdXJpZXIuRnVsZmlsbG1lbnRDb3VyaWVyEghyZXNvdXJjZRoTZnVsZmlsbG1lbnRfY291cmllciIEUmVhZCoHY291cmllcg==",
+                "base64"
+              )
+            ),
+          },
+        },
+      },
+    },
+    services: {
+      Service: {
+        options: { service_name: "fulfillment_product" },
+        methods: { Read: { is_query: true }, Find: { is_query: true } },
+      },
+    },
+  },
 };
 
 type Builtin =

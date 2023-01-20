@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.0.0...@restorecommerce/koa-req-res-logger@1.1.0) (2022-10-04)
+
+
+### Features
+
+* **facade:** add subscriptions ([d9006e9](https://github.com/restorecommerce/koa-req-res-logger/commit/d9006e9ebcd1522a67373f8ca8bfa751c551b36f))
+
+
+
+
+
 # [1.0.0](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@0.1.19...@restorecommerce/koa-req-res-logger@1.0.0) (2022-08-25)
 
 

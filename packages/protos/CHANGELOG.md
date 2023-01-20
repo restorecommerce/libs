@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@1.0.0...@restorecommerce/protos@1.1.0) (2022-10-04)
+
+
+### Bug Fixes
+
+* **protos:** added timezone on Job cron repeat options. ([d25a5c0](https://github.com/restorecommerce/libs/commit/d25a5c0740d8f04102691a5eb3b4c5745fbb75ad))
+* **protos:** restore subject id for auth subject ([150e663](https://github.com/restorecommerce/libs/commit/150e663c0c090721da9b7ce028714d5df7994972))
+
+
+### Features
+
+* **facade:** add subscriptions ([d9006e9](https://github.com/restorecommerce/libs/commit/d9006e9ebcd1522a67373f8ca8bfa751c551b36f))
+
+
+
+
+
 # [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.2...@restorecommerce/protos@1.0.0) (2022-08-25)
 
 

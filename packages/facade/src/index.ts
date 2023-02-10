@@ -2,13 +2,14 @@ import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-import { ApolloServer } from 'apollo-server-koa';
+import { ApolloServer } from 'apollo-server';
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
 import { facadeStatusModule } from './modules';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
-import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';

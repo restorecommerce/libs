@@ -41,7 +41,7 @@
     "graphql-ws": "^5.11.2",
     "handlebars": "^4.7.7",
     "jose": "^4.10.0",
-    "koa": "^2.13.4",
+    "koa": "^2.14.1",
     "koa-body": "^5.0.0",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",

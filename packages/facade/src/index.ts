@@ -345,7 +345,3 @@ export function createFacade(config: FacadeConfig): Facade {
     kafka: config.kafka
   }).useModule(facadeStatusModule);
 }
-function getTokenForRequest(req: http.IncomingMessage) {
-  throw new Error('Function not implemented.');
-}
-

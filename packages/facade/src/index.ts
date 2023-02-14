@@ -1,26 +1,13 @@
-// import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-// import http from "http";
-// import bodyParser from "koa-bodyparser";
-// import cors from "@koa/cors";
-
 
 import http from "http";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import cors from "@koa/cors";
-// import { ApolloServer } from "@apollo/server";
-// import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-// import { koaMiddleware } from "@as-integrations/koa";
-
-// import cors from 'cors';
-import { json } from 'body-parser';
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from '@apollo/server/express4';
 import { startStandaloneServer } from '@apollo/server/standalone';
-// import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
@@ -297,17 +284,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         return {
           message: error.message,
           locations: error.locations,
-          // stack: error.stack,
           stack: error
         };
       },
-      // context: ({ ctx }) => ctx
     });
 
-    const { url } = await startStandaloneServer(gqlServer, {
-      context: async ({ req }) => ({ token: req.headers.token }),
-      // context: ({ ctx }) => ctx
-      // listen: { port: 4000 },
+    await startStandaloneServer(gqlServer, {
+      context: async ({ req }) => ({ token: req.headers.token })
     });
 
     await gqlServer.start();
@@ -319,20 +302,6 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         context: async ({ ctx }) => ctx,
       })
     );
-
-    // const middleware = gqlServer.getMiddleware({
-    //   path: '/graphql',
-    //   cors: true,
-    //   json: {
-    //     jsonLimit: '10mb'
-    //   },
-    // });
-
-    // expressMiddleware(gqlServer, {
-    //   context: async ({ req }) => ({ token: req.headers.token }),
-    // });
-
-    // this.koa.use(middleware);
   }
 }
 

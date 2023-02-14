@@ -65,7 +65,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 
   router.post('/oauth2-register', async (ctx, next) => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
-    const body = ctx.request.body;
+    const body: any = ctx.request.body;
 
     const user = await ids.user.register(RegisterRequest.fromPartial({
       email: body.email,

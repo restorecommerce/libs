@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.0...@restorecommerce/logger@1.2.1) (2022-10-14)
+
+**Note:** Version bump only for package @restorecommerce/logger
+
+
+
+
+
+# [1.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.1.0...@restorecommerce/logger@1.2.0) (2022-10-12)
+
+
+### Bug Fixes
+
+* integrate fieldOptions into existing logger config ([93f74c9](https://github.com/restorecommerce/libs/commit/93f74c93257458289c17cac3bca206f71a36b9c8))
+* **logger:** add precompile options for fieldList based on full field path ([c77e9ec](https://github.com/restorecommerce/libs/commit/c77e9ec9d227bffc80279c9216401e21d809d11c))
+* **logger:** add unit tests ([3760c31](https://github.com/restorecommerce/libs/commit/3760c31b9b3bfd01e8e0909ad0bc3616bb04728c))
+* **logger:** precompile field options and check for object field occurance with individual fields before checking for array entries ([d6eda7c](https://github.com/restorecommerce/libs/commit/d6eda7cf2f49d2ee0c40408183ad8ae7e94124c2))
+* **logger:** remove unused imports ([1087133](https://github.com/restorecommerce/libs/commit/1087133e2f716c6882a28f9eef06a056a2b806c7))
+* rename variables and return modified object from logFieldsHandler ([546097f](https://github.com/restorecommerce/libs/commit/546097f99c1de7ad21449b4a857706122c019486))
+* typing issues ([da052aa](https://github.com/restorecommerce/libs/commit/da052aa4955e296c4d1e9a3384c35c4a60178526))
+
+
+### Features
+
+* add centralized support for maskFields, bufferFields and omitFields ([7179197](https://github.com/restorecommerce/libs/commit/717919704a5f3fd9228ef59f9475b0b7d3469a2e))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.0.0...@restorecommerce/logger@1.1.0) (2022-10-04)
 
 

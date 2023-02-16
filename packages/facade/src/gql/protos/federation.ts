@@ -5,7 +5,7 @@ import {
   ServiceClient,
   SubSpaceServiceConfig
 } from './types';
-import { buildFederatedSchema } from '@apollo/federation';
+import { buildSubgraphSchema } from '@apollo/federation';
 import { gql } from 'apollo-server-koa';
 import { GraphQLSchema, printSchema } from 'graphql/index';
 import { GraphQLObjectType } from 'graphql';
@@ -17,7 +17,7 @@ export const buildFederatedSubscriptionSchema = <T, M extends Record<string, any
 
   // TODO There is currently no way of building a federated schema from GraphQLSchema Object
   // See https://github.com/apollographql/apollo-server/pull/4310
-  const federatedSchema = buildFederatedSchema({
+  const federatedSchema = buildSubgraphSchema({
     typeDefs: gql(printSchema(schema)),
     resolvers
   });

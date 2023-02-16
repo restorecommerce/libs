@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { CallContext, CallOptions } from "nice-grpc-common";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "grpc.health.v1";
 
@@ -20,9 +20,7 @@ export enum HealthCheckResponse_ServingStatus {
   UNRECOGNIZED = -1,
 }
 
-export function healthCheckResponse_ServingStatusFromJSON(
-  object: any
-): HealthCheckResponse_ServingStatus {
+export function healthCheckResponse_ServingStatusFromJSON(object: any): HealthCheckResponse_ServingStatus {
   switch (object) {
     case 0:
     case "UNKNOWN":
@@ -40,9 +38,7 @@ export function healthCheckResponse_ServingStatusFromJSON(
   }
 }
 
-export function healthCheckResponse_ServingStatusToJSON(
-  object: HealthCheckResponse_ServingStatus
-): string {
+export function healthCheckResponse_ServingStatusToJSON(object: HealthCheckResponse_ServingStatus): string {
   switch (object) {
     case HealthCheckResponse_ServingStatus.UNKNOWN:
       return "UNKNOWN";
@@ -61,10 +57,7 @@ function createBaseHealthCheckRequest(): HealthCheckRequest {
 }
 
 export const HealthCheckRequest = {
-  encode(
-    message: HealthCheckRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: HealthCheckRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.service !== "") {
       writer.uint32(10).string(message.service);
     }
@@ -90,9 +83,7 @@ export const HealthCheckRequest = {
   },
 
   fromJSON(object: any): HealthCheckRequest {
-    return {
-      service: isSet(object.service) ? String(object.service) : "",
-    };
+    return { service: isSet(object.service) ? String(object.service) : "" };
   },
 
   toJSON(message: HealthCheckRequest): unknown {
@@ -113,10 +104,7 @@ function createBaseHealthCheckResponse(): HealthCheckResponse {
 }
 
 export const HealthCheckResponse = {
-  encode(
-    message: HealthCheckResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: HealthCheckResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.status !== 0) {
       writer.uint32(8).int32(message.status);
     }
@@ -142,17 +130,12 @@ export const HealthCheckResponse = {
   },
 
   fromJSON(object: any): HealthCheckResponse {
-    return {
-      status: isSet(object.status)
-        ? healthCheckResponse_ServingStatusFromJSON(object.status)
-        : 0,
-    };
+    return { status: isSet(object.status) ? healthCheckResponse_ServingStatusFromJSON(object.status) : 0 };
   },
 
   toJSON(message: HealthCheckResponse): unknown {
     const obj: any = {};
-    message.status !== undefined &&
-      (obj.status = healthCheckResponse_ServingStatusToJSON(message.status));
+    message.status !== undefined && (obj.status = healthCheckResponse_ServingStatusToJSON(message.status));
     return obj;
   },
 
@@ -180,17 +163,11 @@ export const HealthDefinition = {
 } as const;
 
 export interface HealthServiceImplementation<CallContextExt = {}> {
-  check(
-    request: HealthCheckRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<HealthCheckResponse>>;
+  check(request: HealthCheckRequest, context: CallContext & CallContextExt): Promise<DeepPartial<HealthCheckResponse>>;
 }
 
 export interface HealthClient<CallOptionsExt = {}> {
-  check(
-    request: DeepPartial<HealthCheckRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<HealthCheckResponse>;
+  check(request: DeepPartial<HealthCheckRequest>, options?: CallOptions & CallOptionsExt): Promise<HealthCheckResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -207,166 +184,130 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "grpc/health/v1/health.proto",
-    package: "grpc.health.v1",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "HealthCheckRequest",
-        field: [
-          {
-            name: "service",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "service",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "HealthCheckResponse",
-        field: [
-          {
-            name: "status",
-            number: 1,
-            label: 1,
-            type: 14,
-            typeName: ".grpc.health.v1.HealthCheckResponse.ServingStatus",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [
-          {
-            name: "ServingStatus",
-            value: [
-              { name: "UNKNOWN", number: 0, options: undefined },
-              { name: "SERVING", number: 1, options: undefined },
-              { name: "NOT_SERVING", number: 2, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [
-      {
-        name: "Health",
-        method: [
-          {
-            name: "Check",
-            inputType: ".grpc.health.v1.HealthCheckRequest",
-            outputType: ".grpc.health.v1.HealthCheckResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-        ],
-        options: undefined,
-      },
-    ],
-    extension: [],
-    options: {
-      javaPackage: "",
-      javaOuterClassname: "",
-      javaMultipleFiles: false,
-      javaGenerateEqualsAndHash: false,
-      javaStringCheckUtf8: false,
-      optimizeFor: 1,
-      goPackage: "",
-      ccGenericServices: false,
-      javaGenericServices: false,
-      pyGenericServices: false,
-      phpGenericServices: false,
-      deprecated: false,
-      ccEnableArenas: false,
-      objcClassPrefix: "",
-      csharpNamespace: "Grpc.Health.V1",
-      swiftPrefix: "",
-      phpClassPrefix: "",
-      phpNamespace: "",
-      phpMetadataNamespace: "",
-      rubyPackage: "",
-      uninterpretedOption: [],
+    "name": "grpc/health/v1/health.proto",
+    "package": "grpc.health.v1",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "HealthCheckRequest",
+      "field": [{
+        "name": "service",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "service",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "HealthCheckResponse",
+      "field": [{
+        "name": "status",
+        "number": 1,
+        "label": 1,
+        "type": 14,
+        "typeName": ".grpc.health.v1.HealthCheckResponse.ServingStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [{
+        "name": "ServingStatus",
+        "value": [{ "name": "UNKNOWN", "number": 0, "options": undefined }, {
+          "name": "SERVING",
+          "number": 1,
+          "options": undefined,
+        }, { "name": "NOT_SERVING", "number": 2, "options": undefined }],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [{
+      "name": "Health",
+      "method": [{
+        "name": "Check",
+        "inputType": ".grpc.health.v1.HealthCheckRequest",
+        "outputType": ".grpc.health.v1.HealthCheckResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": undefined,
+    }],
+    "extension": [],
+    "options": {
+      "javaPackage": "",
+      "javaOuterClassname": "",
+      "javaMultipleFiles": false,
+      "javaGenerateEqualsAndHash": false,
+      "javaStringCheckUtf8": false,
+      "optimizeFor": 1,
+      "goPackage": "",
+      "ccGenericServices": false,
+      "javaGenericServices": false,
+      "pyGenericServices": false,
+      "phpGenericServices": false,
+      "deprecated": false,
+      "ccEnableArenas": false,
+      "objcClassPrefix": "",
+      "csharpNamespace": "Grpc.Health.V1",
+      "swiftPrefix": "",
+      "phpClassPrefix": "",
+      "phpNamespace": "",
+      "phpMetadataNamespace": "",
+      "rubyPackage": "",
+      "uninterpretedOption": [],
     },
-    sourceCodeInfo: { location: [] },
-    syntax: "proto3",
+    "sourceCodeInfo": { "location": [] },
+    "syntax": "proto3",
   }),
   references: {
     ".grpc.health.v1.HealthCheckRequest": HealthCheckRequest,
     ".grpc.health.v1.HealthCheckResponse": HealthCheckResponse,
-    ".grpc.health.v1.HealthCheckResponse.ServingStatus":
-      HealthCheckResponse_ServingStatus,
+    ".grpc.health.v1.HealthCheckResponse.ServingStatus": HealthCheckResponse_ServingStatus,
   },
   dependencies: [],
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

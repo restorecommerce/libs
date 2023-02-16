@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "google.protobuf";
 
@@ -100,10 +100,7 @@ function createBaseDoubleValue(): DoubleValue {
 }
 
 export const DoubleValue = {
-  encode(
-    message: DoubleValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DoubleValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(9).double(message.value);
     }
@@ -129,9 +126,7 @@ export const DoubleValue = {
   },
 
   fromJSON(object: any): DoubleValue {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: DoubleValue): unknown {
@@ -152,10 +147,7 @@ function createBaseFloatValue(): FloatValue {
 }
 
 export const FloatValue = {
-  encode(
-    message: FloatValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FloatValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(13).float(message.value);
     }
@@ -181,9 +173,7 @@ export const FloatValue = {
   },
 
   fromJSON(object: any): FloatValue {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: FloatValue): unknown {
@@ -204,10 +194,7 @@ function createBaseInt64Value(): Int64Value {
 }
 
 export const Int64Value = {
-  encode(
-    message: Int64Value,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Int64Value, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(8).int64(message.value);
     }
@@ -233,9 +220,7 @@ export const Int64Value = {
   },
 
   fromJSON(object: any): Int64Value {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: Int64Value): unknown {
@@ -256,10 +241,7 @@ function createBaseUInt64Value(): UInt64Value {
 }
 
 export const UInt64Value = {
-  encode(
-    message: UInt64Value,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UInt64Value, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(8).uint64(message.value);
     }
@@ -285,9 +267,7 @@ export const UInt64Value = {
   },
 
   fromJSON(object: any): UInt64Value {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: UInt64Value): unknown {
@@ -308,10 +288,7 @@ function createBaseInt32Value(): Int32Value {
 }
 
 export const Int32Value = {
-  encode(
-    message: Int32Value,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Int32Value, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(8).int32(message.value);
     }
@@ -337,9 +314,7 @@ export const Int32Value = {
   },
 
   fromJSON(object: any): Int32Value {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: Int32Value): unknown {
@@ -360,10 +335,7 @@ function createBaseUInt32Value(): UInt32Value {
 }
 
 export const UInt32Value = {
-  encode(
-    message: UInt32Value,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UInt32Value, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== 0) {
       writer.uint32(8).uint32(message.value);
     }
@@ -389,9 +361,7 @@ export const UInt32Value = {
   },
 
   fromJSON(object: any): UInt32Value {
-    return {
-      value: isSet(object.value) ? Number(object.value) : 0,
-    };
+    return { value: isSet(object.value) ? Number(object.value) : 0 };
   },
 
   toJSON(message: UInt32Value): unknown {
@@ -412,10 +382,7 @@ function createBaseBoolValue(): BoolValue {
 }
 
 export const BoolValue = {
-  encode(
-    message: BoolValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BoolValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value === true) {
       writer.uint32(8).bool(message.value);
     }
@@ -441,9 +408,7 @@ export const BoolValue = {
   },
 
   fromJSON(object: any): BoolValue {
-    return {
-      value: isSet(object.value) ? Boolean(object.value) : false,
-    };
+    return { value: isSet(object.value) ? Boolean(object.value) : false };
   },
 
   toJSON(message: BoolValue): unknown {
@@ -464,10 +429,7 @@ function createBaseStringValue(): StringValue {
 }
 
 export const StringValue = {
-  encode(
-    message: StringValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StringValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value !== "") {
       writer.uint32(10).string(message.value);
     }
@@ -493,9 +455,7 @@ export const StringValue = {
   },
 
   fromJSON(object: any): StringValue {
-    return {
-      value: isSet(object.value) ? String(object.value) : "",
-    };
+    return { value: isSet(object.value) ? String(object.value) : "" };
   },
 
   toJSON(message: StringValue): unknown {
@@ -516,10 +476,7 @@ function createBaseBytesValue(): BytesValue {
 }
 
 export const BytesValue = {
-  encode(
-    message: BytesValue,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BytesValue, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.value.length !== 0) {
       writer.uint32(10).bytes(message.value);
     }
@@ -545,19 +502,13 @@ export const BytesValue = {
   },
 
   fromJSON(object: any): BytesValue {
-    return {
-      value: isSet(object.value)
-        ? Buffer.from(bytesFromBase64(object.value))
-        : Buffer.alloc(0),
-    };
+    return { value: isSet(object.value) ? Buffer.from(bytesFromBase64(object.value)) : Buffer.alloc(0) };
   },
 
   toJSON(message: BytesValue): unknown {
     const obj: any = {};
     message.value !== undefined &&
-      (obj.value = base64FromBytes(
-        message.value !== undefined ? message.value : Buffer.alloc(0)
-      ));
+      (obj.value = base64FromBytes(message.value !== undefined ? message.value : Buffer.alloc(0)));
     return obj;
   },
 
@@ -582,432 +533,375 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "google/protobuf/wrappers.proto",
-    package: "google.protobuf",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "DoubleValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "FloatValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 2,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Int64Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 3,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "UInt64Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 4,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Int32Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "UInt32Value",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "BoolValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "StringValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "BytesValue",
-        field: [
-          {
-            name: "value",
-            number: 1,
-            label: 1,
-            type: 12,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [],
-    extension: [],
-    options: {
-      javaPackage: "com.google.protobuf",
-      javaOuterClassname: "WrappersProto",
-      javaMultipleFiles: true,
-      javaGenerateEqualsAndHash: false,
-      javaStringCheckUtf8: false,
-      optimizeFor: 1,
-      goPackage: "github.com/golang/protobuf/ptypes/wrappers",
-      ccGenericServices: false,
-      javaGenericServices: false,
-      pyGenericServices: false,
-      phpGenericServices: false,
-      deprecated: false,
-      ccEnableArenas: true,
-      objcClassPrefix: "GPB",
-      csharpNamespace: "Google.Protobuf.WellKnownTypes",
-      swiftPrefix: "",
-      phpClassPrefix: "",
-      phpNamespace: "",
-      phpMetadataNamespace: "",
-      rubyPackage: "",
-      uninterpretedOption: [],
+    "name": "google/protobuf/wrappers.proto",
+    "package": "google.protobuf",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "DoubleValue",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FloatValue",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 2,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Int64Value",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 3,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "UInt64Value",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 4,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Int32Value",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "UInt32Value",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "BoolValue",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "StringValue",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "BytesValue",
+      "field": [{
+        "name": "value",
+        "number": 1,
+        "label": 1,
+        "type": 12,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [],
+    "extension": [],
+    "options": {
+      "javaPackage": "com.google.protobuf",
+      "javaOuterClassname": "WrappersProto",
+      "javaMultipleFiles": true,
+      "javaGenerateEqualsAndHash": false,
+      "javaStringCheckUtf8": false,
+      "optimizeFor": 1,
+      "goPackage": "github.com/golang/protobuf/ptypes/wrappers",
+      "ccGenericServices": false,
+      "javaGenericServices": false,
+      "pyGenericServices": false,
+      "phpGenericServices": false,
+      "deprecated": false,
+      "ccEnableArenas": true,
+      "objcClassPrefix": "GPB",
+      "csharpNamespace": "Google.Protobuf.WellKnownTypes",
+      "swiftPrefix": "",
+      "phpClassPrefix": "",
+      "phpNamespace": "",
+      "phpMetadataNamespace": "",
+      "rubyPackage": "",
+      "uninterpretedOption": [],
     },
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [4, 0],
-          span: [55, 0, 58, 1],
-          leadingComments:
-            " Wrapper message for `double`.\n\n The JSON representation for `DoubleValue` is JSON number.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0, 2, 0],
-          span: [57, 2, 19],
-          leadingComments: " The double value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1],
-          span: [63, 0, 66, 1],
-          leadingComments:
-            " Wrapper message for `float`.\n\n The JSON representation for `FloatValue` is JSON number.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 0],
-          span: [65, 2, 18],
-          leadingComments: " The float value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2],
-          span: [71, 0, 74, 1],
-          leadingComments:
-            " Wrapper message for `int64`.\n\n The JSON representation for `Int64Value` is JSON string.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 0],
-          span: [73, 2, 18],
-          leadingComments: " The int64 value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3],
-          span: [79, 0, 82, 1],
-          leadingComments:
-            " Wrapper message for `uint64`.\n\n The JSON representation for `UInt64Value` is JSON string.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 0],
-          span: [81, 2, 19],
-          leadingComments: " The uint64 value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 4],
-          span: [87, 0, 90, 1],
-          leadingComments:
-            " Wrapper message for `int32`.\n\n The JSON representation for `Int32Value` is JSON number.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 4, 2, 0],
-          span: [89, 2, 18],
-          leadingComments: " The int32 value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5],
-          span: [95, 0, 98, 1],
-          leadingComments:
-            " Wrapper message for `uint32`.\n\n The JSON representation for `UInt32Value` is JSON number.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5, 2, 0],
-          span: [97, 2, 19],
-          leadingComments: " The uint32 value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 6],
-          span: [103, 0, 106, 1],
-          leadingComments:
-            " Wrapper message for `bool`.\n\n The JSON representation for `BoolValue` is JSON `true` and `false`.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 6, 2, 0],
-          span: [105, 2, 17],
-          leadingComments: " The bool value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 7],
-          span: [111, 0, 114, 1],
-          leadingComments:
-            " Wrapper message for `string`.\n\n The JSON representation for `StringValue` is JSON string.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 7, 2, 0],
-          span: [113, 2, 19],
-          leadingComments: " The string value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8],
-          span: [119, 0, 122, 1],
-          leadingComments:
-            " Wrapper message for `bytes`.\n\n The JSON representation for `BytesValue` is JSON string.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8, 2, 0],
-          span: [121, 2, 18],
-          leadingComments: " The bytes value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-      ],
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [4, 0],
+        "span": [55, 0, 58, 1],
+        "leadingComments":
+          " Wrapper message for `double`.\n\n The JSON representation for `DoubleValue` is JSON number.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 0],
+        "span": [57, 2, 19],
+        "leadingComments": " The double value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1],
+        "span": [63, 0, 66, 1],
+        "leadingComments":
+          " Wrapper message for `float`.\n\n The JSON representation for `FloatValue` is JSON number.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 0],
+        "span": [65, 2, 18],
+        "leadingComments": " The float value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2],
+        "span": [71, 0, 74, 1],
+        "leadingComments":
+          " Wrapper message for `int64`.\n\n The JSON representation for `Int64Value` is JSON string.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 0],
+        "span": [73, 2, 18],
+        "leadingComments": " The int64 value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3],
+        "span": [79, 0, 82, 1],
+        "leadingComments":
+          " Wrapper message for `uint64`.\n\n The JSON representation for `UInt64Value` is JSON string.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 0],
+        "span": [81, 2, 19],
+        "leadingComments": " The uint64 value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 4],
+        "span": [87, 0, 90, 1],
+        "leadingComments":
+          " Wrapper message for `int32`.\n\n The JSON representation for `Int32Value` is JSON number.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 4, 2, 0],
+        "span": [89, 2, 18],
+        "leadingComments": " The int32 value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5],
+        "span": [95, 0, 98, 1],
+        "leadingComments":
+          " Wrapper message for `uint32`.\n\n The JSON representation for `UInt32Value` is JSON number.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5, 2, 0],
+        "span": [97, 2, 19],
+        "leadingComments": " The uint32 value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 6],
+        "span": [103, 0, 106, 1],
+        "leadingComments":
+          " Wrapper message for `bool`.\n\n The JSON representation for `BoolValue` is JSON `true` and `false`.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 6, 2, 0],
+        "span": [105, 2, 17],
+        "leadingComments": " The bool value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 7],
+        "span": [111, 0, 114, 1],
+        "leadingComments":
+          " Wrapper message for `string`.\n\n The JSON representation for `StringValue` is JSON string.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 7, 2, 0],
+        "span": [113, 2, 19],
+        "leadingComments": " The string value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8],
+        "span": [119, 0, 122, 1],
+        "leadingComments":
+          " Wrapper message for `bytes`.\n\n The JSON representation for `BytesValue` is JSON string.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 0],
+        "span": [121, 2, 18],
+        "leadingComments": " The bytes value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".google.protobuf.DoubleValue": DoubleValue,
@@ -1027,53 +921,51 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function longToNumber(long: Long): number {

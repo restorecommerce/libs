@@ -298,6 +298,45 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
   scope?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentProductArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -413,6 +452,9 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -458,6 +500,8 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -550,7 +594,7 @@ export type IoRestorecommerceJobJobOptionsResolvers<ContextType = SchedulingCont
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobJobOptionsPriorityResolvers = { NORMAL: 'undefined', LOW: 10, MEDIUM: -5, HIGH: -10, CRITICAL: -15 };
+export type IoRestorecommerceJobJobOptionsPriorityResolvers = { NORMAL: 0, LOW: 10, MEDIUM: -5, HIGH: -10, CRITICAL: -15 };
 
 export type IoRestorecommerceJobBackoffResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobBackoff'] = ResolversParentTypes['IoRestorecommerceJobBackoff']> = ResolversObject<{
   delay?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -558,7 +602,7 @@ export type IoRestorecommerceJobBackoffResolvers<ContextType = SchedulingContext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobBackoffTypeResolvers = { FIXED: 'undefined', EXPONENTIAL: 1 };
+export type IoRestorecommerceJobBackoffTypeResolvers = { FIXED: 0, EXPONENTIAL: 1 };
 
 export type IoRestorecommerceJobRepeatResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceJobRepeat'] = ResolversParentTypes['IoRestorecommerceJobRepeat']> = ResolversObject<{
   every?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -584,7 +628,7 @@ export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = Schedu
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceJobJobReadRequestSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+export type IoRestorecommerceJobJobReadRequestSortOrderResolvers = { UNSORTED: 0, ASCENDING: 1, DESCENDING: 2 };
 
 export type MutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   scheduling?: Resolver<ResolversTypes['SchedulingMutation'], ParentType, ContextType>;
@@ -609,6 +653,18 @@ export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextTyp
 export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['IoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type SubscriptionResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
+  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -639,5 +695,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

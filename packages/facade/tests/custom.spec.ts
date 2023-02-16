@@ -11,7 +11,7 @@ import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from "@restorecommerce/logger";
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from "../src/gql/protos";
 import { GraphQLString, printSchema } from "graphql";
-import { buildFederatedSchema } from "@apollo/federation";
+import { buildSubgraphSchema } from "@apollo/federation";
 import { gql } from "apollo-server-koa";
 
 const CONFIG_PATH = __dirname;
@@ -49,7 +49,7 @@ function createTestFacade() {
   const customStuff = createFacadeModuleFactory<CustomConfig, CustomModule>(namespace, (facade, config) => {
     facade.addApolloService({
       name: namespace,
-      schema: buildFederatedSchema({
+      schema: buildSubgraphSchema({
         typeDefs: gql(printSchema(generateSchema([{prefix: 'Custom', namespace}]))),
         resolvers: generateResolver(namespace)
       })

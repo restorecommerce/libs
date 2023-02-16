@@ -5,6 +5,16 @@
       "level": "silly",
       "colorize": true,
       "prettyPrint": true
+    },
+    "fieldOptions": {
+      "bufferFields": [
+        {
+          "fieldPath": "request.context.subject"
+        },
+        {
+          "fieldPath": "request.context.resources"
+        }
+      ]
     }
   },
   "redis": {
@@ -141,6 +151,10 @@
       "db-index": 5,
       "ttl": 3600,
       "prefix": "acs:"
+    },
+    "unauthenticated_user": {
+      "id": "",
+      "token": ""
     }
   },
   "errors": {

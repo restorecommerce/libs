@@ -106,10 +106,19 @@ export const isAllowedRequest = async (subject: Subject,
 export const accessRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
   database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
-  // when subject is not passed (if auth header is not set)
   if (_.isEmpty(subject)) {
-    subject = { unauthenticated: true };
+    // check if unauthenticated user is configured in config.json
+    if (cfg.get('authorization:unauthenticated_user')) {
+      subject = {
+        id: cfg.get('authorization:unauthenticated_user:id'),
+        token: cfg.get('authorization:unauthenticated_user:token')
+      };
+    } else {
+      // when subject is not passed (if auth header is not set)
+      subject = { unauthenticated: true };
+    }
   }
+
   let subClone = _.cloneDeep(subject);
   let token;
   if (subject && subject.token) {
@@ -185,7 +194,7 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
       // Note: it is assumed that there is only one policy set
       policySetResponse = await whatIsAllowedRequest(subClone, resource, action, ctx, useCache);
     } catch (err) {
-      logger.error('Error calling whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
+      logger.error('Error calling whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -239,7 +248,7 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
     try {
       decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err) {
-      logger.error('Error calling isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
+      logger.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -289,7 +298,7 @@ export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<Deci
       operation_status: isAllowedResponse.operation_status
     };
   } catch (err) {
-    logger.error('Error invoking acs-srv isAllowed method',  { code: err.code, message: err.message, stack: err.stack });
+    logger.error('Error invoking acs-srv isAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
 
@@ -312,7 +321,7 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
       obligation: mapResourceURNObligationProperties(whatIsAllowedResponse.obligation)
     } as any; // TODO Decision?
   } catch (err) {
-    logger.error('Error invoking acs-srv whatIsAllowed method',  { code: err.code, message: err.message, stack: err.stack });
+    logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return { decision: Response_Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
   }
 

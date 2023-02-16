@@ -75,10 +75,13 @@ export type IoRestorecommerceAddressAddress = {
   locality?: Maybe<Scalars['String']>;
   street?: Maybe<Scalars['String']>;
   region?: Maybe<Scalars['String']>;
-  geoCoordinates?: Maybe<IoRestorecommerceAddressAddressGeoPoint>;
+  geoCoordinates?: Maybe<IoRestorecommerceAddressGeoPoint>;
   altitude?: Maybe<Scalars['Float']>;
   buildingNumber?: Maybe<Scalars['String']>;
   addressAddition?: Maybe<IoRestorecommerceAddressAddressAddition>;
+  businessAddress?: Maybe<IoRestorecommerceAddressBusinessAddress>;
+  residentialAddress?: Maybe<IoRestorecommerceAddressResidentialAddress>;
+  packStation?: Maybe<IoRestorecommerceAddressPackStation>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -112,8 +115,8 @@ export type IoRestorecommerceCountryCountry = {
   economicAreas?: Maybe<Array<Scalars['String']>>;
 };
 
-export type IoRestorecommerceAddressAddressGeoPoint = {
-  __typename?: 'IoRestorecommerceAddressAddressGeoPoint';
+export type IoRestorecommerceAddressGeoPoint = {
+  __typename?: 'IoRestorecommerceAddressGeoPoint';
   latitude?: Maybe<Scalars['Float']>;
   longitude?: Maybe<Scalars['Float']>;
 };
@@ -122,6 +125,26 @@ export type IoRestorecommerceAddressAddressAddition = {
   __typename?: 'IoRestorecommerceAddressAddressAddition';
   field1?: Maybe<Scalars['String']>;
   field2?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceAddressBusinessAddress = {
+  __typename?: 'IoRestorecommerceAddressBusinessAddress';
+  name?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceAddressResidentialAddress = {
+  __typename?: 'IoRestorecommerceAddressResidentialAddress';
+  title?: Maybe<Scalars['String']>;
+  givenName?: Maybe<Scalars['String']>;
+  midName?: Maybe<Scalars['String']>;
+  familyName?: Maybe<Scalars['String']>;
+};
+
+export type IoRestorecommerceAddressPackStation = {
+  __typename?: 'IoRestorecommerceAddressPackStation';
+  provider?: Maybe<Scalars['String']>;
+  stationNumber?: Maybe<Scalars['String']>;
+  postNumber?: Maybe<Scalars['String']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -849,10 +872,13 @@ export type IIoRestorecommerceAddressAddress = {
   locality?: InputMaybe<Scalars['String']>;
   street?: InputMaybe<Scalars['String']>;
   region?: InputMaybe<Scalars['String']>;
-  geoCoordinates?: InputMaybe<IIoRestorecommerceAddressAddressGeoPoint>;
+  geoCoordinates?: InputMaybe<IIoRestorecommerceAddressGeoPoint>;
   altitude?: InputMaybe<Scalars['Float']>;
   buildingNumber?: InputMaybe<Scalars['String']>;
   addressAddition?: InputMaybe<IIoRestorecommerceAddressAddressAddition>;
+  businessAddress?: InputMaybe<IIoRestorecommerceAddressBusinessAddress>;
+  residentialAddress?: InputMaybe<IIoRestorecommerceAddressResidentialAddress>;
+  packStation?: InputMaybe<IIoRestorecommerceAddressPackStation>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -873,7 +899,7 @@ export type IIoRestorecommerceAttributeAttributeObj = {
   attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
-export type IIoRestorecommerceAddressAddressGeoPoint = {
+export type IIoRestorecommerceAddressGeoPoint = {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
 };
@@ -881,6 +907,23 @@ export type IIoRestorecommerceAddressAddressGeoPoint = {
 export type IIoRestorecommerceAddressAddressAddition = {
   field1?: InputMaybe<Scalars['String']>;
   field2?: InputMaybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceAddressBusinessAddress = {
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceAddressResidentialAddress = {
+  title?: InputMaybe<Scalars['String']>;
+  givenName?: InputMaybe<Scalars['String']>;
+  midName?: InputMaybe<Scalars['String']>;
+  familyName?: InputMaybe<Scalars['String']>;
+};
+
+export type IIoRestorecommerceAddressPackStation = {
+  provider?: InputMaybe<Scalars['String']>;
+  stationNumber?: InputMaybe<Scalars['String']>;
+  postNumber?: InputMaybe<Scalars['String']>;
 };
 
 export enum ModeType {
@@ -1299,6 +1342,27 @@ export type IIoRestorecommerceCommandCommandParameter = {
   properties?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -1382,8 +1446,11 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceCountryCountry: ResolverTypeWrapper<IoRestorecommerceCountryCountry>;
-  IoRestorecommerceAddressAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressAddressGeoPoint>;
+  IoRestorecommerceAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressGeoPoint>;
   IoRestorecommerceAddressAddressAddition: ResolverTypeWrapper<IoRestorecommerceAddressAddressAddition>;
+  IoRestorecommerceAddressBusinessAddress: ResolverTypeWrapper<IoRestorecommerceAddressBusinessAddress>;
+  IoRestorecommerceAddressResidentialAddress: ResolverTypeWrapper<IoRestorecommerceAddressResidentialAddress>;
+  IoRestorecommerceAddressPackStation: ResolverTypeWrapper<IoRestorecommerceAddressPackStation>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
@@ -1478,8 +1545,11 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
-  IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
+  IIoRestorecommerceAddressGeoPoint: IIoRestorecommerceAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
+  IIoRestorecommerceAddressBusinessAddress: IIoRestorecommerceAddressBusinessAddress;
+  IIoRestorecommerceAddressResidentialAddress: IIoRestorecommerceAddressResidentialAddress;
+  IIoRestorecommerceAddressPackStation: IIoRestorecommerceAddressPackStation;
   ModeType: ModeType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
@@ -1521,6 +1591,9 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceCommandCommandList: IIoRestorecommerceCommandCommandList;
   IIoRestorecommerceCommandCommand: IIoRestorecommerceCommandCommand;
   IIoRestorecommerceCommandCommandParameter: IIoRestorecommerceCommandCommandParameter;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1538,8 +1611,11 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceCountryCountry: IoRestorecommerceCountryCountry;
-  IoRestorecommerceAddressAddressGeoPoint: IoRestorecommerceAddressAddressGeoPoint;
+  IoRestorecommerceAddressGeoPoint: IoRestorecommerceAddressGeoPoint;
   IoRestorecommerceAddressAddressAddition: IoRestorecommerceAddressAddressAddition;
+  IoRestorecommerceAddressBusinessAddress: IoRestorecommerceAddressBusinessAddress;
+  IoRestorecommerceAddressResidentialAddress: IoRestorecommerceAddressResidentialAddress;
+  IoRestorecommerceAddressPackStation: IoRestorecommerceAddressPackStation;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   Int: Scalars['Int'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
@@ -1625,8 +1701,11 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
-  IIoRestorecommerceAddressAddressGeoPoint: IIoRestorecommerceAddressAddressGeoPoint;
+  IIoRestorecommerceAddressGeoPoint: IIoRestorecommerceAddressGeoPoint;
   IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
+  IIoRestorecommerceAddressBusinessAddress: IIoRestorecommerceAddressBusinessAddress;
+  IIoRestorecommerceAddressResidentialAddress: IIoRestorecommerceAddressResidentialAddress;
+  IIoRestorecommerceAddressPackStation: IIoRestorecommerceAddressPackStation;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
@@ -1667,6 +1746,8 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceCommandCommandList: IIoRestorecommerceCommandCommandList;
   IIoRestorecommerceCommandCommand: IIoRestorecommerceCommandCommand;
   IIoRestorecommerceCommandCommandParameter: IIoRestorecommerceCommandCommandParameter;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -1721,10 +1802,13 @@ export type IoRestorecommerceAddressAddressResolvers<ContextType = ResourceConte
   locality?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  geoCoordinates?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressGeoPoint']>, ParentType, ContextType>;
+  geoCoordinates?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressGeoPoint']>, ParentType, ContextType>;
   altitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   buildingNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   addressAddition?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddressAddition']>, ParentType, ContextType>;
+  businessAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressBusinessAddress']>, ParentType, ContextType>;
+  residentialAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressResidentialAddress']>, ParentType, ContextType>;
+  packStation?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressPackStation']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1759,7 +1843,7 @@ export type IoRestorecommerceCountryCountryResolvers<ContextType = ResourceConte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAddressAddressGeoPointResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressGeoPoint'] = ResolversParentTypes['IoRestorecommerceAddressAddressGeoPoint']> = ResolversObject<{
+export type IoRestorecommerceAddressGeoPointResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressGeoPoint'] = ResolversParentTypes['IoRestorecommerceAddressGeoPoint']> = ResolversObject<{
   latitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   longitude?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1768,6 +1852,26 @@ export type IoRestorecommerceAddressAddressGeoPointResolvers<ContextType = Resou
 export type IoRestorecommerceAddressAddressAdditionResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddressAddition'] = ResolversParentTypes['IoRestorecommerceAddressAddressAddition']> = ResolversObject<{
   field1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   field2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressBusinessAddressResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressBusinessAddress'] = ResolversParentTypes['IoRestorecommerceAddressBusinessAddress']> = ResolversObject<{
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressResidentialAddressResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressResidentialAddress'] = ResolversParentTypes['IoRestorecommerceAddressResidentialAddress']> = ResolversObject<{
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  givenName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  midName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  familyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressPackStationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressPackStation'] = ResolversParentTypes['IoRestorecommerceAddressPackStation']> = ResolversObject<{
+  provider?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stationNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  postNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1784,19 +1888,19 @@ export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = Resour
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 'undefined', ASCENDING: 1, DESCENDING: 2 };
+export type IoRestorecommerceResourcebaseSortSortOrderResolvers = { UNSORTED: 0, ASCENDING: 1, DESCENDING: 2 };
 
-export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+export type IoRestorecommerceResourcebaseFilterOperationResolvers = { eq: 0, lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
-export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 0, NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
-export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 0, lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
-export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 0, NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
-export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 0, or: 1 };
 
-export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 0, or: 1 };
 
 export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['GoogleProtobufAnyValue'], any> {
   name: 'GoogleProtobufAnyValue';
@@ -1987,7 +2091,7 @@ export type IoRestorecommerceImageImageResolvers<ContextType = ResourceContext, 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 'undefined', INDIVIDUAL_USER: 1, GUEST: 2, TECHNICAL_USER: 3 };
+export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 0, INDIVIDUAL_USER: 1, GUEST: 2, TECHNICAL_USER: 3 };
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2276,7 +2380,7 @@ export type IoRestorecommerceCommandCommandParameterResolvers<ContextType = Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCommandCommandParameterParameterTypeResolvers = { boolean_value: 'undefined', object_value: 1, array_value: 2, number_value: 3, string_value: 4 };
+export type IoRestorecommerceCommandCommandParameterParameterTypeResolvers = { boolean_value: 0, object_value: 1, array_value: 2, number_value: 3, string_value: 4 };
 
 export type MutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   resource?: Resolver<ResolversTypes['ResourceMutation'], ParentType, ContextType>;
@@ -2381,6 +2485,15 @@ export type ResourceCommandMutationResolvers<ContextType = ResourceContext, Pare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   ResourceQuery?: ResourceQueryResolvers<ContextType>;
@@ -2393,8 +2506,11 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceCountryCountry?: IoRestorecommerceCountryCountryResolvers<ContextType>;
-  IoRestorecommerceAddressAddressGeoPoint?: IoRestorecommerceAddressAddressGeoPointResolvers<ContextType>;
+  IoRestorecommerceAddressGeoPoint?: IoRestorecommerceAddressGeoPointResolvers<ContextType>;
   IoRestorecommerceAddressAddressAddition?: IoRestorecommerceAddressAddressAdditionResolvers<ContextType>;
+  IoRestorecommerceAddressBusinessAddress?: IoRestorecommerceAddressBusinessAddressResolvers<ContextType>;
+  IoRestorecommerceAddressResidentialAddress?: IoRestorecommerceAddressResidentialAddressResolvers<ContextType>;
+  IoRestorecommerceAddressPackStation?: IoRestorecommerceAddressPackStationResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
@@ -2486,5 +2602,7 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   ResourceTaxTypeMutation?: ResourceTaxTypeMutationResolvers<ContextType>;
   ResourceTaxMutation?: ResourceTaxMutationResolvers<ContextType>;
   ResourceCommandMutation?: ResourceCommandMutationResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

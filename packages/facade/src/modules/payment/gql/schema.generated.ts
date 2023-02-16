@@ -306,6 +306,27 @@ export type IIoRestorecommercePaymentCaptureRequest = {
   paymentId?: InputMaybe<Scalars['String']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -397,6 +418,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommercePaymentPaymentPayload: ResolverTypeWrapper<IoRestorecommercePaymentPaymentPayload>;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
   IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -421,6 +445,8 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommercePaymentPaymentPayload: IoRestorecommercePaymentPaymentPayload;
   IIoRestorecommercePaymentPaymentRequest: IIoRestorecommercePaymentPaymentRequest;
   IIoRestorecommercePaymentCaptureRequest: IIoRestorecommercePaymentCaptureRequest;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type MutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -478,7 +504,7 @@ export type IoRestorecommerceStatusOperationStatusResolvers<ContextType = Paymen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommercePaymentProviderResolvers = { NO_PROVIDER: 'undefined', Adyen: 1, AuthorizeNetCIM: 2, AuthorizeNet: 3, AxcessMS: 4, Balanced: 5, BamboraAsiaPacific: 6, BankFrick: 7, Banwire: 8, BarclaysePDQExtraPlus: 9, Be2Bill: 10, Beanstreamcom: 11, BluePay: 12, Borgun: 13, Braintree: 14, BridgePay: 15, Cardknox: 16, CardSave: 17, CardStream: 18, Cashnet: 19, Cecabank: 20, Cenpos: 21, CAMSCentralAccountManagementSystem: 22, Checkoutcom: 23, Clearhaus: 24, Commercegate: 25, Conekta: 26, CyberSource: 27, DIBS: 28, DataCash: 29, Efsnet: 30, ElavonMyVirtualMerchant: 31, ePay: 32, EVOCanada: 33, eWAY: 34, eWAYRapid: 35, Exact: 36, Ezic: 37, FatZebra: 38, FederatedCanada: 39, FinansbankWebPOS: 40, Flo2Cash: 41, stPayGatewayNet: 42, FirstDataGlobalGatewaye4: 43, FirstGiving: 44, GarantiSanalPOS: 45, GlobalTransport: 46, HDFC: 47, HeartlandPaymentSystems: 48, iATSPayments: 49, InspireCommerce: 50, InstaPay: 51, IPP: 52, Iridium: 53, iTransact: 54, JetPay: 55, Komoju: 56, LinkPoint: 57, LitleCo: 58, maxiPago: 59, MerchanteSolutions: 60, MerchantOneGateway: 61, MerchantWARE: 62, MerchantWarrior: 63, Mercury: 64, MetricsGlobal: 65, MasterCardInternetGatewayServiceMiGS: 66, ModernPayments: 67, MONEI: 68, Moneris: 69, MoneyMovers: 70, NABTransact: 71, NELiXTransaX: 72, NetRegistry: 73, BBSNetaxept: 74, NETbilling: 75, NETPAYGateway: 76, NMI: 77, Ogone: 78, Omise: 79, Openpay: 80, OptimalPayments: 81, OrbitalPaymentech: 82, Pagarme: 83, PagoFacil: 84, PayConex: 85, PayGatePayXML: 86, PayHub: 87, PayJunction: 89, PaySecure: 90, PayboxDirect: 91, Payeezy: 92, Payex: 93, PaymentExpress: 94, PAYMILL: 95, PayPalExpressCheckout: 96, PayPalExpressCheckoutUK: 97, PayPalPayflowPro: 98, PayPalPaymentsProUS: 99, PayPalPaymentsProUK: 100, PayPalWebsitePaymentsProCA: 101, PayPalExpressCheckoutforDigitalGoods: 102, Payscout: 103, Paystation: 104, PayWay: 105, PayUIndia: 106, PinPayments: 107, PlugnPay: 108, Psigate: 109, PSLPaymentSolutions: 110, QuickBooksMerchantServices: 111, QuickBooksPayments: 112, QuantumGateway: 113, QuickPay: 114, Qvalent: 115, Raven: 116, Realex: 117, Redsys: 118, S5: 119, SagePay: 120, SagePaymentSolutions: 121, SallieMae: 122, SecureNet: 123, SecurePay: 124, SecurePayTech: 125, SecurionPay: 126, SkipJack: 127, SoEasyPay: 128, Spreedly: 129, Stripe: 130, Swipe: 131, TNS: 132, TransactPro: 133, TransFirst: 134, Transnational: 135, Trexle: 136, TrustCommerce: 137, USAePay: 138, VancoPaymentSolutions: 139, Verifi: 140, ViaKLIX: 141, WebPay: 142, WePay: 143, Wirecard: 144, WorldpayGlobal: 145, WorldpayOnline: 146, WorldpayUS: 147 };
+export type IoRestorecommercePaymentProviderResolvers = { NO_PROVIDER: 0, Adyen: 1, AuthorizeNetCIM: 2, AuthorizeNet: 3, AxcessMS: 4, Balanced: 5, BamboraAsiaPacific: 6, BankFrick: 7, Banwire: 8, BarclaysePDQExtraPlus: 9, Be2Bill: 10, Beanstreamcom: 11, BluePay: 12, Borgun: 13, Braintree: 14, BridgePay: 15, Cardknox: 16, CardSave: 17, CardStream: 18, Cashnet: 19, Cecabank: 20, Cenpos: 21, CAMSCentralAccountManagementSystem: 22, Checkoutcom: 23, Clearhaus: 24, Commercegate: 25, Conekta: 26, CyberSource: 27, DIBS: 28, DataCash: 29, Efsnet: 30, ElavonMyVirtualMerchant: 31, ePay: 32, EVOCanada: 33, eWAY: 34, eWAYRapid: 35, Exact: 36, Ezic: 37, FatZebra: 38, FederatedCanada: 39, FinansbankWebPOS: 40, Flo2Cash: 41, stPayGatewayNet: 42, FirstDataGlobalGatewaye4: 43, FirstGiving: 44, GarantiSanalPOS: 45, GlobalTransport: 46, HDFC: 47, HeartlandPaymentSystems: 48, iATSPayments: 49, InspireCommerce: 50, InstaPay: 51, IPP: 52, Iridium: 53, iTransact: 54, JetPay: 55, Komoju: 56, LinkPoint: 57, LitleCo: 58, maxiPago: 59, MerchanteSolutions: 60, MerchantOneGateway: 61, MerchantWARE: 62, MerchantWarrior: 63, Mercury: 64, MetricsGlobal: 65, MasterCardInternetGatewayServiceMiGS: 66, ModernPayments: 67, MONEI: 68, Moneris: 69, MoneyMovers: 70, NABTransact: 71, NELiXTransaX: 72, NetRegistry: 73, BBSNetaxept: 74, NETbilling: 75, NETPAYGateway: 76, NMI: 77, Ogone: 78, Omise: 79, Openpay: 80, OptimalPayments: 81, OrbitalPaymentech: 82, Pagarme: 83, PagoFacil: 84, PayConex: 85, PayGatePayXML: 86, PayHub: 87, PayJunction: 89, PaySecure: 90, PayboxDirect: 91, Payeezy: 92, Payex: 93, PaymentExpress: 94, PAYMILL: 95, PayPalExpressCheckout: 96, PayPalExpressCheckoutUK: 97, PayPalPayflowPro: 98, PayPalPaymentsProUS: 99, PayPalPaymentsProUK: 100, PayPalWebsitePaymentsProCA: 101, PayPalExpressCheckoutforDigitalGoods: 102, Payscout: 103, Paystation: 104, PayWay: 105, PayUIndia: 106, PinPayments: 107, PlugnPay: 108, Psigate: 109, PSLPaymentSolutions: 110, QuickBooksMerchantServices: 111, QuickBooksPayments: 112, QuantumGateway: 113, QuickPay: 114, Qvalent: 115, Raven: 116, Realex: 117, Redsys: 118, S5: 119, SagePay: 120, SagePaymentSolutions: 121, SallieMae: 122, SecureNet: 123, SecurePay: 124, SecurePayTech: 125, SecurionPay: 126, SkipJack: 127, SoEasyPay: 128, Spreedly: 129, Stripe: 130, Swipe: 131, TNS: 132, TransactPro: 133, TransFirst: 134, Transnational: 135, Trexle: 136, TrustCommerce: 137, USAePay: 138, VancoPaymentSolutions: 139, Verifi: 140, ViaKLIX: 141, WebPay: 142, WePay: 143, Wirecard: 144, WorldpayGlobal: 145, WorldpayOnline: 146, WorldpayUS: 147 };
 
 export type ProtoIoRestorecommercePaymentPaymentResponseResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse'] = ResolversParentTypes['ProtoIoRestorecommercePaymentPaymentResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType>;
@@ -503,6 +529,15 @@ export type IoRestorecommercePaymentPaymentPayloadResolvers<ContextType = Paymen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   PaymentMutation?: PaymentMutationResolvers<ContextType>;
@@ -518,5 +553,7 @@ export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   IoRestorecommercePaymentPaymentResponse?: IoRestorecommercePaymentPaymentResponseResolvers<ContextType>;
   IoRestorecommercePaymentPaymentPayloadStatus?: IoRestorecommercePaymentPaymentPayloadStatusResolvers<ContextType>;
   IoRestorecommercePaymentPaymentPayload?: IoRestorecommercePaymentPaymentPayloadResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

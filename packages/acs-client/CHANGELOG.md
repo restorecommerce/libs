@@ -3,6 +3,41 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.5...@restorecommerce/acs-client@1.1.0) (2022-12-28)
+
+
+### Features
+
+* **acs-client:** support for unauthenticated user token configuration for acs-client ([3be404b](https://github.com/restorecommerce/libs/commit/3be404b0dffcf17680060d630cae8700cf5758c4))
+
+
+
+
+
+## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.4...@restorecommerce/acs-client@1.0.5) (2022-11-16)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.3...@restorecommerce/acs-client@1.0.4) (2022-10-14)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
+## [1.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.2...@restorecommerce/acs-client@1.0.3) (2022-10-12)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
 ## [1.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.1...@restorecommerce/acs-client@1.0.2) (2022-10-04)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

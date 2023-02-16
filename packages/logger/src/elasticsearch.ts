@@ -1,11 +1,12 @@
-import { ElasticsearchTransport, ElasticsearchTransportOptions, Transformer } from 'winston-elasticsearch';
+import { ElasticsearchTransport, ElasticsearchTransportOptions } from 'winston-elasticsearch';
 import * as os from 'os';
 import * as rTracer from 'cls-rtracer';
-import { globalLoggerCtxKey, getRealTrace, getCircularReplacer } from './utils';
+import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler, PrecompiledFieldOptions } from './utils';
+import { RestoreFieldsOptions } from './index';
 
 export const indexTemplate = require('../elasticsearch-index-template.json');
 
-function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
+function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) {
   /**
    Transformer function to transform logged data into a
   the message structure used in restore for storage in ES.
@@ -42,12 +43,14 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
     transformed.source_host = os.hostname();
     transformed.message = logData.message;
     if (typeof transformed.message === 'object') {
-      transformed.message = JSON.stringify(transformed.message, getCircularReplacer());
+      const transformedFields = logFieldsHandler(transformed.message, precompiled);
+      transformed.message = JSON.stringify(transformedFields, getCircularReplacer());
     }
     transformed.severity = logData.level;
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
-      transformed.fields ={ message: transformed.fields };
+      const transformedFields = logFieldsHandler(JSON.parse(transformed.fields), precompiled);
+      transformed.fields ={ message: transformedFields };
     }
 
     if (opts.esTransformer && typeof opts.esTransformer === 'function') {
@@ -72,10 +75,11 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions) {
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
   esTransformer?: Function;
+  fieldOptions?: RestoreFieldsOptions;
 }
 
-export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions) {
-  const transformer = createTransformer(opts);
+export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) {
+  const transformer = createTransformer(opts, precompiled);
   return new ElasticsearchTransport({
     indexTemplate,
     transformer,

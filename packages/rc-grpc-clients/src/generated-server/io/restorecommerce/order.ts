@@ -23,6 +23,14 @@ import { protoMetadata as protoMetadata5, KafkaSubscription } from "./options";
 import { protoMetadata as protoMetadata7, Item } from "./product";
 import { protoMetadata as protoMetadata8, Parcel } from "./fulfillment";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { Address, ContactPerson, protoMetadata as protoMetadata6 } from "./address";
+import { protoMetadata as protoMetadata3, Subject } from "./auth";
+import { Parcel, protoMetadata as protoMetadata7 } from "./fulfillment";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata5 } from "./options";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -239,25 +247,16 @@ export const Order = {
       writer.uint32(81).double(message.total_weight_in_kg);
     }
     if (message.shipping_address !== undefined) {
-      Address.encode(
-        message.shipping_address,
-        writer.uint32(90).fork()
-      ).ldelim();
+      Address.encode(message.shipping_address, writer.uint32(90).fork()).ldelim();
     }
     if (message.billing_address !== undefined) {
-      Address.encode(
-        message.billing_address,
-        writer.uint32(106).fork()
-      ).ldelim();
+      Address.encode(message.billing_address, writer.uint32(106).fork()).ldelim();
     }
     if (message.billing_email !== "") {
       writer.uint32(114).string(message.billing_email);
     }
     if (message.contact_person !== undefined) {
-      ContactPerson.encode(
-        message.contact_person,
-        writer.uint32(122).fork()
-      ).ldelim();
+      ContactPerson.encode(message.contact_person, writer.uint32(122).fork()).ldelim();
     }
     if (message.notification_email !== "") {
       writer.uint32(130).string(message.notification_email);
@@ -315,10 +314,7 @@ export const Order = {
           message.billing_email = reader.string();
           break;
         case 15:
-          message.contact_person = ContactPerson.decode(
-            reader,
-            reader.uint32()
-          );
+          message.contact_person = ContactPerson.decode(reader, reader.uint32());
           break;
         case 16:
           message.notification_email = reader.string();
@@ -340,15 +336,9 @@ export const Order = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      state: isSet(object.state)
-        ? stateFromJSON(object.state)
-        : State.Undefined,
-      customer_reference: isSet(object.customer_reference)
-        ? String(object.customer_reference)
-        : "",
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Item.fromJSON(e))
-        : [],
+      state: isSet(object.state) ? stateFromJSON(object.state) : State.Undefined,
+      customer_reference: isSet(object.customer_reference) ? String(object.customer_reference) : "",
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       total_price: isSet(object.total_price) ? Number(object.total_price) : 0,
       total_vat: isSet(object.total_vat) ? Number(object.total_vat) : 0,
       total_weight_in_kg: isSet(object.total_weight_in_kg)
@@ -378,16 +368,13 @@ export const Order = {
   toJSON(message: Order): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined &&
-      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
+    message.description !== undefined && (obj.description = message.description);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
-    message.customer_reference !== undefined &&
-      (obj.customer_reference = message.customer_reference);
+    message.customer_reference !== undefined && (obj.customer_reference = message.customer_reference);
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Item.toJSON(e) : undefined));
+      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -397,21 +384,13 @@ export const Order = {
     message.total_weight_in_kg !== undefined &&
       (obj.total_weight_in_kg = message.total_weight_in_kg);
     message.shipping_address !== undefined &&
-      (obj.shipping_address = message.shipping_address
-        ? Address.toJSON(message.shipping_address)
-        : undefined);
+      (obj.shipping_address = message.shipping_address ? Address.toJSON(message.shipping_address) : undefined);
     message.billing_address !== undefined &&
-      (obj.billing_address = message.billing_address
-        ? Address.toJSON(message.billing_address)
-        : undefined);
-    message.billing_email !== undefined &&
-      (obj.billing_email = message.billing_email);
+      (obj.billing_address = message.billing_address ? Address.toJSON(message.billing_address) : undefined);
+    message.billing_email !== undefined && (obj.billing_email = message.billing_email);
     message.contact_person !== undefined &&
-      (obj.contact_person = message.contact_person
-        ? ContactPerson.toJSON(message.contact_person)
-        : undefined);
-    message.notification_email !== undefined &&
-      (obj.notification_email = message.notification_email);
+      (obj.contact_person = message.contact_person ? ContactPerson.toJSON(message.contact_person) : undefined);
+    message.notification_email !== undefined && (obj.notification_email = message.notification_email);
     if (message.fulfillment_ids) {
       obj.fulfillment_ids = message.fulfillment_ids.map((e) => e);
     } else {
@@ -423,10 +402,7 @@ export const Order = {
   fromPartial(object: DeepPartial<Order>): Order {
     const message = createBaseOrder();
     message.id = object.id ?? "";
-    message.meta =
-      object.meta !== undefined && object.meta !== null
-        ? Meta.fromPartial(object.meta)
-        : undefined;
+    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.state = object.state ?? State.Undefined;
@@ -444,10 +420,9 @@ export const Order = {
         ? Address.fromPartial(object.billing_address)
         : undefined;
     message.billing_email = object.billing_email ?? "";
-    message.contact_person =
-      object.contact_person !== undefined && object.contact_person !== null
-        ? ContactPerson.fromPartial(object.contact_person)
-        : undefined;
+    message.contact_person = (object.contact_person !== undefined && object.contact_person !== null)
+      ? ContactPerson.fromPartial(object.contact_person)
+      : undefined;
     message.notification_email = object.notification_email ?? "";
     message.fulfillment_ids = object.fulfillment_ids?.map((e) => e) || [];
     return message;
@@ -465,10 +440,7 @@ function createBaseShippingDetails(): ShippingDetails {
 }
 
 export const ShippingDetails = {
-  encode(
-    message: ShippingDetails,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ShippingDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.export_type !== "") {
       writer.uint32(10).string(message.export_type);
     }
@@ -543,12 +515,9 @@ export const ShippingDetails = {
 
   toJSON(message: ShippingDetails): unknown {
     const obj: any = {};
-    message.export_type !== undefined &&
-      (obj.export_type = message.export_type);
-    message.export_description !== undefined &&
-      (obj.export_description = message.export_description);
-    message.invoice_number !== undefined &&
-      (obj.invoice_number = message.invoice_number);
+    message.export_type !== undefined && (obj.export_type = message.export_type);
+    message.export_description !== undefined && (obj.export_description = message.export_description);
+    message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
     message.sender_address !== undefined &&
       (obj.sender_address = message.sender_address
         ? Address.toJSON(message.sender_address)
@@ -582,18 +551,12 @@ function createBaseTriggerFulfillmentRequest(): TriggerFulfillmentRequest {
 }
 
 export const TriggerFulfillmentRequest = {
-  encode(
-    message: TriggerFulfillmentRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TriggerFulfillmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     if (message.shipping_details !== undefined) {
-      ShippingDetails.encode(
-        message.shipping_details,
-        writer.uint32(18).fork()
-      ).ldelim();
+      ShippingDetails.encode(message.shipping_details, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.parcels) {
       Parcel.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -601,10 +564,7 @@ export const TriggerFulfillmentRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): TriggerFulfillmentRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTriggerFulfillmentRequest();
@@ -615,10 +575,7 @@ export const TriggerFulfillmentRequest = {
           message.order = Order.decode(reader, reader.uint32());
           break;
         case 2:
-          message.shipping_details = ShippingDetails.decode(
-            reader,
-            reader.uint32()
-          );
+          message.shipping_details = ShippingDetails.decode(reader, reader.uint32());
           break;
         case 3:
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
@@ -634,45 +591,30 @@ export const TriggerFulfillmentRequest = {
   fromJSON(object: any): TriggerFulfillmentRequest {
     return {
       order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
-      shipping_details: isSet(object.shipping_details)
-        ? ShippingDetails.fromJSON(object.shipping_details)
-        : undefined,
-      parcels: Array.isArray(object?.parcels)
-        ? object.parcels.map((e: any) => Parcel.fromJSON(e))
-        : [],
+      shipping_details: isSet(object.shipping_details) ? ShippingDetails.fromJSON(object.shipping_details) : undefined,
+      parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: TriggerFulfillmentRequest): unknown {
     const obj: any = {};
-    message.order !== undefined &&
-      (obj.order = message.order ? Order.toJSON(message.order) : undefined);
+    message.order !== undefined && (obj.order = message.order ? Order.toJSON(message.order) : undefined);
     message.shipping_details !== undefined &&
-      (obj.shipping_details = message.shipping_details
-        ? ShippingDetails.toJSON(message.shipping_details)
-        : undefined);
+      (obj.shipping_details = message.shipping_details ? ShippingDetails.toJSON(message.shipping_details) : undefined);
     if (message.parcels) {
-      obj.parcels = message.parcels.map((e) =>
-        e ? Parcel.toJSON(e) : undefined
-      );
+      obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
     } else {
       obj.parcels = [];
     }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<TriggerFulfillmentRequest>
-  ): TriggerFulfillmentRequest {
+  fromPartial(object: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
     const message = createBaseTriggerFulfillmentRequest();
-    message.order =
-      object.order !== undefined && object.order !== null
-        ? Order.fromPartial(object.order)
-        : undefined;
-    message.shipping_details =
-      object.shipping_details !== undefined && object.shipping_details !== null
-        ? ShippingDetails.fromPartial(object.shipping_details)
-        : undefined;
+    message.order = (object.order !== undefined && object.order !== null) ? Order.fromPartial(object.order) : undefined;
+    message.shipping_details = (object.shipping_details !== undefined && object.shipping_details !== null)
+      ? ShippingDetails.fromPartial(object.shipping_details)
+      : undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     return message;
   },
@@ -683,10 +625,7 @@ function createBaseTriggerFulfillmentRequestList(): TriggerFulfillmentRequestLis
 }
 
 export const TriggerFulfillmentRequestList = {
-  encode(
-    message: TriggerFulfillmentRequestList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TriggerFulfillmentRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       TriggerFulfillmentRequest.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -699,10 +638,7 @@ export const TriggerFulfillmentRequestList = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): TriggerFulfillmentRequestList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequestList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTriggerFulfillmentRequestList();
@@ -710,9 +646,7 @@ export const TriggerFulfillmentRequestList = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(
-            TriggerFulfillmentRequest.decode(reader, reader.uint32())
-          );
+          message.items.push(TriggerFulfillmentRequest.decode(reader, reader.uint32()));
           break;
         case 2:
           message.total_count = reader.uint32();
@@ -730,45 +664,31 @@ export const TriggerFulfillmentRequestList = {
 
   fromJSON(object: any): TriggerFulfillmentRequestList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => TriggerFulfillmentRequest.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => TriggerFulfillmentRequest.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: TriggerFulfillmentRequestList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? TriggerFulfillmentRequest.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? TriggerFulfillmentRequest.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<TriggerFulfillmentRequestList>
-  ): TriggerFulfillmentRequestList {
+  fromPartial(object: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
     const message = createBaseTriggerFulfillmentRequestList();
-    message.items =
-      object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -778,10 +698,7 @@ function createBaseOrderList(): OrderList {
 }
 
 export const OrderList = {
-  encode(
-    message: OrderList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -820,29 +737,21 @@ export const OrderList = {
 
   fromJSON(object: any): OrderList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Order.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Order.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: OrderList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Order.toJSON(e) : undefined));
+      obj.items = message.items.map((e) => e ? Order.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
@@ -850,10 +759,9 @@ export const OrderList = {
     const message = createBaseOrderList();
     message.items = object.items?.map((e) => Order.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -863,10 +771,7 @@ function createBaseOrderListResponse(): OrderListResponse {
 }
 
 export const OrderListResponse = {
-  encode(
-    message: OrderListResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       OrderResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -874,10 +779,7 @@ export const OrderListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(
-        message.operation_status,
-        writer.uint32(26).fork()
-      ).ldelim();
+      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -896,10 +798,7 @@ export const OrderListResponse = {
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(
-            reader,
-            reader.uint32()
-          );
+          message.operation_status = OperationStatus.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -911,43 +810,32 @@ export const OrderListResponse = {
 
   fromJSON(object: any): OrderListResponse {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => OrderResponse.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => OrderResponse.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status)
-        ? OperationStatus.fromJSON(object.operation_status)
-        : undefined,
+      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
     };
   },
 
   toJSON(message: OrderListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? OrderResponse.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? OrderResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined &&
-      (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
-        : undefined);
+      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
     const message = createBaseOrderListResponse();
-    message.items =
-      object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status =
-      object.operation_status !== undefined && object.operation_status !== null
-        ? OperationStatus.fromPartial(object.operation_status)
-        : undefined;
+    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
+      ? OperationStatus.fromPartial(object.operation_status)
+      : undefined;
     return message;
   },
 };
@@ -957,10 +845,7 @@ function createBaseOrderResponse(): OrderResponse {
 }
 
 export const OrderResponse = {
-  encode(
-    message: OrderResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload !== undefined) {
       Order.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -993,34 +878,26 @@ export const OrderResponse = {
 
   fromJSON(object: any): OrderResponse {
     return {
-      payload: isSet(object.payload)
-        ? Order.fromJSON(object.payload)
-        : undefined,
+      payload: isSet(object.payload) ? Order.fromJSON(object.payload) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: OrderResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined &&
-      (obj.payload = message.payload
-        ? Order.toJSON(message.payload)
-        : undefined);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined && (obj.payload = message.payload ? Order.toJSON(message.payload) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<OrderResponse>): OrderResponse {
     const message = createBaseOrderResponse();
-    message.payload =
-      object.payload !== undefined && object.payload !== null
-        ? Order.fromPartial(object.payload)
-        : undefined;
-    message.status =
-      object.status !== undefined && object.status !== null
-        ? Status.fromPartial(object.status)
-        : undefined;
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? Order.fromPartial(object.payload)
+      : undefined;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? Status.fromPartial(object.status)
+      : undefined;
     return message;
   },
 };
@@ -1030,10 +907,7 @@ function createBaseCancelRequestList(): CancelRequestList {
 }
 
 export const CancelRequestList = {
-  encode(
-    message: CancelRequestList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CancelRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.ids) {
       writer.uint32(10).string(v!);
     }
@@ -1066,12 +940,8 @@ export const CancelRequestList = {
 
   fromJSON(object: any): CancelRequestList {
     return {
-      ids: Array.isArray(object?.ids)
-        ? object.ids.map((e: any) => String(e))
-        : [],
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
@@ -1082,20 +952,16 @@ export const CancelRequestList = {
     } else {
       obj.ids = [];
     }
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
     const message = createBaseCancelRequestList();
     message.ids = object.ids?.map((e) => e) || [];
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -1105,10 +971,7 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(
-    message: Deleted,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1134,9 +997,7 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-    };
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
   toJSON(message: Deleted): unknown {
@@ -1267,7 +1128,7 @@ export interface ServiceServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<DeleteResponse>>;
   triggerFulfillment(
     request: TriggerFulfillmentRequestList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<Status>>;
 }
 
@@ -1306,7 +1167,7 @@ export interface ServiceClient<CallOptionsExt = {}> {
   ): Promise<DeleteResponse>;
   triggerFulfillment(
     request: DeepPartial<TriggerFulfillmentRequestList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<Status>;
 }
 
@@ -1324,28 +1185,18 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/order.proto",
-    package: "io.restorecommerce.order",
-    dependency: [
+    "name": "io/restorecommerce/order.proto",
+    "package": "io.restorecommerce.order",
+    "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -2091,17 +1942,96 @@ export const protoMetadata: ProtoMetadata = {
           leadingDetachedComments: [],
         },
       ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "service": [{
+      "name": "Service",
+      "method": [{
+        "name": "Read",
+        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Create",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Update",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Upsert",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Submit",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Cancel",
+        "inputType": ".io.restorecommerce.order.CancelRequestList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Delete",
+        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
+        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "TriggerFulfillment",
+        "inputType": ".io.restorecommerce.order.TriggerFulfillmentRequestList",
+        "outputType": ".io.restorecommerce.status.Status",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": { "deprecated": false, "uninterpretedOption": [] },
+    }],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [4, 0, 2, 0],
+        "span": [41, 2, 39],
+        "leadingComments": " below identifier is id of product, variant or bundle\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1],
+        "span": [64, 0, 87, 1],
+        "leadingComments": "*\nDatabase Entity\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.order.State": State,
     ".io.restorecommerce.order.Order": Order,
     ".io.restorecommerce.order.ShippingDetails": ShippingDetails,
-    ".io.restorecommerce.order.TriggerFulfillmentRequest":
-      TriggerFulfillmentRequest,
-    ".io.restorecommerce.order.TriggerFulfillmentRequestList":
-      TriggerFulfillmentRequestList,
+    ".io.restorecommerce.order.TriggerFulfillmentRequest": TriggerFulfillmentRequest,
+    ".io.restorecommerce.order.TriggerFulfillmentRequestList": TriggerFulfillmentRequestList,
     ".io.restorecommerce.order.OrderList": OrderList,
     ".io.restorecommerce.order.OrderListResponse": OrderListResponse,
     ".io.restorecommerce.order.OrderResponse": OrderResponse,
@@ -2116,47 +2046,29 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata5,
     protoMetadata6,
     protoMetadata7,
-    protoMetadata8,
   ],
   options: {
     messages: {
-      Order: {
+      "Order": {
         options: {
-          kafka_subscriber: KafkaSubscription.decode(
+          "kafka_subscriber": KafkaSubscription.decode(
             Buffer.from(
               "CgZvcmRlcnMSImlvLnJlc3RvcmVjb21tZXJjZS5vcmRlcnMucmVzb3VyY2UaDG9yZGVyQ3JlYXRlZCIMb3JkZXJVcGRhdGVkKgxvcmRlckRlbGV0ZWQ=",
-              "base64"
-            )
+              "base64",
+            ),
           ),
         },
       },
     },
-    services: {
-      Service: {
-        options: { service_name: "order" },
-        methods: { Read: { is_query: true } },
-      },
-    },
+    services: { "Service": { options: { "service_name": "order" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

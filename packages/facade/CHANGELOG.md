@@ -3,6 +3,50 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.3...@restorecommerce/facade@1.1.4) (2022-11-16)
+
+
+### Bug Fixes
+
+* command import ([fcbb6c1](https://github.com/restorecommerce/libs/commit/fcbb6c15b708fc63bf38d0dfa65946731cef3e79))
+
+
+
+
+
+## [1.1.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.2...@restorecommerce/facade@1.1.3) (2022-10-26)
+
+
+### Bug Fixes
+
+* **facade:** fix kafka events for commandInterfaceMeta, build error for lodash, migrated deprecated ApolloGateway serviceList with IntrospectAndCompose, replace deprecated buildFederatedSchema with buildSubgraphSchema ([6d8f4b3](https://github.com/restorecommerce/libs/commit/6d8f4b39a95a19db17075876bc766a6e65ce23d1))
+
+
+
+
+
+## [1.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.1...@restorecommerce/facade@1.1.2) (2022-10-14)
+
+
+### Bug Fixes
+
+* **facade:** updated schema with missing fulfillment_product for registering typings ([5bbdbdf](https://github.com/restorecommerce/libs/commit/5bbdbdfdedf2b8fdf4a89526082bdec660ba9e36))
+
+
+
+
+
+## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.0...@restorecommerce/facade@1.1.1) (2022-10-12)
+
+
+### Bug Fixes
+
+* **facade:** regenerated schema typings for new proto files ([4e26e29](https://github.com/restorecommerce/libs/commit/4e26e2949d14dd0e2f7794b956a7d1107b8564ba))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.0.1...@restorecommerce/facade@1.1.0) (2022-10-04)
 
 

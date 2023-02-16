@@ -1,8 +1,9 @@
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
 import Application from "koa";
-import { Events } from '@restorecommerce/kafka-client';
+import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
+import { protoMetadata as commandInterfaceMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
 
 const Router = require('koa-router');
 
@@ -16,6 +17,8 @@ const API_KEY_COMMAND_NAME = 'set_api_key';
 const API_KEY_COMMAND_EVENT = 'setApiKeyCommand';
 const API_KEY_COMMAND_RESPONSE = 'setApiKeyResponse';
 const COMMAND_TOPIC_NAME = 'io.restorecommerce.command';
+
+registerProtoMeta(commandInterfaceMeta);
 
 const exectueSetAPIKeyCommand = async (apiKey: string, logger: Logger): Promise<any> => {
   const cfg = createServiceConfig(process.cwd());

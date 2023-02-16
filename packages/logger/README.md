@@ -59,8 +59,10 @@ In addition there is a generic `log()` function.
 - Implicit Request ID logging based on [cls-rtracer](https://github.com/puzpuzpuz/cls-rtracer).
 - Logger `AsyncLocalStorage` logger context to log implicit context information.
 - Supports local transformer function for the `fields`.
+- masking fields, omit fields and buffer fields removal from logging or unmarsahall buffer fields and then logging based on configuration.
 
 An example how to use the `AsyncLocalStorage` logger context can be found [here](test/test.js#L4-L11).
+An example how to use field options for masking fields or buffer fields can be found [here](test/test.js#L30-L35).
 
 ### Console logger
 

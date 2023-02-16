@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@2.0.1...@restorecommerce/rc-grpc-clients@2.0.2) (2022-11-16)
+
+
+### Bug Fixes
+
+* command import ([fcbb6c1](https://github.com/restorecommerce/libs/commit/fcbb6c15b708fc63bf38d0dfa65946731cef3e79))
+
+
+
+
+
+## [2.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@2.0.0...@restorecommerce/rc-grpc-clients@2.0.1) (2022-10-14)
+
+
+### Bug Fixes
+
+* **rc-grpc-clients:** regenerate typings from protos ([c8b0ebe](https://github.com/restorecommerce/libs/commit/c8b0ebe5c95fcd788c5a49d5968c0d57bd370220))
+
+
+
+
+
+# [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.1.0...@restorecommerce/rc-grpc-clients@2.0.0) (2022-10-12)
+
+
+### Code Refactoring
+
+* **protos:** refactor protos for fulfillment-srv, ordering-srv, ready for migration tests ([bf8bfd3](https://github.com/restorecommerce/libs/commit/bf8bfd3a00e614857f6f4be35fb00224634ed066))
+
+
+### BREAKING CHANGES
+
+* **protos:** Address has new fields. Compatiblity must be checked.
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@1.0.1...@restorecommerce/rc-grpc-clients@1.1.0) (2022-10-04)
 
 

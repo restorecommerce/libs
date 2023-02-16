@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { FileDescriptorProto } from "ts-proto-descriptors";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto } from "ts-proto-descriptors";
 
 export const protobufPackage = "io.restorecommerce.status";
 
@@ -32,10 +32,7 @@ function createBaseStatus(): Status {
 }
 
 export const Status = {
-  encode(
-    message: Status,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Status, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -102,10 +99,7 @@ function createBaseStatusArray(): StatusArray {
 }
 
 export const StatusArray = {
-  encode(
-    message: StatusArray,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StatusArray, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.status) {
       Status.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -131,19 +125,13 @@ export const StatusArray = {
   },
 
   fromJSON(object: any): StatusArray {
-    return {
-      status: Array.isArray(object?.status)
-        ? object.status.map((e: any) => Status.fromJSON(e))
-        : [],
-    };
+    return { status: Array.isArray(object?.status) ? object.status.map((e: any) => Status.fromJSON(e)) : [] };
   },
 
   toJSON(message: StatusArray): unknown {
     const obj: any = {};
     if (message.status) {
-      obj.status = message.status.map((e) =>
-        e ? Status.toJSON(e) : undefined
-      );
+      obj.status = message.status.map((e) => e ? Status.toJSON(e) : undefined);
     } else {
       obj.status = [];
     }
@@ -162,10 +150,7 @@ function createBaseStatusObj(): StatusObj {
 }
 
 export const StatusObj = {
-  encode(
-    message: StatusObj,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: StatusObj, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(10).fork()).ldelim();
     }
@@ -191,24 +176,20 @@ export const StatusObj = {
   },
 
   fromJSON(object: any): StatusObj {
-    return {
-      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
-    };
+    return { status: isSet(object.status) ? Status.fromJSON(object.status) : undefined };
   },
 
   toJSON(message: StatusObj): unknown {
     const obj: any = {};
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<StatusObj>): StatusObj {
     const message = createBaseStatusObj();
-    message.status =
-      object.status !== undefined && object.status !== null
-        ? Status.fromPartial(object.status)
-        : undefined;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? Status.fromPartial(object.status)
+      : undefined;
     return message;
   },
 };
@@ -218,15 +199,9 @@ function createBaseOperationStatusObj(): OperationStatusObj {
 }
 
 export const OperationStatusObj = {
-  encode(
-    message: OperationStatusObj,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OperationStatusObj, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(
-        message.operation_status,
-        writer.uint32(10).fork()
-      ).ldelim();
+      OperationStatus.encode(message.operation_status, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -239,10 +214,7 @@ export const OperationStatusObj = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.operation_status = OperationStatus.decode(
-            reader,
-            reader.uint32()
-          );
+          message.operation_status = OperationStatus.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -254,27 +226,22 @@ export const OperationStatusObj = {
 
   fromJSON(object: any): OperationStatusObj {
     return {
-      operation_status: isSet(object.operation_status)
-        ? OperationStatus.fromJSON(object.operation_status)
-        : undefined,
+      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
     };
   },
 
   toJSON(message: OperationStatusObj): unknown {
     const obj: any = {};
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status
-        ? OperationStatus.toJSON(message.operation_status)
-        : undefined);
+      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<OperationStatusObj>): OperationStatusObj {
     const message = createBaseOperationStatusObj();
-    message.operation_status =
-      object.operation_status !== undefined && object.operation_status !== null
-        ? OperationStatus.fromPartial(object.operation_status)
-        : undefined;
+    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
+      ? OperationStatus.fromPartial(object.operation_status)
+      : undefined;
     return message;
   },
 };
@@ -284,10 +251,7 @@ function createBaseOperationStatus(): OperationStatus {
 }
 
 export const OperationStatus = {
-  encode(
-    message: OperationStatus,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OperationStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.code !== 0) {
       writer.uint32(8).uint32(message.code);
     }
@@ -354,207 +318,178 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    name: "io/restorecommerce/status.proto",
-    package: "io.restorecommerce.status",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Status",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "code",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "code",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "message",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "message",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "StatusArray",
-        field: [
-          {
-            name: "status",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "StatusObj",
-        field: [
-          {
-            name: "status",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OperationStatusObj",
-        field: [
-          {
-            name: "operation_status",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.OperationStatus",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "operationStatus",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OperationStatus",
-        field: [
-          {
-            name: "code",
-            number: 1,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "code",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "message",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "message",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: { location: [] },
-    syntax: "proto3",
+    "name": "io/restorecommerce/status.proto",
+    "package": "io.restorecommerce.status",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Status",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "code",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "code",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "message",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "message",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "StatusArray",
+      "field": [{
+        "name": "status",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "StatusObj",
+      "field": [{
+        "name": "status",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OperationStatusObj",
+      "field": [{
+        "name": "operation_status",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.OperationStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "operationStatus",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OperationStatus",
+      "field": [{
+        "name": "code",
+        "number": 1,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "code",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "message",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "message",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": { "location": [] },
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.status.Status": Status,
@@ -566,23 +501,11 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

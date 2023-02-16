@@ -402,6 +402,45 @@ export type IIoRestorecommerceOstorageMoveRequestItem = {
   options?: InputMaybe<IIoRestorecommerceOstorageOptions>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  orderingOrders?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
+};
+
+
+export type SubscriptionOrderingOrdersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentProductArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+export type SubscriptionOutput = {
+  __typename?: 'SubscriptionOutput';
+  id?: Maybe<Scalars['String']>;
+};
+
+export enum SubscriptionAction {
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
+}
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -532,6 +571,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceOstorageMoveResponseItem: ResolverTypeWrapper<IoRestorecommerceOstorageMoveResponseItem>;
   IIoRestorecommerceOstorageMoveRequestList: IIoRestorecommerceOstorageMoveRequestList;
   IIoRestorecommerceOstorageMoveRequestItem: IIoRestorecommerceOstorageMoveRequestItem;
+  Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
+  SubscriptionAction: SubscriptionAction;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -593,6 +635,8 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceOstorageMoveResponseItem: IoRestorecommerceOstorageMoveResponseItem;
   IIoRestorecommerceOstorageMoveRequestList: IIoRestorecommerceOstorageMoveRequestList;
   IIoRestorecommerceOstorageMoveRequestItem: IIoRestorecommerceOstorageMoveRequestItem;
+  Subscription: {};
+  SubscriptionOutput: SubscriptionOutput;
 }>;
 
 export type QueryResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -722,11 +766,11 @@ export type IoRestorecommerceOstorageObjectDataResolvers<ContextType = OstorageC
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 'undefined', lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
+export type IoRestorecommerceFilterFilterOperationResolvers = { eq: 0, lt: 1, lte: 2, gt: 3, gte: 4, isEmpty: 5, iLike: 6, in: 7, neq: 8 };
 
-export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 'undefined', NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
+export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 0, NUMBER: 1, BOOLEAN: 2, DATE: 3, ARRAY: 4 };
 
-export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 'undefined', or: 1 };
+export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 0, or: 1 };
 
 export type MutationResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   ostorage?: Resolver<ResolversTypes['OstorageMutation'], ParentType, ContextType>;
@@ -839,6 +883,18 @@ export type IoRestorecommerceOstorageMoveResponseItemResolvers<ContextType = Ost
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type SubscriptionResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
+  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
+  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
+}>;
+
+export type SubscriptionOutputResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   OstorageQuery?: OstorageQueryResolvers<ContextType>;
@@ -881,5 +937,7 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   IoRestorecommerceOstorageMoveResponseList?: IoRestorecommerceOstorageMoveResponseListResolvers<ContextType>;
   IoRestorecommerceOstorageMoveResponsePayloadWithStatus?: IoRestorecommerceOstorageMoveResponsePayloadWithStatusResolvers<ContextType>;
   IoRestorecommerceOstorageMoveResponseItem?: IoRestorecommerceOstorageMoveResponseItemResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
+  SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;
 

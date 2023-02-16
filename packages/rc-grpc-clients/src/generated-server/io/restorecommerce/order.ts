@@ -159,6 +159,11 @@ export interface TriggerFulfillmentRequestList {
   subject?: Subject;
 }
 
+export interface CancelRequestList {
+  ids: string[];
+  subject?: Subject;
+}
+
 export interface OrderList {
   items: Order[];
   total_count: number;
@@ -174,11 +179,6 @@ export interface OrderListResponse {
 export interface OrderResponse {
   payload?: Order;
   status?: Status;
-}
-
-export interface CancelRequestList {
-  ids: string[];
-  subject?: Subject;
 }
 
 export interface Deleted {
@@ -773,6 +773,81 @@ export const TriggerFulfillmentRequestList = {
   },
 };
 
+function createBaseCancelRequestList(): CancelRequestList {
+  return { ids: [], subject: undefined };
+}
+
+export const CancelRequestList = {
+  encode(
+    message: CancelRequestList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
+    for (const v of message.ids) {
+      writer.uint32(10).string(v!);
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CancelRequestList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCancelRequestList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.ids.push(reader.string());
+          break;
+        case 2:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): CancelRequestList {
+    return {
+      ids: Array.isArray(object?.ids)
+        ? object.ids.map((e: any) => String(e))
+        : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+    };
+  },
+
+  toJSON(message: CancelRequestList): unknown {
+    const obj: any = {};
+    if (message.ids) {
+      obj.ids = message.ids.map((e) => e);
+    } else {
+      obj.ids = [];
+    }
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
+    const message = createBaseCancelRequestList();
+    message.ids = object.ids?.map((e) => e) || [];
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
+    return message;
+  },
+};
+
 function createBaseOrderList(): OrderList {
   return { items: [], total_count: 0, subject: undefined };
 }
@@ -1025,81 +1100,6 @@ export const OrderResponse = {
   },
 };
 
-function createBaseCancelRequestList(): CancelRequestList {
-  return { ids: [], subject: undefined };
-}
-
-export const CancelRequestList = {
-  encode(
-    message: CancelRequestList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    for (const v of message.ids) {
-      writer.uint32(10).string(v!);
-    }
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CancelRequestList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCancelRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.ids.push(reader.string());
-          break;
-        case 2:
-          message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CancelRequestList {
-    return {
-      ids: Array.isArray(object?.ids)
-        ? object.ids.map((e: any) => String(e))
-        : [],
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
-    };
-  },
-
-  toJSON(message: CancelRequestList): unknown {
-    const obj: any = {};
-    if (message.ids) {
-      obj.ids = message.ids.map((e) => e);
-    } else {
-      obj.ids = [];
-    }
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
-    const message = createBaseCancelRequestList();
-    message.ids = object.ids?.map((e) => e) || [];
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
-    return message;
-  },
-};
-
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -1189,8 +1189,8 @@ export const ServiceDefinition = {
       responseStream: false,
       options: {},
     },
-    validate: {
-      name: "Validate",
+    evaluate: {
+      name: "Evaluate",
       requestType: OrderList,
       requestStream: false,
       responseType: OrderListResponse,
@@ -1249,7 +1249,7 @@ export interface ServiceServiceImplementation<CallContextExt = {}> {
     request: OrderList,
     context: CallContext & CallContextExt
   ): Promise<DeepPartial<OrderListResponse>>;
-  validate(
+  evaluate(
     request: OrderList,
     context: CallContext & CallContextExt
   ): Promise<DeepPartial<OrderListResponse>>;
@@ -1288,7 +1288,7 @@ export interface ServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<OrderList>,
     options?: CallOptions & CallOptionsExt
   ): Promise<OrderListResponse>;
-  validate(
+  evaluate(
     request: DeepPartial<OrderList>,
     options?: CallOptions & CallOptionsExt
   ): Promise<OrderListResponse>;
@@ -1768,6 +1768,45 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
+        name: "CancelRequestList",
+        field: [
+          {
+            name: "ids",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "ids",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
         name: "OrderList",
         field: [
           {
@@ -1911,45 +1950,6 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
-        name: "CancelRequestList",
-        field: [
-          {
-            name: "ids",
-            number: 1,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "ids",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
         name: "Deleted",
         field: [
           {
@@ -2035,7 +2035,7 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: false,
           },
           {
-            name: "Validate",
+            name: "Evaluate",
             inputType: ".io.restorecommerce.order.OrderList",
             outputType: ".io.restorecommerce.order.OrderListResponse",
             options: undefined,
@@ -2102,10 +2102,10 @@ export const protoMetadata: ProtoMetadata = {
       TriggerFulfillmentRequest,
     ".io.restorecommerce.order.TriggerFulfillmentRequestList":
       TriggerFulfillmentRequestList,
+    ".io.restorecommerce.order.CancelRequestList": CancelRequestList,
     ".io.restorecommerce.order.OrderList": OrderList,
     ".io.restorecommerce.order.OrderListResponse": OrderListResponse,
     ".io.restorecommerce.order.OrderResponse": OrderResponse,
-    ".io.restorecommerce.order.CancelRequestList": CancelRequestList,
     ".io.restorecommerce.order.Deleted": Deleted,
   },
   dependencies: [

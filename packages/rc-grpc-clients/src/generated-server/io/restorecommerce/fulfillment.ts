@@ -158,7 +158,7 @@ export interface Label {
   status?: Status;
 }
 
-export interface Order {
+export interface Packing {
   reference_id: string;
   parcels: Parcel[];
   sender?: FulfillmentAddress;
@@ -184,7 +184,7 @@ export interface Tracking {
 export interface Fulfillment {
   id: string;
   /** filled by user */
-  order?: Order;
+  packing?: Packing;
   meta?: Meta;
   /** filled by service */
   labels: Label[];
@@ -592,7 +592,7 @@ export const Label = {
   },
 };
 
-function createBaseOrder(): Order {
+function createBasePacking(): Packing {
   return {
     reference_id: "",
     parcels: [],
@@ -602,8 +602,11 @@ function createBaseOrder(): Order {
   };
 }
 
-export const Order = {
-  encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Packing = {
+  encode(
+    message: Packing,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.reference_id !== "") {
       writer.uint32(10).string(message.reference_id);
     }
@@ -628,10 +631,10 @@ export const Order = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Order {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Packing {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOrder();
+    const message = createBasePacking();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -658,7 +661,7 @@ export const Order = {
     return message;
   },
 
-  fromJSON(object: any): Order {
+  fromJSON(object: any): Packing {
     return {
       reference_id: isSet(object.reference_id)
         ? String(object.reference_id)
@@ -676,7 +679,7 @@ export const Order = {
     };
   },
 
-  toJSON(message: Order): unknown {
+  toJSON(message: Packing): unknown {
     const obj: any = {};
     message.reference_id !== undefined &&
       (obj.reference_id = message.reference_id);
@@ -699,8 +702,8 @@ export const Order = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Order>): Order {
-    const message = createBaseOrder();
+  fromPartial(object: DeepPartial<Packing>): Packing {
+    const message = createBasePacking();
     message.reference_id = object.reference_id ?? "";
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     message.sender =
@@ -905,7 +908,7 @@ export const Tracking = {
 function createBaseFulfillment(): Fulfillment {
   return {
     id: "",
-    order: undefined,
+    packing: undefined,
     meta: undefined,
     labels: [],
     tracking: [],
@@ -921,8 +924,8 @@ export const Fulfillment = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.order !== undefined) {
-      Order.encode(message.order, writer.uint32(18).fork()).ldelim();
+    if (message.packing !== undefined) {
+      Packing.encode(message.packing, writer.uint32(18).fork()).ldelim();
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
@@ -950,7 +953,7 @@ export const Fulfillment = {
           message.id = reader.string();
           break;
         case 2:
-          message.order = Order.decode(reader, reader.uint32());
+          message.packing = Packing.decode(reader, reader.uint32());
           break;
         case 3:
           message.meta = Meta.decode(reader, reader.uint32());
@@ -975,7 +978,9 @@ export const Fulfillment = {
   fromJSON(object: any): Fulfillment {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
+      packing: isSet(object.packing)
+        ? Packing.fromJSON(object.packing)
+        : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       labels: Array.isArray(object?.labels)
         ? object.labels.map((e: any) => Label.fromJSON(e))
@@ -992,8 +997,10 @@ export const Fulfillment = {
   toJSON(message: Fulfillment): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.order !== undefined &&
-      (obj.order = message.order ? Order.toJSON(message.order) : undefined);
+    message.packing !== undefined &&
+      (obj.packing = message.packing
+        ? Packing.toJSON(message.packing)
+        : undefined);
     message.meta !== undefined &&
       (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     if (message.labels) {
@@ -1015,9 +1022,9 @@ export const Fulfillment = {
   fromPartial(object: DeepPartial<Fulfillment>): Fulfillment {
     const message = createBaseFulfillment();
     message.id = object.id ?? "";
-    message.order =
-      object.order !== undefined && object.order !== null
-        ? Order.fromPartial(object.order)
+    message.packing =
+      object.packing !== undefined && object.packing !== null
+        ? Packing.fromPartial(object.packing)
         : undefined;
     message.meta =
       object.meta !== undefined && object.meta !== null
@@ -2032,7 +2039,7 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
-        name: "Order",
+        name: "Packing",
         field: [
           {
             name: "reference_id",
@@ -2256,15 +2263,15 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "order",
+            name: "packing",
             number: 2,
             label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.fulfillment.Order",
+            typeName: ".io.restorecommerce.fulfillment.Packing",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "order",
+            jsonName: "packing",
             options: undefined,
             proto3Optional: false,
           },
@@ -2826,7 +2833,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 6, 2, 1],
-          span: [146, 2, 18],
+          span: [146, 2, 22],
           leadingComments: "",
           trailingComments: "filled by user\n",
           leadingDetachedComments: [],
@@ -2868,7 +2875,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.fulfillment.FulfillmentAddress": FulfillmentAddress,
     ".io.restorecommerce.fulfillment.Parcel": Parcel,
     ".io.restorecommerce.fulfillment.Label": Label,
-    ".io.restorecommerce.fulfillment.Order": Order,
+    ".io.restorecommerce.fulfillment.Packing": Packing,
     ".io.restorecommerce.fulfillment.Event": Event,
     ".io.restorecommerce.fulfillment.Tracking": Tracking,
     ".io.restorecommerce.fulfillment.Fulfillment": Fulfillment,

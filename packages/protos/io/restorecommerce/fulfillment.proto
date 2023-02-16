@@ -144,7 +144,7 @@ message Fulfillment {
   };
 
   string id = 1;
-  Order order = 2; //filled by user
+  Packing packing = 2; //filled by user
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   repeated Tracking tracking = 5; //filled by service

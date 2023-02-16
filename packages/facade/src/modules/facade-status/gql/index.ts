@@ -1,5 +1,5 @@
 import { buildSubgraphSchema } from "@apollo/federation";
-import { gql } from "apollo-server-koa";
+import gql from "graphql-tag";
 import { printSchema } from "graphql";
 import { resolvers } from "./resolvers";
 import { schema } from "./schema";

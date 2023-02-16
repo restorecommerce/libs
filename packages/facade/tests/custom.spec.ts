@@ -12,7 +12,7 @@ import { createLogger } from "@restorecommerce/logger";
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from "../src/gql/protos";
 import { GraphQLString, printSchema } from "graphql";
 import { buildSubgraphSchema } from "@apollo/federation";
-import { gql } from "apollo-server-koa";
+import gql from "graphql-tag";
 
 const CONFIG_PATH = __dirname;
 

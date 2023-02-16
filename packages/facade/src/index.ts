@@ -1,14 +1,19 @@
-import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-import { ApolloServer } from 'apollo-server-koa';
+
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import cors from "@koa/cors";
+import { ApolloServer } from "@apollo/server";
+import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
 import { facadeStatusModule } from './modules';
 import { Facade, FacadeBaseContext, FacadeModule, FacadeModuleBase, FacadeModulesContext } from './interfaces';
-import { ApolloServerPluginDrainHttpServer, ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 import { createServer } from 'http';
 import { WebSocketServer } from 'ws';
@@ -16,7 +21,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { Disposable } from 'graphql-ws';
 import * as _ from 'lodash';
 import { makeExecutableSchema } from "graphql-tools";
-import { gql } from 'graphql-tag';
+import gql from 'graphql-tag';
 import { GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos';
 import compose from 'koa-compose';
 import { KafkaProviderConfig } from '@restorecommerce/kafka-client';
@@ -255,6 +260,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const gqlServer = new ApolloServer({
       gateway,
       introspection: true,
+      allowBatchedHttpRequests: true,
       plugins: [
         ApolloServerPluginDrainHttpServer({ httpServer: this._server }),
         ApolloServerPluginLandingPageLocalDefault({
@@ -270,30 +276,27 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           },
         },
       ],
-      debug: true,
+      includeStacktraceInErrorResponses: true,
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
         this.logger.debug('Error while processing request', { error });
         return {
           message: error.message,
           locations: error.locations,
-          stack: error.stack,
+          stack: error
         };
       },
-      context: ({ ctx }) => ctx
     });
 
     await gqlServer.start();
 
-    const middleware = gqlServer.getMiddleware({
-      path: '/graphql',
-      cors: true,
-      bodyParserConfig: {
-        jsonLimit: '10mb'
-      },
-    });
-
-    this.koa.use(middleware);
+    this.koa.use(cors());
+    this.koa.use(bodyParser());
+    this.koa.use(
+      koaMiddleware(gqlServer, {
+        context: async ({ ctx }) => ctx,
+      })
+    );
   }
 }
 

@@ -21,6 +21,7 @@ service Service {
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
+  rpc Validate (OrderList) returns (OrderListResponse);
   rpc Submit (OrderList) returns (OrderListResponse);
   rpc Cancel (CancelRequestList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
@@ -58,6 +59,8 @@ message Order {
   string customer_reference = 6;
   repeated io.restorecommerce.product.Item items = 7;
   double total_price = 8;
+  double total_vat = 9;
+  double total_weight_in_kg = 10;
   io.restorecommerce.address.Address shipping_address = 11;
   io.restorecommerce.address.Address billing_address = 13;
   string billing_email = 14;

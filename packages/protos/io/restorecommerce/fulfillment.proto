@@ -91,10 +91,10 @@ message Parcel {
   ];
   string product_variant_id = 3;
   repeated io.restorecommerce.product.Item items = 4;
-  float weight_in_kg = 5;
-  float height_in_cm = 6;
-  float width_in_cm = 7;
-  float length_in_cm = 8;
+  double weight_in_kg = 5;
+  double height_in_cm = 6;
+  double width_in_cm = 7;
+  double length_in_cm = 8;
 }
 
 message Label {

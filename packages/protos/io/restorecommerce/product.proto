@@ -54,7 +54,7 @@ message Product {
     Identifier prototype = 6;
     Identifier category = 7;
   }
-  repeated string tax_id = 8;
+  repeated string tax_ids = 8;
   repeated Variant variants = 9;
   string gtin = 10;
 }
@@ -99,13 +99,20 @@ message Bundle {
   string name = 3;
   string description = 4;
   repeated io.restorecommerce.image.Image image = 5;
-  repeated BundleProduct product = 6;
+  repeated BundleProduct products = 6;
   double price = 7;
 }
 
 message BundleProduct {
   string product_id = 1;
-  uint32 quantity = 2;
+  string variant_id = 2;
+  uint32 quantity = 3;
+  double price_ratio = 4;
+}
+
+message VAT {
+  string tax_id = 1;
+  double vat = 2;
 }
 
 /**
@@ -113,24 +120,21 @@ Used by Fulfillment-Srv and Order-Srv
 **/
 message Item {
   // below identifier is id of product, variant or bundle
-  string product_variant_bundle_id = 1;
-  string product_name = 2;
-  string product_description = 3;
-  string manufacturer_name = 4;
-  string manufacturer_description = 5;
-  string prototype_name = 6;
-  string prototype_description = 7;
-  int32 quantity = 8;
-  int32 vat = 9;
+  string product_id = 1;
+  string variant_id = 2;
+  string product_name = 3;
+  string product_description = 4;
+  string manufacturer_name = 5;
+  string manufacturer_description = 6;
+  string prototype_name = 7;
+  string prototype_description = 8;
+  int32 quantity = 9;
   double price = 10;
-  double quantity_price = 11;
-  string item_type = 12;
-  double taric_code = 13;
-  string stock_keeping_unit = 14;
-  double weight_in_kg = 15;
-  int32 length_in_cm = 16;
-  int32 width_in_cm = 17;
-  int32 height_in_cm = 18;
+  repeated VAT vats = 11;
+  double quantity_price = 12;
+  string item_type = 13;
+  double taric_code = 14;
+  string stock_keeping_unit = 15;
 }
 
 message Deleted {

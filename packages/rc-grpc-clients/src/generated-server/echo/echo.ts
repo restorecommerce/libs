@@ -1,8 +1,8 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../google/protobuf/any";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "echo";
 
@@ -21,7 +21,10 @@ function createBaseEchoRequest(): EchoRequest {
 }
 
 export const EchoRequest = {
-  encode(message: EchoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EchoRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.message !== "") {
       writer.uint32(10).string(message.message);
     }
@@ -62,14 +65,18 @@ export const EchoRequest = {
   toJSON(message: EchoRequest): unknown {
     const obj: any = {};
     message.message !== undefined && (obj.message = message.message);
-    message.test !== undefined && (obj.test = message.test ? Any.toJSON(message.test) : undefined);
+    message.test !== undefined &&
+      (obj.test = message.test ? Any.toJSON(message.test) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<EchoRequest>): EchoRequest {
     const message = createBaseEchoRequest();
     message.message = object.message ?? "";
-    message.test = (object.test !== undefined && object.test !== null) ? Any.fromPartial(object.test) : undefined;
+    message.test =
+      object.test !== undefined && object.test !== null
+        ? Any.fromPartial(object.test)
+        : undefined;
     return message;
   },
 };
@@ -79,7 +86,10 @@ function createBaseEchoResponse(): EchoResponse {
 }
 
 export const EchoResponse = {
-  encode(message: EchoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: EchoResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.message !== "") {
       writer.uint32(10).string(message.message);
     }
@@ -120,14 +130,18 @@ export const EchoResponse = {
   toJSON(message: EchoResponse): unknown {
     const obj: any = {};
     message.message !== undefined && (obj.message = message.message);
-    message.test !== undefined && (obj.test = message.test ? Any.toJSON(message.test) : undefined);
+    message.test !== undefined &&
+      (obj.test = message.test ? Any.toJSON(message.test) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<EchoResponse>): EchoResponse {
     const message = createBaseEchoResponse();
     message.message = object.message ?? "";
-    message.test = (object.test !== undefined && object.test !== null) ? Any.fromPartial(object.test) : undefined;
+    message.test =
+      object.test !== undefined && object.test !== null
+        ? Any.fromPartial(object.test)
+        : undefined;
     return message;
   },
 };
@@ -176,35 +190,41 @@ export const EchoServiceDefinition = {
 
 export interface EchoServiceServiceImplementation<CallContextExt = {}> {
   /** Sends a greeting */
-  echoUnary(request: EchoRequest, context: CallContext & CallContextExt): Promise<DeepPartial<EchoResponse>>;
+  echoUnary(
+    request: EchoRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<EchoResponse>>;
   echoServerStream(
     request: EchoRequest,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): ServerStreamingMethodResult<DeepPartial<EchoResponse>>;
   echoClientStream(
     request: AsyncIterable<EchoRequest>,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<EchoResponse>>;
   echoBidiStream(
     request: AsyncIterable<EchoRequest>,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): ServerStreamingMethodResult<DeepPartial<EchoResponse>>;
 }
 
 export interface EchoServiceClient<CallOptionsExt = {}> {
   /** Sends a greeting */
-  echoUnary(request: DeepPartial<EchoRequest>, options?: CallOptions & CallOptionsExt): Promise<EchoResponse>;
+  echoUnary(
+    request: DeepPartial<EchoRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<EchoResponse>;
   echoServerStream(
     request: DeepPartial<EchoRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): AsyncIterable<EchoResponse>;
   echoClientStream(
     request: AsyncIterable<DeepPartial<EchoRequest>>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<EchoResponse>;
   echoBidiStream(
     request: AsyncIterable<DeepPartial<EchoRequest>>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): AsyncIterable<EchoResponse>;
 }
 
@@ -222,163 +242,226 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "echo/echo.proto",
-    "package": "echo",
-    "dependency": ["google/protobuf/any.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "EchoRequest",
-      "field": [{
-        "name": "message",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "message",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "test",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "test",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "EchoResponse",
-      "field": [{
-        "name": "message",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "message",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "test",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "test",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "EchoService",
-      "method": [{
-        "name": "echoUnary",
-        "inputType": ".echo.EchoRequest",
-        "outputType": ".echo.EchoResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "echoServerStream",
-        "inputType": ".echo.EchoRequest",
-        "outputType": ".echo.EchoResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": true,
-      }, {
-        "name": "echoClientStream",
-        "inputType": ".echo.EchoRequest",
-        "outputType": ".echo.EchoResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": true,
-        "serverStreaming": false,
-      }, {
-        "name": "echoBidiStream",
-        "inputType": ".echo.EchoRequest",
-        "outputType": ".echo.EchoResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": true,
-        "serverStreaming": true,
-      }],
-      "options": undefined,
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [3, 0],
-        "span": [4, 0, 35],
-        "leadingComments": ' import "google/protobuf/wrappers.proto";\n',
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0],
-        "span": [7, 0, 13, 1],
-        "leadingComments": " The greeting service definition.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 0],
-        "span": [9, 2, 55],
-        "leadingComments": " Sends a greeting\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    name: "echo/echo.proto",
+    package: "echo",
+    dependency: ["google/protobuf/any.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "EchoRequest",
+        field: [
+          {
+            name: "message",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "message",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "test",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "test",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "EchoResponse",
+        field: [
+          {
+            name: "message",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "message",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "test",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "test",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "EchoService",
+        method: [
+          {
+            name: "echoUnary",
+            inputType: ".echo.EchoRequest",
+            outputType: ".echo.EchoResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "echoServerStream",
+            inputType: ".echo.EchoRequest",
+            outputType: ".echo.EchoResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: true,
+          },
+          {
+            name: "echoClientStream",
+            inputType: ".echo.EchoRequest",
+            outputType: ".echo.EchoResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: true,
+            serverStreaming: false,
+          },
+          {
+            name: "echoBidiStream",
+            inputType: ".echo.EchoRequest",
+            outputType: ".echo.EchoResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: true,
+            serverStreaming: true,
+          },
+        ],
+        options: undefined,
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [3, 0],
+          span: [4, 0, 35],
+          leadingComments: ' import "google/protobuf/wrappers.proto";\n',
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0],
+          span: [7, 0, 13, 1],
+          leadingComments: " The greeting service definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0, 2, 0],
+          span: [9, 2, 55],
+          leadingComments: " Sends a greeting\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
-  references: { ".echo.EchoRequest": EchoRequest, ".echo.EchoResponse": EchoResponse },
+  references: {
+    ".echo.EchoRequest": EchoRequest,
+    ".echo.EchoResponse": EchoResponse,
+  },
   dependencies: [protoMetadata1],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export type ServerStreamingMethodResult<Response> = { [Symbol.asyncIterator](): AsyncIterator<Response, void> };
+export type ServerStreamingMethodResult<Response> = {
+  [Symbol.asyncIterator](): AsyncIterator<Response, void>;
+};

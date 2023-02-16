@@ -1,12 +1,21 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata4,
+} from "./status";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  ReadRequest,
+  DeleteRequest,
+  DeleteResponse,
+} from "./resource_base";
 import { protoMetadata as protoMetadata5 } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.locale";
 
@@ -43,7 +52,10 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -69,7 +81,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -90,7 +104,10 @@ function createBaseLocaleList(): LocaleList {
 }
 
 export const LocaleList = {
-  encode(message: LocaleList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: LocaleList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Locale.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -129,21 +146,29 @@ export const LocaleList = {
 
   fromJSON(object: any): LocaleList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Locale.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Locale.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: LocaleList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Locale.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Locale.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -151,9 +176,10 @@ export const LocaleList = {
     const message = createBaseLocaleList();
     message.items = object.items?.map((e) => Locale.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -163,7 +189,10 @@ function createBaseLocaleListResponse(): LocaleListResponse {
 }
 
 export const LocaleListResponse = {
-  encode(message: LocaleListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: LocaleListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       LocaleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -171,7 +200,10 @@ export const LocaleListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -190,7 +222,10 @@ export const LocaleListResponse = {
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -202,32 +237,43 @@ export const LocaleListResponse = {
 
   fromJSON(object: any): LocaleListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => LocaleResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => LocaleResponse.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: LocaleListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? LocaleResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? LocaleResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<LocaleListResponse>): LocaleListResponse {
     const message = createBaseLocaleListResponse();
-    message.items = object.items?.map((e) => LocaleResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => LocaleResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -237,7 +283,10 @@ function createBaseLocaleResponse(): LocaleResponse {
 }
 
 export const LocaleResponse = {
-  encode(message: LocaleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: LocaleResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Locale.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -270,26 +319,34 @@ export const LocaleResponse = {
 
   fromJSON(object: any): LocaleResponse {
     return {
-      payload: isSet(object.payload) ? Locale.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? Locale.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: LocaleResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Locale.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Locale.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<LocaleResponse>): LocaleResponse {
     const message = createBaseLocaleResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Locale.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Locale.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -299,7 +356,10 @@ function createBaseLocale(): Locale {
 }
 
 export const Locale = {
-  encode(message: Locale, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Locale,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -354,16 +414,21 @@ export const Locale = {
   toJSON(message: Locale): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = message.value);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     return obj;
   },
 
   fromPartial(object: DeepPartial<Locale>): Locale {
     const message = createBaseLocale();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     message.value = object.value ?? "";
     message.description = object.description ?? "";
     return message;
@@ -420,19 +485,49 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
-  create(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
-  upsert(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  create(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
+  upsert(
+    request: LocaleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<LocaleListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
-  create(request: DeepPartial<LocaleList>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<LocaleList>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
-  upsert(request: DeepPartial<LocaleList>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  create(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
+  upsert(
+    request: DeepPartial<LocaleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<LocaleListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -449,291 +544,339 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/locale.proto",
-    "package": "io.restorecommerce.locale",
-    "dependency": [
+    name: "io/restorecommerce/locale.proto",
+    package: "io.restorecommerce.locale",
+    dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Deleted",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "LocaleList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.locale.Locale",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "LocaleListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.locale.LocaleResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "LocaleResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.locale.Locale",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Locale",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.locale.LocaleListResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".io.restorecommerce.locale.LocaleList",
-        "outputType": ".io.restorecommerce.locale.LocaleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".io.restorecommerce.locale.LocaleList",
-        "outputType": ".io.restorecommerce.locale.LocaleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".io.restorecommerce.locale.LocaleList",
-        "outputType": ".io.restorecommerce.locale.LocaleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 0],
-        "span": [13, 0, 23, 1],
-        "leadingComments": "\n Microservice definition.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "LocaleList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.locale.Locale",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "LocaleListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.locale.LocaleResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "LocaleResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.locale.Locale",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Locale",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.locale.LocaleList",
+            outputType: ".io.restorecommerce.locale.LocaleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [13, 0, 23, 1],
+          leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.locale.Deleted": Deleted,
@@ -742,17 +885,40 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.locale.LocaleResponse": LocaleResponse,
     ".io.restorecommerce.locale.Locale": Locale,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+  ],
   options: {
-    services: { "Service": { options: { "service_name": "locale" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      Service: {
+        options: { service_name: "locale" },
+        methods: { Read: { is_query: true } },
+      },
+    },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

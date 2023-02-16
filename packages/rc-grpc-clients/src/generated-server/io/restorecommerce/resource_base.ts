@@ -1,12 +1,22 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { FilterOp as FilterOp6, protoMetadata as protoMetadata5 } from "./filter";
+import {
+  Any,
+  protoMetadata as protoMetadata1,
+} from "../../google/protobuf/any";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata4,
+} from "./status";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata5,
+  FilterOp as FilterOp6,
+} from "./filter";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.resourcebase";
 
@@ -383,7 +393,10 @@ function createBaseFieldFilter(): FieldFilter {
 }
 
 export const FieldFilter = {
-  encode(message: FieldFilter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: FieldFilter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -475,14 +488,17 @@ export const Sort = {
   fromJSON(object: any): Sort {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : Sort_SortOrder.UNSORTED,
+      order: isSet(object.order)
+        ? sort_SortOrderFromJSON(object.order)
+        : Sort_SortOrder.UNSORTED,
     };
   },
 
   toJSON(message: Sort): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
+    message.order !== undefined &&
+      (obj.order = sort_SortOrderToJSON(message.order));
     return obj;
   },
 
@@ -495,11 +511,20 @@ export const Sort = {
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
+  return {
+    field: "",
+    operation: Filter_Operation.eq,
+    value: "",
+    type: Filter_ValueType.STRING,
+    filters: [],
+  };
 }
 
 export const Filter = {
-  encode(message: Filter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Filter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -551,21 +576,31 @@ export const Filter = {
   fromJSON(object: any): Filter {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
+      operation: isSet(object.operation)
+        ? filter_OperationFromJSON(object.operation)
+        : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
-      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
+      type: isSet(object.type)
+        ? filter_ValueTypeFromJSON(object.type)
+        : Filter_ValueType.STRING,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => FilterOp6.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: Filter): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
+    message.operation !== undefined &&
+      (obj.operation = filter_OperationToJSON(message.operation));
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = filter_ValueTypeToJSON(message.type));
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? FilterOp6.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp6.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
@@ -578,7 +613,8 @@ export const Filter = {
     message.operation = object.operation ?? Filter_Operation.eq;
     message.value = object.value ?? "";
     message.type = object.type ?? Filter_ValueType.STRING;
-    message.filters = object.filters?.map((e) => FilterOp6.fromPartial(e)) || [];
+    message.filters =
+      object.filters?.map((e) => FilterOp6.fromPartial(e)) || [];
     return message;
   },
 };
@@ -588,7 +624,10 @@ function createBaseFilterOp(): FilterOp {
 }
 
 export const FilterOp = {
-  encode(message: FilterOp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: FilterOp,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -621,19 +660,26 @@ export const FilterOp = {
 
   fromJSON(object: any): FilterOp {
     return {
-      filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : FilterOp_Operator.and,
+      filter: Array.isArray(object?.filter)
+        ? object.filter.map((e: any) => Filter.fromJSON(e))
+        : [],
+      operator: isSet(object.operator)
+        ? filterOp_OperatorFromJSON(object.operator)
+        : FilterOp_Operator.and,
     };
   },
 
   toJSON(message: FilterOp): unknown {
     const obj: any = {};
     if (message.filter) {
-      obj.filter = message.filter.map((e) => e ? Filter.toJSON(e) : undefined);
+      obj.filter = message.filter.map((e) =>
+        e ? Filter.toJSON(e) : undefined
+      );
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
   },
 
@@ -740,7 +786,10 @@ function createBaseReadRequest(): ReadRequest {
 }
 
 export const ReadRequest = {
-  encode(message: ReadRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ReadRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.offset !== 0) {
       writer.uint32(8).uint32(message.offset);
     }
@@ -853,17 +902,21 @@ export const ReadRequest = {
     message.offset !== undefined && (obj.offset = Math.round(message.offset));
     message.limit !== undefined && (obj.limit = Math.round(message.limit));
     if (message.sort) {
-      obj.sort = message.sort.map((e) => e ? Sort.toJSON(e) : undefined);
+      obj.sort = message.sort.map((e) => (e ? Sort.toJSON(e) : undefined));
     } else {
       obj.sort = [];
     }
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? FilterOp.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
     if (message.field) {
-      obj.field = message.field.map((e) => e ? FieldFilter.toJSON(e) : undefined);
+      obj.field = message.field.map((e) =>
+        e ? FieldFilter.toJSON(e) : undefined
+      );
     } else {
       obj.field = [];
     }
@@ -926,7 +979,10 @@ function createBaseDeleteRequest(): DeleteRequest {
 }
 
 export const DeleteRequest = {
-  encode(message: DeleteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DeleteRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collection === true) {
       writer.uint32(8).bool(message.collection);
     }
@@ -1037,12 +1093,18 @@ function createBaseDeleteResponse(): DeleteResponse {
 }
 
 export const DeleteResponse = {
-  encode(message: DeleteResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DeleteResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.status) {
       Status.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(18).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -1058,7 +1120,10 @@ export const DeleteResponse = {
           message.status.push(Status.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1070,29 +1135,38 @@ export const DeleteResponse = {
 
   fromJSON(object: any): DeleteResponse {
     return {
-      status: Array.isArray(object?.status) ? object.status.map((e: any) => Status.fromJSON(e)) : [],
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      status: Array.isArray(object?.status)
+        ? object.status.map((e: any) => Status.fromJSON(e))
+        : [],
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: DeleteResponse): unknown {
     const obj: any = {};
     if (message.status) {
-      obj.status = message.status.map((e) => e ? Status.toJSON(e) : undefined);
+      obj.status = message.status.map((e) =>
+        e ? Status.toJSON(e) : undefined
+      );
     } else {
       obj.status = [];
     }
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<DeleteResponse>): DeleteResponse {
     const message = createBaseDeleteResponse();
     message.status = object.status?.map((e) => Status.fromPartial(e)) || [];
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -1102,7 +1176,10 @@ function createBaseResourceList(): ResourceList {
 }
 
 export const ResourceList = {
-  encode(message: ResourceList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1141,21 +1218,31 @@ export const ResourceList = {
 
   fromJSON(object: any): ResourceList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Resource.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Resource.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: ResourceList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Resource.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -1163,9 +1250,10 @@ export const ResourceList = {
     const message = createBaseResourceList();
     message.items = object.items?.map((e) => Resource.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -1175,7 +1263,10 @@ function createBaseResourceListResponse(): ResourceListResponse {
 }
 
 export const ResourceListResponse = {
-  encode(message: ResourceListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ResourceResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1183,12 +1274,18 @@ export const ResourceListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ResourceListResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ResourceListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseResourceListResponse();
@@ -1202,7 +1299,10 @@ export const ResourceListResponse = {
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -1214,32 +1314,43 @@ export const ResourceListResponse = {
 
   fromJSON(object: any): ResourceListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => ResourceResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ResourceResponse.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: ResourceListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? ResourceResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ResourceResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
     const message = createBaseResourceListResponse();
-    message.items = object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -1249,7 +1360,10 @@ function createBaseResourceResponse(): ResourceResponse {
 }
 
 export const ResourceResponse = {
-  encode(message: ResourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Resource.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -1282,26 +1396,34 @@ export const ResourceResponse = {
 
   fromJSON(object: any): ResourceResponse {
     return {
-      payload: isSet(object.payload) ? Resource.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? Resource.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: ResourceResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Resource.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Resource.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<ResourceResponse>): ResourceResponse {
     const message = createBaseResourceResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Resource.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Resource.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -1311,7 +1433,10 @@ function createBaseResource(): Resource {
 }
 
 export const Resource = {
-  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Resource,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1352,14 +1477,18 @@ export const Resource = {
   toJSON(message: Resource): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     return message;
   },
 };
@@ -1414,19 +1543,49 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  create(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  upsert(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  create(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  upsert(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  create(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  upsert(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  create(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  upsert(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1443,195 +1602,105 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    "name": "io/restorecommerce/resource_base.proto",
-    "package": "io.restorecommerce.resourcebase",
-    "dependency": [
+    name: "io/restorecommerce/resource_base.proto",
+    package: "io.restorecommerce.resourcebase",
+    dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/filter.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "FieldFilter",
-      "field": [{
-        "name": "name",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "include",
-        "number": 2,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "include",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Sort",
-      "field": [{
-        "name": "field",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "field",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "order",
-        "number": 2,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.resourcebase.Sort.SortOrder",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "order",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "SortOrder",
-        "value": [{ "name": "UNSORTED", "number": 0, "options": undefined }, {
-          "name": "ASCENDING",
-          "number": 1,
-          "options": undefined,
-        }, { "name": "DESCENDING", "number": 2, "options": undefined }],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Filter",
-      "field": [{
-        "name": "field",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "field",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation",
-        "number": 2,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.resourcebase.Filter.Operation",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operation",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 4,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.resourcebase.Filter.ValueType",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "filters",
-        "number": 5,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.filter.FilterOp",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filters",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Operation",
-        "value": [
-          { "name": "eq", "number": 0, "options": undefined },
-          { "name": "lt", "number": 1, "options": undefined },
-          { "name": "lte", "number": 2, "options": undefined },
-          { "name": "gt", "number": 3, "options": undefined },
-          { "name": "gte", "number": 4, "options": undefined },
-          { "name": "isEmpty", "number": 5, "options": undefined },
-          { "name": "iLike", "number": 6, "options": undefined },
-          { "name": "in", "number": 7, "options": undefined },
-          { "name": "neq", "number": 8, "options": undefined },
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "FieldFilter",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "include",
+            number: 2,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "include",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }, {
-        "name": "ValueType",
-        "value": [
-          { "name": "STRING", "number": 0, "options": undefined },
-          { "name": "NUMBER", "number": 1, "options": undefined },
-          { "name": "BOOLEAN", "number": 2, "options": undefined },
-          { "name": "DATE", "number": 3, "options": undefined },
-          { "name": "ARRAY", "number": 4, "options": undefined },
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Sort",
+        field: [
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "order",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.resourcebase.Sort.SortOrder",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "order",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
@@ -2486,7 +2555,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.resourcebase.FieldFilter": FieldFilter,
@@ -2502,18 +2571,37 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.resourcebase.DeleteRequest": DeleteRequest,
     ".io.restorecommerce.resourcebase.DeleteResponse": DeleteResponse,
     ".io.restorecommerce.resourcebase.ResourceList": ResourceList,
-    ".io.restorecommerce.resourcebase.ResourceListResponse": ResourceListResponse,
+    ".io.restorecommerce.resourcebase.ResourceListResponse":
+      ResourceListResponse,
     ".io.restorecommerce.resourcebase.ResourceResponse": ResourceResponse,
     ".io.restorecommerce.resourcebase.Resource": Resource,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+  ],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

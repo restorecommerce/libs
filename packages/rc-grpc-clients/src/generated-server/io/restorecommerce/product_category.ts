@@ -1,14 +1,23 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { Image, protoMetadata as protoMetadata3 } from "./image";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Image, protoMetadata as protoMetadata3 } from "./image";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata5,
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  ReadRequest,
+  DeleteRequest,
+  DeleteResponse,
+} from "./resource_base";
 import { protoMetadata as protoMetadata6, Resolver } from "./options";
 import { protoMetadata as protoMetadata7 } from "./price_group";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product_category";
 
@@ -61,7 +70,10 @@ function createBaseProductCategory(): ProductCategory {
 }
 
 export const ProductCategory = {
-  encode(message: ProductCategory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductCategory,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -128,7 +140,9 @@ export const ProductCategory = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      price_group_id: isSet(object.price_group_id) ? String(object.price_group_id) : "",
+      price_group_id: isSet(object.price_group_id)
+        ? String(object.price_group_id)
+        : "",
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
       parent: isSet(object.parent) ? Parent.fromJSON(object.parent) : undefined,
     };
@@ -137,26 +151,38 @@ export const ProductCategory = {
   toJSON(message: ProductCategory): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.price_group_id !== undefined && (obj.price_group_id = message.price_group_id);
-    message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.parent !== undefined && (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.price_group_id !== undefined &&
+      (obj.price_group_id = message.price_group_id);
+    message.image !== undefined &&
+      (obj.image = message.image ? Image.toJSON(message.image) : undefined);
+    message.parent !== undefined &&
+      (obj.parent = message.parent ? Parent.toJSON(message.parent) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
     const message = createBaseProductCategory();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.price_group_id = object.price_group_id ?? "";
-    message.image = (object.image !== undefined && object.image !== null) ? Image.fromPartial(object.image) : undefined;
-    message.parent = (object.parent !== undefined && object.parent !== null)
-      ? Parent.fromPartial(object.parent)
-      : undefined;
+    message.image =
+      object.image !== undefined && object.image !== null
+        ? Image.fromPartial(object.image)
+        : undefined;
+    message.parent =
+      object.parent !== undefined && object.parent !== null
+        ? Parent.fromPartial(object.parent)
+        : undefined;
     return message;
   },
 };
@@ -166,7 +192,10 @@ function createBaseProductCategoryList(): ProductCategoryList {
 }
 
 export const ProductCategoryList = {
-  encode(message: ProductCategoryList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductCategoryList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -205,31 +234,43 @@ export const ProductCategoryList = {
 
   fromJSON(object: any): ProductCategoryList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductCategory.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ProductCategory.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: ProductCategoryList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? ProductCategory.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ProductCategory.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
     const message = createBaseProductCategoryList();
-    message.items = object.items?.map((e) => ProductCategory.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => ProductCategory.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -239,7 +280,10 @@ function createBaseProductCategoryListResponse(): ProductCategoryListResponse {
 }
 
 export const ProductCategoryListResponse = {
-  encode(message: ProductCategoryListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductCategoryListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ProductCategoryResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -247,12 +291,18 @@ export const ProductCategoryListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ProductCategoryListResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ProductCategoryListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductCategoryListResponse();
@@ -260,13 +310,18 @@ export const ProductCategoryListResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(ProductCategoryResponse.decode(reader, reader.uint32()));
+          message.items.push(
+            ProductCategoryResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -278,32 +333,45 @@ export const ProductCategoryListResponse = {
 
   fromJSON(object: any): ProductCategoryListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductCategoryResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ProductCategoryResponse.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: ProductCategoryListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? ProductCategoryResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ProductCategoryResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<ProductCategoryListResponse>): ProductCategoryListResponse {
+  fromPartial(
+    object: DeepPartial<ProductCategoryListResponse>
+  ): ProductCategoryListResponse {
     const message = createBaseProductCategoryListResponse();
-    message.items = object.items?.map((e) => ProductCategoryResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => ProductCategoryResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -313,9 +381,15 @@ function createBaseProductCategoryResponse(): ProductCategoryResponse {
 }
 
 export const ProductCategoryResponse = {
-  encode(message: ProductCategoryResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductCategoryResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
-      ProductCategory.encode(message.payload, writer.uint32(10).fork()).ldelim();
+      ProductCategory.encode(
+        message.payload,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -323,7 +397,10 @@ export const ProductCategoryResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ProductCategoryResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ProductCategoryResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductCategoryResponse();
@@ -346,7 +423,9 @@ export const ProductCategoryResponse = {
 
   fromJSON(object: any): ProductCategoryResponse {
     return {
-      payload: isSet(object.payload) ? ProductCategory.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? ProductCategory.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
@@ -354,19 +433,26 @@ export const ProductCategoryResponse = {
   toJSON(message: ProductCategoryResponse): unknown {
     const obj: any = {};
     message.payload !== undefined &&
-      (obj.payload = message.payload ? ProductCategory.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+      (obj.payload = message.payload
+        ? ProductCategory.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<ProductCategoryResponse>): ProductCategoryResponse {
+  fromPartial(
+    object: DeepPartial<ProductCategoryResponse>
+  ): ProductCategoryResponse {
     const message = createBaseProductCategoryResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? ProductCategory.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? ProductCategory.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -376,7 +462,10 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -402,7 +491,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -423,7 +514,10 @@ function createBaseParent(): Parent {
 }
 
 export const Parent = {
-  encode(message: Parent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Parent,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.parent_id !== "") {
       writer.uint32(10).string(message.parent_id);
     }
@@ -449,7 +543,9 @@ export const Parent = {
   },
 
   fromJSON(object: any): Parent {
-    return { parent_id: isSet(object.parent_id) ? String(object.parent_id) : "" };
+    return {
+      parent_id: isSet(object.parent_id) ? String(object.parent_id) : "",
+    };
   },
 
   toJSON(message: Parent): unknown {
@@ -514,36 +610,48 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductCategoryListResponse>>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductCategoryListResponse>>;
   create(
     request: ProductCategoryList,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<ProductCategoryListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
   update(
     request: ProductCategoryList,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<ProductCategoryListResponse>>;
   upsert(
     request: ProductCategoryList,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<ProductCategoryListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ProductCategoryListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductCategoryListResponse>;
   create(
     request: DeepPartial<ProductCategoryList>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<ProductCategoryListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
   update(
     request: DeepPartial<ProductCategoryList>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<ProductCategoryListResponse>;
   upsert(
     request: DeepPartial<ProductCategoryList>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<ProductCategoryListResponse>;
 }
 
@@ -561,18 +669,28 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/product_category.proto",
-    "package": "io.restorecommerce.product_category",
-    "dependency": [
+    name: "io/restorecommerce/product_category.proto",
+    package: "io.restorecommerce.product_category",
+    dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/image.proto",
@@ -581,352 +699,408 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/options.proto",
       "io/restorecommerce/price_group.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "ProductCategory",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "name",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "price_group_id",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "priceGroupId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "ProductCategory",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price_group_id",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "priceGroupId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
+          },
+          {
+            name: "image",
+            number: 6,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.image.Image",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "image",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "parent",
+            number: 7,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product_category.Parent",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "parent",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductCategoryList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product_category.ProductCategory",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductCategoryListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName:
+              ".io.restorecommerce.product_category.ProductCategoryResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductCategoryResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product_category.ProductCategory",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Parent",
+        field: [
+          {
+            name: "parent_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "parentId",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Update",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Upsert",
+            inputType:
+              ".io.restorecommerce.product_category.ProductCategoryList",
+            outputType:
+              ".io.restorecommerce.product_category.ProductCategoryListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [3, 6],
+          span: [12, 0, 46],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
-        "proto3Optional": false,
-      }, {
-        "name": "image",
-        "number": 6,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.image.Image",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "image",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "parent",
-        "number": 7,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product_category.Parent",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "parent",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductCategoryList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product_category.ProductCategory",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductCategoryListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product_category.ProductCategoryResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductCategoryResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product_category.ProductCategory",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Deleted",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Parent",
-      "field": [{
-        "name": "parent_id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "parentId",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.product_category.ProductCategoryListResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".io.restorecommerce.product_category.ProductCategoryList",
-        "outputType": ".io.restorecommerce.product_category.ProductCategoryListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".io.restorecommerce.product_category.ProductCategoryList",
-        "outputType": ".io.restorecommerce.product_category.ProductCategoryListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".io.restorecommerce.product_category.ProductCategoryList",
-        "outputType": ".io.restorecommerce.product_category.ProductCategoryListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [3, 6],
-        "span": [12, 0, 46],
-        "leadingComments": " Used by resolvers\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0],
-        "span": [15, 0, 31, 1],
-        "leadingComments": " ProductCategory resource\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+        {
+          path: [4, 0],
+          span: [15, 0, 31, 1],
+          leadingComments: " ProductCategory resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.product_category.ProductCategory": ProductCategory,
-    ".io.restorecommerce.product_category.ProductCategoryList": ProductCategoryList,
-    ".io.restorecommerce.product_category.ProductCategoryListResponse": ProductCategoryListResponse,
-    ".io.restorecommerce.product_category.ProductCategoryResponse": ProductCategoryResponse,
+    ".io.restorecommerce.product_category.ProductCategoryList":
+      ProductCategoryList,
+    ".io.restorecommerce.product_category.ProductCategoryListResponse":
+      ProductCategoryListResponse,
+    ".io.restorecommerce.product_category.ProductCategoryResponse":
+      ProductCategoryResponse,
     ".io.restorecommerce.product_category.Deleted": Deleted,
     ".io.restorecommerce.product_category.Parent": Parent,
   },
@@ -941,30 +1115,45 @@ export const protoMetadata: ProtoMetadata = {
   ],
   options: {
     messages: {
-      "ProductCategory": {
+      ProductCategory: {
         fields: {
-          "price_group_id": {
-            "resolver": Resolver.decode(
+          price_group_id: {
+            resolver: Resolver.decode(
               Buffer.from(
                 "CiouaW8ucmVzdG9yZWNvbW1lcmNlLnByaWNlX2dyb3VwLlByaWNlR3JvdXASB2NhdGFsb2caC3ByaWNlX2dyb3VwIgRSZWFkKgpwcmljZUdyb3Vw",
-                "base64",
-              ),
+                "base64"
+              )
             ),
           },
         },
       },
     },
     services: {
-      "Service": { options: { "service_name": "product_category" }, methods: { "Read": { "is_query": true } } },
+      Service: {
+        options: { service_name: "product_category" },
+        methods: { Read: { is_query: true } },
+      },
     },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

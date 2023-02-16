@@ -1,13 +1,25 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata2 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata5,
+} from "./status";
+import {
+  Any,
+  protoMetadata as protoMetadata2,
+} from "../../google/protobuf/any";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  FieldFilter,
+  DeleteRequest,
+  DeleteResponse,
+} from "./resource_base";
 import { protoMetadata as protoMetadata6 } from "./options";
-import { DeleteRequest, DeleteResponse, FieldFilter, protoMetadata as protoMetadata1 } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.job";
 
@@ -120,7 +132,9 @@ export function jobOptions_PriorityToJSON(object: JobOptions_Priority): string {
   }
 }
 
-export function jobOptions_PriorityToNumber(object: JobOptions_Priority): number {
+export function jobOptions_PriorityToNumber(
+  object: JobOptions_Priority
+): number {
   switch (object) {
     case JobOptions_Priority.NORMAL:
       return 0;
@@ -278,7 +292,9 @@ export enum JobReadRequest_SortOrder {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function jobReadRequest_SortOrderFromJSON(object: any): JobReadRequest_SortOrder {
+export function jobReadRequest_SortOrderFromJSON(
+  object: any
+): JobReadRequest_SortOrder {
   switch (object) {
     case 0:
     case "UNSORTED":
@@ -296,7 +312,9 @@ export function jobReadRequest_SortOrderFromJSON(object: any): JobReadRequest_So
   }
 }
 
-export function jobReadRequest_SortOrderToJSON(object: JobReadRequest_SortOrder): string {
+export function jobReadRequest_SortOrderToJSON(
+  object: JobReadRequest_SortOrder
+): string {
   switch (object) {
     case JobReadRequest_SortOrder.UNSORTED:
       return "UNSORTED";
@@ -310,7 +328,9 @@ export function jobReadRequest_SortOrderToJSON(object: JobReadRequest_SortOrder)
   }
 }
 
-export function jobReadRequest_SortOrderToNumber(object: JobReadRequest_SortOrder): number {
+export function jobReadRequest_SortOrderToNumber(
+  object: JobReadRequest_SortOrder
+): number {
   switch (object) {
     case JobReadRequest_SortOrder.UNSORTED:
       return 0;
@@ -335,7 +355,10 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -361,7 +384,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -382,7 +407,10 @@ function createBaseJobList(): JobList {
 }
 
 export const JobList = {
-  encode(message: JobList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Job.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -421,21 +449,29 @@ export const JobList = {
 
   fromJSON(object: any): JobList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Job.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Job.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: JobList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Job.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Job.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -443,9 +479,10 @@ export const JobList = {
     const message = createBaseJobList();
     message.items = object.items?.map((e) => Job.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -455,7 +492,10 @@ function createBaseJobListResponse(): JobListResponse {
 }
 
 export const JobListResponse = {
-  encode(message: JobListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       JobResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -463,7 +503,10 @@ export const JobListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -482,7 +525,10 @@ export const JobListResponse = {
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -494,22 +540,31 @@ export const JobListResponse = {
 
   fromJSON(object: any): JobListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => JobResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => JobResponse.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: JobListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? JobResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? JobResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
@@ -517,9 +572,10 @@ export const JobListResponse = {
     const message = createBaseJobListResponse();
     message.items = object.items?.map((e) => JobResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -529,7 +585,10 @@ function createBaseJobResponse(): JobResponse {
 }
 
 export const JobResponse = {
-  encode(message: JobResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Job.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -569,19 +628,23 @@ export const JobResponse = {
 
   toJSON(message: JobResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Job.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Job.toJSON(message.payload) : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
   fromPartial(object: DeepPartial<JobResponse>): JobResponse {
     const message = createBaseJobResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Job.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Job.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -646,7 +709,9 @@ export const Job = {
       type: isSet(object.type) ? String(object.type) : "",
       data: isSet(object.data) ? Data.fromJSON(object.data) : undefined,
       when: isSet(object.when) ? String(object.when) : "",
-      options: isSet(object.options) ? JobOptions.fromJSON(object.options) : undefined,
+      options: isSet(object.options)
+        ? JobOptions.fromJSON(object.options)
+        : undefined,
     };
   },
 
@@ -654,9 +719,13 @@ export const Job = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
-    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Data.toJSON(message.data) : undefined);
     message.when !== undefined && (obj.when = message.when);
-    message.options !== undefined && (obj.options = message.options ? JobOptions.toJSON(message.options) : undefined);
+    message.options !== undefined &&
+      (obj.options = message.options
+        ? JobOptions.toJSON(message.options)
+        : undefined);
     return obj;
   },
 
@@ -664,11 +733,15 @@ export const Job = {
     const message = createBaseJob();
     message.id = object.id ?? "";
     message.type = object.type ?? "";
-    message.data = (object.data !== undefined && object.data !== null) ? Data.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Data.fromPartial(object.data)
+        : undefined;
     message.when = object.when ?? "";
-    message.options = (object.options !== undefined && object.options !== null)
-      ? JobOptions.fromPartial(object.options)
-      : undefined;
+    message.options =
+      object.options !== undefined && object.options !== null
+        ? JobOptions.fromPartial(object.options)
+        : undefined;
     return message;
   },
 };
@@ -686,7 +759,10 @@ function createBaseJobOptions(): JobOptions {
 }
 
 export const JobOptions = {
-  encode(message: JobOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobOptions,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.priority !== JobOptions_Priority.NORMAL) {
       writer.uint32(104).int32(jobOptions_PriorityToNumber(message.priority));
     }
@@ -749,25 +825,39 @@ export const JobOptions = {
 
   fromJSON(object: any): JobOptions {
     return {
-      priority: isSet(object.priority) ? jobOptions_PriorityFromJSON(object.priority) : JobOptions_Priority.NORMAL,
+      priority: isSet(object.priority)
+        ? jobOptions_PriorityFromJSON(object.priority)
+        : JobOptions_Priority.NORMAL,
       attempts: isSet(object.attempts) ? Number(object.attempts) : 0,
-      backoff: isSet(object.backoff) ? Backoff.fromJSON(object.backoff) : undefined,
+      backoff: isSet(object.backoff)
+        ? Backoff.fromJSON(object.backoff)
+        : undefined,
       timeout: isSet(object.timeout) ? Number(object.timeout) : 0,
       repeat: isSet(object.repeat) ? Repeat.fromJSON(object.repeat) : undefined,
       jobId: isSet(object.jobId) ? String(object.jobId) : "",
-      removeOnComplete: isSet(object.removeOnComplete) ? Boolean(object.removeOnComplete) : false,
+      removeOnComplete: isSet(object.removeOnComplete)
+        ? Boolean(object.removeOnComplete)
+        : false,
     };
   },
 
   toJSON(message: JobOptions): unknown {
     const obj: any = {};
-    message.priority !== undefined && (obj.priority = jobOptions_PriorityToJSON(message.priority));
-    message.attempts !== undefined && (obj.attempts = Math.round(message.attempts));
-    message.backoff !== undefined && (obj.backoff = message.backoff ? Backoff.toJSON(message.backoff) : undefined);
-    message.timeout !== undefined && (obj.timeout = Math.round(message.timeout));
-    message.repeat !== undefined && (obj.repeat = message.repeat ? Repeat.toJSON(message.repeat) : undefined);
+    message.priority !== undefined &&
+      (obj.priority = jobOptions_PriorityToJSON(message.priority));
+    message.attempts !== undefined &&
+      (obj.attempts = Math.round(message.attempts));
+    message.backoff !== undefined &&
+      (obj.backoff = message.backoff
+        ? Backoff.toJSON(message.backoff)
+        : undefined);
+    message.timeout !== undefined &&
+      (obj.timeout = Math.round(message.timeout));
+    message.repeat !== undefined &&
+      (obj.repeat = message.repeat ? Repeat.toJSON(message.repeat) : undefined);
     message.jobId !== undefined && (obj.jobId = message.jobId);
-    message.removeOnComplete !== undefined && (obj.removeOnComplete = message.removeOnComplete);
+    message.removeOnComplete !== undefined &&
+      (obj.removeOnComplete = message.removeOnComplete);
     return obj;
   },
 
@@ -775,13 +865,15 @@ export const JobOptions = {
     const message = createBaseJobOptions();
     message.priority = object.priority ?? JobOptions_Priority.NORMAL;
     message.attempts = object.attempts ?? 0;
-    message.backoff = (object.backoff !== undefined && object.backoff !== null)
-      ? Backoff.fromPartial(object.backoff)
-      : undefined;
+    message.backoff =
+      object.backoff !== undefined && object.backoff !== null
+        ? Backoff.fromPartial(object.backoff)
+        : undefined;
     message.timeout = object.timeout ?? 0;
-    message.repeat = (object.repeat !== undefined && object.repeat !== null)
-      ? Repeat.fromPartial(object.repeat)
-      : undefined;
+    message.repeat =
+      object.repeat !== undefined && object.repeat !== null
+        ? Repeat.fromPartial(object.repeat)
+        : undefined;
     message.jobId = object.jobId ?? "";
     message.removeOnComplete = object.removeOnComplete ?? false;
     return message;
@@ -801,7 +893,10 @@ function createBaseRepeat(): Repeat {
 }
 
 export const Repeat = {
-  encode(message: Repeat, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Repeat,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.every !== 0) {
       writer.uint32(8).uint32(message.every);
     }
@@ -979,7 +1074,10 @@ function createBaseScheduledJob(): ScheduledJob {
 }
 
 export const ScheduledJob = {
-  encode(message: ScheduledJob, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ScheduledJob,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1027,7 +1125,9 @@ export const ScheduledJob = {
       id: isSet(object.id) ? String(object.id) : "",
       type: isSet(object.type) ? String(object.type) : "",
       data: isSet(object.data) ? Data.fromJSON(object.data) : undefined,
-      schedule_type: isSet(object.schedule_type) ? String(object.schedule_type) : "",
+      schedule_type: isSet(object.schedule_type)
+        ? String(object.schedule_type)
+        : "",
     };
   },
 
@@ -1035,8 +1135,10 @@ export const ScheduledJob = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
-    message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
-    message.schedule_type !== undefined && (obj.schedule_type = message.schedule_type);
+    message.data !== undefined &&
+      (obj.data = message.data ? Data.toJSON(message.data) : undefined);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
     return obj;
   },
 
@@ -1044,18 +1146,30 @@ export const ScheduledJob = {
     const message = createBaseScheduledJob();
     message.id = object.id ?? "";
     message.type = object.type ?? "";
-    message.data = (object.data !== undefined && object.data !== null) ? Data.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Data.fromPartial(object.data)
+        : undefined;
     message.schedule_type = object.schedule_type ?? "";
     return message;
   },
 };
 
 function createBaseJobDone(): JobDone {
-  return { id: "", schedule_type: "", delete_scheduled: false, type: "", result: undefined };
+  return {
+    id: "",
+    schedule_type: "",
+    delete_scheduled: false,
+    type: "",
+    result: undefined,
+  };
 }
 
 export const JobDone = {
-  encode(message: JobDone, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobDone,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1107,8 +1221,12 @@ export const JobDone = {
   fromJSON(object: any): JobDone {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      schedule_type: isSet(object.schedule_type) ? String(object.schedule_type) : "",
-      delete_scheduled: isSet(object.delete_scheduled) ? Boolean(object.delete_scheduled) : false,
+      schedule_type: isSet(object.schedule_type)
+        ? String(object.schedule_type)
+        : "",
+      delete_scheduled: isSet(object.delete_scheduled)
+        ? Boolean(object.delete_scheduled)
+        : false,
       type: isSet(object.type) ? String(object.type) : "",
       result: isSet(object.result) ? Any.fromJSON(object.result) : undefined,
     };
@@ -1117,10 +1235,13 @@ export const JobDone = {
   toJSON(message: JobDone): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.schedule_type !== undefined && (obj.schedule_type = message.schedule_type);
-    message.delete_scheduled !== undefined && (obj.delete_scheduled = message.delete_scheduled);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
+    message.delete_scheduled !== undefined &&
+      (obj.delete_scheduled = message.delete_scheduled);
     message.type !== undefined && (obj.type = message.type);
-    message.result !== undefined && (obj.result = message.result ? Any.toJSON(message.result) : undefined);
+    message.result !== undefined &&
+      (obj.result = message.result ? Any.toJSON(message.result) : undefined);
     return obj;
   },
 
@@ -1130,9 +1251,10 @@ export const JobDone = {
     message.schedule_type = object.schedule_type ?? "";
     message.delete_scheduled = object.delete_scheduled ?? false;
     message.type = object.type ?? "";
-    message.result = (object.result !== undefined && object.result !== null)
-      ? Any.fromPartial(object.result)
-      : undefined;
+    message.result =
+      object.result !== undefined && object.result !== null
+        ? Any.fromPartial(object.result)
+        : undefined;
     return message;
   },
 };
@@ -1142,7 +1264,10 @@ function createBaseJobFailed(): JobFailed {
 }
 
 export const JobFailed = {
-  encode(message: JobFailed, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobFailed,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1189,7 +1314,9 @@ export const JobFailed = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       error: isSet(object.error) ? String(object.error) : "",
-      schedule_type: isSet(object.schedule_type) ? String(object.schedule_type) : "",
+      schedule_type: isSet(object.schedule_type)
+        ? String(object.schedule_type)
+        : "",
       type: isSet(object.type) ? String(object.type) : "",
     };
   },
@@ -1198,7 +1325,8 @@ export const JobFailed = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.error !== undefined && (obj.error = message.error);
-    message.schedule_type !== undefined && (obj.schedule_type = message.schedule_type);
+    message.schedule_type !== undefined &&
+      (obj.schedule_type = message.schedule_type);
     message.type !== undefined && (obj.type = message.type);
     return obj;
   },
@@ -1218,7 +1346,10 @@ function createBaseBackoff(): Backoff {
 }
 
 export const Backoff = {
-  encode(message: Backoff, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Backoff,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.delay !== 0) {
       writer.uint32(9).double(message.delay);
     }
@@ -1252,7 +1383,9 @@ export const Backoff = {
   fromJSON(object: any): Backoff {
     return {
       delay: isSet(object.delay) ? Number(object.delay) : 0,
-      type: isSet(object.type) ? backoff_TypeFromJSON(object.type) : Backoff_Type.FIXED,
+      type: isSet(object.type)
+        ? backoff_TypeFromJSON(object.type)
+        : Backoff_Type.FIXED,
     };
   },
 
@@ -1272,11 +1405,20 @@ export const Backoff = {
 };
 
 function createBaseJobReadRequest(): JobReadRequest {
-  return { limit: 0, sort: JobReadRequest_SortOrder.UNSORTED, filter: undefined, field: [], subject: undefined };
+  return {
+    limit: 0,
+    sort: JobReadRequest_SortOrder.UNSORTED,
+    filter: undefined,
+    field: [],
+    subject: undefined,
+  };
 }
 
 export const JobReadRequest = {
-  encode(message: JobReadRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobReadRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.limit !== 0) {
       writer.uint32(8).uint32(message.limit);
     }
@@ -1328,24 +1470,41 @@ export const JobReadRequest = {
   fromJSON(object: any): JobReadRequest {
     return {
       limit: isSet(object.limit) ? Number(object.limit) : 0,
-      sort: isSet(object.sort) ? jobReadRequest_SortOrderFromJSON(object.sort) : JobReadRequest_SortOrder.UNSORTED,
-      filter: isSet(object.filter) ? JobFilter.fromJSON(object.filter) : undefined,
-      field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldFilter.fromJSON(e)) : [],
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      sort: isSet(object.sort)
+        ? jobReadRequest_SortOrderFromJSON(object.sort)
+        : JobReadRequest_SortOrder.UNSORTED,
+      filter: isSet(object.filter)
+        ? JobFilter.fromJSON(object.filter)
+        : undefined,
+      field: Array.isArray(object?.field)
+        ? object.field.map((e: any) => FieldFilter.fromJSON(e))
+        : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: JobReadRequest): unknown {
     const obj: any = {};
     message.limit !== undefined && (obj.limit = Math.round(message.limit));
-    message.sort !== undefined && (obj.sort = jobReadRequest_SortOrderToJSON(message.sort));
-    message.filter !== undefined && (obj.filter = message.filter ? JobFilter.toJSON(message.filter) : undefined);
+    message.sort !== undefined &&
+      (obj.sort = jobReadRequest_SortOrderToJSON(message.sort));
+    message.filter !== undefined &&
+      (obj.filter = message.filter
+        ? JobFilter.toJSON(message.filter)
+        : undefined);
     if (message.field) {
-      obj.field = message.field.map((e) => e ? FieldFilter.toJSON(e) : undefined);
+      obj.field = message.field.map((e) =>
+        e ? FieldFilter.toJSON(e) : undefined
+      );
     } else {
       obj.field = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -1353,13 +1512,15 @@ export const JobReadRequest = {
     const message = createBaseJobReadRequest();
     message.limit = object.limit ?? 0;
     message.sort = object.sort ?? JobReadRequest_SortOrder.UNSORTED;
-    message.filter = (object.filter !== undefined && object.filter !== null)
-      ? JobFilter.fromPartial(object.filter)
-      : undefined;
+    message.filter =
+      object.filter !== undefined && object.filter !== null
+        ? JobFilter.fromPartial(object.filter)
+        : undefined;
     message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -1369,7 +1530,10 @@ function createBaseJobFilter(): JobFilter {
 }
 
 export const JobFilter = {
-  encode(message: JobFilter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: JobFilter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.job_ids) {
       writer.uint32(10).string(v!);
     }
@@ -1402,7 +1566,9 @@ export const JobFilter = {
 
   fromJSON(object: any): JobFilter {
     return {
-      job_ids: Array.isArray(object?.job_ids) ? object.job_ids.map((e: any) => String(e)) : [],
+      job_ids: Array.isArray(object?.job_ids)
+        ? object.job_ids.map((e: any) => String(e))
+        : [],
       type: isSet(object.type) ? String(object.type) : "",
     };
   },
@@ -1479,19 +1645,49 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(request: JobReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
-  create(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
-  upsert(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
+  read(
+    request: JobReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  create(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
+  upsert(
+    request: JobList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<JobListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<JobReadRequest>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
-  create(request: DeepPartial<JobList>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<JobList>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
-  upsert(request: DeepPartial<JobList>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
+  read(
+    request: DeepPartial<JobReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  create(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
+  upsert(
+    request: DeepPartial<JobList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<JobListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1508,18 +1704,28 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/job.proto",
-    "package": "io.restorecommerce.job",
-    "dependency": [
+    name: "io/restorecommerce/job.proto",
+    package: "io.restorecommerce.job",
+    dependency: [
       "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
       "io/restorecommerce/meta.proto",
@@ -1527,328 +1733,25 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Deleted",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "JobList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.Job",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "JobListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.JobResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "JobResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.Job",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Job",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 11,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "data",
-        "number": 12,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.Data",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "data",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "when",
-        "number": 21,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "when",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "options",
-        "number": 30,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.JobOptions",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "options",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "JobOptions",
-      "field": [{
-        "name": "priority",
-        "number": 13,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.job.JobOptions.Priority",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "priority",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "attempts",
-        "number": 14,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "attempts",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "backoff",
-        "number": 15,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.Backoff",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "backoff",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "timeout",
-        "number": 16,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "timeout",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "repeat",
-        "number": 20,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.job.Repeat",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "repeat",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "jobId",
-        "number": 21,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "jobId",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "removeOnComplete",
-        "number": 22,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "removeOnComplete",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Priority",
-        "value": [
-          { "name": "NORMAL", "number": 0, "options": undefined },
-          { "name": "LOW", "number": 10, "options": undefined },
-          { "name": "MEDIUM", "number": -5, "options": undefined },
-          { "name": "HIGH", "number": -10, "options": undefined },
-          { "name": "CRITICAL", "number": -15, "options": undefined },
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
         extension: [],
         nestedType: [],
@@ -3134,7 +3037,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.job.Deleted": Deleted,
@@ -3152,20 +3055,45 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.job.Backoff": Backoff,
     ".io.restorecommerce.job.Backoff.Type": Backoff_Type,
     ".io.restorecommerce.job.JobReadRequest": JobReadRequest,
-    ".io.restorecommerce.job.JobReadRequest.SortOrder": JobReadRequest_SortOrder,
+    ".io.restorecommerce.job.JobReadRequest.SortOrder":
+      JobReadRequest_SortOrder,
     ".io.restorecommerce.job.JobFilter": JobFilter,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+    protoMetadata6,
+  ],
   options: {
-    services: { "Service": { options: { "service_name": "job" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      Service: {
+        options: { service_name: "job" },
+        methods: { Read: { is_query: true } },
+      },
+    },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

@@ -1,10 +1,13 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata2, Subject } from "./auth";
+import { Subject, protoMetadata as protoMetadata2 } from "./auth";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  Any,
+} from "../../google/protobuf/any";
 import { protoMetadata as protoMetadata3 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.search";
 
@@ -24,7 +27,10 @@ function createBaseSearchRequest(): SearchRequest {
 }
 
 export const SearchRequest = {
-  encode(message: SearchRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SearchRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collection !== "") {
       writer.uint32(10).string(message.collection);
     }
@@ -71,8 +77,12 @@ export const SearchRequest = {
     return {
       collection: isSet(object.collection) ? String(object.collection) : "",
       text: isSet(object.text) ? String(object.text) : "",
-      acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => String(e)) : [],
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      acl: Array.isArray(object?.acl)
+        ? object.acl.map((e: any) => String(e))
+        : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
@@ -85,7 +95,10 @@ export const SearchRequest = {
     } else {
       obj.acl = [];
     }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -94,9 +107,10 @@ export const SearchRequest = {
     message.collection = object.collection ?? "";
     message.text = object.text ?? "";
     message.acl = object.acl?.map((e) => e) || [];
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -106,7 +120,10 @@ function createBaseSearchResponse(): SearchResponse {
 }
 
 export const SearchResponse = {
-  encode(message: SearchResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SearchResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.data) {
       Any.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -132,13 +149,17 @@ export const SearchResponse = {
   },
 
   fromJSON(object: any): SearchResponse {
-    return { data: Array.isArray(object?.data) ? object.data.map((e: any) => Any.fromJSON(e)) : [] };
+    return {
+      data: Array.isArray(object?.data)
+        ? object.data.map((e: any) => Any.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: SearchResponse): unknown {
     const obj: any = {};
     if (message.data) {
-      obj.data = message.data.map((e) => e ? Any.toJSON(e) : undefined);
+      obj.data = message.data.map((e) => (e ? Any.toJSON(e) : undefined));
     } else {
       obj.data = [];
     }
@@ -170,11 +191,17 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceServiceImplementation<CallContextExt = {}> {
-  search(request: SearchRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SearchResponse>>;
+  search(
+    request: SearchRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<SearchResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  search(request: DeepPartial<SearchRequest>, options?: CallOptions & CallOptionsExt): Promise<SearchResponse>;
+  search(
+    request: DeepPartial<SearchRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<SearchResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -191,142 +218,191 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/search.proto",
-    "package": "io.restorecommerce.search",
-    "dependency": ["google/protobuf/any.proto", "io/restorecommerce/auth.proto", "io/restorecommerce/options.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "SearchRequest",
-      "field": [{
-        "name": "collection",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "collection",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "text",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "text",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "acl",
-        "number": 3,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "acl",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 4,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "SearchResponse",
-      "field": [{
-        "name": "data",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "data",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Search",
-        "inputType": ".io.restorecommerce.search.SearchRequest",
-        "outputType": ".io.restorecommerce.search.SearchResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 0],
-        "span": [8, 0, 12, 1],
-        "leadingComments": " Service provides the CRUD operations\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    name: "io/restorecommerce/search.proto",
+    package: "io.restorecommerce.search",
+    dependency: [
+      "google/protobuf/any.proto",
+      "io/restorecommerce/auth.proto",
+      "io/restorecommerce/options.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "SearchRequest",
+        field: [
+          {
+            name: "collection",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "collection",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "text",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "text",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "acl",
+            number: 3,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "acl",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "SearchResponse",
+        field: [
+          {
+            name: "data",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Search",
+            inputType: ".io.restorecommerce.search.SearchRequest",
+            outputType: ".io.restorecommerce.search.SearchResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [8, 0, 12, 1],
+          leadingComments: " Service provides the CRUD operations\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.search.SearchRequest": SearchRequest,
     ".io.restorecommerce.search.SearchResponse": SearchResponse,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: { services: { "Service": { options: { "service_name": "search" }, methods: {} } } },
+  options: {
+    services: {
+      Service: {
+        options: { service_name: "search" },
+        methods: {},
+      },
+    },
+  },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

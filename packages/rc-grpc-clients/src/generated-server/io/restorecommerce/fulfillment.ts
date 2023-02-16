@@ -31,16 +31,7 @@ import {
   Resolver,
 } from "./options";
 import * as Long from "long";
-import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { Address, ContactPerson, protoMetadata as protoMetadata6 } from "./address";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Meta, protoMetadata as protoMetadata5 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata7, Resolver } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
@@ -314,7 +305,9 @@ export const FulfillmentAddress = {
         ? Country.toJSON(message.country)
         : undefined);
     message.contact_person !== undefined &&
-      (obj.contact_person = message.contact_person ? ContactPerson.toJSON(message.contact_person) : undefined);
+      (obj.contact_person = message.contact_person
+        ? ContactPerson.toJSON(message.contact_person)
+        : undefined);
     return obj;
   },
 
@@ -367,16 +360,16 @@ export const Parcel = {
       Item.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.weight_in_kg !== 0) {
-      writer.uint32(45).float(message.weight_in_kg);
+      writer.uint32(41).double(message.weight_in_kg);
     }
     if (message.height_in_cm !== 0) {
-      writer.uint32(53).float(message.height_in_cm);
+      writer.uint32(49).double(message.height_in_cm);
     }
     if (message.width_in_cm !== 0) {
-      writer.uint32(61).float(message.width_in_cm);
+      writer.uint32(57).double(message.width_in_cm);
     }
     if (message.length_in_cm !== 0) {
-      writer.uint32(69).float(message.length_in_cm);
+      writer.uint32(65).double(message.length_in_cm);
     }
     return writer;
   },
@@ -401,16 +394,16 @@ export const Parcel = {
           message.items.push(Item.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.weight_in_kg = reader.float();
+          message.weight_in_kg = reader.double();
           break;
         case 6:
-          message.height_in_cm = reader.float();
+          message.height_in_cm = reader.double();
           break;
         case 7:
-          message.width_in_cm = reader.float();
+          message.width_in_cm = reader.double();
           break;
         case 8:
-          message.length_in_cm = reader.float();
+          message.length_in_cm = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -424,12 +417,22 @@ export const Parcel = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       product_id: isSet(object.product_id) ? String(object.product_id) : "",
-      product_variant_id: isSet(object.product_variant_id) ? String(object.product_variant_id) : "",
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
-      weight_in_kg: isSet(object.weight_in_kg) ? Number(object.weight_in_kg) : 0,
-      height_in_cm: isSet(object.height_in_cm) ? Number(object.height_in_cm) : 0,
+      product_variant_id: isSet(object.product_variant_id)
+        ? String(object.product_variant_id)
+        : "",
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Item.fromJSON(e))
+        : [],
+      weight_in_kg: isSet(object.weight_in_kg)
+        ? Number(object.weight_in_kg)
+        : 0,
+      height_in_cm: isSet(object.height_in_cm)
+        ? Number(object.height_in_cm)
+        : 0,
       width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      length_in_cm: isSet(object.length_in_cm) ? Number(object.length_in_cm) : 0,
+      length_in_cm: isSet(object.length_in_cm)
+        ? Number(object.length_in_cm)
+        : 0,
     };
   },
 
@@ -437,16 +440,21 @@ export const Parcel = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.product_id !== undefined && (obj.product_id = message.product_id);
-    message.product_variant_id !== undefined && (obj.product_variant_id = message.product_variant_id);
+    message.product_variant_id !== undefined &&
+      (obj.product_variant_id = message.product_variant_id);
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Item.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
-    message.weight_in_kg !== undefined && (obj.weight_in_kg = message.weight_in_kg);
-    message.height_in_cm !== undefined && (obj.height_in_cm = message.height_in_cm);
-    message.width_in_cm !== undefined && (obj.width_in_cm = message.width_in_cm);
-    message.length_in_cm !== undefined && (obj.length_in_cm = message.length_in_cm);
+    message.weight_in_kg !== undefined &&
+      (obj.weight_in_kg = message.weight_in_kg);
+    message.height_in_cm !== undefined &&
+      (obj.height_in_cm = message.height_in_cm);
+    message.width_in_cm !== undefined &&
+      (obj.width_in_cm = message.width_in_cm);
+    message.length_in_cm !== undefined &&
+      (obj.length_in_cm = message.length_in_cm);
     return obj;
   },
 
@@ -563,7 +571,8 @@ export const Label = {
     message.shipment_number !== undefined &&
       (obj.shipment_number = message.shipment_number);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
@@ -575,15 +584,22 @@ export const Label = {
     message.parcel_id = object.parcel_id ?? "";
     message.shipment_number = object.shipment_number ?? "";
     message.state = object.state ?? State.Undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
 
 function createBaseOrder(): Order {
-  return { reference_id: "", parcels: [], sender: undefined, receiver: undefined, notify: "" };
+  return {
+    reference_id: "",
+    parcels: [],
+    sender: undefined,
+    receiver: undefined,
+    notify: "",
+  };
 }
 
 export const Order = {
@@ -662,9 +678,12 @@ export const Order = {
 
   toJSON(message: Order): unknown {
     const obj: any = {};
-    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
+    message.reference_id !== undefined &&
+      (obj.reference_id = message.reference_id);
     if (message.parcels) {
-      obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
+      obj.parcels = message.parcels.map((e) =>
+        e ? Parcel.toJSON(e) : undefined
+      );
     } else {
       obj.parcels = [];
     }
@@ -756,10 +775,13 @@ export const Event = {
 
   toJSON(message: Event): unknown {
     const obj: any = {};
-    message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
+    message.timestamp !== undefined &&
+      (obj.timestamp = Math.round(message.timestamp));
     message.location !== undefined && (obj.location = message.location);
-    message.details !== undefined && (obj.details = message.details ? Any.toJSON(message.details) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.details !== undefined &&
+      (obj.details = message.details ? Any.toJSON(message.details) : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
@@ -767,22 +789,32 @@ export const Event = {
     const message = createBaseEvent();
     message.timestamp = object.timestamp ?? 0;
     message.location = object.location ?? "";
-    message.details = (object.details !== undefined && object.details !== null)
-      ? Any.fromPartial(object.details)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.details =
+      object.details !== undefined && object.details !== null
+        ? Any.fromPartial(object.details)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
 
 function createBaseTracking(): Tracking {
-  return { shipment_number: "", events: [], details: undefined, status: undefined };
+  return {
+    shipment_number: "",
+    events: [],
+    details: undefined,
+    status: undefined,
+  };
 }
 
 export const Tracking = {
-  encode(message: Tracking, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Tracking,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.shipment_number !== "") {
       writer.uint32(10).string(message.shipment_number);
     }
@@ -827,8 +859,12 @@ export const Tracking = {
 
   fromJSON(object: any): Tracking {
     return {
-      shipment_number: isSet(object.shipment_number) ? String(object.shipment_number) : "",
-      events: Array.isArray(object?.events) ? object.events.map((e: any) => Event.fromJSON(e)) : [],
+      shipment_number: isSet(object.shipment_number)
+        ? String(object.shipment_number)
+        : "",
+      events: Array.isArray(object?.events)
+        ? object.events.map((e: any) => Event.fromJSON(e))
+        : [],
       details: isSet(object.details) ? Any.fromJSON(object.details) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
@@ -836,14 +872,17 @@ export const Tracking = {
 
   toJSON(message: Tracking): unknown {
     const obj: any = {};
-    message.shipment_number !== undefined && (obj.shipment_number = message.shipment_number);
+    message.shipment_number !== undefined &&
+      (obj.shipment_number = message.shipment_number);
     if (message.events) {
-      obj.events = message.events.map((e) => e ? Event.toJSON(e) : undefined);
+      obj.events = message.events.map((e) => (e ? Event.toJSON(e) : undefined));
     } else {
       obj.events = [];
     }
-    message.details !== undefined && (obj.details = message.details ? Any.toJSON(message.details) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.details !== undefined &&
+      (obj.details = message.details ? Any.toJSON(message.details) : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
@@ -851,12 +890,14 @@ export const Tracking = {
     const message = createBaseTracking();
     message.shipment_number = object.shipment_number ?? "";
     message.events = object.events?.map((e) => Event.fromPartial(e)) || [];
-    message.details = (object.details !== undefined && object.details !== null)
-      ? Any.fromPartial(object.details)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.details =
+      object.details !== undefined && object.details !== null
+        ? Any.fromPartial(object.details)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -1230,7 +1271,9 @@ export const FulfillmentListResponse = {
     message.total_count !== undefined &&
       (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
@@ -1444,7 +1487,10 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1470,7 +1516,9 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
@@ -1604,7 +1652,10 @@ export interface ServiceServiceImplementation<CallContextExt = {}> {
     context: CallContext & CallContextExt
   ): Promise<DeepPartial<FulfillmentListResponse>>;
   /** Delete a batch of fulfillments from the database */
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
@@ -1644,7 +1695,10 @@ export interface ServiceClient<CallOptionsExt = {}> {
     options?: CallOptions & CallOptionsExt
   ): Promise<FulfillmentListResponse>;
   /** Delete a batch of fulfillments from the database */
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1661,18 +1715,28 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/fulfillment.proto",
-    "package": "io.restorecommerce.fulfillment",
-    "dependency": [
+    name: "io/restorecommerce/fulfillment.proto",
+    package: "io.restorecommerce.fulfillment",
+    dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/auth.proto",
@@ -1805,7 +1869,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "weight_in_kg",
             number: 5,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1818,7 +1882,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "height_in_cm",
             number: 6,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1831,7 +1895,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "width_in_cm",
             number: 7,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1844,7 +1908,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "length_in_cm",
             number: 8,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -2795,313 +2859,9 @@ export const protoMetadata: ProtoMetadata = {
           trailingComments: "optional\n",
           leadingDetachedComments: [],
         },
-        "proto3Optional": false,
-      }, {
-        "name": "tracks",
-        "number": 2,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.Tracking",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "tracks",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TrackingResultList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.TrackingResult",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "CancelRequestList",
-      "field": [{
-        "name": "ids",
-        "number": 1,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "ids",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Deleted",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [{
-      "name": "State",
-      "value": [
-        { "name": "Undefined", "number": 0, "options": undefined },
-        { "name": "Invalid", "number": 1, "options": undefined },
-        { "name": "Failed", "number": 2, "options": undefined },
-        { "name": "Cancelled", "number": 3, "options": undefined },
-        { "name": "Created", "number": 4, "options": undefined },
-        { "name": "Submitted", "number": 5, "options": undefined },
-        { "name": "Shipping", "number": 6, "options": undefined },
-        { "name": "Done", "number": 7, "options": undefined },
       ],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Submit",
-        "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Track",
-        "inputType": ".io.restorecommerce.fulfillment.TrackingRequestList",
-        "outputType": ".io.restorecommerce.fulfillment.TrackingResultList",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Cancel",
-        "inputType": ".io.restorecommerce.fulfillment.CancelRequestList",
-        "outputType": ".io.restorecommerce.fulfillment.FulfillmentResponseList",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 0],
-        "span": [15, 0, 61, 1],
-        "leadingComments": "*\nMicroservice definition.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 0],
-        "span": [21, 2, 23, 3],
-        "leadingComments": "*\nReturns a list of shipment IDs.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 1],
-        "span": [28, 2, 65],
-        "leadingComments": "*\nCreates fulfillment orders\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 2],
-        "span": [33, 2, 65],
-        "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Ordered\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 3],
-        "span": [38, 2, 65],
-        "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Ordered\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 4],
-        "span": [43, 2, 65],
-        "leadingComments": "*\nCreates, Executes and Updates fulfillment orders against API\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 5],
-        "span": [48, 2, 50, 3],
-        "leadingComments": "*\nTrack a batch of fulfillment orders\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 6],
-        "span": [55, 2, 67],
-        "leadingComments": "*\nCancel a batch of fulfillment orders\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 7],
-        "span": [60, 2, 118],
-        "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 0],
-        "span": [81, 2, 21],
-        "leadingComments": "Catalog item!\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 3],
-        "span": [112, 2, 29],
-        "leadingComments": "",
-        "trailingComments": "filled on Order\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 4],
-        "span": [113, 2, 18],
-        "leadingComments": "",
-        "trailingComments": "update by Track\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 5],
-        "span": [114, 2, 46],
-        "leadingComments": "",
-        "trailingComments": "API status\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 5],
-        "span": [128, 0, 142, 1],
-        "leadingComments": "*\nThis is the message how it get stored to the database\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 5, 2, 3],
-        "span": [140, 2, 28],
-        "leadingComments": "",
-        "trailingComments": "filled by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 9, 2, 1],
-        "span": [163, 2, 39],
-        "leadingComments": "",
-        "trailingComments": "optional\n",
-        "leadingDetachedComments": [],
-      }],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.fulfillment.State": State,
@@ -3169,26 +2929,30 @@ declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
   throw "Unable to locate global object";
 })();
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function longToNumber(long: Long): number {

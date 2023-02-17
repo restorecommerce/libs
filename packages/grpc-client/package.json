@@ -16,7 +16,7 @@
     "grpc"
   ],
   "dependencies": {
-    "@grpc/grpc-js": "^1.8.8",
+    "@grpc/grpc-js": "^1.8.9",
     "@grpc/proto-loader": "^0.7.5",
     "@restorecommerce/logger": "^1.2.1",
     "cls-rtracer": "^2.6.2",

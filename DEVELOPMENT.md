@@ -2,8 +2,8 @@
 
 ## Commit messages
 
-This repository use [commitizen](https://github.com/commitizen/cz-cli) to normalize the commit messages.
-Commit messages are not linted.
+This repository use [commitizen](https://github.com/commitizen/cz-cli)
+to normalize the commit messages. Commit messages are not linted.
 
 ## Installing Dependencies
 

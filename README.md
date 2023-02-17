@@ -20,3 +20,7 @@ Library monorepo for Restorecommerce.
 - [@restorecommerce/protos](packages/protos)
 - [@restorecommerce/rc-grpc-client](packages/rc-grpc-client)
 - [@restorecommerce/service-config](packages/service-config)
+
+## Development
+
+See [DEVELOPMENT.md](DEVELOPMENT.md).

@@ -24,18 +24,18 @@
     "@restorecommerce/service-config": "^1.0.3",
     "lodash": "^4.17.21",
     "node-eval": "^2.0.0",
-    "redis": "^4.6.4"
+    "redis": "^4.6.5"
   },
   "devDependencies": {
     "@restorecommerce/protos": "^2.0.2",
     "@types/koa": "^2.13.5",
     "@types/lodash": "^4.14.191",
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.1",
     "@types/redis": "^4.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
+    "@typescript-eslint/eslint-plugin": "^5.53.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.53.0",
+    "@typescript-eslint/parser": "^5.53.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.34.0",

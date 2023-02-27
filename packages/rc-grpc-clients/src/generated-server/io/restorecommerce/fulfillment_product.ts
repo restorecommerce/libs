@@ -173,6 +173,10 @@ export const Preferences = {
     return obj;
   },
 
+  create(base?: DeepPartial<Preferences>): Preferences {
+    return Preferences.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Preferences>): Preferences {
     const message = createBasePreferences();
     message.couriers = object.couriers?.map((e) => Attribute.fromPartial(e)) || [];
@@ -246,6 +250,10 @@ export const Query = {
     return obj;
   },
 
+  create(base?: DeepPartial<Query>): Query {
+    return Query.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Query>): Query {
     const message = createBaseQuery();
     message.goods = object.goods?.map((e) => Item.fromPartial(e)) || [];
@@ -317,6 +325,10 @@ export const QueryList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<QueryList>): QueryList {
+    return QueryList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<QueryList>): QueryList {
@@ -477,6 +489,10 @@ export const FulfillmentProduct = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentProduct>): FulfillmentProduct {
+    return FulfillmentProduct.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentProduct>): FulfillmentProduct {
     const message = createBaseFulfillmentProduct();
     message.id = object.id ?? "";
@@ -609,6 +625,10 @@ export const Variant = {
     return obj;
   },
 
+  create(base?: DeepPartial<Variant>): Variant {
+    return Variant.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Variant>): Variant {
     const message = createBaseVariant();
     message.id = object.id ?? "";
@@ -686,6 +706,10 @@ export const FulfillmentProductList = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentProductList>): FulfillmentProductList {
+    return FulfillmentProductList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentProductList>): FulfillmentProductList {
     const message = createBaseFulfillmentProductList();
     message.items = object.items?.map((e) => FulfillmentProduct.fromPartial(e)) || [];
@@ -746,6 +770,10 @@ export const FulfillmentProductResponse = {
       (obj.payload = message.payload ? FulfillmentProduct.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentProductResponse>): FulfillmentProductResponse {
+    return FulfillmentProductResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FulfillmentProductResponse>): FulfillmentProductResponse {
@@ -821,6 +849,10 @@ export const FulfillmentProductResponseList = {
     message.operation_status !== undefined &&
       (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentProductResponseList>): FulfillmentProductResponseList {
+    return FulfillmentProductResponseList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FulfillmentProductResponseList>): FulfillmentProductResponseList {
@@ -920,6 +952,10 @@ export const PackingSolution = {
     return obj;
   },
 
+  create(base?: DeepPartial<PackingSolution>): PackingSolution {
+    return PackingSolution.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = createBasePackingSolution();
     message.reference_id = object.reference_id ?? "";
@@ -984,6 +1020,10 @@ export const PackingSolutionResponse = {
     }
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PackingSolutionResponse>): PackingSolutionResponse {
+    return PackingSolutionResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PackingSolutionResponse>): PackingSolutionResponse {
@@ -1059,6 +1099,10 @@ export const PackingSolutionResponseList = {
     return obj;
   },
 
+  create(base?: DeepPartial<PackingSolutionResponseList>): PackingSolutionResponseList {
+    return PackingSolutionResponseList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PackingSolutionResponseList>): PackingSolutionResponseList {
     const message = createBasePackingSolutionResponseList();
     message.items = object.items?.map((e) => PackingSolutionResponse.fromPartial(e)) || [];
@@ -1108,6 +1152,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1173,7 +1221,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,

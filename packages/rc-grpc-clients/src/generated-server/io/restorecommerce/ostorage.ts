@@ -243,6 +243,10 @@ export const CopyRequestList = {
     return obj;
   },
 
+  create(base?: DeepPartial<CopyRequestList>): CopyRequestList {
+    return CopyRequestList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CopyRequestList>): CopyRequestList {
     const message = createBaseCopyRequestList();
     message.items = object.items?.map((e) => CopyRequestItem.fromPartial(e)) || [];
@@ -310,6 +314,10 @@ export const CopyResponseList = {
     return obj;
   },
 
+  create(base?: DeepPartial<CopyResponseList>): CopyResponseList {
+    return CopyResponseList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CopyResponseList>): CopyResponseList {
     const message = createBaseCopyResponseList();
     message.response = object.response?.map((e) => copyResponsePayloadWithStatus.fromPartial(e)) || [];
@@ -369,6 +377,10 @@ export const copyResponsePayloadWithStatus = {
       (obj.payload = message.payload ? CopyResponseItem.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<copyResponsePayloadWithStatus>): copyResponsePayloadWithStatus {
+    return copyResponsePayloadWithStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<copyResponsePayloadWithStatus>): copyResponsePayloadWithStatus {
@@ -457,6 +469,10 @@ export const CopyRequestItem = {
     return obj;
   },
 
+  create(base?: DeepPartial<CopyRequestItem>): CopyRequestItem {
+    return CopyRequestItem.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CopyRequestItem>): CopyRequestItem {
     const message = createBaseCopyRequestItem();
     message.bucket = object.bucket ?? "";
@@ -542,6 +558,10 @@ export const CopyResponseItem = {
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CopyResponseItem>): CopyResponseItem {
+    return CopyResponseItem.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CopyResponseItem>): CopyResponseItem {
@@ -677,6 +697,10 @@ export const Options = {
     return obj;
   },
 
+  create(base?: DeepPartial<Options>): Options {
+    return Options.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Options>): Options {
     const message = createBaseOptions();
     message.encoding = object.encoding ?? "";
@@ -791,6 +815,10 @@ export const Object = {
     return obj;
   },
 
+  create(base?: DeepPartial<Object>): Object {
+    return Object.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Object>): Object {
     const message = createBaseObject();
     message.key = object.key ?? "";
@@ -860,6 +888,10 @@ export const ObjectResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ObjectResponse>): ObjectResponse {
+    return ObjectResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ObjectResponse>): ObjectResponse {
     const message = createBaseObjectResponse();
     message.response = (object.response !== undefined && object.response !== null)
@@ -921,6 +953,10 @@ export const ObjectResponsePayloadWithStatus = {
       (obj.payload = message.payload ? ObjectResponsePayload.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ObjectResponsePayloadWithStatus>): ObjectResponsePayloadWithStatus {
+    return ObjectResponsePayloadWithStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ObjectResponsePayloadWithStatus>): ObjectResponsePayloadWithStatus {
@@ -1018,6 +1054,10 @@ export const ObjectResponsePayload = {
     return obj;
   },
 
+  create(base?: DeepPartial<ObjectResponsePayload>): ObjectResponsePayload {
+    return ObjectResponsePayload.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ObjectResponsePayload>): ObjectResponsePayload {
     const message = createBaseObjectResponsePayload();
     message.key = object.key ?? "";
@@ -1098,6 +1138,10 @@ export const GetRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<GetRequest>): GetRequest {
+    return GetRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GetRequest>): GetRequest {
     const message = createBaseGetRequest();
     message.key = object.key ?? "";
@@ -1167,6 +1211,10 @@ export const ListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ListResponse>): ListResponse {
+    return ListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ListResponse>): ListResponse {
     const message = createBaseListResponse();
     message.response = object.response?.map((e) => ObjectsDataWithPayloadStatus.fromPartial(e)) || [];
@@ -1225,6 +1273,10 @@ export const ObjectsDataWithPayloadStatus = {
     message.payload !== undefined && (obj.payload = message.payload ? ObjectData.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ObjectsDataWithPayloadStatus>): ObjectsDataWithPayloadStatus {
+    return ObjectsDataWithPayloadStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ObjectsDataWithPayloadStatus>): ObjectsDataWithPayloadStatus {
@@ -1297,6 +1349,10 @@ export const ObjectData = {
     return obj;
   },
 
+  create(base?: DeepPartial<ObjectData>): ObjectData {
+    return ObjectData.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ObjectData>): ObjectData {
     const message = createBaseObjectData();
     message.object_name = object.object_name ?? "";
@@ -1364,6 +1420,10 @@ export const DeleteRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<DeleteRequest>): DeleteRequest {
+    return DeleteRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = createBaseDeleteRequest();
     message.key = object.key ?? "";
@@ -1427,6 +1487,10 @@ export const PutResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<PutResponse>): PutResponse {
+    return PutResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PutResponse>): PutResponse {
     const message = createBasePutResponse();
     message.response = (object.response !== undefined && object.response !== null)
@@ -1487,6 +1551,10 @@ export const PutResponseWithPayloadStatus = {
     message.payload !== undefined && (obj.payload = message.payload ? Response.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PutResponseWithPayloadStatus>): PutResponseWithPayloadStatus {
+    return PutResponseWithPayloadStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PutResponseWithPayloadStatus>): PutResponseWithPayloadStatus {
@@ -1587,6 +1655,10 @@ export const Response = {
     return obj;
   },
 
+  create(base?: DeepPartial<Response>): Response {
+    return Response.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Response>): Response {
     const message = createBaseResponse();
     message.url = object.url ?? "";
@@ -1673,6 +1745,10 @@ export const ListRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<ListRequest>): ListRequest {
+    return ListRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ListRequest>): ListRequest {
     const message = createBaseListRequest();
     message.bucket = object.bucket ?? "";
@@ -1754,6 +1830,10 @@ export const OstorageMessage = {
     return obj;
   },
 
+  create(base?: DeepPartial<OstorageMessage>): OstorageMessage {
+    return OstorageMessage.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<OstorageMessage>): OstorageMessage {
     const message = createBaseOstorageMessage();
     message.key = object.key ?? "";
@@ -1820,6 +1900,10 @@ export const MoveRequestList = {
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<MoveRequestList>): MoveRequestList {
+    return MoveRequestList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<MoveRequestList>): MoveRequestList {
@@ -1906,6 +1990,10 @@ export const MoveRequestItem = {
     return obj;
   },
 
+  create(base?: DeepPartial<MoveRequestItem>): MoveRequestItem {
+    return MoveRequestItem.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MoveRequestItem>): MoveRequestItem {
     const message = createBaseMoveRequestItem();
     message.bucket = object.bucket ?? "";
@@ -1976,6 +2064,10 @@ export const MoveResponseList = {
     return obj;
   },
 
+  create(base?: DeepPartial<MoveResponseList>): MoveResponseList {
+    return MoveResponseList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MoveResponseList>): MoveResponseList {
     const message = createBaseMoveResponseList();
     message.response = object.response?.map((e) => MoveResponsePayloadWithStatus.fromPartial(e)) || [];
@@ -2035,6 +2127,10 @@ export const MoveResponsePayloadWithStatus = {
       (obj.payload = message.payload ? MoveResponseItem.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<MoveResponsePayloadWithStatus>): MoveResponsePayloadWithStatus {
+    return MoveResponsePayloadWithStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<MoveResponsePayloadWithStatus>): MoveResponsePayloadWithStatus {
@@ -2123,6 +2219,10 @@ export const MoveResponseItem = {
     return obj;
   },
 
+  create(base?: DeepPartial<MoveResponseItem>): MoveResponseItem {
+    return MoveResponseItem.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MoveResponseItem>): MoveResponseItem {
     const message = createBaseMoveResponseItem();
     message.bucket = object.bucket ?? "";
@@ -2192,7 +2292,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   get(
     request: GetRequest,
     context: CallContext & CallContextExt,
@@ -3765,7 +3865,7 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
+var tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -3782,10 +3882,10 @@ var globalThis: any = (() => {
 })();
 
 function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
   } else {
-    const bin = globalThis.atob(b64);
+    const bin = tsProtoGlobalThis.atob(b64);
     const arr = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; ++i) {
       arr[i] = bin.charCodeAt(i);
@@ -3795,14 +3895,14 @@ function bytesFromBase64(b64: string): Uint8Array {
 }
 
 function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
   } else {
     const bin: string[] = [];
     arr.forEach((byte) => {
       bin.push(String.fromCharCode(byte));
     });
-    return globalThis.btoa(bin.join(""));
+    return tsProtoGlobalThis.btoa(bin.join(""));
   }
 }
 

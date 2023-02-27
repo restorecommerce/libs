@@ -138,6 +138,10 @@ export const ProductCategory = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductCategory>): ProductCategory {
+    return ProductCategory.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
     const message = createBaseProductCategory();
     message.id = object.id ?? "";
@@ -215,6 +219,10 @@ export const ProductCategoryList = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductCategoryList>): ProductCategoryList {
+    return ProductCategoryList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
     const message = createBaseProductCategoryList();
     message.items = object.items?.map((e) => ProductCategory.fromPartial(e)) || [];
@@ -289,6 +297,10 @@ export const ProductCategoryListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductCategoryListResponse>): ProductCategoryListResponse {
+    return ProductCategoryListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductCategoryListResponse>): ProductCategoryListResponse {
     const message = createBaseProductCategoryListResponse();
     message.items = object.items?.map((e) => ProductCategoryResponse.fromPartial(e)) || [];
@@ -351,6 +363,10 @@ export const ProductCategoryResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductCategoryResponse>): ProductCategoryResponse {
+    return ProductCategoryResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductCategoryResponse>): ProductCategoryResponse {
     const message = createBaseProductCategoryResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -403,6 +419,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -448,6 +468,10 @@ export const Parent = {
     const obj: any = {};
     message.parentId !== undefined && (obj.parentId = message.parentId);
     return obj;
+  },
+
+  create(base?: DeepPartial<Parent>): Parent {
+    return Parent.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Parent>): Parent {
@@ -505,7 +529,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductCategoryListResponse>>;
   create(
     request: ProductCategoryList,

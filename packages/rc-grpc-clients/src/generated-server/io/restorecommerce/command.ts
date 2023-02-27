@@ -199,6 +199,10 @@ export const Command = {
     return obj;
   },
 
+  create(base?: DeepPartial<Command>): Command {
+    return Command.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Command>): Command {
     const message = createBaseCommand();
     message.id = object.id ?? "";
@@ -278,6 +282,10 @@ export const CommandParameter = {
     return obj;
   },
 
+  create(base?: DeepPartial<CommandParameter>): CommandParameter {
+    return CommandParameter.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
     const message = createBaseCommandParameter();
     message.field = object.field ?? "";
@@ -348,6 +356,10 @@ export const CommandList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CommandList>): CommandList {
+    return CommandList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CommandList>): CommandList {
@@ -424,6 +436,10 @@ export const CommandListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<CommandListResponse>): CommandListResponse {
+    return CommandListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
     const message = createBaseCommandListResponse();
     message.items = object.items?.map((e) => CommandResponse.fromPartial(e)) || [];
@@ -483,6 +499,10 @@ export const CommandResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Command.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CommandResponse>): CommandResponse {
+    return CommandResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
@@ -545,7 +565,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
   create(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

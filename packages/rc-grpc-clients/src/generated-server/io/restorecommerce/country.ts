@@ -80,6 +80,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -147,6 +151,10 @@ export const CountryList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CountryList>): CountryList {
+    return CountryList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CountryList>): CountryList {
@@ -223,6 +231,10 @@ export const CountryListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<CountryListResponse>): CountryListResponse {
+    return CountryListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CountryListResponse>): CountryListResponse {
     const message = createBaseCountryListResponse();
     message.items = object.items?.map((e) => CountryResponse.fromPartial(e)) || [];
@@ -282,6 +294,10 @@ export const CountryResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Country.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CountryResponse>): CountryResponse {
+    return CountryResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CountryResponse>): CountryResponse {
@@ -382,6 +398,10 @@ export const Country = {
     return obj;
   },
 
+  create(base?: DeepPartial<Country>): Country {
+    return Country.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Country>): Country {
     const message = createBaseCountry();
     message.id = object.id ?? "";
@@ -443,7 +463,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CountryListResponse>>;
   create(request: CountryList, context: CallContext & CallContextExt): Promise<DeepPartial<CountryListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

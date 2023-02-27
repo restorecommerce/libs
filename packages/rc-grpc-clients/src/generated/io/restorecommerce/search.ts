@@ -89,6 +89,10 @@ export const SearchRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<SearchRequest>): SearchRequest {
+    return SearchRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
     const message = createBaseSearchRequest();
     message.collection = object.collection ?? "";
@@ -145,6 +149,10 @@ export const SearchResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<SearchResponse>): SearchResponse {
+    return SearchResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<SearchResponse>): SearchResponse {
     const message = createBaseSearchResponse();
     message.data = object.data?.map((e) => Any.fromPartial(e)) || [];
@@ -169,7 +177,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   search(request: SearchRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SearchResponse>>;
 }
 

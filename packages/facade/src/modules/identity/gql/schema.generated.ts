@@ -735,7 +735,6 @@ export type IIoRestorecommerceUserActivateRequest = {
 };
 
 export type IIoRestorecommerceUserChangePasswordRequest = {
-  identifier?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
   newPassword?: InputMaybe<Scalars['String']>;
 };

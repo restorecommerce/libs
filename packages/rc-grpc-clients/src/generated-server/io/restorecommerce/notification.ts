@@ -37,8 +37,8 @@ export interface Notification {
   name: string;
   description: string;
   notification_channel_ids: string[];
-  email: string | undefined;
-  telephone_number: string | undefined;
+  email?: string | undefined;
+  telephone_number?: string | undefined;
   subject_template: string;
   body_template: string;
 }
@@ -81,6 +81,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -150,6 +154,10 @@ export const NotificationList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<NotificationList>): NotificationList {
+    return NotificationList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<NotificationList>): NotificationList {
@@ -226,6 +234,10 @@ export const NotificationListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<NotificationListResponse>): NotificationListResponse {
+    return NotificationListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<NotificationListResponse>): NotificationListResponse {
     const message = createBaseNotificationListResponse();
     message.items = object.items?.map((e) => NotificationResponse.fromPartial(e)) || [];
@@ -285,6 +297,10 @@ export const NotificationResponse = {
     message.items !== undefined && (obj.items = message.items ? Notification.toJSON(message.items) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<NotificationResponse>): NotificationResponse {
+    return NotificationResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<NotificationResponse>): NotificationResponse {
@@ -421,6 +437,10 @@ export const Notification = {
     return obj;
   },
 
+  create(base?: DeepPartial<Notification>): Notification {
+    return Notification.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Notification>): Notification {
     const message = createBaseNotification();
     message.id = object.id ?? "";
@@ -485,7 +505,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<NotificationListResponse>>;
   create(
     request: NotificationList,

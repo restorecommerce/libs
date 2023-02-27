@@ -1,5 +1,6 @@
 import KoaRouter from 'koa-router';
-import { InteractionResults, Provider } from 'oidc-provider';
+import { InteractionResults } from 'oidc-provider';
+import Provider from 'oidc-provider';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';

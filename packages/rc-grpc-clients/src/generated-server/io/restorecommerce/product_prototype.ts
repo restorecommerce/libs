@@ -123,6 +123,10 @@ export const ProductPrototype = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductPrototype>): ProductPrototype {
+    return ProductPrototype.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductPrototype>): ProductPrototype {
     const message = createBaseProductPrototype();
     message.id = object.id ?? "";
@@ -195,6 +199,10 @@ export const ProductPrototypeList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ProductPrototypeList>): ProductPrototypeList {
+    return ProductPrototypeList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductPrototypeList>): ProductPrototypeList {
@@ -271,6 +279,10 @@ export const ProductPrototypeListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductPrototypeListResponse>): ProductPrototypeListResponse {
+    return ProductPrototypeListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductPrototypeListResponse>): ProductPrototypeListResponse {
     const message = createBaseProductPrototypeListResponse();
     message.items = object.items?.map((e) => ProductPrototypeResponse.fromPartial(e)) || [];
@@ -333,6 +345,10 @@ export const ProductPrototypeResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductPrototypeResponse>): ProductPrototypeResponse {
+    return ProductPrototypeResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductPrototypeResponse>): ProductPrototypeResponse {
     const message = createBaseProductPrototypeResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -383,6 +399,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -440,7 +460,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductPrototypeListResponse>>;
   create(
     request: ProductPrototypeList,

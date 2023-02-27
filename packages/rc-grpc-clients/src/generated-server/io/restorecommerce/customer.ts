@@ -118,6 +118,10 @@ export const CustomerList = {
     return obj;
   },
 
+  create(base?: DeepPartial<CustomerList>): CustomerList {
+    return CustomerList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CustomerList>): CustomerList {
     const message = createBaseCustomerList();
     message.items = object.items?.map((e) => Customer.fromPartial(e)) || [];
@@ -192,6 +196,10 @@ export const CustomerListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<CustomerListResponse>): CustomerListResponse {
+    return CustomerListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CustomerListResponse>): CustomerListResponse {
     const message = createBaseCustomerListResponse();
     message.items = object.items?.map((e) => CustomerResponse.fromPartial(e)) || [];
@@ -251,6 +259,10 @@ export const CustomerResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Customer.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CustomerResponse>): CustomerResponse {
+    return CustomerResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CustomerResponse>): CustomerResponse {
@@ -340,6 +352,10 @@ export const Customer = {
     return obj;
   },
 
+  create(base?: DeepPartial<Customer>): Customer {
+    return Customer.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Customer>): Customer {
     const message = createBaseCustomer();
     message.id = object.id ?? "";
@@ -419,6 +435,10 @@ export const IndividualUser = {
     return obj;
   },
 
+  create(base?: DeepPartial<IndividualUser>): IndividualUser {
+    return IndividualUser.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
     const message = createBaseIndividualUser();
     message.user_id = object.user_id ?? "";
@@ -476,6 +496,10 @@ export const OrgUser = {
     message.user_id !== undefined && (obj.user_id = message.user_id);
     message.organization_id !== undefined && (obj.organization_id = message.organization_id);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrgUser>): OrgUser {
+    return OrgUser.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrgUser>): OrgUser {
@@ -550,6 +574,10 @@ export const Guest = {
     return obj;
   },
 
+  create(base?: DeepPartial<Guest>): Guest {
+    return Guest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Guest>): Guest {
     const message = createBaseGuest();
     message.guest = object.guest ?? false;
@@ -608,7 +636,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CustomerListResponse>>;
   create(request: CustomerList, context: CallContext & CallContextExt): Promise<DeepPartial<CustomerListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

@@ -364,6 +364,10 @@ export const Item = {
     return obj;
   },
 
+  create(base?: DeepPartial<Item>): Item {
+    return Item.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Item>): Item {
     const message = createBaseItem();
     message.productVariantBundleId = object.productVariantBundleId ?? "";
@@ -560,6 +564,10 @@ export const Order = {
     return obj;
   },
 
+  create(base?: DeepPartial<Order>): Order {
+    return Order.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Order>): Order {
     const message = createBaseOrder();
     message.id = object.id ?? "";
@@ -668,6 +676,10 @@ export const ShippingDetails = {
     return obj;
   },
 
+  create(base?: DeepPartial<ShippingDetails>): ShippingDetails {
+    return ShippingDetails.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ShippingDetails>): ShippingDetails {
     const message = createBaseShippingDetails();
     message.exportType = object.exportType ?? "";
@@ -746,6 +758,10 @@ export const TriggerFulfillmentRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
+    return TriggerFulfillmentRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
     const message = createBaseTriggerFulfillmentRequest();
     message.order = (object.order !== undefined && object.order !== null) ? Order.fromPartial(object.order) : undefined;
@@ -819,6 +835,10 @@ export const TriggerFulfillmentRequestList = {
     return obj;
   },
 
+  create(base?: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
+    return TriggerFulfillmentRequestList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
     const message = createBaseTriggerFulfillmentRequestList();
     message.items = object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
@@ -890,6 +910,10 @@ export const OrderList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrderList>): OrderList {
+    return OrderList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrderList>): OrderList {
@@ -966,6 +990,10 @@ export const OrderListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<OrderListResponse>): OrderListResponse {
+    return OrderListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
     const message = createBaseOrderListResponse();
     message.items = object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
@@ -1025,6 +1053,10 @@ export const OrderResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Order.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrderResponse>): OrderResponse {
+    return OrderResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrderResponse>): OrderResponse {
@@ -1093,6 +1125,10 @@ export const CancelRequestList = {
     return obj;
   },
 
+  create(base?: DeepPartial<CancelRequestList>): CancelRequestList {
+    return CancelRequestList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
     const message = createBaseCancelRequestList();
     message.ids = object.ids?.map((e) => e) || [];
@@ -1141,6 +1177,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1222,7 +1262,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   create(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   update(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;

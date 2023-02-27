@@ -87,6 +87,10 @@ export const CommandRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<CommandRequest>): CommandRequest {
+    return CommandRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
     const message = createBaseCommandRequest();
     message.name = object.name ?? "";
@@ -154,6 +158,10 @@ export const CommandResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<CommandResponse>): CommandResponse {
+    return CommandResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
     const message = createBaseCommandResponse();
     message.services = object.services?.map((e) => e) || [];
@@ -181,7 +189,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   command(request: CommandRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
 }
 

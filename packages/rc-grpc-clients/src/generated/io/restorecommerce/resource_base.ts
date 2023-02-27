@@ -358,6 +358,10 @@ export const FieldFilter = {
     return obj;
   },
 
+  create(base?: DeepPartial<FieldFilter>): FieldFilter {
+    return FieldFilter.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FieldFilter>): FieldFilter {
     const message = createBaseFieldFilter();
     message.name = object.name ?? "";
@@ -414,6 +418,10 @@ export const Sort = {
     message.field !== undefined && (obj.field = message.field);
     message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
     return obj;
+  },
+
+  create(base?: DeepPartial<Sort>): Sort {
+    return Sort.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Sort>): Sort {
@@ -502,6 +510,10 @@ export const Filter = {
     return obj;
   },
 
+  create(base?: DeepPartial<Filter>): Filter {
+    return Filter.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
     message.field = object.field ?? "";
@@ -565,6 +577,10 @@ export const FilterOp = {
     }
     message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
+  },
+
+  create(base?: DeepPartial<FilterOp>): FilterOp {
+    return FilterOp.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
@@ -635,6 +651,10 @@ export const Search = {
     }
     message.caseSensitive !== undefined && (obj.caseSensitive = message.caseSensitive);
     return obj;
+  },
+
+  create(base?: DeepPartial<Search>): Search {
+    return Search.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Search>): Search {
@@ -792,6 +812,10 @@ export const ReadRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<ReadRequest>): ReadRequest {
+    return ReadRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = createBaseReadRequest();
     message.offset = object.offset ?? 0;
@@ -900,6 +924,10 @@ export const DeleteRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<DeleteRequest>): DeleteRequest {
+    return DeleteRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = createBaseDeleteRequest();
     message.collection = object.collection ?? false;
@@ -966,6 +994,10 @@ export const DeleteResponse = {
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<DeleteResponse>): DeleteResponse {
+    return DeleteResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<DeleteResponse>): DeleteResponse {
@@ -1038,6 +1070,10 @@ export const ResourceList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ResourceList>): ResourceList {
+    return ResourceList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
@@ -1114,6 +1150,10 @@ export const ResourceListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ResourceListResponse>): ResourceListResponse {
+    return ResourceListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
     const message = createBaseResourceListResponse();
     message.items = object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
@@ -1173,6 +1213,10 @@ export const ResourceResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Resource.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ResourceResponse>): ResourceResponse {
+    return ResourceResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceResponse>): ResourceResponse {
@@ -1237,6 +1281,10 @@ export const Resource = {
     return obj;
   },
 
+  create(base?: DeepPartial<Resource>): Resource {
+    return Resource.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
     message.id = object.id ?? "";
@@ -1294,7 +1342,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
   create(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

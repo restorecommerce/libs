@@ -181,6 +181,10 @@ export const RequestInvoiceNumber = {
     return obj;
   },
 
+  create(base?: DeepPartial<RequestInvoiceNumber>): RequestInvoiceNumber {
+    return RequestInvoiceNumber.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RequestInvoiceNumber>): RequestInvoiceNumber {
     const message = createBaseRequestInvoiceNumber();
     message.context = (object.context !== undefined && object.context !== null)
@@ -233,6 +237,10 @@ export const InvoiceNumberResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<InvoiceNumberResponse>): InvoiceNumberResponse {
+    return InvoiceNumberResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<InvoiceNumberResponse>): InvoiceNumberResponse {
     const message = createBaseInvoiceNumberResponse();
     message.invoice_no = object.invoice_no ?? "";
@@ -278,6 +286,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -347,6 +359,10 @@ export const InvoiceList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<InvoiceList>): InvoiceList {
+    return InvoiceList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<InvoiceList>): InvoiceList {
@@ -423,6 +439,10 @@ export const InvoiceListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<InvoiceListResponse>): InvoiceListResponse {
+    return InvoiceListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<InvoiceListResponse>): InvoiceListResponse {
     const message = createBaseInvoiceListResponse();
     message.items = object.items?.map((e) => InvoiceResponse.fromPartial(e)) || [];
@@ -482,6 +502,10 @@ export const InvoiceResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Invoice.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<InvoiceResponse>): InvoiceResponse {
+    return InvoiceResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<InvoiceResponse>): InvoiceResponse {
@@ -630,6 +654,10 @@ export const Invoice = {
     return obj;
   },
 
+  create(base?: DeepPartial<Invoice>): Invoice {
+    return Invoice.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Invoice>): Invoice {
     const message = createBaseInvoice();
     message.id = object.id ?? "";
@@ -695,6 +723,10 @@ export const InvoicesPositionsData = {
       obj.invoices_positions_data = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
+    return InvoicesPositionsData.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
@@ -869,6 +901,10 @@ export const InvoicePositions = {
     return obj;
   },
 
+  create(base?: DeepPartial<InvoicePositions>): InvoicePositions {
+    return InvoicePositions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
     const message = createBaseInvoicePositions();
     message.id = object.id ?? "";
@@ -950,6 +986,10 @@ export const RecipientCustomer = {
     message.id !== undefined && (obj.id = message.id);
     message.customer_number !== undefined && (obj.customer_number = message.customer_number);
     return obj;
+  },
+
+  create(base?: DeepPartial<RecipientCustomer>): RecipientCustomer {
+    return RecipientCustomer.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RecipientCustomer>): RecipientCustomer {
@@ -1103,6 +1143,10 @@ export const BillingAddress = {
     return obj;
   },
 
+  create(base?: DeepPartial<BillingAddress>): BillingAddress {
+    return BillingAddress.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<BillingAddress>): BillingAddress {
     const message = createBaseBillingAddress();
     message.email = object.email ?? "";
@@ -1182,6 +1226,10 @@ export const InvoicePosition = {
     message.totalPrice !== undefined &&
       (obj.totalPrice = message.totalPrice ? InvoicePrice.toJSON(message.totalPrice) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<InvoicePosition>): InvoicePosition {
+    return InvoicePosition.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
@@ -1277,6 +1325,10 @@ export const InvoiceRow = {
     return obj;
   },
 
+  create(base?: DeepPartial<InvoiceRow>): InvoiceRow {
+    return InvoiceRow.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<InvoiceRow>): InvoiceRow {
     const message = createBaseInvoiceRow();
     message.product = object.product ?? "";
@@ -1336,6 +1388,10 @@ export const InvoicePrice = {
     return obj;
   },
 
+  create(base?: DeepPartial<InvoicePrice>): InvoicePrice {
+    return InvoicePrice.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<InvoicePrice>): InvoicePrice {
     const message = createBaseInvoicePrice();
     message.gross = object.gross ?? 0;
@@ -1386,6 +1442,10 @@ export const TriggerInvoices = {
       obj.ids = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<TriggerInvoices>): TriggerInvoices {
+    return TriggerInvoices.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TriggerInvoices>): TriggerInvoices {
@@ -1452,7 +1512,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   create(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

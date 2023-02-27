@@ -87,6 +87,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -154,6 +158,10 @@ export const ContactPointList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ContactPointList>): ContactPointList {
+    return ContactPointList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
@@ -230,6 +238,10 @@ export const ContactPointListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ContactPointListResponse>): ContactPointListResponse {
+    return ContactPointListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ContactPointListResponse>): ContactPointListResponse {
     const message = createBaseContactPointListResponse();
     message.items = object.items?.map((e) => ContactPointResponse.fromPartial(e)) || [];
@@ -289,6 +301,10 @@ export const ContactPointResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? ContactPoint.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ContactPointResponse>): ContactPointResponse {
+    return ContactPointResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ContactPointResponse>): ContactPointResponse {
@@ -419,6 +435,10 @@ export const ContactPoint = {
     return obj;
   },
 
+  create(base?: DeepPartial<ContactPoint>): ContactPoint {
+    return ContactPoint.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
     const message = createBaseContactPoint();
     message.id = object.id ?? "";
@@ -482,7 +502,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ContactPointListResponse>>;
   create(
     request: ContactPointList,

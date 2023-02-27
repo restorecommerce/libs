@@ -107,9 +107,9 @@ export interface Parcel {
 }
 
 export interface Label {
-  url: string | undefined;
-  pdf: string | undefined;
-  png:
+  url?: string | undefined;
+  pdf?: string | undefined;
+  png?:
     | string
     | undefined;
   /** filled on Order */
@@ -252,6 +252,10 @@ export const ShippingAddress = {
     return obj;
   },
 
+  create(base?: DeepPartial<ShippingAddress>): ShippingAddress {
+    return ShippingAddress.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ShippingAddress>): ShippingAddress {
     const message = createBaseShippingAddress();
     message.address = (object.address !== undefined && object.address !== null)
@@ -336,6 +340,10 @@ export const Item = {
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     return obj;
+  },
+
+  create(base?: DeepPartial<Item>): Item {
+    return Item.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Item>): Item {
@@ -443,6 +451,10 @@ export const Parcel = {
     return obj;
   },
 
+  create(base?: DeepPartial<Parcel>): Parcel {
+    return Parcel.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Parcel>): Parcel {
     const message = createBaseParcel();
     message.productId = object.productId ?? "";
@@ -538,6 +550,10 @@ export const Label = {
     return obj;
   },
 
+  create(base?: DeepPartial<Label>): Label {
+    return Label.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Label>): Label {
     const message = createBaseLabel();
     message.url = object.url ?? undefined;
@@ -629,6 +645,10 @@ export const Order = {
       (obj.receiver = message.receiver ? ShippingAddress.toJSON(message.receiver) : undefined);
     message.notify !== undefined && (obj.notify = message.notify);
     return obj;
+  },
+
+  create(base?: DeepPartial<Order>): Order {
+    return Order.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Order>): Order {
@@ -724,6 +744,10 @@ export const Fulfillment = {
     return obj;
   },
 
+  create(base?: DeepPartial<Fulfillment>): Fulfillment {
+    return Fulfillment.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Fulfillment>): Fulfillment {
     const message = createBaseFulfillment();
     message.id = object.id ?? "";
@@ -797,6 +821,10 @@ export const FulfillmentList = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentList>): FulfillmentList {
+    return FulfillmentList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentList>): FulfillmentList {
     const message = createBaseFulfillmentList();
     message.items = object.items?.map((e) => Fulfillment.fromPartial(e)) || [];
@@ -856,6 +884,10 @@ export const FulfillmentResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Fulfillment.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentResponse>): FulfillmentResponse {
+    return FulfillmentResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FulfillmentResponse>): FulfillmentResponse {
@@ -933,6 +965,10 @@ export const FulfillmentResponseList = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentResponseList>): FulfillmentResponseList {
+    return FulfillmentResponseList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentResponseList>): FulfillmentResponseList {
     const message = createBaseFulfillmentResponseList();
     message.items = object.items?.map((e) => FulfillmentResponse.fromPartial(e)) || [];
@@ -1006,6 +1042,10 @@ export const TrackingRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<TrackingRequest>): TrackingRequest {
+    return TrackingRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TrackingRequest>): TrackingRequest {
     const message = createBaseTrackingRequest();
     message.fulfillmentId = object.fulfillmentId ?? "";
@@ -1069,6 +1109,10 @@ export const TrackingRequestList = {
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TrackingRequestList>): TrackingRequestList {
+    return TrackingRequestList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TrackingRequestList>): TrackingRequestList {
@@ -1145,6 +1189,10 @@ export const Event = {
     message.details !== undefined && (obj.details = message.details ? Any.toJSON(message.details) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<Event>): Event {
+    return Event.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Event>): Event {
@@ -1231,6 +1279,10 @@ export const Tracking = {
     return obj;
   },
 
+  create(base?: DeepPartial<Tracking>): Tracking {
+    return Tracking.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Tracking>): Tracking {
     const message = createBaseTracking();
     message.shipmentNumber = object.shipmentNumber ?? "";
@@ -1308,6 +1360,10 @@ export const TrackingResult = {
     return obj;
   },
 
+  create(base?: DeepPartial<TrackingResult>): TrackingResult {
+    return TrackingResult.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TrackingResult>): TrackingResult {
     const message = createBaseTrackingResult();
     message.fulfillment = (object.fulfillment !== undefined && object.fulfillment !== null)
@@ -1376,6 +1432,10 @@ export const TrackingResultList = {
     return obj;
   },
 
+  create(base?: DeepPartial<TrackingResultList>): TrackingResultList {
+    return TrackingResultList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TrackingResultList>): TrackingResultList {
     const message = createBaseTrackingResultList();
     message.items = object.items?.map((e) => TrackingResult.fromPartial(e)) || [];
@@ -1440,6 +1500,10 @@ export const CancelRequestList = {
     return obj;
   },
 
+  create(base?: DeepPartial<CancelRequestList>): CancelRequestList {
+    return CancelRequestList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
     const message = createBaseCancelRequestList();
     message.ids = object.ids?.map((e) => e) || [];
@@ -1488,6 +1552,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1578,7 +1646,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   /** Returns a list of shipment IDs. */
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<FulfillmentResponseList>>;
   /** Creates fulfillment orders */
@@ -2858,7 +2926,7 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
+var tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -2883,7 +2951,7 @@ export type DeepPartial<T> = T extends Builtin ? T
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
 }

@@ -105,6 +105,10 @@ export const Manufacturer = {
     return obj;
   },
 
+  create(base?: DeepPartial<Manufacturer>): Manufacturer {
+    return Manufacturer.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Manufacturer>): Manufacturer {
     const message = createBaseManufacturer();
     message.id = object.id ?? "";
@@ -175,6 +179,10 @@ export const ManufacturerList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ManufacturerList>): ManufacturerList {
+    return ManufacturerList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ManufacturerList>): ManufacturerList {
@@ -251,6 +259,10 @@ export const ManufacturerListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ManufacturerListResponse>): ManufacturerListResponse {
+    return ManufacturerListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ManufacturerListResponse>): ManufacturerListResponse {
     const message = createBaseManufacturerListResponse();
     message.items = object.items?.map((e) => ManufacturerResponse.fromPartial(e)) || [];
@@ -312,6 +324,10 @@ export const ManufacturerResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ManufacturerResponse>): ManufacturerResponse {
+    return ManufacturerResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ManufacturerResponse>): ManufacturerResponse {
     const message = createBaseManufacturerResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -362,6 +378,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -419,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ManufacturerListResponse>>;
   create(
     request: ManufacturerList,

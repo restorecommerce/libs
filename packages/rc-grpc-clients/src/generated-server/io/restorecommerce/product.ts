@@ -162,6 +162,10 @@ export const MainProduct = {
     return obj;
   },
 
+  create(base?: DeepPartial<MainProduct>): MainProduct {
+    return MainProduct.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MainProduct>): MainProduct {
     const message = createBaseMainProduct();
     message.id = object.id ?? "";
@@ -312,6 +316,10 @@ export const Product = {
     return obj;
   },
 
+  create(base?: DeepPartial<Product>): Product {
+    return Product.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Product>): Product {
     const message = createBaseProduct();
     message.id = object.id ?? "";
@@ -370,6 +378,10 @@ export const Identifier = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Identifier>): Identifier {
+    return Identifier.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Identifier>): Identifier {
@@ -439,6 +451,10 @@ export const ProductList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ProductList>): ProductList {
+    return ProductList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductList>): ProductList {
@@ -515,6 +531,10 @@ export const ProductListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ProductListResponse>): ProductListResponse {
+    return ProductListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ProductListResponse>): ProductListResponse {
     const message = createBaseProductListResponse();
     message.items = object.items?.map((e) => ProductResponse.fromPartial(e)) || [];
@@ -574,6 +594,10 @@ export const ProductResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? MainProduct.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ProductResponse>): ProductResponse {
+    return ProductResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductResponse>): ProductResponse {
@@ -730,6 +754,10 @@ export const Variant = {
     return obj;
   },
 
+  create(base?: DeepPartial<Variant>): Variant {
+    return Variant.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Variant>): Variant {
     const message = createBaseVariant();
     message.id = object.id ?? "";
@@ -837,6 +865,10 @@ export const Bundle = {
     return obj;
   },
 
+  create(base?: DeepPartial<Bundle>): Bundle {
+    return Bundle.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Bundle>): Bundle {
     const message = createBaseBundle();
     message.id = object.id ?? "";
@@ -899,6 +931,10 @@ export const BundleProduct = {
     return obj;
   },
 
+  create(base?: DeepPartial<BundleProduct>): BundleProduct {
+    return BundleProduct.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<BundleProduct>): BundleProduct {
     const message = createBaseBundleProduct();
     message.product_id = object.product_id ?? "";
@@ -945,6 +981,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1002,7 +1042,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
   create(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

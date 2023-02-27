@@ -185,6 +185,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -252,6 +256,10 @@ export const PaymentMethodList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PaymentMethodList>): PaymentMethodList {
+    return PaymentMethodList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
@@ -328,6 +336,10 @@ export const PaymentMethodListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<PaymentMethodListResponse>): PaymentMethodListResponse {
+    return PaymentMethodListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PaymentMethodListResponse>): PaymentMethodListResponse {
     const message = createBasePaymentMethodListResponse();
     message.items = object.items?.map((e) => PaymentMethodResponse.fromPartial(e)) || [];
@@ -388,6 +400,10 @@ export const PaymentMethodResponse = {
       (obj.payload = message.payload ? PaymentMethod.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PaymentMethodResponse>): PaymentMethodResponse {
+    return PaymentMethodResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PaymentMethodResponse>): PaymentMethodResponse {
@@ -486,6 +502,10 @@ export const PaymentMethod = {
     return obj;
   },
 
+  create(base?: DeepPartial<PaymentMethod>): PaymentMethod {
+    return PaymentMethod.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PaymentMethod>): PaymentMethod {
     const message = createBasePaymentMethod();
     message.id = object.id ?? "";
@@ -546,7 +566,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PaymentMethodListResponse>>;
   create(
     request: PaymentMethodList,

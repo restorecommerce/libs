@@ -82,6 +82,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -149,6 +153,10 @@ export const TaxList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TaxList>): TaxList {
+    return TaxList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TaxList>): TaxList {
@@ -225,6 +233,10 @@ export const TaxListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<TaxListResponse>): TaxListResponse {
+    return TaxListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TaxListResponse>): TaxListResponse {
     const message = createBaseTaxListResponse();
     message.items = object.items?.map((e) => TaxResponse.fromPartial(e)) || [];
@@ -284,6 +296,10 @@ export const TaxResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Tax.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TaxResponse>): TaxResponse {
+    return TaxResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TaxResponse>): TaxResponse {
@@ -380,6 +396,10 @@ export const Tax = {
     return obj;
   },
 
+  create(base?: DeepPartial<Tax>): Tax {
+    return Tax.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Tax>): Tax {
     const message = createBaseTax();
     message.id = object.id ?? "";
@@ -441,7 +461,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TaxListResponse>>;
   create(request: TaxList, context: CallContext & CallContextExt): Promise<DeepPartial<TaxListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

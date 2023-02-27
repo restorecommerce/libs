@@ -151,6 +151,10 @@ export const FulfillmentCourier = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentCourier>): FulfillmentCourier {
+    return FulfillmentCourier.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentCourier>): FulfillmentCourier {
     const message = createBaseFulfillmentCourier();
     message.id = object.id ?? "";
@@ -229,6 +233,10 @@ export const FulfillmentCourierList = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentCourierList>): FulfillmentCourierList {
+    return FulfillmentCourierList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentCourierList>): FulfillmentCourierList {
     const message = createBaseFulfillmentCourierList();
     message.items = object.items?.map((e) => FulfillmentCourier.fromPartial(e)) || [];
@@ -289,6 +297,10 @@ export const FulfillmentCourierResponse = {
       (obj.payload = message.payload ? FulfillmentCourier.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentCourierResponse>): FulfillmentCourierResponse {
+    return FulfillmentCourierResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FulfillmentCourierResponse>): FulfillmentCourierResponse {
@@ -366,6 +378,10 @@ export const FulfillmentCourierResponseList = {
     return obj;
   },
 
+  create(base?: DeepPartial<FulfillmentCourierResponseList>): FulfillmentCourierResponseList {
+    return FulfillmentCourierResponseList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FulfillmentCourierResponseList>): FulfillmentCourierResponseList {
     const message = createBaseFulfillmentCourierResponseList();
     message.items = object.items?.map((e) => FulfillmentCourierResponse.fromPartial(e)) || [];
@@ -415,6 +431,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -472,7 +492,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,

@@ -123,6 +123,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -190,6 +194,10 @@ export const AddressList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<AddressList>): AddressList {
+    return AddressList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<AddressList>): AddressList {
@@ -266,6 +274,10 @@ export const AddressListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<AddressListResponse>): AddressListResponse {
+    return AddressListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<AddressListResponse>): AddressListResponse {
     const message = createBaseAddressListResponse();
     message.items = object.items?.map((e) => AddressResponse.fromPartial(e)) || [];
@@ -325,6 +337,10 @@ export const AddressResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Address.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<AddressResponse>): AddressResponse {
+    return AddressResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<AddressResponse>): AddressResponse {
@@ -389,6 +405,10 @@ export const GeoPoint = {
     return obj;
   },
 
+  create(base?: DeepPartial<GeoPoint>): GeoPoint {
+    return GeoPoint.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GeoPoint>): GeoPoint {
     const message = createBaseGeoPoint();
     message.latitude = object.latitude ?? 0;
@@ -447,6 +467,10 @@ export const AddressAddition = {
     return obj;
   },
 
+  create(base?: DeepPartial<AddressAddition>): AddressAddition {
+    return AddressAddition.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<AddressAddition>): AddressAddition {
     const message = createBaseAddressAddition();
     message.field1 = object.field1 ?? "";
@@ -493,6 +517,10 @@ export const BusinessAddress = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     return obj;
+  },
+
+  create(base?: DeepPartial<BusinessAddress>): BusinessAddress {
+    return BusinessAddress.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<BusinessAddress>): BusinessAddress {
@@ -568,6 +596,10 @@ export const ResidentialAddress = {
     return obj;
   },
 
+  create(base?: DeepPartial<ResidentialAddress>): ResidentialAddress {
+    return ResidentialAddress.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ResidentialAddress>): ResidentialAddress {
     const message = createBaseResidentialAddress();
     message.title = object.title ?? "";
@@ -636,6 +668,10 @@ export const PackStation = {
     return obj;
   },
 
+  create(base?: DeepPartial<PackStation>): PackStation {
+    return PackStation.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PackStation>): PackStation {
     const message = createBasePackStation();
     message.provider = object.provider ?? "";
@@ -701,6 +737,10 @@ export const ContactPerson = {
     message.email !== undefined && (obj.email = message.email);
     message.phone !== undefined && (obj.phone = message.phone);
     return obj;
+  },
+
+  create(base?: DeepPartial<ContactPerson>): ContactPerson {
+    return ContactPerson.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ContactPerson>): ContactPerson {
@@ -881,6 +921,10 @@ export const Address = {
     return obj;
   },
 
+  create(base?: DeepPartial<Address>): Address {
+    return Address.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Address>): Address {
     const message = createBaseAddress();
     message.id = object.id ?? "";
@@ -960,7 +1004,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<AddressListResponse>>;
   create(request: AddressList, context: CallContext & CallContextExt): Promise<DeepPartial<AddressListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

@@ -78,6 +78,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -145,6 +149,10 @@ export const LocaleList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<LocaleList>): LocaleList {
+    return LocaleList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<LocaleList>): LocaleList {
@@ -221,6 +229,10 @@ export const LocaleListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<LocaleListResponse>): LocaleListResponse {
+    return LocaleListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<LocaleListResponse>): LocaleListResponse {
     const message = createBaseLocaleListResponse();
     message.items = object.items?.map((e) => LocaleResponse.fromPartial(e)) || [];
@@ -280,6 +292,10 @@ export const LocaleResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Locale.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<LocaleResponse>): LocaleResponse {
+    return LocaleResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<LocaleResponse>): LocaleResponse {
@@ -360,6 +376,10 @@ export const Locale = {
     return obj;
   },
 
+  create(base?: DeepPartial<Locale>): Locale {
+    return Locale.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Locale>): Locale {
     const message = createBaseLocale();
     message.id = object.id ?? "";
@@ -419,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
   create(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

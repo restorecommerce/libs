@@ -1505,6 +1505,10 @@ export const SetupRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<SetupRequest>): SetupRequest {
+    return SetupRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<SetupRequest>): SetupRequest {
     const message = createBaseSetupRequest();
     message.ip = object.ip ?? "";
@@ -1583,6 +1587,10 @@ export const SetupPayload = {
     return obj;
   },
 
+  create(base?: DeepPartial<SetupPayload>): SetupPayload {
+    return SetupPayload.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<SetupPayload>): SetupPayload {
     const message = createBaseSetupPayload();
     message.token = object.token ?? "";
@@ -1640,6 +1648,10 @@ export const SetupPayloadStatus = {
     message.payload !== undefined && (obj.payload = message.payload ? SetupPayload.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<SetupPayloadStatus>): SetupPayloadStatus {
+    return SetupPayloadStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<SetupPayloadStatus>): SetupPayloadStatus {
@@ -1703,6 +1715,10 @@ export const SetupResponse = {
     message.operation_status !== undefined &&
       (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<SetupResponse>): SetupResponse {
+    return SetupResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<SetupResponse>): SetupResponse {
@@ -1815,6 +1831,10 @@ export const PaymentRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<PaymentRequest>): PaymentRequest {
+    return PaymentRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
     const message = createBasePaymentRequest();
     message.provider = object.provider ?? Provider.NO_PROVIDER;
@@ -1904,6 +1924,10 @@ export const CaptureRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<CaptureRequest>): CaptureRequest {
+    return CaptureRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
     const message = createBaseCaptureRequest();
     message.provider = object.provider ?? Provider.NO_PROVIDER;
@@ -1967,6 +1991,10 @@ export const PaymentPayload = {
     return obj;
   },
 
+  create(base?: DeepPartial<PaymentPayload>): PaymentPayload {
+    return PaymentPayload.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PaymentPayload>): PaymentPayload {
     const message = createBasePaymentPayload();
     message.payment_id = object.payment_id ?? "";
@@ -2024,6 +2052,10 @@ export const PaymentPayloadStatus = {
       (obj.payload = message.payload ? PaymentPayload.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PaymentPayloadStatus>): PaymentPayloadStatus {
+    return PaymentPayloadStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PaymentPayloadStatus>): PaymentPayloadStatus {
@@ -2087,6 +2119,10 @@ export const PaymentResponse = {
     message.operation_status !== undefined &&
       (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PaymentResponse>): PaymentResponse {
+    return PaymentResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PaymentResponse>): PaymentResponse {
@@ -2183,6 +2219,10 @@ export const PaymentCard = {
     return obj;
   },
 
+  create(base?: DeepPartial<PaymentCard>): PaymentCard {
+    return PaymentCard.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PaymentCard>): PaymentCard {
     const message = createBasePaymentCard();
     message.primary_number = object.primary_number ?? "";
@@ -2261,6 +2301,10 @@ export const Item = {
     return obj;
   },
 
+  create(base?: DeepPartial<Item>): Item {
+    return Item.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Item>): Item {
     const message = createBaseItem();
     message.name = object.name ?? "";
@@ -2324,7 +2368,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   /** Wrapper for setup_authorization in ActiveMerchant */
   setupAuthorization(request: SetupRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SetupResponse>>;
   /** Wrapper for setup_purchase in ActiveMerchant */

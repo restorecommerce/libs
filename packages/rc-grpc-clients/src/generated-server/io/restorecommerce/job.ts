@@ -370,6 +370,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -437,6 +441,10 @@ export const JobList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<JobList>): JobList {
+    return JobList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<JobList>): JobList {
@@ -513,6 +521,10 @@ export const JobListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobListResponse>): JobListResponse {
+    return JobListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobListResponse>): JobListResponse {
     const message = createBaseJobListResponse();
     message.items = object.items?.map((e) => JobResponse.fromPartial(e)) || [];
@@ -572,6 +584,10 @@ export const JobResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Job.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<JobResponse>): JobResponse {
+    return JobResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<JobResponse>): JobResponse {
@@ -658,6 +674,10 @@ export const Job = {
     message.when !== undefined && (obj.when = message.when);
     message.options !== undefined && (obj.options = message.options ? JobOptions.toJSON(message.options) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<Job>): Job {
+    return Job.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Job>): Job {
@@ -771,6 +791,10 @@ export const JobOptions = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobOptions>): JobOptions {
+    return JobOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobOptions>): JobOptions {
     const message = createBaseJobOptions();
     message.priority = object.priority ?? JobOptions_Priority.NORMAL;
@@ -878,6 +902,10 @@ export const Repeat = {
     return obj;
   },
 
+  create(base?: DeepPartial<Repeat>): Repeat {
+    return Repeat.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Repeat>): Repeat {
     const message = createBaseRepeat();
     message.every = object.every ?? 0;
@@ -947,6 +975,10 @@ export const Data = {
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.subject_id !== undefined && (obj.subject_id = message.subject_id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Data>): Data {
+    return Data.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Data>): Data {
@@ -1024,6 +1056,10 @@ export const ScheduledJob = {
     message.data !== undefined && (obj.data = message.data ? Data.toJSON(message.data) : undefined);
     message.schedule_type !== undefined && (obj.schedule_type = message.schedule_type);
     return obj;
+  },
+
+  create(base?: DeepPartial<ScheduledJob>): ScheduledJob {
+    return ScheduledJob.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ScheduledJob>): ScheduledJob {
@@ -1110,6 +1146,10 @@ export const JobDone = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobDone>): JobDone {
+    return JobDone.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobDone>): JobDone {
     const message = createBaseJobDone();
     message.id = object.id ?? "";
@@ -1189,6 +1229,10 @@ export const JobFailed = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobFailed>): JobFailed {
+    return JobFailed.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobFailed>): JobFailed {
     const message = createBaseJobFailed();
     message.id = object.id ?? "";
@@ -1247,6 +1291,10 @@ export const Backoff = {
     message.delay !== undefined && (obj.delay = message.delay);
     message.type !== undefined && (obj.type = backoff_TypeToJSON(message.type));
     return obj;
+  },
+
+  create(base?: DeepPartial<Backoff>): Backoff {
+    return Backoff.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Backoff>): Backoff {
@@ -1335,6 +1383,10 @@ export const JobReadRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobReadRequest>): JobReadRequest {
+    return JobReadRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobReadRequest>): JobReadRequest {
     const message = createBaseJobReadRequest();
     message.limit = object.limit ?? 0;
@@ -1404,6 +1456,10 @@ export const JobFilter = {
     return obj;
   },
 
+  create(base?: DeepPartial<JobFilter>): JobFilter {
+    return JobFilter.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<JobFilter>): JobFilter {
     const message = createBaseJobFilter();
     message.job_ids = object.job_ids?.map((e) => e) || [];
@@ -1464,7 +1520,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: JobReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
   create(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

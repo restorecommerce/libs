@@ -173,6 +173,10 @@ export const Target = {
     return obj;
   },
 
+  create(base?: DeepPartial<Target>): Target {
+    return Target.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Target>): Target {
     const message = createBaseTarget();
     message.subject = object.subject?.map((e) => Attribute.fromPartial(e)) || [];
@@ -299,6 +303,10 @@ export const Rule = {
     return obj;
   },
 
+  create(base?: DeepPartial<Rule>): Rule {
+    return Rule.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Rule>): Rule {
     const message = createBaseRule();
     message.id = object.id ?? "";
@@ -401,6 +409,10 @@ export const RuleRQ = {
     return obj;
   },
 
+  create(base?: DeepPartial<RuleRQ>): RuleRQ {
+    return RuleRQ.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
     const message = createBaseRuleRQ();
     message.id = object.id ?? "";
@@ -479,6 +491,10 @@ export const RuleList = {
     return obj;
   },
 
+  create(base?: DeepPartial<RuleList>): RuleList {
+    return RuleList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RuleList>): RuleList {
     const message = createBaseRuleList();
     message.items = object.items?.map((e) => Rule.fromPartial(e)) || [];
@@ -553,6 +569,10 @@ export const RuleListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<RuleListResponse>): RuleListResponse {
+    return RuleListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
     const message = createBaseRuleListResponse();
     message.items = object.items?.map((e) => RuleResponse.fromPartial(e)) || [];
@@ -612,6 +632,10 @@ export const RuleResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Rule.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<RuleResponse>): RuleResponse {
+    return RuleResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RuleResponse>): RuleResponse {
@@ -680,6 +704,10 @@ export const ContextQuery = {
     return obj;
   },
 
+  create(base?: DeepPartial<ContextQuery>): ContextQuery {
+    return ContextQuery.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
     const message = createBaseContextQuery();
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
@@ -736,7 +764,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
   create(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

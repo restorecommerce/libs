@@ -1,4 +1,4 @@
-import { Provider } from 'oidc-provider';
+import Provider from 'oidc-provider';
 import helmet from 'koa-helmet';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
@@ -74,7 +74,7 @@ export function createOIDC({
         const userService = (ctx as IdentityContext)?.identitySrvClient?.user;
         return {
           accountId: id,
-          claims: async (use, scope) => {
+          claims: async (use: any, scope: any) => {
             try {
               const user = await findUserById(userService, id);
               return {
@@ -117,7 +117,7 @@ export function createOIDC({
     // don't run into weird issues with multiple interactions open
     // at a time.
     interactions: {
-      url(ctx) {
+      url(ctx: any) {
         return `/interaction/${(ctx.oidc as any).uid}`;
       },
     },

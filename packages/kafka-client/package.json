@@ -30,7 +30,6 @@
   },
   "devDependencies": {
     "@types/async": "^3.2.18",
-    "@types/long": "^5.0.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "^18.13.0",
     "@typescript-eslint/eslint-plugin": "^5.52.0",

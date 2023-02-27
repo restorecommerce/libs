@@ -157,6 +157,10 @@ export const Attachment = {
     return obj;
   },
 
+  create(base?: DeepPartial<Attachment>): Attachment {
+    return Attachment.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Attachment>): Attachment {
     const message = createBaseAttachment();
     message.filename = object.filename ?? "";
@@ -265,6 +269,10 @@ export const NotificationReq = {
     return obj;
   },
 
+  create(base?: DeepPartial<NotificationReq>): NotificationReq {
+    return NotificationReq.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<NotificationReq>): NotificationReq {
     const message = createBaseNotificationReq();
     message.email = (object.email !== undefined && object.email !== null) ? Email.fromPartial(object.email) : undefined;
@@ -356,6 +364,10 @@ export const Email = {
     return obj;
   },
 
+  create(base?: DeepPartial<Email>): Email {
+    return Email.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Email>): Email {
     const message = createBaseEmail();
     message.to = object.to?.map((e) => e) || [];
@@ -406,6 +418,10 @@ export const Log = {
     return obj;
   },
 
+  create(base?: DeepPartial<Log>): Log {
+    return Log.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Log>): Log {
     const message = createBaseLog();
     message.level = object.level ?? "";
@@ -430,7 +446,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   /** direct notifications */
   send(request: NotificationReq, context: CallContext & CallContextExt): Promise<DeepPartial<OperationStatusObj>>;
 }
@@ -857,7 +873,7 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
+var tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -874,10 +890,10 @@ var globalThis: any = (() => {
 })();
 
 function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
   } else {
-    const bin = globalThis.atob(b64);
+    const bin = tsProtoGlobalThis.atob(b64);
     const arr = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; ++i) {
       arr[i] = bin.charCodeAt(i);
@@ -887,14 +903,14 @@ function bytesFromBase64(b64: string): Uint8Array {
 }
 
 function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
   } else {
     const bin: string[] = [];
     arr.forEach((byte) => {
       bin.push(String.fromCharCode(byte));
     });
-    return globalThis.btoa(bin.join(""));
+    return tsProtoGlobalThis.btoa(bin.join(""));
   }
 }
 

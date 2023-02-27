@@ -104,6 +104,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -177,6 +181,10 @@ export const DeleteOrgData = {
     return obj;
   },
 
+  create(base?: DeepPartial<DeleteOrgData>): DeleteOrgData {
+    return DeleteOrgData.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<DeleteOrgData>): DeleteOrgData {
     const message = createBaseDeleteOrgData();
     message.orgIds = object.orgIds?.map((e) => e) || [];
@@ -248,6 +256,10 @@ export const OrganizationList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrganizationList>): OrganizationList {
+    return OrganizationList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrganizationList>): OrganizationList {
@@ -324,6 +336,10 @@ export const OrganizationListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<OrganizationListResponse>): OrganizationListResponse {
+    return OrganizationListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<OrganizationListResponse>): OrganizationListResponse {
     const message = createBaseOrganizationListResponse();
     message.items = object.items?.map((e) => OrganizationResponse.fromPartial(e)) || [];
@@ -383,6 +399,10 @@ export const OrganizationResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Organization.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrganizationResponse>): OrganizationResponse {
+    return OrganizationResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrganizationResponse>): OrganizationResponse {
@@ -577,6 +597,10 @@ export const Organization = {
     return obj;
   },
 
+  create(base?: DeepPartial<Organization>): Organization {
+    return Organization.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = createBaseOrganization();
     message.id = object.id ?? "";
@@ -646,7 +670,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrganizationListResponse>>;
   create(
     request: OrganizationList,

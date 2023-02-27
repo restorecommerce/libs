@@ -150,6 +150,10 @@ export const Request = {
     return obj;
   },
 
+  create(base?: DeepPartial<Request>): Request {
+    return Request.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Request>): Request {
     const message = createBaseRequest();
     message.target = (object.target !== undefined && object.target !== null)
@@ -222,6 +226,10 @@ export const Context = {
     }
     message.security !== undefined && (obj.security = message.security ? Any.toJSON(message.security) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<Context>): Context {
+    return Context.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Context>): Context {
@@ -313,6 +321,10 @@ export const Response = {
     return obj;
   },
 
+  create(base?: DeepPartial<Response>): Response {
+    return Response.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Response>): Response {
     const message = createBaseResponse();
     message.decision = object.decision ?? Response_Decision.PERMIT;
@@ -394,6 +406,10 @@ export const ReverseQuery = {
     return obj;
   },
 
+  create(base?: DeepPartial<ReverseQuery>): ReverseQuery {
+    return ReverseQuery.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
     const message = createBaseReverseQuery();
     message.policy_sets = object.policy_sets?.map((e) => PolicySetRQ.fromPartial(e)) || [];
@@ -429,7 +445,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   isAllowed(request: Request, context: CallContext & CallContextExt): Promise<DeepPartial<Response>>;
   whatIsAllowed(request: Request, context: CallContext & CallContextExt): Promise<DeepPartial<ReverseQuery>>;
 }

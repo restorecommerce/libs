@@ -77,6 +77,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -144,6 +148,10 @@ export const TimezoneList = {
     message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TimezoneList>): TimezoneList {
+    return TimezoneList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TimezoneList>): TimezoneList {
@@ -220,6 +228,10 @@ export const TimezoneListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<TimezoneListResponse>): TimezoneListResponse {
+    return TimezoneListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TimezoneListResponse>): TimezoneListResponse {
     const message = createBaseTimezoneListResponse();
     message.items = object.items?.map((e) => TimezoneResponse.fromPartial(e)) || [];
@@ -279,6 +291,10 @@ export const TimezoneResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Timezone.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TimezoneResponse>): TimezoneResponse {
+    return TimezoneResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TimezoneResponse>): TimezoneResponse {
@@ -351,6 +367,10 @@ export const Timezone = {
     return obj;
   },
 
+  create(base?: DeepPartial<Timezone>): Timezone {
+    return Timezone.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Timezone>): Timezone {
     const message = createBaseTimezone();
     message.id = object.id ?? "";
@@ -409,7 +429,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TimezoneListResponse>>;
   create(request: TimezoneList, context: CallContext & CallContextExt): Promise<DeepPartial<TimezoneListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

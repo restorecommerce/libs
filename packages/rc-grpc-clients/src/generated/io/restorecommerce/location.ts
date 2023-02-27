@@ -92,6 +92,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -159,6 +163,10 @@ export const LocationList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<LocationList>): LocationList {
+    return LocationList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<LocationList>): LocationList {
@@ -235,6 +243,10 @@ export const LocationListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<LocationListResponse>): LocationListResponse {
+    return LocationListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<LocationListResponse>): LocationListResponse {
     const message = createBaseLocationListResponse();
     message.items = object.items?.map((e) => LocationResponse.fromPartial(e)) || [];
@@ -294,6 +306,10 @@ export const LocationResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Location.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<LocationResponse>): LocationResponse {
+    return LocationResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<LocationResponse>): LocationResponse {
@@ -424,6 +440,10 @@ export const Location = {
     return obj;
   },
 
+  create(base?: DeepPartial<Location>): Location {
+    return Location.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Location>): Location {
     const message = createBaseLocation();
     message.id = object.id ?? "";
@@ -488,7 +508,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<LocationListResponse>>;
   create(request: LocationList, context: CallContext & CallContextExt): Promise<DeepPartial<LocationListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

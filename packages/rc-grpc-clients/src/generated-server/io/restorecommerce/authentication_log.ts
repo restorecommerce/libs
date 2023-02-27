@@ -113,6 +113,10 @@ export const AuthenticationLogList = {
     return obj;
   },
 
+  create(base?: DeepPartial<AuthenticationLogList>): AuthenticationLogList {
+    return AuthenticationLogList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<AuthenticationLogList>): AuthenticationLogList {
     const message = createBaseAuthenticationLogList();
     message.items = object.items?.map((e) => AuthenticationLog.fromPartial(e)) || [];
@@ -187,6 +191,10 @@ export const AuthenticationLogListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<AuthenticationLogListResponse>): AuthenticationLogListResponse {
+    return AuthenticationLogListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<AuthenticationLogListResponse>): AuthenticationLogListResponse {
     const message = createBaseAuthenticationLogListResponse();
     message.items = object.items?.map((e) => AuthenticationLogResponse.fromPartial(e)) || [];
@@ -247,6 +255,10 @@ export const AuthenticationLogResponse = {
       (obj.payload = message.payload ? AuthenticationLog.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<AuthenticationLogResponse>): AuthenticationLogResponse {
+    return AuthenticationLogResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<AuthenticationLogResponse>): AuthenticationLogResponse {
@@ -386,6 +398,10 @@ export const AuthenticationLog = {
     return obj;
   },
 
+  create(base?: DeepPartial<AuthenticationLog>): AuthenticationLog {
+    return AuthenticationLog.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<AuthenticationLog>): AuthenticationLog {
     const message = createBaseAuthenticationLog();
     message.id = object.id ?? "";
@@ -440,6 +456,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -498,7 +518,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,

@@ -9,7 +9,7 @@ export const protobufPackage = "grpc.reflection.v1alpha";
 export interface ServerReflectionRequest {
   host: string;
   /** / Find a proto file by the file name. */
-  fileByFilename:
+  fileByFilename?:
     | string
     | undefined;
   /**
@@ -17,7 +17,7 @@ export interface ServerReflectionRequest {
    * / This field should be a fully-qualified symbol name
    * / (e.g. <package>.<service>[.<method>] or <package>.<type>).
    */
-  fileContainingSymbol:
+  fileContainingSymbol?:
     | string
     | undefined;
   /**
@@ -37,14 +37,14 @@ export interface ServerReflectionRequest {
    * / This field should be a fully-qualified type name. The format is
    * / <package>.<type>
    */
-  allExtensionNumbersOfType:
+  allExtensionNumbersOfType?:
     | string
     | undefined;
   /**
    * / List the full names of registered services. The content will not be
    * / checked.
    */
-  listServices: string | undefined;
+  listServices?: string | undefined;
 }
 
 /**
@@ -240,6 +240,10 @@ export const ServerReflectionRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<ServerReflectionRequest>): ServerReflectionRequest {
+    return ServerReflectionRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ServerReflectionRequest>): ServerReflectionRequest {
     const message = createBaseServerReflectionRequest();
     message.host = object.host ?? "";
@@ -303,6 +307,10 @@ export const ExtensionRequest = {
     message.containingType !== undefined && (obj.containingType = message.containingType);
     message.extensionNumber !== undefined && (obj.extensionNumber = Math.round(message.extensionNumber));
     return obj;
+  },
+
+  create(base?: DeepPartial<ExtensionRequest>): ExtensionRequest {
+    return ExtensionRequest.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ExtensionRequest>): ExtensionRequest {
@@ -420,6 +428,10 @@ export const ServerReflectionResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ServerReflectionResponse>): ServerReflectionResponse {
+    return ServerReflectionResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ServerReflectionResponse>): ServerReflectionResponse {
     const message = createBaseServerReflectionResponse();
     message.validHost = object.validHost ?? "";
@@ -494,6 +506,10 @@ export const FileDescriptorResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<FileDescriptorResponse>): FileDescriptorResponse {
+    return FileDescriptorResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FileDescriptorResponse>): FileDescriptorResponse {
     const message = createBaseFileDescriptorResponse();
     message.fileDescriptorProto = object.fileDescriptorProto?.map((e) => e) || [];
@@ -564,6 +580,10 @@ export const ExtensionNumberResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ExtensionNumberResponse>): ExtensionNumberResponse {
+    return ExtensionNumberResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ExtensionNumberResponse>): ExtensionNumberResponse {
     const message = createBaseExtensionNumberResponse();
     message.baseTypeName = object.baseTypeName ?? "";
@@ -616,6 +636,10 @@ export const ListServiceResponse = {
       obj.service = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<ListServiceResponse>): ListServiceResponse {
+    return ListServiceResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ListServiceResponse>): ListServiceResponse {
@@ -675,6 +699,10 @@ export const ServiceResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ServiceResponse>): ServiceResponse {
+    return ServiceResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ServiceResponse>): ServiceResponse {
     const message = createBaseServiceResponse();
     message.name = object.name ?? "";
@@ -731,6 +759,10 @@ export const ErrorResponse = {
     message.errorCode !== undefined && (obj.errorCode = Math.round(message.errorCode));
     message.errorMessage !== undefined && (obj.errorMessage = message.errorMessage);
     return obj;
+  },
+
+  create(base?: DeepPartial<ErrorResponse>): ErrorResponse {
+    return ErrorResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ErrorResponse>): ErrorResponse {
@@ -1378,7 +1410,7 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
+var tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -1395,10 +1427,10 @@ var globalThis: any = (() => {
 })();
 
 function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
   } else {
-    const bin = globalThis.atob(b64);
+    const bin = tsProtoGlobalThis.atob(b64);
     const arr = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; ++i) {
       arr[i] = bin.charCodeAt(i);
@@ -1408,14 +1440,14 @@ function bytesFromBase64(b64: string): Uint8Array {
 }
 
 function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
   } else {
     const bin: string[] = [];
     arr.forEach((byte) => {
       bin.push(String.fromCharCode(byte));
     });
-    return globalThis.btoa(bin.join(""));
+    return tsProtoGlobalThis.btoa(bin.join(""));
   }
 }
 

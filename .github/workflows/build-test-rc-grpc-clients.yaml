@@ -1,6 +1,7 @@
 name: build-test-rc-grpc-clients
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/rc-grpc-clients/**'

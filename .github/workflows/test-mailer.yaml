@@ -1,6 +1,7 @@
 name: test-mailer
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/mailer/**'

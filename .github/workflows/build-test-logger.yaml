@@ -1,6 +1,7 @@
 name: build-test-logger
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/logger/**'

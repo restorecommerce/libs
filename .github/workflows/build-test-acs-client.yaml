@@ -1,6 +1,7 @@
 name: build-test-acs-client
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/acs-client/**'

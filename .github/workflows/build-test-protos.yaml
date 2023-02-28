@@ -1,6 +1,7 @@
 name: build-test-protos
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/protos/**'

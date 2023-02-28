@@ -1,6 +1,7 @@
 name: build-test-service-config
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/service-config/**'

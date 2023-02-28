@@ -1,6 +1,7 @@
 name: test-koa-req-res-logger
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/koa-req-res-logger/**'

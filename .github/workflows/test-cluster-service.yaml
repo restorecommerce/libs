@@ -1,6 +1,7 @@
 name: test-cluster-service
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/cluster-service/**'

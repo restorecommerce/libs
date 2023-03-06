@@ -173,8 +173,6 @@ export interface SendInvitationEmailRequest {
 }
 
 export interface ChangePasswordRequest {
-  /** / user name or email */
-  identifier: string;
   password: string;
   new_password: string;
   subject?: Subject;
@@ -1229,7 +1227,7 @@ export const SendInvitationEmailRequest = {
 };
 
 function createBaseChangePasswordRequest(): ChangePasswordRequest {
-  return { identifier: "", password: "", new_password: "", subject: undefined };
+  return { password: "", new_password: "", subject: undefined };
 }
 
 export const ChangePasswordRequest = {
@@ -1237,9 +1235,6 @@ export const ChangePasswordRequest = {
     message: ChangePasswordRequest,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.identifier !== "") {
-      writer.uint32(10).string(message.identifier);
-    }
     if (message.password !== "") {
       writer.uint32(18).string(message.password);
     }
@@ -1262,9 +1257,6 @@ export const ChangePasswordRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1:
-          message.identifier = reader.string();
-          break;
         case 2:
           message.password = reader.string();
           break;
@@ -1284,7 +1276,6 @@ export const ChangePasswordRequest = {
 
   fromJSON(object: any): ChangePasswordRequest {
     return {
-      identifier: isSet(object.identifier) ? String(object.identifier) : "",
       password: isSet(object.password) ? String(object.password) : "",
       new_password: isSet(object.new_password)
         ? String(object.new_password)
@@ -1297,7 +1288,6 @@ export const ChangePasswordRequest = {
 
   toJSON(message: ChangePasswordRequest): unknown {
     const obj: any = {};
-    message.identifier !== undefined && (obj.identifier = message.identifier);
     message.password !== undefined && (obj.password = message.password);
     message.new_password !== undefined &&
       (obj.new_password = message.new_password);
@@ -1312,7 +1302,6 @@ export const ChangePasswordRequest = {
     object: DeepPartial<ChangePasswordRequest>
   ): ChangePasswordRequest {
     const message = createBaseChangePasswordRequest();
-    message.identifier = object.identifier ?? "";
     message.password = object.password ?? "";
     message.new_password = object.new_password ?? "";
     message.subject =
@@ -4396,19 +4385,6 @@ export const protoMetadata: ProtoMetadata = {
         name: "ChangePasswordRequest",
         field: [
           {
-            name: "identifier",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "identifier",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
             name: "password",
             number: 2,
             label: 1,
@@ -6273,57 +6249,50 @@ export const protoMetadata: ProtoMetadata = {
           leadingDetachedComments: [],
         },
         {
-          path: [4, 9, 2, 0],
-          span: [131, 2, 24],
-          leadingComments: "",
-          trailingComments: "/ user name or email\n",
-          leadingDetachedComments: [],
-        },
-        {
           path: [4, 10, 2, 0],
-          span: [138, 2, 24],
+          span: [137, 2, 24],
           leadingComments: "",
           trailingComments: " user name or email\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 11, 2, 0],
-          span: [143, 2, 24],
+          span: [142, 2, 24],
           leadingComments: "",
           trailingComments: " user name or email\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 12, 2, 0],
-          span: [150, 2, 24],
+          span: [149, 2, 24],
           leadingComments: "",
           trailingComments: " user name or email\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 13, 2, 0],
-          span: [156, 2, 24],
+          span: [155, 2, 24],
           leadingComments: "",
           trailingComments: " user name or email\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 14, 2, 0],
-          span: [162, 2, 24],
+          span: [161, 2, 24],
           leadingComments: "",
           trailingComments: "/ User ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 15, 2, 0],
-          span: [167, 2, 24],
+          span: [166, 2, 24],
           leadingComments: "",
           trailingComments: "/ User name or email\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 16],
-          span: [179, 0, 181, 1],
+          span: [178, 0, 180, 1],
           leadingComments:
             "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
           trailingComments: "",
@@ -6331,7 +6300,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 17],
-          span: [189, 0, 192, 1],
+          span: [188, 0, 191, 1],
           leadingComments:
             "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
           trailingComments: "",
@@ -6339,84 +6308,84 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 17, 2, 0],
-          span: [190, 2, 16],
+          span: [189, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 18, 2, 0],
-          span: [195, 2, 16],
+          span: [194, 2, 16],
           leadingComments: "",
           trailingComments: " User ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 19],
-          span: [201, 0, 205, 1],
+          span: [200, 0, 204, 1],
           leadingComments: "*\n User email id changed event.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 20, 2, 0],
-          span: [208, 2, 16],
+          span: [207, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 21],
-          span: [215, 0, 219, 1],
+          span: [214, 0, 218, 1],
           leadingComments: "*\n A list of User.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 26],
-          span: [246, 0, 248, 1],
+          span: [245, 0, 247, 1],
           leadingComments: "*\n User activation request.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 26, 2, 0],
-          span: [247, 2, 16],
+          span: [246, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28],
-          span: [259, 0, 310, 1],
+          span: [258, 0, 309, 1],
           leadingComments: "*\n A User resource.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 0],
-          span: [268, 2, 16],
+          span: [267, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 2],
-          span: [270, 2, 18],
+          span: [269, 2, 18],
           leadingComments: "",
           trailingComments: " The name of the user, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 5],
-          span: [273, 2, 19],
+          span: [272, 2, 19],
           leadingComments: "",
           trailingComments: "/ Email address, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 6],
-          span: [274, 2, 23],
+          span: [273, 2, 23],
           leadingComments: "",
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
@@ -6424,7 +6393,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 7],
-          span: [275, 2, 18],
+          span: [274, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ If the user was activated via the activation process\n",
@@ -6432,7 +6401,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 8],
-          span: [276, 2, 29],
+          span: [275, 2, 29],
           leadingComments: "",
           trailingComments:
             "/ Activation code used in the activation process\n",
@@ -6440,21 +6409,21 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 9],
-          span: [277, 2, 23],
+          span: [276, 2, 23],
           leadingComments: "",
           trailingComments: "/ Raw password, not stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 10],
-          span: [278, 2, 28],
+          span: [277, 2, 28],
           leadingComments: "",
           trailingComments: "/ Encrypted password, stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 11],
-          span: [279, 2, 74],
+          span: [278, 2, 74],
           leadingComments: "",
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
@@ -6462,28 +6431,28 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 12],
-          span: [280, 2, 288, 4],
+          span: [279, 2, 287, 4],
           leadingComments: "",
           trailingComments: " timezone_id specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 13],
-          span: [289, 2, 297, 4],
+          span: [288, 2, 296, 4],
           leadingComments: "",
           trailingComments: " locale specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 14],
-          span: [298, 2, 28],
+          span: [297, 2, 28],
           leadingComments: "",
           trailingComments: " default hierarchical scope\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 15],
-          span: [299, 2, 28],
+          span: [298, 2, 28],
           leadingComments: "",
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
@@ -6491,7 +6460,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 16],
-          span: [300, 2, 18],
+          span: [299, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
@@ -6499,70 +6468,70 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 28, 2, 19],
-          span: [303, 2, 19],
+          span: [302, 2, 19],
           leadingComments: "",
           trailingComments: " For user invitation\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 20],
-          span: [304, 2, 35],
+          span: [303, 2, 35],
           leadingComments: "",
           trailingComments: " user who is inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 21],
-          span: [305, 2, 41],
+          span: [304, 2, 41],
           leadingComments: "",
           trailingComments: " First name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 22],
-          span: [306, 2, 40],
+          span: [305, 2, 40],
           leadingComments: "",
           trailingComments: " Last name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 28, 2, 25],
-          span: [309, 2, 32],
+          span: [308, 2, 32],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29],
-          span: [315, 0, 359, 1],
+          span: [314, 0, 358, 1],
           leadingComments: "*\n A User resource with role\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 0],
-          span: [316, 2, 16],
+          span: [315, 2, 16],
           leadingComments: "",
           trailingComments: "/ User ID, unique, key\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 2],
-          span: [318, 2, 18],
+          span: [317, 2, 18],
           leadingComments: "",
           trailingComments: " The name of the user, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 5],
-          span: [321, 2, 19],
+          span: [320, 2, 19],
           leadingComments: "",
           trailingComments: "/ Email address, can be used for login\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 6],
-          span: [322, 2, 23],
+          span: [321, 2, 23],
           leadingComments: "",
           trailingComments:
             "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
@@ -6570,7 +6539,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 7],
-          span: [323, 2, 18],
+          span: [322, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ If the user was activated via the activation process\n",
@@ -6578,7 +6547,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 8],
-          span: [324, 2, 29],
+          span: [323, 2, 29],
           leadingComments: "",
           trailingComments:
             "/ Activation code used in the activation process\n",
@@ -6586,21 +6555,21 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 9],
-          span: [325, 2, 23],
+          span: [324, 2, 23],
           leadingComments: "",
           trailingComments: "/ Raw password, not stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 10],
-          span: [326, 2, 28],
+          span: [325, 2, 28],
           leadingComments: "",
           trailingComments: "/ Encrypted password, stored\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 11],
-          span: [327, 2, 74],
+          span: [326, 2, 74],
           leadingComments: "",
           trailingComments:
             " A user can have multiple roles and different attributes coupled with each role\n",
@@ -6608,28 +6577,28 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 12],
-          span: [328, 2, 336, 4],
+          span: [327, 2, 335, 4],
           leadingComments: "",
           trailingComments: " timezone_id specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 13],
-          span: [337, 2, 345, 4],
+          span: [336, 2, 344, 4],
           leadingComments: "",
           trailingComments: " locale specifications\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 14],
-          span: [346, 2, 28],
+          span: [345, 2, 28],
           leadingComments: "",
           trailingComments: " default hierarchical scope\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 15],
-          span: [347, 2, 28],
+          span: [346, 2, 28],
           leadingComments: "",
           trailingComments:
             " true in case in case of `register`; set to false after activation\n",
@@ -6637,7 +6606,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 16],
-          span: [348, 2, 18],
+          span: [347, 2, 18],
           leadingComments: "",
           trailingComments:
             "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
@@ -6645,35 +6614,35 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 29, 2, 19],
-          span: [351, 2, 19],
+          span: [350, 2, 19],
           leadingComments: "",
           trailingComments: " For user invitation\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 20],
-          span: [352, 2, 35],
+          span: [351, 2, 35],
           leadingComments: "",
           trailingComments: " user who is inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 21],
-          span: [353, 2, 41],
+          span: [352, 2, 41],
           leadingComments: "",
           trailingComments: " First name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 22],
-          span: [354, 2, 40],
+          span: [353, 2, 40],
           leadingComments: "",
           trailingComments: " Last name of user inviting\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 29, 2, 25],
-          span: [357, 2, 32],
+          span: [356, 2, 32],
           leadingComments: "",
           trailingComments: "/ additional data\n",
           leadingDetachedComments: [],

@@ -129,7 +129,6 @@ message SendInvitationEmailRequest {
 }
 
 message ChangePasswordRequest {
-  string identifier = 1; /// user name or email
   string password = 2;
   string new_password = 3;
   io.restorecommerce.auth.Subject subject = 4;

@@ -105,6 +105,10 @@ export const PriceGroup = {
     return obj;
   },
 
+  create(base?: DeepPartial<PriceGroup>): PriceGroup {
+    return PriceGroup.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PriceGroup>): PriceGroup {
     const message = createBasePriceGroup();
     message.id = object.id ?? "";
@@ -175,6 +179,10 @@ export const PriceGroupList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PriceGroupList>): PriceGroupList {
+    return PriceGroupList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PriceGroupList>): PriceGroupList {
@@ -251,6 +259,10 @@ export const PriceGroupListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<PriceGroupListResponse>): PriceGroupListResponse {
+    return PriceGroupListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PriceGroupListResponse>): PriceGroupListResponse {
     const message = createBasePriceGroupListResponse();
     message.items = object.items?.map((e) => PriceGroupResponse.fromPartial(e)) || [];
@@ -312,6 +324,10 @@ export const PriceGroupResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<PriceGroupResponse>): PriceGroupResponse {
+    return PriceGroupResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PriceGroupResponse>): PriceGroupResponse {
     const message = createBasePriceGroupResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -362,6 +378,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -419,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PriceGroupListResponse>>;
   create(request: PriceGroupList, context: CallContext & CallContextExt): Promise<DeepPartial<PriceGroupListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

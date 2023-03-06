@@ -1,6 +1,7 @@
 name: build-test-kafka-client
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/kafka-client/**'

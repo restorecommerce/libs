@@ -88,6 +88,10 @@ export const ServicesResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ServicesResponse>): ServicesResponse {
+    return ServicesResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ServicesResponse>): ServicesResponse {
     const message = createBaseServicesResponse();
     message.services = object.services?.map((e) => e) || [];
@@ -150,6 +154,10 @@ export const GenerateLinksResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<GenerateLinksResponse>): GenerateLinksResponse {
+    return GenerateLinksResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GenerateLinksResponse>): GenerateLinksResponse {
     const message = createBaseGenerateLinksResponse();
     message.links = Object.entries(object.links ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
@@ -207,6 +215,10 @@ export const GenerateLinksResponse_LinksEntry = {
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
     return obj;
+  },
+
+  create(base?: DeepPartial<GenerateLinksResponse_LinksEntry>): GenerateLinksResponse_LinksEntry {
+    return GenerateLinksResponse_LinksEntry.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<GenerateLinksResponse_LinksEntry>): GenerateLinksResponse_LinksEntry {
@@ -273,6 +285,10 @@ export const ExchangeCodeRequest = {
     message.code !== undefined && (obj.code = message.code);
     message.state !== undefined && (obj.state = message.state);
     return obj;
+  },
+
+  create(base?: DeepPartial<ExchangeCodeRequest>): ExchangeCodeRequest {
+    return ExchangeCodeRequest.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ExchangeCodeRequest>): ExchangeCodeRequest {
@@ -342,6 +358,10 @@ export const ExchangeCodeResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ExchangeCodeResponse>): ExchangeCodeResponse {
+    return ExchangeCodeResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ExchangeCodeResponse>): ExchangeCodeResponse {
     const message = createBaseExchangeCodeResponse();
     message.user = (object.user !== undefined && object.user !== null)
@@ -405,6 +425,10 @@ export const GetTokenRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<GetTokenRequest>): GetTokenRequest {
+    return GetTokenRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GetTokenRequest>): GetTokenRequest {
     const message = createBaseGetTokenRequest();
     message.subject = (object.subject !== undefined && object.subject !== null)
@@ -465,6 +489,10 @@ export const GetTokenResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<GetTokenResponse>): GetTokenResponse {
+    return GetTokenResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GetTokenResponse>): GetTokenResponse {
     const message = createBaseGetTokenResponse();
     message.status = (object.status !== undefined && object.status !== null)
@@ -515,7 +543,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   availableServices(request: Empty, context: CallContext & CallContextExt): Promise<DeepPartial<ServicesResponse>>;
   generateLinks(request: Empty, context: CallContext & CallContextExt): Promise<DeepPartial<GenerateLinksResponse>>;
   exchangeCode(

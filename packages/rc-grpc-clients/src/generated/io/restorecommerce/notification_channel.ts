@@ -35,9 +35,9 @@ export interface NotificationChannel {
   meta?: Meta;
   name: string;
   description: string;
-  email: string | undefined;
-  sms: string | undefined;
-  webhook: string | undefined;
+  email?: string | undefined;
+  sms?: string | undefined;
+  webhook?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -78,6 +78,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -147,6 +151,10 @@ export const NotificationChannelList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<NotificationChannelList>): NotificationChannelList {
+    return NotificationChannelList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<NotificationChannelList>): NotificationChannelList {
@@ -223,6 +231,10 @@ export const NotificationChannelListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<NotificationChannelListResponse>): NotificationChannelListResponse {
+    return NotificationChannelListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<NotificationChannelListResponse>): NotificationChannelListResponse {
     const message = createBaseNotificationChannelListResponse();
     message.items = object.items?.map((e) => NotificationChannelResponse.fromPartial(e)) || [];
@@ -282,6 +294,10 @@ export const NotificationChannelResponse = {
     message.items !== undefined && (obj.items = message.items ? NotificationChannel.toJSON(message.items) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<NotificationChannelResponse>): NotificationChannelResponse {
+    return NotificationChannelResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<NotificationChannelResponse>): NotificationChannelResponse {
@@ -386,6 +402,10 @@ export const NotificationChannel = {
     return obj;
   },
 
+  create(base?: DeepPartial<NotificationChannel>): NotificationChannel {
+    return NotificationChannel.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<NotificationChannel>): NotificationChannel {
     const message = createBaseNotificationChannel();
     message.id = object.id ?? "";
@@ -448,7 +468,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,

@@ -1,10 +1,12 @@
 import KoaRouter from 'koa-router';
-import { InteractionResults, Provider } from 'oidc-provider';
+import { InteractionResults } from 'oidc-provider';
+import Provider from 'oidc-provider';
 import { Logger } from 'winston';
 import { IdentityContext } from '../interfaces';
 import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
 // import { AuthUser, loginUser } from './user';
 import { OIDCError, OIDCHbsTemplates, OIDCBodyLoginFn } from './interfaces';
+import { koaBody } from 'koa-body';
 
 export interface CreateOIDCRouterArgs {
   logger: Logger;
@@ -15,7 +17,6 @@ export interface CreateOIDCRouterArgs {
 }
 
 const Router = eval('require("koa-router")');
-const bodyParser = eval('require("koa-body")');
 
 export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): KoaRouter<{}, IdentityContext> {
 
@@ -98,7 +99,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
   //   });
   // });
 
-  router.post('/interaction/:uid/login', bodyParser({
+  router.post('/interaction/:uid/login', koaBody({
     text: false, json: false
   }), async (ctx) => {
     const { prompt, uid, params, session } = await provider.interactionDetails(ctx.req, ctx.res);

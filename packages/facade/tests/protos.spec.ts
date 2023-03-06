@@ -23,7 +23,7 @@ describe("proto-meta", () => {
 
     const fields = (output as GraphQLObjectType).getFields();
 
-    for (let key of ['id', 'name', 'description', 'status', 'shippingContactPointId', 'billingContactPointId']) {
+    for (let key of ['id', 'name', 'description', 'customerReference', 'billingEmail']) {
       expect(fields[key].type).toBeInstanceOf(GraphQLScalarType);
       expect((fields[key].type as GraphQLScalarType).name).toEqual('String');
     }
@@ -31,13 +31,10 @@ describe("proto-meta", () => {
     expect(fields.totalPrice.type).toBeInstanceOf(GraphQLScalarType);
     expect((fields.totalPrice.type as GraphQLScalarType).name).toEqual('Float');
 
-    expect(fields.totalWeightInKg.type).toBeInstanceOf(GraphQLScalarType);
-    expect((fields.totalWeightInKg.type as GraphQLScalarType).name).toEqual('Float');
-
     expect(fields.items.type).toBeInstanceOf(GraphQLList);
     expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLNonNull);
     expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Items')!.output)
+    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Item')!.output)
 
     expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta')!.output);
   });

@@ -130,6 +130,10 @@ export const TestRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<TestRequest>): TestRequest {
+    return TestRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TestRequest>): TestRequest {
     const message = createBaseTestRequest();
     message.value = object.value ?? "";
@@ -175,6 +179,10 @@ export const StreamTestResponse = {
     const obj: any = {};
     message.result !== undefined && (obj.result = message.result);
     return obj;
+  },
+
+  create(base?: DeepPartial<StreamTestResponse>): StreamTestResponse {
+    return StreamTestResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<StreamTestResponse>): StreamTestResponse {
@@ -232,6 +240,10 @@ export const TestResponse = {
     message.result !== undefined && (obj.result = message.result);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TestResponse>): TestResponse {
+    return TestResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestResponse>): TestResponse {
@@ -292,6 +304,10 @@ export const TestEvent = {
     message.value !== undefined && (obj.value = message.value);
     message.count !== undefined && (obj.count = Math.round(message.count));
     return obj;
+  },
+
+  create(base?: DeepPartial<TestEvent>): TestEvent {
+    return TestEvent.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestEvent>): TestEvent {
@@ -376,6 +392,10 @@ export const TestBufferedData = {
     return obj;
   },
 
+  create(base?: DeepPartial<TestBufferedData>): TestBufferedData {
+    return TestBufferedData.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TestBufferedData>): TestBufferedData {
     const message = createBaseTestBufferedData();
     message.id = object.id ?? "";
@@ -441,6 +461,10 @@ export const TestBufferedDataList = {
     return obj;
   },
 
+  create(base?: DeepPartial<TestBufferedDataList>): TestBufferedDataList {
+    return TestBufferedDataList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TestBufferedDataList>): TestBufferedDataList {
     const message = createBaseTestBufferedDataList();
     message.items = object.items?.map((e) => TestBufferedData.fromPartial(e)) || [];
@@ -498,6 +522,10 @@ export const TestBufferedDataResponse = {
       (obj.payload = message.payload ? TestBufferedData.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<TestBufferedDataResponse>): TestBufferedDataResponse {
+    return TestBufferedDataResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestBufferedDataResponse>): TestBufferedDataResponse {
@@ -575,6 +603,10 @@ export const TestBufferedDataListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<TestBufferedDataListResponse>): TestBufferedDataListResponse {
+    return TestBufferedDataListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<TestBufferedDataListResponse>): TestBufferedDataListResponse {
     const message = createBaseTestBufferedDataListResponse();
     message.items = object.items?.map((e) => TestBufferedDataResponse.fromPartial(e)) || [];
@@ -624,6 +656,10 @@ export const ExtendMe = {
     const obj: any = {};
     message.bar !== undefined && (obj.bar = Math.round(message.bar));
     return obj;
+  },
+
+  create(base?: DeepPartial<ExtendMe>): ExtendMe {
+    return ExtendMe.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ExtendMe>): ExtendMe {
@@ -693,6 +729,10 @@ export const ResourceList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ResourceList>): ResourceList {
+    return ResourceList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
@@ -769,6 +809,10 @@ export const ResourceListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<ResourceListResponse>): ResourceListResponse {
+    return ResourceListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
     const message = createBaseResourceListResponse();
     message.items = object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
@@ -828,6 +872,10 @@ export const ResourceResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Resource.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ResourceResponse>): ResourceResponse {
+    return ResourceResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceResponse>): ResourceResponse {
@@ -938,6 +986,10 @@ export const Resource = {
     message.status !== undefined && (obj.status = message.status);
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<Resource>): Resource {
+    return Resource.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Resource>): Resource {

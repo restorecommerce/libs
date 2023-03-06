@@ -135,6 +135,10 @@ export const DoubleValue = {
     return obj;
   },
 
+  create(base?: DeepPartial<DoubleValue>): DoubleValue {
+    return DoubleValue.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<DoubleValue>): DoubleValue {
     const message = createBaseDoubleValue();
     message.value = object.value ?? 0;
@@ -180,6 +184,10 @@ export const FloatValue = {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
     return obj;
+  },
+
+  create(base?: DeepPartial<FloatValue>): FloatValue {
+    return FloatValue.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FloatValue>): FloatValue {
@@ -229,6 +237,10 @@ export const Int64Value = {
     return obj;
   },
 
+  create(base?: DeepPartial<Int64Value>): Int64Value {
+    return Int64Value.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Int64Value>): Int64Value {
     const message = createBaseInt64Value();
     message.value = object.value ?? 0;
@@ -274,6 +286,10 @@ export const UInt64Value = {
     const obj: any = {};
     message.value !== undefined && (obj.value = Math.round(message.value));
     return obj;
+  },
+
+  create(base?: DeepPartial<UInt64Value>): UInt64Value {
+    return UInt64Value.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<UInt64Value>): UInt64Value {
@@ -323,6 +339,10 @@ export const Int32Value = {
     return obj;
   },
 
+  create(base?: DeepPartial<Int32Value>): Int32Value {
+    return Int32Value.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Int32Value>): Int32Value {
     const message = createBaseInt32Value();
     message.value = object.value ?? 0;
@@ -368,6 +388,10 @@ export const UInt32Value = {
     const obj: any = {};
     message.value !== undefined && (obj.value = Math.round(message.value));
     return obj;
+  },
+
+  create(base?: DeepPartial<UInt32Value>): UInt32Value {
+    return UInt32Value.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<UInt32Value>): UInt32Value {
@@ -417,6 +441,10 @@ export const BoolValue = {
     return obj;
   },
 
+  create(base?: DeepPartial<BoolValue>): BoolValue {
+    return BoolValue.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<BoolValue>): BoolValue {
     const message = createBaseBoolValue();
     message.value = object.value ?? false;
@@ -462,6 +490,10 @@ export const StringValue = {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
     return obj;
+  },
+
+  create(base?: DeepPartial<StringValue>): StringValue {
+    return StringValue.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<StringValue>): StringValue {
@@ -510,6 +542,10 @@ export const BytesValue = {
     message.value !== undefined &&
       (obj.value = base64FromBytes(message.value !== undefined ? message.value : Buffer.alloc(0)));
     return obj;
+  },
+
+  create(base?: DeepPartial<BytesValue>): BytesValue {
+    return BytesValue.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<BytesValue>): BytesValue {
@@ -920,7 +956,7 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
+var tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }
@@ -937,10 +973,10 @@ var globalThis: any = (() => {
 })();
 
 function bytesFromBase64(b64: string): Uint8Array {
-  if (globalThis.Buffer) {
-    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
   } else {
-    const bin = globalThis.atob(b64);
+    const bin = tsProtoGlobalThis.atob(b64);
     const arr = new Uint8Array(bin.length);
     for (let i = 0; i < bin.length; ++i) {
       arr[i] = bin.charCodeAt(i);
@@ -950,14 +986,14 @@ function bytesFromBase64(b64: string): Uint8Array {
 }
 
 function base64FromBytes(arr: Uint8Array): string {
-  if (globalThis.Buffer) {
-    return globalThis.Buffer.from(arr).toString("base64");
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
   } else {
     const bin: string[] = [];
     arr.forEach((byte) => {
       bin.push(String.fromCharCode(byte));
     });
-    return globalThis.btoa(bin.join(""));
+    return tsProtoGlobalThis.btoa(bin.join(""));
   }
 }
 
@@ -970,7 +1006,7 @@ export type DeepPartial<T> = T extends Builtin ? T
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
 }

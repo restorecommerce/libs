@@ -68,19 +68,19 @@ export interface Struct_FieldsEntry {
  */
 export interface Value {
   /** / Represents a null value. */
-  nullValue:
+  nullValue?:
     | NullValue
     | undefined;
   /** / Represents a double value. */
-  numberValue:
+  numberValue?:
     | number
     | undefined;
   /** / Represents a string value. */
-  stringValue:
+  stringValue?:
     | string
     | undefined;
   /** / Represents a boolean value. */
-  boolValue:
+  boolValue?:
     | boolean
     | undefined;
   /** / Represents a structured value. */
@@ -156,6 +156,10 @@ export const Struct = {
     return obj;
   },
 
+  create(base?: DeepPartial<Struct>): Struct {
+    return Struct.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Struct>): Struct {
     const message = createBaseStruct();
     message.fields = Object.entries(object.fields ?? {}).reduce<{ [key: string]: any }>((acc, [key, value]) => {
@@ -179,9 +183,11 @@ export const Struct = {
 
   unwrap(message: Struct): { [key: string]: any } {
     const object: { [key: string]: any } = {};
-    Object.keys(message.fields).forEach((key) => {
-      object[key] = message.fields[key];
-    });
+    if (message.fields) {
+      Object.keys(message.fields).forEach((key) => {
+        object[key] = message.fields[key];
+      });
+    }
     return object;
   },
 };
@@ -231,6 +237,10 @@ export const Struct_FieldsEntry = {
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
     return obj;
+  },
+
+  create(base?: DeepPartial<Struct_FieldsEntry>): Struct_FieldsEntry {
+    return Struct_FieldsEntry.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Struct_FieldsEntry>): Struct_FieldsEntry {
@@ -331,6 +341,10 @@ export const Value = {
     return obj;
   },
 
+  create(base?: DeepPartial<Value>): Value {
+    return Value.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Value>): Value {
     const message = createBaseValue();
     message.nullValue = object.nullValue ?? undefined;
@@ -344,7 +358,6 @@ export const Value = {
 
   wrap(value: any): Value {
     const result = createBaseValue();
-
     if (value === null) {
       result.nullValue = NullValue.NULL_VALUE;
     } else if (typeof value === "boolean") {
@@ -360,19 +373,18 @@ export const Value = {
     } else if (typeof value !== "undefined") {
       throw new Error("Unsupported any value type: " + typeof value);
     }
-
     return result;
   },
 
-  unwrap(message: Value): string | number | boolean | Object | null | Array<any> | undefined {
-    if (message?.stringValue !== undefined) {
+  unwrap(message: any): string | number | boolean | Object | null | Array<any> | undefined {
+    if (message.stringValue !== undefined) {
       return message.stringValue;
     } else if (message?.numberValue !== undefined) {
       return message.numberValue;
     } else if (message?.boolValue !== undefined) {
       return message.boolValue;
     } else if (message?.structValue !== undefined) {
-      return message.structValue;
+      return message.structValue as any;
     } else if (message?.listValue !== undefined) {
       return message.listValue;
     } else if (message?.nullValue !== undefined) {
@@ -426,22 +438,28 @@ export const ListValue = {
     return obj;
   },
 
+  create(base?: DeepPartial<ListValue>): ListValue {
+    return ListValue.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ListValue>): ListValue {
     const message = createBaseListValue();
     message.values = object.values?.map((e) => e) || [];
     return message;
   },
 
-  wrap(value: Array<any> | undefined): ListValue {
+  wrap(array: Array<any> | undefined): ListValue {
     const result = createBaseListValue();
-
-    result.values = value ?? [];
-
+    result.values = array ?? [];
     return result;
   },
 
   unwrap(message: ListValue): Array<any> {
-    return message.values;
+    if (message?.hasOwnProperty("values") && Array.isArray(message.values)) {
+      return message.values;
+    } else {
+      return message as any;
+    }
   },
 };
 

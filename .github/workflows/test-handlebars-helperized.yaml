@@ -1,6 +1,7 @@
 name: test-handlebars-helperized
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/handlebars-helperized/**'

@@ -1,6 +1,7 @@
 name: build-test-cart
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/cart/**'

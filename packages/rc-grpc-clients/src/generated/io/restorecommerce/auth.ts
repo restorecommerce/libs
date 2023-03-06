@@ -127,6 +127,10 @@ export const Subject = {
     return obj;
   },
 
+  create(base?: DeepPartial<Subject>): Subject {
+    return Subject.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Subject>): Subject {
     const message = createBaseSubject();
     message.id = object.id ?? "";
@@ -231,6 +235,10 @@ export const Tokens = {
     return obj;
   },
 
+  create(base?: DeepPartial<Tokens>): Tokens {
+    return Tokens.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Tokens>): Tokens {
     const message = createBaseTokens();
     message.name = object.name ?? "";
@@ -304,6 +312,10 @@ export const HierarchicalScope = {
     }
     message.role !== undefined && (obj.role = message.role);
     return obj;
+  },
+
+  create(base?: DeepPartial<HierarchicalScope>): HierarchicalScope {
+    return HierarchicalScope.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<HierarchicalScope>): HierarchicalScope {
@@ -385,6 +397,10 @@ export const RoleAssociation = {
     return obj;
   },
 
+  create(base?: DeepPartial<RoleAssociation>): RoleAssociation {
+    return RoleAssociation.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RoleAssociation>): RoleAssociation {
     const message = createBaseRoleAssociation();
     message.role = object.role ?? "";
@@ -433,6 +449,10 @@ export const HierarchicalScopesRequest = {
     const obj: any = {};
     message.token !== undefined && (obj.token = message.token);
     return obj;
+  },
+
+  create(base?: DeepPartial<HierarchicalScopesRequest>): HierarchicalScopesRequest {
+    return HierarchicalScopesRequest.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<HierarchicalScopesRequest>): HierarchicalScopesRequest {
@@ -504,6 +524,10 @@ export const HierarchicalScopesResponse = {
     }
     message.token !== undefined && (obj.token = message.token);
     return obj;
+  },
+
+  create(base?: DeepPartial<HierarchicalScopesResponse>): HierarchicalScopesResponse {
+    return HierarchicalScopesResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<HierarchicalScopesResponse>): HierarchicalScopesResponse {

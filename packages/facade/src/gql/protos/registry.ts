@@ -7,7 +7,7 @@ import {
   GraphQLObjectTypeConfig, GraphQLOutputType, GraphQLString, GraphQLUnionType, validate
 } from "graphql";
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
-import { GraphQLUpload } from 'graphql-upload';
+const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
 import { capitalizeProtoName } from "./utils";
 import { authSubjectType, ProtoMetadata, ProtoMetaMessageOptions } from './types';
 import {

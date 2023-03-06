@@ -150,6 +150,10 @@ export const PolicySet = {
     return obj;
   },
 
+  create(base?: DeepPartial<PolicySet>): PolicySet {
+    return PolicySet.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PolicySet>): PolicySet {
     const message = createBasePolicySet();
     message.id = object.id ?? "";
@@ -227,6 +231,10 @@ export const PolicySetList = {
     return obj;
   },
 
+  create(base?: DeepPartial<PolicySetList>): PolicySetList {
+    return PolicySetList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PolicySetList>): PolicySetList {
     const message = createBasePolicySetList();
     message.items = object.items?.map((e) => PolicySet.fromPartial(e)) || [];
@@ -301,6 +309,10 @@ export const PolicySetListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<PolicySetListResponse>): PolicySetListResponse {
+    return PolicySetListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PolicySetListResponse>): PolicySetListResponse {
     const message = createBasePolicySetListResponse();
     message.items = object.items?.map((e) => PolicySetResponse.fromPartial(e)) || [];
@@ -360,6 +372,10 @@ export const PolicySetResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? PolicySet.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<PolicySetResponse>): PolicySetResponse {
+    return PolicySetResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<PolicySetResponse>): PolicySetResponse {
@@ -452,6 +468,10 @@ export const PolicySetRQ = {
     return obj;
   },
 
+  create(base?: DeepPartial<PolicySetRQ>): PolicySetRQ {
+    return PolicySetRQ.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<PolicySetRQ>): PolicySetRQ {
     const message = createBasePolicySetRQ();
     message.id = object.id ?? "";
@@ -513,7 +533,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
   create(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

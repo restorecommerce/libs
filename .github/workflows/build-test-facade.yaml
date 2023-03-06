@@ -1,6 +1,7 @@
 name: build-test-facade
 
 on:
+  workflow_dispatch: {}
   push:
     paths:
       - 'packages/facade/**'

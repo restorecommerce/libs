@@ -82,6 +82,10 @@ export const Deleted = {
     return obj;
   },
 
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Deleted>): Deleted {
     const message = createBaseDeleted();
     message.id = object.id ?? "";
@@ -149,6 +153,10 @@ export const CredentialList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CredentialList>): CredentialList {
+    return CredentialList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CredentialList>): CredentialList {
@@ -225,6 +233,10 @@ export const CredentialListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<CredentialListResponse>): CredentialListResponse {
+    return CredentialListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<CredentialListResponse>): CredentialListResponse {
     const message = createBaseCredentialListResponse();
     message.items = object.items?.map((e) => CredentialResponse.fromPartial(e)) || [];
@@ -284,6 +296,10 @@ export const CredentialResponse = {
     message.payload !== undefined && (obj.payload = message.payload ? Credential.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CredentialResponse>): CredentialResponse {
+    return CredentialResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CredentialResponse>): CredentialResponse {
@@ -389,6 +405,10 @@ export const Credential = {
     return obj;
   },
 
+  create(base?: DeepPartial<Credential>): Credential {
+    return Credential.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Credential>): Credential {
     const message = createBaseCredential();
     message.id = object.id ?? "";
@@ -453,7 +473,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CredentialListResponse>>;
   create(request: CredentialList, context: CallContext & CallContextExt): Promise<DeepPartial<CredentialListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

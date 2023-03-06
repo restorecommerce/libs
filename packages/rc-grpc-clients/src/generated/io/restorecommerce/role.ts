@@ -121,6 +121,10 @@ export const Role = {
     return obj;
   },
 
+  create(base?: DeepPartial<Role>): Role {
+    return Role.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Role>): Role {
     const message = createBaseRole();
     message.id = object.id ?? "";
@@ -192,6 +196,10 @@ export const RoleList = {
     message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<RoleList>): RoleList {
+    return RoleList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RoleList>): RoleList {
@@ -268,6 +276,10 @@ export const RoleListResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<RoleListResponse>): RoleListResponse {
+    return RoleListResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RoleListResponse>): RoleListResponse {
     const message = createBaseRoleListResponse();
     message.items = object.items?.map((e) => RoleResponse.fromPartial(e)) || [];
@@ -329,6 +341,10 @@ export const RoleResponse = {
     return obj;
   },
 
+  create(base?: DeepPartial<RoleResponse>): RoleResponse {
+    return RoleResponse.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RoleResponse>): RoleResponse {
     const message = createBaseRoleResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
@@ -379,6 +395,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -436,7 +456,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<RoleListResponse>>;
   create(request: RoleList, context: CallContext & CallContextExt): Promise<DeepPartial<RoleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;

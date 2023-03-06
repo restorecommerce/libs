@@ -7,7 +7,6 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
-import "io/restorecommerce/product.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/options.proto";
@@ -41,7 +40,7 @@ message Preferences {
 message Query {
   io.restorecommerce.fulfillment.FulfillmentAddress sender = 1;
   io.restorecommerce.fulfillment.FulfillmentAddress receiver = 2;
-  repeated io.restorecommerce.product.Item goods = 3;
+  repeated io.restorecommerce.fulfillment.Item goods = 3;
   Preferences preferences = 4;
   string reference_id = 5;
 }

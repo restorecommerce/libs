@@ -24,9 +24,8 @@ import {
   DeleteRequest,
   DeleteResponse,
 } from "./resource_base";
-import { protoMetadata as protoMetadata8, Item } from "./product";
 import {
-  protoMetadata as protoMetadata9,
+  protoMetadata as protoMetadata8,
   KafkaSubscription,
   Resolver,
 } from "./options";
@@ -134,11 +133,21 @@ export interface FulfillmentAddress {
   contact_person?: ContactPerson;
 }
 
+export interface Item {
+  product_id: string;
+  variant_id: string;
+  quantity: number;
+  weight_in_kg: number;
+  height_in_cm: number;
+  width_in_cm: number;
+  length_in_cm: number;
+}
+
 export interface Parcel {
   id: string;
   product_id: string;
   product_variant_id: string;
-  items: Item[];
+  items?: Item;
   weight_in_kg: number;
   height_in_cm: number;
   width_in_cm: number;
@@ -329,12 +338,134 @@ export const FulfillmentAddress = {
   },
 };
 
+function createBaseItem(): Item {
+  return {
+    product_id: "",
+    variant_id: "",
+    quantity: 0,
+    weight_in_kg: 0,
+    height_in_cm: 0,
+    width_in_cm: 0,
+    length_in_cm: 0,
+  };
+}
+
+export const Item = {
+  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_id !== "") {
+      writer.uint32(10).string(message.product_id);
+    }
+    if (message.variant_id !== "") {
+      writer.uint32(18).string(message.variant_id);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(72).int32(message.quantity);
+    }
+    if (message.weight_in_kg !== 0) {
+      writer.uint32(41).double(message.weight_in_kg);
+    }
+    if (message.height_in_cm !== 0) {
+      writer.uint32(49).double(message.height_in_cm);
+    }
+    if (message.width_in_cm !== 0) {
+      writer.uint32(57).double(message.width_in_cm);
+    }
+    if (message.length_in_cm !== 0) {
+      writer.uint32(65).double(message.length_in_cm);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.product_id = reader.string();
+          break;
+        case 2:
+          message.variant_id = reader.string();
+          break;
+        case 9:
+          message.quantity = reader.int32();
+          break;
+        case 5:
+          message.weight_in_kg = reader.double();
+          break;
+        case 6:
+          message.height_in_cm = reader.double();
+          break;
+        case 7:
+          message.width_in_cm = reader.double();
+          break;
+        case 8:
+          message.length_in_cm = reader.double();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Item {
+    return {
+      product_id: isSet(object.product_id) ? String(object.product_id) : "",
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
+      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      weight_in_kg: isSet(object.weight_in_kg)
+        ? Number(object.weight_in_kg)
+        : 0,
+      height_in_cm: isSet(object.height_in_cm)
+        ? Number(object.height_in_cm)
+        : 0,
+      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
+      length_in_cm: isSet(object.length_in_cm)
+        ? Number(object.length_in_cm)
+        : 0,
+    };
+  },
+
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
+    message.weight_in_kg !== undefined &&
+      (obj.weight_in_kg = message.weight_in_kg);
+    message.height_in_cm !== undefined &&
+      (obj.height_in_cm = message.height_in_cm);
+    message.width_in_cm !== undefined &&
+      (obj.width_in_cm = message.width_in_cm);
+    message.length_in_cm !== undefined &&
+      (obj.length_in_cm = message.length_in_cm);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = createBaseItem();
+    message.product_id = object.product_id ?? "";
+    message.variant_id = object.variant_id ?? "";
+    message.quantity = object.quantity ?? 0;
+    message.weight_in_kg = object.weight_in_kg ?? 0;
+    message.height_in_cm = object.height_in_cm ?? 0;
+    message.width_in_cm = object.width_in_cm ?? 0;
+    message.length_in_cm = object.length_in_cm ?? 0;
+    return message;
+  },
+};
+
 function createBaseParcel(): Parcel {
   return {
     id: "",
     product_id: "",
     product_variant_id: "",
-    items: [],
+    items: undefined,
     weight_in_kg: 0,
     height_in_cm: 0,
     width_in_cm: 0,
@@ -356,8 +487,8 @@ export const Parcel = {
     if (message.product_variant_id !== "") {
       writer.uint32(26).string(message.product_variant_id);
     }
-    for (const v of message.items) {
-      Item.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.items !== undefined) {
+      Item.encode(message.items, writer.uint32(34).fork()).ldelim();
     }
     if (message.weight_in_kg !== 0) {
       writer.uint32(41).double(message.weight_in_kg);
@@ -391,7 +522,7 @@ export const Parcel = {
           message.product_variant_id = reader.string();
           break;
         case 4:
-          message.items.push(Item.decode(reader, reader.uint32()));
+          message.items = Item.decode(reader, reader.uint32());
           break;
         case 5:
           message.weight_in_kg = reader.double();
@@ -420,9 +551,7 @@ export const Parcel = {
       product_variant_id: isSet(object.product_variant_id)
         ? String(object.product_variant_id)
         : "",
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Item.fromJSON(e))
-        : [],
+      items: isSet(object.items) ? Item.fromJSON(object.items) : undefined,
       weight_in_kg: isSet(object.weight_in_kg)
         ? Number(object.weight_in_kg)
         : 0,
@@ -442,11 +571,8 @@ export const Parcel = {
     message.product_id !== undefined && (obj.product_id = message.product_id);
     message.product_variant_id !== undefined &&
       (obj.product_variant_id = message.product_variant_id);
-    if (message.items) {
-      obj.items = message.items.map((e) => (e ? Item.toJSON(e) : undefined));
-    } else {
-      obj.items = [];
-    }
+    message.items !== undefined &&
+      (obj.items = message.items ? Item.toJSON(message.items) : undefined);
     message.weight_in_kg !== undefined &&
       (obj.weight_in_kg = message.weight_in_kg);
     message.height_in_cm !== undefined &&
@@ -463,7 +589,10 @@ export const Parcel = {
     message.id = object.id ?? "";
     message.product_id = object.product_id ?? "";
     message.product_variant_id = object.product_variant_id ?? "";
-    message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
+    message.items =
+      object.items !== undefined && object.items !== null
+        ? Item.fromPartial(object.items)
+        : undefined;
     message.weight_in_kg = object.weight_in_kg ?? 0;
     message.height_in_cm = object.height_in_cm ?? 0;
     message.width_in_cm = object.width_in_cm ?? 0;
@@ -1751,7 +1880,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/country.proto",
-      "io/restorecommerce/product.proto",
       "io/restorecommerce/options.proto",
     ],
     publicDependency: [],
@@ -1796,6 +1924,110 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "contactPerson",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Item",
+        field: [
+          {
+            name: "product_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "variant_id",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variantId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 9,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "weight_in_kg",
+            number: 5,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "weightInKg",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "height_in_cm",
+            number: 6,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "heightInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "width_in_cm",
+            number: 7,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "widthInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "length_in_cm",
+            number: 8,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "lengthInCm",
             options: undefined,
             proto3Optional: false,
           },
@@ -1862,9 +2094,9 @@ export const protoMetadata: ProtoMetadata = {
           {
             name: "items",
             number: 4,
-            label: 3,
+            label: 1,
             type: 11,
-            typeName: ".io.restorecommerce.product.Item",
+            typeName: ".io.restorecommerce.fulfillment.Item",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -2737,28 +2969,28 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [6, 0],
-          span: [17, 0, 61, 1],
+          span: [16, 0, 60, 1],
           leadingComments: "*\nMicroservice definition.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 0],
-          span: [23, 2, 25, 3],
+          span: [22, 2, 24, 3],
           leadingComments: "*\nReturns a list of shipment IDs.\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 1],
-          span: [30, 2, 65],
+          span: [29, 2, 65],
           leadingComments: "*\nCreates fulfillment orders\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 2],
-          span: [35, 2, 65],
+          span: [34, 2, 65],
           leadingComments:
             "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
           trailingComments: "",
@@ -2766,7 +2998,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [6, 0, 2, 3],
-          span: [40, 2, 65],
+          span: [39, 2, 65],
           leadingComments:
             "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
           trailingComments: "",
@@ -2774,7 +3006,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [6, 0, 2, 4],
-          span: [45, 2, 65],
+          span: [44, 2, 65],
           leadingComments:
             "*\nCreates, Submits and Updates fulfillment orders against API\n",
           trailingComments: "",
@@ -2782,86 +3014,86 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [6, 0, 2, 5],
-          span: [50, 2, 66],
+          span: [49, 2, 66],
           leadingComments: "*\nTrack a batch of fulfillments\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 6],
-          span: [55, 2, 67],
+          span: [54, 2, 67],
           leadingComments: "*\nCancel a batch of fulfillments\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0, 2, 7],
-          span: [60, 2, 118],
+          span: [59, 2, 118],
           leadingComments:
             "*\nDelete a batch of fulfillments from the database\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 2, 2, 4],
-          span: [106, 2, 29],
+          path: [4, 3, 2, 4],
+          span: [115, 2, 29],
           leadingComments: "",
           trailingComments: "filled on Order\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 2, 2, 5],
-          span: [107, 2, 18],
+          path: [4, 3, 2, 5],
+          span: [116, 2, 18],
           leadingComments: "",
           trailingComments: "update by Track\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 2, 2, 6],
-          span: [108, 2, 46],
+          path: [4, 3, 2, 6],
+          span: [117, 2, 46],
           leadingComments: "",
           trailingComments: "API status\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6],
-          span: [136, 0, 151, 1],
+          path: [4, 7],
+          span: [145, 0, 160, 1],
           leadingComments:
             "*\nThis is the message of how it get stored to the database\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 1],
-          span: [146, 2, 22],
+          path: [4, 7, 2, 1],
+          span: [155, 2, 22],
           leadingComments: "",
           trailingComments: "filled by user\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 3],
-          span: [148, 2, 28],
+          path: [4, 7, 2, 3],
+          span: [157, 2, 28],
           leadingComments: "",
           trailingComments: "filled by service\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 4],
-          span: [149, 2, 33],
+          path: [4, 7, 2, 4],
+          span: [158, 2, 33],
           leadingComments: "",
           trailingComments: "filled by service\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 6, 2, 5],
-          span: [150, 2, 18],
+          path: [4, 7, 2, 5],
+          span: [159, 2, 18],
           leadingComments: "",
           trailingComments: "filled by service\n",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 10, 2, 1],
-          span: [172, 2, 39],
+          path: [4, 11, 2, 1],
+          span: [181, 2, 39],
           leadingComments: "",
           trailingComments: "optional\n",
           leadingDetachedComments: [],
@@ -2873,6 +3105,7 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.fulfillment.State": State,
     ".io.restorecommerce.fulfillment.FulfillmentAddress": FulfillmentAddress,
+    ".io.restorecommerce.fulfillment.Item": Item,
     ".io.restorecommerce.fulfillment.Parcel": Parcel,
     ".io.restorecommerce.fulfillment.Label": Label,
     ".io.restorecommerce.fulfillment.Packing": Packing,
@@ -2896,7 +3129,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
-    protoMetadata9,
   ],
   options: {
     messages: {

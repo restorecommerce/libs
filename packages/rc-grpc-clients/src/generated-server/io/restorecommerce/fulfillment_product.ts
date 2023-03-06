@@ -2,7 +2,8 @@
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import {
   FulfillmentAddress,
-  protoMetadata as protoMetadata8,
+  protoMetadata as protoMetadata7,
+  Item,
   Parcel,
 } from "./fulfillment";
 import { Subject, protoMetadata as protoMetadata3 } from "./auth";
@@ -20,10 +21,9 @@ import {
   DeleteResponse,
 } from "./resource_base";
 import { protoMetadata as protoMetadata5, Attribute } from "./attribute";
-import { protoMetadata as protoMetadata6, Item } from "./product";
-import { protoMetadata as protoMetadata7 } from "./fulfillment_courier";
+import { protoMetadata as protoMetadata6 } from "./fulfillment_courier";
 import {
-  protoMetadata as protoMetadata9,
+  protoMetadata as protoMetadata8,
   KafkaSubscription,
   Resolver,
 } from "./options";
@@ -1526,7 +1526,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
-      "io/restorecommerce/product.proto",
       "io/restorecommerce/fulfillment_courier.proto",
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/options.proto",
@@ -1633,7 +1632,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 3,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.product.Item",
+            typeName: ".io.restorecommerce.fulfillment.Item",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -2451,7 +2450,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0, 2, 0],
-          span: [34, 2, 63],
+          span: [33, 2, 63],
           leadingComments: "",
           trailingComments: "ID, name or type\n",
           leadingDetachedComments: [],
@@ -2489,7 +2488,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
-    protoMetadata9,
   ],
   options: {
     messages: {

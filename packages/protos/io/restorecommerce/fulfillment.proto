@@ -9,7 +9,6 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
-import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 
 /**
@@ -78,6 +77,16 @@ message FulfillmentAddress {
   io.restorecommerce.address.ContactPerson contact_person = 3;
 }
 
+message Item {
+  string product_id = 1;
+  string variant_id = 2;
+  int32 quantity = 9;
+  double weight_in_kg = 5;
+  double height_in_cm = 6;
+  double width_in_cm = 7;
+  double length_in_cm = 8;
+}
+
 message Parcel {
   string id = 1;
   string product_id = 2 [
@@ -90,7 +99,7 @@ message Parcel {
     }
   ];
   string product_variant_id = 3;
-  repeated io.restorecommerce.product.Item items = 4;
+  Item items = 4;
   double weight_in_kg = 5;
   double height_in_cm = 6;
   double width_in_cm = 7;

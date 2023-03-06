@@ -39,6 +39,24 @@ enum State {
   Done = 7;
 }
 
+message Item {
+  string product_id = 1;
+  string variant_id = 2;
+  string product_name = 3;
+  string product_description = 4;
+  string manufacturer_name = 5;
+  string manufacturer_description = 6;
+  string prototype_name = 7;
+  string prototype_description = 8;
+  int32 quantity = 9;
+  double price = 10;
+  repeated io.restorecommerce.product.VAT vats = 11;
+  double quantity_price = 12;
+  string item_type = 13;
+  double taric_code = 14;
+  string stock_keeping_unit = 15;
+}
+
 /**
   Database Entity
 */
@@ -57,7 +75,7 @@ message Order {
   string description = 4;
   State state = 5;
   string customer_reference = 6;
-  repeated io.restorecommerce.product.Item items = 7;
+  repeated Item items = 7;
   double total_price = 8;
   double total_vat = 9;
   double total_weight_in_kg = 10;

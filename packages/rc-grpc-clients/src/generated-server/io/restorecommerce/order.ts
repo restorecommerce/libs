@@ -20,7 +20,7 @@ import {
   DeleteResponse,
 } from "./resource_base";
 import { protoMetadata as protoMetadata5, KafkaSubscription } from "./options";
-import { protoMetadata as protoMetadata7, Item } from "./product";
+import { protoMetadata as protoMetadata7, VAT } from "./product";
 import { protoMetadata as protoMetadata8, Parcel } from "./fulfillment";
 import * as _m0 from "protobufjs/minimal";
 
@@ -119,6 +119,24 @@ export function stateToNumber(object: State): number {
   }
 }
 
+export interface Item {
+  product_id: string;
+  variant_id: string;
+  product_name: string;
+  product_description: string;
+  manufacturer_name: string;
+  manufacturer_description: string;
+  prototype_name: string;
+  prototype_description: string;
+  quantity: number;
+  price: number;
+  vats: VAT[];
+  quantity_price: number;
+  item_type: string;
+  taric_code: number;
+  stock_keeping_unit: string;
+}
+
 /** Database Entity */
 export interface Order {
   id: string;
@@ -184,6 +202,228 @@ export interface OrderResponse {
 export interface Deleted {
   id: string;
 }
+
+function createBaseItem(): Item {
+  return {
+    product_id: "",
+    variant_id: "",
+    product_name: "",
+    product_description: "",
+    manufacturer_name: "",
+    manufacturer_description: "",
+    prototype_name: "",
+    prototype_description: "",
+    quantity: 0,
+    price: 0,
+    vats: [],
+    quantity_price: 0,
+    item_type: "",
+    taric_code: 0,
+    stock_keeping_unit: "",
+  };
+}
+
+export const Item = {
+  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_id !== "") {
+      writer.uint32(10).string(message.product_id);
+    }
+    if (message.variant_id !== "") {
+      writer.uint32(18).string(message.variant_id);
+    }
+    if (message.product_name !== "") {
+      writer.uint32(26).string(message.product_name);
+    }
+    if (message.product_description !== "") {
+      writer.uint32(34).string(message.product_description);
+    }
+    if (message.manufacturer_name !== "") {
+      writer.uint32(42).string(message.manufacturer_name);
+    }
+    if (message.manufacturer_description !== "") {
+      writer.uint32(50).string(message.manufacturer_description);
+    }
+    if (message.prototype_name !== "") {
+      writer.uint32(58).string(message.prototype_name);
+    }
+    if (message.prototype_description !== "") {
+      writer.uint32(66).string(message.prototype_description);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(72).int32(message.quantity);
+    }
+    if (message.price !== 0) {
+      writer.uint32(81).double(message.price);
+    }
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    if (message.quantity_price !== 0) {
+      writer.uint32(97).double(message.quantity_price);
+    }
+    if (message.item_type !== "") {
+      writer.uint32(106).string(message.item_type);
+    }
+    if (message.taric_code !== 0) {
+      writer.uint32(113).double(message.taric_code);
+    }
+    if (message.stock_keeping_unit !== "") {
+      writer.uint32(122).string(message.stock_keeping_unit);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.product_id = reader.string();
+          break;
+        case 2:
+          message.variant_id = reader.string();
+          break;
+        case 3:
+          message.product_name = reader.string();
+          break;
+        case 4:
+          message.product_description = reader.string();
+          break;
+        case 5:
+          message.manufacturer_name = reader.string();
+          break;
+        case 6:
+          message.manufacturer_description = reader.string();
+          break;
+        case 7:
+          message.prototype_name = reader.string();
+          break;
+        case 8:
+          message.prototype_description = reader.string();
+          break;
+        case 9:
+          message.quantity = reader.int32();
+          break;
+        case 10:
+          message.price = reader.double();
+          break;
+        case 11:
+          message.vats.push(VAT.decode(reader, reader.uint32()));
+          break;
+        case 12:
+          message.quantity_price = reader.double();
+          break;
+        case 13:
+          message.item_type = reader.string();
+          break;
+        case 14:
+          message.taric_code = reader.double();
+          break;
+        case 15:
+          message.stock_keeping_unit = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Item {
+    return {
+      product_id: isSet(object.product_id) ? String(object.product_id) : "",
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
+      product_name: isSet(object.product_name)
+        ? String(object.product_name)
+        : "",
+      product_description: isSet(object.product_description)
+        ? String(object.product_description)
+        : "",
+      manufacturer_name: isSet(object.manufacturer_name)
+        ? String(object.manufacturer_name)
+        : "",
+      manufacturer_description: isSet(object.manufacturer_description)
+        ? String(object.manufacturer_description)
+        : "",
+      prototype_name: isSet(object.prototype_name)
+        ? String(object.prototype_name)
+        : "",
+      prototype_description: isSet(object.prototype_description)
+        ? String(object.prototype_description)
+        : "",
+      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      price: isSet(object.price) ? Number(object.price) : 0,
+      vats: Array.isArray(object?.vats)
+        ? object.vats.map((e: any) => VAT.fromJSON(e))
+        : [],
+      quantity_price: isSet(object.quantity_price)
+        ? Number(object.quantity_price)
+        : 0,
+      item_type: isSet(object.item_type) ? String(object.item_type) : "",
+      taric_code: isSet(object.taric_code) ? Number(object.taric_code) : 0,
+      stock_keeping_unit: isSet(object.stock_keeping_unit)
+        ? String(object.stock_keeping_unit)
+        : "",
+    };
+  },
+
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
+    message.product_name !== undefined &&
+      (obj.product_name = message.product_name);
+    message.product_description !== undefined &&
+      (obj.product_description = message.product_description);
+    message.manufacturer_name !== undefined &&
+      (obj.manufacturer_name = message.manufacturer_name);
+    message.manufacturer_description !== undefined &&
+      (obj.manufacturer_description = message.manufacturer_description);
+    message.prototype_name !== undefined &&
+      (obj.prototype_name = message.prototype_name);
+    message.prototype_description !== undefined &&
+      (obj.prototype_description = message.prototype_description);
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
+    message.price !== undefined && (obj.price = message.price);
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => (e ? VAT.toJSON(e) : undefined));
+    } else {
+      obj.vats = [];
+    }
+    message.quantity_price !== undefined &&
+      (obj.quantity_price = message.quantity_price);
+    message.item_type !== undefined && (obj.item_type = message.item_type);
+    message.taric_code !== undefined && (obj.taric_code = message.taric_code);
+    message.stock_keeping_unit !== undefined &&
+      (obj.stock_keeping_unit = message.stock_keeping_unit);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = createBaseItem();
+    message.product_id = object.product_id ?? "";
+    message.variant_id = object.variant_id ?? "";
+    message.product_name = object.product_name ?? "";
+    message.product_description = object.product_description ?? "";
+    message.manufacturer_name = object.manufacturer_name ?? "";
+    message.manufacturer_description = object.manufacturer_description ?? "";
+    message.prototype_name = object.prototype_name ?? "";
+    message.prototype_description = object.prototype_description ?? "";
+    message.quantity = object.quantity ?? 0;
+    message.price = object.price ?? 0;
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
+    message.quantity_price = object.quantity_price ?? 0;
+    message.item_type = object.item_type ?? "";
+    message.taric_code = object.taric_code ?? 0;
+    message.stock_keeping_unit = object.stock_keeping_unit ?? "";
+    return message;
+  },
+};
 
 function createBaseOrder(): Order {
   return {
@@ -1359,6 +1599,214 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
+        name: "Item",
+        field: [
+          {
+            name: "product_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "variant_id",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variantId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_description",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_name",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_description",
+            number: 6,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_name",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_description",
+            number: 8,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 9,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 10,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "vats",
+            number: 11,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.VAT",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vats",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity_price",
+            number: 12,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantityPrice",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "item_type",
+            number: 13,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "itemType",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "taric_code",
+            number: 14,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taricCode",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 15,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "stockKeepingUnit",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
         name: "Order",
         field: [
           {
@@ -1444,7 +1892,7 @@ export const protoMetadata: ProtoMetadata = {
             number: 7,
             label: 3,
             type: 11,
-            typeName: ".io.restorecommerce.product.Item",
+            typeName: ".io.restorecommerce.order.Item",
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
@@ -2084,8 +2532,8 @@ export const protoMetadata: ProtoMetadata = {
     sourceCodeInfo: {
       location: [
         {
-          path: [4, 0],
-          span: [44, 0, 69, 1],
+          path: [4, 1],
+          span: [62, 0, 87, 1],
           leadingComments: "*\nDatabase Entity\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -2096,6 +2544,7 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.order.State": State,
+    ".io.restorecommerce.order.Item": Item,
     ".io.restorecommerce.order.Order": Order,
     ".io.restorecommerce.order.ShippingDetails": ShippingDetails,
     ".io.restorecommerce.order.TriggerFulfillmentRequest":

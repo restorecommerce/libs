@@ -448,10 +448,6 @@ export const TraversalRequest = {
     return obj;
   },
 
-  create(base?: DeepPartial<TraversalRequest>): TraversalRequest {
-    return TraversalRequest.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
     const message = createBaseTraversalRequest();
     message.vertices =
@@ -538,10 +534,6 @@ export const Vertices = {
     return obj;
   },
 
-  create(base?: DeepPartial<Vertices>): Vertices {
-    return Vertices.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Vertices>): Vertices {
     const message = createBaseVertices();
     message.collection_name = object.collection_name ?? "";
@@ -626,10 +618,6 @@ export const Collection = {
       obj.sort = [];
     }
     return obj;
-  },
-
-  create(base?: DeepPartial<Collection>): Collection {
-    return Collection.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Collection>): Collection {
@@ -752,10 +740,6 @@ export const Options = {
     return obj;
   },
 
-  create(base?: DeepPartial<Options>): Options {
-    return Options.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Options>): Options {
     const message = createBaseOptions();
     message.include_vertex = object.include_vertex?.map((e) => e) || [];
@@ -845,10 +829,6 @@ export const Filters = {
     message.operator !== undefined &&
       (obj.operator = filters_OperatorToJSON(message.operator));
     return obj;
-  },
-
-  create(base?: DeepPartial<Filters>): Filters {
-    return Filters.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Filters>): Filters {
@@ -958,10 +938,6 @@ export const Filter = {
     return obj;
   },
 
-  create(base?: DeepPartial<Filter>): Filter {
-    return Filter.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
     message.field = object.field ?? "";
@@ -1047,10 +1023,6 @@ export const TraversalResponse = {
     return obj;
   },
 
-  create(base?: DeepPartial<TraversalResponse>): TraversalResponse {
-    return TraversalResponse.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
     const message = createBaseTraversalResponse();
     message.data =
@@ -1086,7 +1058,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   traversal(
     request: TraversalRequest,
     context: CallContext & CallContextExt

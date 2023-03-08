@@ -119,10 +119,6 @@ export const TokenData = {
     return obj;
   },
 
-  create(base?: DeepPartial<TokenData>): TokenData {
-    return TokenData.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<TokenData>): TokenData {
     const message = createBaseTokenData();
     message.id = object.id ?? "";
@@ -206,10 +202,6 @@ export const Identifier = {
     return obj;
   },
 
-  create(base?: DeepPartial<Identifier>): Identifier {
-    return Identifier.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Identifier>): Identifier {
     const message = createBaseIdentifier();
     message.id = object.id ?? "";
@@ -280,10 +272,6 @@ export const GrantId = {
     return obj;
   },
 
-  create(base?: DeepPartial<GrantId>): GrantId {
-    return GrantId.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<GrantId>): GrantId {
     const message = createBaseGrantId();
     message.grant_id = object.grant_id ?? "";
@@ -348,7 +336,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ServiceServiceImplementation<CallContextExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
   upsert(
     request: TokenData,

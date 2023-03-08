@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.filter";
 
@@ -182,7 +182,10 @@ function createBaseFilter(): Filter {
 }
 
 export const Filter = {
-  encode(message: Filter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Filter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -234,29 +237,33 @@ export const Filter = {
   fromJSON(object: any): Filter {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : 0,
+      operation: isSet(object.operation)
+        ? filter_OperationFromJSON(object.operation)
+        : 0,
       value: isSet(object.value) ? String(object.value) : "",
       type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : 0,
-      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => FilterOp.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: Filter): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
+    message.operation !== undefined &&
+      (obj.operation = filter_OperationToJSON(message.operation));
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = filter_ValueTypeToJSON(message.type));
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? FilterOp.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
     return obj;
-  },
-
-  create(base?: DeepPartial<Filter>): Filter {
-    return Filter.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Filter>): Filter {
@@ -275,7 +282,10 @@ function createBaseFilterOp(): FilterOp {
 }
 
 export const FilterOp = {
-  encode(message: FilterOp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: FilterOp,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -308,24 +318,27 @@ export const FilterOp = {
 
   fromJSON(object: any): FilterOp {
     return {
-      filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : 0,
+      filter: Array.isArray(object?.filter)
+        ? object.filter.map((e: any) => Filter.fromJSON(e))
+        : [],
+      operator: isSet(object.operator)
+        ? filterOp_OperatorFromJSON(object.operator)
+        : 0,
     };
   },
 
   toJSON(message: FilterOp): unknown {
     const obj: any = {};
     if (message.filter) {
-      obj.filter = message.filter.map((e) => e ? Filter.toJSON(e) : undefined);
+      obj.filter = message.filter.map((e) =>
+        e ? Filter.toJSON(e) : undefined
+      );
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
-  },
-
-  create(base?: DeepPartial<FilterOp>): FilterOp {
-    return FilterOp.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
@@ -350,179 +363,207 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    "name": "io/restorecommerce/filter.proto",
-    "package": "io.restorecommerce.filter",
-    "dependency": [],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Filter",
-      "field": [{
-        "name": "field",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "field",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation",
-        "number": 2,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.filter.Filter.Operation",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operation",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 4,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.filter.Filter.ValueType",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "filters",
-        "number": 6,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.filter.FilterOp",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filters",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Operation",
-        "value": [
-          { "name": "eq", "number": 0, "options": undefined },
-          { "name": "lt", "number": 1, "options": undefined },
-          { "name": "lte", "number": 2, "options": undefined },
-          { "name": "gt", "number": 3, "options": undefined },
-          { "name": "gte", "number": 4, "options": undefined },
-          { "name": "isEmpty", "number": 5, "options": undefined },
-          { "name": "iLike", "number": 6, "options": undefined },
-          { "name": "in", "number": 7, "options": undefined },
-          { "name": "neq", "number": 8, "options": undefined },
+    name: "io/restorecommerce/filter.proto",
+    package: "io.restorecommerce.filter",
+    dependency: [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Filter",
+        field: [
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.filter.Filter.Operation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operation",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.filter.Filter.ValueType",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "filters",
+            number: 6,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.filter.FilterOp",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }, {
-        "name": "ValueType",
-        "value": [
-          { "name": "STRING", "number": 0, "options": undefined },
-          { "name": "NUMBER", "number": 1, "options": undefined },
-          { "name": "BOOLEAN", "number": 2, "options": undefined },
-          { "name": "DATE", "number": 3, "options": undefined },
-          { "name": "ARRAY", "number": 4, "options": undefined },
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            name: "Operation",
+            value: [
+              { name: "eq", number: 0, options: undefined },
+              { name: "lt", number: 1, options: undefined },
+              { name: "lte", number: 2, options: undefined },
+              { name: "gt", number: 3, options: undefined },
+              { name: "gte", number: 4, options: undefined },
+              { name: "isEmpty", number: 5, options: undefined },
+              { name: "iLike", number: 6, options: undefined },
+              { name: "in", number: 7, options: undefined },
+              { name: "neq", number: 8, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+          {
+            name: "ValueType",
+            value: [
+              { name: "STRING", number: 0, options: undefined },
+              { name: "NUMBER", number: 1, options: undefined },
+              { name: "BOOLEAN", number: 2, options: undefined },
+              { name: "DATE", number: 3, options: undefined },
+              { name: "ARRAY", number: 4, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
         ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "FilterOp",
-      "field": [{
-        "name": "filter",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.filter.Filter",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filter",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operator",
-        "number": 2,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.filter.FilterOp.Operator",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operator",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Operator",
-        "value": [{ "name": "and", "number": 0, "options": undefined }, {
-          "name": "or",
-          "number": 1,
-          "options": undefined,
-        }],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0, 4, 1, 2, 0],
-        "span": [20, 4, 15],
-        "leadingComments": "",
-        "trailingComments": " default value type if not specified\n",
-        "leadingDetachedComments": [],
-      }],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "FilterOp",
+        field: [
+          {
+            name: "filter",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.filter.Filter",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filter",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operator",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.filter.FilterOp.Operator",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operator",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            name: "Operator",
+            value: [
+              { name: "and", number: 0, options: undefined },
+              { name: "or", number: 1, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 4, 1, 2, 0],
+          span: [20, 4, 15],
+          leadingComments: "",
+          trailingComments: " default value type if not specified\n",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.filter.Filter": Filter,
@@ -534,11 +575,23 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

@@ -1,10 +1,12 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata2, Subject } from "./auth";
-import { protoMetadata as protoMetadata3 } from "./options";
+import {
+  Any,
+  protoMetadata as protoMetadata1,
+} from "../../google/protobuf/any";
+import { Subject, protoMetadata as protoMetadata2 } from "./auth";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.commandinterface";
 
@@ -34,7 +36,10 @@ function createBaseCommandRequest(): CommandRequest {
 }
 
 export const CommandRequest = {
-  encode(message: CommandRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: CommandRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -75,31 +80,35 @@ export const CommandRequest = {
     return {
       name: isSet(object.name) ? String(object.name) : "",
       payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: CommandRequest): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<CommandRequest>): CommandRequest {
-    return CommandRequest.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
     const message = createBaseCommandRequest();
     message.name = object.name ?? "";
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Any.fromPartial(object.payload)
-      : undefined;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -109,7 +118,10 @@ function createBaseCommandResponse(): CommandResponse {
 }
 
 export const CommandResponse = {
-  encode(message: CommandResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: CommandResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.services) {
       writer.uint32(10).string(v!);
     }
@@ -142,7 +154,9 @@ export const CommandResponse = {
 
   fromJSON(object: any): CommandResponse {
     return {
-      services: Array.isArray(object?.services) ? object.services.map((e: any) => String(e)) : [],
+      services: Array.isArray(object?.services)
+        ? object.services.map((e: any) => String(e))
+        : [],
       payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
     };
   },
@@ -154,20 +168,18 @@ export const CommandResponse = {
     } else {
       obj.services = [];
     }
-    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<CommandResponse>): CommandResponse {
-    return CommandResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
     const message = createBaseCommandResponse();
     message.services = object.services?.map((e) => e) || [];
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Any.fromPartial(object.payload)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
     return message;
   },
 };
@@ -189,12 +201,18 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
-  command(request: CommandRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  command(
+    request: CommandRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  command(request: DeepPartial<CommandRequest>, options?: CallOptions & CallOptionsExt): Promise<Any>;
+  command(
+    request: DeepPartial<CommandRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -211,179 +229,223 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/commandinterface.proto",
-    "package": "io.restorecommerce.commandinterface",
-    "dependency": ["google/protobuf/any.proto", "io/restorecommerce/auth.proto", "io/restorecommerce/options.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "CommandRequest",
-      "field": [{
-        "name": "name",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "payload",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "CommandResponse",
-      "field": [{
-        "name": "services",
-        "number": 1,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "services",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "payload",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Command",
-        "inputType": ".io.restorecommerce.commandinterface.CommandRequest",
-        "outputType": ".google.protobuf.Any",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0],
-        "span": [9, 0, 14, 1],
-        "leadingComments": " used to send requests through Kafka or gRPC\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 0],
-        "span": [11, 2, 18],
-        "leadingComments": "  command identifier (used to demultiplex operation in the command implementation)\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 1],
-        "span": [12, 2, 34],
-        "leadingComments": "",
-        "trailingComments": " variable payload\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1],
-        "span": [17, 0, 23, 1],
-        "leadingComments": " used to push responses to Kafka\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 0],
-        "span": [21, 2, 31],
-        "leadingComments":
-          " service identifiers\n (multiple services may reply to one system command)\n (multiple service names can be bound to one microservice)\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 1],
-        "span": [22, 2, 34],
-        "leadingComments": "",
-        "trailingComments": " variable payload\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0],
-        "span": [28, 0, 31, 1],
-        "leadingComments": "*\n RPC service for executing commands\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    name: "io/restorecommerce/commandinterface.proto",
+    package: "io.restorecommerce.commandinterface",
+    dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "CommandRequest",
+        field: [
+          {
+            name: "name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "payload",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "CommandResponse",
+        field: [
+          {
+            name: "services",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "services",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "payload",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Command",
+            inputType: ".io.restorecommerce.commandinterface.CommandRequest",
+            outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: undefined,
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [8, 0, 13, 1],
+          leadingComments: " used to send requests through Kafka or gRPC\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 0],
+          span: [10, 2, 18],
+          leadingComments:
+            "  command identifier (used to demultiplex operation in the command implementation)\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 1],
+          span: [11, 2, 34],
+          leadingComments: "",
+          trailingComments: " variable payload\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 1],
+          span: [16, 0, 22, 1],
+          leadingComments: " used to push responses to Kafka\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 1, 2, 0],
+          span: [20, 2, 31],
+          leadingComments:
+            " service identifiers\n (multiple services may reply to one system command)\n (multiple service names can be bound to one microservice)\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 1, 2, 1],
+          span: [21, 2, 34],
+          leadingComments: "",
+          trailingComments: " variable payload\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0],
+          span: [27, 0, 29, 1],
+          leadingComments: "*\n RPC service for executing commands\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.commandinterface.CommandRequest": CommandRequest,
     ".io.restorecommerce.commandinterface.CommandResponse": CommandResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: { services: { "Service": { options: { "service_name": "commandinterface" }, methods: {} } } },
+  dependencies: [protoMetadata1, protoMetadata2],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

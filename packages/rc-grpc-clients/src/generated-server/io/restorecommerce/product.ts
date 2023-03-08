@@ -22,13 +22,6 @@ import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product";
 
-export interface Volume {
-  width_in_cm: number;
-  height_in_cm: number;
-  length_in_cm: number;
-  weight_in_kg: number;
-}
-
 /** Product resource */
 export interface MainProduct {
   id: string;
@@ -46,18 +39,9 @@ export interface Product {
   taric_code: string;
   prototype?: Identifier | undefined;
   category?: Identifier | undefined;
-  tax_ids: string[];
+  tax_id: string[];
+  variants: Variant[];
   gtin: string;
-  physical?: PhysicalProduct | undefined;
-  virtual?: VirtualProduct | undefined;
-}
-
-export interface PhysicalProduct {
-  variants: PhysicalVariant[];
-}
-
-export interface VirtualProduct {
-  variants: VirtualVariant[];
 }
 
 export interface Identifier {
@@ -81,22 +65,7 @@ export interface ProductResponse {
   status?: Status;
 }
 
-export interface PhysicalVariant {
-  id: string;
-  name: string;
-  description: string;
-  stock_level: number;
-  price: number;
-  sale: boolean;
-  sale_price: number;
-  image: Image[];
-  stock_keeping_unit: string;
-  template_variant: string;
-  packing_volume?: Volume;
-  attributes: Attribute[];
-}
-
-export interface VirtualVariant {
+export interface Variant {
   id: string;
   name: string;
   description: string;
@@ -115,114 +84,18 @@ export interface Bundle {
   name: string;
   description: string;
   image: Image[];
-  products: BundleProduct[];
+  product: BundleProduct[];
   price: number;
 }
 
 export interface BundleProduct {
   product_id: string;
-  variant_id: string;
   quantity: number;
-  price_ratio: number;
-}
-
-export interface VAT {
-  tax_id: string;
-  vat: number;
 }
 
 export interface Deleted {
   id: string;
 }
-
-function createBaseVolume(): Volume {
-  return { width_in_cm: 0, height_in_cm: 0, length_in_cm: 0, weight_in_kg: 0 };
-}
-
-export const Volume = {
-  encode(
-    message: Volume,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.width_in_cm !== 0) {
-      writer.uint32(9).double(message.width_in_cm);
-    }
-    if (message.height_in_cm !== 0) {
-      writer.uint32(17).double(message.height_in_cm);
-    }
-    if (message.length_in_cm !== 0) {
-      writer.uint32(25).double(message.length_in_cm);
-    }
-    if (message.weight_in_kg !== 0) {
-      writer.uint32(33).double(message.weight_in_kg);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Volume {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVolume();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.width_in_cm = reader.double();
-          break;
-        case 2:
-          message.height_in_cm = reader.double();
-          break;
-        case 3:
-          message.length_in_cm = reader.double();
-          break;
-        case 4:
-          message.weight_in_kg = reader.double();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Volume {
-    return {
-      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      height_in_cm: isSet(object.height_in_cm)
-        ? Number(object.height_in_cm)
-        : 0,
-      length_in_cm: isSet(object.length_in_cm)
-        ? Number(object.length_in_cm)
-        : 0,
-      weight_in_kg: isSet(object.weight_in_kg)
-        ? Number(object.weight_in_kg)
-        : 0,
-    };
-  },
-
-  toJSON(message: Volume): unknown {
-    const obj: any = {};
-    message.width_in_cm !== undefined &&
-      (obj.width_in_cm = message.width_in_cm);
-    message.height_in_cm !== undefined &&
-      (obj.height_in_cm = message.height_in_cm);
-    message.length_in_cm !== undefined &&
-      (obj.length_in_cm = message.length_in_cm);
-    message.weight_in_kg !== undefined &&
-      (obj.weight_in_kg = message.weight_in_kg);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<Volume>): Volume {
-    const message = createBaseVolume();
-    message.width_in_cm = object.width_in_cm ?? 0;
-    message.height_in_cm = object.height_in_cm ?? 0;
-    message.length_in_cm = object.length_in_cm ?? 0;
-    message.weight_in_kg = object.weight_in_kg ?? 0;
-    return message;
-  },
-};
 
 function createBaseMainProduct(): MainProduct {
   return {
@@ -343,10 +216,9 @@ function createBaseProduct(): Product {
     taric_code: "",
     prototype: undefined,
     category: undefined,
-    tax_ids: [],
+    tax_id: [],
+    variants: [],
     gtin: "",
-    physical: undefined,
-    virtual: undefined,
   };
 }
 
@@ -376,20 +248,14 @@ export const Product = {
     if (message.category !== undefined) {
       Identifier.encode(message.category, writer.uint32(58).fork()).ldelim();
     }
-    for (const v of message.tax_ids) {
+    for (const v of message.tax_id) {
       writer.uint32(66).string(v!);
     }
+    for (const v of message.variants) {
+      Variant.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
     if (message.gtin !== "") {
-      writer.uint32(74).string(message.gtin);
-    }
-    if (message.physical !== undefined) {
-      PhysicalProduct.encode(
-        message.physical,
-        writer.uint32(82).fork()
-      ).ldelim();
-    }
-    if (message.virtual !== undefined) {
-      VirtualProduct.encode(message.virtual, writer.uint32(90).fork()).ldelim();
+      writer.uint32(82).string(message.gtin);
     }
     return writer;
   },
@@ -423,16 +289,13 @@ export const Product = {
           message.category = Identifier.decode(reader, reader.uint32());
           break;
         case 8:
-          message.tax_ids.push(reader.string());
+          message.tax_id.push(reader.string());
           break;
         case 9:
-          message.gtin = reader.string();
+          message.variants.push(Variant.decode(reader, reader.uint32()));
           break;
         case 10:
-          message.physical = PhysicalProduct.decode(reader, reader.uint32());
-          break;
-        case 11:
-          message.virtual = VirtualProduct.decode(reader, reader.uint32());
+          message.gtin = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -457,16 +320,13 @@ export const Product = {
       category: isSet(object.category)
         ? Identifier.fromJSON(object.category)
         : undefined,
-      tax_ids: Array.isArray(object?.tax_ids)
-        ? object.tax_ids.map((e: any) => String(e))
+      tax_id: Array.isArray(object?.tax_id)
+        ? object.tax_id.map((e: any) => String(e))
+        : [],
+      variants: Array.isArray(object?.variants)
+        ? object.variants.map((e: any) => Variant.fromJSON(e))
         : [],
       gtin: isSet(object.gtin) ? String(object.gtin) : "",
-      physical: isSet(object.physical)
-        ? PhysicalProduct.fromJSON(object.physical)
-        : undefined,
-      virtual: isSet(object.virtual)
-        ? VirtualProduct.fromJSON(object.virtual)
-        : undefined,
     };
   },
 
@@ -487,20 +347,19 @@ export const Product = {
       (obj.category = message.category
         ? Identifier.toJSON(message.category)
         : undefined);
-    if (message.tax_ids) {
-      obj.tax_ids = message.tax_ids.map((e) => e);
+    if (message.tax_id) {
+      obj.tax_id = message.tax_id.map((e) => e);
     } else {
-      obj.tax_ids = [];
+      obj.tax_id = [];
+    }
+    if (message.variants) {
+      obj.variants = message.variants.map((e) =>
+        e ? Variant.toJSON(e) : undefined
+      );
+    } else {
+      obj.variants = [];
     }
     message.gtin !== undefined && (obj.gtin = message.gtin);
-    message.physical !== undefined &&
-      (obj.physical = message.physical
-        ? PhysicalProduct.toJSON(message.physical)
-        : undefined);
-    message.virtual !== undefined &&
-      (obj.virtual = message.virtual
-        ? VirtualProduct.toJSON(message.virtual)
-        : undefined);
     return obj;
   },
 
@@ -519,140 +378,10 @@ export const Product = {
       object.category !== undefined && object.category !== null
         ? Identifier.fromPartial(object.category)
         : undefined;
-    message.tax_ids = object.tax_ids?.map((e) => e) || [];
+    message.tax_id = object.tax_id?.map((e) => e) || [];
+    message.variants =
+      object.variants?.map((e) => Variant.fromPartial(e)) || [];
     message.gtin = object.gtin ?? "";
-    message.physical =
-      object.physical !== undefined && object.physical !== null
-        ? PhysicalProduct.fromPartial(object.physical)
-        : undefined;
-    message.virtual =
-      object.virtual !== undefined && object.virtual !== null
-        ? VirtualProduct.fromPartial(object.virtual)
-        : undefined;
-    return message;
-  },
-};
-
-function createBasePhysicalProduct(): PhysicalProduct {
-  return { variants: [] };
-}
-
-export const PhysicalProduct = {
-  encode(
-    message: PhysicalProduct,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    for (const v of message.variants) {
-      PhysicalVariant.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): PhysicalProduct {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePhysicalProduct();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.variants.push(
-            PhysicalVariant.decode(reader, reader.uint32())
-          );
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PhysicalProduct {
-    return {
-      variants: Array.isArray(object?.variants)
-        ? object.variants.map((e: any) => PhysicalVariant.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: PhysicalProduct): unknown {
-    const obj: any = {};
-    if (message.variants) {
-      obj.variants = message.variants.map((e) =>
-        e ? PhysicalVariant.toJSON(e) : undefined
-      );
-    } else {
-      obj.variants = [];
-    }
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<PhysicalProduct>): PhysicalProduct {
-    const message = createBasePhysicalProduct();
-    message.variants =
-      object.variants?.map((e) => PhysicalVariant.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseVirtualProduct(): VirtualProduct {
-  return { variants: [] };
-}
-
-export const VirtualProduct = {
-  encode(
-    message: VirtualProduct,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    for (const v of message.variants) {
-      VirtualVariant.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): VirtualProduct {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVirtualProduct();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.variants.push(VirtualVariant.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): VirtualProduct {
-    return {
-      variants: Array.isArray(object?.variants)
-        ? object.variants.map((e: any) => VirtualVariant.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: VirtualProduct): unknown {
-    const obj: any = {};
-    if (message.variants) {
-      obj.variants = message.variants.map((e) =>
-        e ? VirtualVariant.toJSON(e) : undefined
-      );
-    } else {
-      obj.variants = [];
-    }
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<VirtualProduct>): VirtualProduct {
-    const message = createBaseVirtualProduct();
-    message.variants =
-      object.variants?.map((e) => VirtualVariant.fromPartial(e)) || [];
     return message;
   },
 };
@@ -963,202 +692,7 @@ export const ProductResponse = {
   },
 };
 
-function createBasePhysicalVariant(): PhysicalVariant {
-  return {
-    id: "",
-    name: "",
-    description: "",
-    stock_level: 0,
-    price: 0,
-    sale: false,
-    sale_price: 0,
-    image: [],
-    stock_keeping_unit: "",
-    template_variant: "",
-    packing_volume: undefined,
-    attributes: [],
-  };
-}
-
-export const PhysicalVariant = {
-  encode(
-    message: PhysicalVariant,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
-    }
-    if (message.description !== "") {
-      writer.uint32(26).string(message.description);
-    }
-    if (message.stock_level !== 0) {
-      writer.uint32(32).int32(message.stock_level);
-    }
-    if (message.price !== 0) {
-      writer.uint32(41).double(message.price);
-    }
-    if (message.sale === true) {
-      writer.uint32(48).bool(message.sale);
-    }
-    if (message.sale_price !== 0) {
-      writer.uint32(57).double(message.sale_price);
-    }
-    for (const v of message.image) {
-      Image.encode(v!, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.stock_keeping_unit !== "") {
-      writer.uint32(74).string(message.stock_keeping_unit);
-    }
-    if (message.template_variant !== "") {
-      writer.uint32(82).string(message.template_variant);
-    }
-    if (message.packing_volume !== undefined) {
-      Volume.encode(message.packing_volume, writer.uint32(90).fork()).ldelim();
-    }
-    for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(98).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): PhysicalVariant {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePhysicalVariant();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-        case 2:
-          message.name = reader.string();
-          break;
-        case 3:
-          message.description = reader.string();
-          break;
-        case 4:
-          message.stock_level = reader.int32();
-          break;
-        case 5:
-          message.price = reader.double();
-          break;
-        case 6:
-          message.sale = reader.bool();
-          break;
-        case 7:
-          message.sale_price = reader.double();
-          break;
-        case 8:
-          message.image.push(Image.decode(reader, reader.uint32()));
-          break;
-        case 9:
-          message.stock_keeping_unit = reader.string();
-          break;
-        case 10:
-          message.template_variant = reader.string();
-          break;
-        case 11:
-          message.packing_volume = Volume.decode(reader, reader.uint32());
-          break;
-        case 12:
-          message.attributes.push(Attribute.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PhysicalVariant {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      stock_level: isSet(object.stock_level) ? Number(object.stock_level) : 0,
-      price: isSet(object.price) ? Number(object.price) : 0,
-      sale: isSet(object.sale) ? Boolean(object.sale) : false,
-      sale_price: isSet(object.sale_price) ? Number(object.sale_price) : 0,
-      image: Array.isArray(object?.image)
-        ? object.image.map((e: any) => Image.fromJSON(e))
-        : [],
-      stock_keeping_unit: isSet(object.stock_keeping_unit)
-        ? String(object.stock_keeping_unit)
-        : "",
-      template_variant: isSet(object.template_variant)
-        ? String(object.template_variant)
-        : "",
-      packing_volume: isSet(object.packing_volume)
-        ? Volume.fromJSON(object.packing_volume)
-        : undefined,
-      attributes: Array.isArray(object?.attributes)
-        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: PhysicalVariant): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
-    message.stock_level !== undefined &&
-      (obj.stock_level = Math.round(message.stock_level));
-    message.price !== undefined && (obj.price = message.price);
-    message.sale !== undefined && (obj.sale = message.sale);
-    message.sale_price !== undefined && (obj.sale_price = message.sale_price);
-    if (message.image) {
-      obj.image = message.image.map((e) => (e ? Image.toJSON(e) : undefined));
-    } else {
-      obj.image = [];
-    }
-    message.stock_keeping_unit !== undefined &&
-      (obj.stock_keeping_unit = message.stock_keeping_unit);
-    message.template_variant !== undefined &&
-      (obj.template_variant = message.template_variant);
-    message.packing_volume !== undefined &&
-      (obj.packing_volume = message.packing_volume
-        ? Volume.toJSON(message.packing_volume)
-        : undefined);
-    if (message.attributes) {
-      obj.attributes = message.attributes.map((e) =>
-        e ? Attribute.toJSON(e) : undefined
-      );
-    } else {
-      obj.attributes = [];
-    }
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<PhysicalVariant>): PhysicalVariant {
-    const message = createBasePhysicalVariant();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.stock_level = object.stock_level ?? 0;
-    message.price = object.price ?? 0;
-    message.sale = object.sale ?? false;
-    message.sale_price = object.sale_price ?? 0;
-    message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
-    message.stock_keeping_unit = object.stock_keeping_unit ?? "";
-    message.template_variant = object.template_variant ?? "";
-    message.packing_volume =
-      object.packing_volume !== undefined && object.packing_volume !== null
-        ? Volume.fromPartial(object.packing_volume)
-        : undefined;
-    message.attributes =
-      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseVirtualVariant(): VirtualVariant {
+function createBaseVariant(): Variant {
   return {
     id: "",
     name: "",
@@ -1174,9 +708,9 @@ function createBaseVirtualVariant(): VirtualVariant {
   };
 }
 
-export const VirtualVariant = {
+export const Variant = {
   encode(
-    message: VirtualVariant,
+    message: Variant,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
     if (message.id !== "") {
@@ -1215,10 +749,10 @@ export const VirtualVariant = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): VirtualVariant {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Variant {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVirtualVariant();
+    const message = createBaseVariant();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1263,7 +797,7 @@ export const VirtualVariant = {
     return message;
   },
 
-  fromJSON(object: any): VirtualVariant {
+  fromJSON(object: any): Variant {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       name: isSet(object.name) ? String(object.name) : "",
@@ -1287,7 +821,7 @@ export const VirtualVariant = {
     };
   },
 
-  toJSON(message: VirtualVariant): unknown {
+  toJSON(message: Variant): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
@@ -1317,8 +851,8 @@ export const VirtualVariant = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<VirtualVariant>): VirtualVariant {
-    const message = createBaseVirtualVariant();
+  fromPartial(object: DeepPartial<Variant>): Variant {
+    const message = createBaseVariant();
     message.id = object.id ?? "";
     message.name = object.name ?? "";
     message.description = object.description ?? "";
@@ -1341,7 +875,7 @@ function createBaseBundle(): Bundle {
     name: "",
     description: "",
     image: [],
-    products: [],
+    product: [],
     price: 0,
   };
 }
@@ -1363,7 +897,7 @@ export const Bundle = {
     for (const v of message.image) {
       Image.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.products) {
+    for (const v of message.product) {
       BundleProduct.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.price !== 0) {
@@ -1392,7 +926,7 @@ export const Bundle = {
           message.image.push(Image.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.products.push(BundleProduct.decode(reader, reader.uint32()));
+          message.product.push(BundleProduct.decode(reader, reader.uint32()));
           break;
         case 7:
           message.price = reader.double();
@@ -1413,8 +947,8 @@ export const Bundle = {
       image: Array.isArray(object?.image)
         ? object.image.map((e: any) => Image.fromJSON(e))
         : [],
-      products: Array.isArray(object?.products)
-        ? object.products.map((e: any) => BundleProduct.fromJSON(e))
+      product: Array.isArray(object?.product)
+        ? object.product.map((e: any) => BundleProduct.fromJSON(e))
         : [],
       price: isSet(object.price) ? Number(object.price) : 0,
     };
@@ -1431,12 +965,12 @@ export const Bundle = {
     } else {
       obj.image = [];
     }
-    if (message.products) {
-      obj.products = message.products.map((e) =>
+    if (message.product) {
+      obj.product = message.product.map((e) =>
         e ? BundleProduct.toJSON(e) : undefined
       );
     } else {
-      obj.products = [];
+      obj.product = [];
     }
     message.price !== undefined && (obj.price = message.price);
     return obj;
@@ -1448,15 +982,15 @@ export const Bundle = {
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
-    message.products =
-      object.products?.map((e) => BundleProduct.fromPartial(e)) || [];
+    message.product =
+      object.product?.map((e) => BundleProduct.fromPartial(e)) || [];
     message.price = object.price ?? 0;
     return message;
   },
 };
 
 function createBaseBundleProduct(): BundleProduct {
-  return { product_id: "", variant_id: "", quantity: 0, price_ratio: 0 };
+  return { product_id: "", quantity: 0 };
 }
 
 export const BundleProduct = {
@@ -1467,14 +1001,8 @@ export const BundleProduct = {
     if (message.product_id !== "") {
       writer.uint32(10).string(message.product_id);
     }
-    if (message.variant_id !== "") {
-      writer.uint32(18).string(message.variant_id);
-    }
     if (message.quantity !== 0) {
-      writer.uint32(24).uint32(message.quantity);
-    }
-    if (message.price_ratio !== 0) {
-      writer.uint32(33).double(message.price_ratio);
+      writer.uint32(16).uint32(message.quantity);
     }
     return writer;
   },
@@ -1490,13 +1018,7 @@ export const BundleProduct = {
           message.product_id = reader.string();
           break;
         case 2:
-          message.variant_id = reader.string();
-          break;
-        case 3:
           message.quantity = reader.uint32();
-          break;
-        case 4:
-          message.price_ratio = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1509,87 +1031,22 @@ export const BundleProduct = {
   fromJSON(object: any): BundleProduct {
     return {
       product_id: isSet(object.product_id) ? String(object.product_id) : "",
-      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      price_ratio: isSet(object.price_ratio) ? Number(object.price_ratio) : 0,
     };
   },
 
   toJSON(message: BundleProduct): unknown {
     const obj: any = {};
     message.product_id !== undefined && (obj.product_id = message.product_id);
-    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.quantity !== undefined &&
       (obj.quantity = Math.round(message.quantity));
-    message.price_ratio !== undefined &&
-      (obj.price_ratio = message.price_ratio);
     return obj;
   },
 
   fromPartial(object: DeepPartial<BundleProduct>): BundleProduct {
     const message = createBaseBundleProduct();
     message.product_id = object.product_id ?? "";
-    message.variant_id = object.variant_id ?? "";
     message.quantity = object.quantity ?? 0;
-    message.price_ratio = object.price_ratio ?? 0;
-    return message;
-  },
-};
-
-function createBaseVAT(): VAT {
-  return { tax_id: "", vat: 0 };
-}
-
-export const VAT = {
-  encode(message: VAT, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tax_id !== "") {
-      writer.uint32(10).string(message.tax_id);
-    }
-    if (message.vat !== 0) {
-      writer.uint32(17).double(message.vat);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): VAT {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVAT();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.tax_id = reader.string();
-          break;
-        case 2:
-          message.vat = reader.double();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): VAT {
-    return {
-      tax_id: isSet(object.tax_id) ? String(object.tax_id) : "",
-      vat: isSet(object.vat) ? Number(object.vat) : 0,
-    };
-  },
-
-  toJSON(message: VAT): unknown {
-    const obj: any = {};
-    message.tax_id !== undefined && (obj.tax_id = message.tax_id);
-    message.vat !== undefined && (obj.vat = message.vat);
-    return obj;
-  },
-
-  fromPartial(object: DeepPartial<VAT>): VAT {
-    const message = createBaseVAT();
-    message.tax_id = object.tax_id ?? "";
-    message.vat = object.vat ?? 0;
     return message;
   },
 };
@@ -1789,71 +1246,6 @@ export const protoMetadata: ProtoMetadata = {
     weakDependency: [],
     messageType: [
       {
-        name: "Volume",
-        field: [
-          {
-            name: "width_in_cm",
-            number: 1,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "widthInCm",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "height_in_cm",
-            number: 2,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "heightInCm",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "length_in_cm",
-            number: 3,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "lengthInCm",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "weight_in_kg",
-            number: 4,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "weightInKg",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
         name: "MainProduct",
         field: [
           {
@@ -2034,7 +1426,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "tax_ids",
+            name: "tax_id",
             number: 8,
             label: 3,
             type: 9,
@@ -2042,13 +1434,26 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "taxIds",
+            jsonName: "taxId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "variants",
+            number: 9,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Variant",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variants",
             options: undefined,
             proto3Optional: false,
           },
           {
             name: "gtin",
-            number: 9,
+            number: 10,
             label: 1,
             type: 9,
             typeName: "",
@@ -2059,93 +1464,12 @@ export const protoMetadata: ProtoMetadata = {
             options: undefined,
             proto3Optional: false,
           },
-          {
-            name: "physical",
-            number: 10,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.product.PhysicalProduct",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 1,
-            jsonName: "physical",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "virtual",
-            number: 11,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.product.VirtualProduct",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 1,
-            jsonName: "virtual",
-            options: undefined,
-            proto3Optional: false,
-          },
         ],
         extension: [],
         nestedType: [],
         enumType: [],
         extensionRange: [],
-        oneofDecl: [
-          { name: "classification", options: undefined },
-          { name: "nature", options: undefined },
-        ],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "PhysicalProduct",
-        field: [
-          {
-            name: "variants",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.product.PhysicalVariant",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "variants",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "VirtualProduct",
-        field: [
-          {
-            name: "variants",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.product.VirtualVariant",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "variants",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
+        oneofDecl: [{ name: "classification", options: undefined }],
         options: undefined,
         reservedRange: [],
         reservedName: [],
@@ -2320,176 +1644,7 @@ export const protoMetadata: ProtoMetadata = {
         reservedName: [],
       },
       {
-        name: "PhysicalVariant",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "name",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "description",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "description",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "stock_level",
-            number: 4,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "stockLevel",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "price",
-            number: 5,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "price",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "sale",
-            number: 6,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "sale",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "sale_price",
-            number: 7,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "salePrice",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "image",
-            number: 8,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.image.Image",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "image",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "stock_keeping_unit",
-            number: 9,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "stockKeepingUnit",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "template_variant",
-            number: 10,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "templateVariant",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "packing_volume",
-            number: 11,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.product.Volume",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "packingVolume",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "attributes",
-            number: 12,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.attribute.Attribute",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "attributes",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "VirtualVariant",
+        name: "Variant",
         field: [
           {
             name: "id",
@@ -2700,7 +1855,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "products",
+            name: "product",
             number: 6,
             label: 3,
             type: 11,
@@ -2708,7 +1863,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "products",
+            jsonName: "product",
             options: undefined,
             proto3Optional: false,
           },
@@ -2752,21 +1907,8 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "variant_id",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "variantId",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
             name: "quantity",
-            number: 3,
+            number: 2,
             label: 1,
             type: 13,
             typeName: "",
@@ -2774,58 +1916,6 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "quantity",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "price_ratio",
-            number: 4,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "priceRatio",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "VAT",
-        field: [
-          {
-            name: "tax_id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "taxId",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "vat",
-            number: 2,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "vat",
             options: undefined,
             proto3Optional: false,
           },
@@ -2931,8 +2021,8 @@ export const protoMetadata: ProtoMetadata = {
           leadingDetachedComments: [],
         },
         {
-          path: [4, 1],
-          span: [35, 0, 43, 1],
+          path: [4, 0],
+          span: [28, 0, 36, 1],
           leadingComments: " Product resource\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -2942,20 +2032,15 @@ export const protoMetadata: ProtoMetadata = {
     syntax: "proto3",
   }),
   references: {
-    ".io.restorecommerce.product.Volume": Volume,
     ".io.restorecommerce.product.MainProduct": MainProduct,
     ".io.restorecommerce.product.Product": Product,
-    ".io.restorecommerce.product.PhysicalProduct": PhysicalProduct,
-    ".io.restorecommerce.product.VirtualProduct": VirtualProduct,
     ".io.restorecommerce.product.Identifier": Identifier,
     ".io.restorecommerce.product.ProductList": ProductList,
     ".io.restorecommerce.product.ProductListResponse": ProductListResponse,
     ".io.restorecommerce.product.ProductResponse": ProductResponse,
-    ".io.restorecommerce.product.PhysicalVariant": PhysicalVariant,
-    ".io.restorecommerce.product.VirtualVariant": VirtualVariant,
+    ".io.restorecommerce.product.Variant": Variant,
     ".io.restorecommerce.product.Bundle": Bundle,
     ".io.restorecommerce.product.BundleProduct": BundleProduct,
-    ".io.restorecommerce.product.VAT": VAT,
     ".io.restorecommerce.product.Deleted": Deleted,
   },
   dependencies: [

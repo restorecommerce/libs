@@ -6,7 +6,6 @@ import {
 } from "../../google/protobuf/any";
 import { Subject, protoMetadata as protoMetadata2 } from "./auth";
 import { CallContext, CallOptions } from "nice-grpc-common";
-import { protoMetadata as protoMetadata3 } from "./options";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.commandinterface";
@@ -251,11 +250,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     name: "io/restorecommerce/commandinterface.proto",
     package: "io.restorecommerce.commandinterface",
-    dependency: [
-      "google/protobuf/any.proto",
-      "io/restorecommerce/auth.proto",
-      "io/restorecommerce/options.proto",
-    ],
+    dependency: ["google/protobuf/any.proto", "io/restorecommerce/auth.proto"],
     publicDependency: [],
     weakDependency: [],
     messageType: [
@@ -365,7 +360,7 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: false,
           },
         ],
-        options: { deprecated: false, uninterpretedOption: [] },
+        options: undefined,
       },
     ],
     extension: [],
@@ -374,14 +369,14 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [9, 0, 14, 1],
+          span: [8, 0, 13, 1],
           leadingComments: " used to send requests through Kafka or gRPC\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 0, 2, 0],
-          span: [11, 2, 18],
+          span: [10, 2, 18],
           leadingComments:
             "  command identifier (used to demultiplex operation in the command implementation)\n",
           trailingComments: "",
@@ -389,21 +384,21 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 0, 2, 1],
-          span: [12, 2, 34],
+          span: [11, 2, 34],
           leadingComments: "",
           trailingComments: " variable payload\n",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1],
-          span: [17, 0, 23, 1],
+          span: [16, 0, 22, 1],
           leadingComments: " used to push responses to Kafka\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
           path: [4, 1, 2, 0],
-          span: [21, 2, 31],
+          span: [20, 2, 31],
           leadingComments:
             " service identifiers\n (multiple services may reply to one system command)\n (multiple service names can be bound to one microservice)\n",
           trailingComments: "",
@@ -411,14 +406,14 @@ export const protoMetadata: ProtoMetadata = {
         },
         {
           path: [4, 1, 2, 1],
-          span: [22, 2, 34],
+          span: [21, 2, 34],
           leadingComments: "",
           trailingComments: " variable payload\n",
           leadingDetachedComments: [],
         },
         {
           path: [6, 0],
-          span: [28, 0, 31, 1],
+          span: [27, 0, 29, 1],
           leadingComments: "*\n RPC service for executing commands\n",
           trailingComments: "",
           leadingDetachedComments: [],
@@ -431,15 +426,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.commandinterface.CommandRequest": CommandRequest,
     ".io.restorecommerce.commandinterface.CommandResponse": CommandResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: {
-    services: {
-      Service: {
-        options: { service_name: "commandinterface" },
-        methods: {},
-      },
-    },
-  },
+  dependencies: [protoMetadata1, protoMetadata2],
 };
 
 type Builtin =

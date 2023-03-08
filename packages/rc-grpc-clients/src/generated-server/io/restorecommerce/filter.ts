@@ -330,6 +330,10 @@ export const Filter = {
     return obj;
   },
 
+  create(base?: DeepPartial<Filter>): Filter {
+    return Filter.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
     message.field = object.field ?? "";
@@ -403,6 +407,10 @@ export const FilterOp = {
     message.operator !== undefined &&
       (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
+  },
+
+  create(base?: DeepPartial<FilterOp>): FilterOp {
+    return FilterOp.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {

@@ -190,6 +190,10 @@ export const Payload = {
     return obj;
   },
 
+  create(base?: DeepPartial<Payload>): Payload {
+    return Payload.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Payload>): Payload {
     const message = createBasePayload();
     message.templates =
@@ -272,6 +276,10 @@ export const RenderRequest = {
     return obj;
   },
 
+  create(base?: DeepPartial<RenderRequest>): RenderRequest {
+    return RenderRequest.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
     const message = createBaseRenderRequest();
     message.id = object.id ?? "";
@@ -339,6 +347,10 @@ export const RenderResponse = {
       obj.response = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<RenderResponse>): RenderResponse {
+    return RenderResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {

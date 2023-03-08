@@ -114,6 +114,10 @@ export const Resolver = {
     return obj;
   },
 
+  create(base?: DeepPartial<Resolver>): Resolver {
+    return Resolver.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Resolver>): Resolver {
     const message = createBaseResolver();
     message.target_type = object.target_type ?? "";
@@ -200,6 +204,10 @@ export const KafkaSubscription = {
     message.updated !== undefined && (obj.updated = message.updated);
     message.deleted !== undefined && (obj.deleted = message.deleted);
     return obj;
+  },
+
+  create(base?: DeepPartial<KafkaSubscription>): KafkaSubscription {
+    return KafkaSubscription.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<KafkaSubscription>): KafkaSubscription {

@@ -135,6 +135,10 @@ export const Image = {
     return obj;
   },
 
+  create(base?: DeepPartial<Image>): Image {
+    return Image.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Image>): Image {
     const message = createBaseImage();
     message.id = object.id ?? "";
@@ -209,6 +213,10 @@ export const ImageList = {
     return obj;
   },
 
+  create(base?: DeepPartial<ImageList>): ImageList {
+    return ImageList.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ImageList>): ImageList {
     const message = createBaseImageList();
     message.items = object.items?.map((e) => Image.fromPartial(e)) || [];
@@ -260,6 +268,10 @@ export const Deleted = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {

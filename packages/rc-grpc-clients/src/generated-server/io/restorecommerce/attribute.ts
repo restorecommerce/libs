@@ -83,6 +83,10 @@ export const Attribute = {
     return obj;
   },
 
+  create(base?: DeepPartial<Attribute>): Attribute {
+    return Attribute.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Attribute>): Attribute {
     const message = createBaseAttribute();
     message.id = object.id ?? "";
@@ -141,6 +145,10 @@ export const AttributeObj = {
         ? Attribute.toJSON(message.attribute)
         : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<AttributeObj>): AttributeObj {
+    return AttributeObj.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<AttributeObj>): AttributeObj {

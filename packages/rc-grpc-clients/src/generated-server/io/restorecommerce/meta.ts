@@ -111,6 +111,10 @@ export const Meta = {
     return obj;
   },
 
+  create(base?: DeepPartial<Meta>): Meta {
+    return Meta.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Meta>): Meta {
     const message = createBaseMeta();
     message.created = object.created ?? 0;

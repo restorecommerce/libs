@@ -23,9 +23,9 @@ export const protobufPackage = "io.restorecommerce.rule";
 
 /** Resulting effect from a Policy or Rule. */
 export enum Effect {
-  PERMIT = 0,
-  DENY = 1,
-  UNRECOGNIZED = -1,
+  PERMIT = "PERMIT",
+  DENY = "DENY",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function effectFromJSON(object: any): Effect {
@@ -52,6 +52,18 @@ export function effectToJSON(object: Effect): string {
     case Effect.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function effectToNumber(object: Effect): number {
+  switch (object) {
+    case Effect.PERMIT:
+      return 0;
+    case Effect.DENY:
+      return 1;
+    case Effect.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -217,7 +229,7 @@ function createBaseRule(): Rule {
     target: undefined,
     contextQuery: undefined,
     condition: "",
-    effect: 0,
+    effect: Effect.PERMIT,
     evaluationCacheable: false,
   };
 }
@@ -248,8 +260,8 @@ export const Rule = {
     if (message.condition !== "") {
       writer.uint32(58).string(message.condition);
     }
-    if (message.effect !== 0) {
-      writer.uint32(64).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(64).int32(effectToNumber(message.effect));
     }
     if (message.evaluationCacheable === true) {
       writer.uint32(72).bool(message.evaluationCacheable);
@@ -286,7 +298,7 @@ export const Rule = {
           message.condition = reader.string();
           break;
         case 8:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 9:
           message.evaluationCacheable = reader.bool();
@@ -310,7 +322,9 @@ export const Rule = {
         ? ContextQuery.fromJSON(object.contextQuery)
         : undefined,
       condition: isSet(object.condition) ? String(object.condition) : "",
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect)
+        ? effectFromJSON(object.effect)
+        : Effect.PERMIT,
       evaluationCacheable: isSet(object.evaluationCacheable)
         ? Boolean(object.evaluationCacheable)
         : false,
@@ -356,7 +370,7 @@ export const Rule = {
         ? ContextQuery.fromPartial(object.contextQuery)
         : undefined;
     message.condition = object.condition ?? "";
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;
   },
@@ -366,7 +380,7 @@ function createBaseRuleRQ(): RuleRQ {
   return {
     id: "",
     target: undefined,
-    effect: 0,
+    effect: Effect.PERMIT,
     condition: "",
     contextQuery: undefined,
     evaluationCacheable: false,
@@ -384,8 +398,8 @@ export const RuleRQ = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(24).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(24).int32(effectToNumber(message.effect));
     }
     if (message.condition !== "") {
       writer.uint32(34).string(message.condition);
@@ -416,7 +430,7 @@ export const RuleRQ = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 3:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 4:
           message.condition = reader.string();
@@ -439,7 +453,9 @@ export const RuleRQ = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect)
+        ? effectFromJSON(object.effect)
+        : Effect.PERMIT,
       condition: isSet(object.condition) ? String(object.condition) : "",
       contextQuery: isSet(object.contextQuery)
         ? ContextQuery.fromJSON(object.contextQuery)
@@ -473,7 +489,7 @@ export const RuleRQ = {
       object.target !== undefined && object.target !== null
         ? Target.fromPartial(object.target)
         : undefined;
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.condition = object.condition ?? "";
     message.contextQuery =
       object.contextQuery !== undefined && object.contextQuery !== null

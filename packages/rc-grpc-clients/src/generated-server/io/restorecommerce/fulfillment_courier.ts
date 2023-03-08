@@ -18,7 +18,7 @@ import {
   DeleteRequest,
   DeleteResponse,
 } from "./resource_base";
-import { protoMetadata as protoMetadata6 } from "./options";
+import { protoMetadata as protoMetadata6, KafkaSubscription } from "./options";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_courier";
@@ -774,7 +774,13 @@ export const protoMetadata: ProtoMetadata = {
         enumType: [],
         extensionRange: [],
         oneofDecl: [],
-        options: undefined,
+        options: {
+          messageSetWireFormat: false,
+          noStandardDescriptorAccessor: false,
+          deprecated: false,
+          mapEntry: false,
+          uninterpretedOption: [],
+        },
         reservedRange: [],
         reservedName: [],
       },
@@ -1036,6 +1042,18 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
   ],
   options: {
+    messages: {
+      FulfillmentCourier: {
+        options: {
+          kafka_subscriber: KafkaSubscription.decode(
+            Buffer.from(
+              "ChNmdWxmaWxsbWVudENvdXJpZXJzEi9pby5yZXN0b3JlY29tbWVyY2UuZnVsZmlsbG1lbnRfY291cmllci5yZXNvdXJjZRoZZnVsZmlsbG1lbnRDb3VyaWVyQ3JlYXRlZCIZZnVsZmlsbG1lbnRDb3VyaWVyVXBkYXRlZCoZZnVsZmlsbG1lbnRDb3VyaWVyRGVsZXRlZA==",
+              "base64"
+            )
+          ),
+        },
+      },
+    },
     services: {
       Service: {
         options: { service_name: "fulfillment_courier" },

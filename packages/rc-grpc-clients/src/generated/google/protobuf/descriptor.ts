@@ -134,38 +134,38 @@ export enum FieldDescriptorProto_Type {
    * TYPE_DOUBLE - / 0 is reserved for errors.
    * / Order is weird for historical reasons.
    */
-  TYPE_DOUBLE = 1,
-  TYPE_FLOAT = 2,
+  TYPE_DOUBLE = "TYPE_DOUBLE",
+  TYPE_FLOAT = "TYPE_FLOAT",
   /**
    * TYPE_INT64 - / Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if
    * / negative values are likely.
    */
-  TYPE_INT64 = 3,
-  TYPE_UINT64 = 4,
+  TYPE_INT64 = "TYPE_INT64",
+  TYPE_UINT64 = "TYPE_UINT64",
   /**
    * TYPE_INT32 - / Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if
    * / negative values are likely.
    */
-  TYPE_INT32 = 5,
-  TYPE_FIXED64 = 6,
-  TYPE_FIXED32 = 7,
-  TYPE_BOOL = 8,
-  TYPE_STRING = 9,
+  TYPE_INT32 = "TYPE_INT32",
+  TYPE_FIXED64 = "TYPE_FIXED64",
+  TYPE_FIXED32 = "TYPE_FIXED32",
+  TYPE_BOOL = "TYPE_BOOL",
+  TYPE_STRING = "TYPE_STRING",
   /** TYPE_GROUP - / Tag-delimited aggregate. */
-  TYPE_GROUP = 10,
+  TYPE_GROUP = "TYPE_GROUP",
   /** TYPE_MESSAGE - / Length-delimited aggregate. */
-  TYPE_MESSAGE = 11,
+  TYPE_MESSAGE = "TYPE_MESSAGE",
   /** TYPE_BYTES - / New in version 2. */
-  TYPE_BYTES = 12,
-  TYPE_UINT32 = 13,
-  TYPE_ENUM = 14,
-  TYPE_SFIXED32 = 15,
-  TYPE_SFIXED64 = 16,
+  TYPE_BYTES = "TYPE_BYTES",
+  TYPE_UINT32 = "TYPE_UINT32",
+  TYPE_ENUM = "TYPE_ENUM",
+  TYPE_SFIXED32 = "TYPE_SFIXED32",
+  TYPE_SFIXED64 = "TYPE_SFIXED64",
   /** TYPE_SINT32 - / Uses ZigZag encoding. */
-  TYPE_SINT32 = 17,
+  TYPE_SINT32 = "TYPE_SINT32",
   /** TYPE_SINT64 - / Uses ZigZag encoding. */
-  TYPE_SINT64 = 18,
-  UNRECOGNIZED = -1,
+  TYPE_SINT64 = "TYPE_SINT64",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function fieldDescriptorProto_TypeFromJSON(
@@ -279,13 +279,59 @@ export function fieldDescriptorProto_TypeToJSON(
   }
 }
 
+export function fieldDescriptorProto_TypeToNumber(
+  object: FieldDescriptorProto_Type
+): number {
+  switch (object) {
+    case FieldDescriptorProto_Type.TYPE_DOUBLE:
+      return 1;
+    case FieldDescriptorProto_Type.TYPE_FLOAT:
+      return 2;
+    case FieldDescriptorProto_Type.TYPE_INT64:
+      return 3;
+    case FieldDescriptorProto_Type.TYPE_UINT64:
+      return 4;
+    case FieldDescriptorProto_Type.TYPE_INT32:
+      return 5;
+    case FieldDescriptorProto_Type.TYPE_FIXED64:
+      return 6;
+    case FieldDescriptorProto_Type.TYPE_FIXED32:
+      return 7;
+    case FieldDescriptorProto_Type.TYPE_BOOL:
+      return 8;
+    case FieldDescriptorProto_Type.TYPE_STRING:
+      return 9;
+    case FieldDescriptorProto_Type.TYPE_GROUP:
+      return 10;
+    case FieldDescriptorProto_Type.TYPE_MESSAGE:
+      return 11;
+    case FieldDescriptorProto_Type.TYPE_BYTES:
+      return 12;
+    case FieldDescriptorProto_Type.TYPE_UINT32:
+      return 13;
+    case FieldDescriptorProto_Type.TYPE_ENUM:
+      return 14;
+    case FieldDescriptorProto_Type.TYPE_SFIXED32:
+      return 15;
+    case FieldDescriptorProto_Type.TYPE_SFIXED64:
+      return 16;
+    case FieldDescriptorProto_Type.TYPE_SINT32:
+      return 17;
+    case FieldDescriptorProto_Type.TYPE_SINT64:
+      return 18;
+    case FieldDescriptorProto_Type.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum FieldDescriptorProto_Label {
   /** LABEL_OPTIONAL - / 0 is reserved for errors */
-  LABEL_OPTIONAL = 1,
-  LABEL_REQUIRED = 2,
+  LABEL_OPTIONAL = "LABEL_OPTIONAL",
+  LABEL_REQUIRED = "LABEL_REQUIRED",
   /** LABEL_REPEATED - / TODO(sanjay): Should we add LABEL_MAP? */
-  LABEL_REPEATED = 3,
-  UNRECOGNIZED = -1,
+  LABEL_REPEATED = "LABEL_REPEATED",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function fieldDescriptorProto_LabelFromJSON(
@@ -321,6 +367,22 @@ export function fieldDescriptorProto_LabelToJSON(
     case FieldDescriptorProto_Label.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function fieldDescriptorProto_LabelToNumber(
+  object: FieldDescriptorProto_Label
+): number {
+  switch (object) {
+    case FieldDescriptorProto_Label.LABEL_OPTIONAL:
+      return 1;
+    case FieldDescriptorProto_Label.LABEL_REQUIRED:
+      return 2;
+    case FieldDescriptorProto_Label.LABEL_REPEATED:
+      return 3;
+    case FieldDescriptorProto_Label.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -465,12 +527,12 @@ export interface FileOptions {
 /** / Generated classes can be optimized for speed or code size. */
 export enum FileOptions_OptimizeMode {
   /** SPEED - / Generate complete code for parsing, serialization, */
-  SPEED = 1,
+  SPEED = "SPEED",
   /** CODE_SIZE - / etc. */
-  CODE_SIZE = 2,
+  CODE_SIZE = "CODE_SIZE",
   /** LITE_RUNTIME - / Generate code using MessageLite and the lite runtime. */
-  LITE_RUNTIME = 3,
-  UNRECOGNIZED = -1,
+  LITE_RUNTIME = "LITE_RUNTIME",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function fileOptions_OptimizeModeFromJSON(
@@ -506,6 +568,22 @@ export function fileOptions_OptimizeModeToJSON(
     case FileOptions_OptimizeMode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function fileOptions_OptimizeModeToNumber(
+  object: FileOptions_OptimizeMode
+): number {
+  switch (object) {
+    case FileOptions_OptimizeMode.SPEED:
+      return 1;
+    case FileOptions_OptimizeMode.CODE_SIZE:
+      return 2;
+    case FileOptions_OptimizeMode.LITE_RUNTIME:
+      return 3;
+    case FileOptions_OptimizeMode.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -646,10 +724,10 @@ export interface FieldOptions {
 
 export enum FieldOptions_CType {
   /** STRING - / Default mode. */
-  STRING = 0,
-  CORD = 1,
-  STRING_PIECE = 2,
-  UNRECOGNIZED = -1,
+  STRING = "STRING",
+  CORD = "CORD",
+  STRING_PIECE = "STRING_PIECE",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function fieldOptions_CTypeFromJSON(object: any): FieldOptions_CType {
@@ -684,14 +762,28 @@ export function fieldOptions_CTypeToJSON(object: FieldOptions_CType): string {
   }
 }
 
+export function fieldOptions_CTypeToNumber(object: FieldOptions_CType): number {
+  switch (object) {
+    case FieldOptions_CType.STRING:
+      return 0;
+    case FieldOptions_CType.CORD:
+      return 1;
+    case FieldOptions_CType.STRING_PIECE:
+      return 2;
+    case FieldOptions_CType.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum FieldOptions_JSType {
   /** JS_NORMAL - / Use the default type. */
-  JS_NORMAL = 0,
+  JS_NORMAL = "JS_NORMAL",
   /** JS_STRING - / Use JavaScript strings. */
-  JS_STRING = 1,
+  JS_STRING = "JS_STRING",
   /** JS_NUMBER - / Use JavaScript numbers. */
-  JS_NUMBER = 2,
-  UNRECOGNIZED = -1,
+  JS_NUMBER = "JS_NUMBER",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function fieldOptions_JSTypeFromJSON(object: any): FieldOptions_JSType {
@@ -723,6 +815,22 @@ export function fieldOptions_JSTypeToJSON(object: FieldOptions_JSType): string {
     case FieldOptions_JSType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function fieldOptions_JSTypeToNumber(
+  object: FieldOptions_JSType
+): number {
+  switch (object) {
+    case FieldOptions_JSType.JS_NORMAL:
+      return 0;
+    case FieldOptions_JSType.JS_STRING:
+      return 1;
+    case FieldOptions_JSType.JS_NUMBER:
+      return 2;
+    case FieldOptions_JSType.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -1703,8 +1811,8 @@ function createBaseFieldDescriptorProto(): FieldDescriptorProto {
   return {
     name: "",
     number: 0,
-    label: 1,
-    type: 1,
+    label: FieldDescriptorProto_Label.LABEL_OPTIONAL,
+    type: FieldDescriptorProto_Type.TYPE_DOUBLE,
     typeName: "",
     extendee: "",
     defaultValue: "",
@@ -1725,11 +1833,13 @@ export const FieldDescriptorProto = {
     if (message.number !== 0) {
       writer.uint32(24).int32(message.number);
     }
-    if (message.label !== 1) {
-      writer.uint32(32).int32(message.label);
+    if (message.label !== FieldDescriptorProto_Label.LABEL_OPTIONAL) {
+      writer
+        .uint32(32)
+        .int32(fieldDescriptorProto_LabelToNumber(message.label));
     }
-    if (message.type !== 1) {
-      writer.uint32(40).int32(message.type);
+    if (message.type !== FieldDescriptorProto_Type.TYPE_DOUBLE) {
+      writer.uint32(40).int32(fieldDescriptorProto_TypeToNumber(message.type));
     }
     if (message.typeName !== "") {
       writer.uint32(50).string(message.typeName);
@@ -1769,10 +1879,10 @@ export const FieldDescriptorProto = {
           message.number = reader.int32();
           break;
         case 4:
-          message.label = reader.int32() as any;
+          message.label = fieldDescriptorProto_LabelFromJSON(reader.int32());
           break;
         case 5:
-          message.type = reader.int32() as any;
+          message.type = fieldDescriptorProto_TypeFromJSON(reader.int32());
           break;
         case 6:
           message.typeName = reader.string();
@@ -1806,10 +1916,10 @@ export const FieldDescriptorProto = {
       number: isSet(object.number) ? Number(object.number) : 0,
       label: isSet(object.label)
         ? fieldDescriptorProto_LabelFromJSON(object.label)
-        : 1,
+        : FieldDescriptorProto_Label.LABEL_OPTIONAL,
       type: isSet(object.type)
         ? fieldDescriptorProto_TypeFromJSON(object.type)
-        : 1,
+        : FieldDescriptorProto_Type.TYPE_DOUBLE,
       typeName: isSet(object.typeName) ? String(object.typeName) : "",
       extendee: isSet(object.extendee) ? String(object.extendee) : "",
       defaultValue: isSet(object.defaultValue)
@@ -1849,8 +1959,8 @@ export const FieldDescriptorProto = {
     const message = createBaseFieldDescriptorProto();
     message.name = object.name ?? "";
     message.number = object.number ?? 0;
-    message.label = object.label ?? 1;
-    message.type = object.type ?? 1;
+    message.label = object.label ?? FieldDescriptorProto_Label.LABEL_OPTIONAL;
+    message.type = object.type ?? FieldDescriptorProto_Type.TYPE_DOUBLE;
     message.typeName = object.typeName ?? "";
     message.extendee = object.extendee ?? "";
     message.defaultValue = object.defaultValue ?? "";
@@ -2318,7 +2428,7 @@ function createBaseFileOptions(): FileOptions {
     javaMultipleFiles: false,
     javaGenerateEqualsAndHash: false,
     javaStringCheckUtf8: false,
-    optimizeFor: 1,
+    optimizeFor: FileOptions_OptimizeMode.SPEED,
     goPackage: "",
     ccGenericServices: false,
     javaGenericServices: false,
@@ -2351,8 +2461,10 @@ export const FileOptions = {
     if (message.javaStringCheckUtf8 === true) {
       writer.uint32(216).bool(message.javaStringCheckUtf8);
     }
-    if (message.optimizeFor !== 1) {
-      writer.uint32(72).int32(message.optimizeFor);
+    if (message.optimizeFor !== FileOptions_OptimizeMode.SPEED) {
+      writer
+        .uint32(72)
+        .int32(fileOptions_OptimizeModeToNumber(message.optimizeFor));
     }
     if (message.goPackage !== "") {
       writer.uint32(90).string(message.goPackage);
@@ -2407,7 +2519,9 @@ export const FileOptions = {
           message.javaStringCheckUtf8 = reader.bool();
           break;
         case 9:
-          message.optimizeFor = reader.int32() as any;
+          message.optimizeFor = fileOptions_OptimizeModeFromJSON(
+            reader.int32()
+          );
           break;
         case 11:
           message.goPackage = reader.string();
@@ -2463,7 +2577,7 @@ export const FileOptions = {
         : false,
       optimizeFor: isSet(object.optimizeFor)
         ? fileOptions_OptimizeModeFromJSON(object.optimizeFor)
-        : 1,
+        : FileOptions_OptimizeMode.SPEED,
       goPackage: isSet(object.goPackage) ? String(object.goPackage) : "",
       ccGenericServices: isSet(object.ccGenericServices)
         ? Boolean(object.ccGenericServices)
@@ -2538,7 +2652,7 @@ export const FileOptions = {
     message.javaGenerateEqualsAndHash =
       object.javaGenerateEqualsAndHash ?? false;
     message.javaStringCheckUtf8 = object.javaStringCheckUtf8 ?? false;
-    message.optimizeFor = object.optimizeFor ?? 1;
+    message.optimizeFor = object.optimizeFor ?? FileOptions_OptimizeMode.SPEED;
     message.goPackage = object.goPackage ?? "";
     message.ccGenericServices = object.ccGenericServices ?? false;
     message.javaGenericServices = object.javaGenericServices ?? false;
@@ -2673,9 +2787,9 @@ export const MessageOptions = {
 
 function createBaseFieldOptions(): FieldOptions {
   return {
-    ctype: 0,
+    ctype: FieldOptions_CType.STRING,
     packed: false,
-    jstype: 0,
+    jstype: FieldOptions_JSType.JS_NORMAL,
     lazy: false,
     deprecated: false,
     weak: false,
@@ -2688,14 +2802,14 @@ export const FieldOptions = {
     message: FieldOptions,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.ctype !== 0) {
-      writer.uint32(8).int32(message.ctype);
+    if (message.ctype !== FieldOptions_CType.STRING) {
+      writer.uint32(8).int32(fieldOptions_CTypeToNumber(message.ctype));
     }
     if (message.packed === true) {
       writer.uint32(16).bool(message.packed);
     }
-    if (message.jstype !== 0) {
-      writer.uint32(48).int32(message.jstype);
+    if (message.jstype !== FieldOptions_JSType.JS_NORMAL) {
+      writer.uint32(48).int32(fieldOptions_JSTypeToNumber(message.jstype));
     }
     if (message.lazy === true) {
       writer.uint32(40).bool(message.lazy);
@@ -2720,13 +2834,13 @@ export const FieldOptions = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.ctype = reader.int32() as any;
+          message.ctype = fieldOptions_CTypeFromJSON(reader.int32());
           break;
         case 2:
           message.packed = reader.bool();
           break;
         case 6:
-          message.jstype = reader.int32() as any;
+          message.jstype = fieldOptions_JSTypeFromJSON(reader.int32());
           break;
         case 5:
           message.lazy = reader.bool();
@@ -2752,11 +2866,13 @@ export const FieldOptions = {
 
   fromJSON(object: any): FieldOptions {
     return {
-      ctype: isSet(object.ctype) ? fieldOptions_CTypeFromJSON(object.ctype) : 0,
+      ctype: isSet(object.ctype)
+        ? fieldOptions_CTypeFromJSON(object.ctype)
+        : FieldOptions_CType.STRING,
       packed: isSet(object.packed) ? Boolean(object.packed) : false,
       jstype: isSet(object.jstype)
         ? fieldOptions_JSTypeFromJSON(object.jstype)
-        : 0,
+        : FieldOptions_JSType.JS_NORMAL,
       lazy: isSet(object.lazy) ? Boolean(object.lazy) : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       weak: isSet(object.weak) ? Boolean(object.weak) : false,
@@ -2790,9 +2906,9 @@ export const FieldOptions = {
 
   fromPartial(object: DeepPartial<FieldOptions>): FieldOptions {
     const message = createBaseFieldOptions();
-    message.ctype = object.ctype ?? 0;
+    message.ctype = object.ctype ?? FieldOptions_CType.STRING;
     message.packed = object.packed ?? false;
-    message.jstype = object.jstype ?? 0;
+    message.jstype = object.jstype ?? FieldOptions_JSType.JS_NORMAL;
     message.lazy = object.lazy ?? false;
     message.deprecated = object.deprecated ?? false;
     message.weak = object.weak ?? false;

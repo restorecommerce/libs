@@ -1,5 +1,5 @@
 import { loadSync as protoLoaderLoadSync, Options as ProtoLoaderOptions } from '@grpc/proto-loader';
-import { Server, ServerCredentials, loadPackageDefinition, UntypedServiceServiceImplementation } from "@grpc/grpc-js";
+import { Server, ServerCredentials, loadPackageDefinition, UntypedServiceImplementation } from "@grpc/grpc-js";
 import { ChannelOptions } from "@grpc/grpc-js/build/src/channel-options";
 
 function getProtoFromPkgDefinition(pkgName: string, pkgDef: any): any {
@@ -13,7 +13,7 @@ export interface MockServiceArgs {
   protoPath: string | string[];
   packageName: string;
   serviceName: string;
-  implementations: UntypedServiceServiceImplementation;
+  implementations: UntypedServiceImplementation;
   protoRoot?: string;
   protoOptions?: ProtoLoaderOptions;
 }

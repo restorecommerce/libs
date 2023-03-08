@@ -37,11 +37,11 @@ export interface Response {
 }
 
 export enum Response_Decision {
-  PERMIT = 0,
-  DENY = 1,
-  NOT_APPLICABLE = 2,
-  INDETERMINATE = 3,
-  UNRECOGNIZED = -1,
+  PERMIT = "PERMIT",
+  DENY = "DENY",
+  NOT_APPLICABLE = "NOT_APPLICABLE",
+  INDETERMINATE = "INDETERMINATE",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function response_DecisionFromJSON(object: any): Response_Decision {
@@ -78,6 +78,22 @@ export function response_DecisionToJSON(object: Response_Decision): string {
     case Response_Decision.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function response_DecisionToNumber(object: Response_Decision): number {
+  switch (object) {
+    case Response_Decision.PERMIT:
+      return 0;
+    case Response_Decision.DENY:
+      return 1;
+    case Response_Decision.NOT_APPLICABLE:
+      return 2;
+    case Response_Decision.INDETERMINATE:
+      return 3;
+    case Response_Decision.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -252,7 +268,7 @@ export const Context = {
 
 function createBaseResponse(): Response {
   return {
-    decision: 0,
+    decision: Response_Decision.PERMIT,
     obligation: [],
     evaluationCacheable: false,
     operationStatus: undefined,
@@ -264,8 +280,8 @@ export const Response = {
     message: Response,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.decision !== 0) {
-      writer.uint32(8).int32(message.decision);
+    if (message.decision !== Response_Decision.PERMIT) {
+      writer.uint32(8).int32(response_DecisionToNumber(message.decision));
     }
     for (const v of message.obligation) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -290,7 +306,7 @@ export const Response = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.decision = reader.int32() as any;
+          message.decision = response_DecisionFromJSON(reader.int32());
           break;
         case 2:
           message.obligation.push(Attribute.decode(reader, reader.uint32()));
@@ -316,7 +332,7 @@ export const Response = {
     return {
       decision: isSet(object.decision)
         ? response_DecisionFromJSON(object.decision)
-        : 0,
+        : Response_Decision.PERMIT,
       obligation: Array.isArray(object?.obligation)
         ? object.obligation.map((e: any) => Attribute.fromJSON(e))
         : [],
@@ -351,7 +367,7 @@ export const Response = {
 
   fromPartial(object: DeepPartial<Response>): Response {
     const message = createBaseResponse();
-    message.decision = object.decision ?? 0;
+    message.decision = object.decision ?? Response_Decision.PERMIT;
     message.obligation =
       object.obligation?.map((e) => Attribute.fromPartial(e)) || [];
     message.evaluationCacheable = object.evaluationCacheable ?? false;

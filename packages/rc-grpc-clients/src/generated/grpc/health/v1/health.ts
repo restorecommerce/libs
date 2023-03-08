@@ -14,10 +14,10 @@ export interface HealthCheckResponse {
 }
 
 export enum HealthCheckResponse_ServingStatus {
-  UNKNOWN = 0,
-  SERVING = 1,
-  NOT_SERVING = 2,
-  UNRECOGNIZED = -1,
+  UNKNOWN = "UNKNOWN",
+  SERVING = "SERVING",
+  NOT_SERVING = "NOT_SERVING",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function healthCheckResponse_ServingStatusFromJSON(
@@ -53,6 +53,22 @@ export function healthCheckResponse_ServingStatusToJSON(
     case HealthCheckResponse_ServingStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function healthCheckResponse_ServingStatusToNumber(
+  object: HealthCheckResponse_ServingStatus
+): number {
+  switch (object) {
+    case HealthCheckResponse_ServingStatus.UNKNOWN:
+      return 0;
+    case HealthCheckResponse_ServingStatus.SERVING:
+      return 1;
+    case HealthCheckResponse_ServingStatus.NOT_SERVING:
+      return 2;
+    case HealthCheckResponse_ServingStatus.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -109,7 +125,7 @@ export const HealthCheckRequest = {
 };
 
 function createBaseHealthCheckResponse(): HealthCheckResponse {
-  return { status: 0 };
+  return { status: HealthCheckResponse_ServingStatus.UNKNOWN };
 }
 
 export const HealthCheckResponse = {
@@ -117,8 +133,10 @@ export const HealthCheckResponse = {
     message: HealthCheckResponse,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.status !== 0) {
-      writer.uint32(8).int32(message.status);
+    if (message.status !== HealthCheckResponse_ServingStatus.UNKNOWN) {
+      writer
+        .uint32(8)
+        .int32(healthCheckResponse_ServingStatusToNumber(message.status));
     }
     return writer;
   },
@@ -131,7 +149,9 @@ export const HealthCheckResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.status = reader.int32() as any;
+          message.status = healthCheckResponse_ServingStatusFromJSON(
+            reader.int32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -145,7 +165,7 @@ export const HealthCheckResponse = {
     return {
       status: isSet(object.status)
         ? healthCheckResponse_ServingStatusFromJSON(object.status)
-        : 0,
+        : HealthCheckResponse_ServingStatus.UNKNOWN,
     };
   },
 
@@ -158,7 +178,7 @@ export const HealthCheckResponse = {
 
   fromPartial(object: DeepPartial<HealthCheckResponse>): HealthCheckResponse {
     const message = createBaseHealthCheckResponse();
-    message.status = object.status ?? 0;
+    message.status = object.status ?? HealthCheckResponse_ServingStatus.UNKNOWN;
     return message;
   },
 };

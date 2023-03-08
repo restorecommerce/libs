@@ -5,6 +5,7 @@ import {
   Target,
   Effect,
   protoMetadata as protoMetadata5,
+  effectToNumber,
   effectFromJSON,
   effectToJSON,
 } from "./rule";
@@ -460,7 +461,7 @@ function createBasePolicySetRQ(): PolicySetRQ {
     target: undefined,
     combiningAlgorithm: "",
     policies: [],
-    effect: 0,
+    effect: Effect.PERMIT,
   };
 }
 
@@ -481,8 +482,8 @@ export const PolicySetRQ = {
     for (const v of message.policies) {
       PolicyRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(40).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(40).int32(effectToNumber(message.effect));
     }
     return writer;
   },
@@ -507,7 +508,7 @@ export const PolicySetRQ = {
           message.policies.push(PolicyRQ.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -527,7 +528,9 @@ export const PolicySetRQ = {
       policies: Array.isArray(object?.policies)
         ? object.policies.map((e: any) => PolicyRQ.fromJSON(e))
         : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect)
+        ? effectFromJSON(object.effect)
+        : Effect.PERMIT,
     };
   },
 
@@ -559,7 +562,7 @@ export const PolicySetRQ = {
     message.combiningAlgorithm = object.combiningAlgorithm ?? "";
     message.policies =
       object.policies?.map((e) => PolicyRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     return message;
   },
 };

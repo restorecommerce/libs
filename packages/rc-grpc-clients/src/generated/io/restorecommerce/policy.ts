@@ -6,6 +6,7 @@ import {
   Effect,
   protoMetadata as protoMetadata3,
   RuleRQ,
+  effectToNumber,
   effectFromJSON,
   effectToJSON,
 } from "./rule";
@@ -77,7 +78,7 @@ function createBasePolicy(): Policy {
     description: "",
     rules: [],
     target: undefined,
-    effect: 0,
+    effect: Effect.PERMIT,
     combiningAlgorithm: "",
     evaluationCacheable: false,
   };
@@ -106,8 +107,8 @@ export const Policy = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(50).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(56).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(56).int32(effectToNumber(message.effect));
     }
     if (message.combiningAlgorithm !== "") {
       writer.uint32(66).string(message.combiningAlgorithm);
@@ -144,7 +145,7 @@ export const Policy = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 7:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 8:
           message.combiningAlgorithm = reader.string();
@@ -170,7 +171,9 @@ export const Policy = {
         ? object.rules.map((e: any) => String(e))
         : [],
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect)
+        ? effectFromJSON(object.effect)
+        : Effect.PERMIT,
       combiningAlgorithm: isSet(object.combiningAlgorithm)
         ? String(object.combiningAlgorithm)
         : "",
@@ -217,7 +220,7 @@ export const Policy = {
       object.target !== undefined && object.target !== null
         ? Target.fromPartial(object.target)
         : undefined;
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.combiningAlgorithm = object.combiningAlgorithm ?? "";
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;
@@ -230,7 +233,7 @@ function createBasePolicyRQ(): PolicyRQ {
     target: undefined,
     combiningAlgorithm: "",
     rules: [],
-    effect: 0,
+    effect: Effect.PERMIT,
     hasRules: false,
     evaluationCacheable: false,
   };
@@ -253,8 +256,8 @@ export const PolicyRQ = {
     for (const v of message.rules) {
       RuleRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(40).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(40).int32(effectToNumber(message.effect));
     }
     if (message.hasRules === true) {
       writer.uint32(48).bool(message.hasRules);
@@ -285,7 +288,7 @@ export const PolicyRQ = {
           message.rules.push(RuleRQ.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 6:
           message.hasRules = reader.bool();
@@ -311,7 +314,9 @@ export const PolicyRQ = {
       rules: Array.isArray(object?.rules)
         ? object.rules.map((e: any) => RuleRQ.fromJSON(e))
         : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect)
+        ? effectFromJSON(object.effect)
+        : Effect.PERMIT,
       hasRules: isSet(object.hasRules) ? Boolean(object.hasRules) : false,
       evaluationCacheable: isSet(object.evaluationCacheable)
         ? Boolean(object.evaluationCacheable)
@@ -347,7 +352,7 @@ export const PolicyRQ = {
         : undefined;
     message.combiningAlgorithm = object.combiningAlgorithm ?? "";
     message.rules = object.rules?.map((e) => RuleRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.hasRules = object.hasRules ?? false;
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package io.restorecommerce.geometry;
+
+import "io/restorecommerce/options.proto";
+
+
+message Vector3D {
+  double x = 1;
+  double y = 2;
+  double z = 3;
+}
+
+message BoundingBox3D {
+  double width = 1;
+  double height = 2;
+  double length = 3;
+}
+
+message OriginBoundingBox {
+  Vector3D origin = 1;
+  BoundingBox3D bbox = 2;
+}

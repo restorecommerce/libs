@@ -5,7 +5,6 @@ package io.restorecommerce.attribute;
 message Attribute {
   string id = 1;
   string value = 2;
-  repeated Attribute attribute = 3;
 }
 
 message AttributeObj {

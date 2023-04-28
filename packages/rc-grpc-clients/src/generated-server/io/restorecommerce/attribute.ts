@@ -5,9 +5,8 @@ import { FileDescriptorProto } from "ts-proto-descriptors";
 export const protobufPackage = "io.restorecommerce.attribute";
 
 export interface Attribute {
-  id: string;
-  value: string;
-  attribute: Attribute[];
+  id?: string | undefined;
+  value?: string | undefined;
 }
 
 export interface AttributeObj {
@@ -15,19 +14,16 @@ export interface AttributeObj {
 }
 
 function createBaseAttribute(): Attribute {
-  return { id: "", value: "", attribute: [] };
+  return { id: undefined, value: undefined };
 }
 
 export const Attribute = {
   encode(message: Attribute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.value !== "") {
+    if (message.value !== undefined) {
       writer.uint32(18).string(message.value);
-    }
-    for (const v of message.attribute) {
-      Attribute.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -45,9 +41,6 @@ export const Attribute = {
         case 2:
           message.value = reader.string();
           break;
-        case 3:
-          message.attribute.push(Attribute.decode(reader, reader.uint32()));
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -58,9 +51,8 @@ export const Attribute = {
 
   fromJSON(object: any): Attribute {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      value: isSet(object.value) ? String(object.value) : "",
-      attribute: Array.isArray(object?.attribute) ? object.attribute.map((e: any) => Attribute.fromJSON(e)) : [],
+      id: isSet(object.id) ? String(object.id) : undefined,
+      value: isSet(object.value) ? String(object.value) : undefined,
     };
   },
 
@@ -68,11 +60,6 @@ export const Attribute = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.value !== undefined && (obj.value = message.value);
-    if (message.attribute) {
-      obj.attribute = message.attribute.map((e) => e ? Attribute.toJSON(e) : undefined);
-    } else {
-      obj.attribute = [];
-    }
     return obj;
   },
 
@@ -82,9 +69,8 @@ export const Attribute = {
 
   fromPartial(object: DeepPartial<Attribute>): Attribute {
     const message = createBaseAttribute();
-    message.id = object.id ?? "";
-    message.value = object.value ?? "";
-    message.attribute = object.attribute?.map((e) => Attribute.fromPartial(e)) || [];
+    message.id = object.id ?? undefined;
+    message.value = object.value ?? undefined;
     return message;
   },
 };
@@ -184,7 +170,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "value",
         "number": 2,
@@ -193,28 +179,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "value",
         "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "attribute",
-        "number": 3,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "attribute",
-        "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_value", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

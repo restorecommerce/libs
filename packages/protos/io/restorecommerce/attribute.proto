@@ -3,8 +3,8 @@ syntax = "proto3";
 package io.restorecommerce.attribute;
 
 message Attribute {
-  string id = 1;
-  string value = 2;
+  optional string id = 1;
+  optional string value = 2;
 }
 
 message AttributeObj {

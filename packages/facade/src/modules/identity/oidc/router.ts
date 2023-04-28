@@ -162,7 +162,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
       select_account: {}, // make sure its skipped by the interaction policy since we just logged in
       login: {
         remember,
-        accountId: user.id,
+        accountId: user.id as any,
       },
       meta: {}
     };

@@ -282,50 +282,84 @@ export interface FindByRoleRequest {
 /** A User resource. */
 export interface User {
   /** / User ID, unique, key */
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?:
+    | Meta
+    | undefined;
   /** The name of the user, can be used for login */
-  name: string;
-  first_name: string;
-  last_name: string;
+  name?: string | undefined;
+  first_name?: string | undefined;
+  last_name?:
+    | string
+    | undefined;
   /** / Email address, can be used for login */
-  email: string;
+  email?:
+    | string
+    | undefined;
   /** / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange` */
-  new_email: string;
+  new_email?:
+    | string
+    | undefined;
   /** / If the user was activated via the activation process */
-  active: boolean;
+  active?:
+    | boolean
+    | undefined;
   /** / Activation code used in the activation process */
-  activation_code: string;
+  activation_code?:
+    | string
+    | undefined;
   /** / Raw password, not stored */
-  password: string;
+  password?:
+    | string
+    | undefined;
   /** / Encrypted password, stored */
-  password_hash: string;
+  password_hash?:
+    | string
+    | undefined;
   /** A user can have multiple roles and different attributes coupled with each role */
   role_associations: RoleAssociation[];
   /** timezone_id specifications */
-  timezone_id: string;
+  timezone_id?:
+    | string
+    | undefined;
   /** locale specifications */
-  locale_id: string;
+  locale_id?:
+    | string
+    | undefined;
   /** default hierarchical scope */
-  default_scope: string;
+  default_scope?:
+    | string
+    | undefined;
   /** true in case in case of `register`; set to false after activation */
-  unauthenticated: boolean;
+  unauthenticated?:
+    | boolean
+    | undefined;
   /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
-  guest: boolean;
-  image?: Image;
-  user_type: UserType;
+  guest?: boolean | undefined;
+  image?: Image | undefined;
+  user_type?:
+    | UserType
+    | undefined;
   /** For user invitation */
-  invite: boolean;
+  invite?:
+    | boolean
+    | undefined;
   /** user who is inviting */
-  invited_by_user_name: string;
+  invited_by_user_name?:
+    | string
+    | undefined;
   /** First name of user inviting */
-  invited_by_user_first_name: string;
+  invited_by_user_first_name?:
+    | string
+    | undefined;
   /** Last name of user inviting */
-  invited_by_user_last_name: string;
+  invited_by_user_last_name?: string | undefined;
   tokens: Tokens[];
-  last_access: number;
+  last_access?:
+    | number
+    | undefined;
   /** / additional data */
-  data?: Any;
+  data?: Any | undefined;
 }
 
 /** A User resource with role */
@@ -2407,110 +2441,110 @@ export const FindByRoleRequest = {
 
 function createBaseUser(): User {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    new_email: "",
-    active: false,
-    activation_code: "",
-    password: "",
-    password_hash: "",
+    name: undefined,
+    first_name: undefined,
+    last_name: undefined,
+    email: undefined,
+    new_email: undefined,
+    active: undefined,
+    activation_code: undefined,
+    password: undefined,
+    password_hash: undefined,
     role_associations: [],
-    timezone_id: "",
-    locale_id: "",
-    default_scope: "",
-    unauthenticated: false,
-    guest: false,
+    timezone_id: undefined,
+    locale_id: undefined,
+    default_scope: undefined,
+    unauthenticated: undefined,
+    guest: undefined,
     image: undefined,
-    user_type: UserType.ORG_USER,
-    invite: false,
-    invited_by_user_name: "",
-    invited_by_user_first_name: "",
-    invited_by_user_last_name: "",
+    user_type: undefined,
+    invite: undefined,
+    invited_by_user_name: undefined,
+    invited_by_user_first_name: undefined,
+    invited_by_user_last_name: undefined,
     tokens: [],
-    last_access: 0,
+    last_access: undefined,
     data: undefined,
   };
 }
 
 export const User = {
   encode(message: User, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.first_name !== "") {
+    if (message.first_name !== undefined) {
       writer.uint32(34).string(message.first_name);
     }
-    if (message.last_name !== "") {
+    if (message.last_name !== undefined) {
       writer.uint32(42).string(message.last_name);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.new_email !== "") {
+    if (message.new_email !== undefined) {
       writer.uint32(58).string(message.new_email);
     }
-    if (message.active === true) {
+    if (message.active !== undefined) {
       writer.uint32(64).bool(message.active);
     }
-    if (message.activation_code !== "") {
+    if (message.activation_code !== undefined) {
       writer.uint32(74).string(message.activation_code);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(82).string(message.password);
     }
-    if (message.password_hash !== "") {
+    if (message.password_hash !== undefined) {
       writer.uint32(90).string(message.password_hash);
     }
     for (const v of message.role_associations) {
       RoleAssociation.encode(v!, writer.uint32(98).fork()).ldelim();
     }
-    if (message.timezone_id !== "") {
+    if (message.timezone_id !== undefined) {
       writer.uint32(106).string(message.timezone_id);
     }
-    if (message.locale_id !== "") {
+    if (message.locale_id !== undefined) {
       writer.uint32(114).string(message.locale_id);
     }
-    if (message.default_scope !== "") {
+    if (message.default_scope !== undefined) {
       writer.uint32(122).string(message.default_scope);
     }
-    if (message.unauthenticated === true) {
+    if (message.unauthenticated !== undefined) {
       writer.uint32(128).bool(message.unauthenticated);
     }
-    if (message.guest === true) {
+    if (message.guest !== undefined) {
       writer.uint32(136).bool(message.guest);
     }
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    if (message.user_type !== UserType.ORG_USER) {
+    if (message.user_type !== undefined) {
       writer.uint32(152).int32(userTypeToNumber(message.user_type));
     }
-    if (message.invite === true) {
+    if (message.invite !== undefined) {
       writer.uint32(160).bool(message.invite);
     }
-    if (message.invited_by_user_name !== "") {
+    if (message.invited_by_user_name !== undefined) {
       writer.uint32(170).string(message.invited_by_user_name);
     }
-    if (message.invited_by_user_first_name !== "") {
+    if (message.invited_by_user_first_name !== undefined) {
       writer.uint32(178).string(message.invited_by_user_first_name);
     }
-    if (message.invited_by_user_last_name !== "") {
+    if (message.invited_by_user_last_name !== undefined) {
       writer.uint32(186).string(message.invited_by_user_last_name);
     }
     for (const v of message.tokens) {
       Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
     }
-    if (message.last_access !== 0) {
+    if (message.last_access !== undefined) {
       writer.uint32(201).double(message.last_access);
     }
     if (message.data !== undefined) {
@@ -2614,37 +2648,37 @@ export const User = {
 
   fromJSON(object: any): User {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      first_name: isSet(object.first_name) ? String(object.first_name) : "",
-      last_name: isSet(object.last_name) ? String(object.last_name) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      new_email: isSet(object.new_email) ? String(object.new_email) : "",
-      active: isSet(object.active) ? Boolean(object.active) : false,
-      activation_code: isSet(object.activation_code) ? String(object.activation_code) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      password_hash: isSet(object.password_hash) ? String(object.password_hash) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      first_name: isSet(object.first_name) ? String(object.first_name) : undefined,
+      last_name: isSet(object.last_name) ? String(object.last_name) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      new_email: isSet(object.new_email) ? String(object.new_email) : undefined,
+      active: isSet(object.active) ? Boolean(object.active) : undefined,
+      activation_code: isSet(object.activation_code) ? String(object.activation_code) : undefined,
+      password: isSet(object.password) ? String(object.password) : undefined,
+      password_hash: isSet(object.password_hash) ? String(object.password_hash) : undefined,
       role_associations: Array.isArray(object?.role_associations)
         ? object.role_associations.map((e: any) => RoleAssociation.fromJSON(e))
         : [],
-      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : "",
-      locale_id: isSet(object.locale_id) ? String(object.locale_id) : "",
-      default_scope: isSet(object.default_scope) ? String(object.default_scope) : "",
-      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : false,
-      guest: isSet(object.guest) ? Boolean(object.guest) : false,
+      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : undefined,
+      locale_id: isSet(object.locale_id) ? String(object.locale_id) : undefined,
+      default_scope: isSet(object.default_scope) ? String(object.default_scope) : undefined,
+      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : undefined,
+      guest: isSet(object.guest) ? Boolean(object.guest) : undefined,
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
-      user_type: isSet(object.user_type) ? userTypeFromJSON(object.user_type) : UserType.ORG_USER,
-      invite: isSet(object.invite) ? Boolean(object.invite) : false,
-      invited_by_user_name: isSet(object.invited_by_user_name) ? String(object.invited_by_user_name) : "",
+      user_type: isSet(object.user_type) ? userTypeFromJSON(object.user_type) : undefined,
+      invite: isSet(object.invite) ? Boolean(object.invite) : undefined,
+      invited_by_user_name: isSet(object.invited_by_user_name) ? String(object.invited_by_user_name) : undefined,
       invited_by_user_first_name: isSet(object.invited_by_user_first_name)
         ? String(object.invited_by_user_first_name)
-        : "",
+        : undefined,
       invited_by_user_last_name: isSet(object.invited_by_user_last_name)
         ? String(object.invited_by_user_last_name)
-        : "",
+        : undefined,
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => Tokens.fromJSON(e)) : [],
-      last_access: isSet(object.last_access) ? Number(object.last_access) : 0,
+      last_access: isSet(object.last_access) ? Number(object.last_access) : undefined,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
@@ -2673,7 +2707,8 @@ export const User = {
     message.unauthenticated !== undefined && (obj.unauthenticated = message.unauthenticated);
     message.guest !== undefined && (obj.guest = message.guest);
     message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.user_type !== undefined && (obj.user_type = userTypeToJSON(message.user_type));
+    message.user_type !== undefined &&
+      (obj.user_type = message.user_type !== undefined ? userTypeToJSON(message.user_type) : undefined);
     message.invite !== undefined && (obj.invite = message.invite);
     message.invited_by_user_name !== undefined && (obj.invited_by_user_name = message.invited_by_user_name);
     message.invited_by_user_first_name !== undefined &&
@@ -2696,31 +2731,31 @@ export const User = {
 
   fromPartial(object: DeepPartial<User>): User {
     const message = createBaseUser();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.first_name = object.first_name ?? "";
-    message.last_name = object.last_name ?? "";
-    message.email = object.email ?? "";
-    message.new_email = object.new_email ?? "";
-    message.active = object.active ?? false;
-    message.activation_code = object.activation_code ?? "";
-    message.password = object.password ?? "";
-    message.password_hash = object.password_hash ?? "";
+    message.name = object.name ?? undefined;
+    message.first_name = object.first_name ?? undefined;
+    message.last_name = object.last_name ?? undefined;
+    message.email = object.email ?? undefined;
+    message.new_email = object.new_email ?? undefined;
+    message.active = object.active ?? undefined;
+    message.activation_code = object.activation_code ?? undefined;
+    message.password = object.password ?? undefined;
+    message.password_hash = object.password_hash ?? undefined;
     message.role_associations = object.role_associations?.map((e) => RoleAssociation.fromPartial(e)) || [];
-    message.timezone_id = object.timezone_id ?? "";
-    message.locale_id = object.locale_id ?? "";
-    message.default_scope = object.default_scope ?? "";
-    message.unauthenticated = object.unauthenticated ?? false;
-    message.guest = object.guest ?? false;
+    message.timezone_id = object.timezone_id ?? undefined;
+    message.locale_id = object.locale_id ?? undefined;
+    message.default_scope = object.default_scope ?? undefined;
+    message.unauthenticated = object.unauthenticated ?? undefined;
+    message.guest = object.guest ?? undefined;
     message.image = (object.image !== undefined && object.image !== null) ? Image.fromPartial(object.image) : undefined;
-    message.user_type = object.user_type ?? UserType.ORG_USER;
-    message.invite = object.invite ?? false;
-    message.invited_by_user_name = object.invited_by_user_name ?? "";
-    message.invited_by_user_first_name = object.invited_by_user_first_name ?? "";
-    message.invited_by_user_last_name = object.invited_by_user_last_name ?? "";
+    message.user_type = object.user_type ?? undefined;
+    message.invite = object.invite ?? undefined;
+    message.invited_by_user_name = object.invited_by_user_name ?? undefined;
+    message.invited_by_user_first_name = object.invited_by_user_first_name ?? undefined;
+    message.invited_by_user_last_name = object.invited_by_user_last_name ?? undefined;
     message.tokens = object.tokens?.map((e) => Tokens.fromPartial(e)) || [];
-    message.last_access = object.last_access ?? 0;
+    message.last_access = object.last_access ?? undefined;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
@@ -4670,7 +4705,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -4679,10 +4714,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -4691,10 +4726,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "first_name",
         "number": 4,
@@ -4703,10 +4738,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "firstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_name",
         "number": 5,
@@ -4715,10 +4750,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "lastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 6,
@@ -4727,10 +4762,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "new_email",
         "number": 7,
@@ -4739,10 +4774,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "newEmail",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "active",
         "number": 8,
@@ -4751,10 +4786,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "active",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "activation_code",
         "number": 9,
@@ -4763,10 +4798,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "activationCode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password",
         "number": 10,
@@ -4775,10 +4810,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password_hash",
         "number": 11,
@@ -4787,10 +4822,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "passwordHash",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "role_associations",
         "number": 12,
@@ -4811,7 +4846,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "timezoneId",
         "options": {
           "ctype": 0,
@@ -4822,7 +4857,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locale_id",
         "number": 14,
@@ -4831,7 +4866,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 12,
         "jsonName": "localeId",
         "options": {
           "ctype": 0,
@@ -4842,7 +4877,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "default_scope",
         "number": 15,
@@ -4851,10 +4886,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 13,
         "jsonName": "defaultScope",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "unauthenticated",
         "number": 16,
@@ -4863,10 +4898,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 14,
         "jsonName": "unauthenticated",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "guest",
         "number": 17,
@@ -4875,10 +4910,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 15,
         "jsonName": "guest",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "image",
         "number": 18,
@@ -4887,10 +4922,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.image.Image",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 16,
         "jsonName": "image",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user_type",
         "number": 19,
@@ -4899,10 +4934,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.user.UserType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 17,
         "jsonName": "userType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invite",
         "number": 20,
@@ -4911,10 +4946,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 18,
         "jsonName": "invite",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_name",
         "number": 21,
@@ -4923,10 +4958,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 19,
         "jsonName": "invitedByUserName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_first_name",
         "number": 22,
@@ -4935,10 +4970,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 20,
         "jsonName": "invitedByUserFirstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_last_name",
         "number": 23,
@@ -4947,10 +4982,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 21,
         "jsonName": "invitedByUserLastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "tokens",
         "number": 24,
@@ -4971,10 +5006,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 22,
         "jsonName": "lastAccess",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "data",
         "number": 26,
@@ -4983,16 +5018,41 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 23,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_first_name", "options": undefined },
+        { "name": "_last_name", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_new_email", "options": undefined },
+        { "name": "_active", "options": undefined },
+        { "name": "_activation_code", "options": undefined },
+        { "name": "_password", "options": undefined },
+        { "name": "_password_hash", "options": undefined },
+        { "name": "_timezone_id", "options": undefined },
+        { "name": "_locale_id", "options": undefined },
+        { "name": "_default_scope", "options": undefined },
+        { "name": "_unauthenticated", "options": undefined },
+        { "name": "_guest", "options": undefined },
+        { "name": "_image", "options": undefined },
+        { "name": "_user_type", "options": undefined },
+        { "name": "_invite", "options": undefined },
+        { "name": "_invited_by_user_name", "options": undefined },
+        { "name": "_invited_by_user_first_name", "options": undefined },
+        { "name": "_invited_by_user_last_name", "options": undefined },
+        { "name": "_last_access", "options": undefined },
+        { "name": "_data", "options": undefined },
+      ],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -5681,50 +5741,50 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 0],
-        "span": [267, 2, 16],
+        "span": [267, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 2],
-        "span": [269, 2, 18],
+        "span": [269, 2, 27],
         "leadingComments": "",
         "trailingComments": " The name of the user, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 5],
-        "span": [272, 2, 19],
+        "span": [272, 2, 28],
         "leadingComments": "",
         "trailingComments": "/ Email address, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 6],
-        "span": [273, 2, 23],
+        "span": [273, 2, 32],
         "leadingComments": "",
         "trailingComments":
           "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 7],
-        "span": [274, 2, 18],
+        "span": [274, 2, 27],
         "leadingComments": "",
         "trailingComments": "/ If the user was activated via the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 8],
-        "span": [275, 2, 29],
+        "span": [275, 2, 38],
         "leadingComments": "",
         "trailingComments": "/ Activation code used in the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 9],
-        "span": [276, 2, 23],
+        "span": [276, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ Raw password, not stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 10],
-        "span": [277, 2, 28],
+        "span": [277, 2, 37],
         "leadingComments": "",
         "trailingComments": "/ Encrypted password, stored\n",
         "leadingDetachedComments": [],
@@ -5748,50 +5808,50 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 14],
-        "span": [297, 2, 28],
+        "span": [297, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 15],
-        "span": [298, 2, 28],
+        "span": [298, 2, 37],
         "leadingComments": "",
         "trailingComments": " true in case in case of `register`; set to false after activation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 16],
-        "span": [299, 2, 18],
+        "span": [299, 2, 27],
         "leadingComments": "",
         "trailingComments":
           "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 19],
-        "span": [302, 2, 19],
+        "span": [302, 2, 28],
         "leadingComments": "",
         "trailingComments": " For user invitation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 20],
-        "span": [303, 2, 35],
+        "span": [303, 2, 44],
         "leadingComments": "",
         "trailingComments": " user who is inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 21],
-        "span": [304, 2, 41],
+        "span": [304, 2, 50],
         "leadingComments": "",
         "trailingComments": " First name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 22],
-        "span": [305, 2, 40],
+        "span": [305, 2, 49],
         "leadingComments": "",
         "trailingComments": " Last name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 25],
-        "span": [308, 2, 32],
+        "span": [308, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],

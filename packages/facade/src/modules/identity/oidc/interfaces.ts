@@ -96,7 +96,7 @@ export class InvalidPasswordGrant extends errors.InvalidGrant {
 }
 
 export interface Claims {
-  sub: string;
+  sub: string | undefined;
   data: AuthUser;
   [key: string]: any;
 }

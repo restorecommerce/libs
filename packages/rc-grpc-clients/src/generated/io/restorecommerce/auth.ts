@@ -18,17 +18,23 @@ export interface Subject {
 
 export interface Tokens {
   /** token name */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** expiration date for token */
-  expiresIn: number;
+  expiresIn?:
+    | number
+    | undefined;
   /** token */
-  token: string;
+  token?:
+    | string
+    | undefined;
   /** identifier for role_association */
   scopes: string[];
   /** type of token eg: access_token, refresh_token */
-  type: string;
-  interactive: boolean;
-  lastLogin: number;
+  type?: string | undefined;
+  interactive?: boolean | undefined;
+  lastLogin?: number | undefined;
 }
 
 export interface HierarchicalScope {
@@ -42,13 +48,17 @@ export interface HierarchicalScope {
 
 export interface RoleAssociation {
   /** role ID */
-  role: string;
+  role?:
+    | string
+    | undefined;
   /** useful attributes for RBAC/ABAC like organizational scope */
   attributes: Attribute[];
   /** identifier for role_association */
-  id: string;
+  id?:
+    | string
+    | undefined;
   /** timestamp when the role was created */
-  created: number;
+  created?: number | undefined;
 }
 
 export interface HierarchicalScopesRequest {
@@ -142,30 +152,38 @@ export const Subject = {
 };
 
 function createBaseTokens(): Tokens {
-  return { name: "", expiresIn: 0, token: "", scopes: [], type: "", interactive: false, lastLogin: 0 };
+  return {
+    name: undefined,
+    expiresIn: undefined,
+    token: undefined,
+    scopes: [],
+    type: undefined,
+    interactive: undefined,
+    lastLogin: undefined,
+  };
 }
 
 export const Tokens = {
   encode(message: Tokens, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
-    if (message.expiresIn !== 0) {
+    if (message.expiresIn !== undefined) {
       writer.uint32(17).double(message.expiresIn);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined) {
       writer.uint32(26).string(message.token);
     }
     for (const v of message.scopes) {
       writer.uint32(34).string(v!);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(42).string(message.type);
     }
-    if (message.interactive === true) {
+    if (message.interactive !== undefined) {
       writer.uint32(48).bool(message.interactive);
     }
-    if (message.lastLogin !== 0) {
+    if (message.lastLogin !== undefined) {
       writer.uint32(57).double(message.lastLogin);
     }
     return writer;
@@ -209,13 +227,13 @@ export const Tokens = {
 
   fromJSON(object: any): Tokens {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : 0,
-      token: isSet(object.token) ? String(object.token) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
       scopes: Array.isArray(object?.scopes) ? object.scopes.map((e: any) => String(e)) : [],
-      type: isSet(object.type) ? String(object.type) : "",
-      interactive: isSet(object.interactive) ? Boolean(object.interactive) : false,
-      lastLogin: isSet(object.lastLogin) ? Number(object.lastLogin) : 0,
+      type: isSet(object.type) ? String(object.type) : undefined,
+      interactive: isSet(object.interactive) ? Boolean(object.interactive) : undefined,
+      lastLogin: isSet(object.lastLogin) ? Number(object.lastLogin) : undefined,
     };
   },
 
@@ -241,13 +259,13 @@ export const Tokens = {
 
   fromPartial(object: DeepPartial<Tokens>): Tokens {
     const message = createBaseTokens();
-    message.name = object.name ?? "";
-    message.expiresIn = object.expiresIn ?? 0;
-    message.token = object.token ?? "";
+    message.name = object.name ?? undefined;
+    message.expiresIn = object.expiresIn ?? undefined;
+    message.token = object.token ?? undefined;
     message.scopes = object.scopes?.map((e) => e) || [];
-    message.type = object.type ?? "";
-    message.interactive = object.interactive ?? false;
-    message.lastLogin = object.lastLogin ?? 0;
+    message.type = object.type ?? undefined;
+    message.interactive = object.interactive ?? undefined;
+    message.lastLogin = object.lastLogin ?? undefined;
     return message;
   },
 };
@@ -328,21 +346,21 @@ export const HierarchicalScope = {
 };
 
 function createBaseRoleAssociation(): RoleAssociation {
-  return { role: "", attributes: [], id: "", created: 0 };
+  return { role: undefined, attributes: [], id: undefined, created: undefined };
 }
 
 export const RoleAssociation = {
   encode(message: RoleAssociation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.role !== "") {
+    if (message.role !== undefined) {
       writer.uint32(10).string(message.role);
     }
     for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(26).string(message.id);
     }
-    if (message.created !== 0) {
+    if (message.created !== undefined) {
       writer.uint32(33).double(message.created);
     }
     return writer;
@@ -377,10 +395,10 @@ export const RoleAssociation = {
 
   fromJSON(object: any): RoleAssociation {
     return {
-      role: isSet(object.role) ? String(object.role) : "",
+      role: isSet(object.role) ? String(object.role) : undefined,
       attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
-      id: isSet(object.id) ? String(object.id) : "",
-      created: isSet(object.created) ? Number(object.created) : 0,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      created: isSet(object.created) ? Number(object.created) : undefined,
     };
   },
 
@@ -403,10 +421,10 @@ export const RoleAssociation = {
 
   fromPartial(object: DeepPartial<RoleAssociation>): RoleAssociation {
     const message = createBaseRoleAssociation();
-    message.role = object.role ?? "";
+    message.role = object.role ?? undefined;
     message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
-    message.id = object.id ?? "";
-    message.created = object.created ?? 0;
+    message.id = object.id ?? undefined;
+    message.created = object.created ?? undefined;
     return message;
   },
 };
@@ -639,7 +657,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "expires_in",
         "number": 2,
@@ -648,10 +666,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "expiresIn",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token",
         "number": 3,
@@ -660,10 +678,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "token",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "scopes",
         "number": 4,
@@ -684,10 +702,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "interactive",
         "number": 6,
@@ -696,10 +714,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "interactive",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_login",
         "number": 7,
@@ -708,16 +726,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "lastLogin",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_name", "options": undefined },
+        { "name": "_expires_in", "options": undefined },
+        { "name": "_token", "options": undefined },
+        { "name": "_type", "options": undefined },
+        { "name": "_interactive", "options": undefined },
+        { "name": "_last_login", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -781,7 +806,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "role",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "attributes",
         "number": 2,
@@ -802,10 +827,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "created",
         "number": 4,
@@ -814,16 +839,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "created",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_role", "options": undefined }, { "name": "_id", "options": undefined }, {
+        "name": "_created",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -929,19 +957,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 0],
-        "span": [16, 2, 18],
+        "span": [16, 2, 27],
         "leadingComments": "",
         "trailingComments": " token name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 1],
-        "span": [17, 2, 24],
+        "span": [17, 2, 33],
         "leadingComments": "",
         "trailingComments": " expiration date for token\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 2],
-        "span": [18, 2, 19],
+        "span": [18, 2, 28],
         "leadingComments": "",
         "trailingComments": " token\n",
         "leadingDetachedComments": [],
@@ -953,7 +981,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 4],
-        "span": [20, 2, 18],
+        "span": [20, 2, 27],
         "leadingComments": "",
         "trailingComments": " type of token eg: access_token, refresh_token\n",
         "leadingDetachedComments": [],
@@ -977,7 +1005,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [32, 2, 18],
+        "span": [32, 2, 27],
         "leadingComments": "",
         "trailingComments": " role ID\n",
         "leadingDetachedComments": [],
@@ -989,13 +1017,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 2],
-        "span": [34, 2, 16],
+        "span": [34, 2, 25],
         "leadingComments": "",
         "trailingComments": " identifier for role_association\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 3],
-        "span": [35, 2, 21],
+        "span": [35, 2, 30],
         "leadingComments": "",
         "trailingComments": " timestamp when the role was created\n",
         "leadingDetachedComments": [],

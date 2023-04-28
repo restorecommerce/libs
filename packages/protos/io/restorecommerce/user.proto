@@ -265,19 +265,19 @@ message User {
     deleted: "userDeleted"
   };
 
-  string id = 1; /// User ID, unique, key
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3; // The name of the user, can be used for login
-  string first_name = 4;
-  string last_name = 5;
-  string email = 6; /// Email address, can be used for login
-  string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
-  bool active = 8; /// If the user was activated via the activation process
-  string activation_code = 9; /// Activation code used in the activation process
-  string password = 10; /// Raw password, not stored
-  string password_hash = 11; /// Encrypted password, stored
+  optional string id = 1; /// User ID, unique, key
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3; // The name of the user, can be used for login
+  optional string first_name = 4;
+  optional string last_name = 5;
+  optional string email = 6; /// Email address, can be used for login
+  optional string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  optional bool active = 8; /// If the user was activated via the activation process
+  optional string activation_code = 9; /// Activation code used in the activation process
+  optional string password = 10; /// Raw password, not stored
+  optional string password_hash = 11; /// Encrypted password, stored
   repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
-  string timezone_id = 13 [
+  optional string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.timezone.Timezone",
       target_service: "resource",
@@ -286,7 +286,7 @@ message User {
       field_name: "timezone",
     }
   ];  // timezone_id specifications
-  string locale_id = 14 [
+  optional string locale_id = 14 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.locale.Locale",
       target_service: "resource",
@@ -295,18 +295,18 @@ message User {
       field_name: "locale",
     }
   ];  // locale specifications
-  string default_scope = 15; // default hierarchical scope
-  bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
-  bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
-  io.restorecommerce.image.Image image = 18;
-  UserType user_type = 19;
-  bool invite = 20; // For user invitation
-  string invited_by_user_name = 21; // user who is inviting
-  string invited_by_user_first_name = 22; // First name of user inviting
-  string invited_by_user_last_name = 23; // Last name of user inviting
+  optional string default_scope = 15; // default hierarchical scope
+  optional bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
+  optional bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  optional io.restorecommerce.image.Image image = 18;
+  optional UserType user_type = 19;
+  optional bool invite = 20; // For user invitation
+  optional string invited_by_user_name = 21; // user who is inviting
+  optional string invited_by_user_first_name = 22; // First name of user inviting
+  optional string invited_by_user_last_name = 23; // Last name of user inviting
   repeated io.restorecommerce.auth.Tokens tokens = 24;
-  double last_access = 25;
-  google.protobuf.Any data = 26; /// additional data
+  optional double last_access = 25;
+  optional google.protobuf.Any data = 26; /// additional data
 }
 
 /**

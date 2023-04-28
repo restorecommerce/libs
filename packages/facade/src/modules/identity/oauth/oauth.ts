@@ -119,7 +119,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
   return router;
 }
 
-const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string): Promise<string> => {
+const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
   const token = new jose.UnsecuredJWT({})
     .setIssuedAt()
     .setExpirationTime('30d')

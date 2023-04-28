@@ -69,7 +69,6 @@ export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceStatusOperationStatus = {
@@ -92,7 +91,6 @@ export type IIoRestorecommerceRuleTarget = {
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
-  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAccessControlContext = {
@@ -900,7 +898,6 @@ export type IoRestorecommerceAccessControlResponseDecisionResolvers = { PERMIT: 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

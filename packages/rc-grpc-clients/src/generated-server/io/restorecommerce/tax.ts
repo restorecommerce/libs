@@ -42,6 +42,11 @@ export interface Tax {
   type_id: string;
 }
 
+export interface VAT {
+  tax_id: string;
+  vat: number;
+}
+
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -412,6 +417,68 @@ export const Tax = {
   },
 };
 
+function createBaseVAT(): VAT {
+  return { tax_id: "", vat: 0 };
+}
+
+export const VAT = {
+  encode(message: VAT, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tax_id !== "") {
+      writer.uint32(10).string(message.tax_id);
+    }
+    if (message.vat !== 0) {
+      writer.uint32(17).double(message.vat);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): VAT {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVAT();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tax_id = reader.string();
+          break;
+        case 2:
+          message.vat = reader.double();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VAT {
+    return {
+      tax_id: isSet(object.tax_id) ? String(object.tax_id) : "",
+      vat: isSet(object.vat) ? Number(object.vat) : 0,
+    };
+  },
+
+  toJSON(message: VAT): unknown {
+    const obj: any = {};
+    message.tax_id !== undefined && (obj.tax_id = message.tax_id);
+    message.vat !== undefined && (obj.vat = message.vat);
+    return obj;
+  },
+
+  create(base?: DeepPartial<VAT>): VAT {
+    return VAT.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<VAT>): VAT {
+    const message = createBaseVAT();
+    message.tax_id = object.tax_id ?? "";
+    message.vat = object.vat ?? 0;
+    return message;
+  },
+};
+
 /** Microservice definition. */
 export type ServiceDefinition = typeof ServiceDefinition;
 export const ServiceDefinition = {
@@ -764,6 +831,41 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
+    }, {
+      "name": "VAT",
+      "field": [{
+        "name": "tax_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "taxId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "vat",
+        "number": 2,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vat",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
     }],
     "enumType": [],
     "service": [{
@@ -831,6 +933,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.tax.TaxListResponse": TaxListResponse,
     ".io.restorecommerce.tax.TaxResponse": TaxResponse,
     ".io.restorecommerce.tax.Tax": Tax,
+    ".io.restorecommerce.tax.VAT": VAT,
   },
   dependencies: [
     protoMetadata1,

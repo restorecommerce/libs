@@ -8,11 +8,13 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/product.proto";
+import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/country.proto";
 import "io/restorecommerce/fulfillment.proto";
+import "io/restorecommerce/fulfillment_product.proto";
 
 
-service Service {
+service OrderService {
   option (io.restorecommerce.options.service_name) = "order";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse) {
@@ -23,38 +25,37 @@ service Service {
   rpc Upsert (OrderList) returns (OrderListResponse);
   rpc Evaluate (OrderList) returns (OrderListResponse);
   rpc Submit (OrderList) returns (OrderListResponse);
-  rpc Cancel (CancelRequestList) returns (OrderListResponse);
+  rpc Withdraw (OrderIdList) returns (OrderListResponse);
+  rpc Cancel (OrderIdList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc TriggerFulfillment (TriggerFulfillmentRequestList) returns (io.restorecommerce.status.Status);
+  
+  // Requires Fulfillment Service
+  rpc QueryPackingSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.PackingSolutionListResponse);
+  // Requires Fulfillment Service
+  rpc CreateFulfillment (FulfillmentRequestList) returns (io.restorecommerce.fulfillment.FulfillmentListResponse);
+  // Requires Fulfillment Service
+  rpc TriggerFulfillment (FulfillmentRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
-enum State {
-  Undefined = 0;
-  Invalid = 1;
-  Failed = 2;
-  Cancelled = 3;
-  Created = 4;
-  Submitted = 5;
-  Shipping = 6;
-  Done = 7;
+enum OrderState {
+  Created = 0;
+  Submitted = 1;
+  Confirmed = 2;
+  Invalid = 3;
+  Shipping = 4;
+  Failed = 5;
+  Done = 6;
+  Withdrawn = 7;
+  Cancelled = 8;
 }
 
-message Item {
+message OrderItem {
   string product_id = 1;
   string variant_id = 2;
-  string product_name = 3;
-  string product_description = 4;
-  string manufacturer_name = 5;
-  string manufacturer_description = 6;
-  string prototype_name = 7;
-  string prototype_description = 8;
-  int32 quantity = 9;
-  double price = 10;
-  repeated io.restorecommerce.product.VAT vats = 11;
-  double unit_price = 12;
-  string item_type = 13;
-  double taric_code = 14;
-  string stock_keeping_unit = 15;
+  int32 quantity = 3;
+  double unit_price = 4; //Set by service
+  double price = 5; //Set by service
+  repeated io.restorecommerce.tax.VAT vats = 6; //Set by service
 }
 
 /**
@@ -71,42 +72,19 @@ message Order {
 
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
-  State state = 5;
-  string customer_reference = 6;
-  repeated Item items = 7;
-  double total_price = 8;
-  double total_vat = 9;
-  io.restorecommerce.address.Address shipping_address = 10;
-  io.restorecommerce.address.Address billing_address = 12;
-  string billing_email = 13;
-  io.restorecommerce.address.ContactPerson contact_person = 14;
-  string notification_email = 15;
-  repeated string fulfillment_ids = 16;
+  OrderState state = 3;
+  string customer_reference = 4;
+  repeated OrderItem items = 5;
+  double total_price = 6; //Set by service
+  double total_vat = 7; //Set by service
+  io.restorecommerce.address.ShippingAddress shipping_address = 8;
+  io.restorecommerce.address.ShippingAddress billing_address = 9;
+  string billing_email = 10;
+  string notification_email = 11;
+  io.restorecommerce.fulfillment_product.Preferences packing_preferences = 12;
 }
 
-message ShippingDetails {
-  string export_type = 1;
-  string export_description = 2;
-  string invoice_number = 3;
-  io.restorecommerce.address.Address sender_address = 5;
-  io.restorecommerce.address.ContactPerson contact_person = 15;
-}
-
-message TriggerFulfillmentRequest {
-  Order order = 1;
-  ShippingDetails shipping_details = 2;
-  repeated io.restorecommerce.fulfillment.Parcel parcels = 3;
-}
-
-message TriggerFulfillmentRequestList {
-  repeated TriggerFulfillmentRequest items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
-}
-
-message CancelRequestList {
+message OrderIdList {
   repeated string ids = 1;
   io.restorecommerce.auth.Subject subject = 2;
 }
@@ -130,4 +108,22 @@ message OrderResponse {
 
 message Deleted {
   string id = 1;
+}
+
+message ShippingDetails {
+  string export_type = 1;
+  string export_description = 2;
+  string invoice_number = 3;
+  io.restorecommerce.address.ShippingAddress sender_address = 4;
+}
+
+message FulfillmentRequest {
+  string reference_id = 1;
+  ShippingDetails shipping_details = 2;
+}
+
+message FulfillmentRequestList {
+  repeated FulfillmentRequest items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }

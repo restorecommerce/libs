@@ -9,7 +9,7 @@ message Status {
 }
 
 message StatusArray {
-repeated Status status = 1;
+  repeated Status status = 1;
 }
 
 message StatusObj {
@@ -23,4 +23,9 @@ message OperationStatusObj {
 message OperationStatus {
   uint32 code = 1;
   string message = 2;
+}
+
+message StatusListResponse {
+  repeated Status status = 1;
+  OperationStatus operation_status = 2;
 }

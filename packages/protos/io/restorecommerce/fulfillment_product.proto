@@ -7,6 +7,9 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/address.proto";
+import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/options.proto";
@@ -15,38 +18,36 @@ import "io/restorecommerce/options.proto";
 Microservice defination
 */
 
-service Service {
+service FulfillmentProductService {
   option (io.restorecommerce.options.service_name) = "fulfillment_product";
 
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductResponseList) {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Find (QueryList) returns (PackingSolutionResponseList) {
+  rpc Find (ProductQueryList) returns (PackingSolutionListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Create (FulfillmentProductList) returns (FulfillmentProductResponseList);
-  rpc Update (FulfillmentProductList) returns (FulfillmentProductResponseList);
-  rpc Upsert (FulfillmentProductList) returns (FulfillmentProductResponseList);
+  rpc Create (FulfillmentProductList) returns (FulfillmentProductListResponse);
+  rpc Update (FulfillmentProductList) returns (FulfillmentProductListResponse);
+  rpc Upsert (FulfillmentProductList) returns (FulfillmentProductListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
 message Preferences {
   repeated io.restorecommerce.attribute.Attribute couriers = 1; //ID, name or type
-  float pricing = 2;
-  float compactness = 3;
-  float homogeneity = 4;
+  repeated io.restorecommerce.attribute.Attribute options = 2;
 }
 
-message Query {
-  io.restorecommerce.fulfillment.FulfillmentAddress sender = 1;
-  io.restorecommerce.fulfillment.FulfillmentAddress receiver = 2;
-  repeated io.restorecommerce.fulfillment.Item goods = 3;
+message ProductQuery {
+  io.restorecommerce.address.ShippingAddress sender = 1;
+  io.restorecommerce.address.ShippingAddress receiver = 2;
+  repeated io.restorecommerce.fulfillment.FulfillmentItem items = 3;
   Preferences preferences = 4;
   string reference_id = 5;
 }
 
-message QueryList {
-  repeated Query items = 1;
+message ProductQueryList {
+  repeated ProductQuery items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
@@ -85,11 +86,8 @@ message Variant {
   string name = 2;
   string description = 3;
   double price = 4;
-  double max_weight = 5;
-  double max_width = 6;
-  double max_height = 7;
-  double max_length = 8;
-  double max_volume = 9;
+  io.restorecommerce.geometry.BoundingBox3D max_size = 6;
+  double max_weight = 7;
 }
 
 message FulfillmentProductList {
@@ -103,27 +101,28 @@ message FulfillmentProductResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message FulfillmentProductResponseList {
+message FulfillmentProductListResponse {
   repeated FulfillmentProductResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message PackingSolution {
-  string reference_id = 1;
-  float price = 2;
-  float compactness = 3;
-  float homogeneity = 4;
-  float score = 5;
-  repeated io.restorecommerce.fulfillment.Parcel parcels = 6;
+  double price = 1;
+  double compactness = 2;
+  double homogeneity = 3;
+  double score = 4;
+  repeated io.restorecommerce.fulfillment.Parcel parcels = 5;
+  repeated io.restorecommerce.tax.VAT vats = 6;
 }
 
 message PackingSolutionResponse {
-  repeated PackingSolution solutions = 1;
-  io.restorecommerce.status.Status status = 2;
+  string reference_id = 1;
+  repeated PackingSolution solutions = 2;
+  io.restorecommerce.status.Status status = 3;
 }
 
-message PackingSolutionResponseList {
+message PackingSolutionListResponse {
   repeated PackingSolutionResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;

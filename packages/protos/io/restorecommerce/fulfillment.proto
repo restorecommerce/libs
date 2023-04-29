@@ -9,12 +9,13 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
+import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 
 /**
 Microservice definition.
 */
-service Service {
+service FulfillmentService {
   option (io.restorecommerce.options.service_name) = "fulfillment";
 
   /**
@@ -71,20 +72,11 @@ enum State {
   Cancelled = 7;
 }
 
-message FulfillmentAddress {
-  io.restorecommerce.address.Address address = 1;
-  io.restorecommerce.country.Country country = 2;
-  io.restorecommerce.address.ContactPerson contact_person = 3;
-}
-
-message Item {
+message FulfillmentItem {
   string product_id = 1;
   string variant_id = 2;
-  int32 quantity = 9;
-  double weight_in_kg = 5;
-  double height_in_cm = 6;
-  double width_in_cm = 7;
-  double length_in_cm = 8;
+  int32 quantity = 3;
+  io.restorecommerce.product.Package package = 4;
 }
 
 message Parcel {
@@ -98,12 +90,9 @@ message Parcel {
       field_name: "product",
     }
   ];
-  string product_variant_id = 3;
-  Item items = 4;
-  double weight_in_kg = 5;
-  double height_in_cm = 6;
-  double width_in_cm = 7;
-  double length_in_cm = 8;
+  string variant_id = 3;
+  FulfillmentItem item = 4;
+  io.restorecommerce.product.Package package = 11;
 }
 
 message Label {
@@ -121,8 +110,8 @@ message Label {
 message Packing {
   string reference_id = 1;
   repeated Parcel parcels = 2;
-  FulfillmentAddress sender = 3;
-  FulfillmentAddress receiver = 4;
+  io.restorecommerce.address.ShippingAddress sender = 3;
+  io.restorecommerce.address.ShippingAddress receiver = 4;
   string notify = 5;
 }
 
@@ -158,6 +147,7 @@ message Fulfillment {
   repeated Label labels = 4; //filled by service
   repeated Tracking tracking = 5; //filled by service
   State state = 6; //filled by service
+  double price = 7;
 }
 
 message FulfillmentList {
@@ -193,4 +183,3 @@ message FulfillmentIdList {
 message Deleted {
   string id = 1;
 }
-

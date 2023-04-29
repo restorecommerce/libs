@@ -35,7 +35,6 @@ export const loggingMiddleware = (logger: ReturnType<typeof createLogger>, omitt
   ) {
     const {path} = call.method;
 
-    logger.info(`[rid: ${options.rid}] Invoking endpoint ${path}`);
     logger.debug(`[rid: ${options.rid}] invoking ${path} endpoint with data`, { request: call.request });
 
     try {

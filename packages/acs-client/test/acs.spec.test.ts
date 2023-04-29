@@ -9,7 +9,7 @@ import { cfg } from '../lib';
 import {
   Request,
   Response_Decision,
-  ServiceServiceImplementation,
+  ServiceImplementation,
   DeepPartial,
   ReverseQuery,
   Response,
@@ -159,7 +159,7 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   });
 };
 
-const startGrpcMockServer = async (implementation: ServiceServiceImplementation) => {
+const startGrpcMockServer = async (implementation: ServiceImplementation) => {
   mockServer = createServer();
   mockServer.add(ServiceDefinition, implementation);
   await mockServer.listen('0.0.0.0:50061');

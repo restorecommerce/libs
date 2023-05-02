@@ -26,7 +26,8 @@ export async function generateSchemaTypings({schema, outputFile, typescript, typ
       plugins: [
         {
           typescript: {
-            maybeValue: 'T | undefined',
+            maybeValue: 'T | null | undefined',
+            inputMaybeValue: 'T | null | undefined',
             ...(typescript ?? {})
           },
         },

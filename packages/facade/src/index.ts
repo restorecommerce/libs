@@ -3,8 +3,8 @@ import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
 
 import Koa from "koa";
-import bodyParser from "koa-bodyparser";
-import cors from "@koa/cors";
+const bodyParser = require('koa-bodyparser');
+const cors = require('@koa/cors');
 import { ApolloServer } from "@apollo/server";
 import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';

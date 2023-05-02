@@ -7,6 +7,7 @@ export const protobufPackage = "io.restorecommerce.attribute";
 export interface Attribute {
   id?: string | undefined;
   value?: string | undefined;
+  attribute: Attribute[];
 }
 
 export interface AttributeObj {
@@ -14,7 +15,7 @@ export interface AttributeObj {
 }
 
 function createBaseAttribute(): Attribute {
-  return { id: undefined, value: undefined };
+  return { id: undefined, value: undefined, attribute: [] };
 }
 
 export const Attribute = {
@@ -24,6 +25,9 @@ export const Attribute = {
     }
     if (message.value !== undefined) {
       writer.uint32(18).string(message.value);
+    }
+    for (const v of message.attribute) {
+      Attribute.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -41,6 +45,9 @@ export const Attribute = {
         case 2:
           message.value = reader.string();
           break;
+        case 3:
+          message.attribute.push(Attribute.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -53,6 +60,7 @@ export const Attribute = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       value: isSet(object.value) ? String(object.value) : undefined,
+      attribute: Array.isArray(object?.attribute) ? object.attribute.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
@@ -60,6 +68,11 @@ export const Attribute = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.value !== undefined && (obj.value = message.value);
+    if (message.attribute) {
+      obj.attribute = message.attribute.map((e) => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.attribute = [];
+    }
     return obj;
   },
 
@@ -71,6 +84,7 @@ export const Attribute = {
     const message = createBaseAttribute();
     message.id = object.id ?? undefined;
     message.value = object.value ?? undefined;
+    message.attribute = object.attribute?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
@@ -183,6 +197,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "value",
         "options": undefined,
         "proto3Optional": true,
+      }, {
+        "name": "attribute",
+        "number": 3,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.attribute.Attribute",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "attribute",
+        "options": undefined,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],

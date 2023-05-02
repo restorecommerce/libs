@@ -25,18 +25,18 @@ service Service {
 
 // Request object for setup calls
 message SetupRequest {
-  string ip = 1;
+  optional string ip = 1;
   repeated Item items = 2;
-  int32 subtotal = 3;
-  int32 shipping = 4;
-  int32 handling = 5;
-  int32 tax = 6;
-  string currency = 7;
-  string return_url = 8;
-  string cancel_return_url = 9;
-  bool allow_guest_checkout = 10;
-  Provider provider = 11;
-  io.restorecommerce.auth.Subject subject = 12;
+  optional int32 subtotal = 3;
+  optional int32 shipping = 4;
+  optional int32 handling = 5;
+  optional int32 tax = 6;
+  optional string currency = 7;
+  optional string return_url = 8;
+  optional string cancel_return_url = 9;
+  optional bool allow_guest_checkout = 10;
+  optional Provider provider = 11;
+  optional io.restorecommerce.auth.Subject subject = 12;
 }
 
 message SetupPayload {
@@ -58,21 +58,21 @@ message SetupResponse {
 
 // Request object for authorization or purchase call for cardless payment.
 message PaymentRequest {
-  Provider provider = 1;
-  int32 payment_sum = 2;
-  string currency = 3;
-  string payment_id = 4;
-  string payer_id = 5;
-  string token = 6;
+  optional Provider provider = 1;
+  optional int32 payment_sum = 2;
+  optional string currency = 3;
+  optional string payment_id = 4;
+  optional string payer_id = 5;
+  optional string token = 6;
   io.restorecommerce.auth.Subject subject = 7;
 }
 
 // Request object for capture call for both standard and cardless payments.
 message CaptureRequest {
-  Provider provider = 1;
-  int32 payment_sum = 2;
-  string currency = 3;
-  string payment_id = 4;
+  optional Provider provider = 1;
+  optional int32 payment_sum = 2;
+  optional string currency = 3;
+  optional string payment_id = 4;
   io.restorecommerce.auth.Subject subject = 5;
 }
 
@@ -95,20 +95,20 @@ message PaymentResponse {
 
 // Used for building ActiveMerchant::Billing::CreditCard instance.
 message PaymentCard {
-  string primary_number = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string month = 4;
-  int32 year = 5;
-  string verification_value = 6;
+  optional string primary_number = 1;
+  optional string first_name = 2;
+  optional string last_name = 3;
+  optional string month = 4;
+  optional int32 year = 5;
+  optional string verification_value = 6;
 }
 
 // Represents purchased item. Not all providers support this.
 message Item {
-  string name = 1;
-  string description = 2;
-  int32 quantity = 3;
-  int32 amount = 4;
+  optional string name = 1;
+  optional string description = 2;
+  optional int32 quantity = 3;
+  optional int32 amount = 4;
 }
 
 // Possible service providers. Provider names must be exactly as in config.yml.

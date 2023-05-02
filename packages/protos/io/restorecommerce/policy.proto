@@ -13,15 +13,15 @@ import "io/restorecommerce/options.proto";
 * A Policy is defined by a set of Rules.
 */
 message Policy {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
   repeated string rules = 5;  // rule IDs
-  io.restorecommerce.rule.Target target = 6;  // general policy target
-  io.restorecommerce.rule.Effect effect = 7;
-  string combining_algorithm = 8;
-  bool evaluation_cacheable = 9;
+  optional io.restorecommerce.rule.Target target = 6;  // general policy target
+  optional io.restorecommerce.rule.Effect effect = 7;
+  optional string combining_algorithm = 8;
+  optional bool evaluation_cacheable = 9;
 }
 
 message PolicyRQ {
@@ -36,7 +36,7 @@ message PolicyRQ {
 
 message PolicyList {
   repeated Policy items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

@@ -28,7 +28,7 @@ message Sort {
     DESCENDING = 2;
   }
   string field = 1;
-  SortOrder order = 2;
+  optional SortOrder order = 2;
 }
 
 message Filter {
@@ -73,8 +73,8 @@ message Search {
 }
 
 message ReadRequest {
-  uint32 offset = 1;
-  uint32 limit = 2;
+  optional uint32 offset = 1;
+  optional uint32 limit = 2;
   repeated Sort sort = 3;
 
   /// Filter based on fieldName|operation, value|list
@@ -93,14 +93,14 @@ message ReadRequest {
   repeated string locales_limiter = 7;
 
   repeated string custom_queries = 8;
-  google.protobuf.Any custom_arguments = 9;
+  optional google.protobuf.Any custom_arguments = 9;
   io.restorecommerce.auth.Subject subject = 10;
-  Search search = 11;
+  optional Search search = 11;
 }
 
 message DeleteRequest {
   /// Request to purge the whole collection
-  bool collection = 1;
+  optional bool collection = 1;
   /// Delete specified documents
   repeated string ids = 2;
   io.restorecommerce.auth.Subject subject = 3;
@@ -116,7 +116,7 @@ message DeleteResponse {
 /// List of resources
 message ResourceList {
   repeated Resource items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -135,6 +135,6 @@ message ResourceResponse {
 
 /// Example resource
 message Resource {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
 }

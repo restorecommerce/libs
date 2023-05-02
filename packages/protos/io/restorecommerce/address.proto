@@ -32,7 +32,7 @@ message Deleted {
 
 message AddressList {
   repeated Address items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -48,13 +48,13 @@ message AddressResponse {
 }
 
 message GeoPoint {
-  double latitude = 1;
-  double longitude = 2;
+  optional double latitude = 1;
+  optional double longitude = 2;
 }
 
 message AddressAddition {
-  string field1 = 1;
-  string field2 = 2;
+  optional string field1 = 1;
+  optional string field2 = 2;
 }
 
 message BusinessAddress {
@@ -84,10 +84,10 @@ message ContactPerson {
 }
 
 message Address {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string postcode = 3;
-  string country_id = 4 [
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string postcode = 3;
+  optional string country_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.country.Country",
       target_service: "resource",
@@ -96,13 +96,13 @@ message Address {
       field_name: "country",
     }
   ];
-  string locality = 6;
-  string street = 7;
-  string region = 8;
-  GeoPoint geo_coordinates = 9;
-  double altitude = 10;
-  string building_number = 11;
-  AddressAddition address_addition = 12;
+  optional string locality = 6;
+  optional string street = 7;
+  optional string region = 8;
+  optional GeoPoint geo_coordinates = 9;
+  optional double altitude = 10;
+  optional string building_number = 11;
+  optional AddressAddition address_addition = 12;
   oneof type {
     BusinessAddress business_address = 13;
     ResidentialAddress residential_address = 14;

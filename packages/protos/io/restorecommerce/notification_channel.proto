@@ -22,7 +22,7 @@ message Deleted {
 
 message NotificationChannelList {
   repeated NotificationChannel items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -38,10 +38,10 @@ message NotificationChannelResponse {
 }
 
 message NotificationChannel {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
   oneof configuration_type {
     string email = 5;
     string sms = 6;

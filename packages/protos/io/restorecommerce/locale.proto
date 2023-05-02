@@ -29,7 +29,7 @@ message Deleted {
 
 message LocaleList {
   repeated Locale items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -45,8 +45,8 @@ message LocaleResponse {
 }
 
 message Locale {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string value = 3;
-  string description = 4;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string value = 3;
+  optional string description = 4;
 }

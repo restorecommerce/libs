@@ -32,7 +32,7 @@ message Deleted {
 
 message ContactPointList {
   repeated ContactPoint items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -48,9 +48,9 @@ message ContactPointResponse {
 }
 
 message ContactPoint {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string physical_address_id = 3 [
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string physical_address_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
       target_service: "resource",
@@ -59,9 +59,9 @@ message ContactPoint {
       field_name: "physicalAddress",
     }
   ];
-  string website = 5;
-  string email = 6;
-  string contact_point_type_id = 7 [
+  optional string website = 5;
+  optional string email = 6;
+  optional string contact_point_type_id = 7 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point_type.ContactPointType",
       target_service: "resource",
@@ -70,8 +70,8 @@ message ContactPoint {
       field_name: "contactPointType",
     }
   ];
-  string telephone = 8;
-  string timezone_id = 9 [
+  optional string telephone = 8;
+  optional string timezone_id = 9 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.timezone.Timezone",
       target_service: "resource",
@@ -80,7 +80,7 @@ message ContactPoint {
       field_name: "timezone",
     }
   ];
-  string locale_id = 10 [
+  optional string locale_id = 10 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.locale.Locale",
       target_service: "resource",

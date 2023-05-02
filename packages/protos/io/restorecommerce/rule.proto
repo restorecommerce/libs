@@ -28,15 +28,15 @@ enum Effect {
 }
 
 message Rule {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
-  Target target = 5;
-  ContextQuery context_query = 6;
-  string condition = 7; // JS code
-  Effect effect = 8;
-  bool evaluation_cacheable = 9;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional Target target = 5;
+  optional ContextQuery context_query = 6;
+  optional string condition = 7; // JS code
+  optional Effect effect = 8;
+  optional bool evaluation_cacheable = 9;
 }
 
 message RuleRQ { // used for `whatIsAllowed` / reverse queries
@@ -50,7 +50,7 @@ message RuleRQ { // used for `whatIsAllowed` / reverse queries
 
 message RuleList {
   repeated Rule items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

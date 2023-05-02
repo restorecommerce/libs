@@ -9,8 +9,8 @@ import "io/restorecommerce/options.proto";
 // used to send requests through Kafka or gRPC
 message CommandRequest {
   //  command identifier (used to demultiplex operation in the command implementation)
-  string name = 1;
-  google.protobuf.Any payload = 2;  // variable payload
+  optional string name = 1;
+  optional google.protobuf.Any payload = 2;  // variable payload
   io.restorecommerce.auth.Subject subject = 3;
 }
 

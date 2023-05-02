@@ -4,21 +4,21 @@ package io.restorecommerce.image;
 
 // ProductCategory resource
 message Image {
-    string id = 1;
-    string caption = 2;
-    string filename = 3;
-    string content_type = 4;
-    string url = 5;
-    double width = 6;
-    double height = 7;
-    double length = 8;
+  optional string id = 1;
+  optional string caption = 2;
+  optional string filename = 3;
+  optional string content_type = 4;
+  optional string url = 5;
+  optional double width = 6;
+  optional double height = 7;
+  optional double length = 8;
 }
 
 message ImageList {
-    repeated Image items = 1;
-    uint32 total_count = 2;
+  repeated Image items = 1;
+  optional uint32 total_count = 2;
 }
 
 message Deleted {
-    string id = 1;
+  string id = 1;
 }

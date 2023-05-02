@@ -29,7 +29,7 @@ message Deleted {
 
 message CountryList {
   repeated Country items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -45,10 +45,10 @@ message CountryResponse {
 }
 
 message Country {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string country_code = 4;
-  string geographical_name = 5;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string country_code = 4;
+  optional string geographical_name = 5;
   repeated string economic_areas = 6;
 }

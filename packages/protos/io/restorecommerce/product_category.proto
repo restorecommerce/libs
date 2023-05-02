@@ -14,11 +14,11 @@ import "io/restorecommerce/price_group.proto";
 
 // ProductCategory resource
 message ProductCategory {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
-  string price_group_id = 5 [
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional string price_group_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.price_group.PriceGroup",
       target_service: "catalog",
@@ -27,13 +27,13 @@ message ProductCategory {
       field_name: "priceGroup",
     }
   ];
-  io.restorecommerce.image.Image image = 6;
-  Parent parent = 7;
+  optional io.restorecommerce.image.Image image = 6;
+  optional Parent parent = 7;
 }
 
 message ProductCategoryList {
   repeated ProductCategory items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -53,7 +53,7 @@ message Deleted {
 }
 
 message Parent {
-  string parent_id = 1;
+  optional string parent_id = 1;
 }
 
 service Service {

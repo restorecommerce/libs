@@ -7,9 +7,9 @@ import "io/restorecommerce/attribute.proto";
 // meta properties common to all resources
 
 message Meta {
-    double created = 1; // timestamp
-    double modified = 2; // timestamp
-    string modified_by = 3; // ID from last User who modified it
+    optional double created = 1; // timestamp
+    optional double modified = 2; // timestamp
+    optional string modified_by = 3; // ID from last User who modified it
     repeated io.restorecommerce.attribute.Attribute owner = 4;
     repeated io.restorecommerce.attribute.AttributeObj acl = 5;
 }

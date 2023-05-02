@@ -22,11 +22,11 @@ service Service {
 }
 
 message TokenData {
-  string id = 1;
-  google.protobuf.Any payload = 2;
-  double expires_in = 3;
-  string type = 4;
-  io.restorecommerce.auth.Subject subject = 5;
+  optional string id = 1;
+  optional google.protobuf.Any payload = 2;
+  optional double expires_in = 3;
+  optional string type = 4;
+  optional io.restorecommerce.auth.Subject subject = 5;
 }
 
 message Identifier {

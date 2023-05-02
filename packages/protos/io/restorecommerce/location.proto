@@ -34,7 +34,7 @@ message Deleted {
 
 message LocationList {
   repeated Location items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -50,11 +50,11 @@ message LocationResponse {
 }
 
 message Location {
-  string id = 1; // Location ID, unique, key
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3; // Location name
-  string description = 4;
-  string organization_id = 5 [
+  optional string id = 1; // Location ID, unique, key
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3; // Location name
+  optional string description = 4;
+  optional string organization_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "resource",
@@ -63,7 +63,7 @@ message Location {
       field_name: "organization",
     }
   ]; // Organization to which this location is linked
-  string parent_id = 6 [
+  optional string parent_id = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.location.Location",
       target_service: "resource",
@@ -72,7 +72,7 @@ message Location {
       field_name: "parent",
     }
   ];  //  Location which may contain this location; may be null
-  string address_id = 8 [
+  optional string address_id = 8 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
       target_service: "resource",
@@ -81,6 +81,6 @@ message Location {
       field_name: "address",
     }
   ];
-  google.protobuf.Any data = 9; /// additional data
-  string type = 10; // location type
+  optional google.protobuf.Any data = 9; /// additional data
+  optional string type = 10; // location type
 }

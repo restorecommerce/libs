@@ -45,8 +45,8 @@ message CopyRequestItem {
   string bucket = 1;
   string copySource = 2;
   string key = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  Options options = 5;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional Options options = 5;
 }
 
 message CopyResponseItem {
@@ -58,24 +58,24 @@ message CopyResponseItem {
 }
 
 message Options {
-  string encoding = 1;
-  string content_type = 2;
-  string content_language = 3;
-  string content_disposition = 4;
-  int32 length = 5;
-  string version = 6;
-  string md5 = 7;
+  optional string encoding = 1;
+  optional string content_type = 2;
+  optional string content_language = 3;
+  optional string content_disposition = 4;
+  optional int32 length = 5;
+  optional string version = 6;
+  optional string md5 = 7;
   repeated io.restorecommerce.attribute.Attribute tags = 8;
-  google.protobuf.Any data = 9; // optional meta data ex: from and to dates
+  optional google.protobuf.Any data = 9; // optional meta data ex: from and to dates
 }
 
 message Object {
   string key = 1;
   string bucket = 2;
-  bytes object = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  string url = 5;
-  Options options = 6;
+  optional bytes object = 3;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional string url = 5;
+  optional Options options = 6;
   io.restorecommerce.auth.Subject subject = 7;
 }
 
@@ -101,7 +101,7 @@ message ObjectResponsePayload {
 message GetRequest {
   string key = 1;
   string bucket = 2;
-  bool download = 3;
+  optional bool download = 3;
   io.restorecommerce.auth.Subject subject = 4;
 }
 
@@ -148,10 +148,10 @@ message Response {
 
 message ListRequest {
   string bucket = 1;
-  io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
+  optional io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
   io.restorecommerce.auth.Subject subject = 3;
-  int32 max_keys = 4;
-  string prefix = 5;
+  optional int32 max_keys = 4;
+  optional string prefix = 5;
 }
 
 // OstorageMessage is used for emitting
@@ -172,8 +172,8 @@ message MoveRequestItem {
   string bucket = 1; // destination bucket name
   string sourceObject = 2; // source object with bucket name
   string key = 3; // destination key name
-  io.restorecommerce.meta.Meta meta = 4;
-  Options options = 5;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional Options options = 5;
 }
 
 message MoveResponseList {

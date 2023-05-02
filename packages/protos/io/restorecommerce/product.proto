@@ -27,20 +27,20 @@ service Service {
 
 // Product resource
 message MainProduct {
-  string id = 1;
+  optional string id = 1;
   oneof product_type {
     Product product = 2;
     Bundle bundle = 3;
   }
-  bool active = 4;
-  io.restorecommerce.meta.Meta meta = 5;
+  optional bool active = 4;
+  optional io.restorecommerce.meta.Meta meta = 5;
 }
 
 message Product {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string manufacturer_id = 4 [
+  optional string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string manufacturer_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.manufacturer.Manufacturer",
       target_service: "catalog",
@@ -49,14 +49,14 @@ message Product {
       field_name: "manufacturer",
     }
   ];
-  string taric_code = 5;
+  optional string taric_code = 5;
   oneof classification {
     Identifier prototype = 6;
     Identifier category = 7;
   }
   repeated string tax_id = 8;
   repeated Variant variants = 9;
-  string gtin = 10;
+  optional string gtin = 10;
 }
 
 message Identifier {
@@ -65,7 +65,7 @@ message Identifier {
 
 message ProductList {
   repeated MainProduct items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -81,31 +81,31 @@ message ProductResponse {
 }
 
 message Variant {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  int32 stock_level = 4;
-  double price = 5;
-  bool sale = 6;
-  double sale_price = 7;
+  optional string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional int32 stock_level = 4;
+  optional double price = 5;
+  optional bool sale = 6;
+  optional double sale_price = 7;
   repeated io.restorecommerce.image.Image image = 8;
-  string stock_keeping_unit = 9;
-  string template_variant = 10;
+  optional string stock_keeping_unit = 9;
+  optional string template_variant = 10;
   repeated io.restorecommerce.attribute.Attribute attributes = 11;
 }
 
 message Bundle {
-  string id = 1;
-  string name = 3;
-  string description = 4;
+  optional string id = 1;
+  optional string name = 3;
+  optional string description = 4;
   repeated io.restorecommerce.image.Image image = 5;
   repeated BundleProduct product = 6;
-  double price = 7;
+  optional double price = 7;
 }
 
 message BundleProduct {
-  string product_id = 1;
-  uint32 quantity = 2;
+  optional string product_id = 1;
+  optional uint32 quantity = 2;
 }
 
 message Deleted {

@@ -33,7 +33,7 @@ message Deleted {
 
 message TaxList {
   repeated Tax items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -49,9 +49,9 @@ message TaxResponse {
 }
 
 message Tax {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string country_id = 3 [
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string country_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.country.Country",
       target_service: "resource",
@@ -60,9 +60,9 @@ message Tax {
       field_name: "country",
     }
   ];
-  double rate = 4;
-  string variant = 5;
-  string type_id = 6 [
+  optional double rate = 4;
+  optional string variant = 5;
+  optional string type_id = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.tax_type.TaxType",
       target_service: "resource",

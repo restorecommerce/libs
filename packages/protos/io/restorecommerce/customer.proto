@@ -31,7 +31,7 @@ service Service {
 
 message CustomerList {
   repeated Customer items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -47,8 +47,8 @@ message CustomerResponse {
 }
 
 message Customer {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
   oneof customer {
     IndividualUser individual_user = 3;
     OrgUser org_user = 4;
@@ -57,7 +57,7 @@ message Customer {
 }
 
 message IndividualUser {
-  string user_id = 1 [
+  optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
       target_service: "identity",
@@ -66,7 +66,7 @@ message IndividualUser {
       field_name: "user",
     }
   ];
-  string address_id = 2 [
+  optional string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
       target_service: "resource",
@@ -87,7 +87,7 @@ message IndividualUser {
 }
 
 message OrgUser {
-  string user_id = 1 [
+  optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
       target_service: "identity",
@@ -96,7 +96,7 @@ message OrgUser {
       field_name: "user",
     }
   ];
-  string organization_id = 2 [
+  optional string organization_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "resource",
@@ -109,7 +109,7 @@ message OrgUser {
 
 message Guest {
   bool guest = 1;
-  string address_id = 2 [
+  optional string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
       target_service: "resource",

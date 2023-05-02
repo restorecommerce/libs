@@ -11,18 +11,18 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
 message PolicySet {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string description = 4;
-  io.restorecommerce.rule.Target target = 5;
-  string combining_algorithm = 6;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional io.restorecommerce.rule.Target target = 5;
+  optional string combining_algorithm = 6;
   repeated string policies = 7; // policy IDs
 }
 
 message PolicySetList {
   repeated PolicySet items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

@@ -21,16 +21,16 @@ service Service {
 }
 
 message Role {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3; // specifies the role of the user
-  string description = 4;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3; // specifies the role of the user
+  optional string description = 4;
   repeated string assignable_by_roles = 5; // role id who can assign this role
 }
 
 message RoleList {
   repeated Role items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

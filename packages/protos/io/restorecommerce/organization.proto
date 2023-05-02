@@ -37,7 +37,7 @@ message DeleteOrgData {
 
 message OrganizationList {
   repeated Organization items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -53,9 +53,9 @@ message OrganizationResponse {
 }
 
 message Organization {
-  string id = 1; /// Organization ID, unique, key
-  io.restorecommerce.meta.Meta meta = 2;
-  string address_id = 3 [
+  optional string id = 1; /// Organization ID, unique, key
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string address_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
       target_service: "resource",
@@ -64,7 +64,7 @@ message Organization {
       field_name: "address",
     }
   ]; /// Address for the organization
-  string parent_id = 4 [
+  optional string parent_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "resource",
@@ -82,14 +82,14 @@ message Organization {
       field_name: "contactPoints",
     }
   ]; // list of possible legal addresses of different types
-  string website = 7;
-  string email = 8;
-  string logo = 9; // base64; arangoDB does not support blob storage
-  string vat_id = 10;
-  string isic_v4 = 11;
-  string registration = 12;
-  string registration_court = 13;
-  string name = 14;
+  optional string website = 7;
+  optional string email = 8;
+  optional string logo = 9; // base64; arangoDB does not support blob storage
+  optional string vat_id = 10;
+  optional string isic_v4 = 11;
+  optional string registration = 12;
+  optional string registration_court = 13;
+  optional string name = 14;
   repeated string payment_method_ids = 15;
-  google.protobuf.Any data = 16; /// additional data
+  optional google.protobuf.Any data = 16; /// additional data
 }

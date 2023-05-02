@@ -10,17 +10,17 @@ import "io/restorecommerce/options.proto";
 
 // ProductPrototype resource
 message ProductPrototype {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3;
-  string version = 4;
-  string description = 5;
-  string category_id = 6;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string version = 4;
+  optional string description = 5;
+  optional string category_id = 6;
 }
 
 message ProductPrototypeList {
   repeated ProductPrototype items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

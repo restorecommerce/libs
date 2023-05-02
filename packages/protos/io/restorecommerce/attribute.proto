@@ -9,5 +9,5 @@ message Attribute {
 }
 
 message AttributeObj {
-  Attribute attribute = 1;
+  optional Attribute attribute = 1;
 }

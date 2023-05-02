@@ -25,7 +25,7 @@ message Deleted {
 
 message PaymentMethodList {
   repeated PaymentMethod items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -52,9 +52,9 @@ enum TransferTypeEnum {
 }
 
 message PaymentMethod {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  PaymentMethodEnum payment_method = 3;
-  TransferTypeEnum transfer_type = 4;
-  google.protobuf.Any data = 5;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional PaymentMethodEnum payment_method = 3;
+  optional TransferTypeEnum transfer_type = 4;
+  optional google.protobuf.Any data = 5;
 }

@@ -6,7 +6,7 @@ import {
   SubSpaceServiceConfig
 } from './types';
 import { buildSubgraphSchema } from '@apollo/federation';
-import { gql } from 'apollo-server';
+import gql from 'graphql-tag';
 import { GraphQLSchema, printSchema } from 'graphql/index';
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLList, GraphQLScalarType } from 'graphql/type/definition';

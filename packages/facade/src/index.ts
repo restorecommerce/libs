@@ -2,7 +2,17 @@ import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-import { ApolloServer } from 'apollo-server';
+import http from "http";
+// import bodyParser from "koa-bodyparser";
+// import cors from "@koa/cors";
+
+import cors from 'cors';
+import { json } from 'body-parser';
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from '@apollo/server/express4';
+import { startStandaloneServer } from '@apollo/server/standalone';
+// import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
@@ -17,7 +27,7 @@ import { useServer } from 'graphql-ws/lib/use/ws';
 import { Disposable } from 'graphql-ws';
 import * as _ from 'lodash';
 import { makeExecutableSchema } from "graphql-tools";
-import { gql } from 'graphql-tag';
+import gql from 'graphql-tag';
 import { GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos';
 import compose from 'koa-compose';
 import { KafkaProviderConfig } from '@restorecommerce/kafka-client';
@@ -271,17 +281,24 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           },
         },
       ],
-      debug: true,
+      includeStacktraceInErrorResponses: true,
       formatError: (error) => {
         this.logger.error('Error while processing request', { message: error.message });
         this.logger.debug('Error while processing request', { error });
         return {
           message: error.message,
           locations: error.locations,
-          stack: error.stack,
+          // stack: error.stack,
+          stack: error
         };
       },
-      context: ({ ctx }) => ctx
+      // context: ({ ctx }) => ctx
+    });
+
+    const { url } = await startStandaloneServer(gqlServer, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+      // context: ({ ctx }) => ctx
+      // listen: { port: 4000 },
     });
 
     await gqlServer.start();
@@ -289,9 +306,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const middleware = gqlServer.getMiddleware({
       path: '/graphql',
       cors: true,
-      bodyParserConfig: {
+      json: {
         jsonLimit: '10mb'
       },
+    });
+
+    expressMiddleware(gqlServer, {
+      context: async ({ req }) => ({ token: req.headers.token }),
     });
 
     this.koa.use(middleware);
@@ -338,3 +359,7 @@ export function createFacade(config: FacadeConfig): Facade {
     kafka: config.kafka
   }).useModule(facadeStatusModule);
 }
+function getTokenForRequest(req: http.IncomingMessage) {
+  throw new Error('Function not implemented.');
+}
+

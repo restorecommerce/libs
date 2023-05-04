@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "apollo-server";
 import { buildSubgraphSchema } from "@apollo/federation";
 import { schema } from "./schema";
 import { namespace, OrderingServiceConfig } from "../interfaces";

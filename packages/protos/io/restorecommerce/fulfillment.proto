@@ -56,7 +56,7 @@ service Service {
   /**
   Creates, Executes and Updates fulfillment orders against API
   */
-  rpc Order (FulfillmentRequestList) returns (FulfillmentResponseList);
+  rpc Submit (FulfillmentRequestList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders
@@ -151,7 +151,7 @@ message Fulfillment {
   };
 
   string id = 1;
-  Packing packing = 2;
+  Order order = 2;
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   State state = 5;

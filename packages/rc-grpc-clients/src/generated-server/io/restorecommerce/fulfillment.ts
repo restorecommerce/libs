@@ -360,16 +360,16 @@ export const Parcel = {
       Item.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.weight_in_kg !== 0) {
-      writer.uint32(45).float(message.weight_in_kg);
+      writer.uint32(41).double(message.weight_in_kg);
     }
     if (message.height_in_cm !== 0) {
-      writer.uint32(53).float(message.height_in_cm);
+      writer.uint32(49).double(message.height_in_cm);
     }
     if (message.width_in_cm !== 0) {
-      writer.uint32(61).float(message.width_in_cm);
+      writer.uint32(57).double(message.width_in_cm);
     }
     if (message.length_in_cm !== 0) {
-      writer.uint32(69).float(message.length_in_cm);
+      writer.uint32(65).double(message.length_in_cm);
     }
     return writer;
   },
@@ -394,16 +394,16 @@ export const Parcel = {
           message.items.push(Item.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.weight_in_kg = reader.float();
+          message.weight_in_kg = reader.double();
           break;
         case 6:
-          message.height_in_cm = reader.float();
+          message.height_in_cm = reader.double();
           break;
         case 7:
-          message.width_in_cm = reader.float();
+          message.width_in_cm = reader.double();
           break;
         case 8:
-          message.length_in_cm = reader.float();
+          message.length_in_cm = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1869,7 +1869,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "weight_in_kg",
             number: 5,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1882,7 +1882,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "height_in_cm",
             number: 6,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1895,7 +1895,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "width_in_cm",
             number: 7,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",
@@ -1908,7 +1908,7 @@ export const protoMetadata: ProtoMetadata = {
             name: "length_in_cm",
             number: 8,
             label: 1,
-            type: 2,
+            type: 1,
             typeName: "",
             extendee: "",
             defaultValue: "",

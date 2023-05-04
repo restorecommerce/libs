@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "google.protobuf";
 
@@ -15,8 +15,7 @@ export const protobufPackage = "google.protobuf";
  * /
  * / The JSON representation for `Empty` is empty JSON object `{}`.
  */
-export interface Empty {
-}
+export interface Empty {}
 
 function createBaseEmpty(): Empty {
   return {};
@@ -75,77 +74,103 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "google/protobuf/empty.proto",
-    "package": "google.protobuf",
-    "dependency": [],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Empty",
-      "field": [],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [],
-    "extension": [],
-    "options": {
-      "javaPackage": "com.google.protobuf",
-      "javaOuterClassname": "EmptyProto",
-      "javaMultipleFiles": true,
-      "javaGenerateEqualsAndHash": true,
-      "javaStringCheckUtf8": false,
-      "optimizeFor": 1,
-      "goPackage": "github.com/golang/protobuf/ptypes/empty",
-      "ccGenericServices": false,
-      "javaGenericServices": false,
-      "pyGenericServices": false,
-      "phpGenericServices": false,
-      "deprecated": false,
-      "ccEnableArenas": true,
-      "objcClassPrefix": "GPB",
-      "csharpNamespace": "Google.Protobuf.WellKnownTypes",
-      "swiftPrefix": "",
-      "phpClassPrefix": "",
-      "phpNamespace": "",
-      "phpMetadataNamespace": "",
-      "rubyPackage": "",
-      "uninterpretedOption": [],
+    name: "google/protobuf/empty.proto",
+    package: "google.protobuf",
+    dependency: [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Empty",
+        field: [],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    options: {
+      javaPackage: "com.google.protobuf",
+      javaOuterClassname: "EmptyProto",
+      javaMultipleFiles: true,
+      javaGenerateEqualsAndHash: true,
+      javaStringCheckUtf8: false,
+      optimizeFor: 1,
+      goPackage: "github.com/golang/protobuf/ptypes/empty",
+      ccGenericServices: false,
+      javaGenericServices: false,
+      pyGenericServices: false,
+      phpGenericServices: false,
+      deprecated: false,
+      ccEnableArenas: true,
+      objcClassPrefix: "GPB",
+      csharpNamespace: "Google.Protobuf.WellKnownTypes",
+      swiftPrefix: "",
+      phpClassPrefix: "",
+      phpNamespace: "",
+      phpMetadataNamespace: "",
+      rubyPackage: "",
+      uninterpretedOption: [],
     },
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0],
-        "span": [52, 0, 16],
-        "leadingComments":
-          "/ A generic empty message that you can re-use to avoid defining duplicated\n/ empty messages in your APIs. A typical example is to use it as the request\n/ or the response type of an API method. For instance:\n/\n/     service Foo {\n/       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n/     }\n/\n/ The JSON representation for `Empty` is empty JSON object `{}`.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [52, 0, 16],
+          leadingComments:
+            "/ A generic empty message that you can re-use to avoid defining duplicated\n/ empty messages in your APIs. A typical example is to use it as the request\n/ or the response type of an API method. For instance:\n/\n/     service Foo {\n/       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n/     }\n/\n/ The JSON representation for `Empty` is empty JSON object `{}`.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: { ".google.protobuf.Empty": Empty },
   dependencies: [],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;

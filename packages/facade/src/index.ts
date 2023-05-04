@@ -2,12 +2,10 @@ import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
 
-import http from "http";
 import Koa from "koa";
 import bodyParser from "koa-bodyparser";
 import cors from "@koa/cors";
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from '@apollo/server/standalone';
 import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
@@ -262,6 +260,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const gqlServer = new ApolloServer({
       gateway,
       introspection: true,
+      allowBatchedHttpRequests: true,
       plugins: [
         ApolloServerPluginDrainHttpServer({ httpServer: this._server }),
         ApolloServerPluginLandingPageLocalDefault({
@@ -287,10 +286,6 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           stack: error
         };
       },
-    });
-
-    await startStandaloneServer(gqlServer, {
-      context: async ({ req }) => ({ token: req.headers.token })
     });
 
     await gqlServer.start();

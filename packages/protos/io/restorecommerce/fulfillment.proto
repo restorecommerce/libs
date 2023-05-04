@@ -117,53 +117,6 @@ message Packing {
   string notify = 5;
 }
 
-/**
-This is the message how it get stored to the database
-*/
-message Fulfillment {
-  option (restorecommerce.options.kafka_subscriber) = {
-    plural: "fulfillment"
-    topic: "io.restorecommerce.fulfillment.resource"
-    created: "fulfillmentCreated"
-    updated: "fulfillmentUpdated"
-    deleted: "fulfillmentDeleted"
-  };
-
-  string id = 1;
-  Packing packing = 2;
-  io.restorecommerce.meta.Meta meta = 3;
-  repeated Label labels = 4; //filled by service
-  State state = 5;
-}
-
-message FulfillmentList {
-  repeated Fulfillment items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
-}
-
-message FulfillmentResponse {
-  Fulfillment payload = 1;
-  io.restorecommerce.status.Status status = 2;
-}
-
-message FulfillmentResponseList {
-  repeated FulfillmentResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
-}
-
-message TrackingRequest {
-  string fulfillment_id = 1;
-  repeated string shipment_numbers = 2; //optional
-  google.protobuf.Any options = 3;
-}
-
-message TrackingRequestList {
-  repeated TrackingRequest items = 1;
-  io.restorecommerce.auth.Subject subject = 2;
-}
-
 message Event {
   int64 timestamp = 1;
   string location = 2;
@@ -191,7 +144,7 @@ message Fulfillment {
   };
 
   string id = 1;
-  Order order = 2; //filled by user
+  Packing packing = 2; //filled by user
   io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   repeated Tracking tracking = 5; //filled by service

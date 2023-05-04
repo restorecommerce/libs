@@ -4,11 +4,12 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { Address, ContactPerson, protoMetadata as protoMetadata6 } from "./address";
+import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Country, protoMetadata as protoMetadata7 } from "./country";
+import { protoMetadata as protoMetadata7 } from "./country";
 import { Meta, protoMetadata as protoMetadata5 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata8, Resolver } from "./options";
+import { KafkaSubscription, protoMetadata as protoMetadata9, Resolver } from "./options";
+import { Package, protoMetadata as protoMetadata8 } from "./product";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
@@ -107,31 +108,19 @@ export function stateToNumber(object: State): number {
   }
 }
 
-export interface FulfillmentAddress {
-  address?: Address;
-  country?: Country;
-  contact_person?: ContactPerson;
-}
-
-export interface Item {
+export interface FulfillmentItem {
   product_id: string;
   variant_id: string;
   quantity: number;
-  weight_in_kg: number;
-  height_in_cm: number;
-  width_in_cm: number;
-  length_in_cm: number;
+  package?: Package;
 }
 
 export interface Parcel {
   id: string;
   product_id: string;
-  product_variant_id: string;
-  items?: Item;
-  weight_in_kg: number;
-  height_in_cm: number;
-  width_in_cm: number;
-  length_in_cm: number;
+  variant_id: string;
+  item?: FulfillmentItem;
+  package?: Package;
 }
 
 export interface Label {
@@ -150,8 +139,8 @@ export interface Label {
 export interface Packing {
   reference_id: string;
   parcels: Parcel[];
-  sender?: FulfillmentAddress;
-  receiver?: FulfillmentAddress;
+  sender?: ShippingAddress;
+  receiver?: ShippingAddress;
   notify: string;
 }
 
@@ -181,6 +170,7 @@ export interface Fulfillment {
   tracking: Tracking[];
   /** filled by service */
   state: State;
+  price: number;
 }
 
 export interface FulfillmentList {
@@ -218,98 +208,12 @@ export interface Deleted {
   id: string;
 }
 
-function createBaseFulfillmentAddress(): FulfillmentAddress {
-  return { address: undefined, country: undefined, contact_person: undefined };
+function createBaseFulfillmentItem(): FulfillmentItem {
+  return { product_id: "", variant_id: "", quantity: 0, package: undefined };
 }
 
-export const FulfillmentAddress = {
-  encode(message: FulfillmentAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.address !== undefined) {
-      Address.encode(message.address, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.country !== undefined) {
-      Country.encode(message.country, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.contact_person !== undefined) {
-      ContactPerson.encode(message.contact_person, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentAddress {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFulfillmentAddress();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.address = Address.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.country = Country.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.contact_person = ContactPerson.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): FulfillmentAddress {
-    return {
-      address: isSet(object.address) ? Address.fromJSON(object.address) : undefined,
-      country: isSet(object.country) ? Country.fromJSON(object.country) : undefined,
-      contact_person: isSet(object.contact_person) ? ContactPerson.fromJSON(object.contact_person) : undefined,
-    };
-  },
-
-  toJSON(message: FulfillmentAddress): unknown {
-    const obj: any = {};
-    message.address !== undefined && (obj.address = message.address ? Address.toJSON(message.address) : undefined);
-    message.country !== undefined && (obj.country = message.country ? Country.toJSON(message.country) : undefined);
-    message.contact_person !== undefined &&
-      (obj.contact_person = message.contact_person ? ContactPerson.toJSON(message.contact_person) : undefined);
-    return obj;
-  },
-
-  create(base?: DeepPartial<FulfillmentAddress>): FulfillmentAddress {
-    return FulfillmentAddress.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<FulfillmentAddress>): FulfillmentAddress {
-    const message = createBaseFulfillmentAddress();
-    message.address = (object.address !== undefined && object.address !== null)
-      ? Address.fromPartial(object.address)
-      : undefined;
-    message.country = (object.country !== undefined && object.country !== null)
-      ? Country.fromPartial(object.country)
-      : undefined;
-    message.contact_person = (object.contact_person !== undefined && object.contact_person !== null)
-      ? ContactPerson.fromPartial(object.contact_person)
-      : undefined;
-    return message;
-  },
-};
-
-function createBaseItem(): Item {
-  return {
-    product_id: "",
-    variant_id: "",
-    quantity: 0,
-    weight_in_kg: 0,
-    height_in_cm: 0,
-    width_in_cm: 0,
-    length_in_cm: 0,
-  };
-}
-
-export const Item = {
-  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FulfillmentItem = {
+  encode(message: FulfillmentItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.product_id !== "") {
       writer.uint32(10).string(message.product_id);
     }
@@ -317,27 +221,18 @@ export const Item = {
       writer.uint32(18).string(message.variant_id);
     }
     if (message.quantity !== 0) {
-      writer.uint32(72).int32(message.quantity);
+      writer.uint32(24).int32(message.quantity);
     }
-    if (message.weight_in_kg !== 0) {
-      writer.uint32(41).double(message.weight_in_kg);
-    }
-    if (message.height_in_cm !== 0) {
-      writer.uint32(49).double(message.height_in_cm);
-    }
-    if (message.width_in_cm !== 0) {
-      writer.uint32(57).double(message.width_in_cm);
-    }
-    if (message.length_in_cm !== 0) {
-      writer.uint32(65).double(message.length_in_cm);
+    if (message.package !== undefined) {
+      Package.encode(message.package, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentItem {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseItem();
+    const message = createBaseFulfillmentItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -347,20 +242,11 @@ export const Item = {
         case 2:
           message.variant_id = reader.string();
           break;
-        case 9:
+        case 3:
           message.quantity = reader.int32();
           break;
-        case 5:
-          message.weight_in_kg = reader.double();
-          break;
-        case 6:
-          message.height_in_cm = reader.double();
-          break;
-        case 7:
-          message.width_in_cm = reader.double();
-          break;
-        case 8:
-          message.length_in_cm = reader.double();
+        case 4:
+          message.package = Package.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -370,58 +256,42 @@ export const Item = {
     return message;
   },
 
-  fromJSON(object: any): Item {
+  fromJSON(object: any): FulfillmentItem {
     return {
       product_id: isSet(object.product_id) ? String(object.product_id) : "",
       variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      weight_in_kg: isSet(object.weight_in_kg) ? Number(object.weight_in_kg) : 0,
-      height_in_cm: isSet(object.height_in_cm) ? Number(object.height_in_cm) : 0,
-      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      length_in_cm: isSet(object.length_in_cm) ? Number(object.length_in_cm) : 0,
+      package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
     };
   },
 
-  toJSON(message: Item): unknown {
+  toJSON(message: FulfillmentItem): unknown {
     const obj: any = {};
     message.product_id !== undefined && (obj.product_id = message.product_id);
     message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
-    message.weight_in_kg !== undefined && (obj.weight_in_kg = message.weight_in_kg);
-    message.height_in_cm !== undefined && (obj.height_in_cm = message.height_in_cm);
-    message.width_in_cm !== undefined && (obj.width_in_cm = message.width_in_cm);
-    message.length_in_cm !== undefined && (obj.length_in_cm = message.length_in_cm);
+    message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<Item>): Item {
-    return Item.fromPartial(base ?? {});
+  create(base?: DeepPartial<FulfillmentItem>): FulfillmentItem {
+    return FulfillmentItem.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Item>): Item {
-    const message = createBaseItem();
+  fromPartial(object: DeepPartial<FulfillmentItem>): FulfillmentItem {
+    const message = createBaseFulfillmentItem();
     message.product_id = object.product_id ?? "";
     message.variant_id = object.variant_id ?? "";
     message.quantity = object.quantity ?? 0;
-    message.weight_in_kg = object.weight_in_kg ?? 0;
-    message.height_in_cm = object.height_in_cm ?? 0;
-    message.width_in_cm = object.width_in_cm ?? 0;
-    message.length_in_cm = object.length_in_cm ?? 0;
+    message.package = (object.package !== undefined && object.package !== null)
+      ? Package.fromPartial(object.package)
+      : undefined;
     return message;
   },
 };
 
 function createBaseParcel(): Parcel {
-  return {
-    id: "",
-    product_id: "",
-    product_variant_id: "",
-    items: undefined,
-    weight_in_kg: 0,
-    height_in_cm: 0,
-    width_in_cm: 0,
-    length_in_cm: 0,
-  };
+  return { id: "", product_id: "", variant_id: "", item: undefined, package: undefined };
 }
 
 export const Parcel = {
@@ -432,23 +302,14 @@ export const Parcel = {
     if (message.product_id !== "") {
       writer.uint32(18).string(message.product_id);
     }
-    if (message.product_variant_id !== "") {
-      writer.uint32(26).string(message.product_variant_id);
+    if (message.variant_id !== "") {
+      writer.uint32(26).string(message.variant_id);
     }
-    if (message.items !== undefined) {
-      Item.encode(message.items, writer.uint32(34).fork()).ldelim();
+    if (message.item !== undefined) {
+      FulfillmentItem.encode(message.item, writer.uint32(34).fork()).ldelim();
     }
-    if (message.weight_in_kg !== 0) {
-      writer.uint32(41).double(message.weight_in_kg);
-    }
-    if (message.height_in_cm !== 0) {
-      writer.uint32(49).double(message.height_in_cm);
-    }
-    if (message.width_in_cm !== 0) {
-      writer.uint32(57).double(message.width_in_cm);
-    }
-    if (message.length_in_cm !== 0) {
-      writer.uint32(65).double(message.length_in_cm);
+    if (message.package !== undefined) {
+      Package.encode(message.package, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -467,22 +328,13 @@ export const Parcel = {
           message.product_id = reader.string();
           break;
         case 3:
-          message.product_variant_id = reader.string();
+          message.variant_id = reader.string();
           break;
         case 4:
-          message.items = Item.decode(reader, reader.uint32());
+          message.item = FulfillmentItem.decode(reader, reader.uint32());
           break;
-        case 5:
-          message.weight_in_kg = reader.double();
-          break;
-        case 6:
-          message.height_in_cm = reader.double();
-          break;
-        case 7:
-          message.width_in_cm = reader.double();
-          break;
-        case 8:
-          message.length_in_cm = reader.double();
+        case 11:
+          message.package = Package.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -496,12 +348,9 @@ export const Parcel = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       product_id: isSet(object.product_id) ? String(object.product_id) : "",
-      product_variant_id: isSet(object.product_variant_id) ? String(object.product_variant_id) : "",
-      items: isSet(object.items) ? Item.fromJSON(object.items) : undefined,
-      weight_in_kg: isSet(object.weight_in_kg) ? Number(object.weight_in_kg) : 0,
-      height_in_cm: isSet(object.height_in_cm) ? Number(object.height_in_cm) : 0,
-      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      length_in_cm: isSet(object.length_in_cm) ? Number(object.length_in_cm) : 0,
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
+      item: isSet(object.item) ? FulfillmentItem.fromJSON(object.item) : undefined,
+      package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
     };
   },
 
@@ -509,12 +358,9 @@ export const Parcel = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.product_id !== undefined && (obj.product_id = message.product_id);
-    message.product_variant_id !== undefined && (obj.product_variant_id = message.product_variant_id);
-    message.items !== undefined && (obj.items = message.items ? Item.toJSON(message.items) : undefined);
-    message.weight_in_kg !== undefined && (obj.weight_in_kg = message.weight_in_kg);
-    message.height_in_cm !== undefined && (obj.height_in_cm = message.height_in_cm);
-    message.width_in_cm !== undefined && (obj.width_in_cm = message.width_in_cm);
-    message.length_in_cm !== undefined && (obj.length_in_cm = message.length_in_cm);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
+    message.item !== undefined && (obj.item = message.item ? FulfillmentItem.toJSON(message.item) : undefined);
+    message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     return obj;
   },
 
@@ -526,12 +372,13 @@ export const Parcel = {
     const message = createBaseParcel();
     message.id = object.id ?? "";
     message.product_id = object.product_id ?? "";
-    message.product_variant_id = object.product_variant_id ?? "";
-    message.items = (object.items !== undefined && object.items !== null) ? Item.fromPartial(object.items) : undefined;
-    message.weight_in_kg = object.weight_in_kg ?? 0;
-    message.height_in_cm = object.height_in_cm ?? 0;
-    message.width_in_cm = object.width_in_cm ?? 0;
-    message.length_in_cm = object.length_in_cm ?? 0;
+    message.variant_id = object.variant_id ?? "";
+    message.item = (object.item !== undefined && object.item !== null)
+      ? FulfillmentItem.fromPartial(object.item)
+      : undefined;
+    message.package = (object.package !== undefined && object.package !== null)
+      ? Package.fromPartial(object.package)
+      : undefined;
     return message;
   },
 };
@@ -666,10 +513,10 @@ export const Packing = {
       Parcel.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.sender !== undefined) {
-      FulfillmentAddress.encode(message.sender, writer.uint32(26).fork()).ldelim();
+      ShippingAddress.encode(message.sender, writer.uint32(26).fork()).ldelim();
     }
     if (message.receiver !== undefined) {
-      FulfillmentAddress.encode(message.receiver, writer.uint32(34).fork()).ldelim();
+      ShippingAddress.encode(message.receiver, writer.uint32(34).fork()).ldelim();
     }
     if (message.notify !== "") {
       writer.uint32(42).string(message.notify);
@@ -691,10 +538,10 @@ export const Packing = {
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.sender = FulfillmentAddress.decode(reader, reader.uint32());
+          message.sender = ShippingAddress.decode(reader, reader.uint32());
           break;
         case 4:
-          message.receiver = FulfillmentAddress.decode(reader, reader.uint32());
+          message.receiver = ShippingAddress.decode(reader, reader.uint32());
           break;
         case 5:
           message.notify = reader.string();
@@ -711,8 +558,8 @@ export const Packing = {
     return {
       reference_id: isSet(object.reference_id) ? String(object.reference_id) : "",
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
-      sender: isSet(object.sender) ? FulfillmentAddress.fromJSON(object.sender) : undefined,
-      receiver: isSet(object.receiver) ? FulfillmentAddress.fromJSON(object.receiver) : undefined,
+      sender: isSet(object.sender) ? ShippingAddress.fromJSON(object.sender) : undefined,
+      receiver: isSet(object.receiver) ? ShippingAddress.fromJSON(object.receiver) : undefined,
       notify: isSet(object.notify) ? String(object.notify) : "",
     };
   },
@@ -725,10 +572,9 @@ export const Packing = {
     } else {
       obj.parcels = [];
     }
-    message.sender !== undefined &&
-      (obj.sender = message.sender ? FulfillmentAddress.toJSON(message.sender) : undefined);
+    message.sender !== undefined && (obj.sender = message.sender ? ShippingAddress.toJSON(message.sender) : undefined);
     message.receiver !== undefined &&
-      (obj.receiver = message.receiver ? FulfillmentAddress.toJSON(message.receiver) : undefined);
+      (obj.receiver = message.receiver ? ShippingAddress.toJSON(message.receiver) : undefined);
     message.notify !== undefined && (obj.notify = message.notify);
     return obj;
   },
@@ -742,10 +588,10 @@ export const Packing = {
     message.reference_id = object.reference_id ?? "";
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     message.sender = (object.sender !== undefined && object.sender !== null)
-      ? FulfillmentAddress.fromPartial(object.sender)
+      ? ShippingAddress.fromPartial(object.sender)
       : undefined;
     message.receiver = (object.receiver !== undefined && object.receiver !== null)
-      ? FulfillmentAddress.fromPartial(object.receiver)
+      ? ShippingAddress.fromPartial(object.receiver)
       : undefined;
     message.notify = object.notify ?? "";
     return message;
@@ -925,7 +771,7 @@ export const Tracking = {
 };
 
 function createBaseFulfillment(): Fulfillment {
-  return { id: "", packing: undefined, meta: undefined, labels: [], tracking: [], state: State.Undefined };
+  return { id: "", packing: undefined, meta: undefined, labels: [], tracking: [], state: State.Undefined, price: 0 };
 }
 
 export const Fulfillment = {
@@ -947,6 +793,9 @@ export const Fulfillment = {
     }
     if (message.state !== State.Undefined) {
       writer.uint32(48).int32(stateToNumber(message.state));
+    }
+    if (message.price !== 0) {
+      writer.uint32(57).double(message.price);
     }
     return writer;
   },
@@ -976,6 +825,9 @@ export const Fulfillment = {
         case 6:
           message.state = stateFromJSON(reader.int32());
           break;
+        case 7:
+          message.price = reader.double();
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -992,6 +844,7 @@ export const Fulfillment = {
       labels: Array.isArray(object?.labels) ? object.labels.map((e: any) => Label.fromJSON(e)) : [],
       tracking: Array.isArray(object?.tracking) ? object.tracking.map((e: any) => Tracking.fromJSON(e)) : [],
       state: isSet(object.state) ? stateFromJSON(object.state) : State.Undefined,
+      price: isSet(object.price) ? Number(object.price) : 0,
     };
   },
 
@@ -1011,6 +864,7 @@ export const Fulfillment = {
       obj.tracking = [];
     }
     message.state !== undefined && (obj.state = stateToJSON(message.state));
+    message.price !== undefined && (obj.price = message.price);
     return obj;
   },
 
@@ -1028,6 +882,7 @@ export const Fulfillment = {
     message.labels = object.labels?.map((e) => Label.fromPartial(e)) || [];
     message.tracking = object.tracking?.map((e) => Tracking.fromPartial(e)) || [];
     message.state = object.state ?? State.Undefined;
+    message.price = object.price ?? 0;
     return message;
   },
 };
@@ -1472,10 +1327,10 @@ export const Deleted = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.fulfillment.Service",
+export type FulfillmentServiceDefinition = typeof FulfillmentServiceDefinition;
+export const FulfillmentServiceDefinition = {
+  name: "FulfillmentService",
+  fullName: "io.restorecommerce.fulfillment.FulfillmentService",
   methods: {
     /** Returns a list of shipment IDs. */
     read: {
@@ -1552,7 +1407,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface FulfillmentServiceImplementation<CallContextExt = {}> {
   /** Returns a list of shipment IDs. */
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<FulfillmentListResponse>>;
   /** Creates fulfillment orders */
@@ -1589,7 +1444,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface FulfillmentServiceClient<CallOptionsExt = {}> {
   /** Returns a list of shipment IDs. */
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<FulfillmentListResponse>;
   /** Creates fulfillment orders */
@@ -1659,59 +1514,13 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/country.proto",
+      "io/restorecommerce/product.proto",
       "io/restorecommerce/options.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "FulfillmentAddress",
-      "field": [{
-        "name": "address",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.Address",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "address",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "country",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.country.Country",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "country",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "contact_person",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.ContactPerson",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contactPerson",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Item",
+      "name": "FulfillmentItem",
       "field": [{
         "name": "product_id",
         "number": 1,
@@ -1738,7 +1547,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "quantity",
-        "number": 9,
+        "number": 3,
         "label": 1,
         "type": 5,
         "typeName": "",
@@ -1749,51 +1558,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "weight_in_kg",
-        "number": 5,
+        "name": "package",
+        "number": 4,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.product.Package",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "weightInKg",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "height_in_cm",
-        "number": 6,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "heightInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "width_in_cm",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "widthInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "length_in_cm",
-        "number": 8,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "lengthInCm",
+        "jsonName": "package",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1840,7 +1613,7 @@ export const protoMetadata: ProtoMetadata = {
         },
         "proto3Optional": false,
       }, {
-        "name": "product_variant_id",
+        "name": "variant_id",
         "number": 3,
         "label": 1,
         "type": 9,
@@ -1848,67 +1621,31 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "productVariantId",
+        "jsonName": "variantId",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "items",
+        "name": "item",
         "number": 4,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.Item",
+        "typeName": ".io.restorecommerce.fulfillment.FulfillmentItem",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "items",
+        "jsonName": "item",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "weight_in_kg",
-        "number": 5,
+        "name": "package",
+        "number": 11,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.product.Package",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "weightInKg",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "height_in_cm",
-        "number": 6,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "heightInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "width_in_cm",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "widthInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "length_in_cm",
-        "number": 8,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "lengthInCm",
+        "jsonName": "package",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2046,7 +1783,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 3,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.FulfillmentAddress",
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2058,7 +1795,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 4,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.FulfillmentAddress",
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2276,6 +2013,18 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 0,
         "jsonName": "state",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "price",
+        "number": 7,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "price",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2569,7 +2318,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "FulfillmentService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -2634,109 +2383,109 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [16, 0, 60, 1],
+        "span": [17, 0, 61, 1],
         "leadingComments": "*\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [22, 2, 24, 3],
+        "span": [23, 2, 25, 3],
         "leadingComments": "*\nReturns a list of shipment IDs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [29, 2, 65],
+        "span": [30, 2, 65],
         "leadingComments": "*\nCreates fulfillment orders\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [34, 2, 65],
+        "span": [35, 2, 65],
         "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [39, 2, 65],
+        "span": [40, 2, 65],
         "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [44, 2, 65],
+        "span": [45, 2, 65],
         "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [49, 2, 66],
+        "span": [50, 2, 66],
         "leadingComments": "*\nTrack a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [54, 2, 67],
+        "span": [55, 2, 67],
         "leadingComments": "*\nCancel a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [59, 2, 118],
+        "span": [60, 2, 118],
         "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 3, 2, 4],
-        "span": [115, 2, 29],
+        "path": [4, 2, 2, 4],
+        "span": [104, 2, 29],
         "leadingComments": "",
         "trailingComments": "filled on Order\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 3, 2, 5],
-        "span": [116, 2, 18],
+        "path": [4, 2, 2, 5],
+        "span": [105, 2, 18],
         "leadingComments": "",
         "trailingComments": "update by Track\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 3, 2, 6],
-        "span": [117, 2, 46],
+        "path": [4, 2, 2, 6],
+        "span": [106, 2, 46],
         "leadingComments": "",
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 7],
-        "span": [145, 0, 160, 1],
+        "path": [4, 6],
+        "span": [134, 0, 150, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 7, 2, 1],
-        "span": [155, 2, 22],
+        "path": [4, 6, 2, 1],
+        "span": [144, 2, 22],
         "leadingComments": "",
         "trailingComments": "filled by user\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 7, 2, 3],
-        "span": [157, 2, 28],
+        "path": [4, 6, 2, 3],
+        "span": [146, 2, 28],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 7, 2, 4],
-        "span": [158, 2, 33],
+        "path": [4, 6, 2, 4],
+        "span": [147, 2, 33],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 7, 2, 5],
-        "span": [159, 2, 18],
+        "path": [4, 6, 2, 5],
+        "span": [148, 2, 18],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 11, 2, 1],
-        "span": [181, 2, 39],
+        "path": [4, 10, 2, 1],
+        "span": [171, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],
@@ -2746,8 +2495,7 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.fulfillment.State": State,
-    ".io.restorecommerce.fulfillment.FulfillmentAddress": FulfillmentAddress,
-    ".io.restorecommerce.fulfillment.Item": Item,
+    ".io.restorecommerce.fulfillment.FulfillmentItem": FulfillmentItem,
     ".io.restorecommerce.fulfillment.Parcel": Parcel,
     ".io.restorecommerce.fulfillment.Label": Label,
     ".io.restorecommerce.fulfillment.Packing": Packing,
@@ -2770,6 +2518,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
+    protoMetadata9,
   ],
   options: {
     messages: {
@@ -2796,7 +2545,9 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "fulfillment" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      "FulfillmentService": { options: { "service_name": "fulfillment" }, methods: { "Read": { "is_query": true } } },
+    },
   },
 };
 

@@ -74,15 +74,6 @@ message PackStation {
   string post_number = 3;
 }
 
-/**
-  Uses by Order-Srv and Fulfillment-Srv
-**/
-message ContactPerson {
-  string name = 1;
-  string email = 2;
-  string phone = 3;
-}
-
 message Address {
   string id = 1;
   io.restorecommerce.meta.Meta meta = 2;
@@ -108,4 +99,17 @@ message Address {
     ResidentialAddress residential_address = 14;
     PackStation pack_station = 15;
   }
+}
+
+message Contact {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
+message ShippingAddress {
+  Address address = 1;
+  Contact contact = 2;
+  string comments = 3;
+  io.restorecommerce.country.Country country = 4;
 }

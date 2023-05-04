@@ -25,6 +25,13 @@ service Service {
   rpc Upsert (ProductList) returns (ProductListResponse);
 }
 
+message Volume {
+  double width_in_cm = 1;
+  double height_in_cm = 2;
+  double length_in_cm = 3;
+  double weight_in_kg = 4;
+}
+
 // Product resource
 message MainProduct {
   string id = 1;
@@ -55,8 +62,20 @@ message Product {
     Identifier category = 7;
   }
   repeated string tax_ids = 8;
-  repeated Variant variants = 9;
-  string gtin = 10;
+  
+  string gtin = 9;
+  oneof nature {
+    PhysicalProduct physical = 10;
+    VirtualProduct virtual = 11;
+  };
+}
+
+message PhysicalProduct {
+  repeated PhysicalVariant variants = 1;
+}
+
+message VirtualProduct {
+  repeated VirtualVariant variants = 1;
 }
 
 message Identifier {
@@ -80,7 +99,22 @@ message ProductResponse {
   io.restorecommerce.status.Status status = 3;
 }
 
-message Variant {
+message PhysicalVariant {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  int32 stock_level = 4;
+  double price = 5;
+  bool sale = 6;
+  double sale_price = 7;
+  repeated io.restorecommerce.image.Image image = 8;
+  string stock_keeping_unit = 9;
+  string template_variant = 10;
+  Volume packing_volume = 11;
+  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+}
+
+message VirtualVariant {
   string id = 1;
   string name = 2;
   string description = 3;
@@ -113,28 +147,6 @@ message BundleProduct {
 message VAT {
   string tax_id = 1;
   double vat = 2;
-}
-
-/**
-Used by Fulfillment-Srv and Order-Srv
-**/
-message Item {
-  // below identifier is id of product, variant or bundle
-  string product_id = 1;
-  string variant_id = 2;
-  string product_name = 3;
-  string product_description = 4;
-  string manufacturer_name = 5;
-  string manufacturer_description = 6;
-  string prototype_name = 7;
-  string prototype_description = 8;
-  int32 quantity = 9;
-  double price = 10;
-  repeated VAT vats = 11;
-  double quantity_price = 12;
-  string item_type = 13;
-  double taric_code = 14;
-  string stock_keeping_unit = 15;
 }
 
 message Deleted {

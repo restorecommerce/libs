@@ -1,8 +1,14 @@
-import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-import { ApolloServer } from 'apollo-server';
+
+import http from "http";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import cors from "@koa/cors";
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from '@apollo/server/standalone';
+import { koaMiddleware } from "@as-integrations/koa";
 import { AddressInfo } from 'net';
 import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
@@ -278,23 +284,24 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         return {
           message: error.message,
           locations: error.locations,
-          stack: error.stack,
+          stack: error
         };
       },
-      context: ({ ctx }) => ctx
+    });
+
+    await startStandaloneServer(gqlServer, {
+      context: async ({ req }) => ({ token: req.headers.token })
     });
 
     await gqlServer.start();
 
-    const middleware = gqlServer.getMiddleware({
-      path: '/graphql',
-      cors: true,
-      bodyParserConfig: {
-        jsonLimit: '10mb'
-      },
-    });
-
-    this.koa.use(middleware);
+    this.koa.use(cors());
+    this.koa.use(bodyParser());
+    this.koa.use(
+      koaMiddleware(gqlServer, {
+        context: async ({ ctx }) => ctx,
+      })
+    );
   }
 }
 

@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { CallContext, CallOptions } from "nice-grpc-common";
-import { protoMetadata as protoMetadata1, OperationStatusObj } from "./status";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { OperationStatusObj, protoMetadata as protoMetadata1 } from "./status";
 
 export const protobufPackage = "io.restorecommerce.notification_req";
 
@@ -63,10 +63,7 @@ function createBaseAttachment(): Attachment {
 }
 
 export const Attachment = {
-  encode(
-    message: Attachment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Attachment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.filename !== "") {
       writer.uint32(10).string(message.filename);
     }
@@ -137,14 +134,10 @@ export const Attachment = {
     return {
       filename: isSet(object.filename) ? String(object.filename) : "",
       text: isSet(object.text) ? String(object.text) : "",
-      buffer: isSet(object.buffer)
-        ? Buffer.from(bytesFromBase64(object.buffer))
-        : Buffer.alloc(0),
+      buffer: isSet(object.buffer) ? Buffer.from(bytesFromBase64(object.buffer)) : Buffer.alloc(0),
       path: isSet(object.path) ? String(object.path) : "",
       contentType: isSet(object.contentType) ? String(object.contentType) : "",
-      contentDisposition: isSet(object.contentDisposition)
-        ? String(object.contentDisposition)
-        : "",
+      contentDisposition: isSet(object.contentDisposition) ? String(object.contentDisposition) : "",
       cid: isSet(object.cid) ? String(object.cid) : "",
       encoding: isSet(object.encoding) ? String(object.encoding) : "",
     };
@@ -155,17 +148,17 @@ export const Attachment = {
     message.filename !== undefined && (obj.filename = message.filename);
     message.text !== undefined && (obj.text = message.text);
     message.buffer !== undefined &&
-      (obj.buffer = base64FromBytes(
-        message.buffer !== undefined ? message.buffer : Buffer.alloc(0)
-      ));
+      (obj.buffer = base64FromBytes(message.buffer !== undefined ? message.buffer : Buffer.alloc(0)));
     message.path !== undefined && (obj.path = message.path);
-    message.contentType !== undefined &&
-      (obj.contentType = message.contentType);
-    message.contentDisposition !== undefined &&
-      (obj.contentDisposition = message.contentDisposition);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.contentDisposition !== undefined && (obj.contentDisposition = message.contentDisposition);
     message.cid !== undefined && (obj.cid = message.cid);
     message.encoding !== undefined && (obj.encoding = message.encoding);
     return obj;
+  },
+
+  create(base?: DeepPartial<Attachment>): Attachment {
+    return Attachment.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Attachment>): Attachment {
@@ -183,22 +176,11 @@ export const Attachment = {
 };
 
 function createBaseNotificationReq(): NotificationReq {
-  return {
-    email: undefined,
-    log: undefined,
-    subject: "",
-    body: "",
-    transport: "",
-    provider: "",
-    attachments: [],
-  };
+  return { email: undefined, log: undefined, subject: "", body: "", transport: "", provider: "", attachments: [] };
 }
 
 export const NotificationReq = {
-  encode(
-    message: NotificationReq,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: NotificationReq, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.email !== undefined) {
       Email.encode(message.email, writer.uint32(10).fork()).ldelim();
     }
@@ -267,48 +249,39 @@ export const NotificationReq = {
       body: isSet(object.body) ? String(object.body) : "",
       transport: isSet(object.transport) ? String(object.transport) : "",
       provider: isSet(object.provider) ? String(object.provider) : "",
-      attachments: Array.isArray(object?.attachments)
-        ? object.attachments.map((e: any) => Attachment.fromJSON(e))
-        : [],
+      attachments: Array.isArray(object?.attachments) ? object.attachments.map((e: any) => Attachment.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: NotificationReq): unknown {
     const obj: any = {};
-    message.email !== undefined &&
-      (obj.email = message.email ? Email.toJSON(message.email) : undefined);
-    message.log !== undefined &&
-      (obj.log = message.log ? Log.toJSON(message.log) : undefined);
+    message.email !== undefined && (obj.email = message.email ? Email.toJSON(message.email) : undefined);
+    message.log !== undefined && (obj.log = message.log ? Log.toJSON(message.log) : undefined);
     message.subject !== undefined && (obj.subject = message.subject);
     message.body !== undefined && (obj.body = message.body);
     message.transport !== undefined && (obj.transport = message.transport);
     message.provider !== undefined && (obj.provider = message.provider);
     if (message.attachments) {
-      obj.attachments = message.attachments.map((e) =>
-        e ? Attachment.toJSON(e) : undefined
-      );
+      obj.attachments = message.attachments.map((e) => e ? Attachment.toJSON(e) : undefined);
     } else {
       obj.attachments = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<NotificationReq>): NotificationReq {
+    return NotificationReq.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<NotificationReq>): NotificationReq {
     const message = createBaseNotificationReq();
-    message.email =
-      object.email !== undefined && object.email !== null
-        ? Email.fromPartial(object.email)
-        : undefined;
-    message.log =
-      object.log !== undefined && object.log !== null
-        ? Log.fromPartial(object.log)
-        : undefined;
+    message.email = (object.email !== undefined && object.email !== null) ? Email.fromPartial(object.email) : undefined;
+    message.log = (object.log !== undefined && object.log !== null) ? Log.fromPartial(object.log) : undefined;
     message.subject = object.subject ?? "";
     message.body = object.body ?? "";
     message.transport = object.transport ?? "";
     message.provider = object.provider ?? "";
-    message.attachments =
-      object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
+    message.attachments = object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
     return message;
   },
 };
@@ -365,9 +338,7 @@ export const Email = {
     return {
       to: Array.isArray(object?.to) ? object.to.map((e: any) => String(e)) : [],
       cc: Array.isArray(object?.cc) ? object.cc.map((e: any) => String(e)) : [],
-      bcc: Array.isArray(object?.bcc)
-        ? object.bcc.map((e: any) => String(e))
-        : [],
+      bcc: Array.isArray(object?.bcc) ? object.bcc.map((e: any) => String(e)) : [],
       replyto: isSet(object.replyto) ? String(object.replyto) : "",
     };
   },
@@ -391,6 +362,10 @@ export const Email = {
     }
     message.replyto !== undefined && (obj.replyto = message.replyto);
     return obj;
+  },
+
+  create(base?: DeepPartial<Email>): Email {
+    return Email.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Email>): Email {
@@ -434,15 +409,17 @@ export const Log = {
   },
 
   fromJSON(object: any): Log {
-    return {
-      level: isSet(object.level) ? String(object.level) : "",
-    };
+    return { level: isSet(object.level) ? String(object.level) : "" };
   },
 
   toJSON(message: Log): unknown {
     const obj: any = {};
     message.level !== undefined && (obj.level = message.level);
     return obj;
+  },
+
+  create(base?: DeepPartial<Log>): Log {
+    return Log.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Log>): Log {
@@ -469,20 +446,14 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
+export interface ServiceImplementation<CallContextExt = {}> {
   /** direct notifications */
-  send(
-    request: NotificationReq,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OperationStatusObj>>;
+  send(request: NotificationReq, context: CallContext & CallContextExt): Promise<DeepPartial<OperationStatusObj>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
   /** direct notifications */
-  send(
-    request: DeepPartial<NotificationReq>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OperationStatusObj>;
+  send(request: DeepPartial<NotificationReq>, options?: CallOptions & CallOptionsExt): Promise<OperationStatusObj>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -499,455 +470,396 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/notification_req.proto",
-    package: "io.restorecommerce.notification_req",
-    dependency: ["io/restorecommerce/status.proto"],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Attachment",
-        field: [
-          {
-            name: "filename",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "filename",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "text",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "text",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "buffer",
-            number: 3,
-            label: 1,
-            type: 12,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "buffer",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "path",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "path",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "content_type",
-            number: 5,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contentType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "content_disposition",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contentDisposition",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "cid",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "cid",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "encoding",
-            number: 8,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "encoding",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "NotificationReq",
-        field: [
-          {
-            name: "email",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.notification_req.Email",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "email",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "log",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.notification_req.Log",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "log",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "body",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "body",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "transport",
-            number: 5,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "transport",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "provider",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "provider",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "attachments",
-            number: 7,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.notification_req.Attachment",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "attachments",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [{ name: "channel", options: undefined }],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Email",
-        field: [
-          {
-            name: "to",
-            number: 1,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "to",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "cc",
-            number: 2,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "cc",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "bcc",
-            number: 3,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "bcc",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "replyto",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "replyto",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Log",
-        field: [
-          {
-            name: "level",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "level",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [
-      {
-        name: "Service",
-        method: [
-          {
-            name: "Send",
-            inputType: ".io.restorecommerce.notification_req.NotificationReq",
-            outputType: ".io.restorecommerce.status.OperationStatusObj",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-        ],
-        options: undefined,
-      },
-    ],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [6, 0, 2, 0],
-          span: [8, 2, 84],
-          leadingComments: " direct notifications\n",
-          trailingComments: "/ generic fallback\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0],
-          span: [12, 0, 24, 1],
-          leadingComments:
-            " mimics nodemailer properties for easy configuration\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0, 2, 1],
-          span: [16, 2, 18],
-          leadingComments: ' the "content" may be on of the following:\n',
-          trailingComments: " for textual data\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0, 2, 2],
-          span: [17, 2, 19],
-          leadingComments: "",
-          trailingComments: " for binary data, eg.: images\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1],
-          span: [27, 0, 37, 1],
-          leadingComments: " sendEmail NotificationReq event\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 3],
-          span: [33, 2, 18],
-          leadingComments: "",
-          trailingComments: " text/HTML content\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 4],
-          span: [34, 2, 23],
-          leadingComments: "",
-          trailingComments: "/ 'email', 'log', ... default == 'log'\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 5],
-          span: [35, 2, 22],
-          leadingComments: "",
-          trailingComments:
-            "/ specific transport provider, eg: 'console' for transport == 'log'\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 0],
-          span: [40, 2, 25],
-          leadingComments: "",
-          trailingComments: " array of to email list\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 1],
-          span: [41, 2, 26],
-          leadingComments: "",
-          trailingComments: " array of cc email list\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 2],
-          span: [42, 2, 26],
-          leadingComments: "",
-          trailingComments: " array of bcc email list\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 3],
-          span: [43, 2, 21],
-          leadingComments: "",
-          trailingComments:
-            " if set, the outgoing mail will have this replyTo header set\n",
-          leadingDetachedComments: [],
-        },
-      ],
+    "name": "io/restorecommerce/notification_req.proto",
+    "package": "io.restorecommerce.notification_req",
+    "dependency": ["io/restorecommerce/status.proto"],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Attachment",
+      "field": [{
+        "name": "filename",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "filename",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "text",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "text",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "buffer",
+        "number": 3,
+        "label": 1,
+        "type": 12,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "buffer",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "path",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "path",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "content_type",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contentType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "content_disposition",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contentDisposition",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "cid",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "cid",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "encoding",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "encoding",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "NotificationReq",
+      "field": [{
+        "name": "email",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_req.Email",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "email",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "log",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_req.Log",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "log",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "body",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "body",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "transport",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "transport",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "provider",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "provider",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "attachments",
+        "number": 7,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.notification_req.Attachment",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "attachments",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "channel", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Email",
+      "field": [{
+        "name": "to",
+        "number": 1,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "to",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "cc",
+        "number": 2,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "cc",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "bcc",
+        "number": 3,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "bcc",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "replyto",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "replyto",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Log",
+      "field": [{
+        "name": "level",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "level",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [{
+      "name": "Service",
+      "method": [{
+        "name": "Send",
+        "inputType": ".io.restorecommerce.notification_req.NotificationReq",
+        "outputType": ".io.restorecommerce.status.OperationStatusObj",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": undefined,
+    }],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [6, 0, 2, 0],
+        "span": [8, 2, 84],
+        "leadingComments": " direct notifications\n",
+        "trailingComments": "/ generic fallback\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0],
+        "span": [12, 0, 24, 1],
+        "leadingComments": " mimics nodemailer properties for easy configuration\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 1],
+        "span": [16, 2, 18],
+        "leadingComments": ' the "content" may be on of the following:\n',
+        "trailingComments": " for textual data\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 2],
+        "span": [17, 2, 19],
+        "leadingComments": "",
+        "trailingComments": " for binary data, eg.: images\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1],
+        "span": [27, 0, 37, 1],
+        "leadingComments": " sendEmail NotificationReq event\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 3],
+        "span": [33, 2, 18],
+        "leadingComments": "",
+        "trailingComments": " text/HTML content\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 4],
+        "span": [34, 2, 23],
+        "leadingComments": "",
+        "trailingComments": "/ 'email', 'log', ... default == 'log'\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 5],
+        "span": [35, 2, 22],
+        "leadingComments": "",
+        "trailingComments": "/ specific transport provider, eg: 'console' for transport == 'log'\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 0],
+        "span": [40, 2, 25],
+        "leadingComments": "",
+        "trailingComments": " array of to email list\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 1],
+        "span": [41, 2, 26],
+        "leadingComments": "",
+        "trailingComments": " array of cc email list\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 2],
+        "span": [42, 2, 26],
+        "leadingComments": "",
+        "trailingComments": " array of bcc email list\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 3],
+        "span": [43, 2, 21],
+        "leadingComments": "",
+        "trailingComments": " if set, the outgoing mail will have this replyTo header set\n",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.notification_req.Attachment": Attachment,
@@ -961,54 +873,52 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+var tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = tsProtoGlobalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return tsProtoGlobalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

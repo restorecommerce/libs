@@ -21,7 +21,7 @@ service Service {
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
-  rpc Validate (OrderList) returns (OrderListResponse);
+  rpc Evaluate (OrderList) returns (OrderListResponse);
   rpc Submit (OrderList) returns (OrderListResponse);
   rpc Cancel (CancelRequestList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);

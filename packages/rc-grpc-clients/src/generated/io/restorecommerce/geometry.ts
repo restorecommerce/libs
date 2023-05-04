@@ -1,25 +1,14 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata1, Resolver } from "./options";
-import { protoMetadata as protoMetadata2 } from "./unit";
+import { protoMetadata as protoMetadata1 } from "./options";
 
 export const protobufPackage = "io.restorecommerce.geometry";
-
-export interface ScalarUnit {
-  scalar: number;
-  unitId: string;
-}
 
 export interface Vector3D {
   x: number;
   y: number;
   z: number;
-}
-
-export interface Vector3DUnit {
-  vector?: Vector3D;
-  unitId: string;
 }
 
 export interface BoundingBox3D {
@@ -28,78 +17,10 @@ export interface BoundingBox3D {
   length: number;
 }
 
-export interface BoundingBox3DUnit {
-  bbox?: BoundingBox3D;
-  unitId: string;
-}
-
-export interface OriginBoundingBox3DUnit {
+export interface OriginBoundingBox {
   origin?: Vector3D;
   bbox?: BoundingBox3D;
-  unitId: string;
 }
-
-function createBaseScalarUnit(): ScalarUnit {
-  return { scalar: 0, unitId: "" };
-}
-
-export const ScalarUnit = {
-  encode(message: ScalarUnit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.scalar !== 0) {
-      writer.uint32(9).double(message.scalar);
-    }
-    if (message.unitId !== "") {
-      writer.uint32(18).string(message.unitId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ScalarUnit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseScalarUnit();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.scalar = reader.double();
-          break;
-        case 2:
-          message.unitId = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ScalarUnit {
-    return {
-      scalar: isSet(object.scalar) ? Number(object.scalar) : 0,
-      unitId: isSet(object.unitId) ? String(object.unitId) : "",
-    };
-  },
-
-  toJSON(message: ScalarUnit): unknown {
-    const obj: any = {};
-    message.scalar !== undefined && (obj.scalar = message.scalar);
-    message.unitId !== undefined && (obj.unitId = message.unitId);
-    return obj;
-  },
-
-  create(base?: DeepPartial<ScalarUnit>): ScalarUnit {
-    return ScalarUnit.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<ScalarUnit>): ScalarUnit {
-    const message = createBaseScalarUnit();
-    message.scalar = object.scalar ?? 0;
-    message.unitId = object.unitId ?? "";
-    return message;
-  },
-};
 
 function createBaseVector3D(): Vector3D {
   return { x: 0, y: 0, z: 0 };
@@ -168,70 +89,6 @@ export const Vector3D = {
     message.x = object.x ?? 0;
     message.y = object.y ?? 0;
     message.z = object.z ?? 0;
-    return message;
-  },
-};
-
-function createBaseVector3DUnit(): Vector3DUnit {
-  return { vector: undefined, unitId: "" };
-}
-
-export const Vector3DUnit = {
-  encode(message: Vector3DUnit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.vector !== undefined) {
-      Vector3D.encode(message.vector, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.unitId !== "") {
-      writer.uint32(18).string(message.unitId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Vector3DUnit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVector3DUnit();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.vector = Vector3D.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.unitId = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Vector3DUnit {
-    return {
-      vector: isSet(object.vector) ? Vector3D.fromJSON(object.vector) : undefined,
-      unitId: isSet(object.unitId) ? String(object.unitId) : "",
-    };
-  },
-
-  toJSON(message: Vector3DUnit): unknown {
-    const obj: any = {};
-    message.vector !== undefined && (obj.vector = message.vector ? Vector3D.toJSON(message.vector) : undefined);
-    message.unitId !== undefined && (obj.unitId = message.unitId);
-    return obj;
-  },
-
-  create(base?: DeepPartial<Vector3DUnit>): Vector3DUnit {
-    return Vector3DUnit.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<Vector3DUnit>): Vector3DUnit {
-    const message = createBaseVector3DUnit();
-    message.vector = (object.vector !== undefined && object.vector !== null)
-      ? Vector3D.fromPartial(object.vector)
-      : undefined;
-    message.unitId = object.unitId ?? "";
     return message;
   },
 };
@@ -307,92 +164,25 @@ export const BoundingBox3D = {
   },
 };
 
-function createBaseBoundingBox3DUnit(): BoundingBox3DUnit {
-  return { bbox: undefined, unitId: "" };
+function createBaseOriginBoundingBox(): OriginBoundingBox {
+  return { origin: undefined, bbox: undefined };
 }
 
-export const BoundingBox3DUnit = {
-  encode(message: BoundingBox3DUnit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.bbox !== undefined) {
-      BoundingBox3D.encode(message.bbox, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.unitId !== "") {
-      writer.uint32(18).string(message.unitId);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): BoundingBox3DUnit {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBoundingBox3DUnit();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.bbox = BoundingBox3D.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.unitId = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): BoundingBox3DUnit {
-    return {
-      bbox: isSet(object.bbox) ? BoundingBox3D.fromJSON(object.bbox) : undefined,
-      unitId: isSet(object.unitId) ? String(object.unitId) : "",
-    };
-  },
-
-  toJSON(message: BoundingBox3DUnit): unknown {
-    const obj: any = {};
-    message.bbox !== undefined && (obj.bbox = message.bbox ? BoundingBox3D.toJSON(message.bbox) : undefined);
-    message.unitId !== undefined && (obj.unitId = message.unitId);
-    return obj;
-  },
-
-  create(base?: DeepPartial<BoundingBox3DUnit>): BoundingBox3DUnit {
-    return BoundingBox3DUnit.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<BoundingBox3DUnit>): BoundingBox3DUnit {
-    const message = createBaseBoundingBox3DUnit();
-    message.bbox = (object.bbox !== undefined && object.bbox !== null)
-      ? BoundingBox3D.fromPartial(object.bbox)
-      : undefined;
-    message.unitId = object.unitId ?? "";
-    return message;
-  },
-};
-
-function createBaseOriginBoundingBox3DUnit(): OriginBoundingBox3DUnit {
-  return { origin: undefined, bbox: undefined, unitId: "" };
-}
-
-export const OriginBoundingBox3DUnit = {
-  encode(message: OriginBoundingBox3DUnit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const OriginBoundingBox = {
+  encode(message: OriginBoundingBox, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.origin !== undefined) {
       Vector3D.encode(message.origin, writer.uint32(10).fork()).ldelim();
     }
     if (message.bbox !== undefined) {
       BoundingBox3D.encode(message.bbox, writer.uint32(18).fork()).ldelim();
     }
-    if (message.unitId !== "") {
-      writer.uint32(26).string(message.unitId);
-    }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): OriginBoundingBox3DUnit {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OriginBoundingBox {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOriginBoundingBox3DUnit();
+    const message = createBaseOriginBoundingBox();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -402,9 +192,6 @@ export const OriginBoundingBox3DUnit = {
         case 2:
           message.bbox = BoundingBox3D.decode(reader, reader.uint32());
           break;
-        case 3:
-          message.unitId = reader.string();
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -413,35 +200,32 @@ export const OriginBoundingBox3DUnit = {
     return message;
   },
 
-  fromJSON(object: any): OriginBoundingBox3DUnit {
+  fromJSON(object: any): OriginBoundingBox {
     return {
       origin: isSet(object.origin) ? Vector3D.fromJSON(object.origin) : undefined,
       bbox: isSet(object.bbox) ? BoundingBox3D.fromJSON(object.bbox) : undefined,
-      unitId: isSet(object.unitId) ? String(object.unitId) : "",
     };
   },
 
-  toJSON(message: OriginBoundingBox3DUnit): unknown {
+  toJSON(message: OriginBoundingBox): unknown {
     const obj: any = {};
     message.origin !== undefined && (obj.origin = message.origin ? Vector3D.toJSON(message.origin) : undefined);
     message.bbox !== undefined && (obj.bbox = message.bbox ? BoundingBox3D.toJSON(message.bbox) : undefined);
-    message.unitId !== undefined && (obj.unitId = message.unitId);
     return obj;
   },
 
-  create(base?: DeepPartial<OriginBoundingBox3DUnit>): OriginBoundingBox3DUnit {
-    return OriginBoundingBox3DUnit.fromPartial(base ?? {});
+  create(base?: DeepPartial<OriginBoundingBox>): OriginBoundingBox {
+    return OriginBoundingBox.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<OriginBoundingBox3DUnit>): OriginBoundingBox3DUnit {
-    const message = createBaseOriginBoundingBox3DUnit();
+  fromPartial(object: DeepPartial<OriginBoundingBox>): OriginBoundingBox {
+    const message = createBaseOriginBoundingBox();
     message.origin = (object.origin !== undefined && object.origin !== null)
       ? Vector3D.fromPartial(object.origin)
       : undefined;
     message.bbox = (object.bbox !== undefined && object.bbox !== null)
       ? BoundingBox3D.fromPartial(object.bbox)
       : undefined;
-    message.unitId = object.unitId ?? "";
     return message;
   },
 };
@@ -471,53 +255,10 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     "name": "io/restorecommerce/geometry.proto",
     "package": "io.restorecommerce.geometry",
-    "dependency": ["io/restorecommerce/options.proto", "io/restorecommerce/unit.proto"],
+    "dependency": ["io/restorecommerce/options.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "ScalarUnit",
-      "field": [{
-        "name": "scalar",
-        "number": 1,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "scalar",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "unit_id",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "unitId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
       "name": "Vector3D",
       "field": [{
         "name": "x",
@@ -554,49 +295,6 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "z",
         "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Vector3DUnit",
-      "field": [{
-        "name": "vector",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.geometry.Vector3D",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vector",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "unit_id",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "unitId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
         "proto3Optional": false,
       }],
       "extension": [],
@@ -655,50 +353,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "BoundingBox3DUnit",
-      "field": [{
-        "name": "bbox",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.geometry.BoundingBox3D",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "bbox",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "unit_id",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "unitId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "OriginBoundingBox3DUnit",
+      "name": "OriginBoundingBox",
       "field": [{
         "name": "origin",
         "number": 1,
@@ -723,26 +378,6 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "bbox",
         "options": undefined,
         "proto3Optional": false,
-      }, {
-        "name": "unit_id",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "unitId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -757,66 +392,15 @@ export const protoMetadata: ProtoMetadata = {
     "service": [],
     "extension": [],
     "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [3, 1],
-        "span": [7, 0, 39],
-        "leadingComments": " Used by resolvers\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
-    },
+    "sourceCodeInfo": { "location": [] },
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.geometry.ScalarUnit": ScalarUnit,
     ".io.restorecommerce.geometry.Vector3D": Vector3D,
-    ".io.restorecommerce.geometry.Vector3DUnit": Vector3DUnit,
     ".io.restorecommerce.geometry.BoundingBox3D": BoundingBox3D,
-    ".io.restorecommerce.geometry.BoundingBox3DUnit": BoundingBox3DUnit,
-    ".io.restorecommerce.geometry.OriginBoundingBox3DUnit": OriginBoundingBox3DUnit,
+    ".io.restorecommerce.geometry.OriginBoundingBox": OriginBoundingBox,
   },
-  dependencies: [protoMetadata1, protoMetadata2],
-  options: {
-    messages: {
-      "ScalarUnit": {
-        fields: {
-          "unit_id": {
-            "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBHVuaXQ=", "base64"),
-            ),
-          },
-        },
-      },
-      "Vector3DUnit": {
-        fields: {
-          "unit_id": {
-            "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBHVuaXQ=", "base64"),
-            ),
-          },
-        },
-      },
-      "BoundingBox3DUnit": {
-        fields: {
-          "unit_id": {
-            "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBHVuaXQ=", "base64"),
-            ),
-          },
-        },
-      },
-      "OriginBoundingBox3DUnit": {
-        fields: {
-          "unit_id": {
-            "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBHVuaXQ=", "base64"),
-            ),
-          },
-        },
-      },
-    },
-  },
+  dependencies: [protoMetadata1],
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

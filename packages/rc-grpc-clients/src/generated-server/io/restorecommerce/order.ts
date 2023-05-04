@@ -135,7 +135,6 @@ export interface Order {
   items: Item[];
   total_price: number;
   total_vat: number;
-  /** double total_weight_in_kg = 10; */
   shipping_address?: Address;
   billing_address?: Address;
   billing_email: string;
@@ -439,22 +438,22 @@ export const Order = {
       writer.uint32(73).double(message.total_vat);
     }
     if (message.shipping_address !== undefined) {
-      Address.encode(message.shipping_address, writer.uint32(90).fork()).ldelim();
+      Address.encode(message.shipping_address, writer.uint32(82).fork()).ldelim();
     }
     if (message.billing_address !== undefined) {
-      Address.encode(message.billing_address, writer.uint32(106).fork()).ldelim();
+      Address.encode(message.billing_address, writer.uint32(98).fork()).ldelim();
     }
     if (message.billing_email !== "") {
-      writer.uint32(114).string(message.billing_email);
+      writer.uint32(106).string(message.billing_email);
     }
     if (message.contact_person !== undefined) {
-      ContactPerson.encode(message.contact_person, writer.uint32(122).fork()).ldelim();
+      ContactPerson.encode(message.contact_person, writer.uint32(114).fork()).ldelim();
     }
     if (message.notification_email !== "") {
-      writer.uint32(130).string(message.notification_email);
+      writer.uint32(122).string(message.notification_email);
     }
     for (const v of message.fulfillment_ids) {
-      writer.uint32(138).string(v!);
+      writer.uint32(130).string(v!);
     }
     return writer;
   },
@@ -493,22 +492,22 @@ export const Order = {
         case 9:
           message.total_vat = reader.double();
           break;
-        case 11:
+        case 10:
           message.shipping_address = Address.decode(reader, reader.uint32());
           break;
-        case 13:
+        case 12:
           message.billing_address = Address.decode(reader, reader.uint32());
           break;
-        case 14:
+        case 13:
           message.billing_email = reader.string();
           break;
-        case 15:
+        case 14:
           message.contact_person = ContactPerson.decode(reader, reader.uint32());
           break;
-        case 16:
+        case 15:
           message.notification_email = reader.string();
           break;
-        case 17:
+        case 16:
           message.fulfillment_ids.push(reader.string());
           break;
         default:
@@ -1647,7 +1646,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "shipping_address",
-        "number": 11,
+        "number": 10,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.address.Address",
@@ -1659,7 +1658,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "billing_address",
-        "number": 13,
+        "number": 12,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.address.Address",
@@ -1671,7 +1670,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "billing_email",
-        "number": 14,
+        "number": 13,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1683,7 +1682,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "contact_person",
-        "number": 15,
+        "number": 14,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.address.ContactPerson",
@@ -1695,7 +1694,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "notification_email",
-        "number": 16,
+        "number": 15,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1707,7 +1706,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "fulfillment_ids",
-        "number": 17,
+        "number": 16,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -2174,14 +2173,8 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 1],
-        "span": [62, 0, 87, 1],
+        "span": [62, 0, 86, 1],
         "leadingComments": "*\nDatabase Entity\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 9],
-        "span": [81, 2, 59],
-        "leadingComments": "double total_weight_in_kg = 10;\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }],

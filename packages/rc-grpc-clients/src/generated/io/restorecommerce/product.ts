@@ -11,7 +11,6 @@ import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata8, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
-import { protoMetadata as protoMetadata10 } from "./unit";
 
 export const protobufPackage = "io.restorecommerce.product";
 
@@ -76,17 +75,6 @@ export interface PhysicalVariant {
   sale: boolean;
   salePrice: number;
   image: Image[];
-  /**
-   * string stock_keeping_unit_id = 9 [
-   * (io.restorecommerce.options.resolver) = {
-   * target_type: ".io.restorecommerce.unit.Unit",
-   * target_service: "resource",
-   * target_sub_service: "unit",
-   * target_method: "Read",
-   * field_name: "stock_keeping_unit",
-   * }
-   * ];
-   */
   stockKeepingUnit: string;
   templateVariant: string;
   packingSizeInCm?: BoundingBox3D;
@@ -1528,7 +1516,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/geometry.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/manufacturer.proto",
-      "io/restorecommerce/unit.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -2515,20 +2502,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0],
-        "span": [30, 0, 38, 1],
+        "span": [29, 0, 37, 1],
         "leadingComments": " Product resource\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 8],
-        "span": [116, 2, 32],
-        "leadingComments":
-          '\nstring stock_keeping_unit_id = 9 [\n(io.restorecommerce.options.resolver) = {\ntarget_type: ".io.restorecommerce.unit.Unit",\ntarget_service: "resource",\ntarget_sub_service: "unit",\ntarget_method: "Read",\nfield_name: "stock_keeping_unit",\n}\n];\n',
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
         "path": [4, 11, 2, 3],
-        "span": [150, 2, 23],
+        "span": [138, 2, 23],
         "leadingComments": "",
         "trailingComments": "Discount in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -2562,7 +2542,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata7,
     protoMetadata8,
     protoMetadata9,
-    protoMetadata10,
   ],
   options: {
     messages: {

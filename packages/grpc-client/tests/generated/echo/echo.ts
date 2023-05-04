@@ -188,7 +188,7 @@ export const EchoServiceDefinition = {
   },
 } as const;
 
-export interface EchoServiceServiceServiceImplementation<CallContextExt = {}> {
+export interface EchoServiceServiceImplementation<CallContextExt = {}> {
   /** Sends a greeting */
   echoUnary(
     request: EchoRequest,

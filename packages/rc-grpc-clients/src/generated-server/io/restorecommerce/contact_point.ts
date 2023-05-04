@@ -345,13 +345,13 @@ export const ContactPoint = {
       writer.uint32(26).string(message.physical_address_id);
     }
     if (message.website !== "") {
-      writer.uint32(34).string(message.website);
+      writer.uint32(42).string(message.website);
     }
     if (message.email !== "") {
-      writer.uint32(42).string(message.email);
+      writer.uint32(50).string(message.email);
     }
     if (message.contact_point_type_id !== "") {
-      writer.uint32(50).string(message.contact_point_type_id);
+      writer.uint32(58).string(message.contact_point_type_id);
     }
     if (message.telephone !== "") {
       writer.uint32(66).string(message.telephone);
@@ -381,13 +381,13 @@ export const ContactPoint = {
         case 3:
           message.physical_address_id = reader.string();
           break;
-        case 4:
+        case 5:
           message.website = reader.string();
           break;
-        case 5:
+        case 6:
           message.email = reader.string();
           break;
-        case 6:
+        case 7:
           message.contact_point_type_id = reader.string();
           break;
         case 8:
@@ -796,7 +796,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "website",
-            number: 4,
+            number: 5,
             label: 1,
             type: 9,
             typeName: "",
@@ -809,7 +809,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "email",
-            number: 5,
+            number: 6,
             label: 1,
             type: 9,
             typeName: "",
@@ -822,7 +822,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "contact_point_type_id",
-            number: 6,
+            number: 7,
             label: 1,
             type: 9,
             typeName: "",

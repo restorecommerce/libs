@@ -13,16 +13,16 @@ export interface Filter {
 }
 
 export enum Filter_Operation {
-  eq = 0,
-  lt = 1,
-  lte = 2,
-  gt = 3,
-  gte = 4,
-  isEmpty = 5,
-  iLike = 6,
-  in = 7,
-  neq = 8,
-  UNRECOGNIZED = -1,
+  eq = "eq",
+  lt = "lt",
+  lte = "lte",
+  gt = "gt",
+  gte = "gte",
+  isEmpty = "isEmpty",
+  iLike = "iLike",
+  in = "in",
+  neq = "neq",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filter_OperationFromJSON(object: any): Filter_Operation {
@@ -87,14 +87,40 @@ export function filter_OperationToJSON(object: Filter_Operation): string {
   }
 }
 
+export function filter_OperationToNumber(object: Filter_Operation): number {
+  switch (object) {
+    case Filter_Operation.eq:
+      return 0;
+    case Filter_Operation.lt:
+      return 1;
+    case Filter_Operation.lte:
+      return 2;
+    case Filter_Operation.gt:
+      return 3;
+    case Filter_Operation.gte:
+      return 4;
+    case Filter_Operation.isEmpty:
+      return 5;
+    case Filter_Operation.iLike:
+      return 6;
+    case Filter_Operation.in:
+      return 7;
+    case Filter_Operation.neq:
+      return 8;
+    case Filter_Operation.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum Filter_ValueType {
   /** STRING - default value type if not specified */
-  STRING = 0,
-  NUMBER = 1,
-  BOOLEAN = 2,
-  DATE = 3,
-  ARRAY = 4,
-  UNRECOGNIZED = -1,
+  STRING = "STRING",
+  NUMBER = "NUMBER",
+  BOOLEAN = "BOOLEAN",
+  DATE = "DATE",
+  ARRAY = "ARRAY",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filter_ValueTypeFromJSON(object: any): Filter_ValueType {
@@ -139,15 +165,33 @@ export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
   }
 }
 
+export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
+  switch (object) {
+    case Filter_ValueType.STRING:
+      return 0;
+    case Filter_ValueType.NUMBER:
+      return 1;
+    case Filter_ValueType.BOOLEAN:
+      return 2;
+    case Filter_ValueType.DATE:
+      return 3;
+    case Filter_ValueType.ARRAY:
+      return 4;
+    case Filter_ValueType.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface FilterOp {
   filter: Filter[];
   operator: FilterOp_Operator;
 }
 
 export enum FilterOp_Operator {
-  and = 0,
-  or = 1,
-  UNRECOGNIZED = -1,
+  and = "and",
+  or = "or",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filterOp_OperatorFromJSON(object: any): FilterOp_Operator {
@@ -177,8 +221,26 @@ export function filterOp_OperatorToJSON(object: FilterOp_Operator): string {
   }
 }
 
+export function filterOp_OperatorToNumber(object: FilterOp_Operator): number {
+  switch (object) {
+    case FilterOp_Operator.and:
+      return 0;
+    case FilterOp_Operator.or:
+      return 1;
+    case FilterOp_Operator.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 function createBaseFilter(): Filter {
-  return { field: "", operation: 0, value: "", type: 0, filters: [] };
+  return {
+    field: "",
+    operation: Filter_Operation.eq,
+    value: "",
+    type: Filter_ValueType.STRING,
+    filters: [],
+  };
 }
 
 export const Filter = {
@@ -189,14 +251,14 @@ export const Filter = {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
-    if (message.operation !== 0) {
-      writer.uint32(16).int32(message.operation);
+    if (message.operation !== Filter_Operation.eq) {
+      writer.uint32(16).int32(filter_OperationToNumber(message.operation));
     }
     if (message.value !== "") {
       writer.uint32(26).string(message.value);
     }
-    if (message.type !== 0) {
-      writer.uint32(32).int32(message.type);
+    if (message.type !== Filter_ValueType.STRING) {
+      writer.uint32(32).int32(filter_ValueTypeToNumber(message.type));
     }
     for (const v of message.filters) {
       FilterOp.encode(v!, writer.uint32(50).fork()).ldelim();
@@ -215,13 +277,13 @@ export const Filter = {
           message.field = reader.string();
           break;
         case 2:
-          message.operation = reader.int32() as any;
+          message.operation = filter_OperationFromJSON(reader.int32());
           break;
         case 3:
           message.value = reader.string();
           break;
         case 4:
-          message.type = reader.int32() as any;
+          message.type = filter_ValueTypeFromJSON(reader.int32());
           break;
         case 6:
           message.filters.push(FilterOp.decode(reader, reader.uint32()));
@@ -239,9 +301,11 @@ export const Filter = {
       field: isSet(object.field) ? String(object.field) : "",
       operation: isSet(object.operation)
         ? filter_OperationFromJSON(object.operation)
-        : 0,
+        : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : 0,
+      type: isSet(object.type)
+        ? filter_ValueTypeFromJSON(object.type)
+        : Filter_ValueType.STRING,
       filters: Array.isArray(object?.filters)
         ? object.filters.map((e: any) => FilterOp.fromJSON(e))
         : [],
@@ -269,16 +333,16 @@ export const Filter = {
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
     message.field = object.field ?? "";
-    message.operation = object.operation ?? 0;
+    message.operation = object.operation ?? Filter_Operation.eq;
     message.value = object.value ?? "";
-    message.type = object.type ?? 0;
+    message.type = object.type ?? Filter_ValueType.STRING;
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseFilterOp(): FilterOp {
-  return { filter: [], operator: 0 };
+  return { filter: [], operator: FilterOp_Operator.and };
 }
 
 export const FilterOp = {
@@ -289,8 +353,8 @@ export const FilterOp = {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operator !== 0) {
-      writer.uint32(16).int32(message.operator);
+    if (message.operator !== FilterOp_Operator.and) {
+      writer.uint32(16).int32(filterOp_OperatorToNumber(message.operator));
     }
     return writer;
   },
@@ -306,7 +370,7 @@ export const FilterOp = {
           message.filter.push(Filter.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operator = reader.int32() as any;
+          message.operator = filterOp_OperatorFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -323,7 +387,7 @@ export const FilterOp = {
         : [],
       operator: isSet(object.operator)
         ? filterOp_OperatorFromJSON(object.operator)
-        : 0,
+        : FilterOp_Operator.and,
     };
   },
 
@@ -344,7 +408,7 @@ export const FilterOp = {
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
     const message = createBaseFilterOp();
     message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
-    message.operator = object.operator ?? 0;
+    message.operator = object.operator ?? FilterOp_Operator.and;
     return message;
   },
 };

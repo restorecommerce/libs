@@ -106,11 +106,6 @@ message OrderResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message CancelRequestList {
-  repeated string ids = 1;
-  io.restorecommerce.auth.Subject subject = 2;
-}
-
 message Deleted {
   string id = 1;
 }

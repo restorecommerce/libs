@@ -1,12 +1,21 @@
-import Koa from 'koa';
+// import Koa from 'koa';
 import { createLogger } from '@restorecommerce/logger';
 import { Logger } from 'winston';
 import { Server, ServerResponse } from 'http';
-import http from "http";
+// import http from "http";
 // import bodyParser from "koa-bodyparser";
 // import cors from "@koa/cors";
 
-import cors from 'cors';
+
+import http from "http";
+import Koa from "koa";
+import bodyParser from "koa-bodyparser";
+import cors from "@koa/cors";
+// import { ApolloServer } from "@apollo/server";
+// import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+// import { koaMiddleware } from "@as-integrations/koa";
+
+// import cors from 'cors';
 import { json } from 'body-parser';
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from '@apollo/server/express4';
@@ -303,19 +312,27 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     await gqlServer.start();
 
-    const middleware = gqlServer.getMiddleware({
-      path: '/graphql',
-      cors: true,
-      json: {
-        jsonLimit: '10mb'
-      },
-    });
+    this.koa.use(cors());
+    this.koa.use(bodyParser());
+    this.koa.use(
+      koaMiddleware(gqlServer, {
+        context: async ({ ctx }) => ctx,
+      })
+    );
 
-    expressMiddleware(gqlServer, {
-      context: async ({ req }) => ({ token: req.headers.token }),
-    });
+    // const middleware = gqlServer.getMiddleware({
+    //   path: '/graphql',
+    //   cors: true,
+    //   json: {
+    //     jsonLimit: '10mb'
+    //   },
+    // });
 
-    this.koa.use(middleware);
+    // expressMiddleware(gqlServer, {
+    //   context: async ({ req }) => ({ token: req.headers.token }),
+    // });
+
+    // this.koa.use(middleware);
   }
 }
 

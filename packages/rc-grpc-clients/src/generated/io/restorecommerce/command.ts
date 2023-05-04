@@ -34,12 +34,12 @@ export interface CommandParameter {
 }
 
 export enum CommandParameter_ParameterType {
-  boolean_value = 0,
-  object_value = 1,
-  array_value = 2,
-  number_value = 3,
-  string_value = 4,
-  UNRECOGNIZED = -1,
+  boolean_value = "boolean_value",
+  object_value = "object_value",
+  array_value = "array_value",
+  number_value = "number_value",
+  string_value = "string_value",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function commandParameter_ParameterTypeFromJSON(object: any): CommandParameter_ParameterType {
@@ -81,6 +81,24 @@ export function commandParameter_ParameterTypeToJSON(object: CommandParameter_Pa
     case CommandParameter_ParameterType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
+  }
+}
+
+export function commandParameter_ParameterTypeToNumber(object: CommandParameter_ParameterType): number {
+  switch (object) {
+    case CommandParameter_ParameterType.boolean_value:
+      return 0;
+    case CommandParameter_ParameterType.object_value:
+      return 1;
+    case CommandParameter_ParameterType.array_value:
+      return 2;
+    case CommandParameter_ParameterType.number_value:
+      return 3;
+    case CommandParameter_ParameterType.string_value:
+      return 4;
+    case CommandParameter_ParameterType.UNRECOGNIZED:
+    default:
+      return -1;
   }
 }
 
@@ -197,7 +215,7 @@ export const Command = {
 };
 
 function createBaseCommandParameter(): CommandParameter {
-  return { field: "", description: "", type: 0, properties: "" };
+  return { field: "", description: "", type: CommandParameter_ParameterType.boolean_value, properties: "" };
 }
 
 export const CommandParameter = {
@@ -208,8 +226,8 @@ export const CommandParameter = {
     if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
-    if (message.type !== 0) {
-      writer.uint32(24).int32(message.type);
+    if (message.type !== CommandParameter_ParameterType.boolean_value) {
+      writer.uint32(24).int32(commandParameter_ParameterTypeToNumber(message.type));
     }
     if (message.properties !== "") {
       writer.uint32(34).string(message.properties);
@@ -231,7 +249,7 @@ export const CommandParameter = {
           message.description = reader.string();
           break;
         case 3:
-          message.type = reader.int32() as any;
+          message.type = commandParameter_ParameterTypeFromJSON(reader.int32());
           break;
         case 4:
           message.properties = reader.string();
@@ -248,7 +266,9 @@ export const CommandParameter = {
     return {
       field: isSet(object.field) ? String(object.field) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      type: isSet(object.type) ? commandParameter_ParameterTypeFromJSON(object.type) : 0,
+      type: isSet(object.type)
+        ? commandParameter_ParameterTypeFromJSON(object.type)
+        : CommandParameter_ParameterType.boolean_value,
       properties: isSet(object.properties) ? String(object.properties) : "",
     };
   },
@@ -270,7 +290,7 @@ export const CommandParameter = {
     const message = createBaseCommandParameter();
     message.field = object.field ?? "";
     message.description = object.description ?? "";
-    message.type = object.type ?? 0;
+    message.type = object.type ?? CommandParameter_ParameterType.boolean_value;
     message.properties = object.properties ?? "";
     return message;
   },

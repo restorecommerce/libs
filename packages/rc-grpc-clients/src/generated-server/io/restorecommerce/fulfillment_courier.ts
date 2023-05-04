@@ -33,7 +33,7 @@ export interface FulfillmentCourierResponse {
   status?: Status;
 }
 
-export interface FulfillmentCourierResponseList {
+export interface FulfillmentCourierListResponse {
   items: FulfillmentCourierResponse[];
   total_count: number;
   operation_status?: OperationStatus;
@@ -315,12 +315,12 @@ export const FulfillmentCourierResponse = {
   },
 };
 
-function createBaseFulfillmentCourierResponseList(): FulfillmentCourierResponseList {
+function createBaseFulfillmentCourierListResponse(): FulfillmentCourierListResponse {
   return { items: [], total_count: 0, operation_status: undefined };
 }
 
-export const FulfillmentCourierResponseList = {
-  encode(message: FulfillmentCourierResponseList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FulfillmentCourierListResponse = {
+  encode(message: FulfillmentCourierListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       FulfillmentCourierResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -333,10 +333,10 @@ export const FulfillmentCourierResponseList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentCourierResponseList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentCourierListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFulfillmentCourierResponseList();
+    const message = createBaseFulfillmentCourierListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -357,7 +357,7 @@ export const FulfillmentCourierResponseList = {
     return message;
   },
 
-  fromJSON(object: any): FulfillmentCourierResponseList {
+  fromJSON(object: any): FulfillmentCourierListResponse {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentCourierResponse.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
@@ -365,7 +365,7 @@ export const FulfillmentCourierResponseList = {
     };
   },
 
-  toJSON(message: FulfillmentCourierResponseList): unknown {
+  toJSON(message: FulfillmentCourierListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) => e ? FulfillmentCourierResponse.toJSON(e) : undefined);
@@ -378,12 +378,12 @@ export const FulfillmentCourierResponseList = {
     return obj;
   },
 
-  create(base?: DeepPartial<FulfillmentCourierResponseList>): FulfillmentCourierResponseList {
-    return FulfillmentCourierResponseList.fromPartial(base ?? {});
+  create(base?: DeepPartial<FulfillmentCourierListResponse>): FulfillmentCourierListResponse {
+    return FulfillmentCourierListResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<FulfillmentCourierResponseList>): FulfillmentCourierResponseList {
-    const message = createBaseFulfillmentCourierResponseList();
+  fromPartial(object: DeepPartial<FulfillmentCourierListResponse>): FulfillmentCourierListResponse {
+    const message = createBaseFulfillmentCourierListResponse();
     message.items = object.items?.map((e) => FulfillmentCourierResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
     message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
@@ -444,16 +444,16 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.fulfillment_courier.Service",
+export type FulfillmentCourierServiceDefinition = typeof FulfillmentCourierServiceDefinition;
+export const FulfillmentCourierServiceDefinition = {
+  name: "FulfillmentCourierService",
+  fullName: "io.restorecommerce.fulfillment_courier.FulfillmentCourierService",
   methods: {
     read: {
       name: "Read",
       requestType: ReadRequest,
       requestStream: false,
-      responseType: FulfillmentCourierResponseList,
+      responseType: FulfillmentCourierListResponse,
       responseStream: false,
       options: {},
     },
@@ -461,7 +461,7 @@ export const ServiceDefinition = {
       name: "Create",
       requestType: FulfillmentCourierList,
       requestStream: false,
-      responseType: FulfillmentCourierResponseList,
+      responseType: FulfillmentCourierListResponse,
       responseStream: false,
       options: {},
     },
@@ -469,7 +469,7 @@ export const ServiceDefinition = {
       name: "Update",
       requestType: FulfillmentCourierList,
       requestStream: false,
-      responseType: FulfillmentCourierResponseList,
+      responseType: FulfillmentCourierListResponse,
       responseStream: false,
       options: {},
     },
@@ -477,7 +477,7 @@ export const ServiceDefinition = {
       name: "Upsert",
       requestType: FulfillmentCourierList,
       requestStream: false,
-      responseType: FulfillmentCourierResponseList,
+      responseType: FulfillmentCourierListResponse,
       responseStream: false,
       options: {},
     },
@@ -492,43 +492,43 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface FulfillmentCourierServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  ): Promise<DeepPartial<FulfillmentCourierListResponse>>;
   create(
     request: FulfillmentCourierList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  ): Promise<DeepPartial<FulfillmentCourierListResponse>>;
   update(
     request: FulfillmentCourierList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  ): Promise<DeepPartial<FulfillmentCourierListResponse>>;
   upsert(
     request: FulfillmentCourierList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentCourierResponseList>>;
+  ): Promise<DeepPartial<FulfillmentCourierListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface FulfillmentCourierServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentCourierResponseList>;
+  ): Promise<FulfillmentCourierListResponse>;
   create(
     request: DeepPartial<FulfillmentCourierList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentCourierResponseList>;
+  ): Promise<FulfillmentCourierListResponse>;
   update(
     request: DeepPartial<FulfillmentCourierList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentCourierResponseList>;
+  ): Promise<FulfillmentCourierListResponse>;
   upsert(
     request: DeepPartial<FulfillmentCourierList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentCourierResponseList>;
+  ): Promise<FulfillmentCourierListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
 }
 
@@ -763,7 +763,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "FulfillmentCourierResponseList",
+      "name": "FulfillmentCourierListResponse",
       "field": [{
         "name": "items",
         "number": 1,
@@ -835,32 +835,32 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "FulfillmentCourierService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Create",
         "inputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierList",
-        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Update",
         "inputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierList",
-        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Upsert",
         "inputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierList",
-        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_courier.FulfillmentCourierListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -883,7 +883,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.fulfillment_courier.FulfillmentCourier": FulfillmentCourier,
     ".io.restorecommerce.fulfillment_courier.FulfillmentCourierList": FulfillmentCourierList,
     ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponse": FulfillmentCourierResponse,
-    ".io.restorecommerce.fulfillment_courier.FulfillmentCourierResponseList": FulfillmentCourierResponseList,
+    ".io.restorecommerce.fulfillment_courier.FulfillmentCourierListResponse": FulfillmentCourierListResponse,
     ".io.restorecommerce.fulfillment_courier.Deleted": Deleted,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
@@ -901,7 +901,10 @@ export const protoMetadata: ProtoMetadata = {
       },
     },
     services: {
-      "Service": { options: { "service_name": "fulfillment_courier" }, methods: { "Read": { "is_query": true } } },
+      "FulfillmentCourierService": {
+        options: { "service_name": "fulfillment_courier" },
+        methods: { "Read": { "is_query": true } },
+      },
     },
   },
 };

@@ -6,7 +6,15 @@ import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata6 } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { Effect, effectFromJSON, effectToJSON, protoMetadata as protoMetadata3, RuleRQ, Target } from "./rule";
+import {
+  Effect,
+  effectFromJSON,
+  effectToJSON,
+  effectToNumber,
+  protoMetadata as protoMetadata3,
+  RuleRQ,
+  Target,
+} from "./rule";
 import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.policy";
@@ -61,7 +69,7 @@ function createBasePolicy(): Policy {
     description: "",
     rules: [],
     target: undefined,
-    effect: 0,
+    effect: Effect.PERMIT,
     combiningAlgorithm: "",
     evaluationCacheable: false,
   };
@@ -87,8 +95,8 @@ export const Policy = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(50).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(56).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(56).int32(effectToNumber(message.effect));
     }
     if (message.combiningAlgorithm !== "") {
       writer.uint32(66).string(message.combiningAlgorithm);
@@ -125,7 +133,7 @@ export const Policy = {
           message.target = Target.decode(reader, reader.uint32());
           break;
         case 7:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 8:
           message.combiningAlgorithm = reader.string();
@@ -149,7 +157,7 @@ export const Policy = {
       description: isSet(object.description) ? String(object.description) : "",
       rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => String(e)) : [],
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
       combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : "",
       evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
     };
@@ -187,7 +195,7 @@ export const Policy = {
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.combiningAlgorithm = object.combiningAlgorithm ?? "";
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;
@@ -200,7 +208,7 @@ function createBasePolicyRQ(): PolicyRQ {
     target: undefined,
     combiningAlgorithm: "",
     rules: [],
-    effect: 0,
+    effect: Effect.PERMIT,
     hasRules: false,
     evaluationCacheable: false,
   };
@@ -220,8 +228,8 @@ export const PolicyRQ = {
     for (const v of message.rules) {
       RuleRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.effect !== 0) {
-      writer.uint32(40).int32(message.effect);
+    if (message.effect !== Effect.PERMIT) {
+      writer.uint32(40).int32(effectToNumber(message.effect));
     }
     if (message.hasRules === true) {
       writer.uint32(48).bool(message.hasRules);
@@ -252,7 +260,7 @@ export const PolicyRQ = {
           message.rules.push(RuleRQ.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.effect = reader.int32() as any;
+          message.effect = effectFromJSON(reader.int32());
           break;
         case 6:
           message.hasRules = reader.bool();
@@ -274,7 +282,7 @@ export const PolicyRQ = {
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
       combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : "",
       rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => RuleRQ.fromJSON(e)) : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
       hasRules: isSet(object.hasRules) ? Boolean(object.hasRules) : false,
       evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
     };
@@ -308,7 +316,7 @@ export const PolicyRQ = {
       : undefined;
     message.combiningAlgorithm = object.combiningAlgorithm ?? "";
     message.rules = object.rules?.map((e) => RuleRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? 0;
+    message.effect = object.effect ?? Effect.PERMIT;
     message.hasRules = object.hasRules ?? false;
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;

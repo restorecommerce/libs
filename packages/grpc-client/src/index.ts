@@ -34,4 +34,4 @@ export function createClient<Service extends CompatServiceDefinition>(
   return factory.create(definition, channel, defaultCallOptions);
 }
 
-export { Channel, createChannel };
+export { Client, Channel, createChannel };

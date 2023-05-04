@@ -8,6 +8,7 @@ import "io/restorecommerce/image.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
@@ -25,22 +26,29 @@ service Service {
   rpc Upsert (ProductList) returns (ProductListResponse);
 }
 
-// Product resource
-message MainProduct {
+// Product resource entity
+message Product {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "products"
+    topic: "io.restorecommerce.product.resource"
+    created: "productCreated"
+    updated: "productUpdated"
+    deleted: "productDeleted"
+  };
+
   string id = 1;
   oneof product_type {
-    Product product = 2;
+    IndividualProduct product = 2;
     Bundle bundle = 3;
   }
   bool active = 4;
   io.restorecommerce.meta.Meta meta = 5;
 }
 
-message Product {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string manufacturer_id = 4 [
+message IndividualProduct {
+  string name = 1;
+  string description = 2;
+  string manufacturer_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.manufacturer.Manufacturer",
       target_service: "catalog",
@@ -49,14 +57,25 @@ message Product {
       field_name: "manufacturer",
     }
   ];
-  string taric_code = 5;
+  string taric_code = 4;
   oneof classification {
-    Identifier prototype = 6;
-    Identifier category = 7;
+    Identifier prototype = 5;
+    Identifier category = 6;
   }
-  repeated string tax_id = 8;
-  repeated Variant variants = 9;
-  string gtin = 10;
+  repeated string tax_ids = 7;
+  string gtin = 8;
+  oneof nature {
+    PhysicalProduct physical = 9;
+    VirtualProduct virtual = 10;
+  };
+}
+
+message PhysicalProduct {
+  repeated PhysicalVariant variants = 1;
+}
+
+message VirtualProduct {
+  repeated VirtualVariant variants = 1;
 }
 
 message Identifier {
@@ -64,7 +83,7 @@ message Identifier {
 }
 
 message ProductList {
-  repeated MainProduct items = 1;
+  repeated Product items = 1;
   uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
@@ -76,11 +95,32 @@ message ProductListResponse {
 }
 
 message ProductResponse {
-  MainProduct payload = 1;
+  Product payload = 1;
   io.restorecommerce.status.Status status = 3;
 }
 
-message Variant {
+message Package {
+  io.restorecommerce.geometry.BoundingBox3D size_in_cm = 1;
+  double weight_in_kg = 2;
+  bool rotatable = 3;
+}
+
+message PhysicalVariant {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  int32 stock_level = 4;
+  double price = 5;
+  bool sale = 6;
+  double sale_price = 7;
+  repeated io.restorecommerce.image.Image image = 8;
+  string stock_keeping_unit = 9;
+  string template_variant = 10;
+  Package packaged = 11;
+  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+}
+
+message VirtualVariant {
   string id = 1;
   string name = 2;
   string description = 3;
@@ -95,17 +135,19 @@ message Variant {
 }
 
 message Bundle {
-  string id = 1;
-  string name = 3;
-  string description = 4;
-  repeated io.restorecommerce.image.Image image = 5;
-  repeated BundleProduct product = 6;
-  double price = 7;
+  string name = 1;
+  string description = 2;
+  repeated io.restorecommerce.image.Image image = 3;
+  repeated BundleProduct products = 4;
+  double price = 5;
+  Package pre_packaged = 6;
 }
 
 message BundleProduct {
   string product_id = 1;
-  uint32 quantity = 2;
+  string variant_id = 2;
+  uint32 quantity = 3;
+  double tax_ratio = 4; //Discount in relation to the bundle price
 }
 
 message Deleted {

@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "@restorecommerce/grpc-client": "^1.0.3",
+    "@types/google-protobuf": "^3.15.6",
+    "google-protobuf": "^3.21.2",
     "nice-grpc": "^2.1.0",
     "nice-grpc-common": "^2.0.1",
     "protobufjs": "^7.2.2",
@@ -40,9 +42,9 @@
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "prepublishOnly": "npm run build",
-    "generate": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto ./node_modules/@restorecommerce/protos/grpc/health/v1/*.proto ./node_modules/@restorecommerce/protos/grpc/reflection/v1alpha/*.proto ./node_modules/@restorecommerce/protos/test/*.proto ./node_modules/@restorecommerce/protos/echo/*.proto",
-    "generate:google": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ./node_modules/@restorecommerce/protos/google/protobuf/*.proto",
-    "generate:server": "protoc --experimental_allow_proto3_optional --ts_proto_opt=stringEnums=true,outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions,snakeToCamel=false --proto_path=./node_modules/@restorecommerce/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated-server ./node_modules/@restorecommerce/protos/io/restorecommerce/*.proto ./node_modules/@restorecommerce/protos/grpc/health/v1/*.proto ./node_modules/@restorecommerce/protos/grpc/reflection/v1alpha/*.proto ./node_modules/@restorecommerce/protos/test/*.proto ./node_modules/@restorecommerce/protos/echo/*.proto"
+    "generate": "npm run generate:client && npm run generate:server",
+    "generate:client": "protoc --experimental_allow_proto3_optional --ts_proto_opt=stringEnums=true,outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated ../protos/io/restorecommerce/*.proto ../protos/grpc/health/v1/*.proto ../protos/grpc/reflection/v1alpha/*.proto ../protos/test/*.proto ../protos/echo/*.proto ../protos/google/**/*.proto",
+    "generate:server": "protoc --experimental_allow_proto3_optional --ts_proto_opt=stringEnums=true,outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions,snakeToCamel=false --proto_path=../protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated-server ../protos/io/restorecommerce/*.proto ../protos/grpc/health/v1/*.proto ../protos/grpc/reflection/v1alpha/*.proto ../protos/test/*.proto ../protos/echo/*.proto  ../protos/google/**/*.proto"
   },
   "engines": {
     "node": ">= 12.18.0"

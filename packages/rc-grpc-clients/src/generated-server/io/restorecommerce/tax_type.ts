@@ -10,6 +10,51 @@ import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./stat
 
 export const protobufPackage = "io.restorecommerce.tax_type";
 
+export enum Behavior {
+  NONE = "NONE",
+  ADDITIVE_ON_GROSS = "ADDITIVE_ON_GROSS",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function behaviorFromJSON(object: any): Behavior {
+  switch (object) {
+    case 0:
+    case "NONE":
+      return Behavior.NONE;
+    case 1:
+    case "ADDITIVE_ON_GROSS":
+      return Behavior.ADDITIVE_ON_GROSS;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return Behavior.UNRECOGNIZED;
+  }
+}
+
+export function behaviorToJSON(object: Behavior): string {
+  switch (object) {
+    case Behavior.NONE:
+      return "NONE";
+    case Behavior.ADDITIVE_ON_GROSS:
+      return "ADDITIVE_ON_GROSS";
+    case Behavior.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function behaviorToNumber(object: Behavior): number {
+  switch (object) {
+    case Behavior.NONE:
+      return 0;
+    case Behavior.ADDITIVE_ON_GROSS:
+      return 1;
+    case Behavior.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface Deleted {
   id: string;
 }
@@ -36,6 +81,7 @@ export interface TaxType {
   meta?: Meta;
   type: string;
   description: string;
+  behavior: Behavior;
 }
 
 function createBaseDeleted(): Deleted {
@@ -311,7 +357,7 @@ export const TaxTypeResponse = {
 };
 
 function createBaseTaxType(): TaxType {
-  return { id: "", meta: undefined, type: "", description: "" };
+  return { id: "", meta: undefined, type: "", description: "", behavior: Behavior.NONE };
 }
 
 export const TaxType = {
@@ -327,6 +373,9 @@ export const TaxType = {
     }
     if (message.description !== "") {
       writer.uint32(34).string(message.description);
+    }
+    if (message.behavior !== Behavior.NONE) {
+      writer.uint32(40).int32(behaviorToNumber(message.behavior));
     }
     return writer;
   },
@@ -350,6 +399,9 @@ export const TaxType = {
         case 4:
           message.description = reader.string();
           break;
+        case 5:
+          message.behavior = behaviorFromJSON(reader.int32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -364,6 +416,7 @@ export const TaxType = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       type: isSet(object.type) ? String(object.type) : "",
       description: isSet(object.description) ? String(object.description) : "",
+      behavior: isSet(object.behavior) ? behaviorFromJSON(object.behavior) : Behavior.NONE,
     };
   },
 
@@ -373,6 +426,7 @@ export const TaxType = {
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.type !== undefined && (obj.type = message.type);
     message.description !== undefined && (obj.description = message.description);
+    message.behavior !== undefined && (obj.behavior = behaviorToJSON(message.behavior));
     return obj;
   },
 
@@ -386,6 +440,7 @@ export const TaxType = {
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.type = object.type ?? "";
     message.description = object.description ?? "";
+    message.behavior = object.behavior ?? Behavior.NONE;
     return message;
   },
 };
@@ -691,6 +746,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "description",
         "options": undefined,
         "proto3Optional": false,
+      }, {
+        "name": "behavior",
+        "number": 5,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.tax_type.Behavior",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "behavior",
+        "options": undefined,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -701,7 +768,17 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }],
-    "enumType": [],
+    "enumType": [{
+      "name": "Behavior",
+      "value": [{ "name": "NONE", "number": 0, "options": undefined }, {
+        "name": "ADDITIVE_ON_GROSS",
+        "number": 1,
+        "options": undefined,
+      }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
     "service": [{
       "name": "Service",
       "method": [{
@@ -756,6 +833,7 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
+    ".io.restorecommerce.tax_type.Behavior": Behavior,
     ".io.restorecommerce.tax_type.Deleted": Deleted,
     ".io.restorecommerce.tax_type.TaxTypeList": TaxTypeList,
     ".io.restorecommerce.tax_type.TaxTypeListResponse": TaxTypeListResponse,

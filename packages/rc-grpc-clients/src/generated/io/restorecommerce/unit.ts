@@ -2,94 +2,228 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { protoMetadata as protoMetadata3, Subject } from "./auth";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { protoMetadata as protoMetadata7 } from "./options";
-import { PolicyRQ, protoMetadata as protoMetadata3 } from "./policy";
+import { protoMetadata as protoMetadata5, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { Effect, effectFromJSON, effectToJSON, effectToNumber, protoMetadata as protoMetadata5, Target } from "./rule";
-import { OperationStatus, protoMetadata as protoMetadata6, Status } from "./status";
+import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
-export const protobufPackage = "io.restorecommerce.policy_set";
+export const protobufPackage = "io.restorecommerce.unit";
 
-export interface PolicySet {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
-  target?: Target;
-  combiningAlgorithm: string;
-  /** policy IDs */
-  policies: string[];
+export enum UnitType {
+  UnitTypeUndefined = "UnitTypeUndefined",
+  Length = "Length",
+  Weight = "Weight",
+  Speed = "Speed",
+  /** Force - ... */
+  Force = "Force",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export interface PolicySetList {
-  items: PolicySet[];
+export function unitTypeFromJSON(object: any): UnitType {
+  switch (object) {
+    case 0:
+    case "UnitTypeUndefined":
+      return UnitType.UnitTypeUndefined;
+    case 1:
+    case "Length":
+      return UnitType.Length;
+    case 2:
+    case "Weight":
+      return UnitType.Weight;
+    case 3:
+    case "Speed":
+      return UnitType.Speed;
+    case 4:
+    case "Force":
+      return UnitType.Force;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return UnitType.UNRECOGNIZED;
+  }
+}
+
+export function unitTypeToJSON(object: UnitType): string {
+  switch (object) {
+    case UnitType.UnitTypeUndefined:
+      return "UnitTypeUndefined";
+    case UnitType.Length:
+      return "Length";
+    case UnitType.Weight:
+      return "Weight";
+    case UnitType.Speed:
+      return "Speed";
+    case UnitType.Force:
+      return "Force";
+    case UnitType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function unitTypeToNumber(object: UnitType): number {
+  switch (object) {
+    case UnitType.UnitTypeUndefined:
+      return 0;
+    case UnitType.Length:
+      return 1;
+    case UnitType.Weight:
+      return 2;
+    case UnitType.Speed:
+      return 3;
+    case UnitType.Force:
+      return 4;
+    case UnitType.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
+export enum UnitSystem {
+  UnitSystemUndefined = "UnitSystemUndefined",
+  Metric = "Metric",
+  Imperial = "Imperial",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function unitSystemFromJSON(object: any): UnitSystem {
+  switch (object) {
+    case 0:
+    case "UnitSystemUndefined":
+      return UnitSystem.UnitSystemUndefined;
+    case 1:
+    case "Metric":
+      return UnitSystem.Metric;
+    case 2:
+    case "Imperial":
+      return UnitSystem.Imperial;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return UnitSystem.UNRECOGNIZED;
+  }
+}
+
+export function unitSystemToJSON(object: UnitSystem): string {
+  switch (object) {
+    case UnitSystem.UnitSystemUndefined:
+      return "UnitSystemUndefined";
+    case UnitSystem.Metric:
+      return "Metric";
+    case UnitSystem.Imperial:
+      return "Imperial";
+    case UnitSystem.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function unitSystemToNumber(object: UnitSystem): number {
+  switch (object) {
+    case UnitSystem.UnitSystemUndefined:
+      return 0;
+    case UnitSystem.Metric:
+      return 1;
+    case UnitSystem.Imperial:
+      return 2;
+    case UnitSystem.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
+export interface Unit {
+  id: string;
+  meta?: Meta;
+  parentId: string;
+  name: string;
+  symbol: string;
+  standardType?: UnitType | undefined;
+  customType?: string | undefined;
+  standardSystem?: UnitSystem | undefined;
+  customSystem?:
+    | string
+    | undefined;
+  /** convert factor to standard unit */
+  factor: number;
+}
+
+export interface UnitList {
+  items: Unit[];
   totalCount: number;
   subject?: Subject;
 }
 
-export interface PolicySetListResponse {
-  items: PolicySetResponse[];
+export interface UnitListResponse {
+  items: UnitResponse[];
   totalCount: number;
   operationStatus?: OperationStatus;
 }
 
-export interface PolicySetResponse {
-  payload?: PolicySet;
+export interface UnitResponse {
+  payload?: Unit;
   status?: Status;
 }
 
-export interface PolicySetRQ {
+export interface Deleted {
   id: string;
-  target?: Target;
-  combiningAlgorithm: string;
-  policies: PolicyRQ[];
-  effect: Effect;
 }
 
-function createBasePolicySet(): PolicySet {
+function createBaseUnit(): Unit {
   return {
     id: "",
     meta: undefined,
+    parentId: "",
     name: "",
-    description: "",
-    target: undefined,
-    combiningAlgorithm: "",
-    policies: [],
+    symbol: "",
+    standardType: undefined,
+    customType: undefined,
+    standardSystem: undefined,
+    customSystem: undefined,
+    factor: 0,
   };
 }
 
-export const PolicySet = {
-  encode(message: PolicySet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Unit = {
+  encode(message: Unit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
+    if (message.parentId !== "") {
+      writer.uint32(26).string(message.parentId);
+    }
     if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+      writer.uint32(34).string(message.name);
     }
-    if (message.description !== "") {
-      writer.uint32(34).string(message.description);
+    if (message.symbol !== "") {
+      writer.uint32(42).string(message.symbol);
     }
-    if (message.target !== undefined) {
-      Target.encode(message.target, writer.uint32(42).fork()).ldelim();
+    if (message.standardType !== undefined) {
+      writer.uint32(48).int32(unitTypeToNumber(message.standardType));
     }
-    if (message.combiningAlgorithm !== "") {
-      writer.uint32(50).string(message.combiningAlgorithm);
+    if (message.customType !== undefined) {
+      writer.uint32(58).string(message.customType);
     }
-    for (const v of message.policies) {
-      writer.uint32(58).string(v!);
+    if (message.standardSystem !== undefined) {
+      writer.uint32(64).int32(unitSystemToNumber(message.standardSystem));
+    }
+    if (message.customSystem !== undefined) {
+      writer.uint32(74).string(message.customSystem);
+    }
+    if (message.factor !== 0) {
+      writer.uint32(81).double(message.factor);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PolicySet {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Unit {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePolicySet();
+    const message = createBaseUnit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -100,19 +234,28 @@ export const PolicySet = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.name = reader.string();
+          message.parentId = reader.string();
           break;
         case 4:
-          message.description = reader.string();
+          message.name = reader.string();
           break;
         case 5:
-          message.target = Target.decode(reader, reader.uint32());
+          message.symbol = reader.string();
           break;
         case 6:
-          message.combiningAlgorithm = reader.string();
+          message.standardType = unitTypeFromJSON(reader.int32());
           break;
         case 7:
-          message.policies.push(reader.string());
+          message.customType = reader.string();
+          break;
+        case 8:
+          message.standardSystem = unitSystemFromJSON(reader.int32());
+          break;
+        case 9:
+          message.customSystem = reader.string();
+          break;
+        case 10:
+          message.factor = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -122,61 +265,68 @@ export const PolicySet = {
     return message;
   },
 
-  fromJSON(object: any): PolicySet {
+  fromJSON(object: any): Unit {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : "",
       name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : "",
-      policies: Array.isArray(object?.policies) ? object.policies.map((e: any) => String(e)) : [],
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      standardType: isSet(object.standardType) ? unitTypeFromJSON(object.standardType) : undefined,
+      customType: isSet(object.customType) ? String(object.customType) : undefined,
+      standardSystem: isSet(object.standardSystem) ? unitSystemFromJSON(object.standardSystem) : undefined,
+      customSystem: isSet(object.customSystem) ? String(object.customSystem) : undefined,
+      factor: isSet(object.factor) ? Number(object.factor) : 0,
     };
   },
 
-  toJSON(message: PolicySet): unknown {
+  toJSON(message: Unit): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.parentId !== undefined && (obj.parentId = message.parentId);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
-    if (message.policies) {
-      obj.policies = message.policies.map((e) => e);
-    } else {
-      obj.policies = [];
-    }
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.standardType !== undefined &&
+      (obj.standardType = message.standardType !== undefined ? unitTypeToJSON(message.standardType) : undefined);
+    message.customType !== undefined && (obj.customType = message.customType);
+    message.standardSystem !== undefined &&
+      (obj.standardSystem = message.standardSystem !== undefined
+        ? unitSystemToJSON(message.standardSystem)
+        : undefined);
+    message.customSystem !== undefined && (obj.customSystem = message.customSystem);
+    message.factor !== undefined && (obj.factor = message.factor);
     return obj;
   },
 
-  create(base?: DeepPartial<PolicySet>): PolicySet {
-    return PolicySet.fromPartial(base ?? {});
+  create(base?: DeepPartial<Unit>): Unit {
+    return Unit.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PolicySet>): PolicySet {
-    const message = createBasePolicySet();
+  fromPartial(object: DeepPartial<Unit>): Unit {
+    const message = createBaseUnit();
     message.id = object.id ?? "";
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.parentId = object.parentId ?? "";
     message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.target = (object.target !== undefined && object.target !== null)
-      ? Target.fromPartial(object.target)
-      : undefined;
-    message.combiningAlgorithm = object.combiningAlgorithm ?? "";
-    message.policies = object.policies?.map((e) => e) || [];
+    message.symbol = object.symbol ?? "";
+    message.standardType = object.standardType ?? undefined;
+    message.customType = object.customType ?? undefined;
+    message.standardSystem = object.standardSystem ?? undefined;
+    message.customSystem = object.customSystem ?? undefined;
+    message.factor = object.factor ?? 0;
     return message;
   },
 };
 
-function createBasePolicySetList(): PolicySetList {
+function createBaseUnitList(): UnitList {
   return { items: [], totalCount: 0, subject: undefined };
 }
 
-export const PolicySetList = {
-  encode(message: PolicySetList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitList = {
+  encode(message: UnitList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
+      Unit.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -187,15 +337,15 @@ export const PolicySetList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PolicySetList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePolicySetList();
+    const message = createBaseUnitList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(PolicySet.decode(reader, reader.uint32()));
+          message.items.push(Unit.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -211,18 +361,18 @@ export const PolicySetList = {
     return message;
   },
 
-  fromJSON(object: any): PolicySetList {
+  fromJSON(object: any): UnitList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => PolicySet.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Unit.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
-  toJSON(message: PolicySetList): unknown {
+  toJSON(message: UnitList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? PolicySet.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? Unit.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -231,13 +381,13 @@ export const PolicySetList = {
     return obj;
   },
 
-  create(base?: DeepPartial<PolicySetList>): PolicySetList {
-    return PolicySetList.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitList>): UnitList {
+    return UnitList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PolicySetList>): PolicySetList {
-    const message = createBasePolicySetList();
-    message.items = object.items?.map((e) => PolicySet.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<UnitList>): UnitList {
+    const message = createBaseUnitList();
+    message.items = object.items?.map((e) => Unit.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -246,14 +396,14 @@ export const PolicySetList = {
   },
 };
 
-function createBasePolicySetListResponse(): PolicySetListResponse {
+function createBaseUnitListResponse(): UnitListResponse {
   return { items: [], totalCount: 0, operationStatus: undefined };
 }
 
-export const PolicySetListResponse = {
-  encode(message: PolicySetListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitListResponse = {
+  encode(message: UnitListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      PolicySetResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+      UnitResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -264,15 +414,15 @@ export const PolicySetListResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PolicySetListResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePolicySetListResponse();
+    const message = createBaseUnitListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(PolicySetResponse.decode(reader, reader.uint32()));
+          message.items.push(UnitResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -288,18 +438,18 @@ export const PolicySetListResponse = {
     return message;
   },
 
-  fromJSON(object: any): PolicySetListResponse {
+  fromJSON(object: any): UnitListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => PolicySetResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => UnitResponse.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
 
-  toJSON(message: PolicySetListResponse): unknown {
+  toJSON(message: UnitListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? PolicySetResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? UnitResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -309,13 +459,13 @@ export const PolicySetListResponse = {
     return obj;
   },
 
-  create(base?: DeepPartial<PolicySetListResponse>): PolicySetListResponse {
-    return PolicySetListResponse.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitListResponse>): UnitListResponse {
+    return UnitListResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PolicySetListResponse>): PolicySetListResponse {
-    const message = createBasePolicySetListResponse();
-    message.items = object.items?.map((e) => PolicySetResponse.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<UnitListResponse>): UnitListResponse {
+    const message = createBaseUnitListResponse();
+    message.items = object.items?.map((e) => UnitResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
     message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
       ? OperationStatus.fromPartial(object.operationStatus)
@@ -324,14 +474,14 @@ export const PolicySetListResponse = {
   },
 };
 
-function createBasePolicySetResponse(): PolicySetResponse {
+function createBaseUnitResponse(): UnitResponse {
   return { payload: undefined, status: undefined };
 }
 
-export const PolicySetResponse = {
-  encode(message: PolicySetResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitResponse = {
+  encode(message: UnitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload !== undefined) {
-      PolicySet.encode(message.payload, writer.uint32(10).fork()).ldelim();
+      Unit.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -339,15 +489,15 @@ export const PolicySetResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PolicySetResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePolicySetResponse();
+    const message = createBaseUnitResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.payload = PolicySet.decode(reader, reader.uint32());
+          message.payload = Unit.decode(reader, reader.uint32());
           break;
         case 2:
           message.status = Status.decode(reader, reader.uint32());
@@ -360,28 +510,28 @@ export const PolicySetResponse = {
     return message;
   },
 
-  fromJSON(object: any): PolicySetResponse {
+  fromJSON(object: any): UnitResponse {
     return {
-      payload: isSet(object.payload) ? PolicySet.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload) ? Unit.fromJSON(object.payload) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
-  toJSON(message: PolicySetResponse): unknown {
+  toJSON(message: UnitResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? PolicySet.toJSON(message.payload) : undefined);
+    message.payload !== undefined && (obj.payload = message.payload ? Unit.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<PolicySetResponse>): PolicySetResponse {
-    return PolicySetResponse.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitResponse>): UnitResponse {
+    return UnitResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PolicySetResponse>): PolicySetResponse {
-    const message = createBasePolicySetResponse();
+  fromPartial(object: DeepPartial<UnitResponse>): UnitResponse {
+    const message = createBaseUnitResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
-      ? PolicySet.fromPartial(object.payload)
+      ? Unit.fromPartial(object.payload)
       : undefined;
     message.status = (object.status !== undefined && object.status !== null)
       ? Status.fromPartial(object.status)
@@ -390,51 +540,27 @@ export const PolicySetResponse = {
   },
 };
 
-function createBasePolicySetRQ(): PolicySetRQ {
-  return { id: "", target: undefined, combiningAlgorithm: "", policies: [], effect: Effect.PERMIT };
+function createBaseDeleted(): Deleted {
+  return { id: "" };
 }
 
-export const PolicySetRQ = {
-  encode(message: PolicySetRQ, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Deleted = {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
-    }
-    if (message.target !== undefined) {
-      Target.encode(message.target, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.combiningAlgorithm !== "") {
-      writer.uint32(26).string(message.combiningAlgorithm);
-    }
-    for (const v of message.policies) {
-      PolicyRQ.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.effect !== Effect.PERMIT) {
-      writer.uint32(40).int32(effectToNumber(message.effect));
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PolicySetRQ {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePolicySetRQ();
+    const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.id = reader.string();
-          break;
-        case 2:
-          message.target = Target.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.combiningAlgorithm = reader.string();
-          break;
-        case 4:
-          message.policies.push(PolicyRQ.decode(reader, reader.uint32()));
-          break;
-        case 5:
-          message.effect = effectFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -444,65 +570,46 @@ export const PolicySetRQ = {
     return message;
   },
 
-  fromJSON(object: any): PolicySetRQ {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-      target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : "",
-      policies: Array.isArray(object?.policies) ? object.policies.map((e: any) => PolicyRQ.fromJSON(e)) : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
-    };
+  fromJSON(object: any): Deleted {
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
-  toJSON(message: PolicySetRQ): unknown {
+  toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.combiningAlgorithm !== undefined && (obj.combiningAlgorithm = message.combiningAlgorithm);
-    if (message.policies) {
-      obj.policies = message.policies.map((e) => e ? PolicyRQ.toJSON(e) : undefined);
-    } else {
-      obj.policies = [];
-    }
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
     return obj;
   },
 
-  create(base?: DeepPartial<PolicySetRQ>): PolicySetRQ {
-    return PolicySetRQ.fromPartial(base ?? {});
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PolicySetRQ>): PolicySetRQ {
-    const message = createBasePolicySetRQ();
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
     message.id = object.id ?? "";
-    message.target = (object.target !== undefined && object.target !== null)
-      ? Target.fromPartial(object.target)
-      : undefined;
-    message.combiningAlgorithm = object.combiningAlgorithm ?? "";
-    message.policies = object.policies?.map((e) => PolicyRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? Effect.PERMIT;
     return message;
   },
 };
 
+/** Microservice definition. */
 export type ServiceDefinition = typeof ServiceDefinition;
 export const ServiceDefinition = {
   name: "Service",
-  fullName: "io.restorecommerce.policy_set.Service",
+  fullName: "io.restorecommerce.unit.Service",
   methods: {
     read: {
       name: "Read",
       requestType: ReadRequest,
       requestStream: false,
-      responseType: PolicySetListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
     create: {
       name: "Create",
-      requestType: PolicySetList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: PolicySetListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
@@ -516,17 +623,17 @@ export const ServiceDefinition = {
     },
     update: {
       name: "Update",
-      requestType: PolicySetList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: PolicySetListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
     upsert: {
       name: "Upsert",
-      requestType: PolicySetList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: PolicySetListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
@@ -534,19 +641,19 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
-  create(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
+  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
+  create(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
-  upsert(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
+  update(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
+  upsert(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
-  create(request: DeepPartial<PolicySetList>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
+  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
+  create(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<PolicySetList>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
-  upsert(request: DeepPartial<PolicySetList>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
+  update(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
+  upsert(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -572,21 +679,19 @@ export interface ProtoMetadata {
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/policy_set.proto",
-    "package": "io.restorecommerce.policy_set",
+    "name": "io/restorecommerce/unit.proto",
+    "package": "io.restorecommerce.unit",
     "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
-      "io/restorecommerce/policy.proto",
       "io/restorecommerce/auth.proto",
-      "io/restorecommerce/rule.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "PolicySet",
+      "name": "Unit",
       "field": [{
         "name": "id",
         "number": 1,
@@ -612,8 +717,28 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "name",
+        "name": "parent_id",
         "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "parentId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": false,
+      }, {
+        "name": "name",
+        "number": 4,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -624,51 +749,75 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target",
+        "name": "symbol",
         "number": 5,
         "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Target",
+        "type": 9,
+        "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "target",
+        "jsonName": "symbol",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "combining_algorithm",
+        "name": "standard_type",
         "number": 6,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.unit.UnitType",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "standardType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "custom_type",
+        "number": 7,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "combiningAlgorithm",
+        "jsonName": "customType",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "policies",
-        "number": 7,
-        "label": 3,
+        "name": "standard_system",
+        "number": 8,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.unit.UnitSystem",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "standardSystem",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "custom_system",
+        "number": 9,
+        "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "customSystem",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "factor",
+        "number": 10,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "policies",
+        "jsonName": "factor",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -676,18 +825,18 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "type", "options": undefined }, { "name": "system", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "PolicySetList",
+      "name": "UnitList",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.policy_set.PolicySet",
+        "typeName": ".io.restorecommerce.unit.Unit",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -728,13 +877,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "PolicySetListResponse",
+      "name": "UnitListResponse",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.policy_set.PolicySetResponse",
+        "typeName": ".io.restorecommerce.unit.UnitResponse",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -775,13 +924,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "PolicySetResponse",
+      "name": "UnitResponse",
       "field": [{
         "name": "payload",
         "number": 1,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.policy_set.PolicySet",
+        "typeName": ".io.restorecommerce.unit.Unit",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -810,7 +959,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "PolicySetRQ",
+      "name": "Deleted",
       "field": [{
         "name": "id",
         "number": 1,
@@ -823,54 +972,6 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "id",
         "options": undefined,
         "proto3Optional": false,
-      }, {
-        "name": "target",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Target",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "target",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "combining_algorithm",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "combiningAlgorithm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "policies",
-        "number": 4,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.policy.PolicyRQ",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "policies",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "effect",
-        "number": 5,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.rule.Effect",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "effect",
-        "options": undefined,
-        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -881,20 +982,42 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }],
-    "enumType": [],
+    "enumType": [{
+      "name": "UnitType",
+      "value": [
+        { "name": "UnitTypeUndefined", "number": 0, "options": undefined },
+        { "name": "Length", "number": 1, "options": undefined },
+        { "name": "Weight", "number": 2, "options": undefined },
+        { "name": "Speed", "number": 3, "options": undefined },
+        { "name": "Force", "number": 4, "options": undefined },
+      ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "UnitSystem",
+      "value": [{ "name": "UnitSystemUndefined", "number": 0, "options": undefined }, {
+        "name": "Metric",
+        "number": 1,
+        "options": undefined,
+      }, { "name": "Imperial", "number": 2, "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
     "service": [{
       "name": "Service",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.policy_set.PolicySetListResponse",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Create",
-        "inputType": ".io.restorecommerce.policy_set.PolicySetList",
-        "outputType": ".io.restorecommerce.policy_set.PolicySetListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -907,15 +1030,15 @@ export const protoMetadata: ProtoMetadata = {
         "serverStreaming": false,
       }, {
         "name": "Update",
-        "inputType": ".io.restorecommerce.policy_set.PolicySetList",
-        "outputType": ".io.restorecommerce.policy_set.PolicySetListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Upsert",
-        "inputType": ".io.restorecommerce.policy_set.PolicySetList",
-        "outputType": ".io.restorecommerce.policy_set.PolicySetListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -926,33 +1049,53 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [4, 0, 2, 6],
-        "span": [19, 2, 31],
+        "path": [6, 0],
+        "span": [13, 0, 23, 1],
+        "leadingComments": "\n Microservice definition.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [5, 0, 2, 4],
+        "span": [30, 2, 12],
         "leadingComments": "",
-        "trailingComments": " policy IDs\n",
+        "trailingComments": "...\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 9],
+        "span": [62, 2, 21],
+        "leadingComments": "",
+        "trailingComments": "convert factor to standard unit\n",
         "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.policy_set.PolicySet": PolicySet,
-    ".io.restorecommerce.policy_set.PolicySetList": PolicySetList,
-    ".io.restorecommerce.policy_set.PolicySetListResponse": PolicySetListResponse,
-    ".io.restorecommerce.policy_set.PolicySetResponse": PolicySetResponse,
-    ".io.restorecommerce.policy_set.PolicySetRQ": PolicySetRQ,
+    ".io.restorecommerce.unit.UnitType": UnitType,
+    ".io.restorecommerce.unit.UnitSystem": UnitSystem,
+    ".io.restorecommerce.unit.Unit": Unit,
+    ".io.restorecommerce.unit.UnitList": UnitList,
+    ".io.restorecommerce.unit.UnitListResponse": UnitListResponse,
+    ".io.restorecommerce.unit.UnitResponse": UnitResponse,
+    ".io.restorecommerce.unit.Deleted": Deleted,
   },
-  dependencies: [
-    protoMetadata1,
-    protoMetadata2,
-    protoMetadata3,
-    protoMetadata4,
-    protoMetadata5,
-    protoMetadata6,
-    protoMetadata7,
-  ],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: { "Service": { options: { "service_name": "policy_set" }, methods: { "Read": { "is_query": true } } } },
+    messages: {
+      "Unit": {
+        fields: {
+          "parent_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBnBhcmVudA==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
+    },
+    services: { "Service": { options: { "service_name": "unit" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 

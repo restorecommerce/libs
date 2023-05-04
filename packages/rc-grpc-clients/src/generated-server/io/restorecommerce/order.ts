@@ -2,166 +2,152 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Address, ContactPerson, protoMetadata as protoMetadata6 } from "./address";
+import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Parcel, protoMetadata as protoMetadata7 } from "./fulfillment";
+import { protoMetadata as protoMetadata8 } from "./country";
+import { FulfillmentListResponse, protoMetadata as protoMetadata9 } from "./fulfillment";
+import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata10 } from "./fulfillment_product";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata5 } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import { OperationStatus, protoMetadata as protoMetadata4, Status, StatusListResponse } from "./status";
+import { protoMetadata as protoMetadata7, VAT } from "./tax";
 
 export const protobufPackage = "io.restorecommerce.order";
 
-export enum State {
-  Undefined = "Undefined",
-  Invalid = "Invalid",
-  Failed = "Failed",
-  Cancelled = "Cancelled",
+export enum OrderState {
   Created = "Created",
   Submitted = "Submitted",
+  Confirmed = "Confirmed",
+  Invalid = "Invalid",
   Shipping = "Shipping",
+  Failed = "Failed",
   Done = "Done",
+  Withdrawn = "Withdrawn",
+  Cancelled = "Cancelled",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function stateFromJSON(object: any): State {
+export function orderStateFromJSON(object: any): OrderState {
   switch (object) {
     case 0:
-    case "Undefined":
-      return State.Undefined;
-    case 1:
-    case "Invalid":
-      return State.Invalid;
-    case 2:
-    case "Failed":
-      return State.Failed;
-    case 3:
-    case "Cancelled":
-      return State.Cancelled;
-    case 4:
     case "Created":
-      return State.Created;
-    case 5:
+      return OrderState.Created;
+    case 1:
     case "Submitted":
-      return State.Submitted;
-    case 6:
+      return OrderState.Submitted;
+    case 2:
+    case "Confirmed":
+      return OrderState.Confirmed;
+    case 3:
+    case "Invalid":
+      return OrderState.Invalid;
+    case 4:
     case "Shipping":
-      return State.Shipping;
-    case 7:
+      return OrderState.Shipping;
+    case 5:
+    case "Failed":
+      return OrderState.Failed;
+    case 6:
     case "Done":
-      return State.Done;
+      return OrderState.Done;
+    case 7:
+    case "Withdrawn":
+      return OrderState.Withdrawn;
+    case 8:
+    case "Cancelled":
+      return OrderState.Cancelled;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return State.UNRECOGNIZED;
+      return OrderState.UNRECOGNIZED;
   }
 }
 
-export function stateToJSON(object: State): string {
+export function orderStateToJSON(object: OrderState): string {
   switch (object) {
-    case State.Undefined:
-      return "Undefined";
-    case State.Invalid:
-      return "Invalid";
-    case State.Failed:
-      return "Failed";
-    case State.Cancelled:
-      return "Cancelled";
-    case State.Created:
+    case OrderState.Created:
       return "Created";
-    case State.Submitted:
+    case OrderState.Submitted:
       return "Submitted";
-    case State.Shipping:
+    case OrderState.Confirmed:
+      return "Confirmed";
+    case OrderState.Invalid:
+      return "Invalid";
+    case OrderState.Shipping:
       return "Shipping";
-    case State.Done:
+    case OrderState.Failed:
+      return "Failed";
+    case OrderState.Done:
       return "Done";
-    case State.UNRECOGNIZED:
+    case OrderState.Withdrawn:
+      return "Withdrawn";
+    case OrderState.Cancelled:
+      return "Cancelled";
+    case OrderState.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export function stateToNumber(object: State): number {
+export function orderStateToNumber(object: OrderState): number {
   switch (object) {
-    case State.Undefined:
+    case OrderState.Created:
       return 0;
-    case State.Invalid:
+    case OrderState.Submitted:
       return 1;
-    case State.Failed:
+    case OrderState.Confirmed:
       return 2;
-    case State.Cancelled:
+    case OrderState.Invalid:
       return 3;
-    case State.Created:
+    case OrderState.Shipping:
       return 4;
-    case State.Submitted:
+    case OrderState.Failed:
       return 5;
-    case State.Shipping:
+    case OrderState.Done:
       return 6;
-    case State.Done:
+    case OrderState.Withdrawn:
       return 7;
-    case State.UNRECOGNIZED:
+    case OrderState.Cancelled:
+      return 8;
+    case OrderState.UNRECOGNIZED:
     default:
       return -1;
   }
 }
 
-export interface Item {
-  /** below identifier is id of product, variant or bundle */
-  product_variant_bundle_id: string;
-  product_name: string;
-  product_description: string;
-  manufacturer_name: string;
-  manufacturer_description: string;
-  prototype_name: string;
-  prototype_description: string;
+export interface OrderItem {
+  product_id: string;
+  variant_id: string;
   quantity: number;
-  vat: number;
+  /** Set by service */
+  unit_price: number;
+  /** Set by service */
   price: number;
-  quantity_price: number;
-  item_type: string;
-  taric_code: number;
-  stock_keeping_unit: string;
-  weight_in_kg: number;
-  length_in_cm: number;
-  width_in_cm: number;
-  height_in_cm: number;
+  /** Set by service */
+  vats: VAT[];
 }
 
 /** Database Entity */
 export interface Order {
   id: string;
   meta?: Meta;
-  name: string;
-  description: string;
-  state: State;
+  state: OrderState;
   customer_reference: string;
-  items: Item[];
+  items: OrderItem[];
+  /** Set by service */
   total_price: number;
-  shipping_address?: Address;
-  billing_address?: Address;
+  /** Set by service */
+  total_vat: number;
+  shipping_address?: ShippingAddress;
+  billing_address?: ShippingAddress;
   billing_email: string;
-  contact_person?: ContactPerson;
   notification_email: string;
-  fulfillment_ids: string[];
+  packing_preferences?: Preferences;
 }
 
-export interface ShippingDetails {
-  export_type: string;
-  export_description: string;
-  invoice_number: string;
-  sender_address?: Address;
-  contact_person?: ContactPerson;
-}
-
-export interface TriggerFulfillmentRequest {
-  order?: Order;
-  shipping_details?: ShippingDetails;
-  parcels: Parcel[];
-}
-
-export interface TriggerFulfillmentRequestList {
-  items: TriggerFulfillmentRequest[];
-  total_count: number;
+export interface OrderIdList {
+  ids: string[];
   subject?: Subject;
 }
 
@@ -182,157 +168,79 @@ export interface OrderResponse {
   status?: Status;
 }
 
-export interface CancelRequestList {
-  ids: string[];
-  subject?: Subject;
-}
-
 export interface Deleted {
   id: string;
 }
 
-function createBaseItem(): Item {
-  return {
-    product_variant_bundle_id: "",
-    product_name: "",
-    product_description: "",
-    manufacturer_name: "",
-    manufacturer_description: "",
-    prototype_name: "",
-    prototype_description: "",
-    quantity: 0,
-    vat: 0,
-    price: 0,
-    quantity_price: 0,
-    item_type: "",
-    taric_code: 0,
-    stock_keeping_unit: "",
-    weight_in_kg: 0,
-    length_in_cm: 0,
-    width_in_cm: 0,
-    height_in_cm: 0,
-  };
+export interface ShippingDetails {
+  export_type: string;
+  export_description: string;
+  invoice_number: string;
+  sender_address?: ShippingAddress;
 }
 
-export const Item = {
-  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.product_variant_bundle_id !== "") {
-      writer.uint32(10).string(message.product_variant_bundle_id);
+export interface FulfillmentRequest {
+  reference_id: string;
+  shipping_details?: ShippingDetails;
+}
+
+export interface FulfillmentRequestList {
+  items: FulfillmentRequest[];
+  total_count: number;
+  subject?: Subject;
+}
+
+function createBaseOrderItem(): OrderItem {
+  return { product_id: "", variant_id: "", quantity: 0, unit_price: 0, price: 0, vats: [] };
+}
+
+export const OrderItem = {
+  encode(message: OrderItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_id !== "") {
+      writer.uint32(10).string(message.product_id);
     }
-    if (message.product_name !== "") {
-      writer.uint32(18).string(message.product_name);
-    }
-    if (message.product_description !== "") {
-      writer.uint32(26).string(message.product_description);
-    }
-    if (message.manufacturer_name !== "") {
-      writer.uint32(34).string(message.manufacturer_name);
-    }
-    if (message.manufacturer_description !== "") {
-      writer.uint32(42).string(message.manufacturer_description);
-    }
-    if (message.prototype_name !== "") {
-      writer.uint32(50).string(message.prototype_name);
-    }
-    if (message.prototype_description !== "") {
-      writer.uint32(58).string(message.prototype_description);
+    if (message.variant_id !== "") {
+      writer.uint32(18).string(message.variant_id);
     }
     if (message.quantity !== 0) {
-      writer.uint32(64).int32(message.quantity);
+      writer.uint32(24).int32(message.quantity);
     }
-    if (message.vat !== 0) {
-      writer.uint32(72).int32(message.vat);
+    if (message.unit_price !== 0) {
+      writer.uint32(33).double(message.unit_price);
     }
     if (message.price !== 0) {
-      writer.uint32(81).double(message.price);
+      writer.uint32(41).double(message.price);
     }
-    if (message.quantity_price !== 0) {
-      writer.uint32(89).double(message.quantity_price);
-    }
-    if (message.item_type !== "") {
-      writer.uint32(98).string(message.item_type);
-    }
-    if (message.taric_code !== 0) {
-      writer.uint32(105).double(message.taric_code);
-    }
-    if (message.stock_keeping_unit !== "") {
-      writer.uint32(114).string(message.stock_keeping_unit);
-    }
-    if (message.weight_in_kg !== 0) {
-      writer.uint32(121).double(message.weight_in_kg);
-    }
-    if (message.length_in_cm !== 0) {
-      writer.uint32(128).int32(message.length_in_cm);
-    }
-    if (message.width_in_cm !== 0) {
-      writer.uint32(136).int32(message.width_in_cm);
-    }
-    if (message.height_in_cm !== 0) {
-      writer.uint32(144).int32(message.height_in_cm);
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderItem {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseItem();
+    const message = createBaseOrderItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.product_variant_bundle_id = reader.string();
+          message.product_id = reader.string();
           break;
         case 2:
-          message.product_name = reader.string();
+          message.variant_id = reader.string();
           break;
         case 3:
-          message.product_description = reader.string();
-          break;
-        case 4:
-          message.manufacturer_name = reader.string();
-          break;
-        case 5:
-          message.manufacturer_description = reader.string();
-          break;
-        case 6:
-          message.prototype_name = reader.string();
-          break;
-        case 7:
-          message.prototype_description = reader.string();
-          break;
-        case 8:
           message.quantity = reader.int32();
           break;
-        case 9:
-          message.vat = reader.int32();
+        case 4:
+          message.unit_price = reader.double();
           break;
-        case 10:
+        case 5:
           message.price = reader.double();
           break;
-        case 11:
-          message.quantity_price = reader.double();
-          break;
-        case 12:
-          message.item_type = reader.string();
-          break;
-        case 13:
-          message.taric_code = reader.double();
-          break;
-        case 14:
-          message.stock_keeping_unit = reader.string();
-          break;
-        case 15:
-          message.weight_in_kg = reader.double();
-          break;
-        case 16:
-          message.length_in_cm = reader.int32();
-          break;
-        case 17:
-          message.width_in_cm = reader.int32();
-          break;
-        case 18:
-          message.height_in_cm = reader.int32();
+        case 6:
+          message.vats.push(VAT.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -342,79 +250,44 @@ export const Item = {
     return message;
   },
 
-  fromJSON(object: any): Item {
+  fromJSON(object: any): OrderItem {
     return {
-      product_variant_bundle_id: isSet(object.product_variant_bundle_id)
-        ? String(object.product_variant_bundle_id)
-        : "",
-      product_name: isSet(object.product_name) ? String(object.product_name) : "",
-      product_description: isSet(object.product_description) ? String(object.product_description) : "",
-      manufacturer_name: isSet(object.manufacturer_name) ? String(object.manufacturer_name) : "",
-      manufacturer_description: isSet(object.manufacturer_description) ? String(object.manufacturer_description) : "",
-      prototype_name: isSet(object.prototype_name) ? String(object.prototype_name) : "",
-      prototype_description: isSet(object.prototype_description) ? String(object.prototype_description) : "",
+      product_id: isSet(object.product_id) ? String(object.product_id) : "",
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      vat: isSet(object.vat) ? Number(object.vat) : 0,
+      unit_price: isSet(object.unit_price) ? Number(object.unit_price) : 0,
       price: isSet(object.price) ? Number(object.price) : 0,
-      quantity_price: isSet(object.quantity_price) ? Number(object.quantity_price) : 0,
-      item_type: isSet(object.item_type) ? String(object.item_type) : "",
-      taric_code: isSet(object.taric_code) ? Number(object.taric_code) : 0,
-      stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : "",
-      weight_in_kg: isSet(object.weight_in_kg) ? Number(object.weight_in_kg) : 0,
-      length_in_cm: isSet(object.length_in_cm) ? Number(object.length_in_cm) : 0,
-      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      height_in_cm: isSet(object.height_in_cm) ? Number(object.height_in_cm) : 0,
+      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: Item): unknown {
+  toJSON(message: OrderItem): unknown {
     const obj: any = {};
-    message.product_variant_bundle_id !== undefined &&
-      (obj.product_variant_bundle_id = message.product_variant_bundle_id);
-    message.product_name !== undefined && (obj.product_name = message.product_name);
-    message.product_description !== undefined && (obj.product_description = message.product_description);
-    message.manufacturer_name !== undefined && (obj.manufacturer_name = message.manufacturer_name);
-    message.manufacturer_description !== undefined && (obj.manufacturer_description = message.manufacturer_description);
-    message.prototype_name !== undefined && (obj.prototype_name = message.prototype_name);
-    message.prototype_description !== undefined && (obj.prototype_description = message.prototype_description);
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
-    message.vat !== undefined && (obj.vat = Math.round(message.vat));
+    message.unit_price !== undefined && (obj.unit_price = message.unit_price);
     message.price !== undefined && (obj.price = message.price);
-    message.quantity_price !== undefined && (obj.quantity_price = message.quantity_price);
-    message.item_type !== undefined && (obj.item_type = message.item_type);
-    message.taric_code !== undefined && (obj.taric_code = message.taric_code);
-    message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
-    message.weight_in_kg !== undefined && (obj.weight_in_kg = message.weight_in_kg);
-    message.length_in_cm !== undefined && (obj.length_in_cm = Math.round(message.length_in_cm));
-    message.width_in_cm !== undefined && (obj.width_in_cm = Math.round(message.width_in_cm));
-    message.height_in_cm !== undefined && (obj.height_in_cm = Math.round(message.height_in_cm));
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
+    } else {
+      obj.vats = [];
+    }
     return obj;
   },
 
-  create(base?: DeepPartial<Item>): Item {
-    return Item.fromPartial(base ?? {});
+  create(base?: DeepPartial<OrderItem>): OrderItem {
+    return OrderItem.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Item>): Item {
-    const message = createBaseItem();
-    message.product_variant_bundle_id = object.product_variant_bundle_id ?? "";
-    message.product_name = object.product_name ?? "";
-    message.product_description = object.product_description ?? "";
-    message.manufacturer_name = object.manufacturer_name ?? "";
-    message.manufacturer_description = object.manufacturer_description ?? "";
-    message.prototype_name = object.prototype_name ?? "";
-    message.prototype_description = object.prototype_description ?? "";
+  fromPartial(object: DeepPartial<OrderItem>): OrderItem {
+    const message = createBaseOrderItem();
+    message.product_id = object.product_id ?? "";
+    message.variant_id = object.variant_id ?? "";
     message.quantity = object.quantity ?? 0;
-    message.vat = object.vat ?? 0;
+    message.unit_price = object.unit_price ?? 0;
     message.price = object.price ?? 0;
-    message.quantity_price = object.quantity_price ?? 0;
-    message.item_type = object.item_type ?? "";
-    message.taric_code = object.taric_code ?? 0;
-    message.stock_keeping_unit = object.stock_keeping_unit ?? "";
-    message.weight_in_kg = object.weight_in_kg ?? 0;
-    message.length_in_cm = object.length_in_cm ?? 0;
-    message.width_in_cm = object.width_in_cm ?? 0;
-    message.height_in_cm = object.height_in_cm ?? 0;
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     return message;
   },
 };
@@ -423,18 +296,16 @@ function createBaseOrder(): Order {
   return {
     id: "",
     meta: undefined,
-    name: "",
-    description: "",
-    state: State.Undefined,
+    state: OrderState.Created,
     customer_reference: "",
     items: [],
     total_price: 0,
+    total_vat: 0,
     shipping_address: undefined,
     billing_address: undefined,
     billing_email: "",
-    contact_person: undefined,
     notification_email: "",
-    fulfillment_ids: [],
+    packing_preferences: undefined,
   };
 }
 
@@ -446,41 +317,35 @@ export const Order = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
-      writer.uint32(26).string(message.name);
-    }
-    if (message.description !== "") {
-      writer.uint32(34).string(message.description);
-    }
-    if (message.state !== State.Undefined) {
-      writer.uint32(40).int32(stateToNumber(message.state));
+    if (message.state !== OrderState.Created) {
+      writer.uint32(24).int32(orderStateToNumber(message.state));
     }
     if (message.customer_reference !== "") {
-      writer.uint32(50).string(message.customer_reference);
+      writer.uint32(34).string(message.customer_reference);
     }
     for (const v of message.items) {
-      Item.encode(v!, writer.uint32(58).fork()).ldelim();
+      OrderItem.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     if (message.total_price !== 0) {
-      writer.uint32(65).double(message.total_price);
+      writer.uint32(49).double(message.total_price);
+    }
+    if (message.total_vat !== 0) {
+      writer.uint32(57).double(message.total_vat);
     }
     if (message.shipping_address !== undefined) {
-      Address.encode(message.shipping_address, writer.uint32(90).fork()).ldelim();
+      ShippingAddress.encode(message.shipping_address, writer.uint32(66).fork()).ldelim();
     }
     if (message.billing_address !== undefined) {
-      Address.encode(message.billing_address, writer.uint32(106).fork()).ldelim();
+      ShippingAddress.encode(message.billing_address, writer.uint32(74).fork()).ldelim();
     }
     if (message.billing_email !== "") {
-      writer.uint32(114).string(message.billing_email);
-    }
-    if (message.contact_person !== undefined) {
-      ContactPerson.encode(message.contact_person, writer.uint32(122).fork()).ldelim();
+      writer.uint32(82).string(message.billing_email);
     }
     if (message.notification_email !== "") {
-      writer.uint32(130).string(message.notification_email);
+      writer.uint32(90).string(message.notification_email);
     }
-    for (const v of message.fulfillment_ids) {
-      writer.uint32(138).string(v!);
+    if (message.packing_preferences !== undefined) {
+      Preferences.encode(message.packing_preferences, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -499,40 +364,34 @@ export const Order = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.name = reader.string();
+          message.state = orderStateFromJSON(reader.int32());
           break;
         case 4:
-          message.description = reader.string();
-          break;
-        case 5:
-          message.state = stateFromJSON(reader.int32());
-          break;
-        case 6:
           message.customer_reference = reader.string();
           break;
-        case 7:
-          message.items.push(Item.decode(reader, reader.uint32()));
+        case 5:
+          message.items.push(OrderItem.decode(reader, reader.uint32()));
           break;
-        case 8:
+        case 6:
           message.total_price = reader.double();
           break;
-        case 11:
-          message.shipping_address = Address.decode(reader, reader.uint32());
+        case 7:
+          message.total_vat = reader.double();
           break;
-        case 13:
-          message.billing_address = Address.decode(reader, reader.uint32());
+        case 8:
+          message.shipping_address = ShippingAddress.decode(reader, reader.uint32());
           break;
-        case 14:
+        case 9:
+          message.billing_address = ShippingAddress.decode(reader, reader.uint32());
+          break;
+        case 10:
           message.billing_email = reader.string();
           break;
-        case 15:
-          message.contact_person = ContactPerson.decode(reader, reader.uint32());
-          break;
-        case 16:
+        case 11:
           message.notification_email = reader.string();
           break;
-        case 17:
-          message.fulfillment_ids.push(reader.string());
+        case 12:
+          message.packing_preferences = Preferences.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -546,18 +405,18 @@ export const Order = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      state: isSet(object.state) ? stateFromJSON(object.state) : State.Undefined,
+      state: isSet(object.state) ? orderStateFromJSON(object.state) : OrderState.Created,
       customer_reference: isSet(object.customer_reference) ? String(object.customer_reference) : "",
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => OrderItem.fromJSON(e)) : [],
       total_price: isSet(object.total_price) ? Number(object.total_price) : 0,
-      shipping_address: isSet(object.shipping_address) ? Address.fromJSON(object.shipping_address) : undefined,
-      billing_address: isSet(object.billing_address) ? Address.fromJSON(object.billing_address) : undefined,
+      total_vat: isSet(object.total_vat) ? Number(object.total_vat) : 0,
+      shipping_address: isSet(object.shipping_address) ? ShippingAddress.fromJSON(object.shipping_address) : undefined,
+      billing_address: isSet(object.billing_address) ? ShippingAddress.fromJSON(object.billing_address) : undefined,
       billing_email: isSet(object.billing_email) ? String(object.billing_email) : "",
-      contact_person: isSet(object.contact_person) ? ContactPerson.fromJSON(object.contact_person) : undefined,
       notification_email: isSet(object.notification_email) ? String(object.notification_email) : "",
-      fulfillment_ids: Array.isArray(object?.fulfillment_ids) ? object.fulfillment_ids.map((e: any) => String(e)) : [],
+      packing_preferences: isSet(object.packing_preferences)
+        ? Preferences.fromJSON(object.packing_preferences)
+        : undefined,
     };
   },
 
@@ -565,29 +424,24 @@ export const Order = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.state !== undefined && (obj.state = stateToJSON(message.state));
+    message.state !== undefined && (obj.state = orderStateToJSON(message.state));
     message.customer_reference !== undefined && (obj.customer_reference = message.customer_reference);
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? OrderItem.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
     message.total_price !== undefined && (obj.total_price = message.total_price);
+    message.total_vat !== undefined && (obj.total_vat = message.total_vat);
     message.shipping_address !== undefined &&
-      (obj.shipping_address = message.shipping_address ? Address.toJSON(message.shipping_address) : undefined);
+      (obj.shipping_address = message.shipping_address ? ShippingAddress.toJSON(message.shipping_address) : undefined);
     message.billing_address !== undefined &&
-      (obj.billing_address = message.billing_address ? Address.toJSON(message.billing_address) : undefined);
+      (obj.billing_address = message.billing_address ? ShippingAddress.toJSON(message.billing_address) : undefined);
     message.billing_email !== undefined && (obj.billing_email = message.billing_email);
-    message.contact_person !== undefined &&
-      (obj.contact_person = message.contact_person ? ContactPerson.toJSON(message.contact_person) : undefined);
     message.notification_email !== undefined && (obj.notification_email = message.notification_email);
-    if (message.fulfillment_ids) {
-      obj.fulfillment_ids = message.fulfillment_ids.map((e) => e);
-    } else {
-      obj.fulfillment_ids = [];
-    }
+    message.packing_preferences !== undefined && (obj.packing_preferences = message.packing_preferences
+      ? Preferences.toJSON(message.packing_preferences)
+      : undefined);
     return obj;
   },
 
@@ -599,239 +453,52 @@ export const Order = {
     const message = createBaseOrder();
     message.id = object.id ?? "";
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.state = object.state ?? State.Undefined;
+    message.state = object.state ?? OrderState.Created;
     message.customer_reference = object.customer_reference ?? "";
-    message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => OrderItem.fromPartial(e)) || [];
     message.total_price = object.total_price ?? 0;
+    message.total_vat = object.total_vat ?? 0;
     message.shipping_address = (object.shipping_address !== undefined && object.shipping_address !== null)
-      ? Address.fromPartial(object.shipping_address)
+      ? ShippingAddress.fromPartial(object.shipping_address)
       : undefined;
     message.billing_address = (object.billing_address !== undefined && object.billing_address !== null)
-      ? Address.fromPartial(object.billing_address)
+      ? ShippingAddress.fromPartial(object.billing_address)
       : undefined;
     message.billing_email = object.billing_email ?? "";
-    message.contact_person = (object.contact_person !== undefined && object.contact_person !== null)
-      ? ContactPerson.fromPartial(object.contact_person)
-      : undefined;
     message.notification_email = object.notification_email ?? "";
-    message.fulfillment_ids = object.fulfillment_ids?.map((e) => e) || [];
-    return message;
-  },
-};
-
-function createBaseShippingDetails(): ShippingDetails {
-  return {
-    export_type: "",
-    export_description: "",
-    invoice_number: "",
-    sender_address: undefined,
-    contact_person: undefined,
-  };
-}
-
-export const ShippingDetails = {
-  encode(message: ShippingDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.export_type !== "") {
-      writer.uint32(10).string(message.export_type);
-    }
-    if (message.export_description !== "") {
-      writer.uint32(18).string(message.export_description);
-    }
-    if (message.invoice_number !== "") {
-      writer.uint32(26).string(message.invoice_number);
-    }
-    if (message.sender_address !== undefined) {
-      Address.encode(message.sender_address, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.contact_person !== undefined) {
-      ContactPerson.encode(message.contact_person, writer.uint32(122).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): ShippingDetails {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseShippingDetails();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.export_type = reader.string();
-          break;
-        case 2:
-          message.export_description = reader.string();
-          break;
-        case 3:
-          message.invoice_number = reader.string();
-          break;
-        case 5:
-          message.sender_address = Address.decode(reader, reader.uint32());
-          break;
-        case 15:
-          message.contact_person = ContactPerson.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): ShippingDetails {
-    return {
-      export_type: isSet(object.export_type) ? String(object.export_type) : "",
-      export_description: isSet(object.export_description) ? String(object.export_description) : "",
-      invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : "",
-      sender_address: isSet(object.sender_address) ? Address.fromJSON(object.sender_address) : undefined,
-      contact_person: isSet(object.contact_person) ? ContactPerson.fromJSON(object.contact_person) : undefined,
-    };
-  },
-
-  toJSON(message: ShippingDetails): unknown {
-    const obj: any = {};
-    message.export_type !== undefined && (obj.export_type = message.export_type);
-    message.export_description !== undefined && (obj.export_description = message.export_description);
-    message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
-    message.sender_address !== undefined &&
-      (obj.sender_address = message.sender_address ? Address.toJSON(message.sender_address) : undefined);
-    message.contact_person !== undefined &&
-      (obj.contact_person = message.contact_person ? ContactPerson.toJSON(message.contact_person) : undefined);
-    return obj;
-  },
-
-  create(base?: DeepPartial<ShippingDetails>): ShippingDetails {
-    return ShippingDetails.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<ShippingDetails>): ShippingDetails {
-    const message = createBaseShippingDetails();
-    message.export_type = object.export_type ?? "";
-    message.export_description = object.export_description ?? "";
-    message.invoice_number = object.invoice_number ?? "";
-    message.sender_address = (object.sender_address !== undefined && object.sender_address !== null)
-      ? Address.fromPartial(object.sender_address)
-      : undefined;
-    message.contact_person = (object.contact_person !== undefined && object.contact_person !== null)
-      ? ContactPerson.fromPartial(object.contact_person)
+    message.packing_preferences = (object.packing_preferences !== undefined && object.packing_preferences !== null)
+      ? Preferences.fromPartial(object.packing_preferences)
       : undefined;
     return message;
   },
 };
 
-function createBaseTriggerFulfillmentRequest(): TriggerFulfillmentRequest {
-  return { order: undefined, shipping_details: undefined, parcels: [] };
+function createBaseOrderIdList(): OrderIdList {
+  return { ids: [], subject: undefined };
 }
 
-export const TriggerFulfillmentRequest = {
-  encode(message: TriggerFulfillmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.order !== undefined) {
-      Order.encode(message.order, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.shipping_details !== undefined) {
-      ShippingDetails.encode(message.shipping_details, writer.uint32(18).fork()).ldelim();
-    }
-    for (const v of message.parcels) {
-      Parcel.encode(v!, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTriggerFulfillmentRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.order = Order.decode(reader, reader.uint32());
-          break;
-        case 2:
-          message.shipping_details = ShippingDetails.decode(reader, reader.uint32());
-          break;
-        case 3:
-          message.parcels.push(Parcel.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): TriggerFulfillmentRequest {
-    return {
-      order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
-      shipping_details: isSet(object.shipping_details) ? ShippingDetails.fromJSON(object.shipping_details) : undefined,
-      parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: TriggerFulfillmentRequest): unknown {
-    const obj: any = {};
-    message.order !== undefined && (obj.order = message.order ? Order.toJSON(message.order) : undefined);
-    message.shipping_details !== undefined &&
-      (obj.shipping_details = message.shipping_details ? ShippingDetails.toJSON(message.shipping_details) : undefined);
-    if (message.parcels) {
-      obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
-    } else {
-      obj.parcels = [];
-    }
-    return obj;
-  },
-
-  create(base?: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
-    return TriggerFulfillmentRequest.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
-    const message = createBaseTriggerFulfillmentRequest();
-    message.order = (object.order !== undefined && object.order !== null) ? Order.fromPartial(object.order) : undefined;
-    message.shipping_details = (object.shipping_details !== undefined && object.shipping_details !== null)
-      ? ShippingDetails.fromPartial(object.shipping_details)
-      : undefined;
-    message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseTriggerFulfillmentRequestList(): TriggerFulfillmentRequestList {
-  return { items: [], total_count: 0, subject: undefined };
-}
-
-export const TriggerFulfillmentRequestList = {
-  encode(message: TriggerFulfillmentRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.items) {
-      TriggerFulfillmentRequest.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    if (message.total_count !== 0) {
-      writer.uint32(16).uint32(message.total_count);
+export const OrderIdList = {
+  encode(message: OrderIdList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.ids) {
+      writer.uint32(10).string(v!);
     }
     if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
+      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequestList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OrderIdList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTriggerFulfillmentRequestList();
+    const message = createBaseOrderIdList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(TriggerFulfillmentRequest.decode(reader, reader.uint32()));
+          message.ids.push(reader.string());
           break;
         case 2:
-          message.total_count = reader.uint32();
-          break;
-        case 3:
           message.subject = Subject.decode(reader, reader.uint32());
           break;
         default:
@@ -842,34 +509,31 @@ export const TriggerFulfillmentRequestList = {
     return message;
   },
 
-  fromJSON(object: any): TriggerFulfillmentRequestList {
+  fromJSON(object: any): OrderIdList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => TriggerFulfillmentRequest.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
-  toJSON(message: TriggerFulfillmentRequestList): unknown {
+  toJSON(message: OrderIdList): unknown {
     const obj: any = {};
-    if (message.items) {
-      obj.items = message.items.map((e) => e ? TriggerFulfillmentRequest.toJSON(e) : undefined);
+    if (message.ids) {
+      obj.ids = message.ids.map((e) => e);
     } else {
-      obj.items = [];
+      obj.ids = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
-    return TriggerFulfillmentRequestList.fromPartial(base ?? {});
+  create(base?: DeepPartial<OrderIdList>): OrderIdList {
+    return OrderIdList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
-    const message = createBaseTriggerFulfillmentRequestList();
-    message.items = object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+  fromPartial(object: DeepPartial<OrderIdList>): OrderIdList {
+    const message = createBaseOrderIdList();
+    message.ids = object.ids?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1098,74 +762,6 @@ export const OrderResponse = {
   },
 };
 
-function createBaseCancelRequestList(): CancelRequestList {
-  return { ids: [], subject: undefined };
-}
-
-export const CancelRequestList = {
-  encode(message: CancelRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.ids) {
-      writer.uint32(10).string(v!);
-    }
-    if (message.subject !== undefined) {
-      Subject.encode(message.subject, writer.uint32(18).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CancelRequestList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCancelRequestList();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.ids.push(reader.string());
-          break;
-        case 2:
-          message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CancelRequestList {
-    return {
-      ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
-    };
-  },
-
-  toJSON(message: CancelRequestList): unknown {
-    const obj: any = {};
-    if (message.ids) {
-      obj.ids = message.ids.map((e) => e);
-    } else {
-      obj.ids = [];
-    }
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
-    return obj;
-  },
-
-  create(base?: DeepPartial<CancelRequestList>): CancelRequestList {
-    return CancelRequestList.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
-    const message = createBaseCancelRequestList();
-    message.ids = object.ids?.map((e) => e) || [];
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
-    return message;
-  },
-};
-
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -1217,10 +813,235 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.order.Service",
+function createBaseShippingDetails(): ShippingDetails {
+  return { export_type: "", export_description: "", invoice_number: "", sender_address: undefined };
+}
+
+export const ShippingDetails = {
+  encode(message: ShippingDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.export_type !== "") {
+      writer.uint32(10).string(message.export_type);
+    }
+    if (message.export_description !== "") {
+      writer.uint32(18).string(message.export_description);
+    }
+    if (message.invoice_number !== "") {
+      writer.uint32(26).string(message.invoice_number);
+    }
+    if (message.sender_address !== undefined) {
+      ShippingAddress.encode(message.sender_address, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): ShippingDetails {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseShippingDetails();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.export_type = reader.string();
+          break;
+        case 2:
+          message.export_description = reader.string();
+          break;
+        case 3:
+          message.invoice_number = reader.string();
+          break;
+        case 4:
+          message.sender_address = ShippingAddress.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): ShippingDetails {
+    return {
+      export_type: isSet(object.export_type) ? String(object.export_type) : "",
+      export_description: isSet(object.export_description) ? String(object.export_description) : "",
+      invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : "",
+      sender_address: isSet(object.sender_address) ? ShippingAddress.fromJSON(object.sender_address) : undefined,
+    };
+  },
+
+  toJSON(message: ShippingDetails): unknown {
+    const obj: any = {};
+    message.export_type !== undefined && (obj.export_type = message.export_type);
+    message.export_description !== undefined && (obj.export_description = message.export_description);
+    message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
+    message.sender_address !== undefined &&
+      (obj.sender_address = message.sender_address ? ShippingAddress.toJSON(message.sender_address) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<ShippingDetails>): ShippingDetails {
+    return ShippingDetails.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<ShippingDetails>): ShippingDetails {
+    const message = createBaseShippingDetails();
+    message.export_type = object.export_type ?? "";
+    message.export_description = object.export_description ?? "";
+    message.invoice_number = object.invoice_number ?? "";
+    message.sender_address = (object.sender_address !== undefined && object.sender_address !== null)
+      ? ShippingAddress.fromPartial(object.sender_address)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseFulfillmentRequest(): FulfillmentRequest {
+  return { reference_id: "", shipping_details: undefined };
+}
+
+export const FulfillmentRequest = {
+  encode(message: FulfillmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.reference_id !== "") {
+      writer.uint32(10).string(message.reference_id);
+    }
+    if (message.shipping_details !== undefined) {
+      ShippingDetails.encode(message.shipping_details, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFulfillmentRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.reference_id = reader.string();
+          break;
+        case 2:
+          message.shipping_details = ShippingDetails.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FulfillmentRequest {
+    return {
+      reference_id: isSet(object.reference_id) ? String(object.reference_id) : "",
+      shipping_details: isSet(object.shipping_details) ? ShippingDetails.fromJSON(object.shipping_details) : undefined,
+    };
+  },
+
+  toJSON(message: FulfillmentRequest): unknown {
+    const obj: any = {};
+    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
+    message.shipping_details !== undefined &&
+      (obj.shipping_details = message.shipping_details ? ShippingDetails.toJSON(message.shipping_details) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentRequest>): FulfillmentRequest {
+    return FulfillmentRequest.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<FulfillmentRequest>): FulfillmentRequest {
+    const message = createBaseFulfillmentRequest();
+    message.reference_id = object.reference_id ?? "";
+    message.shipping_details = (object.shipping_details !== undefined && object.shipping_details !== null)
+      ? ShippingDetails.fromPartial(object.shipping_details)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseFulfillmentRequestList(): FulfillmentRequestList {
+  return { items: [], total_count: 0, subject: undefined };
+}
+
+export const FulfillmentRequestList = {
+  encode(message: FulfillmentRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.items) {
+      FulfillmentRequest.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.total_count !== 0) {
+      writer.uint32(16).uint32(message.total_count);
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentRequestList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFulfillmentRequestList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(FulfillmentRequest.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.total_count = reader.uint32();
+          break;
+        case 3:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FulfillmentRequestList {
+    return {
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentRequest.fromJSON(e)) : [],
+      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+    };
+  },
+
+  toJSON(message: FulfillmentRequestList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => e ? FulfillmentRequest.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentRequestList>): FulfillmentRequestList {
+    return FulfillmentRequestList.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<FulfillmentRequestList>): FulfillmentRequestList {
+    const message = createBaseFulfillmentRequestList();
+    message.items = object.items?.map((e) => FulfillmentRequest.fromPartial(e)) || [];
+    message.total_count = object.total_count ?? 0;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
+    return message;
+  },
+};
+
+export type OrderServiceDefinition = typeof OrderServiceDefinition;
+export const OrderServiceDefinition = {
+  name: "OrderService",
+  fullName: "io.restorecommerce.order.OrderService",
   methods: {
     read: {
       name: "Read",
@@ -1254,6 +1075,14 @@ export const ServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    evaluate: {
+      name: "Evaluate",
+      requestType: OrderList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
     submit: {
       name: "Submit",
       requestType: OrderList,
@@ -1262,9 +1091,17 @@ export const ServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    withdraw: {
+      name: "Withdraw",
+      requestType: OrderIdList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
     cancel: {
       name: "Cancel",
-      requestType: CancelRequestList,
+      requestType: OrderIdList,
       requestStream: false,
       responseType: OrderListResponse,
       responseStream: false,
@@ -1278,43 +1115,88 @@ export const ServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    /** Requires Fulfillment Service */
+    queryPackingSolution: {
+      name: "QueryPackingSolution",
+      requestType: FulfillmentRequestList,
+      requestStream: false,
+      responseType: PackingSolutionListResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Requires Fulfillment Service */
+    createFulfillment: {
+      name: "CreateFulfillment",
+      requestType: FulfillmentRequestList,
+      requestStream: false,
+      responseType: FulfillmentListResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Requires Fulfillment Service */
     triggerFulfillment: {
       name: "TriggerFulfillment",
-      requestType: TriggerFulfillmentRequestList,
+      requestType: FulfillmentRequestList,
       requestStream: false,
-      responseType: Status,
+      responseType: StatusListResponse,
       responseStream: false,
       options: {},
     },
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface OrderServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   create(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   update(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   upsert(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  evaluate(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   submit(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
-  cancel(request: CancelRequestList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  withdraw(request: OrderIdList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  cancel(request: OrderIdList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  triggerFulfillment(
-    request: TriggerFulfillmentRequestList,
+  /** Requires Fulfillment Service */
+  queryPackingSolution(
+    request: FulfillmentRequestList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<Status>>;
+  ): Promise<DeepPartial<PackingSolutionListResponse>>;
+  /** Requires Fulfillment Service */
+  createFulfillment(
+    request: FulfillmentRequestList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<FulfillmentListResponse>>;
+  /** Requires Fulfillment Service */
+  triggerFulfillment(
+    request: FulfillmentRequestList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<StatusListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface OrderServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
   create(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
   update(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
   upsert(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  evaluate(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
   submit(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
-  cancel(request: DeepPartial<CancelRequestList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  withdraw(request: DeepPartial<OrderIdList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  cancel(request: DeepPartial<OrderIdList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  triggerFulfillment(
-    request: DeepPartial<TriggerFulfillmentRequestList>,
+  /** Requires Fulfillment Service */
+  queryPackingSolution(
+    request: DeepPartial<FulfillmentRequestList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<Status>;
+  ): Promise<PackingSolutionListResponse>;
+  /** Requires Fulfillment Service */
+  createFulfillment(
+    request: DeepPartial<FulfillmentRequestList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<FulfillmentListResponse>;
+  /** Requires Fulfillment Service */
+  triggerFulfillment(
+    request: DeepPartial<FulfillmentRequestList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<StatusListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1349,14 +1231,17 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
+      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/country.proto",
       "io/restorecommerce/fulfillment.proto",
+      "io/restorecommerce/fulfillment_product.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "Item",
+      "name": "OrderItem",
       "field": [{
-        "name": "product_variant_bundle_id",
+        "name": "product_id",
         "number": 1,
         "label": 1,
         "type": 9,
@@ -1364,11 +1249,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "productVariantBundleId",
+        "jsonName": "productId",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "product_name",
+        "name": "variant_id",
         "number": 2,
         "label": 1,
         "type": 9,
@@ -1376,72 +1261,12 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "productName",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "product_description",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "productDescription",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "manufacturer_name",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "manufacturerName",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "manufacturer_description",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "manufacturerDescription",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "prototype_name",
-        "number": 6,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "prototypeName",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "prototype_description",
-        "number": 7,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "prototypeDescription",
+        "jsonName": "variantId",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "quantity",
-        "number": 8,
+        "number": 3,
         "label": 1,
         "type": 5,
         "typeName": "",
@@ -1452,20 +1277,20 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "vat",
-        "number": 9,
+        "name": "unit_price",
+        "number": 4,
         "label": 1,
-        "type": 5,
+        "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "vat",
+        "jsonName": "unitPrice",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "price",
-        "number": 10,
+        "number": 5,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -1476,99 +1301,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "quantity_price",
-        "number": 11,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
+        "name": "vats",
+        "number": 6,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.tax.VAT",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "quantityPrice",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "item_type",
-        "number": 12,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "itemType",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "taric_code",
-        "number": 13,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "taricCode",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "stock_keeping_unit",
-        "number": 14,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "stockKeepingUnit",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "weight_in_kg",
-        "number": 15,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "weightInKg",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "length_in_cm",
-        "number": 16,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "lengthInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "width_in_cm",
-        "number": 17,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "widthInCm",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "height_in_cm",
-        "number": 18,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "heightInCm",
+        "jsonName": "vats",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1607,35 +1348,11 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "name",
+        "name": "state",
         "number": 3,
         "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "state",
-        "number": 5,
-        "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.order.State",
+        "typeName": ".io.restorecommerce.order.OrderState",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1644,7 +1361,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "customer_reference",
-        "number": 6,
+        "number": 4,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1656,10 +1373,10 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "items",
-        "number": 7,
+        "number": 5,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.order.Item",
+        "typeName": ".io.restorecommerce.order.OrderItem",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1668,7 +1385,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "total_price",
-        "number": 8,
+        "number": 6,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -1679,11 +1396,23 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
+        "name": "total_vat",
+        "number": 7,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalVat",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
         "name": "shipping_address",
-        "number": 11,
+        "number": 8,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.address.Address",
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1692,10 +1421,10 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "billing_address",
-        "number": 13,
+        "number": 9,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.address.Address",
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1704,7 +1433,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "billing_email",
-        "number": 14,
+        "number": 10,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1715,20 +1444,8 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "contact_person",
-        "number": 15,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.ContactPerson",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contactPerson",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
         "name": "notification_email",
-        "number": 16,
+        "number": 11,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1739,15 +1456,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "fulfillment_ids",
-        "number": 17,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
+        "name": "packing_preferences",
+        "number": 12,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.fulfillment_product.Preferences",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "fulfillmentIds",
+        "jsonName": "packingPreferences",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1766,152 +1483,22 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "ShippingDetails",
+      "name": "OrderIdList",
       "field": [{
-        "name": "export_type",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "exportType",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "export_description",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "exportDescription",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "invoice_number",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "invoiceNumber",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "sender_address",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.Address",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "senderAddress",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "contact_person",
-        "number": 15,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.ContactPerson",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contactPerson",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TriggerFulfillmentRequest",
-      "field": [{
-        "name": "order",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.order.Order",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "order",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "shipping_details",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.order.ShippingDetails",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "shippingDetails",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "parcels",
-        "number": 3,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.Parcel",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "parcels",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TriggerFulfillmentRequestList",
-      "field": [{
-        "name": "items",
+        "name": "ids",
         "number": 1,
         "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.order.TriggerFulfillmentRequest",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
+        "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "totalCount",
+        "jsonName": "ids",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "subject",
-        "number": 3,
+        "number": 2,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.auth.Subject",
@@ -2060,41 +1647,6 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "CancelRequestList",
-      "field": [{
-        "name": "ids",
-        "number": 1,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "ids",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
       "name": "Deleted",
       "field": [{
         "name": "id",
@@ -2117,25 +1669,167 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
+    }, {
+      "name": "ShippingDetails",
+      "field": [{
+        "name": "export_type",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "exportType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "export_description",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "exportDescription",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "invoice_number",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "invoiceNumber",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "sender_address",
+        "number": 4,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "senderAddress",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FulfillmentRequest",
+      "field": [{
+        "name": "reference_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "referenceId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "shipping_details",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.ShippingDetails",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "shippingDetails",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FulfillmentRequestList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.FulfillmentRequest",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
     }],
     "enumType": [{
-      "name": "State",
+      "name": "OrderState",
       "value": [
-        { "name": "Undefined", "number": 0, "options": undefined },
-        { "name": "Invalid", "number": 1, "options": undefined },
-        { "name": "Failed", "number": 2, "options": undefined },
-        { "name": "Cancelled", "number": 3, "options": undefined },
-        { "name": "Created", "number": 4, "options": undefined },
-        { "name": "Submitted", "number": 5, "options": undefined },
-        { "name": "Shipping", "number": 6, "options": undefined },
-        { "name": "Done", "number": 7, "options": undefined },
+        { "name": "Created", "number": 0, "options": undefined },
+        { "name": "Submitted", "number": 1, "options": undefined },
+        { "name": "Confirmed", "number": 2, "options": undefined },
+        { "name": "Invalid", "number": 3, "options": undefined },
+        { "name": "Shipping", "number": 4, "options": undefined },
+        { "name": "Failed", "number": 5, "options": undefined },
+        { "name": "Done", "number": 6, "options": undefined },
+        { "name": "Withdrawn", "number": 7, "options": undefined },
+        { "name": "Cancelled", "number": 8, "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "OrderService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -2165,6 +1859,13 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "Evaluate",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "Submit",
         "inputType": ".io.restorecommerce.order.OrderList",
         "outputType": ".io.restorecommerce.order.OrderListResponse",
@@ -2172,8 +1873,15 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "Withdraw",
+        "inputType": ".io.restorecommerce.order.OrderIdList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "Cancel",
-        "inputType": ".io.restorecommerce.order.CancelRequestList",
+        "inputType": ".io.restorecommerce.order.OrderIdList",
         "outputType": ".io.restorecommerce.order.OrderListResponse",
         "options": undefined,
         "clientStreaming": false,
@@ -2186,9 +1894,23 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "QueryPackingSolution",
+        "inputType": ".io.restorecommerce.order.FulfillmentRequestList",
+        "outputType": ".io.restorecommerce.fulfillment_product.PackingSolutionListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "CreateFulfillment",
+        "inputType": ".io.restorecommerce.order.FulfillmentRequestList",
+        "outputType": ".io.restorecommerce.fulfillment.FulfillmentListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "TriggerFulfillment",
-        "inputType": ".io.restorecommerce.order.TriggerFulfillmentRequestList",
-        "outputType": ".io.restorecommerce.status.Status",
+        "inputType": ".io.restorecommerce.order.FulfillmentRequestList",
+        "outputType": ".io.restorecommerce.status.StatusListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -2199,33 +1921,75 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [4, 0, 2, 0],
-        "span": [41, 2, 39],
-        "leadingComments": " below identifier is id of product, variant or bundle\n",
+        "path": [6, 0, 2, 9],
+        "span": [32, 2, 129],
+        "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
+        "path": [6, 0, 2, 10],
+        "span": [34, 2, 114],
+        "leadingComments": " Requires Fulfillment Service\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [6, 0, 2, 11],
+        "span": [36, 2, 105],
+        "leadingComments": " Requires Fulfillment Service\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 3],
+        "span": [55, 2, 24],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 4],
+        "span": [56, 2, 19],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0, 2, 5],
+        "span": [57, 2, 47],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 1],
-        "span": [64, 0, 87, 1],
+        "span": [63, 0, 84, 1],
         "leadingComments": "*\nDatabase Entity\n",
         "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 5],
+        "span": [77, 2, 25],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 6],
+        "span": [78, 2, 23],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.order.State": State,
-    ".io.restorecommerce.order.Item": Item,
+    ".io.restorecommerce.order.OrderState": OrderState,
+    ".io.restorecommerce.order.OrderItem": OrderItem,
     ".io.restorecommerce.order.Order": Order,
-    ".io.restorecommerce.order.ShippingDetails": ShippingDetails,
-    ".io.restorecommerce.order.TriggerFulfillmentRequest": TriggerFulfillmentRequest,
-    ".io.restorecommerce.order.TriggerFulfillmentRequestList": TriggerFulfillmentRequestList,
+    ".io.restorecommerce.order.OrderIdList": OrderIdList,
     ".io.restorecommerce.order.OrderList": OrderList,
     ".io.restorecommerce.order.OrderListResponse": OrderListResponse,
     ".io.restorecommerce.order.OrderResponse": OrderResponse,
-    ".io.restorecommerce.order.CancelRequestList": CancelRequestList,
     ".io.restorecommerce.order.Deleted": Deleted,
+    ".io.restorecommerce.order.ShippingDetails": ShippingDetails,
+    ".io.restorecommerce.order.FulfillmentRequest": FulfillmentRequest,
+    ".io.restorecommerce.order.FulfillmentRequestList": FulfillmentRequestList,
   },
   dependencies: [
     protoMetadata1,
@@ -2235,6 +1999,9 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata5,
     protoMetadata6,
     protoMetadata7,
+    protoMetadata8,
+    protoMetadata9,
+    protoMetadata10,
   ],
   options: {
     messages: {
@@ -2249,7 +2016,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "order" }, methods: { "Read": { "is_query": true } } } },
+    services: { "OrderService": { options: { "service_name": "order" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 
